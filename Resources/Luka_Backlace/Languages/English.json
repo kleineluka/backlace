@@ -1,0 +1,100 @@
+{
+    "entries": [
+        {
+            "key": "enabled",
+            "value": "Enabled"
+        },
+                {
+            "key": "disabled",
+            "value": "Disabled"
+        },
+        {
+            "key": "config_tab_theme",
+            "value": "Tab Theme"
+        },
+        {
+            "key": "config_text_theme",
+            "value": "Text Theme"            
+        },
+        {
+            "key": "config_ui_size",
+            "value": "UI Size"
+        },
+        {
+            "key": "config_updates",
+            "value": "Check for Updates"
+        },
+        {
+            "key": "config_language",
+            "value": "Language"
+        },
+        {
+            "key": "config_toggle_updates",
+            "value": "Show Updates"
+        },
+        {
+            "key": "config_toggle_announcements",
+            "value": "Show News"
+        },
+        {
+            "key": "config_toggle_enabled",
+            "value": "Enabled"
+        },
+        {
+            "key": "config_toggle_disabled",
+            "value": "Disabled"
+        },
+        {
+            "key": "config_save",
+            "value": "Save Config"
+        },
+        {
+            "key": "config_reset",
+            "value": "Reset Config"
+        },
+        {
+            "key": "config_save_success",
+            "value": "Your configuration was saved successfully! ^~^"
+        },
+        {
+            "key": "config_save_error",
+            "value": "Something went wrong trying to save your configuration, try reimporting the Unity package! >.<"
+        },
+        {
+            "key": "config_reset_success",
+            "value": "Your configuration was reset to the default values! ^~^"           
+        },
+        {
+            "key": "config_reset_error",
+            "value": "Something went wrong trying to reset your configuration, try reimporting the Unity package! >.<"
+        },
+        {
+            "key": "dialog_okay",
+            "value": "Oki!"
+        },
+        {
+            "key": "update_available",
+            "value": "Update available!"
+        },
+        {
+            "key": "update_description",
+            "value": "Download the latest version for new features and bug fixes! <3"
+        },
+        {
+            "key": "tab_config",
+            "value": "Settings"
+        },
+        {
+            "key": "open_docs",
+            "value": "Need help? Click here to open the documentation!"
+        },
+        {
+            "key": "tab_license",
+            "value": "License"
+        },
+        {
+            "key": "button_show_license",
+            "value": "Show License in Unity"
+        }
+    ]
+}
