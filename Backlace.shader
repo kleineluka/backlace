@@ -1,6 +1,6 @@
 Shader "luka/indev/backlace"
 {
-    
+
     Properties
     {
         _SrcBlend ("Src Blend", Float) = 1.0
@@ -68,13 +68,13 @@ Shader "luka/indev/backlace"
             Tags { "LightMode" = "ForwardBase" }
             ENDCG
         }
-            
+          
         Pass
         {
             Tags { "LightMode" = "ForwardAdd" }
             ENDCG
         }
-                
+
         Pass
         {
             Tags { "LightMode" = "ShadowCaster" }
@@ -88,4 +88,5 @@ Shader "luka/indev/backlace"
         }
 
     }
+
 }

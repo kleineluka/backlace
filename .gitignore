@@ -6,4 +6,4 @@ indev/*
 
 # Unity
 *.meta
-*.met
+*.mat
