@@ -1,5 +1,5 @@
 # Mine
-.indev/*
+indev/*
 
 # VSCode
 *.code-workspace
@@ -7,6 +7,3 @@
 # Unity
 *.meta
 *.met
-
-# Temporary (Sorry)
-Backlace.shader
