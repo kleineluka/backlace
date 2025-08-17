@@ -107,6 +107,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     ClipAlpha();
     SampleNormal();
     SampleMSSO();
+    #if defined(_BACKLACE_EMISSION)
+        CalculateEmission();
+    #endif
     if (_EnableSpecular == 1)
     {
         GetSampleData();
@@ -175,8 +178,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
     {
         AddIndirectSpecular();
     }
+    #if defined(_BACKLACE_EMISSION)
+        AddEmission();
+    #endif
     AddAlpha();
-    
     return FinalColor;
 }
 

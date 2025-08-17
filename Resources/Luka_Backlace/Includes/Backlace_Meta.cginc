@@ -54,12 +54,14 @@ float4 Fragment(FragmentData i) : SV_TARGET
     UnityMetaInput surfaceData;
     UNITY_INITIALIZE_OUTPUT(UnityMetaInput, surfaceData);
     Albedo = 0;
-    Emission = 0;
     SpecularColor = 0;
     Roughness = 1;
     LoadUVs();
     SampleAlbedo();
     SampleMSSO();
+    #if defined(_BACKLACE_EMISSION)
+        CalculateEmission();
+    #endif
     if (_EnableSpecular == 1)
     {
         GetSampleData();
@@ -68,7 +70,11 @@ float4 Fragment(FragmentData i) : SV_TARGET
     {
         SetupAlbedoAndSpecColor();
     }
-    surfaceData.Emission = Emission;
+    #if defined(_BACKLACE_EMISSION)
+        surfaceData.Emission = Emission;
+    #else
+        surfaceData.Emission = 0;
+    #endif
     surfaceData.Albedo = Albedo + SpecularColor * Roughness * Roughness;
     surfaceData.SpecularColor = SpecularColor;
     return UnityMetaFragment(surfaceData);

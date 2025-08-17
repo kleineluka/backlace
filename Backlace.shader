@@ -3,6 +3,10 @@ Shader "luka/indev/backlace"
 
     Properties
     {
+        // RENDERING SETTINGS
+        [Space(35)]
+        [Header(Rendering Settings)]
+        [Space(10)]
         _SrcBlend ("Src Blend", Float) = 1.0
         _DstBlend ("Dst Blend", Float) = 0.0
         _ZWrite ("ZWrite", Float) = 1.0
@@ -11,43 +15,94 @@ Shader "luka/indev/backlace"
         [IntRange] _StencilID ("Stencil ID (0-255)", Range(0, 255)) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 0
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
-        _StencilSection ("Stencil Section Display", Int) = 0
-        _DirectLightMode ("Direct Light Mode", Float) = 0.0
-        _UVCount ("UV Count", Float) = 0.0
-        _UV1Index ("UV1 Index", Float) = 0.0
+
+        // MAIN MAPS AND ALPHA
+        [Space(35)]
+        [Header(Main Maps and Alpha)]
+        [Space(10)]
         _MainTex ("Main texture", 2D) = "white" { }
         _Color ("Albedo color", Color) = (1, 1, 1, 1)
+        _Cutoff ("Alpha Cutoff", Range(0, 1)) = 0.5
         _BumpMap ("Normal map", 2D) = "bump" { }
         _BumpScale ("Normal map scale", Float) = 1
-        _Cutoff ("Alpha Cutoff", Range(0, 1)) = 0.5
-        _Occlusion ("Occlusion", Range(0, 1)) = 1
+
+        // EMISSION
+        [Space(35)]
+        [Header(Emission)]
+        [Space(10)]
+        [Toggle(_BACKLACE_EMISSION)] _ToggleEmission ("Enable Emission", Float) = 0.0
+        [HDR] _EmissionColor ("Emission Color", Color) = (0, 0, 0, 1)
+        _EmissionMap ("Emission Map (Mask)", 2D) = "black" { }
+        [IntRange] _UseAlbedoAsEmission ("Use Albedo for Emission", Range(0, 1)) = 0.0
+        _EmissionStrength ("Emission Strength", Float) = 1.0
+
+        // SURFACE AND PBR MAPS
+        [Space(35)]
+        [Header(Surface and PBR Maps)]
+        [Space(10)]
         _MSSO ("MSSO", 2D) = "white" { }
-        _MainTex_UV ("Main texture UV set", Float) = 0
-        _BumpMap_UV ("Bump map UV set", Float) = 0
-        _MSSO_UV ("MSSO UV set", Float) = 0
+        _Metallic ("Metallic", Range(0, 1)) = 0
+        _Glossiness ("Glossiness", Range(0, 1)) = 0
+        _Occlusion ("Occlusion", Range(0, 1)) = 1
+
+        // TOON LIGHTING
+        [Space(35)]
+        [Header(Toon Lighting)]
+        [Space(10)]
+        _DirectLightMode ("Direct Light Mode", Float) = 0.0
         _Ramp ("Toon Ramp", 2D) = "white" { }
+        _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
         _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
         _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
-        _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
-        _Metallic ("Metallic", Range(0, 1)) = 0
-        _Glossiness ("Glossiness", Range(0, 1)) = 0
+
+        // SPECULAR
+        [Space(35)]
+        [Header(Specular Reflections)]
+        [Space(10)]
+        _EnableSpecular ("Enable Specular", Float) = 0.0
         _Specular ("Specular", Range(0, 1)) = 0.5
         _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
         _ReplaceSpecular ("Replace Specular", Float) = 0
+
+        // ANISOTROPY
+        [Space(35)]
+        [Header(Anisotropy)]
+        [Space(10)]
         _SpecularMode ("Specular Mode", Float) = -1
-        _SpecularTintTexture_UV ("Specular Tint UV Set", Float) = 0
-        [NonModifiableTextureData][NoScaleOffset] _DFG ("DFG Lut", 2D) = "black" { }
-        [NonModifiableTextureData][NoScaleOffset] _DFGType ("Lighing Type", Float) = 0
-        _EnableSpecular ("Enable Specular", Float) = 0.0
         _TangentMap ("Tangent Map", 2D) = "white" { }
         _Anisotropy ("Ansotropy", Range(-1, 1)) = 0
-        _TangentMap_UV ("Tangent Map UV", Float) = 0
+
+        // INDIRECT LIGHTING
+        [Space(35)]
+        [Header(Indirect Lighting)]
+        [Space(10)]
         _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
         _IndirectOverride ("Indirect Override", Float) = 0.0
         _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
+
+        // UV SETTINGS
+        [Space(35)]
+        [Header(UV Settings)]
+        [Space(10)]
+        _UVCount ("UV Count", Float) = 0.0
+        _UV1Index ("UV1 Index", Float) = 0.0
+        _MainTex_UV ("Main texture UV set", Float) = 0
+        _BumpMap_UV ("Bump map UV set", Float) = 0
+        _MSSO_UV ("MSSO UV set", Float) = 0
+        _SpecularTintTexture_UV ("Specular Tint UV Set", Float) = 0
+        _TangentMap_UV ("Tangent Map UV", Float) = 0
+        _EmissionMap_UV ("Emission Map UV Set", Float) = 0
+
+        // DO NOT CHANGE
+        [Space(35)]
+        [Header(Do Not Change)]
+        [Space(10)]
+        [NonModifiableTextureData][NoScaleOffset] _DFG ("DFG Lut", 2D) = "black" { }
+        [NonModifiableTextureData][NoScaleOffset] _DFGType ("Lighing Type", Float) = 0
+        _StencilSection ("Stencil Section Display", Int) = 0
     }
 
     SubShader
@@ -82,6 +137,7 @@ Shader "luka/indev/backlace"
             #endif
 
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+            #pragma shader_feature_local _ _BACKLACE_EMISSION
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -148,6 +204,7 @@ Shader "luka/indev/backlace"
             #pragma multi_compile_instancing
             
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+            #pragma shader_feature_local _ _BACKLACE_EMISSION
             
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -272,6 +329,8 @@ Shader "luka/indev/backlace"
             #include "UnityCG.cginc"
             #include "UnityStandardUtils.cginc"
             #include "UnityMetaPass.cginc"
+
+            #pragma shader_feature_local _ _BACKLACE_EMISSION
 
             struct VertexData
             {
