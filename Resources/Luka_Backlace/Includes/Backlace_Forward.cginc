@@ -183,13 +183,208 @@ void GetDotProducts()
     LdotH = max(dot(LightDir, HalfDir), 0);
 }
 
-// setup albedo and specular color
-void SetupDFG()
+// gtr2 distribution function
+float GTR2(float NdotH, float a)
 {
-    float3 dfguv = float3(NdotV, Roughness, 0);
-    Dfg = _DFG.Sample(sampler_DFG, dfguv).xyz;
-    EnergyCompensation = lerp(1.0 + SpecularColor * (1.0 / Dfg.y - 1.0), 1, _DFGType);
+    float a2 = a * a;
+    float t = 1 + (a2 - 1) * NdotH * NdotH;
+    return a2 / (UNITY_PI * t * t + 1e-7f);
 }
+
+// ggx distribution function
+float smithG_GGX(float NdotV, float alphaG)
+{
+    float a = alphaG * alphaG;
+    float b = NdotV * NdotV;
+    return 1 / (NdotV + sqrt(a + b - a * b));
+}
+
+// standard direct specular calculation
+void StandardDirectSpecular()
+{
+    NDF = GTR2(NdotH, SquareRoughness) * UNITY_PI;
+    GFS = smithG_GGX(max(NdotL, lerp(0.3, 0, SquareRoughness)), Roughness) * smithG_GGX(NdotV, Roughness);
+}
+
+// modified tangent space
+float3 GetModifiedTangent(float3 tangentTS, float3 tangentDir)
+{
+    float3x3 worldToTangent;
+    worldToTangent[0] = float3(1, 0, 0);
+    worldToTangent[1] = float3(0, 1, 0);
+    worldToTangent[2] = float3(0, 0, 1);
+    float3 tangentTWS = mul(tangentTS, worldToTangent);
+    float3 fTangent;
+    if (tangentTS.z < 1)
+        fTangent = tangentTWS;
+    else
+        fTangent = tangentDir;
+    return fTangent;
+}
+
+// gtr2 anisotropic distribution function
+float GTR2_aniso(float NdotH, float HdotX, float HdotY, float ax, float ay)
+{
+    return 1 / (UNITY_PI * ax * ay * sqr(sqr(HdotX / ax) + sqr(HdotY / ay) + NdotH * NdotH));
+}
+
+// ggx anisotropic distribution function
+float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
+{
+    return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
+}
+
+// ...
+void AnisotropicDirectSpecular()
+{
+    float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
+    float anisotropy = tangentTS.a * _Anisotropy;
+    float3 tangent = GetModifiedTangent(tangentTS.rgb, TangentDir);
+    float3 anisotropyDirection = anisotropy >= 0.0 ? BitangentDir : TangentDir;
+    float3 anisotropicTangent = cross(anisotropyDirection, ViewDir);
+    float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
+    float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - SquareRoughness)));
+    float3 bentNormal = normalize(lerp(NormalDir, anisotropicNormal, bendFactor));
+    ReflectDir = reflect(-ViewDir, bentNormal);
+    float TdotH = dot(tangent, HalfDir);
+    float TdotL = dot(tangent, LightDir);
+    float BdotH = dot(BitangentDir, HalfDir);
+    float BdotL = dot(BitangentDir, LightDir);
+    float TdotV = dot(ViewDir, tangent);
+    float BdotV = dot(ViewDir, BitangentDir);
+    //float aspect = sqrt(1-anisotropy*.9);
+    //float ax = max(.005, SquareRoughness / aspect);
+    //float ay = max(.005, SquareRoughness * aspect);
+    float ax = max(SquareRoughness * (1.0 + anisotropy), 0.005);
+    float ay = max(SquareRoughness * (1.0 - anisotropy), 0.005);
+    NDF = GTR2_aniso(NdotH, TdotH, BdotH, ax, ay) * UNITY_PI;
+    GFS = smithG_GGX_aniso(NdotL, TdotL, BdotL, ax, ay);
+    GFS *= smithG_GGX_aniso(NdotV, TdotV, BdotV, ax, ay);
+    //NDF = GTR2(NdotH, SquareRoughness) * UNITY_PI;
+    //GFS = smithG_GGX(max(NdotL,lerp(0.3,0,SquareRoughness)), Roughness) * smithG_GGX(NdotV, Roughness);
+}
+
+// ...
+void GetFallbackCubemap()
+{
+    CustomIndirect = texCUBElod(_FallbackCubemap, half4(ReflectDir.xyz, remap(SquareRoughness, 1, 0, 5, 0))).rgb;
+}
+
+// specular feature
+#if defined(_BACKLACE_SPECULAR)
+
+    // setup albedo and specular color
+    void SetupDFG()
+    {
+        float3 dfguv = float3(NdotV, Roughness, 0);
+        Dfg = _DFG.Sample(sampler_DFG, dfguv).xyz;
+        EnergyCompensation = lerp(1.0 + SpecularColor * (1.0 / Dfg.y - 1.0), 1, _DFGType);
+    }
+
+    // ...
+    inline half3 FresnelTerm(half3 F0, half cosA)
+    {
+        half t = Pow5(1 - cosA);   // ala Schlick interpoliation
+        return F0 + (1 - F0) * t;
+    }
+
+    // ...
+    void FinalizeDirectSpecularTerm()
+    {
+        DirectSpecular = GFS * NDF * FresnelTerm(SpecularColor, LdotH) * EnergyCompensation;
+        #ifdef UNITY_COLORSPACE_GAMMA
+            DirectSpecular = sqrt(max(1e-4h, DirectSpecular));
+        #endif
+        DirectSpecular = max(0, DirectSpecular * Attenuation);
+        DirectSpecular *= any(SpecularColor) ? 1.0 : 0.0;
+    }
+
+    // ...
+    struct Unity_GlossyEnvironmentData
+    {
+        // - Deferred case have one cubemap
+        // - Forward case can have two blended cubemap (unusual should be deprecated).
+        // Surface properties use for cubemap integration
+        half roughness; // CAUTION: This is perceptualRoughness but because of compatibility this name can't be change :(
+        half3 reflUVW;
+    };
+
+    // ...
+    half perceptualRoughnessToMipmapLevel(half perceptualRoughness)
+    {
+        return perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
+    }
+
+    // ...
+    half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
+    {
+        half perceptualRoughness = glossIn.roughness /* perceptualRoughness */ ;
+        #if 0
+            float m = PerceptualRoughnessToRoughness(perceptualRoughness); // m is the real roughness parameter
+            const float fEps = 1.192092896e-07F;        // smallest such that 1.0+FLT_EPSILON != 1.0  (+1e-4h is NOT good here. is visibly very wrong)
+            float n = (2.0 / max(fEps, m * m)) - 2.0;        // remap to spec power. See eq. 21 in --> https://dl.dropboxusercontent.com/u/55891920/papers/mm_brdf.pdf
+            n /= 4;                                     // remap from n_dot_h formulatino to n_dot_r. See section "Pre-convolved Cube Maps vs Path Tracers" --> https://s3.amazonaws.com/docs.knaldtech.com/knald/1.0.0/lys_power_drops.html
+            perceptualRoughness = pow(2 / (n + 2), 0.25);      // remap back to square root of real roughness (0.25 include both the sqrt root of the conversion and sqrt for going from roughness to perceptualRoughness)
+        #else
+            // MM: came up with a surprisingly close approximation to what the #if 0'ed out code above does.
+            perceptualRoughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);
+        #endif
+        half mip = perceptualRoughnessToMipmapLevel(perceptualRoughness);
+        half3 R = glossIn.reflUVW;
+        half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
+        return float4(DecodeHDR(rgbm, hdr), rgbm.a);
+    }
+
+    // ...
+    inline half3 FresnelLerp(half3 F0, half3 F90, half cosA)
+    {
+        half t = Pow5(1 - cosA);   // ala Schlick interpoliation
+        return lerp(F0, F90, t);
+    }
+
+    // ...
+    void GetIndirectSpecular()
+    {
+        Unity_GlossyEnvironmentData envData;
+        envData.roughness = Roughness;
+        envData.reflUVW = BoxProjectedCubemapDirection(ReflectDir, FragData.worldPos, unity_SpecCube0_ProbePosition, unity_SpecCube0_BoxMin, unity_SpecCube0_BoxMax);
+        float4 indirectSpecularRGBA = Unity_GlossyEnvironment(UNITY_PASS_TEXCUBE(unity_SpecCube0), unity_SpecCube0_HDR, envData);
+        #if defined(UNITY_SPECCUBE_BLENDING) && !defined(SHADER_API_MOBILE)
+            UNITY_BRANCH
+            if (unity_SpecCube0_BoxMin.w < 0.99999)
+            {
+                envData.reflUVW = BoxProjectedCubemapDirection(ReflectDir, FragData.worldPos, unity_SpecCube1_ProbePosition, unity_SpecCube1_BoxMin, unity_SpecCube1_BoxMax);
+                float4 indirectSpecularRGBA1 = Unity_GlossyEnvironment(UNITY_PASS_TEXCUBE_SAMPLER(unity_SpecCube1, unity_SpecCube0), unity_SpecCube1_HDR, envData);
+                indirectSpecularRGBA = lerp(indirectSpecularRGBA1, indirectSpecularRGBA, unity_SpecCube0_BoxMin.w);
+            }
+        #endif
+        IndirectSpecular = indirectSpecularRGBA.rgb;
+        if ((_IndirectFallbackMode > 0 && indirectSpecularRGBA.a == 0) || (_IndirectOverride > 0))
+        {
+            //using the fake specular probe toned down based on the average light, it's not phisically accurate
+            //but having a probe that reflects arbitrary stuff isn't accurate to begin with
+            half lightColGrey = max((LightColor.r + LightColor.g + LightColor.b) / 3, (IndirectDiffuse.r + IndirectDiffuse.g + IndirectDiffuse.b) / 3);
+            IndirectSpecular = CustomIndirect * min(lightColGrey, 1);
+        }
+        float horizon = min(1 + NdotH, 1.0);
+        float grazingTerm = saturate(1 - SquareRoughness + (1 - OneMinusReflectivity));
+        Dfg.x *= lerp(1.0, saturate(dot(IndirectDiffuse, 1.0)), Occlusion);
+        IndirectSpecular *= EnergyCompensation * horizon * horizon * lerp(lerp(Dfg.xxx, Dfg.yyy, SpecularColor), SpecularColor * Dfg.z, _DFGType);
+    }
+
+    // ...
+    void AddDirectSpecular()
+    {
+        FinalColor.rgb += DirectSpecular * SpecLightColor.rgb * SpecLightColor.a;
+    }
+
+    // ...
+    void AddIndirectSpecular()
+    {
+        FinalColor.rgb += IndirectSpecular * clamp(pow(NdotV + Occlusion, exp2(-16.0 * SquareRoughness - 1.0)) - 1.0 + Occlusion, 0.0, 1.0);
+    }
+
+#endif // defined(_BACKLACE_SPECULAR)
 
 // premultiply alpha
 void PremultiplyAlpha()
@@ -344,190 +539,6 @@ void GetToonVertexDiffuse()
     #endif
 }
 
-// gtr2 distribution function
-float GTR2(float NdotH, float a)
-{
-    float a2 = a * a;
-    float t = 1 + (a2 - 1) * NdotH * NdotH;
-    return a2 / (UNITY_PI * t * t + 1e-7f);
-}
-
-// ggx distribution function
-float smithG_GGX(float NdotV, float alphaG)
-{
-    float a = alphaG * alphaG;
-    float b = NdotV * NdotV;
-    return 1 / (NdotV + sqrt(a + b - a * b));
-}
-
-// standard direct specular calculation
-void StandardDirectSpecular()
-{
-    NDF = GTR2(NdotH, SquareRoughness) * UNITY_PI;
-    GFS = smithG_GGX(max(NdotL, lerp(0.3, 0, SquareRoughness)), Roughness) * smithG_GGX(NdotV, Roughness);
-}
-
-// square without pow
-float sqr(float x)
-{
-    return x * x;
-}
-
-// gtr2 anisotropic distribution function
-float GTR2_aniso(float NdotH, float HdotX, float HdotY, float ax, float ay)
-{
-    return 1 / (UNITY_PI * ax * ay * sqr(sqr(HdotX / ax) + sqr(HdotY / ay) + NdotH * NdotH));
-}
-
-// ggx anisotropic distribution function
-float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
-{
-    return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
-}
-
-// modified tangent space
-float3 GetModifiedTangent(float3 tangentTS, float3 tangentDir)
-{
-    float3x3 worldToTangent;
-    worldToTangent[0] = float3(1, 0, 0);
-    worldToTangent[1] = float3(0, 1, 0);
-    worldToTangent[2] = float3(0, 0, 1);
-    float3 tangentTWS = mul(tangentTS, worldToTangent);
-    float3 fTangent;
-    if (tangentTS.z < 1)
-        fTangent = tangentTWS;
-    else
-        fTangent = tangentDir;
-    return fTangent;
-}
-
-// ...
-void AnisotropicDirectSpecular()
-{
-    float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
-    float anisotropy = tangentTS.a * _Anisotropy;
-    float3 tangent = GetModifiedTangent(tangentTS.rgb, TangentDir);
-    float3 anisotropyDirection = anisotropy >= 0.0 ? BitangentDir : TangentDir;
-    float3 anisotropicTangent = cross(anisotropyDirection, ViewDir);
-    float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
-    float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - SquareRoughness)));
-    float3 bentNormal = normalize(lerp(NormalDir, anisotropicNormal, bendFactor));
-    ReflectDir = reflect(-ViewDir, bentNormal);
-    float TdotH = dot(tangent, HalfDir);
-    float TdotL = dot(tangent, LightDir);
-    float BdotH = dot(BitangentDir, HalfDir);
-    float BdotL = dot(BitangentDir, LightDir);
-    float TdotV = dot(ViewDir, tangent);
-    float BdotV = dot(ViewDir, BitangentDir);
-    //float aspect = sqrt(1-anisotropy*.9);
-    //float ax = max(.005, SquareRoughness / aspect);
-    //float ay = max(.005, SquareRoughness * aspect);
-    float ax = max(SquareRoughness * (1.0 + anisotropy), 0.005);
-    float ay = max(SquareRoughness * (1.0 - anisotropy), 0.005);
-    NDF = GTR2_aniso(NdotH, TdotH, BdotH, ax, ay) * UNITY_PI;
-    GFS = smithG_GGX_aniso(NdotL, TdotL, BdotL, ax, ay);
-    GFS *= smithG_GGX_aniso(NdotV, TdotV, BdotV, ax, ay);
-    //NDF = GTR2(NdotH, SquareRoughness) * UNITY_PI;
-    //GFS = smithG_GGX(max(NdotL,lerp(0.3,0,SquareRoughness)), Roughness) * smithG_GGX(NdotV, Roughness);
-}
-
-// ...
-inline half3 FresnelTerm(half3 F0, half cosA)
-{
-    half t = Pow5(1 - cosA);   // ala Schlick interpoliation
-    return F0 + (1 - F0) * t;
-}
-
-// ...
-void FinalizeDirectSpecularTerm()
-{
-    DirectSpecular = GFS * NDF * FresnelTerm(SpecularColor, LdotH) * EnergyCompensation;
-    #ifdef UNITY_COLORSPACE_GAMMA
-        DirectSpecular = sqrt(max(1e-4h, DirectSpecular));
-    #endif
-    DirectSpecular = max(0, DirectSpecular * Attenuation);
-    DirectSpecular *= any(SpecularColor) ? 1.0 : 0.0;
-}
-
-// ...
-void GetFallbackCubemap()
-{
-    CustomIndirect = texCUBElod(_FallbackCubemap, half4(ReflectDir.xyz, remap(SquareRoughness, 1, 0, 5, 0))).rgb;
-}
-
-// ...
-struct Unity_GlossyEnvironmentData
-{
-    // - Deferred case have one cubemap
-    // - Forward case can have two blended cubemap (unusual should be deprecated).
-    // Surface properties use for cubemap integration
-    half roughness; // CAUTION: This is perceptualRoughness but because of compatibility this name can't be change :(
-    half3 reflUVW;
-};
-
-// ...
-half perceptualRoughnessToMipmapLevel(half perceptualRoughness)
-{
-    return perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
-}
-
-// ...
-half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
-{
-    half perceptualRoughness = glossIn.roughness /* perceptualRoughness */ ;
-    #if 0
-        float m = PerceptualRoughnessToRoughness(perceptualRoughness); // m is the real roughness parameter
-        const float fEps = 1.192092896e-07F;        // smallest such that 1.0+FLT_EPSILON != 1.0  (+1e-4h is NOT good here. is visibly very wrong)
-        float n = (2.0 / max(fEps, m * m)) - 2.0;        // remap to spec power. See eq. 21 in --> https://dl.dropboxusercontent.com/u/55891920/papers/mm_brdf.pdf
-        n /= 4;                                     // remap from n_dot_h formulatino to n_dot_r. See section "Pre-convolved Cube Maps vs Path Tracers" --> https://s3.amazonaws.com/docs.knaldtech.com/knald/1.0.0/lys_power_drops.html
-        perceptualRoughness = pow(2 / (n + 2), 0.25);      // remap back to square root of real roughness (0.25 include both the sqrt root of the conversion and sqrt for going from roughness to perceptualRoughness)
-    #else
-        // MM: came up with a surprisingly close approximation to what the #if 0'ed out code above does.
-        perceptualRoughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);
-    #endif
-    half mip = perceptualRoughnessToMipmapLevel(perceptualRoughness);
-    half3 R = glossIn.reflUVW;
-    half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
-    return float4(DecodeHDR(rgbm, hdr), rgbm.a);
-}
-
-// ...
-inline half3 FresnelLerp(half3 F0, half3 F90, half cosA)
-{
-    half t = Pow5(1 - cosA);   // ala Schlick interpoliation
-    return lerp(F0, F90, t);
-}
-
-// ...
-void GetIndirectSpecular()
-{
-    Unity_GlossyEnvironmentData envData;
-    envData.roughness = Roughness;
-    envData.reflUVW = BoxProjectedCubemapDirection(ReflectDir, FragData.worldPos, unity_SpecCube0_ProbePosition, unity_SpecCube0_BoxMin, unity_SpecCube0_BoxMax);
-    float4 indirectSpecularRGBA = Unity_GlossyEnvironment(UNITY_PASS_TEXCUBE(unity_SpecCube0), unity_SpecCube0_HDR, envData);
-    #if defined(UNITY_SPECCUBE_BLENDING) && !defined(SHADER_API_MOBILE)
-        UNITY_BRANCH
-        if (unity_SpecCube0_BoxMin.w < 0.99999)
-        {
-            envData.reflUVW = BoxProjectedCubemapDirection(ReflectDir, FragData.worldPos, unity_SpecCube1_ProbePosition, unity_SpecCube1_BoxMin, unity_SpecCube1_BoxMax);
-            float4 indirectSpecularRGBA1 = Unity_GlossyEnvironment(UNITY_PASS_TEXCUBE_SAMPLER(unity_SpecCube1, unity_SpecCube0), unity_SpecCube1_HDR, envData);
-            indirectSpecularRGBA = lerp(indirectSpecularRGBA1, indirectSpecularRGBA, unity_SpecCube0_BoxMin.w);
-        }
-    #endif
-    IndirectSpecular = indirectSpecularRGBA.rgb;
-    if ((_IndirectFallbackMode > 0 && indirectSpecularRGBA.a == 0) || (_IndirectOverride > 0))
-    {
-        //using the fake specular probe toned down based on the average light, it's not phisically accurate
-        //but having a probe that reflects arbitrary stuff isn't accurate to begin with
-        half lightColGrey = max((LightColor.r + LightColor.g + LightColor.b) / 3, (IndirectDiffuse.r + IndirectDiffuse.g + IndirectDiffuse.b) / 3);
-        IndirectSpecular = CustomIndirect * min(lightColGrey, 1);
-    }
-    float horizon = min(1 + NdotH, 1.0);
-    float grazingTerm = saturate(1 - SquareRoughness + (1 - OneMinusReflectivity));
-    Dfg.x *= lerp(1.0, saturate(dot(IndirectDiffuse, 1.0)), Occlusion);
-    IndirectSpecular *= EnergyCompensation * horizon * horizon * lerp(lerp(Dfg.xxx, Dfg.yyy, SpecularColor), SpecularColor * Dfg.z, _DFGType);
-}
-
 // ...
 void AddStandardDiffuse()
 {
@@ -538,18 +549,6 @@ void AddStandardDiffuse()
 void AddToonDiffuse()
 {
     FinalColor.rgb += Diffuse + VertexDirectDiffuse;
-}
-
-// ...
-void AddDirectSpecular()
-{
-    FinalColor.rgb += DirectSpecular * SpecLightColor.rgb * SpecLightColor.a;
-}
-
-// ...
-void AddIndirectSpecular()
-{
-    FinalColor.rgb += IndirectSpecular * clamp(pow(NdotV + Occlusion, exp2(-16.0 * SquareRoughness - 1.0)) - 1.0 + Occlusion, 0.0, 1.0);
 }
 
 // ...

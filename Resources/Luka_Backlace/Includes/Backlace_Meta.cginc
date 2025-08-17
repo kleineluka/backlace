@@ -62,14 +62,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission();
     #endif
-    if (_EnableSpecular == 1)
-    {
+    #if defined(_BACKLACE_SPECULAR)
         GetSampleData();
-    }
-    if (_EnableSpecular == 1)
-    {
         SetupAlbedoAndSpecColor();
-    }
+    #endif // _BACKLACE_SPECULAR
     #if defined(_BACKLACE_EMISSION)
         surfaceData.Emission = Emission;
     #else

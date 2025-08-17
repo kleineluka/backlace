@@ -101,7 +101,6 @@ float4 Fragment(FragmentData i) : SV_TARGET
 {
     FragData = i;
     FinalColor = float4(0, 0, 0, 0);
-    
     LoadUVs();
     SampleAlbedo();
     ClipAlpha();
@@ -110,21 +109,16 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission();
     #endif
-    if (_EnableSpecular == 1)
-    {
+    #if defined(_BACKLACE_SPECULAR)
         GetSampleData();
-    }
+    #endif // _BACKLACE_SPECULAR
     GetDirectionVectors();
     GetLightData();
     GetDotProducts();
-    if (_EnableSpecular == 1)
-    {
+    #if defined(_BACKLACE_SPECULAR)
         SetupAlbedoAndSpecColor();
-    }
-    if (_EnableSpecular == 1)
-    {
         SetupDFG();
-    }
+    #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha();
     if (_DirectLightMode == 0)
     {
@@ -150,18 +144,16 @@ float4 Fragment(FragmentData i) : SV_TARGET
     {
         AnisotropicDirectSpecular();
     }
-    if (_EnableSpecular == 1)
-    {
+    #if defined(_BACKLACE_SPECULAR)
         FinalizeDirectSpecularTerm();
-    }
+    #endif // _BACKLACE_SPECULAR
     if (_IndirectFallbackMode == 1)
     {
         GetFallbackCubemap();
     }
-    if (_EnableSpecular == 1)
-    {
+    #if defined(_BACKLACE_SPECULAR)
         GetIndirectSpecular();
-    }
+    #endif // _BACKLACE_SPECULAR
     if (_DirectLightMode == 0)
     {
         AddStandardDiffuse();
@@ -170,14 +162,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
     {
         AddToonDiffuse();
     }
-    if (_EnableSpecular == 1)
-    {
+    #if defined(_BACKLACE_SPECULAR)
         AddDirectSpecular();
-    }
-    if (_EnableSpecular == 1)
-    {
         AddIndirectSpecular();
-    }
+    #endif // _BACKLACE_SPECULAR
     #if defined(_BACKLACE_EMISSION)
         AddEmission();
     #endif

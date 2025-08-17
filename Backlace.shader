@@ -61,7 +61,7 @@ Shader "luka/indev/backlace"
         [Space(35)]
         [Header(Specular Reflections)]
         [Space(10)]
-        _EnableSpecular ("Enable Specular", Float) = 0.0
+        [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         _Specular ("Specular", Range(0, 1)) = 0.5
         _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
@@ -137,7 +137,7 @@ Shader "luka/indev/backlace"
             #endif
 
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-            #pragma shader_feature_local _ _BACKLACE_EMISSION
+            #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
 
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -204,7 +204,7 @@ Shader "luka/indev/backlace"
             #pragma multi_compile_instancing
             
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-            #pragma shader_feature_local _ _BACKLACE_EMISSION
+            #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
             
             #include "UnityCG.cginc"
             #include "UnityLightingCommon.cginc"
@@ -329,8 +329,8 @@ Shader "luka/indev/backlace"
             #include "UnityCG.cginc"
             #include "UnityStandardUtils.cginc"
             #include "UnityMetaPass.cginc"
-
-            #pragma shader_feature_local _ _BACKLACE_EMISSION
+            
+            #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
 
             struct VertexData
             {

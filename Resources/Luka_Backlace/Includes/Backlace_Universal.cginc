@@ -63,6 +63,12 @@ inline half Pow5(half x)
     return x * x * x * x * x;
 }
 
+// square without pow
+float sqr(float x)
+{
+    return x * x;
+}
+
 // here is where we leave out shadow pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
@@ -73,37 +79,41 @@ inline half Pow5(half x)
         Occlusion = lerp(1, Msso.a, _Occlusion);
     }
 
-    // get sample data from MSSO texture
-    void GetSampleData()
-    {
-        Metallic = Msso.r * _Metallic;
-        Glossiness = Msso.g * _Glossiness;
-        Specular = Msso.b * _Specular;
-        Roughness = 1 - Glossiness;
-        SquareRoughness = max(Roughness * Roughness, 0.002);
-    }
+    // specular feature
+    #if defined(_BACKLACE_SPECULAR)
+        // get sample data from MSSO texture
+        void GetSampleData()
+        {
+            Metallic = Msso.r * _Metallic;
+            Glossiness = Msso.g * _Glossiness;
+            Specular = Msso.b * _Specular;
+            Roughness = 1 - Glossiness;
+            SquareRoughness = max(Roughness * Roughness, 0.002);
+        }
 
-    // setup albedo and specular color
-    void SetupAlbedoAndSpecColor()
-    {
-        float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
-        float sp = Specular * 0.08;
-        SpecularColor = lerp(float3(sp, sp, sp), Albedo.rgb, Metallic);
-        if (_ReplaceSpecular == 1)
+        // setup albedo and specular color
+        void SetupAlbedoAndSpecColor()
         {
-            SpecularColor = specularTint;
+            float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
+            float sp = Specular * 0.08;
+            SpecularColor = lerp(float3(sp, sp, sp), Albedo.rgb, Metallic);
+            if (_ReplaceSpecular == 1)
+            {
+                SpecularColor = specularTint;
+            }
+            else
+            {
+                SpecularColor *= specularTint;
+            }
+            OneMinusReflectivity = (1 - sp) - (Metallic * (1 - sp));
+            Albedo.rgb *= OneMinusReflectivity;
         }
-        else
-        {
-            SpecularColor *= specularTint;
-        }
-        OneMinusReflectivity = (1 - sp) - (Metallic * (1 - sp));
-        Albedo.rgb *= OneMinusReflectivity;
-    }
+    #endif // defined(_BACKLACE_SPECULAR)
 
     // emission feature
     #if defined(_BACKLACE_EMISSION)
 
+        // emission-specific variables and properties
         float3 Emission;
         float4 _EmissionColor;
         float4 _EmissionMap_ST;
@@ -115,19 +125,12 @@ inline half Pow5(half x)
         // get strength and colour of emission
         void CalculateEmission()
         {
-            // Start with the emission color property
             float3 baseEmission = _EmissionColor.rgb;
-
-            // If the toggle is on, use the albedo texture's color instead
-            if (_UseAlbedoAsEmission > 0.5)
+            [branch] if (_UseAlbedoAsEmission > 0)
             {
-                baseEmission = Albedo.rgb;
+                baseEmission = lerp(baseEmission, Albedo.rgb, _UseAlbedoAsEmission);
             }
-
-            // Sample the emission map
             float3 emissionMap = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _EmissionMap)).rgb;
-            
-            // The final emission is the base color, masked by the map, and multiplied by the strength
             Emission = baseEmission * emissionMap * _EmissionStrength;
         }
 
