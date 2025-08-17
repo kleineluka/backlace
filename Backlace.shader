@@ -66,6 +66,66 @@ Shader "luka/indev/backlace"
         Pass
         {  
             Tags { "LightMode" = "ForwardBase" }
+            
+            CGPROGRAM
+            #pragma target 5.0
+            #pragma vertex Vertex
+            #pragma fragment Fragment
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fog
+            #pragma multi_compile _ VERTEXLIGHT_ON
+            #pragma multi_compile_instancing
+
+            #ifndef UNITY_PASS_FORWARDBASE
+                #define UNITY_PASS_FORWARDBASE
+            #endif
+
+            #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+
+            #include "UnityCG.cginc"
+            #include "UnityLightingCommon.cginc"
+            #include "UnityStandardUtils.cginc"
+            #include "AutoLight.cginc"
+
+            struct VertexData
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+                float2 uv1 : TEXCOORD1;
+                float2 uv2 : TEXCOORD2;
+                float2 uv3 : TEXCOORD3;
+                float3 normal : NORMAL;
+                float4 tangentDir : TANGENT;
+                
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct FragmentData
+            {
+                float4 pos : SV_POSITION;
+                float3 normal : NORMAL;
+                float4 tangentDir : TANGENT;
+                float2 uv : TEXCOORD0;
+                float2 uv1 : TEXCOORD1;
+                float2 uv2 : TEXCOORD2;
+                float2 uv3 : TEXCOORD3;
+                float3 worldPos : TEXCOORD4;
+                float4 vertex : TEXCOORD5;
+                
+                UNITY_SHADOW_COORDS(6)
+                UNITY_FOG_COORDS(7)
+                
+                #if defined(LIGHTMAP_ON)
+                    float2 lightmapUV : TEXCOORD8;
+                #endif
+                #if defined(DYNAMICLIGHTMAP_ON)
+                    float2 dynamicLightmapUV : TEXCOORD9;
+                #endif
+                
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+
             ENDCG
         }
           
