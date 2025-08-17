@@ -36,6 +36,17 @@ Shader "luka/indev/backlace"
         [IntRange] _UseAlbedoAsEmission ("Use Albedo for Emission", Range(0, 1)) = 0.0
         _EmissionStrength ("Emission Strength", Float) = 1.0
 
+        // LIGHT LIMITING
+        [Space(35)]
+        [Header(Light Limiting)]
+        [Space(10)]
+        [IntRange] _EnableBaseLightLimit ("Enable Base Pass Limit", Range(0, 1)) = 0.0
+        _BaseLightMin ("Base Light Min", Float) = 0.0
+        _BaseLightMax ("Base Light Max", Float) = 2.0
+        [IntRange] _EnableAddLightLimit ("Enable Add Pass Limit", Range(0, 1)) = 0.0
+        _AddLightMin ("Add Light Min", Float) = 0.0
+        _AddLightMax ("Add Light Max", Float) = 2.0
+
         // SURFACE AND PBR MAPS
         [Space(35)]
         [Header(Surface and PBR Maps)]

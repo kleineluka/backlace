@@ -1,6 +1,21 @@
 #ifndef BACKLACE_FORWARD_CGINC
 #define BACKLACE_FORWARD_CGINC
 
+// Helper function to clamp the brightness of a light color while preserving its hue
+float3 LimitLightBrightness(float3 lightColor, float minVal, float maxVal)
+{
+    // find brightest colour channel
+    float brightness = max(lightColor.r, max(lightColor.g, lightColor.b));
+    // avoid division by zero
+    if (brightness > 0.0001)
+    {
+        float newBrightness = clamp(brightness, minVal, maxVal);
+        float scale = newBrightness / brightness;
+        return lightColor * scale;
+    }
+    return lightColor;
+}
+
 // clip alpha based on the _Cutoff value or dither mask
 // todo: make cutoff passed and not _Cutoff
 void ClipAlpha()

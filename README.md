@@ -1,5 +1,5 @@
 # Backlace 💗
-Base Toon Shader for VRChat & Unity. Forked from [Toony Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild/tree/main) which is under the [MIT License](https://github.com/VRLabs/Toony-Standard-Rebuild/blob/main/LICENSE). More information (license, features, etc.) will be added as the shader is (re-)built.
+Base Toon Shader for VRChat & Unity. Forked from [Toony Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild/tree/main) which is under the [MIT License](https://github.com/VRLabs/Toony-Standard-Rebuild/blob/main/LICENSE). More information (license, features, etc.) will be added as the shader is (re-)built. **This is a base to build your work off of, not a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.)**.
 
 ## Code Structure
 
