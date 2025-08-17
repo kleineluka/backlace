@@ -6,21 +6,32 @@
 
 // loading uv functions
 // todo: rework this, seems incredibly inefficient ?
-float2 Uvs[1];
-inline void LoadUV0()
-{
-    Uvs[0] = FragData.uv;
-}
+#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    
+    float2 Uvs[1];
+    inline void LoadUV0()
+    {
+        Uvs[0] = FragData.uv;
+    }
 
-void LoadUVList()
-{
-    LoadUV0();
-}
+    void LoadUVList()
+    {
+        LoadUV0();
+    }
 
-void LoadUVs()
-{
-    LoadUVList();
-}
+    void LoadUVs()
+    {
+        LoadUVList();
+    }
+
+    // sample texture shortcuct
+    // too: make colour passed to it instead of using _Color
+    void SampleAlbedo()
+    {
+        Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
+    }
+
+#endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
 
 // remap float from [oldMin, oldMax] to [newMin, newMax]
 inline float remap(float value, float oldMin, float oldMax, float newMin, float newMax)
@@ -52,13 +63,6 @@ inline half Pow5(half x)
     return x * x * x * x * x;
 }
 
-// sample texture shortcuct
-// too: make colour passed to it instead of using _Color
-void SampleAlbedo()
-{
-    Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
-}
-
 // here is where we leave out shadow pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
@@ -83,7 +87,6 @@ void SampleAlbedo()
     void SetupAlbedoAndSpecColor()
     {
         float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
-        
         float sp = Specular * 0.08;
         SpecularColor = lerp(float3(sp, sp, sp), Albedo.rgb, Metallic);
         if (_ReplaceSpecular == 1)
@@ -99,16 +102,5 @@ void SampleAlbedo()
     }
 
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
-
-// here is where we leave out meta pass
-#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_SHADOWCASTER)
-
-    // sample albedo texture
-    void SampleAlbedo()
-    {
-        Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
-    }
-
-#endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_SHADOWCASTER
 
 #endif // BACKLACE_UNIVERSAL_CGINC

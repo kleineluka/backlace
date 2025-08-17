@@ -1,6 +1,7 @@
 #ifndef BACKLACE_FORWARDBASE_CGINC
 #define BACKLACE_FORWARDBASE_CGINC
 
+// shared properties between base/add passes
 FragmentData FragData;
 float4 FinalColor;
 #if defined(_ALPHAMODULATE_ON)
@@ -90,10 +91,12 @@ UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
 Texture2D_float _DFG;
 SamplerState sampler_DFG;
 
+// includes
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Forward.cginc"
 #include "./Backlace_Vertex.cginc"
 
+// ...
 float4 Fragment(FragmentData i) : SV_TARGET
 {
     FragData = i;
