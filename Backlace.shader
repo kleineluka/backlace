@@ -63,6 +63,7 @@ Shader "luka/indev/backlace"
             Pass [_StencilOp]
         }
 
+        // Forward Base Pass
         Pass
         {  
             Tags { "LightMode" = "ForwardBase" }
@@ -125,22 +126,26 @@ Shader "luka/indev/backlace"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
+            #include "Resources/Luka_Backlace/Includes/Backlace_Base.cginc"
 
             ENDCG
         }
           
+        // ...
         Pass
         {
             Tags { "LightMode" = "ForwardAdd" }
             ENDCG
         }
 
+        // ...
         Pass
         {
             Tags { "LightMode" = "ShadowCaster" }
             ENDCG
         }
-                
+        
+        // ...
         Pass
         {
             Tags { "LightMode" = "Meta" }

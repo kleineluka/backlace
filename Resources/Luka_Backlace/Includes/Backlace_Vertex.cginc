@@ -1,0 +1,35 @@
+#ifndef BACKLACE_VERTEX_CGINC
+#define BACKLACE_VERTEX_CGINC
+
+FragmentData Vertex(VertexData v)
+{
+    FragmentData i;
+    UNITY_SETUP_INSTANCE_ID(v);
+    UNITY_INITIALIZE_OUTPUT(FragmentData, i);
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i);
+    
+    i.vertex = v.vertex;
+    i.pos = UnityObjectToClipPos(v.vertex);
+    i.normal = UnityObjectToWorldNormal(v.normal);
+    i.worldPos = mul(unity_ObjectToWorld, v.vertex);
+    i.tangentDir = v.tangentDir;
+    i.uv = v.uv;
+    i.uv1 = v.uv1;
+    i.uv2 = v.uv2;
+    i.uv3 = v.uv3;
+    
+    UNITY_TRANSFER_SHADOW(i, v.uv);
+    UNITY_TRANSFER_FOG(i, i.pos);
+    
+    #if defined(LIGHTMAP_ON)
+        i.lightmapUV = v.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
+    #endif
+    
+    #if defined(DYNAMICLIGHTMAP_ON)
+        i.dynamicLightmapUV = v.uv2 * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+    #endif
+    
+    return i;
+}
+
+#endif // BACKLACE_VERTEX_CGINC

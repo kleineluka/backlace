@@ -59,7 +59,6 @@ void SampleAlbedo()
     Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
 }
 
-
 // here is where we leave out shadow pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
@@ -101,8 +100,6 @@ void SampleAlbedo()
 
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
 
-
-
 // here is where we leave out meta pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_SHADOWCASTER)
 
@@ -113,7 +110,5 @@ void SampleAlbedo()
     }
 
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_SHADOWCASTER
-
-
 
 #endif // BACKLACE_UNIVERSAL_CGINC
