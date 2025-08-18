@@ -116,6 +116,7 @@ Shader "luka/indev/backlace"
     SubShader
     {
 
+        // Rendering Settings
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]
@@ -130,64 +131,8 @@ Shader "luka/indev/backlace"
         Pass
         {  
             Tags { "LightMode" = "ForwardBase" }
-            
             CGPROGRAM
-            #pragma target 5.0
-            #pragma vertex Vertex
-            #pragma fragment Fragment
-            #pragma multi_compile_fwdbase
-            #pragma multi_compile_fog
-            #pragma multi_compile _ VERTEXLIGHT_ON
-            #pragma multi_compile_instancing
-
-            #ifndef UNITY_PASS_FORWARDBASE
-                #define UNITY_PASS_FORWARDBASE
-            #endif // UNITY_PASS_FORWARDBASE
-
-            #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-            #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
-
-            #include "UnityCG.cginc"
-            #include "UnityLightingCommon.cginc"
-            #include "UnityStandardUtils.cginc"
-            #include "AutoLight.cginc"
-
-            struct VertexData
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-                float3 normal : NORMAL;
-                float4 tangentDir : TANGENT;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct FragmentData
-            {
-                float4 pos : SV_POSITION;
-                float3 normal : NORMAL;
-                float4 tangentDir : TANGENT;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-                float3 worldPos : TEXCOORD4;
-                float4 vertex : TEXCOORD5;
-                UNITY_SHADOW_COORDS(6)
-                UNITY_FOG_COORDS(7)
-                #if defined(LIGHTMAP_ON)
-                    float2 lightmapUV : TEXCOORD8;
-                #endif
-                #if defined(DYNAMICLIGHTMAP_ON)
-                    float2 dynamicLightmapUV : TEXCOORD9;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
-
             #include "Resources/Luka_Backlace/Includes/Backlace_Base.cginc"
-
             ENDCG
         }
           
@@ -196,69 +141,10 @@ Shader "luka/indev/backlace"
         {
             Tags { "LightMode" = "ForwardAdd" }
             Blend [_SrcBlend] One // make it, well, *additive*
-            Fog
-            {
-                Color(0, 0, 0, 0) // additive = black fog
-
-            }
+            Fog { Color(0, 0, 0, 0) } // additive should have black fog
             ZWrite Off
-
             CGPROGRAM
-            #pragma target 5.0
-            #pragma vertex Vertex
-            #pragma fragment Fragment
-            #pragma multi_compile_fwdadd_fullshadows
-            #pragma multi_compile_fog
-            #pragma multi_compile_instancing
-
-            #ifndef UNITY_PASS_FORWARDADD
-                #define UNITY_PASS_FORWARDADD
-            #endif // UNITY_PASS_FORWARDADD
-            
-            #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-            #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
-            
-            #include "UnityCG.cginc"
-            #include "UnityLightingCommon.cginc"
-            #include "UnityStandardUtils.cginc"
-            #include "AutoLight.cginc"
-            
-            struct VertexData
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-                float3 normal : NORMAL;
-                float4 tangentDir : TANGENT;    
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-            
-            struct FragmentData
-            {
-                float4 pos : SV_POSITION;
-                float3 normal : NORMAL;
-                float4 tangentDir : TANGENT;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-                float3 worldPos : TEXCOORD4;
-                float4 vertex : TEXCOORD5;
-                UNITY_SHADOW_COORDS(6)
-                UNITY_FOG_COORDS(7)
-                #if defined(LIGHTMAP_ON)
-                    float2 lightmapUV : TEXCOORD8;
-                #endif
-                #if defined(DYNAMICLIGHTMAP_ON)
-                    float2 dynamicLightmapUV : TEXCOORD9;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
-
             #include "Resources/Luka_Backlace/Includes/Backlace_Add.cginc"
-
             ENDCG
         }
 
@@ -266,69 +152,10 @@ Shader "luka/indev/backlace"
         Pass
         {
             Tags { "LightMode" = "ShadowCaster" }
-            ZWrite On ZTest LEqual
-
+            ZWrite On 
+            ZTest LEqual
             CGPROGRAM
-            #pragma target 5.0
-            #pragma multi_compile_shadowcaster
-            #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
-            #pragma vertex Vertex
-            #pragma fragment Fragment
-
-            #ifndef UNITY_PASS_SHADOWCASTER
-                #define UNITY_PASS_SHADOWCASTER
-            #endif // UNITY_PASS_SHADOWCASTER
-
-            #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-
-            #include "UnityCG.cginc"
-
-            struct VertexData
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-            };
-
-            struct VertexOutput
-            {
-                float4 pos : SV_POSITION;
-                #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-                    float2 uv : TEXCOORD0;
-                    float2 uv1 : TEXCOORD1;
-                    float2 uv2 : TEXCOORD2;
-                    float2 uv3 : TEXCOORD3;
-                #endif
-                #if defined(SHADOWS_CUBE)
-                    float3 lightVec : TEXCOORD4;
-                #endif
-                float4 vertex : TEXCOORD5;
-            };
-
-            struct FragmentData
-            {
-                #if defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-                    UNITY_VPOS_TYPE pos : VPOS;
-                #else
-                    float4 pos : SV_POSITION;
-                #endif
-                #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-                    float2 uv : TEXCOORD0;
-                    float2 uv1 : TEXCOORD1;
-                    float2 uv2 : TEXCOORD2;
-                    float2 uv3 : TEXCOORD3;
-                #endif
-                #if defined(SHADOWS_CUBE)
-                    float3 lightVec : TEXCOORD4;
-                #endif
-                float4 vertex : TEXCOORD5;
-            };
-
             #include "Resources/Luka_Backlace/Includes/Backlace_Shadow.cginc"
-
             ENDCG
         }
         
@@ -337,42 +164,8 @@ Shader "luka/indev/backlace"
         {
             Tags { "LightMode" = "Meta" }
             Cull Off
-
             CGPROGRAM
-            #pragma vertex Vertex
-            #pragma fragment Fragment
-
-            #include "UnityCG.cginc"
-            #include "UnityStandardUtils.cginc"
-            #include "UnityMetaPass.cginc"
-
-            #ifndef UNITY_PASS_META
-                #define UNITY_PASS_META
-            #endif // UNITY_PASS_META
-            
-            #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
-
-            struct VertexData
-            {
-                float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-            };
-
-            struct FragmentData
-            {
-                float4 pos : SV_POSITION;
-                float2 uv : TEXCOORD0;
-                float2 uv1 : TEXCOORD1;
-                float2 uv2 : TEXCOORD2;
-                float2 uv3 : TEXCOORD3;
-                float4 vertex : TEXCOORD4;
-            };
-
             #include "Resources/Luka_Backlace/Includes/Backlace_Meta.cginc"
-
             ENDCG
         }
 

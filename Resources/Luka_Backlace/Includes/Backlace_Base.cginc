@@ -1,92 +1,70 @@
 #ifndef BACKLACE_FORWARDBASE_CGINC
 #define BACKLACE_FORWARDBASE_CGINC
 
-// includes
+// compiler directives
+#pragma target 5.0
+#pragma vertex Vertex
+#pragma fragment Fragment
+#pragma multi_compile_fwdbase
+#pragma multi_compile_fog
+#pragma multi_compile _ VERTEXLIGHT_ON
+#pragma multi_compile_instancing
+
+// current pass
+#ifndef UNITY_PASS_FORWARDBASE
+    #define UNITY_PASS_FORWARDBASE
+#endif // UNITY_PASS_FORWARDBASE
+
+// keywords
+#pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+#include "./Backlace_Keywords.cginc"
+
+// unity includes
+#include "UnityCG.cginc"
+#include "UnityLightingCommon.cginc"
+#include "UnityStandardUtils.cginc"
+#include "AutoLight.cginc"
+
+// data structures
+struct VertexData
+{
+    float4 vertex : POSITION;
+    float2 uv : TEXCOORD0;
+    float2 uv1 : TEXCOORD1;
+    float2 uv2 : TEXCOORD2;
+    float2 uv3 : TEXCOORD3;
+    float3 normal : NORMAL;
+    float4 tangentDir : TANGENT;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
+};
+
+struct FragmentData
+{
+    float4 pos : SV_POSITION;
+    float3 normal : NORMAL;
+    float4 tangentDir : TANGENT;
+    float2 uv : TEXCOORD0;
+    float2 uv1 : TEXCOORD1;
+    float2 uv2 : TEXCOORD2;
+    float2 uv3 : TEXCOORD3;
+    float3 worldPos : TEXCOORD4;
+    float4 vertex : TEXCOORD5;
+    UNITY_SHADOW_COORDS(6)
+    UNITY_FOG_COORDS(7)
+    #if defined(LIGHTMAP_ON)
+        float2 lightmapUV : TEXCOORD8;
+    #endif // LIGHTMAP_ON
+    #if defined(DYNAMICLIGHTMAP_ON)
+        float2 dynamicLightmapUV : TEXCOORD9;
+    #endif // DYNAMICLIGHTMAP_ON
+    UNITY_VERTEX_OUTPUT_STEREO
+};
+
+// backlace includes
 #include "./Backlace_Properties.cginc"
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Forward.cginc"
 #include "./Backlace_Vertex.cginc"
-
-// ...
-float4 Fragment(FragmentData i) : SV_TARGET
-{
-    FragData = i;
-    FinalColor = float4(0, 0, 0, 0);
-    LoadUVs();
-    SampleAlbedo();
-    ClipAlpha();
-    SampleNormal();
-    SampleMSSO();
-    #if defined(_BACKLACE_EMISSION)
-        CalculateEmission();
-    #endif
-    #if defined(_BACKLACE_SPECULAR)
-        GetSampleData();
-    #endif // _BACKLACE_SPECULAR
-    GetDirectionVectors();
-    GetLightData();
-    GetDotProducts();
-    #if defined(_BACKLACE_SPECULAR)
-        SetupAlbedoAndSpecColor();
-        SetupDFG();
-    #endif // _BACKLACE_SPECULAR
-    PremultiplyAlpha();
-    if (_DirectLightMode == 0)
-    {
-        GetPBRDiffuse();
-    }
-    if (_DirectLightMode == 1)
-    {
-        GetToonDiffuse();
-    }
-    if (_DirectLightMode == 0)
-    {
-        GetPBRVertexDiffuse();
-    }
-    if (_DirectLightMode == 1)
-    {
-        GetToonVertexDiffuse();
-    }
-    if (_SpecularMode == 0)
-    {
-        StandardDirectSpecular();
-    }
-    if (_SpecularMode == 1)
-    {
-        AnisotropicDirectSpecular();
-    }
-    if (_SpecularMode == 2)
-    {
-        StandardDirectSpecular();
-        ApplyToonHighlights();
-    }
-    #if defined(_BACKLACE_SPECULAR)
-        FinalizeDirectSpecularTerm();
-    #endif // _BACKLACE_SPECULAR
-    if (_IndirectFallbackMode == 1)
-    {
-        GetFallbackCubemap();
-    }
-    #if defined(_BACKLACE_SPECULAR)
-        GetIndirectSpecular();
-    #endif // _BACKLACE_SPECULAR
-    if (_DirectLightMode == 0)
-    {
-        AddStandardDiffuse();
-    }
-    if (_DirectLightMode == 1)
-    {
-        AddToonDiffuse();
-    }
-    #if defined(_BACKLACE_SPECULAR)
-        AddDirectSpecular();
-        AddIndirectSpecular();
-    #endif // _BACKLACE_SPECULAR
-    #if defined(_BACKLACE_EMISSION)
-        AddEmission();
-    #endif
-    AddAlpha();
-    return FinalColor;
-}
+#include "./Backlace_Fragment.cginc"
 
 #endif // BACKLACE_FORWARDBASE_CGINC
