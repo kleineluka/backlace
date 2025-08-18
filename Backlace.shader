@@ -46,6 +46,9 @@ Shader "luka/indev/backlace"
         [IntRange] _EnableAddLightLimit ("Enable Add Pass Limit", Range(0, 1)) = 0.0
         _AddLightMin ("Add Light Min", Float) = 0.0
         _AddLightMax ("Add Light Max", Float) = 2.0
+        _GreyscaleLighting ("Greyscale Lighting", Range(0, 1)) = 0.0
+        _ForceLightColor ("Force Light Color", Range(0, 1)) = 0.0
+        _ForcedLightColor ("Forced Light Color", Color) = (1, 1, 1, 1)
 
         // SURFACE AND PBR MAPS
         [Space(35)]
@@ -145,7 +148,7 @@ Shader "luka/indev/backlace"
 
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
-            #endif
+            #endif // UNITY_PASS_FORWARDBASE
 
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
@@ -213,6 +216,10 @@ Shader "luka/indev/backlace"
             #pragma multi_compile_fwdadd_fullshadows
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
+
+            #ifndef UNITY_PASS_FORWARDADD
+                #define UNITY_PASS_FORWARDADD
+            #endif // UNITY_PASS_FORWARDADD
             
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
             #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
@@ -273,6 +280,10 @@ Shader "luka/indev/backlace"
             #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
             #pragma vertex Vertex
             #pragma fragment Fragment
+
+            #ifndef UNITY_PASS_SHADOWCASTER
+                #define UNITY_PASS_SHADOWCASTER
+            #endif // UNITY_PASS_SHADOWCASTER
 
             #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
 
@@ -340,6 +351,10 @@ Shader "luka/indev/backlace"
             #include "UnityCG.cginc"
             #include "UnityStandardUtils.cginc"
             #include "UnityMetaPass.cginc"
+
+            #ifndef UNITY_PASS_META
+                #define UNITY_PASS_META
+            #endif // UNITY_PASS_META
             
             #include "Resources/Luka_Backlace/Includes/Backlace_Keywords.cginc"
 

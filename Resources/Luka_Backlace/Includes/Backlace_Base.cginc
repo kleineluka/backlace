@@ -6,7 +6,7 @@ FragmentData FragData;
 float4 FinalColor;
 #if defined(_ALPHAMODULATE_ON)
     sampler3D _DitherMaskLOD;
-#endif
+#endif // _ALPHAMODULATE_ON
 float LightAttenuation;
 float _DirectLightMode;
 float UnmaxedNdotL;
@@ -46,6 +46,12 @@ float _IndirectOverride;
 float RoughnessSquared;
 float _EnableSpecular;
 float _SpecularMode;
+float _EnableBaseLightLimit;
+float _BaseLightMin;
+float _BaseLightMax;
+float _GreyscaleLighting;
+float _ForceLightColor;
+float4 _ForcedLightColor;
 float3 NormalMap;
 float3 NormalDir;
 float3 LightDir;

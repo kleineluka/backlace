@@ -118,27 +118,49 @@ void GetLightData()
     attenuation = FadeShadows(FragData, attenuation);
     LightAttenuation = attenuation;
     
-    //lightmap sampling
+    // lightmap sampling
     #if defined(LIGHTMAP_ON)
         Lightmap = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
-        
         //directional map sampling
         #if defined(DIRLIGHTMAP_COMBINED)
             LightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd, unity_Lightmap, FragData.lightmapUV);
-        #endif
-    #endif
-    //dynamic Lightmap sampling
+        #endif // DIRLIGHTMAP_COMBINED
+    #endif // LIGHTMAP_ON
+
+    // dynamic Lightmap sampling
     #if defined(DYNAMICLIGHTMAP_ON)
         DynamicLightmap = DecodeRealtimeLightmap(UNITY_SAMPLE_TEX2D(unity_DynamicLightmap, FragData.dynamicLightmapUV));
         
         #if defined(DIRLIGHTMAP_COMBINED)
             DynamicLightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_DynamicDirectionality, unity_DynamicLightmap, FragData.dynamicLightmapUV);
-        #endif
-    #endif
+        #endif // DIRLIGHTMAP_COMBINED
+    #endif // DYNAMICLIGHTMAP_ON
     
     LightColor = float4(_LightColor0.rgb, LightAttenuation);
+
+    // make lighting greyscale
+    [branch] if (_GreyscaleLighting != 0)
+    {
+        float light_luminance = GetLuma(LightColor.rgb);
+        LightColor.rgb = lerp(LightColor.rgb, float3(light_luminance, light_luminance, light_luminance), _GreyscaleLighting);
+    }
+
+    // force light colour
+    [branch] if (_ForceLightColor != 0)
+    {
+        LightColor.rgb = lerp(LightColor.rgb, _ForcedLightColor.rgb, _ForceLightColor);
+    }
+
+    #if defined(UNITY_PASS_FORWARDADD)
+        [branch] if (_EnableAddLightLimit == 1)
+        {
+            LightColor.rgb = LimitLightBrightness(LightColor.rgb, _AddLightMin, _AddLightMax);
+        }
+    #endif // UNITY_PASS_FORWARDADD
+
     SpecLightColor = LightColor;
     IndirectDiffuse = 0;
+
     //only counts it in the forwardBase pass
     #if defined(UNITY_PASS_FORWARDBASE)
         
@@ -151,8 +173,8 @@ void GetLightData()
             IndirectDiffuse = Lightmap;
             #if defined(DIRLIGHTMAP_COMBINED)
                 IndirectDiffuse = DecodeDirectionalLightmap(IndirectDiffuse, LightmapDirection, NormalDir);
-            #endif
-        #endif
+            #endif // DIRLIGHTMAP_COMBINED
+        #endif // LIGHTMAP_ON
         
         #if defined(DYNAMICLIGHTMAP_ON)
             
@@ -160,8 +182,8 @@ void GetLightData()
                 IndirectDiffuse += DecodeDirectionalLightmap(DynamicLightmap, DynamicLightmapDirection, NormalDir);
             #else
                 IndirectDiffuse += DynamicLightmap;
-            #endif
-        #endif
+            #endif // DIRLIGHTMAP_COMBINED
+        #endif // DYNAMICLIGHTMAP_ON
         
         #if !defined(LIGHTMAP_ON) && !defined(DYNAMICLIGHTMAP_ON)
             
@@ -183,8 +205,15 @@ void GetLightData()
                     IndirectDiffuse = 0;
                 }
             }
-        #endif
-    #endif
+        #endif // !LIGHTMAP_ON && !DYNAMICLIGHTMAP_ON
+
+        [branch] if (_EnableBaseLightLimit == 1)
+        {
+            LightColor.rgb = LimitLightBrightness(LightColor.rgb, _BaseLightMin, _BaseLightMax);
+            IndirectDiffuse = LimitLightBrightness(IndirectDiffuse, _BaseLightMin, _BaseLightMax);
+        }
+
+    #endif // UNITY_PASS_FORWARDBASE
 }
 
 // get dot products

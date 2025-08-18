@@ -79,6 +79,12 @@ float sqr(float x)
         Occlusion = lerp(1, Msso.a, _Occlusion);
     }
 
+    // get the greyscale of a colour
+    inline float GetLuma(float3 color)
+    {
+        return dot(color, float3(0.299, 0.587, 0.114));
+    }
+
     // specular feature
     #if defined(_BACKLACE_SPECULAR)
         // get sample data from MSSO texture

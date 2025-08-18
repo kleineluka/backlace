@@ -1,5 +1,12 @@
 # Backlace 💗
-Base Toon Shader for VRChat & Unity. Forked from [Toony Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild/tree/main) which is under the [MIT License](https://github.com/VRLabs/Toony-Standard-Rebuild/blob/main/LICENSE). More information (license, features, etc.) will be added as the shader is (re-)built. **This is a base to build your work off of, not a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.)**.
+Base Toon Shader for VRChat & Unity. Forked from [Toony Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild/tree/main) which is under the [MIT License](https://github.com/VRLabs/Toony-Standard-Rebuild/blob/main/LICENSE). More information (license, features, etc.) will be added as the shader is (re-)built. **This is a base to build your work off of, not a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). As such, many features are a naïve implementation.**
+
+## Variants
+
+Backlace comes in three variants:
+- **Lite**: The most performant version of the shader, with the least features enabled.
+- **Standard**: The default version of the shader, with most features enabled.
+- **Fun:** The least performant, a version of the shader with additional special effects.
 
 ## Code Structure
 
