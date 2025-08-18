@@ -55,6 +55,11 @@ float4 Fragment(FragmentData i) : SV_TARGET
     {
         AnisotropicDirectSpecular();
     }
+    if (_SpecularMode == 2)
+    {
+        StandardDirectSpecular();
+        ApplyToonHighlights();
+    }
     #if defined(_BACKLACE_SPECULAR)
         FinalizeDirectSpecularTerm();
     #endif // _BACKLACE_SPECULAR

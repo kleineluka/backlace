@@ -240,7 +240,7 @@ float smithG_GGX(float NdotV, float alphaG)
 {
     float a = alphaG * alphaG;
     float b = NdotV * NdotV;
-    return 1 / (NdotV + sqrt(a + b - a * b));
+    return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
 }
 
 // standard direct specular calculation
@@ -314,6 +314,17 @@ void GetFallbackCubemap()
     CustomIndirect = texCUBElod(_FallbackCubemap, half4(ReflectDir.xyz, remap(SquareRoughness, 1, 0, 5, 0))).rgb;
 }
 
+// toon highlights
+void ApplyToonHighlights()
+{
+    // calculating highlight ramp uvs based on offset
+    float newMin = max(_HighlightRampOffset, 0);
+    float newMax = max(_HighlightRampOffset +1, 0);
+    float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
+    // have to recheck the metallic thing in here in case of a specular workflow where there's no metallic value
+    NDF = UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Metallic + (0.2 * Metallic));
+}
+
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
 
@@ -322,6 +333,7 @@ void GetFallbackCubemap()
     {
         float3 dfguv = float3(NdotV, Roughness, 0);
         Dfg = _DFG.Sample(sampler_DFG, dfguv).xyz;
+        Dfg.y = max(Dfg.y, 1e-7f); // prevent division by zero
         EnergyCompensation = lerp(1.0 + SpecularColor * (1.0 / Dfg.y - 1.0), 1, _DFGType);
     }
 

@@ -106,5 +106,11 @@ SamplerState sampler_DFG;
     float _AddLightMax;
 #endif // UNITY_PASS_FORWARDADD
 
+// ...
+UNITY_DECLARE_TEX2D(_HighlightRamp);
+float4 _HighlightRampColor;
+float _HighlightIntensity;
+float _HighlightRampOffset;
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

@@ -50,15 +50,6 @@ Shader "luka/indev/backlace"
         _ForceLightColor ("Force Light Color", Range(0, 1)) = 0.0
         _ForcedLightColor ("Forced Light Color", Color) = (1, 1, 1, 1)
 
-        // SURFACE AND PBR MAPS
-        [Space(35)]
-        [Header(Surface and PBR Maps)]
-        [Space(10)]
-        _MSSO ("MSSO", 2D) = "white" { }
-        _Metallic ("Metallic", Range(0, 1)) = 0
-        _Glossiness ("Glossiness", Range(0, 1)) = 0
-        _Occlusion ("Occlusion", Range(0, 1)) = 1
-
         // TOON LIGHTING
         [Space(35)]
         [Header(Toon Lighting)]
@@ -73,21 +64,24 @@ Shader "luka/indev/backlace"
 
         // SPECULAR
         [Space(35)]
-        [Header(Specular Reflections)]
+        [Header(Specular)]
         [Space(10)]
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
+        _MSSO ("MSSO", 2D) = "white" { }
+        _Metallic ("Metallic", Range(0, 1)) = 0
+        _Glossiness ("Glossiness", Range(0, 1)) = 0
+        _Occlusion ("Occlusion", Range(0, 1)) = 1
         _Specular ("Specular", Range(0, 1)) = 0.5
         _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
-        _ReplaceSpecular ("Replace Specular", Float) = 0
-
-        // ANISOTROPY
-        [Space(35)]
-        [Header(Anisotropy)]
-        [Space(10)]
         _SpecularMode ("Specular Mode", Float) = -1
         _TangentMap ("Tangent Map", 2D) = "white" { }
         _Anisotropy ("Ansotropy", Range(-1, 1)) = 0
+        _ReplaceSpecular ("Replace Specular", Float) = 0
+        _HighlightRamp ("Highlight Ramp", 2D) = "white" { }
+        _HighlightRampColor ("Highlight Color", Color) = (1, 1, 1, 1)
+        _HighlightIntensity ("Highlight Intensity", Float) = 1.0
+        _HighlightRampOffset ("Highlight Ramp Offset", Range(-1, 1)) = 0.0
 
         // INDIRECT LIGHTING
         [Space(35)]
