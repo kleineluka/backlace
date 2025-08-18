@@ -1,21 +1,6 @@
 #ifndef BACKLACE_FORWARD_CGINC
 #define BACKLACE_FORWARD_CGINC
 
-// Helper function to clamp the brightness of a light color while preserving its hue
-float3 LimitLightBrightness(float3 lightColor, float minVal, float maxVal)
-{
-    // find brightest colour channel
-    float brightness = max(lightColor.r, max(lightColor.g, lightColor.b));
-    // avoid division by zero
-    if (brightness > 0.0001)
-    {
-        float newBrightness = clamp(brightness, minVal, maxVal);
-        float scale = newBrightness / brightness;
-        return lightColor * scale;
-    }
-    return lightColor;
-}
-
 // clip alpha based on the _Cutoff value or dither mask
 // todo: make cutoff passed and not _Cutoff
 void ClipAlpha()
@@ -35,13 +20,6 @@ void ClipAlpha()
 void SampleNormal()
 {
     NormalMap = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_BumpMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _BumpMap)), _BumpScale);
-}
-
-// safe normalize a half3 vector
-half3 Unity_SafeNormalize(half3 inVec)
-{
-    half dp3 = max(0.001f, dot(inVec, inVec));
-    return inVec * rsqrt(dp3);
 }
 
 // calculate normals from normal map
@@ -73,147 +51,6 @@ void GetDirectionVectors()
     ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
     ReflectDir = reflect(-ViewDir, NormalDir);
     HalfDir = Unity_SafeNormalize(LightDir + ViewDir);
-}
-
-// get SH length
-half3 GetSHLength()
-{
-    half3 x, x1;
-    x.r = length(unity_SHAr);
-    x.g = length(unity_SHAg);
-    x.b = length(unity_SHAb);
-    x1.r = length(unity_SHBr);
-    x1.g = length(unity_SHBg);
-    x1.b = length(unity_SHBb);
-    return x + x1;
-}
-
-// fade shadows based on distance
-float FadeShadows(FragmentData i, float attenuation)
-{
-    #if HANDLE_SHADOWS_BLENDING_IN_GI && !defined(SHADOWS_SHADOWMASK)
-        // UNITY_LIGHT_ATTENUATION doesn't fade shadows for us.
-        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-        attenuation = saturate(attenuation + shadowFade);
-    #endif
-    #if defined(LIGHTMAP_ON) && defined(SHADOWS_SHADOWMASK)
-        // UNITY_LIGHT_ATTENUATION doesn't fade shadows for us.
-        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-        float bakedAttenuation = UnitySampleBakedOcclusion(i.lightmapUV, i.worldPos);
-        attenuation = UnityMixRealtimeAndBakedShadows(attenuation, bakedAttenuation, shadowFade);
-        //attenuation = saturate(attenuation + shadowFade);
-        //attenuation = bakedAttenuation;   
-    #endif
-    return attenuation;
-}
-
-// get light data
-void GetLightData()
-{
-    UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
-    attenuation = FadeShadows(FragData, attenuation);
-    LightAttenuation = attenuation;
-    
-    // lightmap sampling
-    #if defined(LIGHTMAP_ON)
-        Lightmap = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
-        //directional map sampling
-        #if defined(DIRLIGHTMAP_COMBINED)
-            LightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd, unity_Lightmap, FragData.lightmapUV);
-        #endif // DIRLIGHTMAP_COMBINED
-    #endif // LIGHTMAP_ON
-
-    // dynamic Lightmap sampling
-    #if defined(DYNAMICLIGHTMAP_ON)
-        DynamicLightmap = DecodeRealtimeLightmap(UNITY_SAMPLE_TEX2D(unity_DynamicLightmap, FragData.dynamicLightmapUV));
-        
-        #if defined(DIRLIGHTMAP_COMBINED)
-            DynamicLightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_DynamicDirectionality, unity_DynamicLightmap, FragData.dynamicLightmapUV);
-        #endif // DIRLIGHTMAP_COMBINED
-    #endif // DYNAMICLIGHTMAP_ON
-    
-    LightColor = float4(_LightColor0.rgb, LightAttenuation);
-
-    // make lighting greyscale
-    [branch] if (_GreyscaleLighting != 0)
-    {
-        float light_luminance = GetLuma(LightColor.rgb);
-        LightColor.rgb = lerp(LightColor.rgb, float3(light_luminance, light_luminance, light_luminance), _GreyscaleLighting);
-    }
-
-    // force light colour
-    [branch] if (_ForceLightColor != 0)
-    {
-        LightColor.rgb = lerp(LightColor.rgb, _ForcedLightColor.rgb, _ForceLightColor);
-    }
-
-    #if defined(UNITY_PASS_FORWARDADD)
-        [branch] if (_EnableAddLightLimit == 1)
-        {
-            LightColor.rgb = LimitLightBrightness(LightColor.rgb, _AddLightMin, _AddLightMax);
-        }
-    #endif // UNITY_PASS_FORWARDADD
-
-    SpecLightColor = LightColor;
-    IndirectDiffuse = 0;
-
-    //only counts it in the forwardBase pass
-    #if defined(UNITY_PASS_FORWARDBASE)
-        
-        LightColor.rgb += float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
-        //some random magic to get more tinted by the ambient
-        LightColor.rgb = lerp(GetSHLength(), LightColor.rgb, .75);
-        SpecLightColor = LightColor;
-        
-        #if defined(LIGHTMAP_ON)
-            IndirectDiffuse = Lightmap;
-            #if defined(DIRLIGHTMAP_COMBINED)
-                IndirectDiffuse = DecodeDirectionalLightmap(IndirectDiffuse, LightmapDirection, NormalDir);
-            #endif // DIRLIGHTMAP_COMBINED
-        #endif // LIGHTMAP_ON
-        
-        #if defined(DYNAMICLIGHTMAP_ON)
-            
-            #if defined(DIRLIGHTMAP_COMBINED)
-                IndirectDiffuse += DecodeDirectionalLightmap(DynamicLightmap, DynamicLightmapDirection, NormalDir);
-            #else
-                IndirectDiffuse += DynamicLightmap;
-            #endif // DIRLIGHTMAP_COMBINED
-        #endif // DYNAMICLIGHTMAP_ON
-        
-        #if !defined(LIGHTMAP_ON) && !defined(DYNAMICLIGHTMAP_ON)
-            
-            //if there's no direct light, we get the probe light direction to use as direct light direction and
-            //we consider the indirect light color as it was the direct light color.
-            //also taking into account the case of a really low intensity being considered like non existent due to it no having
-            //much relevance anyways and it can cause problems locally on mirrors if the avatat has a very low intensity light
-            //just for enabling the depth buffer.
-            IndirectDiffuse = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
-            if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
-            {
-                LightDir = normalize(unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz);
-                HalfDir = Unity_SafeNormalize(LightDir + ViewDir);
-                SpecLightColor.rgb = IndirectDiffuse;
-                LightColor.a = 1;
-                if (_DirectLightMode > 0)
-                {
-                    LightColor.rgb = IndirectDiffuse;
-                    IndirectDiffuse = 0;
-                }
-            }
-        #endif // !LIGHTMAP_ON && !DYNAMICLIGHTMAP_ON
-
-        [branch] if (_EnableBaseLightLimit == 1)
-        {
-            LightColor.rgb = LimitLightBrightness(LightColor.rgb, _BaseLightMin, _BaseLightMax);
-            IndirectDiffuse = LimitLightBrightness(IndirectDiffuse, _BaseLightMin, _BaseLightMax);
-        }
-
-    #endif // UNITY_PASS_FORWARDBASE
 }
 
 // get dot products
@@ -612,5 +449,19 @@ void AddAlpha()
 {
     FinalColor.a = Albedo.a;
 }
+
+// rim feature
+#if defined(_BACKLACE_RIMLIGHT)
+    void CalculateRimlight()
+    {
+        float fresnel = 1 - saturate(dot(NormalDir, ViewDir));
+        fresnel = pow(fresnel, _RimWidth);
+        [branch] if (_RimLightBased > 0)
+        {
+            fresnel *= NdotL;
+        }
+        Rimlight = fresnel * _RimColor.rgb * _RimIntensity;
+    }
+#endif // _BACKLACE_RIMLIGHT
 
 #endif // BACKLACE_FORWARD_CGINC

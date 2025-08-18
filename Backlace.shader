@@ -50,6 +50,16 @@ Shader "luka/indev/backlace"
         _ForceLightColor ("Force Light Color", Range(0, 1)) = 0.0
         _ForcedLightColor ("Forced Light Color", Color) = (1, 1, 1, 1)
 
+        // LIGHTING MODELS
+        [Space(35)]
+        [Header(Lighting Model)]
+        [Space(10)]
+        [Enum(Backlace, 0, Poiyomi Custom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
+        [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
+        _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
+        _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
+        _ViewDirectionOffsetY ("View Direction Offset Y", Float) = 0.0
+
         // TOON LIGHTING
         [Space(35)]
         [Header(Toon Lighting)]
@@ -82,6 +92,16 @@ Shader "luka/indev/backlace"
         _HighlightRampColor ("Highlight Color", Color) = (1, 1, 1, 1)
         _HighlightIntensity ("Highlight Intensity", Float) = 1.0
         _HighlightRampOffset ("Highlight Ramp Offset", Range(-1, 1)) = 0.0
+
+        // RIM LIGHTING
+        [Space(35)]
+        [Header(Rim Lighting)]
+        [Space(10)]
+        [Toggle(_BACKLACE_RIMLIGHT)] _ToggleRimlight ("Enable Rim Lighting", Float) = 0.0
+        [HDR] _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
+        _RimWidth ("Rim Width", Range(20, 0.1)) = 2.5
+        _RimIntensity ("Rim Intensity", Float) = 1.0
+        [IntRange] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
 
         // INDIRECT LIGHTING
         [Space(35)]

@@ -62,6 +62,7 @@ struct FragmentData
 // my includes
 #include "./Backlace_Properties.cginc"
 #include "./Backlace_Universal.cginc"
+#include "./Backlace_Lighting.cginc"
 #include "./Backlace_Forward.cginc"
 #include "./Backlace_Vertex.cginc"
 #include "./Backlace_Fragment.cginc"

@@ -3,6 +3,11 @@
 
 FragmentData FragData;
 float4 FinalColor;
+float _LightingColorMode;
+float _LightingDirectionMode;
+float4 _ForcedLightDirection;
+float _ViewDirectionOffsetX;
+float _ViewDirectionOffsetY;
 float LightAttenuation;
 float _DirectLightMode;
 float UnmaxedNdotL;
@@ -111,6 +116,15 @@ UNITY_DECLARE_TEX2D(_HighlightRamp);
 float4 _HighlightRampColor;
 float _HighlightIntensity;
 float _HighlightRampOffset;
+
+// rim feature
+#if defined(_BACKLACE_RIMLIGHT)
+    float3 Rimlight;
+    float4 _RimColor;
+    float _RimWidth;
+    float _RimIntensity;
+    float _RimLightBased;
+#endif // _BACKLACE_RIMLIGHT
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

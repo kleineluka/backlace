@@ -1,6 +1,7 @@
 #ifndef BACKLACE_FRAGMENT_CGINC
 #define BACKLACE_FRAGMENT_CGINC
 
+// shared fragment between both base and add passes
 float4 Fragment(FragmentData i) : SV_TARGET
 {
     FragData = i;
@@ -75,6 +76,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
         AddDirectSpecular();
         AddIndirectSpecular();
     #endif // _BACKLACE_SPECULAR
+    #if defined(_BACKLACE_RIMLIGHT)
+        CalculateRimlight();
+        FinalColor.rgb += Rimlight;
+    #endif // _BACKLACE_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
         AddEmission();
     #endif

@@ -3,7 +3,7 @@ Base Toon Shader for VRChat & Unity. Forked from [Toony Rebuild](https://github.
 
 ## Variants
 
-Backlace comes in three variants:
+Backlace (will) comes in three variants:
 - **Lite**: The most performant version of the shader, with the least features enabled.
 - **Standard**: The default version of the shader, with most features enabled.
 - **Fun:** The least performant, a version of the shader with additional special effects.
