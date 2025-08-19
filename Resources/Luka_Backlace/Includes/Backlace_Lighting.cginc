@@ -354,7 +354,6 @@ void GetLightData()
         {
             lightData.direction = normalize(unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz);
         }
-
         LightDir = lightData.direction;
         HalfDir = Unity_SafeNormalize(LightDir + ViewDir);
         switch(_LightingColorMode)

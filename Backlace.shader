@@ -152,7 +152,10 @@ Shader "luka/indev/backlace"
         {  
             Tags { "LightMode" = "ForwardBase" }
             CGPROGRAM
-            #include "Resources/Luka_Backlace/Includes/Backlace_Base.cginc"
+            #ifndef UNITY_PASS_FORWARDBASE
+                #define UNITY_PASS_FORWARDBASE
+            #endif // UNITY_PASS_FORWARDBASE
+            #include "Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
           
@@ -160,11 +163,14 @@ Shader "luka/indev/backlace"
         Pass
         {
             Tags { "LightMode" = "ForwardAdd" }
-            Blend [_SrcBlend] One // make it, well, *additive*
+            Blend [_SrcBlend] One // make it, well, *additive
             Fog { Color(0, 0, 0, 0) } // additive should have black fog
             ZWrite Off
             CGPROGRAM
-            #include "Resources/Luka_Backlace/Includes/Backlace_Add.cginc"
+            #ifndef UNITY_PASS_FORWARDADD
+                #define UNITY_PASS_FORWARDADD
+            #endif // UNITY_PASS_FORWARDADD
+            #include "Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
 
@@ -175,6 +181,9 @@ Shader "luka/indev/backlace"
             ZWrite On 
             ZTest LEqual
             CGPROGRAM
+            #ifndef UNITY_PASS_SHADOWCASTER
+                #define UNITY_PASS_SHADOWCASTER
+            #endif // UNITY_PASS_SHADOWCASTER
             #include "Resources/Luka_Backlace/Includes/Backlace_Shadow.cginc"
             ENDCG
         }
@@ -185,6 +194,9 @@ Shader "luka/indev/backlace"
             Tags { "LightMode" = "Meta" }
             Cull Off
             CGPROGRAM
+            #ifndef UNITY_PASS_META
+                #define UNITY_PASS_META
+            #endif // UNITY_PASS_META
             #include "Resources/Luka_Backlace/Includes/Backlace_Meta.cginc"
             ENDCG
         }

@@ -25,50 +25,36 @@ float4 Fragment(FragmentData i) : SV_TARGET
         SetupDFG();
     #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha();
-    if (_DirectLightMode == 0)
+    [branch] if (_DirectLightMode == 0) // real lighting
     {
         GetPBRDiffuse();
-    }
-    if (_DirectLightMode == 1)
-    {
-        GetToonDiffuse();
-    }
-    if (_DirectLightMode == 0)
-    {
         GetPBRVertexDiffuse();
     }
-    if (_DirectLightMode == 1)
+    else if (_DirectLightMode == 1)// toon lighting
     {
+        GetToonDiffuse();
         GetToonVertexDiffuse();
     }
-    if (_SpecularMode == 0)
-    {
-        StandardDirectSpecular();
-    }
-    if (_SpecularMode == 1)
-    {
-        AnisotropicDirectSpecular();
-    }
-    if (_SpecularMode == 2)
-    {
-        StandardDirectSpecular();
-        ApplyToonHighlights();
-    }
     #if defined(_BACKLACE_SPECULAR)
+        [branch] if (_SpecularMode == 0) { // standard specular
+            StandardDirectSpecular();
+        } else if (_SpecularMode == 1) { // anisotropic specular
+            AnisotropicDirectSpecular(); 
+        } else if (_SpecularMode == 2) { // toon highlights
+            StandardDirectSpecular();
+            ApplyToonHighlights();
+        }
         FinalizeDirectSpecularTerm();
-    #endif // _BACKLACE_SPECULAR
-    if (_IndirectFallbackMode == 1)
-    {
-        GetFallbackCubemap();
-    }
-    #if defined(_BACKLACE_SPECULAR)
+        if (_IndirectFallbackMode == 1)
+        {
+            GetFallbackCubemap();
+        }
         GetIndirectSpecular();
     #endif // _BACKLACE_SPECULAR
-    if (_DirectLightMode == 0)
+    [branch] if (_DirectLightMode == 0) // real lighting
     {
         AddStandardDiffuse();
-    }
-    if (_DirectLightMode == 1)
+    } else if (_DirectLightMode == 1) // toon lighting
     {
         AddToonDiffuse();
     }
@@ -82,7 +68,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // _BACKLACE_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
         AddEmission();
-    #endif
+    #endif // _BACKLACE_EMISSION
     AddAlpha();
     return FinalColor;
 }

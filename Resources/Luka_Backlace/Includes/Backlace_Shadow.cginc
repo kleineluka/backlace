@@ -8,11 +8,6 @@
 #pragma vertex Vertex
 #pragma fragment Fragment
 
-// current pass
-#ifndef UNITY_PASS_SHADOWCASTER
-    #define UNITY_PASS_SHADOWCASTER
-#endif // UNITY_PASS_SHADOWCASTER
-
 // keywords
 #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
 

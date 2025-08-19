@@ -10,11 +10,6 @@
 #include "UnityStandardUtils.cginc"
 #include "UnityMetaPass.cginc"
 
-// current pass
-#ifndef UNITY_PASS_META
-    #define UNITY_PASS_META
-#endif // UNITY_PASS_META
-
 // keywords
 #include "./Backlace_Keywords.cginc"
 
