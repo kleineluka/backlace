@@ -338,7 +338,7 @@ void GetForwardAddLightData(out BacklaceLightData lightData)
 }
 
 // get light data
-void GetLightData()
+void GetLightData(inout BacklaceSurfaceData Surface)
 {
     BacklaceLightData lightData;
     #if defined(UNITY_PASS_FORWARDBASE)
@@ -354,27 +354,27 @@ void GetLightData()
         {
             lightData.direction = normalize(unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz);
         }
-        LightDir = lightData.direction;
-        HalfDir = Unity_SafeNormalize(LightDir + ViewDir);
+        Surface.LightDir = lightData.direction;
+        Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
         switch(_LightingColorMode)
         {
-            case 1: GetPoiyomiLightColor(lightData, NormalDir); break;
-            case 2: GetOpenLitLightColor(lightData, NormalDir); break;
-            case 3: GetStandardLightColor(lightData, NormalDir); break;
-            case 4: GetMochieLightColor(lightData, NormalDir); break;
-            case 0: default: GetBacklaceLightColor(lightData, NormalDir); break;
+            case 1: GetPoiyomiLightColor(lightData, Surface.NormalDir); break;
+            case 2: GetOpenLitLightColor(lightData, Surface.NormalDir); break;
+            case 3: GetStandardLightColor(lightData, Surface.NormalDir); break;
+            case 4: GetMochieLightColor(lightData, Surface.NormalDir); break;
+            case 0: default: GetBacklaceLightColor(lightData, Surface.NormalDir); break;
         }
     #else // UNITY_PASS_FORWARDADD
         GetForwardAddLightData(lightData);
-        LightDir = lightData.direction;
-        HalfDir = Unity_SafeNormalize(LightDir + ViewDir);
+        Surface.LightDir = lightData.direction;
+        Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
         switch(_LightingColorMode)
         {
-            case 1: GetPoiyomiLightColor(lightData, NormalDir); break;
-            case 2: GetOpenLitLightColor(lightData, NormalDir); break;
-            case 3: GetStandardLightColor(lightData, NormalDir); break;
-            case 4: GetMochieLightColor(lightData, NormalDir); break;
-            case 0: default: GetBacklaceLightColor(lightData, NormalDir); break;
+            case 1: GetPoiyomiLightColor(lightData, Surface.NormalDir); break;
+            case 2: GetOpenLitLightColor(lightData, Surface.NormalDir); break;
+            case 3: GetStandardLightColor(lightData, Surface.NormalDir); break;
+            case 4: GetMochieLightColor(lightData, Surface.NormalDir); break;
+            case 0: default: GetBacklaceLightColor(lightData, Surface.NormalDir); break;
         }
     #endif
 
@@ -409,9 +409,9 @@ void GetLightData()
     }
 
     // finalize and output
-    LightColor = float4(combinedLight, lightData.attenuation);
-    SpecLightColor = LightColor;
-    IndirectDiffuse = finalIndirectColor;
+    Surface.LightColor = float4(combinedLight, lightData.attenuation);
+    Surface.SpecLightColor = Surface.LightColor;
+    Surface.IndirectDiffuse = finalIndirectColor;
 }
 
 #endif // BACKLACE_LIGHTING_CGINC

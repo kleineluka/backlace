@@ -2,17 +2,16 @@
 #define BACKLACE_SHADING_CGINC
 
 // clip alpha based on the _Cutoff value or dither mask
-void ClipAlpha()
+void ClipAlpha(inout BacklaceSurfaceData Surface)
 {
     #if defined(_ALPHATEST_ON)
-        clip(Albedo.a - _Cutoff);
+        clip(Surface.Albedo.a - _Cutoff);
     #else // _ALPHATEST_ON
         #if defined(_ALPHAMODULATE_ON)
-            float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
+            float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Surface.Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
             clip(dither - 0.01);
         #endif // _ALPHAMODULATE_ON
     #endif // _ALPHATEST_ON
-
 }
 
 // sample normal map
@@ -40,164 +39,375 @@ void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bi
 }
 
 // get direction vectors
-void GetDirectionVectors()
+void GetDirectionVectors(inout BacklaceSurfaceData Surface)
 {
-    NormalDir = normalize(FragData.normal);
-    TangentDir = normalize(UnityObjectToWorldDir(FragData.tangentDir.xyz));
-    BitangentDir = normalize(cross(NormalDir, TangentDir) * FragData.tangentDir.w * unity_WorldTransformParams.w);
-    CalculateNormals(NormalDir, TangentDir, BitangentDir, NormalMap);
-    LightDir = normalize(UnityWorldSpaceLightDir(FragData.worldPos));
-    ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
-    ReflectDir = reflect(-ViewDir, NormalDir);
-    HalfDir = Unity_SafeNormalize(LightDir + ViewDir);
+    Surface.NormalDir = normalize(FragData.normal);
+    Surface.TangentDir = normalize(UnityObjectToWorldDir(FragData.tangentDir.xyz));
+    Surface.BitangentDir = normalize(cross(Surface.NormalDir, Surface.TangentDir) * FragData.tangentDir.w * unity_WorldTransformParams.w);
+    CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
+    Surface.LightDir = normalize(UnityWorldSpaceLightDir(FragData.worldPos));
+    Surface.ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
+    Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
+    Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
 }
 
 // get dot products
-void GetDotProducts()
+void GetDotProducts(inout BacklaceSurfaceData Surface)
 {
-    UnmaxedNdotL = dot(NormalDir, LightDir);
-    UnmaxedNdotL = min(UnmaxedNdotL, LightColor.a);
-    NdotL = max(UnmaxedNdotL, 0);
-    NdotV = abs(dot(NormalDir, ViewDir));
-    NdotH = max(dot(NormalDir, HalfDir), 0);
-    LdotH = max(dot(LightDir, HalfDir), 0);
+    Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);
+    Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, Surface.LightColor.a);
+    Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
+    Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
+    Surface.NdotH = max(dot(Surface.NormalDir, Surface.HalfDir), 0);
+    Surface.LdotH = max(dot(Surface.LightDir, Surface.HalfDir), 0);
 }
 
-// gtr2 distribution function
-float GTR2(float NdotH, float a)
+// premultiply alpha
+void PremultiplyAlpha(inout BacklaceSurfaceData Surface)
 {
-    float a2 = a * a;
-    float t = 1 + (a2 - 1) * NdotH * NdotH;
-    return a2 / (UNITY_PI * t * t + 1e-7f);
+    #if defined(_ALPHAPREMULTIPLY_ON)
+        Surface.Albedo.rgb *= Surface.Albedo.a;
+    #endif
 }
 
-// ggx distribution function
-float smithG_GGX(float NdotV, float alphaG)
+//unity's base diffuse based on disney implementation
+float DisneyDiffuse(half perceptualRoughness, inout BacklaceSurfaceData Surface)
 {
-    float a = alphaG * alphaG;
-    float b = NdotV * NdotV;
-    return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
+    float fd90 = 0.5 + 2 * Surface.LdotH * Surface.LdotH * perceptualRoughness;
+    // Two schlick fresnel term
+    float lightScatter = (1 + (fd90 - 1) * Pow5(1 - Surface.NdotL));
+    float viewScatter = (1 + (fd90 - 1) * Pow5(1 - Surface.NdotV));
+    return lightScatter * viewScatter;
 }
 
-// standard direct specular calculation
-void StandardDirectSpecular()
+// get the direct diffuse contribution using disney's diffuse implementation
+void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
 {
-    NDF = GTR2(NdotH, SquareRoughness) * UNITY_PI;
-    GFS = smithG_GGX(max(NdotL, lerp(0.3, 0, SquareRoughness)), Roughness) * smithG_GGX(NdotV, Roughness);
+    Surface.Diffuse = 0;
+    float ramp = DisneyDiffuse(Surface.Roughness, Surface) * Surface.NdotL;
+    Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * ramp + Surface.IndirectDiffuse);
+    Surface.Attenuation = ramp;
 }
 
-// modified tangent space
-float3 GetModifiedTangent(float3 tangentTS, float3 tangentDir)
+// for toon lighting, we use a ramp texture
+float4 RampDotL(inout BacklaceSurfaceData Surface)
 {
-    float3x3 worldToTangent;
-    worldToTangent[0] = float3(1, 0, 0);
-    worldToTangent[1] = float3(0, 1, 0);
-    worldToTangent[2] = float3(0, 0, 1);
-    float3 tangentTWS = mul(tangentTS, worldToTangent);
-    float3 fTangent;
-    if (tangentTS.z < 1)
-        fTangent = tangentTWS;
-    else
-        fTangent = tangentDir;
-    return fTangent;
+    //Adding the occlusion into the offset of the ramp
+    float offset = _RampOffset + (Surface.Occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
+    //Calculating ramp uvs based on offset
+    float newMin = max(offset, 0);
+    float newMax = max(offset +1, 0);
+    float rampUv = remap(Surface.UnmaxedNdotL, -1, 1, newMin, newMax);
+    float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampUv)).rgb;
+    //Adding the color and remapping it based on the shadow intensity stored into the alpha channel of the ramp color
+    ramp *= _RampColor.rgb;
+    float intensity = max(_ShadowIntensity, 0.001);
+    ramp = remap(ramp, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1));
+    //getting the modified ramp for highlights and all lights that are not directional
+    float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
+    float3 rampA = remap(ramp, rmin, 1, 0, 1);
+    float rampGrey = max(max(rampA.r, rampA.g), rampA.b);
+    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+        return float4(ramp, rampGrey);
+    #else // DIRECTIONAL || DIRECTIONAL_COOKIE
+        return float4(rampA, rampGrey);
+    #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
 }
 
-// gtr2 anisotropic distribution function
-float GTR2_aniso(float NdotH, float HdotX, float HdotY, float ax, float ay)
+// toon shading
+void GetToonDiffuse(inout BacklaceSurfaceData Surface)
 {
-    return 1 / (UNITY_PI * ax * ay * sqr(sqr(HdotX / ax) + sqr(HdotY / ay) + NdotH * NdotH));
+    Surface.Diffuse = 0;
+    //diffuse color
+    float4 ramp = RampDotL(Surface);
+    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+        Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+    #else
+        Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
+    #endif
+    Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
+    // tints, optionally
+    [branch] if (_TintMaskSource != 0)
+    {
+        float finalMask;
+        switch(_TintMaskSource)
+        {
+            case 2: // tuned light
+            {
+                float rawMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
+                finalMask = smoothstep(_ShadowThreshold, max(_ShadowThreshold, _LitThreshold), rawMask);
+                break;
+            }
+            case 1: // raw light
+            {
+                finalMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
+                break;
+            }
+            default: // ramp based
+            {
+                finalMask = ramp.a;
+                break;
+            }
+        }
+        float shadowInfluence = (1 - finalMask) * _ShadowTint.a;
+        Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _ShadowTint.rgb, shadowInfluence);
+        float litInfluence = finalMask * _LitTint.a;
+        Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _LitTint.rgb, litInfluence);
+    }
 }
 
-// ggx anisotropic distribution function
-float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
+//modified version of Shade4PointLights
+void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out float3 direction)
 {
-    return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
+    float4 toLightX = unity_4LightPosX0 - worldPos.x;
+    float4 toLightY = unity_4LightPosY0 - worldPos.y;
+    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
+    float4 lengthSq = 0;
+    lengthSq += toLightX * toLightX;
+    lengthSq += toLightY * toLightY;
+    lengthSq += toLightZ * toLightZ;
+    float4 ndl = 0;
+    ndl += toLightX * normal.x;
+    ndl += toLightY * normal.y;
+    ndl += toLightZ * normal.z;
+    float4 corr = rsqrt(lengthSq);
+    ndl = max(0, ndl * corr); 
+    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+    float4 diff = ndl * atten;
+    color = 0; 
+    color += unity_LightColor[0].rgb * diff.x;
+    color += unity_LightColor[1].rgb * diff.y;
+    color += unity_LightColor[2].rgb * diff.z;
+    color += unity_LightColor[3].rgb * diff.w;
+    direction = 0; 
+    #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
+        direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(unity_LightColor[0].rgb, 1) * diff.x;
+        direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(unity_LightColor[1].rgb, 1) * diff.y;
+        direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(unity_LightColor[2].rgb, 1) * diff.z;
+        direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(unity_LightColor[3].rgb, 1) * diff.w;
+    #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
 }
 
-// calculates anisotropic direct specular reflection using tangent space and view/light directions
-void AnisotropicDirectSpecular()
+// get vertex diffuse for vertex lighting
+void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 {
-    float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
-    float anisotropy = tangentTS.a * _Anisotropy;
-    float3 tangent = GetModifiedTangent(tangentTS.rgb, TangentDir);
-    float3 anisotropyDirection = anisotropy >= 0.0 ? BitangentDir : TangentDir;
-    float3 anisotropicTangent = cross(anisotropyDirection, ViewDir);
-    float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
-    float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - SquareRoughness)));
-    float3 bentNormal = normalize(lerp(NormalDir, anisotropicNormal, bendFactor));
-    ReflectDir = reflect(-ViewDir, bentNormal);
-    float TdotH = dot(tangent, HalfDir);
-    float TdotL = dot(tangent, LightDir);
-    float BdotH = dot(BitangentDir, HalfDir);
-    float BdotL = dot(BitangentDir, LightDir);
-    float TdotV = dot(ViewDir, tangent);
-    float BdotV = dot(ViewDir, BitangentDir);
-    float ax = max(SquareRoughness * (1.0 + anisotropy), 0.005);
-    float ay = max(SquareRoughness * (1.0 - anisotropy), 0.005);
-    NDF = GTR2_aniso(NdotH, TdotH, BdotH, ax, ay) * UNITY_PI;
-    GFS = smithG_GGX_aniso(NdotL, TdotL, BdotL, ax, ay);
-    GFS *= smithG_GGX_aniso(NdotV, TdotV, BdotV, ax, ay);
+    Surface.VertexDirectDiffuse = 0;
+    #if defined(VERTEXLIGHT_ON)
+        #if defined(_BACKLACE_VERTEX_SPECULAR)
+            Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, VertexLightDir);
+        #else
+            float3 ignoredDir;
+            Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
+        #endif
+        Surface.VertexDirectDiffuse *= Surface.Albedo;
+    #endif
 }
 
-// gets the indirect lighting color from a fallback cubemap using the reflected direction and remapped roughness
-void GetFallbackCubemap()
+// ...
+void RampDotLVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
 {
-    CustomIndirect = texCUBElod(_FallbackCubemap, half4(ReflectDir.xyz, remap(SquareRoughness, 1, 0, 5, 0))).rgb;
+    //from Shade4PointLights function to get NdotL + attenuation
+    float4 toLightX = unity_4LightPosX0 - worldPos.x;
+    float4 toLightY = unity_4LightPosY0 - worldPos.y;
+    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
+    float4 lengthSq = 0;
+    lengthSq += toLightX * toLightX;
+    lengthSq += toLightY * toLightY;
+    lengthSq += toLightZ * toLightZ;
+    float4 ndl = 0;
+    ndl += toLightX * normal.x;
+    ndl += toLightY * normal.y;
+    ndl += toLightZ * normal.z;
+    // correct NdotL
+    float4 corr = rsqrt(lengthSq);
+    ndl = ndl * corr;
+    //attenuation
+    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+    float4 atten2 = saturate(1 - (lengthSq * unity_4LightAtten0 / 25));
+    atten = min(atten, atten2 * atten2);
+    //ramp calculation for all 4 vertex lights
+    float offset = _RampOffset + (occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
+    //Calculating ramp uvs based on offset
+    float newMin = max(offset, 0);
+    float newMax = max(offset +1, 0);
+    float4 rampUv = remap(ndl, float4(-1, -1, -1, -1), float4(1, 1, 1, 1), float4(newMin, newMin, newMin, newMin), float4(newMax, newMax, newMax, newMax));
+    float intensity = max(_ShadowIntensity, 0.001);
+    float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
+    float3 ramp0 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.x, rampUv.x)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[0].rgb * atten.r;
+    float3 ramp1 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.y, rampUv.y)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[1].rgb * atten.g;
+    float3 ramp2 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.z, rampUv.z)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[2].rgb * atten.b;
+    float3 ramp3 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.w, rampUv.w)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[3].rgb * atten.a;
+    color = ramp0 + ramp1 + ramp2 + ramp3;
+    // direction calculation
+    direction = 0;
+    #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
+        direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(ramp0, 1);
+        direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(ramp1, 1);
+        direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(ramp2, 1);
+        direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(ramp3, 1);
+    #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
 }
 
-// toon highlights
-void ApplyToonHighlights()
+// get the vertex diffuse contribution using a toon ramp
+void GetToonVertexDiffuse(inout BacklaceSurfaceData Surface)
 {
-    // calculating highlight ramp uvs based on offset
-    float newMin = max(_HighlightRampOffset, 0);
-    float newMax = max(_HighlightRampOffset +1, 0);
-    float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
-    // have to recheck the metallic thing in here in case of a specular workflow where there's no metallic value
-    NDF = UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Metallic + (0.2 * Metallic));
+    Surface.VertexDirectDiffuse = 0;
+    #if defined(VERTEXLIGHT_ON)
+        #if defined(_BACKLACE_VERTEX_SPECULAR)
+            RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, VertexLightDir);
+        #else
+            float3 ignoredDir;
+            RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, ignoredDir);
+        #endif
+        Surface.VertexDirectDiffuse *= Surface.Albedo;
+    #endif
+}
+
+// ...
+void AddStandardDiffuse(inout BacklaceSurfaceData Surface)
+{
+    Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse;
+}
+
+// ...
+void AddToonDiffuse(inout BacklaceSurfaceData Surface)
+{
+    Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse;
+}
+
+// ...
+void AddAlpha(inout BacklaceSurfaceData Surface)
+{
+    Surface.FinalColor.a = Surface.Albedo.a;
 }
 
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
 
-// setup albedo and specular color
-void SetupDFG()
-{
-    float3 dfguv = float3(NdotV, Roughness, 0);
-    Dfg = _DFG.Sample(sampler_DFG, dfguv).xyz;
-    Dfg.y = max(Dfg.y, 1e-7f); // prevent division by zero
-    EnergyCompensation = lerp(1.0 + SpecularColor * (1.0 / Dfg.y - 1.0), 1, _DFGType);
-}
+    // gets the indirect lighting color from a fallback cubemap using the reflected direction and remapped roughness
+    void GetFallbackCubemap(inout BacklaceSurfaceData Surface)
+    {
+        Surface.CustomIndirect = texCUBElod(_FallbackCubemap, half4(Surface.ReflectDir.xyz, remap(Surface.SquareRoughness, 1, 0, 5, 0))).rgb;
+    }
 
-// ...
-inline half3 FresnelTerm(half3 F0, half cosA)
-{
-    half t = Pow5(1 - cosA);   // ala Schlick interpoliation
-    return F0 + (1 - F0) * t;
-}
+    // gtr2 distribution function
+    float GTR2(float NdotH, float a)
+    {
+        float a2 = a * a;
+        float t = 1 + (a2 - 1) * NdotH * NdotH;
+        return a2 / (UNITY_PI * t * t + 1e-7f);
+    }
 
-// ...
-void FinalizeDirectSpecularTerm()
-{
-    DirectSpecular = GFS * NDF * FresnelTerm(SpecularColor, LdotH) * EnergyCompensation;
-    #ifdef UNITY_COLORSPACE_GAMMA
-        DirectSpecular = sqrt(max(1e-4h, DirectSpecular));
-    #endif
-    DirectSpecular = max(0, DirectSpecular * Attenuation);
-    DirectSpecular *= any(SpecularColor) ? 1.0 : 0.0;
-}
+    // ggx distribution function
+    float smithG_GGX(float NdotV, float alphaG)
+    {
+        float a = alphaG * alphaG;
+        float b = NdotV * NdotV;
+        return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
+    }
 
-// ...
-struct Unity_GlossyEnvironmentData
-{
-    // - Deferred case have one cubemap
-    // - Forward case can have two blended cubemap (unusual should be deprecated).
-    // Surface properties use for cubemap integration
-    half roughness; // CAUTION: This is perceptualRoughness but because of compatibility this name can't be change :(
-        half3 reflUVW;
-        };
+    // modified tangent space
+    float3 GetModifiedTangent(float3 tangentTS, float3 tangentDir)
+    {
+        float3x3 worldToTangent;
+        worldToTangent[0] = float3(1, 0, 0);
+        worldToTangent[1] = float3(0, 1, 0);
+        worldToTangent[2] = float3(0, 0, 1);
+        float3 tangentTWS = mul(tangentTS, worldToTangent);
+        float3 fTangent;
+        if (tangentTS.z < 1)
+            fTangent = tangentTWS;
+        else
+            fTangent = tangentDir;
+        return fTangent;
+    }
 
-        // ...
-        half perceptualRoughnessToMipmapLevel(half perceptualRoughness)
+    // gtr2 anisotropic distribution function
+    float GTR2_aniso(float NdotH, float HdotX, float HdotY, float ax, float ay)
+    {
+        return 1 / (UNITY_PI * ax * ay * sqr(sqr(HdotX / ax) + sqr(HdotY / ay) + NdotH * NdotH));
+    }
+
+    // ggx anisotropic distribution function
+    float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
+    {
+        return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
+    }
+
+    // standard direct specular calculation
+    void StandardDirectSpecular(float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
+    {
+        outNDF = 0;
+        outGFS = 0;
+        outNDF = GTR2(ndotH, Surface.SquareRoughness) * UNITY_PI;
+        outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
+    }
+
+    // calculates anisotropic direct specular reflection using tangent space and view/light directions
+    void AnisotropicDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
+    {
+        outNDF = 0;
+        outGFS = 0;
+        float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
+        float anisotropy = tangentTS.a * _Anisotropy;
+        float3 tangent = GetModifiedTangent(tangentTS.rgb, tangentDir);
+        float3 anisotropyDirection = anisotropy >= 0.0 ? bitangentDir : tangentDir;
+        float3 anisotropicTangent = cross(anisotropyDirection, Surface.ViewDir);
+        float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
+        float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - Surface.SquareRoughness)));
+        float3 bentNormal = normalize(lerp(Surface.NormalDir, anisotropicNormal, bendFactor));
+        Surface.ReflectDir = reflect(-Surface.ViewDir, bentNormal);
+        float TdotH = dot(tangent, halfDir);
+        float TdotL = dot(tangent, lightDir);
+        float BdotH = dot(bitangentDir, halfDir);
+        float BdotL = dot(bitangentDir, lightDir);
+        float TdotV = dot(Surface.ViewDir, tangent);
+        float BdotV = dot(bitangentDir, Surface.ViewDir);
+        float ax = max(Surface.SquareRoughness * (1.0 + anisotropy), 0.005);
+        float ay = max(Surface.SquareRoughness * (1.0 - anisotropy), 0.005);
+        outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
+        outGFS = smithG_GGX_aniso(ndotL, TdotL, BdotL, ax, ay);
+        outGFS *= smithG_GGX_aniso(ndotV, TdotV, BdotV, ax, ay);
+    }
+
+    // toon highlights specular
+    float3 ApplyToonHighlights(float NDF, inout BacklaceSurfaceData Surface)
+    {
+        float newMin = max(_HighlightRampOffset, 0);
+        float newMax = max(_HighlightRampOffset +1, 0);
+        float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
+        return UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Surface.Metallic + (0.2 * Surface.Metallic));
+    }
+
+    // setup albedo and specular color
+    void SetupDFG(inout BacklaceSurfaceData Surface)
+    {
+        float3 dfguv = float3(Surface.NdotV, Surface.Roughness, 0);
+        Surface.Dfg = _DFG.Sample(sampler_DFG, dfguv).xyz;
+        Surface.Dfg.y = max(Surface.Dfg.y, 1e-7f); // prevent division by zero
+        Surface.EnergyCompensation = lerp(1.0 + Surface.SpecularColor * (1.0 / Surface.Dfg.y - 1.0), 1, _DFGType);
+    }
+
+    // ...
+    inline half3 FresnelTerm(half3 F0, half cosA)
+    {
+        half t = Pow5(1 - cosA);   // ala Schlick interpoliation
+        return F0 + (1 - F0) * t;
+    }
+
+    // ...
+    void FinalizeDirectSpecularTerm(inout BacklaceSurfaceData Surface)
+    {
+        Surface.DirectSpecular = GFS * NDF * FresnelTerm(Surface.SpecularColor, Surface.LdotH) * Surface.EnergyCompensation;
+        #ifdef UNITY_COLORSPACE_GAMMA
+            Surface.DirectSpecular = sqrt(max(1e-4h, Surface.DirectSpecular));
+        #endif
+        Surface.DirectSpecular = max(0, Surface.DirectSpecular * Surface.Attenuation);
+        Surface.DirectSpecular *= any(Surface.SpecularColor) ? 1.0 : 0.0;
+    }
+
+    // ...
+    half perceptualRoughnessToMipmapLevel(half perceptualRoughness)
     {
         return perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
     }
@@ -230,229 +440,109 @@ struct Unity_GlossyEnvironmentData
     }
 
     // ...
-    void GetIndirectSpecular()
+    void GetIndirectSpecular(inout BacklaceSurfaceData Surface)
     {
         Unity_GlossyEnvironmentData envData;
-        envData.roughness = Roughness;
-        envData.reflUVW = BoxProjectedCubemapDirection(ReflectDir, FragData.worldPos, unity_SpecCube0_ProbePosition, unity_SpecCube0_BoxMin, unity_SpecCube0_BoxMax);
+        envData.roughness = Surface.Roughness;
+        envData.reflUVW = BoxProjectedCubemapDirection(Surface.ReflectDir, FragData.worldPos, unity_SpecCube0_ProbePosition, unity_SpecCube0_BoxMin, unity_SpecCube0_BoxMax);
         float4 indirectSpecularRGBA = Unity_GlossyEnvironment(UNITY_PASS_TEXCUBE(unity_SpecCube0), unity_SpecCube0_HDR, envData);
         #if defined(UNITY_SPECCUBE_BLENDING) && !defined(SHADER_API_MOBILE)
             UNITY_BRANCH
             if (unity_SpecCube0_BoxMin.w < 0.99999)
             {
-                envData.reflUVW = BoxProjectedCubemapDirection(ReflectDir, FragData.worldPos, unity_SpecCube1_ProbePosition, unity_SpecCube1_BoxMin, unity_SpecCube1_BoxMax);
+                envData.reflUVW = BoxProjectedCubemapDirection(Surface.ReflectDir, FragData.worldPos, unity_SpecCube1_ProbePosition, unity_SpecCube1_BoxMin, unity_SpecCube1_BoxMax);
                 float4 indirectSpecularRGBA1 = Unity_GlossyEnvironment(UNITY_PASS_TEXCUBE_SAMPLER(unity_SpecCube1, unity_SpecCube0), unity_SpecCube1_HDR, envData);
                 indirectSpecularRGBA = lerp(indirectSpecularRGBA1, indirectSpecularRGBA, unity_SpecCube0_BoxMin.w);
             }
         #endif
-        IndirectSpecular = indirectSpecularRGBA.rgb;
+        Surface.IndirectSpecular = indirectSpecularRGBA.rgb;
         if ((_IndirectFallbackMode > 0 && indirectSpecularRGBA.a == 0) || (_IndirectOverride > 0))
         {
             //using the fake specular probe toned down based on the average light, it's not phisically accurate
             //but having a probe that reflects arbitrary stuff isn't accurate to begin with
-            half lightColGrey = max((LightColor.r + LightColor.g + LightColor.b) / 3, (IndirectDiffuse.r + IndirectDiffuse.g + IndirectDiffuse.b) / 3);
-            IndirectSpecular = CustomIndirect * min(lightColGrey, 1);
+            half lightColGrey = max((Surface.LightColor.r + Surface.LightColor.g + Surface.LightColor.b) / 3, (Surface.IndirectDiffuse.r + Surface.IndirectDiffuse.g + Surface.IndirectDiffuse.b) / 3);
+            Surface.IndirectSpecular = Surface.CustomIndirect * min(lightColGrey, 1);
         }
-        float horizon = min(1 + NdotH, 1.0);
-        float grazingTerm = saturate(1 - SquareRoughness + (1 - OneMinusReflectivity));
-        Dfg.x *= lerp(1.0, saturate(dot(IndirectDiffuse, 1.0)), Occlusion);
-        IndirectSpecular *= EnergyCompensation * horizon * horizon * lerp(lerp(Dfg.xxx, Dfg.yyy, SpecularColor), SpecularColor * Dfg.z, _DFGType);
+        float horizon = min(1 + Surface.NdotH, 1.0);
+        float grazingTerm = saturate(1 - Surface.SquareRoughness + (1 - Surface.OneMinusReflectivity));
+        Surface.Dfg.x *= lerp(1.0, saturate(dot(Surface.IndirectDiffuse, 1.0)), Surface.Occlusion);
+        Surface.IndirectSpecular *= Surface.EnergyCompensation * horizon * horizon * lerp(lerp(Surface.Dfg.xxx, Surface.Dfg.yyy, Surface.SpecularColor), Surface.SpecularColor * Surface.Dfg.z, _DFGType);
     }
 
     // ...
-    void AddDirectSpecular()
+    void AddDirectSpecular(inout BacklaceSurfaceData Surface)
     {
-        FinalColor.rgb += DirectSpecular * SpecLightColor.rgb * SpecLightColor.a;
+        Surface.FinalColor.rgb += Surface.DirectSpecular * Surface.SpecLightColor.rgb * Surface.SpecLightColor.a;
     }
 
     // ...
-    void AddIndirectSpecular()
+    void AddIndirectSpecular(inout BacklaceSurfaceData Surface)
     {
-        FinalColor.rgb += IndirectSpecular * clamp(pow(NdotV + Occlusion, exp2(-16.0 * SquareRoughness - 1.0)) - 1.0 + Occlusion, 0.0, 1.0);
+        Surface.FinalColor.rgb += Surface.IndirectSpecular * clamp(pow(Surface.NdotV + Surface.Occlusion, exp2(-16.0 * Surface.SquareRoughness - 1.0)) - 1.0 + Surface.Occlusion, 0.0, 1.0);
     }
 
-#endif // defined(_BACKLACE_SPECULAR)
+    // direct specular calculations
+    float3 CalculateDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, float ldotH, float attenuation, inout BacklaceSurfaceData Surface)
+    {
+        float NDF_Term, GFS_Term;
+        float3 ToonHighlight_Term;
+        float3 specTerm = 0; // using local variable for the result
+        [branch] if (_SpecularMode == 0)
+        {
+            // standard specular
+            StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
+            specTerm = GFS_Term * NDF_Term;
+        }
+        else if (_SpecularMode == 1)
+        {
+            // anisotropic specular
+            AnisotropicDirectSpecular(tangentDir, bitangentDir, lightDir, halfDir, ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
+            specTerm = GFS_Term * NDF_Term;
+        }
+        else if (_SpecularMode == 2)
+        {
+            // toon highlights
+            StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
+            ToonHighlight_Term = ApplyToonHighlights(NDF_Term, Surface);
+            specTerm = GFS_Term * ToonHighlight_Term;
+        }
+        // finalise the term
+        specTerm *= FresnelTerm(Surface.SpecularColor, ldotH) * Surface.EnergyCompensation;
+        #ifdef UNITY_COLORSPACE_GAMMA
+            specTerm = sqrt(max(1e-4h, specTerm));
+        #endif
+        specTerm = max(0, specTerm * attenuation);
+        specTerm *= any(Surface.SpecularColor) ? 1.0 : 0.0;
+        return specTerm;
+    }
 
-// premultiply alpha
-void PremultiplyAlpha()
-{
-    #if defined(_ALPHAPREMULTIPLY_ON)
-        Albedo.rgb *= Albedo.a;
-    #endif
-}
+    // vertex specular feature
+    #if defined(_BACKLACE_VERTEX_SPECULAR)
+        void AddVertexSpecular(inout BacklaceSurfaceData Surface)
+        {
+            float3 VLightDir = normalize(VertexLightDir);
+            if (dot(VLightDir, VLightDir) < 0.01) return;
+            float3 V_HalfDir = normalize(VLightDir + Surface.ViewDir);
+            float V_NdotL = saturate(dot(Surface.NormalDir, VLightDir));
+            float V_NdotH = saturate(dot(Surface.NormalDir, V_HalfDir));
+            float V_LdotH = saturate(dot(VLightDir, V_HalfDir));
+            // note: just passing 1.0 for attenuation as the colour is already attenuated
+            float3 VertexSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, VLightDir, V_HalfDir, V_NdotH, V_NdotL, Surface.NdotV, V_LdotH, 1.0, Surface);
+            Surface.FinalColor.rgb += VertexSpecular * Surface.VertexDirectDiffuse;
+        }
+    #endif // _BACKLACE_VERTEX_SPECULAR
 
-//unity's base diffuse based on disney implementation
-float DisneyDiffuse(half perceptualRoughness)
-{
-    float fd90 = 0.5 + 2 * LdotH * LdotH * perceptualRoughness;
-    // Two schlick fresnel term
-    float lightScatter = (1 + (fd90 - 1) * Pow5(1 - NdotL));
-    float viewScatter = (1 + (fd90 - 1) * Pow5(1 - NdotV));
-    return lightScatter * viewScatter;
-}
-
-// get the direct diffuse contribution using disney's diffuse implementation
-void GetPBRDiffuse()
-{
-    Diffuse = 0;
-    float ramp = DisneyDiffuse(Roughness) * NdotL;
-    Diffuse = Albedo * (LightColor.rgb * LightColor.a * ramp + IndirectDiffuse);
-    Attenuation = ramp;
-}
-
-// for toon lighting, we use a ramp texture
-float4 RampDotL()
-{
-    //Adding the occlusion into the offset of the ramp
-    float offset = _RampOffset + (Occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
-    //Calculating ramp uvs based on offset
-    float newMin = max(offset, 0);
-    float newMax = max(offset +1, 0);
-    float rampUv = remap(UnmaxedNdotL, -1, 1, newMin, newMax);
-    float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampUv)).rgb;
-    //Adding the color and remapping it based on the shadow intensity stored into the alpha channel of the ramp color
-    ramp *= _RampColor.rgb;
-    float intensity = max(_ShadowIntensity, 0.001);
-    ramp = remap(ramp, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1));
-    //getting the modified ramp for highlights and all lights that are not directional
-    float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
-    float3 rampA = remap(ramp, rmin, 1, 0, 1);
-    float rampGrey = max(max(rampA.r, rampA.g), rampA.b);
-    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-        return float4(ramp, rampGrey);
-    #else
-        return float4(rampA, rampGrey);
-    #endif
-}
-
-// toon shading
-void GetToonDiffuse()
-{
-    Diffuse = 0;
-    //toon version of the NdotL for the direct light
-    float4 ramp = RampDotL();
-    Attenuation = ramp.a;
-    //diffuse color
-    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-        Diffuse = Albedo * ramp.rgb * (LightColor.rgb + IndirectDiffuse);
-    #else
-        Diffuse = Albedo * ramp.rgb * LightColor.rgb * LightColor.a;
-    #endif
-}
-
-//modified version of Shade4PointLights
-float3 Shade4PointLights(float3 normal, float3 worldPos)
-{
-    float4 toLightX = unity_4LightPosX0 - worldPos.x;
-    float4 toLightY = unity_4LightPosY0 - worldPos.y;
-    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
-    float4 lengthSq = 0;
-    lengthSq += toLightX * toLightX;
-    lengthSq += toLightY * toLightY;
-    lengthSq += toLightZ * toLightZ;
-    float4 ndl = 0;
-    ndl += toLightX * normal.x;
-    ndl += toLightY * normal.y;
-    ndl += toLightZ * normal.z;
-    // correct NdotL
-    float4 corr = rsqrt(lengthSq);
-    ndl = ndl * corr;
-    //attenuation
-    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
-    float4 diff = max(ndl, 0) * atten;
-    // final color
-    float3 col = 0;
-    col += unity_LightColor[0] * diff.x;
-    col += unity_LightColor[1] * diff.y;
-    col += unity_LightColor[2] * diff.z;
-    col += unity_LightColor[3] * diff.w;
-    return col;
-}
-
-// get vertex diffuse for vertex lighting
-void GetPBRVertexDiffuse()
-{
-    VertexDirectDiffuse = 0;
-    #if defined(VERTEXLIGHT_ON)
-        VertexDirectDiffuse = Shade4PointLights(NormalDir, FragData.worldPos);
-        VertexDirectDiffuse *= Albedo;
-    #endif
-}
-
-// ...
-float3 RampDotLVertLight(float3 normal, float3 worldPos, float occlusion)
-{
-    //from Shade4PointLights function to get NdotL + attenuation
-    float4 toLightX = unity_4LightPosX0 - worldPos.x;
-    float4 toLightY = unity_4LightPosY0 - worldPos.y;
-    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
-    float4 lengthSq = 0;
-    lengthSq += toLightX * toLightX;
-    lengthSq += toLightY * toLightY;
-    lengthSq += toLightZ * toLightZ;
-    float4 ndl = 0;
-    ndl += toLightX * normal.x;
-    ndl += toLightY * normal.y;
-    ndl += toLightZ * normal.z;
-    // correct NdotL
-    float4 corr = rsqrt(lengthSq);
-    ndl = ndl * corr;
-    //attenuation
-    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
-    float4 atten2 = saturate(1 - (lengthSq * unity_4LightAtten0 / 25));
-    atten = min(atten, atten2 * atten2);
-    //ramp calculation for all 4 vertex lights
-    float offset = _RampOffset + (occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
-    //Calculating ramp uvs based on offset
-    float newMin = max(offset, 0);
-    float newMax = max(offset +1, 0);
-    float4 rampUv = remap(ndl, float4(-1, -1, -1, -1), float4(1, 1, 1, 1), float4(newMin, newMin, newMin, newMin), float4(newMax, newMax, newMax, newMax));
-    float intensity = max(_ShadowIntensity, 0.001);
-    float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
-    float3 ramp = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.x, rampUv.x)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[0].rgb * atten.r;
-    ramp += remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.y, rampUv.y)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[1].rgb * atten.g;
-    ramp += remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.z, rampUv.z)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[2].rgb * atten.b;
-    ramp += remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.w, rampUv.w)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[3].rgb * atten.a;
-    return ramp;
-}
-
-// get the vertex diffuse contribution using a toon ramp
-void GetToonVertexDiffuse()
-{
-    VertexDirectDiffuse = 0;
-    #if defined(VERTEXLIGHT_ON)
-        VertexDirectDiffuse = RampDotLVertLight(NormalDir, FragData.worldPos, Occlusion);
-        VertexDirectDiffuse *= Albedo;
-    #endif
-}
-
-// ...
-void AddStandardDiffuse()
-{
-    FinalColor.rgb += Diffuse + VertexDirectDiffuse;
-}
-
-// ...
-void AddToonDiffuse()
-{
-    FinalColor.rgb += Diffuse + VertexDirectDiffuse;
-}
-
-// ...
-void AddAlpha()
-{
-    FinalColor.a = Albedo.a;
-}
+#endif // _BACKLACE_SPECULAR
 
 // rim feature
 #if defined(_BACKLACE_RIMLIGHT)
-    void CalculateRimlight()
+    void CalculateRimlight(inout BacklaceSurfaceData Surface)
     {
-        float fresnel = 1 - saturate(dot(NormalDir, ViewDir));
+        float fresnel = 1 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
         fresnel = pow(fresnel, _RimWidth);
         [branch] if (_RimLightBased > 0)
         {
-            fresnel *= NdotL;
+            fresnel *= Surface.NdotL;
         }
         Rimlight = fresnel * _RimColor.rgb * _RimIntensity;
     }

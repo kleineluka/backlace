@@ -10,17 +10,7 @@ Backlace (will) comes in three variants:
 
 ## Code Structure
 
-- `Backlace.shader`: The main shader file.
-- `Includes/`: Contains shader include files that are used by the main shader.
-    - `Backlace_Universal.cginc`: Contains shared code between all (or mostly all) passes.
-    - `Backlace_Forward.cginc`: Contains shared code between the base and add passes.
-    - `Backlace_Vertex.cginc`: Contains vertex shader code.
-    - `Backlace_Base.cginc`: Contains code specific to the base pass.
-    - `Backlace_Add.cginc`: Contains code specific to the add pass.
-    - `Backlace_Shadow.cginc`: Contains code specific to the shadow pass.
-    - `Backlace_Meta.cginc`: Contains code specific to the meta pass.
-
-Throughout the code, you may see `// todo:` comments. If you want to contribute, feel free to pick up any of these todos and submit a pull request!
+// to-do
 
 ## License
 

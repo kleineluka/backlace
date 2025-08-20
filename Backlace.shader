@@ -71,12 +71,18 @@ Shader "luka/indev/backlace"
         _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
         _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
+        [Enum(Disabled, 0, Raw Light, 1, Tuned Light, 2, Ramp Based, 3)] _TintMaskSource ("Tint Mask Source", Int) = 0
+        [HDR] _LitTint ("Lit Area Tint", Color) = (1, 1, 1, 0.75)
+        _LitThreshold ("Lit Coverage", Range(0, 1)) = 0.6
+        [HDR] _ShadowTint ("Shadow Area Tint", Color) = (1, 1, 1, 0.75)
+        _ShadowThreshold ("Shadow Coverage", Range(0, 1)) = 0.4
 
         // SPECULAR
         [Space(35)]
         [Header(Specular)]
         [Space(10)]
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
+        [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
         _MSSO ("MSSO", 2D) = "white" { }
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0

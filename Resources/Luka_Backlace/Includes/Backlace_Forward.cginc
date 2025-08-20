@@ -61,6 +61,12 @@ struct FragmentData
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
+struct Unity_GlossyEnvironmentData
+{
+    half roughness; // this is perceptualRoughness but compatability
+    half3 reflUVW;
+};
+
 // backlace includes
 #include "./Backlace_Properties.cginc"
 #include "./Backlace_Universal.cginc"

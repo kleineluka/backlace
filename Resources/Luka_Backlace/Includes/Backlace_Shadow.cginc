@@ -69,19 +69,18 @@ FragmentData FragData;
     float _EnableSpecular;
     float _SpecularMode;
     float _IndirectFallbackMode;
-    float4 Albedo;
     float4 _MainTex_ST;
     float4 _Color;
     UNITY_DECLARE_TEX2D(_MainTex);
-    void ClipShadowAlpha()
+    void ClipShadowAlpha(inout BacklaceSurfaceData Surface)
     {
         #if defined(_ALPHATEST_ON)
-            clip(Albedo.a - _Cutoff);
-        #else
+            clip(Surface.Albedo.a - _Cutoff);
+        #else // _ALPHATEST_ON
             #if defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-                float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
+                float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Surface.Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
                 clip(dither - 0.01);
-            #endif
+            #endif // _ALPHABLEND_ON || _ALPHAPREMULTIPLY_ON || _ALPHAMODULATE_ON
         #endif
     }
 #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
@@ -113,11 +112,12 @@ VertexOutput  Vertex(VertexData v)
 // shadow fragment function
 float4 Fragment(FragmentData i) : SV_TARGET
 {
+    BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
         LoadUVs();
-        SampleAlbedo();
-        ClipShadowAlpha();
+        SampleAlbedo(Surface);
+        ClipShadowAlpha(Surface);
     #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
     #if defined(SHADOWS_CUBE)
         float depth = length(i.lightVec) + unity_LightShadowBias.x;

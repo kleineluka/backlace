@@ -3,6 +3,7 @@
 
 #pragma shader_feature_local _ _BACKLACE_EMISSION
 #pragma shader_feature_local _ _BACKLACE_SPECULAR
+#pragma shader_feature_local _ _BACKLACE_VERTEX_SPECULAR
 #pragma shader_feature_local _ _BACKLACE_RIMLIGHT
 
 #endif // BACKLACE_KEYWORDS_CGINC

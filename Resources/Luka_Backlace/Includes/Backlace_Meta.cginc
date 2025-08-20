@@ -35,23 +35,16 @@ struct FragmentData
 
 // meta properties
 FragmentData FragData;
-float3 Albedo;
 float3 Emission;
 float3 SpecularColor;
-float Roughness;
 float _MainTex_UV;
 float _Occlusion;
 float Occlusion;
 float _MSSO_UV;
 float _Metallic;
-float Metallic;
 float _Glossiness;
-float Glossiness;
 float _Specular;
-float Specular;
-float SquareRoughness;
 float _ReplaceSpecular;
-float OneMinusReflectivity;
 float _SpecularTintTexture_UV;
 float _DirectLightMode;
 float _EnableSpecular;
@@ -86,29 +79,27 @@ FragmentData  Vertex(VertexData v)
 // meta fragment function
 float4 Fragment(FragmentData i) : SV_TARGET
 {
+    BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     UnityMetaInput surfaceData;
     UNITY_INITIALIZE_OUTPUT(UnityMetaInput, surfaceData);
-    Albedo = 0;
-    SpecularColor = 0;
-    Roughness = 1;
     LoadUVs();
-    SampleAlbedo();
-    SampleMSSO();
+    SampleAlbedo(Surface);
+    SampleMSSO(Surface);
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission();
     #endif // _BACKLACE_EMISSION
     #if defined(_BACKLACE_SPECULAR)
-        GetSampleData();
-        SetupAlbedoAndSpecColor();
+        GetSampleData(Surface);
+        SetupAlbedoAndSpecColor(Surface);
     #endif // _BACKLACE_SPECULAR
     #if defined(_BACKLACE_EMISSION)
         surfaceData.Emission = Emission;
     #else // _BACKLACE_EMISSION
         surfaceData.Emission = 0;
     #endif // _BACKLACE_EMISSION
-    surfaceData.Albedo = Albedo + SpecularColor * Roughness * Roughness;
-    surfaceData.SpecularColor = SpecularColor;
+    surfaceData.Albedo = Surface.Albedo + Surface.SpecularColor * Surface.Roughness * Surface.Roughness;
+    surfaceData.SpecularColor = Surface.SpecularColor;
     return UnityMetaFragment(surfaceData);
 }
 

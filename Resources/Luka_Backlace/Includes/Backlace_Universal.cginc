@@ -4,31 +4,67 @@
 // macros
 #define BACKLACE_TRANSFORM_TEX(set, name) (set[name##_UV].xy * name##_ST.xy + name##_ST.zw)
 
-// loading uv functions
-// todo: rework this, seems incredibly inefficient ?
+// data structures
+struct BacklaceSurfaceData
+{
+    // resulting colour
+    float4 FinalColor;
+    // core surface properties
+    float4 Albedo;
+    float3 NormalDir;
+    float3 TangentDir;
+    float3 BitangentDir;
+    // pbr from msso
+    float Metallic;
+    float Glossiness;
+    float Roughness;
+    float SquareRoughness;
+    float Specular;
+    float OneMinusReflectivity;
+    float Occlusion;
+    // directional/light vectors
+    float3 ViewDir;
+    float3 LightDir;
+    float3 HalfDir;
+    float3 ReflectDir;
+    // dot products
+    float NdotL;
+    float UnmaxedNdotL;
+    float NdotV;
+    float NdotH;
+    float LdotH;
+    // calculated light data
+    float4 LightColor;
+    float4 SpecLightColor;
+    float3 IndirectDiffuse;
+    float3 Diffuse;
+    float3 DirectSpecular;
+    float3 IndirectSpecular;
+    float3 VertexDirectDiffuse;
+    float Attenuation;
+    // specular intermediates
+    float3 SpecularColor;
+    float3 EnergyCompensation;
+    float3 Dfg;
+    float3 CustomIndirect;
+};
+
+
+// loading uv function
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
     
-    float2 Uvs[1];
-    inline void LoadUV0()
-    {
-        Uvs[0] = FragData.uv;
-    }
-
-    void LoadUVList()
-    {
-        LoadUV0();
-    }
-
+    float2 Uvs[4];
     void LoadUVs()
     {
-        LoadUVList();
+        Uvs[0] = FragData.uv;
+        Uvs[1] = FragData.uv1;
+        Uvs[2] = FragData.uv2;
+        Uvs[3] = FragData.uv3;
     }
 
-    // sample texture shortcuct
-    // too: make colour passed to it instead of using _Color
-    void SampleAlbedo()
+    void SampleAlbedo(inout BacklaceSurfaceData Surface)
     {
-        Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
+        Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
     }
 
 #endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
@@ -73,10 +109,10 @@ float sqr(float x)
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
     // sample MSSO texture
-    void SampleMSSO()
+    void SampleMSSO(inout BacklaceSurfaceData Surface)
     {
         Msso = UNITY_SAMPLE_TEX2D_SAMPLER(_MSSO, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MSSO));
-        Occlusion = lerp(1, Msso.a, _Occlusion);
+        Surface.Occlusion = lerp(1, Msso.a, _Occlusion);
     }
 
     // get the greyscale of a colour
@@ -88,31 +124,31 @@ float sqr(float x)
     // specular feature
     #if defined(_BACKLACE_SPECULAR)
         // get sample data from MSSO texture
-        void GetSampleData()
+        void GetSampleData(inout BacklaceSurfaceData Surface)
         {
-            Metallic = Msso.r * _Metallic;
-            Glossiness = Msso.g * _Glossiness;
-            Specular = Msso.b * _Specular;
-            Roughness = 1 - Glossiness;
-            SquareRoughness = max(Roughness * Roughness, 0.002);
+            Surface.Metallic = Msso.r * _Metallic;
+            Surface.Glossiness = Msso.g * _Glossiness;
+            Surface.Specular = Msso.b * _Specular;
+            Surface.Roughness = 1 - Surface.Glossiness;
+            Surface.SquareRoughness = max(Surface.Roughness * Surface.Roughness, 0.002);
         }
 
         // setup albedo and specular color
-        void SetupAlbedoAndSpecColor()
+        void SetupAlbedoAndSpecColor(inout BacklaceSurfaceData Surface)
         {
             float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
-            float sp = Specular * 0.08;
-            SpecularColor = lerp(float3(sp, sp, sp), Albedo.rgb, Metallic);
+            float sp = Surface.Specular * 0.08;
+            Surface.SpecularColor = lerp(float3(sp, sp, sp), Surface.Albedo.rgb, Surface.Metallic);
             if (_ReplaceSpecular == 1)
             {
-                SpecularColor = specularTint;
+                Surface.SpecularColor = specularTint;
             }
             else
             {
-                SpecularColor *= specularTint;
+                Surface.SpecularColor *= specularTint;
             }
-            OneMinusReflectivity = (1 - sp) - (Metallic * (1 - sp));
-            Albedo.rgb *= OneMinusReflectivity;
+            Surface.OneMinusReflectivity = (1 - sp) - (Surface.Metallic * (1 - sp));
+            Surface.Albedo.rgb *= Surface.OneMinusReflectivity;
         }
     #endif // defined(_BACKLACE_SPECULAR)
 
