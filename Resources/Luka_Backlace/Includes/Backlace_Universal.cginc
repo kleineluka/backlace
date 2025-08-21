@@ -165,21 +165,15 @@ float sqr(float x)
         UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
 
         // get strength and colour of emission
-        void CalculateEmission()
+        void CalculateEmission(inout BacklaceSurfaceData Surface)
         {
             float3 baseEmission = _EmissionColor.rgb;
             [branch] if (_UseAlbedoAsEmission > 0)
             {
-                baseEmission = lerp(baseEmission, Albedo.rgb, _UseAlbedoAsEmission);
+                baseEmission = lerp(baseEmission, Surface.Albedo.rgb, _UseAlbedoAsEmission);
             }
             float3 emissionMap = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _EmissionMap)).rgb;
             Emission = baseEmission * emissionMap * _EmissionStrength;
-        }
-
-        // apply the emission to the final color
-        void AddEmission()
-        {
-            FinalColor.rgb += Emission;
         }
 
     #endif // _BACKLACE_EMISSION

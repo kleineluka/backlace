@@ -75,7 +75,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // _BACKLACE_CLEARCOAT
     #if defined(_BACKLACE_EMISSION)
-        AddEmission(Surface);
+        Surface.FinalColor.rgb += Emission;
     #endif // _BACKLACE_EMISSION
     AddAlpha(Surface);
     return Surface.FinalColor;
