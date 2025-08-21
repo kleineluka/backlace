@@ -120,6 +120,15 @@ Shader "luka/indev/backlace"
         _ClearcoatRoughness ("Roughness", Range(0, 1)) = 0.1
         _ClearcoatColor ("Color", Color) = (1, 1, 1, 1)
 
+        // MATCAP
+        [Space(35)]
+        [Header(Matcap)]
+        [Space(10)]
+        [Toggle(_BACKLACE_MATCAP)] _ToggleMatcap ("Enable Matcap", Float) = 0.0
+        [NoScaleOffset] _MatcapTex ("Matcap Texture", 2D) = "white" { }
+        [HDR] _MatcapTint ("Matcap Tint", Color) = (1, 1, 1, 1)
+        _MatcapIntensity ("Matcap Intensity", Range(0, 2)) = 1.0
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]

@@ -126,9 +126,7 @@ SamplerState sampler_DFG;
     #if defined(_BACKLACE_VERTEX_SPECULAR)
         float3 VertexLightDir;
     #endif // _BACKLACE_VERTEX_SPECULAR
-
 #endif // _BACKLACE_SPECULAR
-
 
 #endif // BACKLACE_PROPERTIES_CGINC
 
