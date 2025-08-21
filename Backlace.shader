@@ -109,6 +109,15 @@ Shader "luka/indev/backlace"
         _RimIntensity ("Rim Intensity", Float) = 1.0
         [IntRange] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
 
+        // CLEARCOAT
+        [Space(35)]
+        [Header(Clear Coat)]
+        [Space(10)]
+        [Toggle(_BACKLACE_CLEARCOAT)] _ToggleClearcoat ("Enable Clear Coat", Float) = 0.0
+        _ClearcoatStrength ("Strength", Range(0, 1)) = 1.0
+        [NoScaleOffset] _ClearcoatMap ("Strength Map (R)", 2D) = "white" { }
+        _ClearcoatRoughness ("Roughness", Range(0, 1)) = 0.1
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]
@@ -129,6 +138,7 @@ Shader "luka/indev/backlace"
         _SpecularTintTexture_UV ("Specular Tint UV Set", Float) = 0
         _TangentMap_UV ("Tangent Map UV", Float) = 0
         _EmissionMap_UV ("Emission Map UV Set", Float) = 0
+        _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]

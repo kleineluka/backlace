@@ -58,10 +58,19 @@ float4 Fragment(FragmentData i) : SV_TARGET
             AddVertexSpecular(Surface);
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // _BACKLACE_SPECULAR
+    #if defined(_BACKLACE_CLEARCOAT)
+        float3 clearcoatHighlight;
+        float clearcoatOcclusion;
+        CalculateClearcoat(Surface, clearcoatHighlight, clearcoatOcclusion);
+        Surface.FinalColor.rgb *= clearcoatOcclusion;
+    #endif // _BACKLACE_CLEARCOAT
     #if defined(_BACKLACE_RIMLIGHT)
         CalculateRimlight(Surface);
-        FinalColor.rgb += Rimlight;
+        Surface.FinalColor.rgb += Rimlight;
     #endif // _BACKLACE_RIMLIGHT
+    #if defined(_BACKLACE_CLEARCOAT)
+        Surface.FinalColor.rgb += clearcoatHighlight;
+    #endif // _BACKLACE_CLEARCOAT
     #if defined(_BACKLACE_EMISSION)
         AddEmission(Surface);
     #endif // _BACKLACE_EMISSION

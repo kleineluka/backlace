@@ -281,29 +281,45 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     Surface.FinalColor.a = Surface.Albedo.a;
 }
 
-// specular feature
+// gtr2 distribution function
+float GTR2(float NdotH, float a)
+{
+    float a2 = a * a;
+    float t = 1 + (a2 - 1) * NdotH * NdotH;
+    return a2 / (UNITY_PI * t * t + 1e-7f);
+}
+
+// ggx distribution function
+float smithG_GGX(float NdotV, float alphaG)
+{
+    float a = alphaG * alphaG;
+    float b = NdotV * NdotV;
+    return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
+}
+
+// standard direct specular calculation
+void StandardDirectSpecular(float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
+{
+    outNDF = 0;
+    outGFS = 0;
+    outNDF = GTR2(ndotH, Surface.SquareRoughness) * UNITY_PI;
+    outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
+}
+
+// ...
+inline half3 FresnelTerm(half3 F0, half cosA)
+{
+    half t = Pow5(1 - cosA);   // ala Schlick interpoliation
+    return F0 + (1 - F0) * t;
+}
+
+// specular-only features
 #if defined(_BACKLACE_SPECULAR)
 
     // gets the indirect lighting color from a fallback cubemap using the reflected direction and remapped roughness
     void GetFallbackCubemap(inout BacklaceSurfaceData Surface)
     {
         Surface.CustomIndirect = texCUBElod(_FallbackCubemap, half4(Surface.ReflectDir.xyz, remap(Surface.SquareRoughness, 1, 0, 5, 0))).rgb;
-    }
-
-    // gtr2 distribution function
-    float GTR2(float NdotH, float a)
-    {
-        float a2 = a * a;
-        float t = 1 + (a2 - 1) * NdotH * NdotH;
-        return a2 / (UNITY_PI * t * t + 1e-7f);
-    }
-
-    // ggx distribution function
-    float smithG_GGX(float NdotV, float alphaG)
-    {
-        float a = alphaG * alphaG;
-        float b = NdotV * NdotV;
-        return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
     }
 
     // modified tangent space
@@ -332,15 +348,6 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
     {
         return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
-    }
-
-    // standard direct specular calculation
-    void StandardDirectSpecular(float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
-    {
-        outNDF = 0;
-        outGFS = 0;
-        outNDF = GTR2(ndotH, Surface.SquareRoughness) * UNITY_PI;
-        outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
     }
 
     // calculates anisotropic direct specular reflection using tangent space and view/light directions
@@ -386,13 +393,6 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         Surface.Dfg = _DFG.Sample(sampler_DFG, dfguv).xyz;
         Surface.Dfg.y = max(Surface.Dfg.y, 1e-7f); // prevent division by zero
         Surface.EnergyCompensation = lerp(1.0 + Surface.SpecularColor * (1.0 / Surface.Dfg.y - 1.0), 1, _DFGType);
-    }
-
-    // ...
-    inline half3 FresnelTerm(half3 F0, half cosA)
-    {
-        half t = Pow5(1 - cosA);   // ala Schlick interpoliation
-        return F0 + (1 - F0) * t;
     }
 
     // ...
@@ -534,7 +534,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
 
 #endif // _BACKLACE_SPECULAR
 
-// rim feature
+// rim-only features
 #if defined(_BACKLACE_RIMLIGHT)
     void CalculateRimlight(inout BacklaceSurfaceData Surface)
     {
@@ -547,5 +547,22 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         Rimlight = fresnel * _RimColor.rgb * _RimIntensity;
     }
 #endif // _BACKLACE_RIMLIGHT
+
+// clearcoat-only features
+#if defined(_BACKLACE_CLEARCOAT)
+    void CalculateClearcoat(inout BacklaceSurfaceData Surface, out float3 highlight, out float occlusion)
+    {
+        float mask = _ClearcoatStrength * UNITY_SAMPLE_TEX2D(_ClearcoatMap, Uvs[0]).r;
+        float3 F0 = 0.04;
+        float3 fresnel = FresnelTerm(F0, Surface.LdotH);
+        float roughness = _ClearcoatRoughness;
+        float squareRoughness = max(roughness * roughness, 0.002);
+        float distribution = GTR2(Surface.NdotH, squareRoughness);
+        float geometry = smithG_GGX(Surface.NdotL, squareRoughness) * smithG_GGX(Surface.NdotV, squareRoughness);
+        float3 clearcoatSpec = fresnel * distribution * geometry;
+        highlight = clearcoatSpec * Surface.LightColor.rgb * mask;
+        occlusion = lerp(1.0, 1.0 - fresnel, mask);
+    }
+#endif // _BACKLACE_CLEARCOAT
 
 #endif // BACKLACE_SHADING_CGINC

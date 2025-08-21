@@ -95,6 +95,15 @@ float _LitThreshold;
     float _RimLightBased;
 #endif // _BACKLACE_RIMLIGHT
 
+// clear coat feature
+#if defined(_BACKLACE_CLEARCOAT)
+    UNITY_DECLARE_TEX2D(_ClearcoatMap);
+    float4 _ClearcoatMap_ST;
+    float _ClearcoatStrength;
+    float _ClearcoatRoughness;
+    float _ClearcoatMap_UV;
+#endif // _BACKLACE_CLEARCOAT
+
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
     // toon specular feature
