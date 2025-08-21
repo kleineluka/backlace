@@ -25,18 +25,14 @@ float4 Fragment(FragmentData i) : SV_TARGET
         SetupDFG(Surface);
     #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
-    [branch] if (_DirectLightMode == 0) // real lighting
-    {
-        GetPBRDiffuse(Surface);
-        GetPBRVertexDiffuse(Surface);
-    }
-    else if (_DirectLightMode == 1)// toon lighting
-    {
+    #if defined(_BACKLACE_TOON) // TOON LIGHTING
         GetToonDiffuse(Surface);
         GetToonVertexDiffuse(Surface);
-    }
+    #else // REAL LIGHTING
+        GetPBRDiffuse(Surface);
+        GetPBRVertexDiffuse(Surface);
+    #endif // _BACKLACE_TOON
     #if defined(_BACKLACE_SPECULAR)
-        //DirectSpecular = CalculateDirectSpecular(TangentDir, BitangentDir, LightDir, HalfDir, NdotH, NdotL, NdotV, LdotH, Attenuation);
         Surface.DirectSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, Surface.LightDir, Surface.HalfDir, Surface.NdotH, Surface.NdotL, Surface.NdotV, Surface.LdotH, Surface.Attenuation, Surface);
         [branch] if (_IndirectFallbackMode == 1)
         {
@@ -44,13 +40,11 @@ float4 Fragment(FragmentData i) : SV_TARGET
         }
         GetIndirectSpecular(Surface);
     #endif // _BACKLACE_SPECULAR
-    [branch] if (_DirectLightMode == 0) // real lighting
-    {
-        AddStandardDiffuse(Surface);
-    } else if (_DirectLightMode == 1) // toon lighting
-    {
+    #if defined(_BACKLACE_TOON) // TOON LIGHTING
         AddToonDiffuse(Surface);
-    }
+    #else // REAL LIGHTING
+        AddStandardDiffuse(Surface);
+    #endif // _BACKLACE_TOON
     #if defined(_BACKLACE_SPECULAR)
         AddDirectSpecular(Surface);
         AddIndirectSpecular(Surface);

@@ -87,7 +87,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     SampleAlbedo(Surface);
     SampleMSSO(Surface);
     #if defined(_BACKLACE_EMISSION)
-        CalculateEmission();
+        CalculateEmission(Surface);
     #endif // _BACKLACE_EMISSION
     #if defined(_BACKLACE_SPECULAR)
         GetSampleData(Surface);

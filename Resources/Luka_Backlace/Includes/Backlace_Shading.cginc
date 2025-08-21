@@ -115,46 +115,48 @@ float4 RampDotL(inout BacklaceSurfaceData Surface)
 }
 
 // toon shading
-void GetToonDiffuse(inout BacklaceSurfaceData Surface)
-{
-    Surface.Diffuse = 0;
-    //diffuse color
-    float4 ramp = RampDotL(Surface);
-    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-        Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
-    #else
-        Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
-    #endif
-    Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
-    // tints, optionally
-    [branch] if (_TintMaskSource != 0)
+#if defined(_BACKLACE_TOON)
+    void GetToonDiffuse(inout BacklaceSurfaceData Surface)
     {
-        float finalMask;
-        switch(_TintMaskSource)
+        Surface.Diffuse = 0;
+        //diffuse color
+        float4 ramp = RampDotL(Surface);
+        #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+            Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+        #else
+            Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
+        #endif
+        Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
+        // tints, optionally
+        [branch] if (_TintMaskSource != 0)
         {
-            case 2: // tuned light
+            float finalMask;
+            switch(_TintMaskSource)
             {
-                float rawMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
-                finalMask = smoothstep(_ShadowThreshold, max(_ShadowThreshold, _LitThreshold), rawMask);
-                break;
+                case 2: // tuned light
+                {
+                    float rawMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
+                    finalMask = smoothstep(_ShadowThreshold, max(_ShadowThreshold, _LitThreshold), rawMask);
+                    break;
+                }
+                case 1: // raw light
+                {
+                    finalMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
+                    break;
+                }
+                default: // ramp based
+                {
+                    finalMask = ramp.a;
+                    break;
+                }
             }
-            case 1: // raw light
-            {
-                finalMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
-                break;
-            }
-            default: // ramp based
-            {
-                finalMask = ramp.a;
-                break;
-            }
+            float shadowInfluence = (1 - finalMask) * _ShadowTint.a;
+            Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _ShadowTint.rgb, shadowInfluence);
+            float litInfluence = finalMask * _LitTint.a;
+            Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _LitTint.rgb, litInfluence);
         }
-        float shadowInfluence = (1 - finalMask) * _ShadowTint.a;
-        Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _ShadowTint.rgb, shadowInfluence);
-        float litInfluence = finalMask * _LitTint.a;
-        Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _LitTint.rgb, litInfluence);
     }
-}
+#endif // _BACKLACE_TOON
 
 //modified version of Shade4PointLights
 void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out float3 direction)

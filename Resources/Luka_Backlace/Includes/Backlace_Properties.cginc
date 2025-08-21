@@ -8,7 +8,6 @@ float4 _ForcedLightDirection;
 float _ViewDirectionOffsetX;
 float _ViewDirectionOffsetY;
 float LightAttenuation;
-float _DirectLightMode;
 float _MainTex_UV;
 float _Occlusion;
 float _MSSO_UV;
@@ -41,8 +40,6 @@ float3 Lightmap;
 float3 DynamicLightmap;
 float3 _RampMin;
 float3 NDF;
-
-
 float4 LightmapDirection;
 float4 DynamicLightmapDirection;
 float4 _MainTex_ST;
@@ -64,12 +61,6 @@ UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
 Texture2D_float _DFG;
 SamplerState sampler_DFG;
 
-float _TintMaskSource;
-float4 _LitTint;
-float4 _ShadowTint;
-float _ShadowThreshold;
-float _LitThreshold;
-
 #if defined(_ALPHAMODULATE_ON)
     sampler3D _DitherMaskLOD;
 #endif // _ALPHAMODULATE_ON
@@ -85,6 +76,24 @@ float _LitThreshold;
     float _AddLightMin;
     float _AddLightMax;
 #endif // UNITY_PASS_FORWARDADD
+
+#if defined(_BACKLACE_TOON)
+    float _TintMaskSource;
+    float4 _LitTint;
+    float4 _ShadowTint;
+    float _ShadowThreshold;
+    float _LitThreshold;
+#endif // _BACKLACE_TOON
+
+#if defined(_BACKLACE_EMISSION)
+    float3 Emission;
+    float4 _EmissionColor;
+    float4 _EmissionMap_ST;
+    float _UseAlbedoAsEmission;
+    float _EmissionStrength;
+    float _EmissionMap_UV;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
+#endif // _BACKLACE_EMISSION
 
 // rim feature
 #if defined(_BACKLACE_RIMLIGHT)

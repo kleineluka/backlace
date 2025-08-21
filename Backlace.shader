@@ -64,7 +64,7 @@ Shader "luka/indev/backlace"
         [Space(35)]
         [Header(Toon Lighting)]
         [Space(10)]
-        _DirectLightMode ("Direct Light Mode", Float) = 0.0
+        [Toggle(_BACKLACE_TOON)] _ToggleToonLighting ("Enable Toon Lighting", Float) = 0.0
         _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0

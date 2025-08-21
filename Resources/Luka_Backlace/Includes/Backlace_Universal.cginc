@@ -154,16 +154,6 @@ float sqr(float x)
 
     // emission feature
     #if defined(_BACKLACE_EMISSION)
-
-        // emission-specific variables and properties
-        float3 Emission;
-        float4 _EmissionColor;
-        float4 _EmissionMap_ST;
-        float _UseAlbedoAsEmission;
-        float _EmissionStrength;
-        float _EmissionMap_UV;
-        UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
-
         // get strength and colour of emission
         void CalculateEmission(inout BacklaceSurfaceData Surface)
         {
@@ -175,7 +165,6 @@ float sqr(float x)
             float3 emissionMap = UNITY_SAMPLE_TEX2D_SAMPLER(_EmissionMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _EmissionMap)).rgb;
             Emission = baseEmission * emissionMap * _EmissionStrength;
         }
-
     #endif // _BACKLACE_EMISSION
 
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
