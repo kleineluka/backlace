@@ -60,7 +60,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // _BACKLACE_SPECULAR
     #if defined(_BACKLACE_CLEARCOAT)
         float3 clearcoatHighlight;
-        float clearcoatOcclusion;
+        float3 clearcoatOcclusion;
         CalculateClearcoat(Surface, clearcoatHighlight, clearcoatOcclusion);
         Surface.FinalColor.rgb *= clearcoatOcclusion;
     #endif // _BACKLACE_CLEARCOAT
@@ -70,6 +70,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // _BACKLACE_RIMLIGHT
     #if defined(_BACKLACE_CLEARCOAT)
         Surface.FinalColor.rgb += clearcoatHighlight;
+        #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
+            AddClearcoatVertex(Surface);
+        #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // _BACKLACE_CLEARCOAT
     #if defined(_BACKLACE_EMISSION)
         AddEmission(Surface);

@@ -115,8 +115,10 @@ Shader "luka/indev/backlace"
         [Space(10)]
         [Toggle(_BACKLACE_CLEARCOAT)] _ToggleClearcoat ("Enable Clear Coat", Float) = 0.0
         _ClearcoatStrength ("Strength", Range(0, 1)) = 1.0
-        [NoScaleOffset] _ClearcoatMap ("Strength Map (R)", 2D) = "white" { }
+        _ClearcoatReflectionStrength ("Reflection Strength", Range(0, 2)) = 1.0
+        [NoScaleOffset] _ClearcoatMap ("Mask (R=Strength, G=Roughness)", 2D) = "white" { }
         _ClearcoatRoughness ("Roughness", Range(0, 1)) = 0.1
+        _ClearcoatColor ("Color", Color) = (1, 1, 1, 1)
 
         // INDIRECT LIGHTING
         [Space(35)]

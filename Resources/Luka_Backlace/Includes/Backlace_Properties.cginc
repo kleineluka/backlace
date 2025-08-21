@@ -101,7 +101,9 @@ float _LitThreshold;
     float4 _ClearcoatMap_ST;
     float _ClearcoatStrength;
     float _ClearcoatRoughness;
+    float _ClearcoatReflectionStrength;
     float _ClearcoatMap_UV;
+    float4 _ClearcoatColor;
 #endif // _BACKLACE_CLEARCOAT
 
 // specular feature

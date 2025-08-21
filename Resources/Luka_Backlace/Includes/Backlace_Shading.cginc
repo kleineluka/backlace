@@ -467,6 +467,9 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         float grazingTerm = saturate(1 - Surface.SquareRoughness + (1 - Surface.OneMinusReflectivity));
         Surface.Dfg.x *= lerp(1.0, saturate(dot(Surface.IndirectDiffuse, 1.0)), Surface.Occlusion);
         Surface.IndirectSpecular *= Surface.EnergyCompensation * horizon * horizon * lerp(lerp(Surface.Dfg.xxx, Surface.Dfg.yyy, Surface.SpecularColor), Surface.SpecularColor * Surface.Dfg.z, _DFGType);
+        #if defined(_BACKLACE_CLEARCOAT)
+            Surface.IndirectSpecular *= _ClearcoatReflectionStrength;
+        #endif // _BACKLACE_CLEARCOAT
     }
 
     // ...
@@ -550,19 +553,37 @@ inline half3 FresnelTerm(half3 F0, half cosA)
 
 // clearcoat-only features
 #if defined(_BACKLACE_CLEARCOAT)
-    void CalculateClearcoat(inout BacklaceSurfaceData Surface, out float3 highlight, out float occlusion)
+    void CalculateClearcoat(inout BacklaceSurfaceData Surface, out float3 highlight, out float3 occlusion)
     {
-        float mask = _ClearcoatStrength * UNITY_SAMPLE_TEX2D(_ClearcoatMap, Uvs[0]).r;
+        float4 clearcoatMap = UNITY_SAMPLE_TEX2D(_ClearcoatMap, Uvs[_ClearcoatMap_UV]);
+        float mask = _ClearcoatStrength * clearcoatMap.r; 
+        float roughness = _ClearcoatRoughness * clearcoatMap.g;
         float3 F0 = 0.04;
         float3 fresnel = FresnelTerm(F0, Surface.LdotH);
-        float roughness = _ClearcoatRoughness;
         float squareRoughness = max(roughness * roughness, 0.002);
         float distribution = GTR2(Surface.NdotH, squareRoughness);
         float geometry = smithG_GGX(Surface.NdotL, squareRoughness) * smithG_GGX(Surface.NdotV, squareRoughness);
         float3 clearcoatSpec = fresnel * distribution * geometry;
-        highlight = clearcoatSpec * Surface.LightColor.rgb * mask;
-        occlusion = lerp(1.0, 1.0 - fresnel, mask);
+        highlight = clearcoatSpec * lerp(Surface.LightColor.rgb, Surface.LightColor.rgb * _ClearcoatColor.rgb, _ClearcoatColor.a) * mask;
+        float3 occlusionTint = lerp(1.0, _ClearcoatColor.rgb, fresnel);
+        occlusion = lerp(1.0, occlusionTint, mask);
     }
+
+    #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
+        void AddClearcoatVertex(inout BacklaceSurfaceData Surface)
+        {
+            float3 VLightDir = normalize(VertexLightDir);
+            if (dot(VLightDir, VLightDir) < 0.01) return;
+            float3 F0 = 0.04;
+            float3 fresnel = FresnelTerm(F0, saturate(dot(normalize(VLightDir + Surface.ViewDir), VLightDir)));
+            float roughness = _ClearcoatRoughness; // no map for this to keep it simple
+            float squareRoughness = max(roughness * roughness, 0.002);
+            float distribution = GTR2(saturate(dot(Surface.NormalDir, normalize(VLightDir + Surface.ViewDir))), squareRoughness);
+            float geometry = smithG_GGX(saturate(dot(Surface.NormalDir, VLightDir)), squareRoughness) * smithG_GGX(Surface.NdotV, squareRoughness);
+            float3 clearcoatV_Spec = fresnel * distribution * geometry;
+            Surface.FinalColor.rgb += clearcoatV_Spec * Surface.VertexDirectDiffuse * _ClearcoatColor.rgb * _ClearcoatStrength;
+        }
+    #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
 #endif // _BACKLACE_CLEARCOAT
 
 #endif // BACKLACE_SHADING_CGINC
