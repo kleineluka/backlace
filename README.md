@@ -1,5 +1,8 @@
 # Backlace 💗
-Base Toon Shader for VRChat & Unity. **This is a base to build your work off of, not a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). As such, many features are a naïve implementation.**
+Backlace is a standard and toon shader for Unity and VRChat. It's primary function is to provide a base for other shaders, but it can also be used as a stand-alone shader. A good use case for this shader would be, for instance, wanting to make a shader that implements a specific special effect but not wanting to build a lighting system from scratch. While fully usable as a stand-alone shader, it is much more lightweight.
+
+> [!CAUTION]
+> **This is inherently not a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). As such, many features are a naïve implementation.**
 
 ## License
 Anything in the [Editor](https://github.com/kleineluka/backlace/tree/main/Resources/Luka_Backlace/Editor) folder in this repository is strictly not for redistribution under any circumstances. This code is provided as a demo UI, and has all of my socials and metadata hard-coded, so you do not want to redistribute this anyways.
