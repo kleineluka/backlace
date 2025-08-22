@@ -23,11 +23,17 @@ FragmentData Vertex(VertexData v)
     
     #if defined(LIGHTMAP_ON)
         i.lightmapUV = v.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
-    #endif
+    #endif // LIGHTMAP_ON
     
     #if defined(DYNAMICLIGHTMAP_ON)
         i.dynamicLightmapUV = v.uv2 * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
-    #endif
+    #endif // DYNAMICLIGHTMAP_ON
+
+    #if defined(_BACKLACE_MATCAP)
+        float3 worldN = UnityObjectToWorldNormal(v.normal);
+        float3 viewN = mul((float3x3)UNITY_MATRIX_V, worldN);
+        i.matcapUV = viewN.xy * 0.5 + 0.5;
+    #endif // _BACKLACE_MATCAP
     
     return i;
 }

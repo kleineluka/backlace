@@ -71,6 +71,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_EMISSION)
         Surface.FinalColor.rgb += Emission;
     #endif // _BACKLACE_EMISSION
+    #if defined(_BACKLACE_MATCAP)
+        ApplyMatcap(Surface, i);
+    #endif // _BACKLACE_MATCAP
     AddAlpha(Surface);
     return Surface.FinalColor;
 }

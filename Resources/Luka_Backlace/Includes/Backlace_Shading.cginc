@@ -333,10 +333,14 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         worldToTangent[2] = float3(0, 0, 1);
         float3 tangentTWS = mul(tangentTS, worldToTangent);
         float3 fTangent;
-        if (tangentTS.z < 1)
+        if (tangentTS.z < 1) 
+        {
             fTangent = tangentTWS;
-        else
+        } 
+        else 
+        {
             fTangent = tangentDir;
+        }
         return fTangent;
     }
 
@@ -587,5 +591,37 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         }
     #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
 #endif // _BACKLACE_CLEARCOAT
+
+#if defined(_BACKLACE_MATCAP)
+    void ApplyMatcap(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float3 matcapColor;
+        [branch] if (_MatcapSmoothnessEnabled == 1) 
+        {
+            // use smoothness to sample a mip level
+            float mipLevel = _MatcapSmoothness * 10.0;
+            matcapColor = UNITY_SAMPLE_TEX2D_LOD(_MatcapTex, i.matcapUV, mipLevel).rgb;
+        }
+        else
+        {
+            matcapColor = UNITY_SAMPLE_TEX2D(_MatcapTex, i.matcapUV).rgb;
+        }
+        matcapColor *= _MatcapTint.rgb;
+        float mask = UNITY_SAMPLE_TEX2D(_MatcapMask, Uvs[_MatcapMask_UV]).r;
+        float3 finalMatcap = matcapColor * _MatcapIntensity * mask;
+        switch(_MatcapBlendMode)
+        {
+            case 0: // Additive
+            Surface.FinalColor.rgb += finalMatcap;
+            break;
+            case 1: // Multiply
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
+            break;
+            case 2: // Replace
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
+            break;
+        }
+    }
+#endif // _BACKLACE_MATCAP
 
 #endif // BACKLACE_SHADING_CGINC

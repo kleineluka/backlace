@@ -128,5 +128,17 @@ SamplerState sampler_DFG;
     #endif // _BACKLACE_VERTEX_SPECULAR
 #endif // _BACKLACE_SPECULAR
 
+#if defined(_BACKLACE_MATCAP)
+    UNITY_DECLARE_TEX2D(_MatcapTex);
+    UNITY_DECLARE_TEX2D(_MatcapMask);
+    float4 _MatcapTex_ST;
+    float _MatcapIntensity;
+    float3 _MatcapTint;
+    float _MatcapSmoothnessEnabled;
+    float _MatcapSmoothness;
+    float _MatcapMask_UV;
+    int _MatcapBlendMode;
+#endif // _BACKLACE_MATCAP
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

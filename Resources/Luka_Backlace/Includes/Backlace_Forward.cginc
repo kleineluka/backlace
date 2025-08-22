@@ -58,6 +58,9 @@ struct FragmentData
     #if defined(DYNAMICLIGHTMAP_ON)
         float2 dynamicLightmapUV : TEXCOORD9;
     #endif // DYNAMICLIGHTMAP_ON
+    #if defined(_BACKLACE_MATCAP)
+        float2 matcapUV : TEXCOORD10;
+    #endif // _BACKLACE_MATCAP
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

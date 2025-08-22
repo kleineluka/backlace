@@ -128,6 +128,10 @@ Shader "luka/indev/backlace"
         [NoScaleOffset] _MatcapTex ("Matcap Texture", 2D) = "white" { }
         [HDR] _MatcapTint ("Matcap Tint", Color) = (1, 1, 1, 1)
         _MatcapIntensity ("Matcap Intensity", Range(0, 2)) = 1.0
+        [Enum(Additive, 0, Multiply, 1, Replace, 2)] _MatcapBlendMode ("Blend Mode", Int) = 0
+        [NoScaleOffset] _MatcapMask ("Matcap Mask (R)", 2D) = "white" { }
+        [Enum(OFF, 0, ON, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
+        _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
         // INDIRECT LIGHTING
         [Space(35)]
@@ -150,6 +154,7 @@ Shader "luka/indev/backlace"
         _TangentMap_UV ("Tangent Map UV", Float) = 0
         _EmissionMap_UV ("Emission Map UV Set", Float) = 0
         _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
+        _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]

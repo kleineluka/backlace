@@ -64,7 +64,7 @@ UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
 #include "./Backlace_Universal.cginc"
 
 // meta vertex function
-FragmentData  Vertex(VertexData v)
+FragmentData Vertex(VertexData v)
 {
     FragmentData  i;
     i.vertex = v.vertex;
