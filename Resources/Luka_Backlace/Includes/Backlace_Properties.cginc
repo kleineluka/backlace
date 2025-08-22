@@ -158,5 +158,16 @@ SamplerState sampler_DFG;
     float _ParallaxSteps;
 #endif // _BACKLACE_PARALLAX
 
+// subsurface scattering feature
+#if defined(_BACKLACE_SSS)
+    UNITY_DECLARE_TEX2D(_ThicknessMap);
+    float _ThicknessMap_UV;
+    float4 _SSSColor;
+    float _SSSStrength;
+    float _SSSDistortion;
+    float _SSSSpread;
+    float _SSSBaseColorMix;
+#endif
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

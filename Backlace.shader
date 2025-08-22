@@ -154,6 +154,19 @@ Shader "luka/indev/backlace"
         _ParallaxStrength ("Parallax Strength", Range(0, 0.1)) = 0.02
         _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
 
+        // SUBSURFACE SCATTERING
+        [Space(35)]
+        [Header(Subsurface Scattering)]
+        [Space(10)]
+        [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
+        [NoScaleOffset] _ThicknessMap ("Thickness Map (R)", 2D) = "white" { }
+        _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
+        [HDR] _SSSColor ("Scattering Tint", Color) = (1, 1, 1, 1)
+        _SSSStrength ("Strength", Range(0, 2)) = 1.0
+        _SSSDistortion ("Distortion", Range(0, 1)) = 0.5
+        _SSSSpread ("Spread", Range(16, 0.01)) = 2.0
+        _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]
@@ -177,6 +190,7 @@ Shader "luka/indev/backlace"
         _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
         _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
         _ParallaxMap_UV ("Height Map UV Set", Float) = 0
+        _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]

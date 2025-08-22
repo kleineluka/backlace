@@ -43,6 +43,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
         GetPBRDiffuse(Surface);
         GetPBRVertexDiffuse(Surface);
     #endif // _BACKLACE_TOON
+    #if defined(_BACKLACE_SSS)
+        ApplySubsurfaceScattering(Surface);
+    #endif // _BACKLACE_SSS
     #if defined(_BACKLACE_SPECULAR)
         Surface.DirectSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, Surface.LightDir, Surface.HalfDir, Surface.NdotH, Surface.NdotL, Surface.NdotV, Surface.LdotH, Surface.Attenuation, Surface);
         [branch] if (_IndirectFallbackMode == 1)

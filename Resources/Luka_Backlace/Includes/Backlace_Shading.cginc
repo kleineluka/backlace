@@ -681,6 +681,19 @@ inline half3 FresnelTerm(half3 F0, half cosA)
             }
         }
     }
-#endif
+#endif // _BACKLACE_PARALLAX
+
+#if defined(_BACKLACE_SSS)
+    void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
+    {
+        float thickness = UNITY_SAMPLE_TEX2D(_ThicknessMap, Uvs[_ThicknessMap_UV]).r;
+        float3 distortedLightDir = normalize(Surface.LightDir + Surface.NormalDir * _SSSDistortion);
+        float sssDot = saturate(dot(Surface.ViewDir, -distortedLightDir));
+        sssDot = pow(sssDot, _SSSSpread);
+        float3 sssColor = sssDot * Surface.LightColor.rgb * _SSSColor.rgb * thickness * _SSSStrength;
+        sssColor = lerp(sssColor, sssColor * Surface.Albedo.rgb, _SSSBaseColorMix);
+        Surface.Diffuse += sssColor;
+    }
+#endif // _BACKLACE_SSS
 
 #endif // BACKLACE_SHADING_CGINC

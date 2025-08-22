@@ -10,5 +10,6 @@
 #pragma shader_feature_local _ _BACKLACE_MATCAP
 #pragma shader_feature_local _ _BACKLACE_CUBEMAP
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
+#pragma shader_feature_local _ _BACKLACE_SSS
 
 #endif // BACKLACE_KEYWORDS_CGINC
