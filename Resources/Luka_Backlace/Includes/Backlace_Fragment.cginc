@@ -7,6 +7,17 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
+    GetGeometryVectors(Surface);
+    #if defined(_BACKLACE_PARALLAX)
+        [branch] if (_ParallaxMode == 0) // fast parallax
+        {
+            ApplyParallax_Fast(Uvs[0], Surface);
+        }
+        else if (_ParallaxMode == 1) // fancy parallax
+        {
+            ApplyParallax_Fancy(Uvs[0], Surface);
+        }
+    #endif
     SampleAlbedo(Surface);
     ClipAlpha(Surface);
     SampleNormal();

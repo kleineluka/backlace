@@ -133,6 +133,7 @@ Shader "luka/indev/backlace"
         [Enum(OFF, 0, ON, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
+        // CUBEMAP
         [Space(35)]
         [Header(Cubemap)]
         [Space(10)]
@@ -141,6 +142,17 @@ Shader "luka/indev/backlace"
         [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
         _CubemapIntensity ("Cubemap Intensity", Range(0, 2)) = 1.0
         [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
+
+        // PARALLAX MAPPING
+        [Space(35)]
+        [Header(Parallax Mapping)]
+        [Space(10)]
+        [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
+        [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
+        [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
+        _ParallaxMap_UV ("Height Map UV Set", Float) = 0
+        _ParallaxStrength ("Parallax Strength", Range(0, 0.1)) = 0.02
+        _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
 
         // INDIRECT LIGHTING
         [Space(35)]
@@ -164,6 +176,7 @@ Shader "luka/indev/backlace"
         _EmissionMap_UV ("Emission Map UV Set", Float) = 0
         _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
         _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
+        _ParallaxMap_UV ("Height Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]

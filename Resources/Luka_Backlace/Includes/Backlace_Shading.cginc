@@ -38,15 +38,20 @@ void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bi
     bitangent = bumpedBitangent;
 }
 
-// get direction vectors
-void GetDirectionVectors(inout BacklaceSurfaceData Surface)
+// get geometry vectors
+void GetGeometryVectors(inout BacklaceSurfaceData Surface)
 {
     Surface.NormalDir = normalize(FragData.normal);
     Surface.TangentDir = normalize(UnityObjectToWorldDir(FragData.tangentDir.xyz));
     Surface.BitangentDir = normalize(cross(Surface.NormalDir, Surface.TangentDir) * FragData.tangentDir.w * unity_WorldTransformParams.w);
+    Surface.ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
+}
+
+// get direction vectors
+void GetDirectionVectors(inout BacklaceSurfaceData Surface)
+{
     CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
     Surface.LightDir = normalize(UnityWorldSpaceLightDir(FragData.worldPos));
-    Surface.ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
     Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
     Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
 }
@@ -625,25 +630,57 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 #endif // _BACKLACE_MATCAP
 
-//
+// cubemap-only features
 #if defined(_BACKLACE_CUBEMAP)
-void ApplyCubemap(inout BacklaceSurfaceData Surface)
-{
-    float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb;
-    float intensity = _CubemapIntensity;
-    switch(_CubemapBlendMode)
+    void ApplyCubemap(inout BacklaceSurfaceData Surface)
     {
-        case 0: // additive
-            Surface.FinalColor.rgb += cubemapColor * intensity;
-            break;
-        case 1: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
-            break;
-        case 2: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
-            break;
+        float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb;
+        float intensity = _CubemapIntensity;
+        switch(_CubemapBlendMode)
+        {
+            case 0: // additive
+                Surface.FinalColor.rgb += cubemapColor * intensity;
+                break;
+            case 1: // multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
+                break;
+            case 2: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
+                break;
+        }
     }
-}
 #endif // _BACKLACE_CUBEMAP
+
+// parallax-only features
+#if defined(_BACKLACE_PARALLAX)
+    void ApplyParallax_Fast(inout float2 uv, in BacklaceSurfaceData Surface)
+    {
+        float height = UNITY_SAMPLE_TEX2D(_ParallaxMap, uv).r;
+        float3 viewDirTS = float3(dot(Surface.ViewDir, Surface.TangentDir), dot(Surface.ViewDir, Surface.BitangentDir), 0);
+        float2 offset = viewDirTS.xy * (height * _ParallaxStrength);
+        uv -= offset;
+    }
+    
+    void ApplyParallax_Fancy(inout float2 uv, in BacklaceSurfaceData Surface)
+    {
+        float3 viewDirTS = float3(dot(Surface.ViewDir, Surface.TangentDir), dot(Surface.ViewDir, Surface.BitangentDir), dot(Surface.ViewDir, Surface.NormalDir));
+        float numSteps = _ParallaxSteps;
+        float stepSize = 1.0 / numSteps;
+        float2 step = -viewDirTS.xy * _ParallaxStrength * stepSize;
+        float currentHeight = 1.0;
+        float2 currentUVOffset = 0;
+        [loop] for (int i = 0; i < numSteps; i++)
+        {
+            currentHeight -= stepSize;
+            currentUVOffset += step;
+            float surfaceHeight = UNITY_SAMPLE_TEX2D(_ParallaxMap, uv + currentUVOffset).r;
+            if (surfaceHeight > currentHeight)
+            {
+                uv += currentUVOffset;
+                return;
+            }
+        }
+    }
+#endif
 
 #endif // BACKLACE_SHADING_CGINC

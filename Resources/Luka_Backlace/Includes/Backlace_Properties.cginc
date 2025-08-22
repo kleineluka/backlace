@@ -128,6 +128,7 @@ SamplerState sampler_DFG;
     #endif // _BACKLACE_VERTEX_SPECULAR
 #endif // _BACKLACE_SPECULAR
 
+// matcap feature
 #if defined(_BACKLACE_MATCAP)
     UNITY_DECLARE_TEX2D(_MatcapTex);
     UNITY_DECLARE_TEX2D(_MatcapMask);
@@ -140,12 +141,22 @@ SamplerState sampler_DFG;
     int _MatcapBlendMode;
 #endif // _BACKLACE_MATCAP
 
+// cubemap feature
 #if defined(_BACKLACE_CUBEMAP)
     samplerCUBE _CubemapTex;
     float4 _CubemapTint;
     float _CubemapIntensity;
     int _CubemapBlendMode;
 #endif // _BACKLACE_CUBEMAP
+
+// parallax feature
+#if defined(_BACKLACE_PARALLAX)
+    UNITY_DECLARE_TEX2D(_ParallaxMap);
+    float _ParallaxMap_UV;
+    float _ParallaxStrength;
+    float _ParallaxMode;
+    float _ParallaxSteps;
+#endif // _BACKLACE_PARALLAX
 
 #endif // BACKLACE_PROPERTIES_CGINC
 
