@@ -133,6 +133,15 @@ Shader "luka/indev/backlace"
         [Enum(OFF, 0, ON, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
+        [Space(35)]
+        [Header(Cubemap)]
+        [Space(10)]
+        [Toggle(_BACKLACE_CUBEMAP)] _ToggleCubemap ("Enable Cubemap", Float) = 0.0
+        [NoScaleOffset] _CubemapTex ("Cubemap", Cube) = "" { }
+        [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
+        _CubemapIntensity ("Cubemap Intensity", Range(0, 2)) = 1.0
+        [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]

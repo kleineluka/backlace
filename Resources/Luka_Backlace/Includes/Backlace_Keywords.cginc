@@ -8,5 +8,6 @@
 #pragma shader_feature_local _ _BACKLACE_RIMLIGHT
 #pragma shader_feature_local _ _BACKLACE_CLEARCOAT
 #pragma shader_feature_local _ _BACKLACE_MATCAP
+#pragma shader_feature_local _ _BACKLACE_CUBEMAP
 
 #endif // BACKLACE_KEYWORDS_CGINC

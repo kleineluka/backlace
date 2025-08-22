@@ -140,5 +140,12 @@ SamplerState sampler_DFG;
     int _MatcapBlendMode;
 #endif // _BACKLACE_MATCAP
 
+#if defined(_BACKLACE_CUBEMAP)
+    samplerCUBE _CubemapTex;
+    float4 _CubemapTint;
+    float _CubemapIntensity;
+    int _CubemapBlendMode;
+#endif // _BACKLACE_CUBEMAP
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

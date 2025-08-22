@@ -592,6 +592,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
 #endif // _BACKLACE_CLEARCOAT
 
+// matcap-only features
 #if defined(_BACKLACE_MATCAP)
     void ApplyMatcap(inout BacklaceSurfaceData Surface, FragmentData i)
     {
@@ -611,17 +612,38 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         float3 finalMatcap = matcapColor * _MatcapIntensity * mask;
         switch(_MatcapBlendMode)
         {
-            case 0: // Additive
-            Surface.FinalColor.rgb += finalMatcap;
-            break;
-            case 1: // Multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
-            break;
-            case 2: // Replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
-            break;
+            case 0: // additive
+                Surface.FinalColor.rgb += finalMatcap;
+                break;
+            case 1: // multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
+                break;
+            case 2: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
+                break;
         }
     }
 #endif // _BACKLACE_MATCAP
+
+//
+#if defined(_BACKLACE_CUBEMAP)
+void ApplyCubemap(inout BacklaceSurfaceData Surface)
+{
+    float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb;
+    float intensity = _CubemapIntensity;
+    switch(_CubemapBlendMode)
+    {
+        case 0: // additive
+            Surface.FinalColor.rgb += cubemapColor * intensity;
+            break;
+        case 1: // multiply
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
+            break;
+        case 2: // replace
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
+            break;
+    }
+}
+#endif // _BACKLACE_CUBEMAP
 
 #endif // BACKLACE_SHADING_CGINC
