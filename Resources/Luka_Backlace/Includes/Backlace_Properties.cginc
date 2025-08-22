@@ -167,7 +167,16 @@ SamplerState sampler_DFG;
     float _SSSDistortion;
     float _SSSSpread;
     float _SSSBaseColorMix;
-#endif
+#endif // _BACKLACE_SSS
+
+// detail feature
+#if defined(_BACKLACE_DETAIL)
+    UNITY_DECLARE_TEX2D(_DetailAlbedoMap);
+    UNITY_DECLARE_TEX2D(_DetailNormalMap);
+    float _DetailMap_UV;
+    float _DetailTiling;
+    float _DetailNormalStrength;
+#endif // _BACKLACE_DETAIL
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

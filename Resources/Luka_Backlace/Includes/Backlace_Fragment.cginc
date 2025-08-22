@@ -21,6 +21,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     SampleAlbedo(Surface);
     ClipAlpha(Surface);
     SampleNormal();
+    #if defined(_BACKLACE_DETAIL)
+        ApplyDetailMaps(Surface);
+    #endif // _BACKLACE_DETAIL
     SampleMSSO(Surface);
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission(Surface);

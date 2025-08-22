@@ -683,6 +683,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 #endif // _BACKLACE_PARALLAX
 
+// subsurface scattering-only features
 #if defined(_BACKLACE_SSS)
     void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
     {
@@ -695,5 +696,18 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         Surface.Diffuse += sssColor;
     }
 #endif // _BACKLACE_SSS
+
+// detail maps-only features
+#if defined(_BACKLACE_DETAIL)
+    void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
+    {
+        float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
+        float4 detailAlbedo = UNITY_SAMPLE_TEX2D(_DetailAlbedoMap, detailUV);
+        Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
+        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D(_DetailNormalMap, detailUV), _DetailNormalStrength);
+        float3 baseNormalTS = NormalMap;
+        NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
+    }
+#endif // _BACKLACE_DETAIL
 
 #endif // BACKLACE_SHADING_CGINC

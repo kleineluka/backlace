@@ -167,6 +167,16 @@ Shader "luka/indev/backlace"
         _SSSSpread ("Spread", Range(16, 0.01)) = 2.0
         _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
 
+        // DETAIL MAPPING
+        [Space(35)]
+        [Header(Detail Mapping)]
+        [Space(10)]
+        [Toggle(_BACKLACE_DETAIL)] _ToggleDetail ("Enable Detail Maps", Float) = 0.0
+        [NoScaleOffset] _DetailAlbedoMap ("Detail Albedo (A=Strength)", 2D) = "gray" { }
+        [NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" { }
+        _DetailTiling ("Detail Tiling", Float) = 16
+        _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]
@@ -191,6 +201,7 @@ Shader "luka/indev/backlace"
         _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
         _ParallaxMap_UV ("Height Map UV Set", Float) = 0
         _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
+        _DetailMap_UV ("Detail Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]
