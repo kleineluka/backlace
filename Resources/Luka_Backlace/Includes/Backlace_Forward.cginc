@@ -75,6 +75,7 @@ struct Unity_GlossyEnvironmentData
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Lighting.cginc"
 #include "./Backlace_Shading.cginc"
+#include "./Backlace_Effects.cginc"
 #include "./Backlace_Fragment.cginc"
 #include "./Backlace_Vertex.cginc"
 

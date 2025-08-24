@@ -1,6 +1,10 @@
 #ifndef BACKLACE_KEYWORDS_CGINC
 #define BACKLACE_KEYWORDS_CGINC
 
+// BRANCHING KEYWORDS
+#pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON
+
+// CORE FEATURES
 #pragma shader_feature_local _ _BACKLACE_TOON
 #pragma shader_feature_local _ _BACKLACE_EMISSION
 #pragma shader_feature_local _ _BACKLACE_SPECULAR
@@ -18,6 +22,7 @@
 #pragma shader_feature_local _ _BACKLACE_DECAL2
 //#pragma shader_feature_local _ _BACKLACE_DECAL2_TRIPLANAR
 
-#pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON
+// FUN KEYWORDS
+#pragma shader_feature_local _ _BACKLACE_GLITTER
 
 #endif // BACKLACE_KEYWORDS_CGINC

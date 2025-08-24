@@ -110,6 +110,36 @@ inline float GetLuma(float3 color)
     return dot(color, float3(0.299, 0.587, 0.114));
 }
 
+// fast hash function
+float Hash(float2 p)
+{
+    float3 p3 = frac(float3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return frac((p3.x + p3.y) * p3.z);
+}
+
+// create a random-looking 2D vector
+float2 Hash2(float2 p)
+{
+    return float2(Hash(p), Hash(p + 0.123));
+}
+
+// convert HSV to RGB
+float3 HSVtoRGB(float3 c)
+{
+    float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    float3 p = abs(frac(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * lerp(K.xxx, saturate(p - K.xxx), c.y);
+}
+
+// pastel sinebow function
+float3 Sinebow(float val)
+{
+    val = 0.5 - val * 0.5; // remap to 0-0.5 for a more pastel range
+    float3 sinebowColor = sin((val * UNITY_PI) + float3(0.0, 0.333 * UNITY_PI, 0.666 * UNITY_PI));
+    return sinebowColor * sinebowColor;
+}
+
 // rotates a 3D vector using euler angles (in degrees)
 float3 RotateVector(float3 pos, float3 rotation)
 {

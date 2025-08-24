@@ -213,6 +213,24 @@ Shader "luka/indev/backlace"
         _Decal2TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
 
+        // GLITTER
+        [Space(35)]
+        [Header(Glitter)]
+        [Space(10)]
+        [Toggle(_BACKLACE_GLITTER)] _ToggleGlitter ("Enable Glitter", Float) = 0.0
+        [Enum(Procedural, 0, Texture, 1)] _GlitterMode ("Mode", Range(0, 2)) = 0.0
+        [NoScaleOffset] _GlitterNoiseTex ("Noise Texture (R)", 2D) = "gray" { }
+        [NoScaleOffset] _GlitterMask ("Mask (R)", 2D) = "white" { }
+        _GlitterTint ("Tint", Color) = (1, 1, 1, 1)
+        _GlitterFrequency ("Density", Float) = 50.0
+        _GlitterThreshold ("Density Threshold", Range(0.01, 1.0)) = 0.5
+        _GlitterSize ("Size", Range(0.01, 0.5)) = 0.1
+        _GlitterFlickerSpeed ("Flicker Speed", Float) = 1.0
+        _GlitterBrightness ("Brightness", Float) = 2.0
+        _GlitterContrast ("Contrast", Range(1, 256)) = 128.0
+        _ToggleGlitterRainbow ("Enable Rainbow", Range(0, 1)) = 0.0
+        _GlitterRainbowSpeed ("Rainbow Speed", Float) = 0.1
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]
@@ -240,6 +258,8 @@ Shader "luka/indev/backlace"
         _DetailMap_UV ("Detail Map UV Set", Float) = 0
         _Decal1_UV ("Deca; 1 UV Set", Float) = 0
         _Decal2_UV ("Decal 2 UV Set", Float) = 0
+        _Glitter_UV ("Glitter UV Set", Float) = 0.0
+        _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
 
         // DO NOT CHANGE
         [Space(35)]

@@ -23,7 +23,7 @@ void SampleNormal()
 // calculate normals from normal map
 void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bitangent, float3 normalmap)
 {
-    float3 tspace0 = float3(tangent.x, bitangent.x, normal.x);
+    /*float3 tspace0 = float3(tangent.x, bitangent.x, normal.x);
     float3 tspace1 = float3(tangent.y, bitangent.y, normal.y);
     float3 tspace2 = float3(tangent.z, bitangent.z, normal.z);
     float3 calcedNormal;
@@ -35,7 +35,11 @@ void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bi
     float3 bumpedBitangent = (cross(calcedNormal, bumpedTangent));
     normal = calcedNormal;
     tangent = bumpedTangent;
-    bitangent = bumpedBitangent;
+    bitangent = bumpedBitangent;*/
+    float3x3 tbn = float3x3(tangent, bitangent, normal);
+    normal = normalize(mul(normalmap, tbn));
+    tangent = normalize(cross(bitangent, normal));
+    bitangent = normalize(cross(normal, tangent));
 }
 
 // get geometry vectors
