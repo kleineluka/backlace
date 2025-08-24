@@ -191,7 +191,7 @@ SamplerState sampler_DFG;
     float _Decal1_UV;
     float _Decal1TriplanarSharpness;
     int _Decal1BlendMode;
-    // not worth for extra compiler time to make these conditional
+    float  _Decal1IsTriplanar;
     float3 _Decal1TriplanarPosition;
     float _Decal1TriplanarScale;
     float3 _Decal1TriplanarRotation;
@@ -206,7 +206,7 @@ SamplerState sampler_DFG;
     float _Decal2_UV;
     float _Decal2TriplanarSharpness;
     int _Decal2BlendMode;
-    // not worth for extra compiler time to make these conditional
+    float _Decal2IsTriplanar;
     float3 _Decal2TriplanarPosition;
     float _Decal2TriplanarScale;
     float3 _Decal2TriplanarRotation;

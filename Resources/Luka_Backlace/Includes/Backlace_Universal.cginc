@@ -191,12 +191,14 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
     #if defined(_BACKLACE_DECAL1)
         void ApplyDecal1(inout BacklaceSurfaceData Surface, FragmentData i, float2 Uvs[4])
         {
-            #if defined(_BACKLACE_DECAL1_TRIPLANAR)
+            [branch] if (_Decal1IsTriplanar == 1)
+            {
                 ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1TriplanarPosition.xyz, _Decal1TriplanarScale, _Decal1TriplanarRotation.xyz, _Decal1TriplanarSharpness, _Decal1BlendMode);
-            #else // !_BACKLACE_DECAL1_TRIPLANAR
+            }
+            else
+            {
                 ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal1_UV], _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1Position.xy, _Decal1Scale.xy, _Decal1Rotation, _Decal1BlendMode);
-            #endif // _BACKLACE_DECAL1_TRIPLANAR
-
+            }
         }
     #endif // _BACKLACE_DECAL1
 
@@ -204,12 +206,14 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
     #if defined(_BACKLACE_DECAL2)
         void ApplyDecal2(inout BacklaceSurfaceData Surface, FragmentData i, float2 Uvs[4])
         {
-            #if defined(_BACKLACE_DECAL2_TRIPLANAR)
+            [branch] if (_Decal2IsTriplanar == 1)
+            {
                 ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2TriplanarPosition.xyz, _Decal2TriplanarScale, _Decal2TriplanarRotation.xyz, _Decal2TriplanarSharpness, _Decal2BlendMode);
-            #else // !_BACKLACE_DECAL2_TRIPLANAR
+            }
+            else
+            {
                 ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal2_UV], _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2Position.xy, _Decal2Scale.xy, _Decal2Rotation, _Decal2BlendMode);
-            #endif // _BACKLACE_DECAL2_TRIPLANAR
-
+            }
         }
     #endif // _BACKLACE_DECAL2
 #endif // _BACKLACE_DECAL1 || _BACKLACE_DECAL2
@@ -223,7 +227,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         Msso = UNITY_SAMPLE_TEX2D_SAMPLER(_MSSO, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MSSO));
         Surface.Occlusion = lerp(1, Msso.a, _Occlusion);
     }
-    
+
     // specular feature
     #if defined(_BACKLACE_SPECULAR)
         // get sample data from MSSO texture

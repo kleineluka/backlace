@@ -12,9 +12,7 @@
 #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
 #pragma shader_feature_local _ _BACKLACE_DECAL1
-#pragma shader_feature_local _ _BACKLACE_DECAL1_TRIPLANAR
 #pragma shader_feature_local _ _BACKLACE_DECAL2
-#pragma shader_feature_local _ _BACKLACE_DECAL2_TRIPLANAR
 
 // unity includes
 #include "UnityCG.cginc"
@@ -44,6 +42,8 @@ struct VertexOutput
         float3 lightVec : TEXCOORD4;
     #endif // SHADOWS_CUBE
     float4 vertex : TEXCOORD5;
+    float3 worldPos : TEXCOORD6;
+    float3 normal : NORMAL;
 };
 
 struct FragmentData
@@ -63,6 +63,8 @@ struct FragmentData
         float3 lightVec : TEXCOORD4;
     #endif // SHADOWS_CUBE
     float4 vertex : TEXCOORD5;
+    float3 worldPos : TEXCOORD6;
+    float3 normal : NORMAL;
 };
 
 sampler3D _DitherMaskLOD;
@@ -91,6 +93,7 @@ float _MainTex_UV;
     float _Decal1TriplanarSharpness;
     int _Decal1BlendMode;
     // not worth for extra compiler time to make these conditional
+    float _Decal1IsTriplanar;   
     float3 _Decal1TriplanarPosition;
     float _Decal1TriplanarScale;
     float3 _Decal1TriplanarRotation;
@@ -107,6 +110,7 @@ float _MainTex_UV;
     float _Decal2TriplanarSharpness;
     int _Decal2BlendMode;
     // not worth for extra compiler time to make these conditional
+    float _Decal2IsTriplanar;
     float3 _Decal2TriplanarPosition;
     float _Decal2TriplanarScale;
     float3 _Decal2TriplanarRotation;
@@ -138,6 +142,9 @@ VertexOutput  Vertex(VertexData v)
 {
     VertexOutput  i;
     i.vertex = v.vertex;
+    float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+    i.normal = UnityObjectToWorldNormal(v.normal);
+    i.worldPos = worldPos;
     #if defined(_BACKLACE_PARALLAX)
         float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
         float3 worldNormal = UnityObjectToWorldNormal(v.normal);

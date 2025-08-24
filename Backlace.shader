@@ -187,7 +187,7 @@ Shader "luka/indev/backlace"
         [NoScaleOffset] _Decal1Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal1Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal1BlendMode ("Blend Mode", Int) = 2
-        [Toggle(_BACKLACE_DECAL1_TRIPLANAR)] _Decal1IsTriplanar ("Use Triplanar Mapping", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)]  _Decal1IsTriplanar ("Use Triplanar Mapping", Float) = 0.0
         _Decal1Position ("UV Position (XY)", Vector) = (0.5, 0.5, 0, 0)
         _Decal1Scale ("UV Scale (XY)", Vector) = (0.25, 0.25, 0, 0)
         _Decal1Rotation ("UV Rotation", Range(0, 360)) = 0
@@ -204,7 +204,7 @@ Shader "luka/indev/backlace"
         [NoScaleOffset] _Decal2Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal2Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal2BlendMode ("Blend Mode", Int) = 2
-        [Toggle(_BACKLACE_DECAL2_TRIPLANAR)] _Decal2IsTriplanar ("Use Triplanar Mapping", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal2IsTriplanar ("Use Triplanar Mapping", Float) = 0.0
         _Decal2Position ("UV Position (XY)", Vector) = (0.5, 0.5, 0, 0)
         _Decal2Scale ("UV Scale (XY)", Vector) = (0.25, 0.25, 0, 0)
         _Decal2Rotation ("UV Rotation", Range(0, 360)) = 0
