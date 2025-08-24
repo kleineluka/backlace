@@ -31,7 +31,6 @@ float _IndirectFallbackMode;
 float _IndirectOverride;
 float RoughnessSquared;
 float _EnableSpecular;
-float _SpecularMode;
 float _GreyscaleLighting;
 float _ForceLightColor;
 float4 _ForcedLightColor;
@@ -156,6 +155,11 @@ SamplerState sampler_DFG;
     float _ParallaxStrength;
     float _ParallaxMode;
     float _ParallaxSteps;
+    #if defined(_BACKLACE_PARALLAX_SHADOWS)
+        float ParallaxShadow;
+        float _ParallaxShadowSteps;
+        float _ParallaxShadowStrength;
+    #endif // _BACKLACE_PARALLAX_SHADOWS
 #endif // _BACKLACE_PARALLAX
 
 // subsurface scattering feature
@@ -177,6 +181,36 @@ SamplerState sampler_DFG;
     float _DetailTiling;
     float _DetailNormalStrength;
 #endif // _BACKLACE_DETAIL
+
+#if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
+    UNITY_DECLARE_TEX2D(_Decal1Tex);
+    float4 _Decal1Tint;
+    float2 _Decal1Position;
+    float2 _Decal1Scale;
+    float _Decal1Rotation;
+    float _Decal1_UV;
+    float _Decal1TriplanarSharpness;
+    int _Decal1BlendMode;
+    // not worth for extra compiler time to make these conditional
+    float3 _Decal1TriplanarPosition;
+    float _Decal1TriplanarScale;
+    float3 _Decal1TriplanarRotation;
+#endif // _BACKLACE_DECAL1
+
+#if defined(_BACKLACE_DECAL2)
+    UNITY_DECLARE_TEX2D(_Decal2Tex);
+    float4 _Decal2Tint;
+    float2 _Decal2Position;
+    float2 _Decal2Scale;
+    float _Decal2Rotation;
+    float _Decal2_UV;
+    float _Decal2TriplanarSharpness;
+    int _Decal2BlendMode;
+    // not worth for extra compiler time to make these conditional
+    float3 _Decal2TriplanarPosition;
+    float _Decal2TriplanarScale;
+    float3 _Decal2TriplanarRotation;
+#endif // _BACKLACE_DECAL2
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

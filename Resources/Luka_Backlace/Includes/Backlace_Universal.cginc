@@ -104,6 +104,49 @@ float sqr(float x)
     return x * x;
 }
 
+// rotates a 3D vector using euler angles (in degrees)
+float3 RotateVector(float3 pos, float3 rotation)
+{
+    float3 angles = rotation * (UNITY_PI / 180.0); 
+    float3 s, c;
+    sincos(angles, s, c);
+    float3x3 rotX = float3x3(1, 0, 0, 0, c.x, -s.x, 0, s.x, c.x);
+    float3x3 rotY = float3x3(c.y, 0, s.y, 0, 1, 0, -s.y, 0, c.y);
+    float3x3 rotZ = float3x3(c.z, -s.z, 0, s.z, c.z, 0, 0, 0, 1);
+    return mul(rotZ, mul(rotY, mul(rotX, pos)));
+}
+
+// triplanar texture sampling
+float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, float3 normal, float3 position, float scale, float3 rotation, float sharpness)
+{
+    float3 localPos = RotateVector(worldPos - position, -rotation);
+    float3 weights = abs(normal);
+    weights = pow(weights, sharpness);
+    weights /= dot(weights, 1.0.xxx);
+    // projection from X-axis
+    float2 uvX = (localPos.yz / scale) + 0.5; // 0.5 = centering
+    float4 sampleX = 0; // default to transparent black
+    if (all(saturate(uvX) == uvX)) //check if uvX is between 0 and 1
+    {
+        sampleX = tex.Sample(texSampler, uvX);
+    }
+    // projection from Y-axis
+    float2 uvY = (localPos.xz / scale) + 0.5;
+    float4 sampleY = 0;
+    if (all(saturate(uvY) == uvY))
+    {
+        sampleY = tex.Sample(texSampler, uvY);
+    }
+    // projection from z-axis
+    float2 uvZ = (localPos.xy / scale) + 0.5;
+    float4 sampleZ = 0;
+    if (all(saturate(uvZ) == uvZ))
+    {
+        sampleZ = tex.Sample(texSampler, uvZ);
+    }
+    return sampleX * weights.x + sampleY * weights.y + sampleZ * weights.z;
+}
+
 // here is where we leave out shadow pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 

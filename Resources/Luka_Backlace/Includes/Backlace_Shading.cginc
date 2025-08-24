@@ -90,6 +90,9 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
 {
     Surface.Diffuse = 0;
     float ramp = DisneyDiffuse(Surface.Roughness, Surface) * Surface.NdotL;
+    #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
+        ramp *= ParallaxShadow;
+    #endif // _BACKLACE_PARALLAX_SHADOWS
     Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * ramp + Surface.IndirectDiffuse);
     Surface.Attenuation = ramp;
 }
@@ -126,6 +129,9 @@ float4 RampDotL(inout BacklaceSurfaceData Surface)
         Surface.Diffuse = 0;
         //diffuse color
         float4 ramp = RampDotL(Surface);
+        #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
+            ramp *= ParallaxShadow;
+        #endif // _BACKLACE_PARALLAX_SHADOWS
         #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
             Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
         #else
@@ -501,25 +507,17 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         float NDF_Term, GFS_Term;
         float3 ToonHighlight_Term;
         float3 specTerm = 0; // using local variable for the result
-        [branch] if (_SpecularMode == 0)
-        {
-            // standard specular
+        #if defined(_SPECULARMODE_STANDARD)
             StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
             specTerm = GFS_Term * NDF_Term;
-        }
-        else if (_SpecularMode == 1)
-        {
-            // anisotropic specular
+        #elif defined(_SPECULARMODE_ANISOTROPIC)
             AnisotropicDirectSpecular(tangentDir, bitangentDir, lightDir, halfDir, ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
             specTerm = GFS_Term * NDF_Term;
-        }
-        else if (_SpecularMode == 2)
-        {
-            // toon highlights
+        #elif defined(_SPECULARMODE_TOON)
             StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
             ToonHighlight_Term = ApplyToonHighlights(NDF_Term, Surface);
             specTerm = GFS_Term * ToonHighlight_Term;
-        }
+        #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON
         // finalise the term
         specTerm *= FresnelTerm(Surface.SpecularColor, ldotH) * Surface.EnergyCompensation;
         #ifdef UNITY_COLORSPACE_GAMMA
@@ -661,7 +659,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         uv -= offset;
     }
     
-    void ApplyParallax_Fancy(inout float2 uv, in BacklaceSurfaceData Surface)
+    void ApplyParallax_Fancy(inout float2 uv, inout BacklaceSurfaceData Surface)
     {
         float3 viewDirTS = float3(dot(Surface.ViewDir, Surface.TangentDir), dot(Surface.ViewDir, Surface.BitangentDir), dot(Surface.ViewDir, Surface.NormalDir));
         float numSteps = _ParallaxSteps;
@@ -669,17 +667,44 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         float2 step = -viewDirTS.xy * _ParallaxStrength * stepSize;
         float currentHeight = 1.0;
         float2 currentUVOffset = 0;
+        float surfaceHeight = 1.0;
         [loop] for (int i = 0; i < numSteps; i++)
         {
             currentHeight -= stepSize;
             currentUVOffset += step;
-            float surfaceHeight = UNITY_SAMPLE_TEX2D(_ParallaxMap, uv + currentUVOffset).r;
+            surfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv + currentUVOffset, 0).r;
             if (surfaceHeight > currentHeight)
             {
+                currentUVOffset -= step;
+                currentHeight += stepSize;
+                float prevSurfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv + currentUVOffset, 0).r;
+                float distanceToSurface = currentHeight - surfaceHeight;
+                float distanceBetweenSamples = surfaceHeight - prevSurfaceHeight;
+                currentUVOffset += step * (distanceToSurface / max(distanceBetweenSamples, 0.001));
                 uv += currentUVOffset;
-                return;
+                surfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv, 0).r;
+                break;
             }
         }
+        #if defined(_BACKLACE_PARALLAX_SHADOWS)
+            ParallaxShadow = 1.0;
+            float3 lightDirTS = float3(dot(Surface.LightDir, Surface.TangentDir), dot(Surface.LightDir, Surface.BitangentDir), dot(Surface.LightDir, Surface.NormalDir));
+            float shadowSteps = _ParallaxShadowSteps;
+            float shadowStepSize = 1.0 / shadowSteps;
+            float2 shadowStep = lightDirTS.xy * _ParallaxStrength * shadowStepSize;
+            float shadowRayHeight = surfaceHeight + shadowStepSize;
+            [loop] for (int j = 0; j < shadowSteps; j++)
+            {
+                float shadowSampleHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv + shadowStep * j, 0).r;
+                if (shadowSampleHeight > shadowRayHeight)
+                {
+                    ParallaxShadow = 0.0;
+                    break;
+                }
+                shadowRayHeight += shadowStepSize;
+            }
+            ParallaxShadow = lerp(1.0, ParallaxShadow, _ParallaxShadowStrength);
+        #endif // _BACKLACE_PARALLAX_SHADOWS
     }
 #endif // _BACKLACE_PARALLAX
 
@@ -709,5 +734,64 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
     }
 #endif // _BACKLACE_DETAIL
+
+// decals-only features
+#if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
+    void ApplyDecal_UVSpace(inout float4 baseAlbedo, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, float4 tint, float2 position, float2 scale, float rotation, int blendMode)
+    {
+        float angle = -rotation * (UNITY_PI / 180.0);
+        float s = sin(angle);
+        float c = cos(angle);
+        float2x2 rotationMatrix = float2x2(c, -s, s, c);
+        float2 localUV = baseUV - position;
+        localUV = mul(rotationMatrix, localUV);
+        localUV /= max(scale, 0.0001);
+        localUV += 0.5;
+        if (any(saturate(localUV) != localUV)) return;
+        float4 decalColor = decalTex.Sample(decalSampler, localUV) * tint;
+        switch(blendMode)
+        {
+            case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break;
+            case 1: baseAlbedo.rgb = lerp(baseAlbedo.rgb, baseAlbedo.rgb * decalColor.rgb, decalColor.a); break;
+            case 2: baseAlbedo.rgb = lerp(baseAlbedo.rgb, decalColor.rgb, decalColor.a); break;
+        }
+    }
+
+    void ApplyDecal_Triplanar(inout float4 baseAlbedo, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler, float4 tint, float3 position, float scale, float3 rotation, float sharpness, int blendMode)
+    {
+        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, position, scale, rotation, sharpness);
+        decalColor *= tint;
+        switch(blendMode)
+        {
+            case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break;
+            case 1: baseAlbedo.rgb = lerp(baseAlbedo.rgb, baseAlbedo.rgb * decalColor.rgb, decalColor.a); break;
+            case 2: baseAlbedo.rgb = lerp(baseAlbedo.rgb, decalColor.rgb, decalColor.a); break;
+        }
+    }
+
+    // decal one application
+    #if defined(_BACKLACE_DECAL1)
+        void ApplyDecal1(inout BacklaceSurfaceData Surface, FragmentData i, float2 Uvs[4])
+        {
+            #if defined(_BACKLACE_DECAL1_TRIPLANAR)
+                ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1TriplanarPosition.xyz, _Decal1TriplanarScale, _Decal1TriplanarRotation.xyz, _Decal1TriplanarSharpness, _Decal1BlendMode);
+            #else // !_BACKLACE_DECAL1_TRIPLANAR
+                ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal1_UV], _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1Position.xy, _Decal1Scale.xy, _Decal1Rotation, _Decal1BlendMode);
+            #endif // _BACKLACE_DECAL1_TRIPLANAR
+        }
+    #endif // _BACKLACE_DECAL1
+
+    // decal two application
+    #if defined(_BACKLACE_DECAL2)
+        void ApplyDecal2(inout BacklaceSurfaceData Surface, FragmentData i, float2 Uvs[4])
+        {
+            #if defined(_BACKLACE_DECAL2_TRIPLANAR)
+                ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2TriplanarPosition.xyz, _Decal2TriplanarScale, _Decal2TriplanarRotation.xyz, _Decal2TriplanarSharpness, _Decal2BlendMode);
+            #else // !_BACKLACE_DECAL2_TRIPLANAR
+                ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal2_UV], _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2Position.xy, _Decal2Scale.xy, _Decal2Rotation, _Decal2BlendMode);
+            #endif // _BACKLACE_DECAL2_TRIPLANAR
+        }
+    #endif // _BACKLACE_DECAL2
+#endif // _BACKLACE_DECAL1 || _BACKLACE_DECAL2
 
 #endif // BACKLACE_SHADING_CGINC

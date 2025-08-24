@@ -48,7 +48,6 @@ float _ReplaceSpecular;
 float _SpecularTintTexture_UV;
 float _DirectLightMode;
 float _EnableSpecular;
-float _SpecularMode;
 float _IndirectFallbackMode;
 float4 _MainTex_ST;
 float4 _Color;

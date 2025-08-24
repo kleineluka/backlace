@@ -19,6 +19,12 @@ float4 Fragment(FragmentData i) : SV_TARGET
         }
     #endif
     SampleAlbedo(Surface);
+    #if defined(_BACKLACE_DECAL1)
+        ApplyDecal1(Surface, FragData, Uvs);
+    #endif // _BACKLACE_DECAL1
+    #if defined(_BACKLACE_DECAL2)
+        ApplyDecal2(Surface, FragData, Uvs);
+    #endif // _BACKLACE_DECAL2
     ClipAlpha(Surface);
     SampleNormal();
     #if defined(_BACKLACE_DETAIL)
