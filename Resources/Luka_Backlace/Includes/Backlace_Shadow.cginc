@@ -10,6 +10,11 @@
 
 // keywords
 #pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+#pragma shader_feature_local _ _BACKLACE_PARALLAX
+#pragma shader_feature_local _ _BACKLACE_DECAL1
+#pragma shader_feature_local _ _BACKLACE_DECAL1_TRIPLANAR
+#pragma shader_feature_local _ _BACKLACE_DECAL2
+#pragma shader_feature_local _ _BACKLACE_DECAL2_TRIPLANAR
 
 // unity includes
 #include "UnityCG.cginc"
@@ -19,6 +24,7 @@ struct VertexData
 {
     float4 vertex : POSITION;
     float3 normal : NORMAL;
+    float4 tangentDir : TANGENT;
     float2 uv : TEXCOORD0;
     float2 uv1 : TEXCOORD1;
     float2 uv2 : TEXCOORD2;
@@ -61,15 +67,55 @@ struct FragmentData
 
 sampler3D _DitherMaskLOD;
 FragmentData FragData;
+UNITY_DECLARE_TEX2D(_MainTex);
+float4 _MainTex_ST;
+float4 _Color;
+float _Cutoff;
+float _MainTex_UV;
+
+// parallax-only features
+#if defined(_BACKLACE_PARALLAX)
+    UNITY_DECLARE_TEX2D(_ParallaxMap);
+    float _ParallaxMap_UV;
+    float _ParallaxStrength;
+#endif // _BACKLACE_PARALLAX
+
+// decal1-only features
+#if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
+    UNITY_DECLARE_TEX2D(_Decal1Tex);
+    float4 _Decal1Tint;
+    float2 _Decal1Position;
+    float2 _Decal1Scale;
+    float _Decal1Rotation;
+    float _Decal1_UV;
+    float _Decal1TriplanarSharpness;
+    int _Decal1BlendMode;
+    // not worth for extra compiler time to make these conditional
+    float3 _Decal1TriplanarPosition;
+    float _Decal1TriplanarScale;
+    float3 _Decal1TriplanarRotation;
+#endif // _BACKLACE_DECAL1
+
+// decal2-only features
+#if defined(_BACKLACE_DECAL2)
+    UNITY_DECLARE_TEX2D(_Decal2Tex);
+    float4 _Decal2Tint;
+    float2 _Decal2Position;
+    float2 _Decal2Scale;
+    float _Decal2Rotation;
+    float _Decal2_UV;
+    float _Decal2TriplanarSharpness;
+    int _Decal2BlendMode;
+    // not worth for extra compiler time to make these conditional
+    float3 _Decal2TriplanarPosition;
+    float _Decal2TriplanarScale;
+    float3 _Decal2TriplanarRotation;
+#endif // _BACKLACE_DECAL2
 
 #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-    float _MainTex_UV;
-    float _Cutoff;
     float _DirectLightMode;
     float _EnableSpecular;  
     float _IndirectFallbackMode;
-    float4 _MainTex_ST;
-    float4 _Color;
     UNITY_DECLARE_TEX2D(_MainTex);
     void ClipShadowAlpha(inout BacklaceSurfaceData Surface)
     {
@@ -92,6 +138,21 @@ VertexOutput  Vertex(VertexData v)
 {
     VertexOutput  i;
     i.vertex = v.vertex;
+    #if defined(_BACKLACE_PARALLAX)
+        float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+        float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+        float3 worldTangent = UnityObjectToWorldDir(v.tangentDir.xyz);
+        float3 worldBitangent = cross(worldNormal, worldTangent) * v.tangentDir.w * unity_WorldTransformParams.w;
+        float3 lightDir = UnityWorldSpaceLightDir(worldPos);
+        float3 viewDirForParallax = -lightDir; 
+        float3x3 worldToTangent = float3x3(worldTangent, worldBitangent, worldNormal);
+        float3 viewDirTS = mul(worldToTangent, viewDirForParallax);
+        float2 parallaxUVs = v.uv;
+        float height = UNITY_SAMPLE_TEX2D_LOD(_ParallaxMap, parallaxUVs, 0).r;
+        float2 offset = viewDirTS.xy * (height * _ParallaxStrength);
+        worldPos += offset.x * worldTangent + offset.y * worldBitangent;
+        v.vertex.xyz = mul(unity_WorldToObject, float4(worldPos, 1)).xyz;
+    #endif // _BACKLACE_PARALLAX
     #if defined(SHADOWS_CUBE)
         i.pos = UnityObjectToClipPos(v.vertex);
         i.lightVec = mul(unity_ObjectToWorld, v.vertex).xyz - _LightPositionRange.xyz;
@@ -116,6 +177,12 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
         LoadUVs();
         SampleAlbedo(Surface);
+        #if defined(_BACKLACE_DECAL1)
+            ApplyDecal1(Surface, FragData, Uvs);
+        #endif // _BACKLACE_DECAL1
+        #if defined(_BACKLACE_DECAL2)
+            ApplyDecal2(Surface, FragData, Uvs);
+        #endif // _BACKLACE_DECAL2
         ClipShadowAlpha(Surface);
     #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
     #if defined(SHADOWS_CUBE)
