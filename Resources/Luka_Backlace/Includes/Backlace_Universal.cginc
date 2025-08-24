@@ -104,6 +104,12 @@ float sqr(float x)
     return x * x;
 }
 
+// get the greyscale of a colour
+inline float GetLuma(float3 color)
+{
+    return dot(color, float3(0.299, 0.587, 0.114));
+}
+
 // rotates a 3D vector using euler angles (in degrees)
 float3 RotateVector(float3 pos, float3 rotation)
 {
@@ -217,13 +223,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         Msso = UNITY_SAMPLE_TEX2D_SAMPLER(_MSSO, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MSSO));
         Surface.Occlusion = lerp(1, Msso.a, _Occlusion);
     }
-
-    // get the greyscale of a colour
-    inline float GetLuma(float3 color)
-    {
-        return dot(color, float3(0.299, 0.587, 0.114));
-    }
-
+    
     // specular feature
     #if defined(_BACKLACE_SPECULAR)
         // get sample data from MSSO texture
@@ -269,7 +269,6 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             Emission = baseEmission * emissionMap * _EmissionStrength;
         }
     #endif // _BACKLACE_EMISSION
-
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
 
 #endif // BACKLACE_UNIVERSAL_CGINC
