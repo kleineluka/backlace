@@ -53,7 +53,8 @@ struct BacklaceSurfaceData
 
 // loading uv function
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-    
+
+    // load the uvs
     float2 Uvs[4];
     void LoadUVs()
     {

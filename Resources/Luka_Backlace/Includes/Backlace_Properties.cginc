@@ -54,22 +54,33 @@ UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
 Texture2D_float _DFG;
 SamplerState sampler_DFG;
 
+// uv manipulation
+float _UV_Offset_X;
+float _UV_Offset_Y;
+float _UV_Scale_X;
+float _UV_Scale_Y;
+float _UV_Rotation;
+
+// dither feature
 #if defined(_ALPHAMODULATE_ON) || defined(_BACKLACE_DISTANCE_FADE)
     sampler3D _DitherMaskLOD;
 #endif // _ALPHAMODULATE_ON || _BACKLACE_DISTANCE_FADE
 
+// min/max light (base)
 #if defined(UNITY_PASS_FORWARDBASE)
     float _EnableBaseLightLimit;
     float _BaseLightMin;
     float _BaseLightMax;
 #endif // UNITY_PASS_FORWARDBASE
 
+// min/max light (add)
 #if defined(UNITY_PASS_FORWARDADD)
     float _EnableAddLightLimit;
     float _AddLightMin;
     float _AddLightMax;
 #endif // UNITY_PASS_FORWARDADD
 
+// toon feature
 #if defined(_BACKLACE_TOON)
     float _TintMaskSource;
     float4 _LitTint;
@@ -100,6 +111,7 @@ SamplerState sampler_DFG;
     #endif // _TOONMODE_RAMP || _TOONMODE_ANIME
 #endif // _BACKLACE_TOON
 
+// emission feature
 #if defined(_BACKLACE_EMISSION)
     float3 Emission;
     float4 _EmissionColor;

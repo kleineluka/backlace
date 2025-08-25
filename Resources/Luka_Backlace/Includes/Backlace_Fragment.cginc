@@ -7,6 +7,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
+    Uvs[0] = ManipulateUVs(FragData.uv);
     GetGeometryVectors(Surface, FragData);
     #if defined(_BACKLACE_DISTANCE_FADE)
         bool isNearFading;

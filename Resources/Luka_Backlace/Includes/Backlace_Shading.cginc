@@ -14,6 +14,25 @@ void ClipAlpha(inout BacklaceSurfaceData Surface)
     #endif // _ALPHATEST_ON
 }
 
+// manipulate uvs
+float2 ManipulateUVs(float2 uv)
+{
+    float2 finalUV = uv;
+    if (_UV_Rotation != 0)
+    {
+        finalUV = uv - 0.5;
+        float angle = -_UV_Rotation * (UNITY_PI / 180.0);
+        float s = sin(angle);
+        float c = cos(angle);
+        float2x2 rotationMatrix = float2x2(c, -s, s, c);
+        finalUV = mul(rotationMatrix, finalUV);
+        finalUV += 0.5;
+    }
+    finalUV *= float2(_UV_Scale_X, _UV_Scale_Y);
+    finalUV += float2(_UV_Offset_X, _UV_Offset_Y);
+    return finalUV;
+}
+
 // sample normal map
 void SampleNormal()
 {

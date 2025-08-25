@@ -27,6 +27,14 @@ Shader "luka/indev/backlace"
         _BumpScale ("Normal map scale", Float) = 1
 
         // UV MANIPULATION
+        [Space(35)]
+        [Header(UV Manipulation)]
+        [Space(10)]
+        _UV_Offset_X ("UV Offset X", Float) = 0
+        _UV_Offset_Y ("UV Offset Y", Float) = 0
+        _UV_Scale_X ("UV Scale X", Float) = 1
+        _UV_Scale_Y ("UV Scale Y", Float) = 1
+        _UV_Rotation ("UV Rotation", Range(0, 360)) = 0
 
         // UV EFFECTS
 
