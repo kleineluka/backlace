@@ -35,6 +35,10 @@ FragmentData Vertex(VertexData v)
         float3 viewN = mul((float3x3)UNITY_MATRIX_V, worldN);
         i.matcapUV = viewN.xy * 0.5 + 0.5;
     #endif // _BACKLACE_MATCAP
+
+    #if defined(_BACKLACE_GEOMETRY_EFFECTS)
+        i.geomColor = float4(0, 0, 0, 0);
+    #endif // _BACKLACE_GEOMETRY_EFFECTS
     
     return i;
 }

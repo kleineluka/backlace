@@ -7,11 +7,6 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
-    #if defined(_BACKLACE_FLOWMAP)
-        float2 mainUv = Uvs[_Flowmap_Affects];
-        ApplyFlowMap(mainUv);
-        Uvs[_Flowmap_Affects] = mainUv;
-    #endif // _BACKLACE_FLOWMAP
     GetGeometryVectors(Surface, FragData);
     #if defined(_BACKLACE_DISTANCE_FADE)
         bool isNearFading;

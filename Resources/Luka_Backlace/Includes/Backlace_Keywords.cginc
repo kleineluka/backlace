@@ -26,4 +26,7 @@
 #pragma shader_feature_local _ _BACKLACE_GLITTER
 #pragma shader_feature_local _ _BACKLACE_DISTANCE_FADE
 
+// GEOMETRY KEYWORDS
+#pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS
+
 #endif // BACKLACE_KEYWORDS_CGINC

@@ -26,6 +26,14 @@ Shader "luka/indev/backlace"
         _BumpMap ("Normal map", 2D) = "bump" { }
         _BumpScale ("Normal map scale", Float) = 1
 
+        // UV MANIPULATION
+
+        // UV EFFECTS
+
+        // VERTEX MANIPULATION
+
+        // VERTEX EFFECTS
+
         // EMISSION
         [Space(35)]
         [Header(Emission)]
@@ -289,6 +297,12 @@ Shader "luka/indev/backlace"
         _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
         _IndirectOverride ("Indirect Override", Float) = 0.0
         _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
+
+        // GEOMETRY EFFECTS
+        [Space(35)]
+        [Header(Geometry Effects)]
+        [Space(10)]
+        [Toggle(_BACKLACE_GEOMETRY_EFFECTS)] _ToggleGeometryEffects ("Enable Geometry Effects", Float) = 0.0
 
         // UV SETTINGS
         [Space(35)]
