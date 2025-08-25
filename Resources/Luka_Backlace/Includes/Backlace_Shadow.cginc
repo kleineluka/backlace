@@ -142,23 +142,22 @@ VertexOutput  Vertex(VertexData v)
 {
     VertexOutput  i;
     i.vertex = v.vertex;
-    float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
     i.normal = UnityObjectToWorldNormal(v.normal);
-    i.worldPos = worldPos;
+    i.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
     #if defined(_BACKLACE_PARALLAX)
-        float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+        float3 parallaxWorldPos = i.worldPos;
         float3 worldNormal = UnityObjectToWorldNormal(v.normal);
         float3 worldTangent = UnityObjectToWorldDir(v.tangentDir.xyz);
         float3 worldBitangent = cross(worldNormal, worldTangent) * v.tangentDir.w * unity_WorldTransformParams.w;
-        float3 lightDir = UnityWorldSpaceLightDir(worldPos);
+        float3 lightDir = UnityWorldSpaceLightDir(parallaxWorldPos);
         float3 viewDirForParallax = -lightDir; 
         float3x3 worldToTangent = float3x3(worldTangent, worldBitangent, worldNormal);
         float3 viewDirTS = mul(worldToTangent, viewDirForParallax);
         float2 parallaxUVs = v.uv;
         float height = UNITY_SAMPLE_TEX2D_LOD(_ParallaxMap, parallaxUVs, 0).r;
         float2 offset = viewDirTS.xy * (height * _ParallaxStrength);
-        worldPos += offset.x * worldTangent + offset.y * worldBitangent;
-        v.vertex.xyz = mul(unity_WorldToObject, float4(worldPos, 1)).xyz;
+        parallaxWorldPos += offset.x * worldTangent + offset.y * worldBitangent;
+        v.vertex.xyz = mul(unity_WorldToObject, float4(parallaxWorldPos, 1)).xyz;
     #endif // _BACKLACE_PARALLAX
     #if defined(SHADOWS_CUBE)
         i.pos = UnityObjectToClipPos(v.vertex);

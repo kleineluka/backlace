@@ -15,9 +15,6 @@ float _Cutoff;
 float _BumpScale;
 float _BumpMap_UV;
 float RampAttenuation;
-float _RampOffset;
-float _ShadowIntensity;
-float _OcclusionOffsetIntensity;
 float _Metallic;
 float _Glossiness;
 float _Specular;
@@ -37,7 +34,6 @@ float4 _ForcedLightColor;
 float3 NormalMap;
 float3 Lightmap;
 float3 DynamicLightmap;
-float3 _RampMin;
 float3 NDF;
 float4 LightmapDirection;
 float4 DynamicLightmapDirection;
@@ -46,13 +42,11 @@ float4 _Color;
 float4 _MSSO_ST;
 float4 Msso;
 float4 _BumpMap_ST;
-float4 _RampColor;
 float4 _SpecularTintTexture_ST;
 float4 _SpecularTint;
 float4 _TangentMap_ST;
 samplerCUBE _FallbackCubemap;
 UNITY_DECLARE_TEX2D(_MainTex);
-UNITY_DECLARE_TEX2D(_Ramp);
 UNITY_DECLARE_TEX2D_NOSAMPLER(_MSSO);
 UNITY_DECLARE_TEX2D_NOSAMPLER(_BumpMap);
 UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
@@ -82,6 +76,28 @@ SamplerState sampler_DFG;
     float4 _ShadowTint;
     float _ShadowThreshold;
     float _LitThreshold;
+    float _ToggleAmbientGradient;
+    float4 _AmbientUp;
+    float4 _AmbientDown;
+    float _AmbientIntensity;
+    float _AmbientSkyThreshold;
+    float _AmbientGroundThreshold;
+    #if defined(_TOONMODE_RAMP)
+        UNITY_DECLARE_TEX2D(_Ramp);
+        float _Ramp_UV;
+        float4 _RampColor;
+        float _RampOffset;
+        float _ShadowIntensity;
+        float _OcclusionOffsetIntensity;
+        float3 _RampMin;
+    #elif defined(_TOONMODE_ANIME)
+        float4 _AnimeShadowColor;
+        float _AnimeShadowThreshold;
+        float4 _AnimeHalftoneColor;
+        float _AnimeHalftoneThreshold;
+        float _AnimeShadowSoftness;
+        float _AnimeOcclusionToShadow;
+    #endif // _TOONMODE_RAMP || _TOONMODE_ANIME
 #endif // _BACKLACE_TOON
 
 #if defined(_BACKLACE_EMISSION)
@@ -182,6 +198,7 @@ SamplerState sampler_DFG;
     float _DetailNormalStrength;
 #endif // _BACKLACE_DETAIL
 
+// decal1 feature
 #if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
     UNITY_DECLARE_TEX2D(_Decal1Tex);
     float4 _Decal1Tint;
@@ -197,6 +214,7 @@ SamplerState sampler_DFG;
     float3 _Decal1TriplanarRotation;
 #endif // _BACKLACE_DECAL1
 
+// decal2 feature
 #if defined(_BACKLACE_DECAL2)
     UNITY_DECLARE_TEX2D(_Decal2Tex);
     float4 _Decal2Tint;
@@ -211,6 +229,24 @@ SamplerState sampler_DFG;
     float _Decal2TriplanarScale;
     float3 _Decal2TriplanarRotation;
 #endif // _BACKLACE_DECAL2
+
+// post-processing feature
+#if defined(_BACKLACE_POST_PROCESSING)
+    UNITY_DECLARE_TEX2D(_ColorGradingLUT);
+    float4 _RGBColor;
+    float _RGBBlendMode;
+    float _HSVMode;
+    float _HSVHue;
+    float _HSVSaturation;
+    float _HSVValue;
+    float _ToggleHueShift;
+    float _HueShift;
+    float _ToggleAutoCycle;
+    float _AutoCycleSpeed;
+    float _ColorGradingIntensity;   
+    float _BlackAndWhite;
+    float _Brightness;
+#endif // _BACKLACE_POST_PROCESSING
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

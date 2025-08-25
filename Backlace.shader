@@ -54,7 +54,7 @@ Shader "luka/indev/backlace"
         [Space(35)]
         [Header(Lighting Model)]
         [Space(10)]
-        [Enum(Backlace, 0, Poiyomi Custom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
+        [Enum(Backlace, 0, Toony, 1, PoiCustom, 2, OpenLit, 3, Standard, 4, Mochie, 5)] _LightingColorMode ("Light Color Mode", Int) = 0
         [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
         _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
         _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
@@ -65,12 +65,29 @@ Shader "luka/indev/backlace"
         [Header(Toon Lighting)]
         [Space(10)]
         [Toggle(_BACKLACE_TOON)] _ToggleToonLighting ("Enable Toon Lighting", Float) = 0.0
+        [KeywordEnum(Ramp, Anime)] _ToonMode ("Toon Mode", Int) = 0
+        // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
         _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
         _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
+        // anime
+        [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1) // <-- RENAME THIS
+        _AnimeShadowThreshold ("Core Shadow Threshold", Range(0, 1)) = 0.3 // <-- RENAME and adjust default
+        [HDR] _AnimeHalftoneColor ("Halftone Color", Color) = (0.8, 0.8, 1, 1) // <-- ADD THIS
+        _AnimeHalftoneThreshold ("Halftone Threshold", Range(0, 1)) = 0.6 // <-- ADD THIS
+        _AnimeShadowSoftness ("Shadow Softness", Range(0.001, 1)) = 0.02
+        // ambient gradient
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleAnimeAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
+        _AnimeOcclusionToShadow ("Occlusion To Shadow", Range(0, 1)) = 0.5
+        _AmbientUp ("Sky Ambient", Color) = (0.8, 0.8, 1, 1)
+        _AmbientSkyThreshold ("Sky Threshold", Range(0, 1)) = 0.5
+        _AmbientDown ("Ground Ambient", Color) = (1, 0.9, 0.8, 1)
+        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5 
+        _AmbientIntensity ("Gradient Intensity", Range(0, 1)) = 0.25
+        // tinting
         [Enum(Disabled, 0, Raw Light, 1, Tuned Light, 2, Ramp Based, 3)] _TintMaskSource ("Tint Mask Source", Int) = 0
         [HDR] _LitTint ("Lit Area Tint", Color) = (1, 1, 1, 0.75)
         _LitThreshold ("Lit Coverage", Range(0, 1)) = 0.6
@@ -212,6 +229,26 @@ Shader "luka/indev/backlace"
         _Decal2TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
 
+        // POST-PROCESSING
+        [Space(35)]
+        [Header(Post Processing)]
+        [Space(10)]
+        [Toggle(_BACKLACE_POST_PROCESSING)] _TogglePostProcessing ("Enable Post Processing", Float) = 0.0
+        [HDR] _RGBColor ("RGB Tint", Color) = (1, 1, 1, 1)
+        _RGBBlendMode ("RGB Multiply/Replace", Range(0, 1)) = 0.0
+        [Enum(Additive, 0, Multiply, 1)] _HSVMode ("HSV Mode", Float) = 0.0
+        _HSVHue ("Hue", Range(-1, 1)) = 0.0
+        _HSVSaturation ("Saturation", Float) = 1.0
+        _HSVValue ("Value (Brightness)", Float) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleHueShift ("Enable Hue Shift", Range(0, 1)) = 0.0
+        _HueShift ("Hue Shift", Range(-1, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleAutoCycle ("Enable Auto Cycle Hue", Float) = 0.0
+        _AutoCycleSpeed ("Auto Cycle Speed", Float) = 0.1
+        [NoScaleOffset] _ColorGradingLUT ("Color Grading LUT", 2D) = "white" { }
+        _ColorGradingIntensity ("Grading Intensity", Range(0, 1)) = 1.0
+        _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
+        _Brightness ("Brightness", Range(0, 2)) = 1.0
+
         // GLITTER
         [Space(35)]
         [Header(Glitter)]
@@ -288,6 +325,7 @@ Shader "luka/indev/backlace"
     {
 
         // Rendering Settings
+        // Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]

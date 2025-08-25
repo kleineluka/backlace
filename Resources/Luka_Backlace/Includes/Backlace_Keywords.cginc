@@ -3,6 +3,7 @@
 
 // BRANCHING KEYWORDS
 #pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON
+#pragma multi_compile _TOONMODE_RAMP _TOONMODE_ANIME
 
 // CORE FEATURES
 #pragma shader_feature_local _ _BACKLACE_TOON
@@ -18,9 +19,8 @@
 #pragma shader_feature_local _ _BACKLACE_SSS
 #pragma shader_feature_local _ _BACKLACE_DETAIL
 #pragma shader_feature_local _ _BACKLACE_DECAL1
-//#pragma shader_feature_local _ _BACKLACE_DECAL1_TRIPLANAR
 #pragma shader_feature_local _ _BACKLACE_DECAL2
-//#pragma shader_feature_local _ _BACKLACE_DECAL2_TRIPLANAR
+#pragma shader_feature_local _ _BACKLACE_POST_PROCESSING
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER

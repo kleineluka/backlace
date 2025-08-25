@@ -7,6 +7,11 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
+    #if defined(_BACKLACE_FLOWMAP)
+        float2 mainUv = Uvs[_Flowmap_Affects];
+        ApplyFlowMap(mainUv);
+        Uvs[_Flowmap_Affects] = mainUv;
+    #endif // _BACKLACE_FLOWMAP
     GetGeometryVectors(Surface, FragData);
     #if defined(_BACKLACE_DISTANCE_FADE)
         bool isNearFading;
@@ -54,8 +59,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
     #if defined(_BACKLACE_TOON) // TOON LIGHTING
-        GetToonDiffuse(Surface);
-        GetToonVertexDiffuse(Surface);
+        GetToonDiffuse(Surface); // (includes vertex diffuse inside wrapper)
     #else // REAL LIGHTING
         GetPBRDiffuse(Surface);
         GetPBRVertexDiffuse(Surface);
@@ -76,6 +80,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #else // REAL LIGHTING
         AddStandardDiffuse(Surface);
     #endif // _BACKLACE_TOON
+    #if defined(_BACKLACE_POST_PROCESSING)
+        ApplyPostProcessing(Surface);
+    #endif // _BACKLACE_POST_PROCESSING
     #if defined(_BACKLACE_SPECULAR)
         AddDirectSpecular(Surface);
         AddIndirectSpecular(Surface);

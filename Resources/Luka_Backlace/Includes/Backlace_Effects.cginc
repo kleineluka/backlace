@@ -133,11 +133,8 @@
     void ApplyDistanceFadePost(FragmentData i, float fade_factor, bool isNearFading, inout BacklaceSurfaceData Surface)
     {
         [branch] if (_NearFadeMode == 1 && isNearFading) {
-
-            // dithering threshold
-            float dither_threshold = fade_factor;
             float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy);
-            Surface.FinalColor.a *= step(dither_threshold, pattern);
+            Surface.FinalColor.a *= step(fade_factor, pattern);
         } else {
             // just a normal fade
             Surface.FinalColor.a *= fade_factor;

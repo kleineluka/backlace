@@ -134,6 +134,29 @@ float3 HSVtoRGB(float3 c)
     return c.z * lerp(K.xxx, saturate(p - K.xxx), c.y);
 }
 
+// convert RGB to HSV
+float3 RGBtoHSV(float3 c) {
+	float4 K = float4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+	float4 p = lerp(float4(c.bg, K.wz), float4(c.gb, K.xy), step(c.b, c.g));
+	float4 q = lerp(float4(p.xyw, c.r), float4(c.r, p.yzx), step(p.x, c.r));
+	float d = q.x - min(q.w, q.y);
+	float E = 1e-10;
+	return float3(abs(q.z + (q.w - q.y) / (6.0 * d + E)), d / (q.x + E), q.x);
+}
+
+// apply a hue shift to a colour
+float3 ApplyHueShift(float3 inColor, float baseShift, float autoCycleToggle, float autoCycleSpeed)
+{
+    float totalShift = baseShift;
+    if (autoCycleToggle > 0)
+    {
+        totalShift += frac(_Time.y * autoCycleSpeed);
+    }
+    float3 hsv = RGBtoHSV(inColor);
+    hsv.x = frac(hsv.x + totalShift);
+    return HSVtoRGB(hsv);
+}
+
 // pastel sinebow function
 float3 Sinebow(float val)
 {

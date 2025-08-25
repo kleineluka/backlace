@@ -89,48 +89,57 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
     Surface.Attenuation = ramp;
 }
 
-// for toon lighting, we use a ramp texture
-float4 RampDotL(inout BacklaceSurfaceData Surface)
+//modified version of Shade4PointLights
+void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out float3 direction)
 {
-    //Adding the occlusion into the offset of the ramp
-    float offset = _RampOffset + (Surface.Occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
-    //Calculating ramp uvs based on offset
-    float newMin = max(offset, 0);
-    float newMax = max(offset +1, 0);
-    float rampUv = remap(Surface.UnmaxedNdotL, -1, 1, newMin, newMax);
-    float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampUv)).rgb;
-    //Adding the color and remapping it based on the shadow intensity stored into the alpha channel of the ramp color
-    ramp *= _RampColor.rgb;
-    float intensity = max(_ShadowIntensity, 0.001);
-    ramp = remap(ramp, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1));
-    //getting the modified ramp for highlights and all lights that are not directional
-    float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
-    float3 rampA = remap(ramp, rmin, 1, 0, 1);
-    float rampGrey = max(max(rampA.r, rampA.g), rampA.b);
-    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-        return float4(ramp, rampGrey);
-    #else // DIRECTIONAL || DIRECTIONAL_COOKIE
-        return float4(rampA, rampGrey);
-    #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
+    float4 toLightX = unity_4LightPosX0 - worldPos.x;
+    float4 toLightY = unity_4LightPosY0 - worldPos.y;
+    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
+    float4 lengthSq = 0;
+    lengthSq += toLightX * toLightX;
+    lengthSq += toLightY * toLightY;
+    lengthSq += toLightZ * toLightZ;
+    float4 ndl = 0;
+    ndl += toLightX * normal.x;
+    ndl += toLightY * normal.y;
+    ndl += toLightZ * normal.z;
+    float4 corr = rsqrt(lengthSq);
+    ndl = max(0, ndl * corr);
+    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+    float4 diff = ndl * atten;
+    color = 0;
+    color += unity_LightColor[0].rgb * diff.x;
+    color += unity_LightColor[1].rgb * diff.y;
+    color += unity_LightColor[2].rgb * diff.z;
+    color += unity_LightColor[3].rgb * diff.w;
+    direction = 0;
+    #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
+        direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(unity_LightColor[0].rgb, 1) * diff.x;
+        direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(unity_LightColor[1].rgb, 1) * diff.y;
+        direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(unity_LightColor[2].rgb, 1) * diff.z;
+        direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(unity_LightColor[3].rgb, 1) * diff.w;
+    #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
 }
 
 // toon shading
 #if defined(_BACKLACE_TOON)
-    void GetToonDiffuse(inout BacklaceSurfaceData Surface)
+    // apply a gradient based on the world normal y
+    void ApplyAmbientGradient(inout BacklaceSurfaceData Surface)
     {
-        Surface.Diffuse = 0;
-        //diffuse color
-        float4 ramp = RampDotL(Surface);
-        #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
-            ramp *= ParallaxShadow;
-        #endif // _BACKLACE_PARALLAX_SHADOWS
-        #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-            Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
-        #else
-            Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
-        #endif
-        Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
-        // tints, optionally
+        [branch] if (_ToggleAmbientGradient == 1) {
+            float3 worldNormal = normalize(FragData.normal);
+            float updownGradient = worldNormal.y * 0.5 + 0.5; // 0 when pointing down, 0.5 horizontal, 1 pointing up.
+            float skyMask = smoothstep(_AmbientSkyThreshold, 1.0, updownGradient);
+            float groundMask = smoothstep(_AmbientGroundThreshold, 0.0, updownGradient);
+            float3 skyGradientColor = _AmbientUp.rgb * skyMask;
+            float3 groundGradientColor = _AmbientDown.rgb * groundMask;
+            Surface.Diffuse += (skyGradientColor + groundGradientColor) * _AmbientIntensity;
+        }
+    }
+
+    // apply area tinting based on light and shadow areas
+    void ApplyAreaTint(inout BacklaceSurfaceData Surface)
+    {
         [branch] if (_TintMaskSource != 0)
         {
             float finalMask;
@@ -147,9 +156,9 @@ float4 RampDotL(inout BacklaceSurfaceData Surface)
                     finalMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
                     break;
                 }
-                default: // ramp based
+                default: // ramp based (from RampDotL)
                 {
-                    finalMask = ramp.a;
+                    finalMask = Surface.Attenuation;
                     break;
                 }
             }
@@ -159,39 +168,172 @@ float4 RampDotL(inout BacklaceSurfaceData Surface)
             Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _LitTint.rgb, litInfluence);
         }
     }
-#endif // _BACKLACE_TOON
 
-//modified version of Shade4PointLights
-void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out float3 direction)
-{
-    float4 toLightX = unity_4LightPosX0 - worldPos.x;
-    float4 toLightY = unity_4LightPosY0 - worldPos.y;
-    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
-    float4 lengthSq = 0;
-    lengthSq += toLightX * toLightX;
-    lengthSq += toLightY * toLightY;
-    lengthSq += toLightZ * toLightZ;
-    float4 ndl = 0;
-    ndl += toLightX * normal.x;
-    ndl += toLightY * normal.y;
-    ndl += toLightZ * normal.z;
-    float4 corr = rsqrt(lengthSq);
-    ndl = max(0, ndl * corr); 
-    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
-    float4 diff = ndl * atten;
-    color = 0; 
-    color += unity_LightColor[0].rgb * diff.x;
-    color += unity_LightColor[1].rgb * diff.y;
-    color += unity_LightColor[2].rgb * diff.z;
-    color += unity_LightColor[3].rgb * diff.w;
-    direction = 0; 
-    #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
-        direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(unity_LightColor[0].rgb, 1) * diff.x;
-        direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(unity_LightColor[1].rgb, 1) * diff.y;
-        direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(unity_LightColor[2].rgb, 1) * diff.z;
-        direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(unity_LightColor[3].rgb, 1) * diff.w;
-    #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
-}
+    #if defined(_TOONMODE_RAMP)
+        // for toon lighting, we use a ramp texture
+        float4 RampDotL(inout BacklaceSurfaceData Surface)
+        {
+            //Adding the occlusion into the offset of the ramp
+            float offset = _RampOffset + (Surface.Occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
+            //Calculating ramp uvs based on offset
+            float newMin = max(offset, 0);
+            float newMax = max(offset +1, 0);
+            float rampUv = remap(Surface.UnmaxedNdotL, -1, 1, newMin, newMax);
+            float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampUv)).rgb;
+            //Adding the color and remapping it based on the shadow intensity stored into the alpha channel of the ramp color
+            ramp *= _RampColor.rgb;
+            float intensity = max(_ShadowIntensity, 0.001);
+            ramp = remap(ramp, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1));
+            //getting the modified ramp for highlights and all lights that are not directional
+            float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
+            float3 rampA = remap(ramp, rmin, 1, 0, 1);
+            float rampGrey = max(max(rampA.r, rampA.g), rampA.b);
+            #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+                return float4(ramp, rampGrey);
+            #else // DIRECTIONAL || DIRECTIONAL_COOKIE
+                return float4(rampA, rampGrey);
+            #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
+
+        }
+
+        // ...
+        void RampDotLVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
+        {
+            //from Shade4PointLights function to get NdotL + attenuation
+            float4 toLightX = unity_4LightPosX0 - worldPos.x;
+            float4 toLightY = unity_4LightPosY0 - worldPos.y;
+            float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
+            float4 lengthSq = 0;
+            lengthSq += toLightX * toLightX;
+            lengthSq += toLightY * toLightY;
+            lengthSq += toLightZ * toLightZ;
+            float4 ndl = 0;
+            ndl += toLightX * normal.x;
+            ndl += toLightY * normal.y;
+            ndl += toLightZ * normal.z;
+            // correct NdotL
+            float4 corr = rsqrt(lengthSq);
+            ndl = ndl * corr;
+            //attenuation
+            float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+            float4 atten2 = saturate(1 - (lengthSq * unity_4LightAtten0 / 25));
+            atten = min(atten, atten2 * atten2);
+            //ramp calculation for all 4 vertex lights
+            float offset = _RampOffset + (occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
+            //Calculating ramp uvs based on offset
+            float newMin = max(offset, 0);
+            float newMax = max(offset +1, 0);
+            float4 rampUv = remap(ndl, float4(-1, -1, -1, -1), float4(1, 1, 1, 1), float4(newMin, newMin, newMin, newMin), float4(newMax, newMax, newMax, newMax));
+            float intensity = max(_ShadowIntensity, 0.001);
+            float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
+            float3 ramp0 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.x, rampUv.x)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[0].rgb * atten.r;
+            float3 ramp1 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.y, rampUv.y)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[1].rgb * atten.g;
+            float3 ramp2 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.z, rampUv.z)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[2].rgb * atten.b;
+            float3 ramp3 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.w, rampUv.w)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[3].rgb * atten.a;
+            color = ramp0 + ramp1 + ramp2 + ramp3;
+            // direction calculation
+            direction = 0;
+            #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
+                direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(ramp0, 1);
+                direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(ramp1, 1);
+                direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(ramp2, 1);
+                direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(ramp3, 1);
+            #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
+        }
+
+        // get the direct diffuse contribution using a toon ramp
+        void GetRampDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.Diffuse = 0;
+            //diffuse color
+            float4 ramp = RampDotL(Surface);
+            ApplyAmbientGradient(Surface);
+            #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
+                ramp *= ParallaxShadow;
+            #endif // _BACKLACE_PARALLAX_SHADOWS
+            #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+                Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+            #else
+                Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
+            #endif
+            Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
+            ApplyAreaTint(Surface);
+        }
+
+        // get the vertex diffuse contribution using a toon ramp
+        void GetRampVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                #if defined(_BACKLACE_VERTEX_SPECULAR)
+                    RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, VertexLightDir);
+                #else
+                    float3 ignoredDir;
+                    RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, ignoredDir);
+                #endif
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
+            #endif
+        }
+    #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
+        // ...
+        void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
+        {
+            Shade4PointLights(normal, worldPos, color, direction);
+            float luma = GetLuma(color);
+            float shadowMask = step(_AnimeHalftoneThreshold, luma + (1.0 - occlusion) * _AnimeOcclusionToShadow * 0.1);
+            color = lerp(color * _AnimeShadowColor.rgb, color, shadowMask);
+        }
+
+        // diffuse function for anime-style lighting
+        void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            float lightTerm = saturate(Surface.UnmaxedNdotL * 0.5 + 0.5);
+            lightTerm = saturate(lightTerm - (1.0 - Surface.Occlusion) * _AnimeOcclusionToShadow);
+            float3 finalColor = Surface.Albedo.rgb * unity_AmbientSky.rgb;
+            float halftoneShadow = smoothstep(_AnimeHalftoneThreshold + _AnimeShadowSoftness, _AnimeHalftoneThreshold - _AnimeShadowSoftness, lightTerm);
+            float coreShadow = smoothstep(_AnimeShadowThreshold + _AnimeShadowSoftness, _AnimeShadowThreshold - _AnimeShadowSoftness, lightTerm);
+            finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeHalftoneColor.rgb, halftoneShadow);
+            finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeShadowColor.rgb, coreShadow);
+            float3 directLight = Surface.LightColor.rgb * Surface.Albedo.rgb;
+            float lightMask = 1.0 - halftoneShadow;
+            finalColor = lerp(finalColor, directLight, lightMask);
+            Surface.Diffuse = finalColor;
+            ApplyAmbientGradient(Surface);
+            #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
+                Surface.Diffuse *= ParallaxShadow;
+            #endif
+            Surface.Attenuation = lightMask;
+            ApplyAreaTint(Surface);
+        }
+
+        // get the vertex diffuse contribution using anime-style lighting
+        void GetAnimeVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                #if defined(_BACKLACE_VERTEX_SPECULAR)
+                    AnimeVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, VertexLightDir);
+                #else
+                    float3 ignoredDir;
+                    AnimeVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, ignoredDir);
+                #endif
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
+            #endif
+        }
+    #endif // _TOONMODE_ANIME
+
+    // wrapper function for toon diffuse
+    void GetToonDiffuse(inout BacklaceSurfaceData Surface)
+    {
+        #if defined(_TOONMODE_RAMP)
+            GetRampDiffuse(Surface);
+            GetRampVertexDiffuse(Surface);
+        #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
+            GetAnimeDiffuse(Surface);
+            GetAnimeVertexDiffuse(Surface);
+        #endif // _TOONMODE_RAMP
+    }
+#endif // _BACKLACE_TOON
 
 // get vertex diffuse for vertex lighting
 void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
@@ -203,66 +345,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         #else
             float3 ignoredDir;
             Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
-        #endif
-        Surface.VertexDirectDiffuse *= Surface.Albedo;
-    #endif
-}
-
-// ...
-void RampDotLVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
-{
-    //from Shade4PointLights function to get NdotL + attenuation
-    float4 toLightX = unity_4LightPosX0 - worldPos.x;
-    float4 toLightY = unity_4LightPosY0 - worldPos.y;
-    float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
-    float4 lengthSq = 0;
-    lengthSq += toLightX * toLightX;
-    lengthSq += toLightY * toLightY;
-    lengthSq += toLightZ * toLightZ;
-    float4 ndl = 0;
-    ndl += toLightX * normal.x;
-    ndl += toLightY * normal.y;
-    ndl += toLightZ * normal.z;
-    // correct NdotL
-    float4 corr = rsqrt(lengthSq);
-    ndl = ndl * corr;
-    //attenuation
-    float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
-    float4 atten2 = saturate(1 - (lengthSq * unity_4LightAtten0 / 25));
-    atten = min(atten, atten2 * atten2);
-    //ramp calculation for all 4 vertex lights
-    float offset = _RampOffset + (occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
-    //Calculating ramp uvs based on offset
-    float newMin = max(offset, 0);
-    float newMax = max(offset +1, 0);
-    float4 rampUv = remap(ndl, float4(-1, -1, -1, -1), float4(1, 1, 1, 1), float4(newMin, newMin, newMin, newMin), float4(newMax, newMax, newMax, newMax));
-    float intensity = max(_ShadowIntensity, 0.001);
-    float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
-    float3 ramp0 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.x, rampUv.x)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[0].rgb * atten.r;
-    float3 ramp1 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.y, rampUv.y)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[1].rgb * atten.g;
-    float3 ramp2 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.z, rampUv.z)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[2].rgb * atten.b;
-    float3 ramp3 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.w, rampUv.w)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[3].rgb * atten.a;
-    color = ramp0 + ramp1 + ramp2 + ramp3;
-    // direction calculation
-    direction = 0;
-    #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
-        direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(ramp0, 1);
-        direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(ramp1, 1);
-        direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(ramp2, 1);
-        direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(ramp3, 1);
-    #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
-}
-
-// get the vertex diffuse contribution using a toon ramp
-void GetToonVertexDiffuse(inout BacklaceSurfaceData Surface)
-{
-    Surface.VertexDirectDiffuse = 0;
-    #if defined(VERTEXLIGHT_ON)
-        #if defined(_BACKLACE_VERTEX_SPECULAR)
-            RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, VertexLightDir);
-        #else
-            float3 ignoredDir;
-            RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, ignoredDir);
         #endif
         Surface.VertexDirectDiffuse *= Surface.Albedo;
     #endif
@@ -726,5 +808,51 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
     }
 #endif // _BACKLACE_DETAIL
+
+// post-processing-only features
+#if defined(_BACKLACE_POST_PROCESSING)
+    void ApplyPostProcessing(inout BacklaceSurfaceData Surface)
+    {
+        float3 finalColor = Surface.FinalColor.rgb;
+        // rgb tint/replace
+        float3 tintedColor = lerp(finalColor * _RGBColor.rgb, _RGBColor.rgb, _RGBBlendMode);
+        finalColor = tintedColor;
+        // hsv manipulation
+        float3 hsv = RGBtoHSV(finalColor);
+        [branch] if (_HSVMode == 0) // additive
+        {
+            hsv.x = frac(hsv.x + _HSVHue);
+            hsv.y += _HSVSaturation - 1.0;
+            hsv.z += _HSVValue - 1.0;
+        }
+        else // multiplicative
+        {
+            hsv.x = frac(hsv.x + _HSVHue);
+            hsv.y *= _HSVSaturation;
+            hsv.z *= _HSVValue;
+        }
+        finalColor = HSVtoRGB(saturate(hsv));
+        // hue shift/cycle
+        [branch] if (_ToggleHueShift > 0)
+        {
+            finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
+        }
+        // colour grading
+        [branch] if (_ColorGradingIntensity > 0)
+        {
+            float3 gradedColor = UNITY_SAMPLE_TEX2D(_ColorGradingLUT, finalColor.rg).rgb;
+            finalColor = lerp(finalColor, gradedColor, _ColorGradingIntensity);
+        }
+        // black and white
+        [branch] if (_BlackAndWhite > 0)
+        {
+            float luma = GetLuma(finalColor);
+            finalColor = lerp(finalColor, float3(luma, luma, luma), _BlackAndWhite);
+        }
+        // brightness
+        finalColor *= _Brightness;
+        Surface.FinalColor.rgb = finalColor;
+    }
+#endif // _BACKLACE_POST_PROCESSING
 
 #endif // BACKLACE_SHADING_CGINC
