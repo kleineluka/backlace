@@ -24,5 +24,6 @@
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
+#pragma shader_feature_local _ _BACKLACE_DISTANCE_FADE
 
 #endif // BACKLACE_KEYWORDS_CGINC

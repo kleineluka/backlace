@@ -61,6 +61,7 @@ struct FragmentData
     #if defined(_BACKLACE_MATCAP)
         float2 matcapUV : TEXCOORD10;
     #endif // _BACKLACE_MATCAP
+    float3 worldObjectCenter : TEXCOORD11;
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

@@ -162,7 +162,6 @@ Shader "luka/indev/backlace"
         [Space(10)]
         [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
         [NoScaleOffset] _ThicknessMap ("Thickness Map (R)", 2D) = "white" { }
-        _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
         [HDR] _SSSColor ("Scattering Tint", Color) = (1, 1, 1, 1)
         _SSSStrength ("Strength", Range(0, 2)) = 1.0
         _SSSDistortion ("Distortion", Range(0, 1)) = 0.5
@@ -218,7 +217,7 @@ Shader "luka/indev/backlace"
         [Header(Glitter)]
         [Space(10)]
         [Toggle(_BACKLACE_GLITTER)] _ToggleGlitter ("Enable Glitter", Float) = 0.0
-        [Enum(Procedural, 0, Texture, 1)] _GlitterMode ("Mode", Range(0, 2)) = 0.0
+        [Enum(Procedural, 0, Texture, 1)] _GlitterMode ("Mode", Range(0, 1)) = 0.0
         [NoScaleOffset] _GlitterNoiseTex ("Noise Texture (R)", 2D) = "gray" { }
         [NoScaleOffset] _GlitterMask ("Mask (R)", 2D) = "white" { }
         _GlitterTint ("Tint", Color) = (1, 1, 1, 1)
@@ -230,6 +229,21 @@ Shader "luka/indev/backlace"
         _GlitterContrast ("Contrast", Range(1, 256)) = 128.0
         _ToggleGlitterRainbow ("Enable Rainbow", Range(0, 1)) = 0.0
         _GlitterRainbowSpeed ("Rainbow Speed", Float) = 0.1
+
+        // DISTANCE FADING
+        [Space(35)]
+        [Header(Distance Fading)]
+        [Space(10)]
+        [Toggle(_BACKLACE_DISTANCE_FADE)] _ToggleDistanceFade ("Enable Distance Fading", Float) = 0.0
+        [Enum(World Position, 0, Object Center, 1)] _DistanceFadeReference ("Fade Reference Point", Range(0, 1)) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleNearFade ("Enable Near Fade", Float) = 0.0
+        [Enum(Transparent, 0, Dither, 1)] _NearFadeMode ("Near Fade Mode", Float) = 0.0
+        _NearFadeDitherScale ("Near Fade Dither Scale", Range(100, 0.1)) = 10
+        _NearFadeStart ("Near Fade Start", Float) = 0.5
+        _NearFadeEnd ("Near Fade End", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleFarFade ("Enable Far Fade", Float) = 0.0
+        _FarFadeStart ("Far Fade Start", Float) = 20.0
+        _FarFadeEnd ("Far Fade End", Float) = 50.0
 
         // INDIRECT LIGHTING
         [Space(35)]
@@ -274,6 +288,7 @@ Shader "luka/indev/backlace"
     {
 
         // Rendering Settings
+        Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

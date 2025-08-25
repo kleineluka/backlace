@@ -23,19 +23,6 @@ void SampleNormal()
 // calculate normals from normal map
 void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bitangent, float3 normalmap)
 {
-    /*float3 tspace0 = float3(tangent.x, bitangent.x, normal.x);
-    float3 tspace1 = float3(tangent.y, bitangent.y, normal.y);
-    float3 tspace2 = float3(tangent.z, bitangent.z, normal.z);
-    float3 calcedNormal;
-    calcedNormal.x = dot(tspace0, normalmap);
-    calcedNormal.y = dot(tspace1, normalmap);
-    calcedNormal.z = dot(tspace2, normalmap);
-    calcedNormal = normalize(calcedNormal);
-    float3 bumpedTangent = (cross(bitangent, calcedNormal));
-    float3 bumpedBitangent = (cross(calcedNormal, bumpedTangent));
-    normal = calcedNormal;
-    tangent = bumpedTangent;
-    bitangent = bumpedBitangent;*/
     float3x3 tbn = float3x3(tangent, bitangent, normal);
     normal = normalize(mul(normalmap, tbn));
     tangent = normalize(cross(bitangent, normal));
@@ -43,12 +30,13 @@ void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bi
 }
 
 // get geometry vectors
-void GetGeometryVectors(inout BacklaceSurfaceData Surface)
+void GetGeometryVectors(inout BacklaceSurfaceData Surface, FragmentData FragData)
 {
     Surface.NormalDir = normalize(FragData.normal);
     Surface.TangentDir = normalize(UnityObjectToWorldDir(FragData.tangentDir.xyz));
     Surface.BitangentDir = normalize(cross(Surface.NormalDir, Surface.TangentDir) * FragData.tangentDir.w * unity_WorldTransformParams.w);
     Surface.ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
+    Surface.ScreenCoords = FragData.pos.xy / _ScreenParams.xy;
 }
 
 // get direction vectors

@@ -60,9 +60,9 @@ UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
 Texture2D_float _DFG;
 SamplerState sampler_DFG;
 
-#if defined(_ALPHAMODULATE_ON)
+#if defined(_ALPHAMODULATE_ON) || defined(_BACKLACE_DISTANCE_FADE)
     sampler3D _DitherMaskLOD;
-#endif // _ALPHAMODULATE_ON
+#endif // _ALPHAMODULATE_ON || _BACKLACE_DISTANCE_FADE
 
 #if defined(UNITY_PASS_FORWARDBASE)
     float _EnableBaseLightLimit;

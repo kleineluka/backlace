@@ -1,9 +1,8 @@
 #ifndef BACKLACE_EFFECTS_CGINC
 #define BACKLACE_EFFECTS_CGINC
 
-// glitter-specific properties
+// glitter-specific features
 #if defined(_BACKLACE_GLITTER)
-    
     // glitter properties
     UNITY_DECLARE_TEX2D(_GlitterMask);
     UNITY_DECLARE_TEX2D(_GlitterNoiseTex);
@@ -53,6 +52,7 @@
         }
         else if (_GlitterMode == 1) // TEXTURE
         {
+            // todo: is noise tex needed if we just use another hash before?
             float noise_val = UNITY_SAMPLE_TEX2D_LOD(_GlitterNoiseTex, i_uv / _GlitterFrequency, 0).r;
             if (noise_val < _GlitterThreshold) return;
             float dist_from_center = length(f_uv - 0.5);
@@ -75,6 +75,75 @@
         Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, final_glitter, sparkle);
     }
 #endif // _BACKLACE_GLITTER
+
+// distance fading-specific features
+#if defined(_BACKLACE_DISTANCE_FADE)
+    // distance fade properties
+    float _DistanceFadeReference;
+    float _ToggleNearFade;
+    float _NearFadeMode;
+    float _NearFadeDitherScale;
+    float _NearFadeStart;
+    float _NearFadeEnd;
+    float _ToggleFarFade;
+    float _FarFadeStart;
+    float _FarFadeEnd;
+
+    // fake dithering stylised as checkerboard pattern for the aesthetics
+    float GetTiltedCheckerboardPattern(float2 screenPos)
+    {
+        float u = screenPos.x + screenPos.y;
+        float v = screenPos.x - screenPos.y;
+        float2 gridPos = floor(float2(u, v) / _NearFadeDitherScale);
+        return fmod(gridPos.x + gridPos.y, 2.0);
+    }
+
+    // fade based on how far or close the object is to the camera
+    void CalculateDistanceFade(FragmentData i, inout bool isNearFading, out float fade_factor)
+    {
+        fade_factor = 1.0;
+        float3 referencePos = _DistanceFadeReference == 1 ? i.worldObjectCenter : i.worldPos;
+        float view_dist = distance(referencePos, GetCameraPos());
+        isNearFading = false;
+        if (_ToggleNearFade == 1 && _NearFadeStart > _NearFadeEnd)
+        {
+            float nearFade = smoothstep(_NearFadeEnd, _NearFadeStart, view_dist);
+            fade_factor *= nearFade;
+            isNearFading = nearFade < 1.0;
+        }
+        if (_ToggleFarFade == 1 && _FarFadeEnd > _FarFadeStart)
+        {
+            float farFade = 1.0 - smoothstep(_FarFadeStart, _FarFadeEnd, view_dist);
+            fade_factor *= farFade;
+        }
+    }
+
+    // before we do any math, maybe we can optimise and not do anything at all!
+    float ApplyDistanceFadePre(bool isNearFading, float fade_factor)
+    {
+        if (_NearFadeMode == 0) { // don't need to worry about dither
+            if (fade_factor == 0) {
+                return -1; // fully faded out, skip all processing
+            }
+        }
+        return fade_factor; // we'll handle this in the fade post function
+    }
+
+    // this is just the normal fade at the end if we need to partially show the object
+    void ApplyDistanceFadePost(FragmentData i, float fade_factor, bool isNearFading, inout BacklaceSurfaceData Surface)
+    {
+        [branch] if (_NearFadeMode == 1 && isNearFading) {
+
+            // dithering threshold
+            float dither_threshold = fade_factor;
+            float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy);
+            Surface.FinalColor.a *= step(dither_threshold, pattern);
+        } else {
+            // just a normal fade
+            Surface.FinalColor.a *= fade_factor;
+        }
+    }
+#endif // _BACKLACE_DISTANCE_FADE
 
 #endif // BACKLACE_EFFECTS_CGINC
 

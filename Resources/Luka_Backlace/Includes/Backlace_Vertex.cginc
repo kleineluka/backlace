@@ -12,6 +12,7 @@ FragmentData Vertex(VertexData v)
     i.pos = UnityObjectToClipPos(v.vertex);
     i.normal = UnityObjectToWorldNormal(v.normal);
     i.worldPos = mul(unity_ObjectToWorld, v.vertex);
+    i.worldObjectCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
     i.tangentDir = v.tangentDir;
     i.uv = v.uv;
     i.uv1 = v.uv1;

@@ -47,6 +47,8 @@ struct BacklaceSurfaceData
     float3 EnergyCompensation;
     float3 Dfg;
     float3 CustomIndirect;
+    // extra data cos we ball >.<
+    float2 ScreenCoords;
 };
 
 // loading uv function
@@ -138,6 +140,16 @@ float3 Sinebow(float val)
     val = 0.5 - val * 0.5; // remap to 0-0.5 for a more pastel range
     float3 sinebowColor = sin((val * UNITY_PI) + float3(0.0, 0.333 * UNITY_PI, 0.666 * UNITY_PI));
     return sinebowColor * sinebowColor;
+}
+
+// calculate camera position with vr in mind
+float3 GetCameraPos()
+{
+    #if UNITY_SINGLE_PASS_STEREO
+        return (unity_StereoWorldSpaceCameraPos[0] + unity_StereoWorldSpaceCameraPos[1]) * 0.5;
+    #else // UNITY_SINGLE_PASS_STEREO
+        return _WorldSpaceCameraPos;
+    #endif // UNITY_SINGLE_PASS_STEREO
 }
 
 // rotates a 3D vector using euler angles (in degrees)

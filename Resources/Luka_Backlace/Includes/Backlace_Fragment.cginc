@@ -7,7 +7,15 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
-    GetGeometryVectors(Surface);
+    GetGeometryVectors(Surface, FragData);
+    #if defined(_BACKLACE_DISTANCE_FADE)
+        bool isNearFading;
+        float fadeFactor;
+        CalculateDistanceFade(i, isNearFading, fadeFactor);
+        if(ApplyDistanceFadePre(isNearFading, fadeFactor) == -1) {
+            discard; // fully faded out, skip all processing
+        }
+    #endif // _BACKLACE_DISTANCE_FADE
     #if defined(_BACKLACE_PARALLAX)
         [branch] if (_ParallaxMode == 0) // fast parallax
         {
@@ -17,7 +25,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         {
             ApplyParallax_Fancy(Uvs[0], Surface);
         }
-    #endif
+    #endif // _BACKLACE_PARALLAX
     SampleAlbedo(Surface);
     #if defined(_BACKLACE_DECAL1)
         ApplyDecal1(Surface, FragData, Uvs);
@@ -102,6 +110,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // _BACKLACE_CLEARCOAT
     AddAlpha(Surface);
+    #if defined(_BACKLACE_DISTANCE_FADE)
+        ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);
+    #endif // _BACKLACE_DISTANCE_FADE
     return Surface.FinalColor;
 }
 
