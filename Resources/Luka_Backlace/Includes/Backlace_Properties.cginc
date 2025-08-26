@@ -145,10 +145,21 @@ float _UV_Rotation;
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
     // toon specular feature
-    UNITY_DECLARE_TEX2D(_HighlightRamp);
-    float4 _HighlightRampColor;
-    float _HighlightIntensity;
-    float _HighlightRampOffset;
+    #if defined(_SPECULARMODE_TOON)
+        UNITY_DECLARE_TEX2D(_HighlightRamp);
+        float4 _HighlightRampColor;
+        float _HighlightIntensity;
+        float _HighlightRampOffset;
+    #endif // _SPECULARMODE_TOON
+    // hair specular feature
+    #if defined(_SPECULARMODE_HAIR)
+        UNITY_DECLARE_TEX2D(_HairFlowMap);
+        float _HairFlowMap_UV;
+        float _PrimarySpecularShift;
+        float _SecondarySpecularShift;
+        float4 _SecondarySpecularColor;
+        float _SpecularExponent;
+    #endif
     // vertex specular feature
     #if defined(_BACKLACE_VERTEX_SPECULAR)
         float3 VertexLightDir;

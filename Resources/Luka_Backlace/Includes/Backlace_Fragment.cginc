@@ -7,7 +7,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
-    Uvs[0] = ManipulateUVs(FragData.uv);
+    Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y);
     GetGeometryVectors(Surface, FragData);
     #if defined(_BACKLACE_DISTANCE_FADE)
         bool isNearFading;
@@ -71,11 +71,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         }
         GetIndirectSpecular(Surface);
     #endif // _BACKLACE_SPECULAR
-    #if defined(_BACKLACE_TOON) // TOON LIGHTING
-        AddToonDiffuse(Surface);
-    #else // REAL LIGHTING
-        AddStandardDiffuse(Surface);
-    #endif // _BACKLACE_TOON
+    AddDiffuse(Surface);
     #if defined(_BACKLACE_POST_PROCESSING)
         ApplyPostProcessing(Surface);
     #endif // _BACKLACE_POST_PROCESSING
@@ -93,6 +89,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_EMISSION)
         Surface.FinalColor.rgb += Emission;
     #endif // _BACKLACE_EMISSION
+    #if defined(_BACKLACE_IRIDESCENCE)
+        ApplyIridescence(Surface);
+    #endif // _BACKLACE_IRIDESCENCE
     #if defined(_BACKLACE_GLITTER)
         ApplyGlitter(Surface);
     #endif // _BACKLACE_GLITTER

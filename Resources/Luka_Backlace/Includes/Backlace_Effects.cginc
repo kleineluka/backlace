@@ -142,6 +142,54 @@
     }
 #endif // _BACKLACE_DISTANCE_FADE
 
+// iridescence-only features
+#if defined(_BACKLACE_IRIDESCENCE)
+    UNITY_DECLARE_TEX2D(_IridescenceMask);
+    float _IridescenceMask_UV;
+    float4 _IridescenceTint;
+    float _IridescenceIntensity;
+    int _IridescenceBlendMode;
+    UNITY_DECLARE_TEX2D(_IridescenceRamp);
+    float _IridescencePower;
+    float _IridescenceFrequency;
+    float _IridescenceMode;
+    float _IridescenceParallax;;
+
+    void ApplyIridescence(inout BacklaceSurfaceData Surface)
+    {
+        float3 shiftedNormal = normalize(Surface.NormalDir + Surface.ViewDir * _IridescenceParallax);
+        float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
+        float fresnel_shifted = 1.0 - saturate(dot(shiftedNormal, Surface.ViewDir));
+        float interference = abs(fresnel_shifted - fresnel_base);
+        float3 iridescenceColor = 0;
+        float finalFresnel = pow(interference, _IridescencePower);
+        if (_IridescenceMode == 0) // RAMP-BASED
+        {
+            iridescenceColor = UNITY_SAMPLE_TEX2D(_IridescenceRamp, float2(finalFresnel, 0.5)).rgb;
+        }
+        else if (_IridescenceMode == 1) // SINEBOW
+        {
+            float hue = finalFresnel * _IridescenceFrequency;
+            iridescenceColor = Sinebow(hue);
+        }
+        float mask = UNITY_SAMPLE_TEX2D(_IridescenceMask, Uvs[_IridescenceMask_UV]).r;
+        float finalIntensity = _IridescenceIntensity * pow(fresnel_base, 2.0) * mask;
+        iridescenceColor *= _IridescenceTint.rgb * finalIntensity;
+        [branch] switch(_IridescenceBlendMode)
+        {
+            case 0: // Additive
+                Surface.FinalColor.rgb += iridescenceColor;
+                break;
+            case 1: // Screen
+                Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
+                break;
+            case 2: // Alpha Blend
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
+                break;
+        }
+    }
+#endif // _BACKLACE_IRIDESCENCE
+
 #endif // BACKLACE_EFFECTS_CGINC
 
   

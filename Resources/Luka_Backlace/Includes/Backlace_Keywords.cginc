@@ -2,7 +2,8 @@
 #define BACKLACE_KEYWORDS_CGINC
 
 // BRANCHING KEYWORDS
-#pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON
+#pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON _SPECULARMODE_HAIR
+// should light model be here too, same with light direction?
 #pragma multi_compile _TOONMODE_RAMP _TOONMODE_ANIME
 
 // CORE FEATURES
@@ -25,6 +26,7 @@
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
 #pragma shader_feature_local _ _BACKLACE_DISTANCE_FADE
+#pragma shader_feature_local _ _BACKLACE_IRIDESCENCE
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

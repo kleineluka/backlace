@@ -116,7 +116,7 @@ Shader "luka/indev/backlace"
         [Space(10)]
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
-        [KeywordEnum(Standard, Anisotropic, Toon)] _SpecularMode ("Specular Mode", Float) = 0
+        [KeywordEnum(Standard, Anisotropic, Toon, Hair)] _SpecularMode ("Specular Mode", Float) = 0
         _MSSO ("MSSO", 2D) = "white" { }
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0
@@ -127,10 +127,17 @@ Shader "luka/indev/backlace"
         _TangentMap ("Tangent Map", 2D) = "white" { }
         _Anisotropy ("Ansotropy", Range(-1, 1)) = 0
         _ReplaceSpecular ("Replace Specular", Float) = 0
+        // toon highlights
         _HighlightRamp ("Highlight Ramp", 2D) = "white" { }
         _HighlightRampColor ("Highlight Color", Color) = (1, 1, 1, 1)
         _HighlightIntensity ("Highlight Intensity", Float) = 1.0
         _HighlightRampOffset ("Highlight Ramp Offset", Range(-1, 1)) = 0.0
+        // hair specular
+        [NoScaleOffset] _HairFlowMap ("Hair Flow/Tangent Map (RG)", 2D) = "gray" { }
+        _PrimarySpecularShift ("Primary Specular Shift", Range(-1, 1)) = 0
+        _SecondarySpecularShift ("Secondary Specular Shift", Range(-1, 1)) = 0.1
+        [HDR] _SecondarySpecularColor ("Secondary Specular Color", Color) = (1, 1, 1, 1)
+        _SpecularExponent ("Specular Exponent", Range(1, 256)) = 64
 
         // RIM LIGHTING
         [Space(35)]
@@ -298,6 +305,25 @@ Shader "luka/indev/backlace"
         _FarFadeStart ("Far Fade Start", Float) = 20.0
         _FarFadeEnd ("Far Fade End", Float) = 50.0
 
+        // IRIDESCENCE
+        [Space(35)]
+        [Header(Iridescence)]
+        [Space(10)]
+        [Toggle(_BACKLACE_IRIDESCENCE)] _ToggleIridescence ("Enable Iridescence", Float) = 0.0
+        [KeywordEnum(Texture, Procedural)] _IridescenceMode ("Mode", Int) = 0
+        [NoScaleOffset] _IridescenceMask ("Mask (R)", 2D) = "white" { }
+        [HDR] _IridescenceTint ("Tint", Color) = (1, 1, 1, 1)
+        _IridescenceIntensity ("Intensity", Range(0, 5)) = 1.0
+        // THIS ENUM IS CHANGED, MY LOVE
+        [Enum(Additive, 0, Screen, 1, Alpha Blend, 2)] _IridescenceBlendMode ("Blend Mode", Int) = 0
+        // THIS IS OUR NEW SHIMMER CONTROL
+        _IridescenceParallax ("View Parallax", Range(0, 1)) = 0.5
+        // Texture Mode
+        [NoScaleOffset] _IridescenceRamp ("Color Ramp", 2D) = "white" { }
+        _IridescencePower ("Ramp Power", Range(0.1, 10)) = 1.0
+        // Procedural Mode
+        _IridescenceFrequency ("Rainbow Frequency", Range(0.1, 20)) = 5.0
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]
@@ -332,7 +358,9 @@ Shader "luka/indev/backlace"
         _Decal1_UV ("Deca; 1 UV Set", Float) = 0
         _Decal2_UV ("Decal 2 UV Set", Float) = 0
         _Glitter_UV ("Glitter UV Set", Float) = 0.0
+        _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
         _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
+        _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
 
         // DO NOT CHANGE
         [Space(35)]

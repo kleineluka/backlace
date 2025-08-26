@@ -15,21 +15,21 @@ void ClipAlpha(inout BacklaceSurfaceData Surface)
 }
 
 // manipulate uvs
-float2 ManipulateUVs(float2 uv)
+float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, float offsetx, float offsety)
 {
     float2 finalUV = uv;
-    if (_UV_Rotation != 0)
+    if (rotation != 0)
     {
         finalUV = uv - 0.5;
-        float angle = -_UV_Rotation * (UNITY_PI / 180.0);
+        float angle = -rotation * (UNITY_PI / 180.0);
         float s = sin(angle);
         float c = cos(angle);
         float2x2 rotationMatrix = float2x2(c, -s, s, c);
         finalUV = mul(rotationMatrix, finalUV);
         finalUV += 0.5;
     }
-    finalUV *= float2(_UV_Scale_X, _UV_Scale_Y);
-    finalUV += float2(_UV_Offset_X, _UV_Offset_Y);
+    finalUV *= float2(scalex, scaley);
+    finalUV += float2(offsetx, offsety);
     return finalUV;
 }
 
@@ -345,9 +345,11 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
     void GetToonDiffuse(inout BacklaceSurfaceData Surface)
     {
         #if defined(_TOONMODE_RAMP)
+            // traditional toony ramp
             GetRampDiffuse(Surface);
             GetRampVertexDiffuse(Surface);
         #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
+            // procedural anime style
             GetAnimeDiffuse(Surface);
             GetAnimeVertexDiffuse(Surface);
         #endif // _TOONMODE_RAMP
@@ -369,14 +371,8 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     #endif
 }
 
-// ...
-void AddStandardDiffuse(inout BacklaceSurfaceData Surface)
-{
-    Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse;
-}
-
-// ...
-void AddToonDiffuse(inout BacklaceSurfaceData Surface)
+// diffuse add
+void AddDiffuse(inout BacklaceSurfaceData Surface)
 {
     Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse;
 }
@@ -385,31 +381,6 @@ void AddToonDiffuse(inout BacklaceSurfaceData Surface)
 void AddAlpha(inout BacklaceSurfaceData Surface)
 {
     Surface.FinalColor.a = Surface.Albedo.a;
-}
-
-// gtr2 distribution function
-float GTR2(float NdotH, float a)
-{
-    float a2 = a * a;
-    float t = 1 + (a2 - 1) * NdotH * NdotH;
-    return a2 / (UNITY_PI * t * t + 1e-7f);
-}
-
-// ggx distribution function
-float smithG_GGX(float NdotV, float alphaG)
-{
-    float a = alphaG * alphaG;
-    float b = NdotV * NdotV;
-    return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
-}
-
-// standard direct specular calculation
-void StandardDirectSpecular(float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
-{
-    outNDF = 0;
-    outGFS = 0;
-    outNDF = GTR2(ndotH, Surface.SquareRoughness) * UNITY_PI;
-    outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
 }
 
 // ...
@@ -421,6 +392,33 @@ inline half3 FresnelTerm(half3 F0, half cosA)
 
 // specular-only features
 #if defined(_BACKLACE_SPECULAR)
+
+    // ...
+    half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
+    {
+        half perceptualRoughness = glossIn.roughness;
+        perceptualRoughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);
+        half mip = perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
+        half3 R = glossIn.reflUVW;
+        half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
+        return float4(DecodeHDR(rgbm, hdr), rgbm.a);
+    }
+
+    // gtr2 distribution function
+    float GTR2(float NdotH, float a)
+    {
+        float a2 = a * a;
+        float t = 1 + (a2 - 1) * NdotH * NdotH;
+        return a2 / (UNITY_PI * t * t + 1e-7f);
+    }
+
+    // ggx distribution function
+    float smithG_GGX(float NdotV, float alphaG)
+    {
+        float a = alphaG * alphaG;
+        float b = NdotV * NdotV;
+        return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
+    }
 
     // gets the indirect lighting color from a fallback cubemap using the reflected direction and remapped roughness
     void GetFallbackCubemap(inout BacklaceSurfaceData Surface)
@@ -437,11 +435,11 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         worldToTangent[2] = float3(0, 0, 1);
         float3 tangentTWS = mul(tangentTS, worldToTangent);
         float3 fTangent;
-        if (tangentTS.z < 1) 
+        if (tangentTS.z < 1)
         {
             fTangent = tangentTWS;
-        } 
-        else 
+        }
+        else
         {
             fTangent = tangentDir;
         }
@@ -460,40 +458,10 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
     }
 
-    // calculates anisotropic direct specular reflection using tangent space and view/light directions
-    void AnisotropicDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
+    // shift a tangent
+    float3 ShiftTangent(float3 T, float3 N, float shift)
     {
-        outNDF = 0;
-        outGFS = 0;
-        float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
-        float anisotropy = tangentTS.a * _Anisotropy;
-        float3 tangent = GetModifiedTangent(tangentTS.rgb, tangentDir);
-        float3 anisotropyDirection = anisotropy >= 0.0 ? bitangentDir : tangentDir;
-        float3 anisotropicTangent = cross(anisotropyDirection, Surface.ViewDir);
-        float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
-        float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - Surface.SquareRoughness)));
-        float3 bentNormal = normalize(lerp(Surface.NormalDir, anisotropicNormal, bendFactor));
-        Surface.ReflectDir = reflect(-Surface.ViewDir, bentNormal);
-        float TdotH = dot(tangent, halfDir);
-        float TdotL = dot(tangent, lightDir);
-        float BdotH = dot(bitangentDir, halfDir);
-        float BdotL = dot(bitangentDir, lightDir);
-        float TdotV = dot(Surface.ViewDir, tangent);
-        float BdotV = dot(bitangentDir, Surface.ViewDir);
-        float ax = max(Surface.SquareRoughness * (1.0 + anisotropy), 0.005);
-        float ay = max(Surface.SquareRoughness * (1.0 - anisotropy), 0.005);
-        outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
-        outGFS = smithG_GGX_aniso(ndotL, TdotL, BdotL, ax, ay);
-        outGFS *= smithG_GGX_aniso(ndotV, TdotV, BdotV, ax, ay);
-    }
-
-    // toon highlights specular
-    float3 ApplyToonHighlights(float NDF, inout BacklaceSurfaceData Surface)
-    {
-        float newMin = max(_HighlightRampOffset, 0);
-        float newMax = max(_HighlightRampOffset +1, 0);
-        float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
-        return UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Surface.Metallic + (0.2 * Surface.Metallic));
+        return normalize(T + shift * N);
     }
 
     // setup albedo and specular color
@@ -505,49 +473,81 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         Surface.EnergyCompensation = lerp(1.0 + Surface.SpecularColor * (1.0 / Surface.Dfg.y - 1.0), 1, _DFGType);
     }
 
-    // ...
-    void FinalizeDirectSpecularTerm(inout BacklaceSurfaceData Surface)
+    // standard direct specular calculation (used in a few modes)
+    void StandardDirectSpecular(float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
     {
-        Surface.DirectSpecular = GFS * NDF * FresnelTerm(Surface.SpecularColor, Surface.LdotH) * Surface.EnergyCompensation;
-        #ifdef UNITY_COLORSPACE_GAMMA
-            Surface.DirectSpecular = sqrt(max(1e-4h, Surface.DirectSpecular));
-        #endif
-        Surface.DirectSpecular = max(0, Surface.DirectSpecular * Surface.Attenuation);
-        Surface.DirectSpecular *= any(Surface.SpecularColor) ? 1.0 : 0.0;
+        outNDF = 0;
+        outGFS = 0;
+        outNDF = GTR2(ndotH, Surface.SquareRoughness) * UNITY_PI;
+        outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
     }
 
-    // ...
-    half perceptualRoughnessToMipmapLevel(half perceptualRoughness)
-    {
-        return perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
-    }
+    #if defined(_SPECULARMODE_ANISOTROPIC) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+        // calculates anisotropic direct specular reflection using tangent space and view/light directions
+        void AnisotropicDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
+        {
+            outNDF = 0;
+            outGFS = 0;
+            float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
+            float anisotropy = tangentTS.a * _Anisotropy;
+            float3 tangent = GetModifiedTangent(tangentTS.rgb, tangentDir);
+            float3 anisotropyDirection = anisotropy >= 0.0 ? bitangentDir : tangentDir;
+            float3 anisotropicTangent = cross(anisotropyDirection, Surface.ViewDir);
+            float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
+            float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - Surface.SquareRoughness)));
+            float3 bentNormal = normalize(lerp(Surface.NormalDir, anisotropicNormal, bendFactor));
+            Surface.ReflectDir = reflect(-Surface.ViewDir, bentNormal);
+            float TdotH = dot(tangent, halfDir);
+            float TdotL = dot(tangent, lightDir);
+            float BdotH = dot(bitangentDir, halfDir);
+            float BdotL = dot(bitangentDir, lightDir);
+            float TdotV = dot(Surface.ViewDir, tangent);
+            float BdotV = dot(bitangentDir, Surface.ViewDir);
+            float ax = max(Surface.SquareRoughness * (1.0 + anisotropy), 0.005);
+            float ay = max(Surface.SquareRoughness * (1.0 - anisotropy), 0.005);
+            outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
+            outGFS = smithG_GGX_aniso(ndotL, TdotL, BdotL, ax, ay);
+            outGFS *= smithG_GGX_aniso(ndotV, TdotV, BdotV, ax, ay);
+        }
+    #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+        // toon highlights specular
+        float3 ApplyToonHighlights(float NDF, inout BacklaceSurfaceData Surface)
+        {
+            float newMin = max(_HighlightRampOffset, 0);
+            float newMax = max(_HighlightRampOffset +1, 0);
+            float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
+            return UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Surface.Metallic + (0.2 * Surface.Metallic));
+        }
+        #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+            // kajiya-kay hair specular
+            float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
+            {
+                // Sample the flow map to get our hair direction
+                float2 flow = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rg * 2 - 1;
+                float3 hairTangent = normalize(flow.x * Surface.TangentDir + flow.y * Surface.BitangentDir);
+                
+                // Shift the tangent along the normal for the primary highlight
+                float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * _PrimarySpecularShift);
+                float dotT1L = dot(shiftedTangent1, lightDir);
+                float dotT1V = dot(shiftedTangent1, Surface.ViewDir);
+                float sinT1L = sqrt(1.0 - dotT1L * dotT1L);
+                float sinT1V = sqrt(1.0 - dotT1V * dotT1V);
+                float primarySpec = pow(saturate(dotT1L * dotT1V + sinT1L * sinT1V), _SpecularExponent);
+                
+                // Shift it again for the secondary highlight
+                float3 shiftedTangent2 = normalize(hairTangent + Surface.NormalDir * _SecondarySpecularShift);
+                float dotT2L = dot(shiftedTangent2, lightDir);
+                float dotT2V = dot(shiftedTangent2, Surface.ViewDir);
+                float sinT2L = sqrt(1.0 - dotT2L * dotT2L);
+                float sinT2V = sqrt(1.0 - dotT2V * dotT2V);
+                float secondarySpec = pow(saturate(dotT2L * dotT2V + sinT2L * sinT2V), _SpecularExponent);
+                
+                // The secondary highlight is often colored by the hair's albedo
+                float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
 
-    // ...
-    half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
-    {
-        half perceptualRoughness = glossIn.roughness /* perceptualRoughness */ ;
-        #if 0
-            float m = PerceptualRoughnessToRoughness(perceptualRoughness); // m is the real roughness parameter
-            const float fEps = 1.192092896e-07F;        // smallest such that 1.0+FLT_EPSILON != 1.0  (+1e-4h is NOT good here. is visibly very wrong)
-            float n = (2.0 / max(fEps, m * m)) - 2.0;        // remap to spec power. See eq. 21 in --> https://dl.dropboxusercontent.com/u/55891920/papers/mm_brdf.pdf
-            n /= 4;                                     // remap from n_dot_h formulatino to n_dot_r. See section "Pre-convolved Cube Maps vs Path Tracers" --> https://s3.amazonaws.com/docs.knaldtech.com/knald/1.0.0/lys_power_drops.html
-            perceptualRoughness = pow(2 / (n + 2), 0.25);      // remap back to square root of real roughness (0.25 include both the sqrt root of the conversion and sqrt for going from roughness to perceptualRoughness)
-        #else
-            // MM: came up with a surprisingly close approximation to what the #if 0'ed out code above does.
-            perceptualRoughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);
-        #endif
-        half mip = perceptualRoughnessToMipmapLevel(perceptualRoughness);
-        half3 R = glossIn.reflUVW;
-        half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
-        return float4(DecodeHDR(rgbm, hdr), rgbm.a);
-    }
-
-    // ...
-    inline half3 FresnelLerp(half3 F0, half3 F90, half cosA)
-    {
-        half t = Pow5(1 - cosA);   // ala Schlick interpoliation
-        return lerp(F0, F90, t);
-    }
+                return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);
+            }
+    #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
 
     // ...
     void GetIndirectSpecular(inout BacklaceSurfaceData Surface)
@@ -583,12 +583,6 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 
     // ...
-    void AddDirectSpecular(inout BacklaceSurfaceData Surface)
-    {
-        Surface.FinalColor.rgb += Surface.DirectSpecular * Surface.SpecLightColor.rgb * Surface.SpecLightColor.a;
-    }
-
-    // ...
     void AddIndirectSpecular(inout BacklaceSurfaceData Surface)
     {
         Surface.FinalColor.rgb += Surface.IndirectSpecular * clamp(pow(Surface.NdotV + Surface.Occlusion, exp2(-16.0 * Surface.SquareRoughness - 1.0)) - 1.0 + Surface.Occlusion, 0.0, 1.0);
@@ -610,7 +604,9 @@ inline half3 FresnelTerm(half3 F0, half cosA)
             StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
             ToonHighlight_Term = ApplyToonHighlights(NDF_Term, Surface);
             specTerm = GFS_Term * ToonHighlight_Term;
-        #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON
+        #elif defined(_SPECULARMODE_HAIR)
+            specTerm = HairDirectSpecular(tangentDir, lightDir, Surface);
+        #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
         // finalise the term
         specTerm *= FresnelTerm(Surface.SpecularColor, ldotH) * Surface.EnergyCompensation;
         #ifdef UNITY_COLORSPACE_GAMMA
@@ -619,6 +615,12 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         specTerm = max(0, specTerm * attenuation);
         specTerm *= any(Surface.SpecularColor) ? 1.0 : 0.0;
         return specTerm;
+    }
+
+    // ...
+    void AddDirectSpecular(inout BacklaceSurfaceData Surface)
+    {
+        Surface.FinalColor.rgb += Surface.DirectSpecular * Surface.SpecLightColor.rgb * Surface.SpecLightColor.a;
     }
 
     // vertex specular feature
