@@ -144,24 +144,26 @@ float _UV_Rotation;
 
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
-    // toon specular feature
-    #if defined(_SPECULARMODE_TOON)
+    // specific specular modes
+    #if defined(_SPECULARMODE_TOON) // TOON SPECULAR
         UNITY_DECLARE_TEX2D(_HighlightRamp);
         float4 _HighlightRampColor;
         float _HighlightIntensity;
         float _HighlightRampOffset;
-    #endif // _SPECULARMODE_TOON
-    // hair specular feature
-    #if defined(_SPECULARMODE_HAIR)
+    #elif defined(_SPECULARMODE_HAIR) // HAIR SPECULAR
         UNITY_DECLARE_TEX2D(_HairFlowMap);
         float _HairFlowMap_UV;
         float _PrimarySpecularShift;
         float _SecondarySpecularShift;
         float4 _SecondarySpecularColor;
         float _SpecularExponent;
-    #endif // _SPECULARMODE_HAIR
+    #elif defined(_SPECULARMODE_CLOTH) // CLOTH SPECULAR
+        float4 _SheenColor;
+        float _SheenIntensity;
+        float _SheenRoughness;
+    #endif // _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
     // vertex specular feature
-    #if defined(_BACKLACE_VERTEX_SPECULAR)
+    #if defined(_BACKLACE_VERTEX_SPECULAR) // VERTEX SPECULAR
         float3 VertexLightDir;
     #endif // _BACKLACE_VERTEX_SPECULAR
 #endif // _BACKLACE_SPECULAR

@@ -7,9 +7,9 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 ## Features 🌈
 **Core Features:**
 - Multiple Lighting Models (Backlace, PoiCustom, OpenLit, Standard, Mochie)
-- Various Specular Modes (Standard, Anisotropic, Toon, Hair)
-- Various Diffuse Modes (Standard, Ramp Toon, Anime Toon)
-- Light Direction Modes (Backlace Forced, View Direction)
+- Various Specular Modes (PBR, Anisotropic, Toon, Hair, Cloth)
+- Various Diffuse Modes (PBR, Ramp Toon, Anime Toon)
+- Light Direction Modes (Backlace, Forced, View Direction)
 - UV Manipulation
 - Emission
 - Light Limiting
@@ -17,22 +17,28 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 - Clearcoat
 - Matcap
 - Cubemap
-- Parallax Mapping (Fast and Fancy)
 - Subsurface Scattering
 - Detail Mapping
 - Decal (2 Slots)
 - Texture Post-Processing
+
+**Advanced Features:**
+- Parallax Mapping (Fasty and Fancy)
+- Fur
 
 **Fun Features:**
 - Glitter
 - Distance Fading
 - Iridescence
 
+**Presets:**
+- Fabric Texture
+- Wet Surface
+
 **Additional Perks:**
 - Custom Editor
 - Lightweight and Keyword Optimised
 - VR Optimised
-- Presets
 
 There is a large roadmap ahead for this shader, and I am open to suggestions and contributions.
 
@@ -49,7 +55,7 @@ What you edit depends on what you want to do. A good place to start is with `Bac
 ## License ✨
 Anything in the [Editor](https://github.com/kleineluka/backlace/tree/main/Resources/Luka_Backlace/Editor) folder in this repository is strictly not for redistribution under any circumstances. This code is provided as a demo UI, and has all of my socials and metadata hard-coded, so you do not want to redistribute this anyways.
 
-The shader itself is under the **MIT license**, with the additional clause that you must credit Backlace/KleineLuka in your project if you use it and the editor exemption stated above.
+The shader itself is under the **MIT license**, with the additional clauses that (1) you must credit Backlace/KleineLuka in your project if you use Backlace in any capacity and (2) the editor exemption stated above.
 
 ## Attributions 🎨
 - This shader was originally a fork of the [Toony Standard Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuil) shader by VRLabs, which is under the MIT license. However, most of the original code has been rewritten or removed.

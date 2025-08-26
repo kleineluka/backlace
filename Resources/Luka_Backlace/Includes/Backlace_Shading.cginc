@@ -518,36 +518,46 @@ inline half3 FresnelTerm(half3 F0, half cosA)
             float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
             return UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Surface.Metallic + (0.2 * Surface.Metallic));
         }
-        #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
-            // kajiya-kay hair specular
-            float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
-            {
-                // Sample the flow map to get our hair direction
-                float2 flow = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rg * 2 - 1;
-                float3 hairTangent = normalize(flow.x * Surface.TangentDir + flow.y * Surface.BitangentDir);
-                
-                // Shift the tangent along the normal for the primary highlight
-                float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * _PrimarySpecularShift);
-                float dotT1L = dot(shiftedTangent1, lightDir);
-                float dotT1V = dot(shiftedTangent1, Surface.ViewDir);
-                float sinT1L = sqrt(1.0 - dotT1L * dotT1L);
-                float sinT1V = sqrt(1.0 - dotT1V * dotT1V);
-                float primarySpec = pow(saturate(dotT1L * dotT1V + sinT1L * sinT1V), _SpecularExponent);
-                
-                // Shift it again for the secondary highlight
-                float3 shiftedTangent2 = normalize(hairTangent + Surface.NormalDir * _SecondarySpecularShift);
-                float dotT2L = dot(shiftedTangent2, lightDir);
-                float dotT2V = dot(shiftedTangent2, Surface.ViewDir);
-                float sinT2L = sqrt(1.0 - dotT2L * dotT2L);
-                float sinT2V = sqrt(1.0 - dotT2V * dotT2V);
-                float secondarySpec = pow(saturate(dotT2L * dotT2V + sinT2L * sinT2V), _SpecularExponent);
-                
-                // The secondary highlight is often colored by the hair's albedo
-                float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
+    #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+        // kajiya-kay hair specular
+        float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
+        {
+            // Sample the flow map to get our hair direction
+            float2 flow = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rg * 2 - 1;
+            float3 hairTangent = normalize(flow.x * Surface.TangentDir + flow.y * Surface.BitangentDir);
+            
+            // Shift the tangent along the normal for the primary highlight
+            float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * _PrimarySpecularShift);
+            float dotT1L = dot(shiftedTangent1, lightDir);
+            float dotT1V = dot(shiftedTangent1, Surface.ViewDir);
+            float sinT1L = sqrt(1.0 - dotT1L * dotT1L);
+            float sinT1V = sqrt(1.0 - dotT1V * dotT1V);
+            float primarySpec = pow(saturate(dotT1L * dotT1V + sinT1L * sinT1V), _SpecularExponent);
+            
+            // Shift it again for the secondary highlight
+            float3 shiftedTangent2 = normalize(hairTangent + Surface.NormalDir * _SecondarySpecularShift);
+            float dotT2L = dot(shiftedTangent2, lightDir);
+            float dotT2V = dot(shiftedTangent2, Surface.ViewDir);
+            float sinT2L = sqrt(1.0 - dotT2L * dotT2L);
+            float sinT2V = sqrt(1.0 - dotT2V * dotT2V);
+            float secondarySpec = pow(saturate(dotT2L * dotT2V + sinT2L * sinT2V), _SpecularExponent);
+            
+            // The secondary highlight is often colored by the hair's albedo
+            float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
 
-                return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);
-            }
-    #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+            return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);
+        }
+    #elif defined(_SPECULARMODE_CLOTH)
+        // charlie sheen ndf as Estevez and Kulla of Sony Imageworks describe
+        float CharlieSheenNDF(float roughness, float NdotH)
+        {
+            float invAlpha = 1.0 / roughness;
+            float cos2h = NdotH * NdotH;
+            float sin2h = max(1.0 - cos2h, 0.0078125); // prevent fp16 issues
+            // pow(sin^2(h), invA * 0.5) is the same as pow(sin(h), invA) but faster.
+            return (2.0 + invAlpha) * pow(sin2h, invAlpha * 0.5) / (2.0 * UNITY_PI);
+        }
+    #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
 
     // ...
     void GetIndirectSpecular(inout BacklaceSurfaceData Surface)
@@ -606,7 +616,11 @@ inline half3 FresnelTerm(half3 F0, half cosA)
             specTerm = GFS_Term * ToonHighlight_Term;
         #elif defined(_SPECULARMODE_HAIR)
             specTerm = HairDirectSpecular(tangentDir, lightDir, Surface);
-        #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+        #elif defined(_SPECULARMODE_CLOTH)
+            NDF_Term = CharlieSheenNDF(Surface.Roughness * _SheenRoughness, ndotH);
+            specTerm = NDF_Term * _SheenColor.rgb * _SheenColor.a * _SheenIntensity;
+            return max(0, specTerm * attenuation); // don't need rest of logic..
+        #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
         // finalise the term
         specTerm *= FresnelTerm(Surface.SpecularColor, ldotH) * Surface.EnergyCompensation;
         #ifdef UNITY_COLORSPACE_GAMMA

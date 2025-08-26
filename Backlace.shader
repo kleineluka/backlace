@@ -116,7 +116,7 @@ Shader "luka/indev/backlace"
         [Space(10)]
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
-        [KeywordEnum(Standard, Anisotropic, Toon, Hair)] _SpecularMode ("Specular Mode", Float) = 0
+        [KeywordEnum(Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
         _MSSO ("MSSO", 2D) = "white" { }
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0
@@ -138,6 +138,10 @@ Shader "luka/indev/backlace"
         _SecondarySpecularShift ("Secondary Specular Shift", Range(-1, 1)) = 0.1
         [HDR] _SecondarySpecularColor ("Secondary Specular Color", Color) = (1, 1, 1, 1)
         _SpecularExponent ("Specular Exponent", Range(1, 256)) = 64
+        // cloth specular
+        _SheenColor ("Sheen Color", Color) = (1, 1, 1, 1)
+        _SheenIntensity ("Sheen Intensity", Float) = 0.5
+        _SheenRoughness ("Sheen Roughness", Float) = 0.5
 
         // RIM LIGHTING
         [Space(35)]
@@ -314,14 +318,10 @@ Shader "luka/indev/backlace"
         [NoScaleOffset] _IridescenceMask ("Mask (R)", 2D) = "white" { }
         [HDR] _IridescenceTint ("Tint", Color) = (1, 1, 1, 1)
         _IridescenceIntensity ("Intensity", Range(0, 5)) = 1.0
-        // THIS ENUM IS CHANGED, MY LOVE
         [Enum(Additive, 0, Screen, 1, Alpha Blend, 2)] _IridescenceBlendMode ("Blend Mode", Int) = 0
-        // THIS IS OUR NEW SHIMMER CONTROL
         _IridescenceParallax ("View Parallax", Range(0, 1)) = 0.5
-        // Texture Mode
         [NoScaleOffset] _IridescenceRamp ("Color Ramp", 2D) = "white" { }
         _IridescencePower ("Ramp Power", Range(0.1, 10)) = 1.0
-        // Procedural Mode
         _IridescenceFrequency ("Rainbow Frequency", Range(0.1, 20)) = 5.0
 
         // INDIRECT LIGHTING
@@ -361,7 +361,8 @@ Shader "luka/indev/backlace"
         _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
         _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
         _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
-        _ClothSheenMask_UV ("Sheen Mask UV Set", Float) = 0.0
+        _FuzzMap_UV ("Fuzz Map UV Set", Float) = 0.0
+        _ThreadMap_UV ("Thread Map UV Set", Float) = 0.0
 
         // DO NOT CHANGE
         [Space(35)]
