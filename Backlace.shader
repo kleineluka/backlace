@@ -70,7 +70,7 @@ Shader "luka/indev/backlace"
         [Space(35)]
         [Header(Lighting Model)]
         [Space(10)]
-        [Enum(Backlace, 0, Toony, 1, PoiCustom, 2, OpenLit, 3, Standard, 4, Mochie, 5)] _LightingColorMode ("Light Color Mode", Int) = 0
+        [Enum(Backlace, 0, PoiCustom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
         [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
         _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
         _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
@@ -361,6 +361,7 @@ Shader "luka/indev/backlace"
         _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
         _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
         _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
+        _ClothSheenMask_UV ("Sheen Mask UV Set", Float) = 0.0
 
         // DO NOT CHANGE
         [Space(35)]

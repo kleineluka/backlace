@@ -159,7 +159,7 @@ float _UV_Rotation;
         float _SecondarySpecularShift;
         float4 _SecondarySpecularColor;
         float _SpecularExponent;
-    #endif
+    #endif // _SPECULARMODE_HAIR
     // vertex specular feature
     #if defined(_BACKLACE_VERTEX_SPECULAR)
         float3 VertexLightDir;
