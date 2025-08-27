@@ -188,38 +188,79 @@ float3 RotateVector(float3 pos, float3 rotation)
     return mul(rotZ, mul(rotY, mul(rotX, pos)));
 }
 
-// triplanar texture sampling
-float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, float3 normal, float3 position, float scale, float3 rotation, float sharpness, bool isTiling)
+// triplanar uv and weight calculation
+void GetTriplanarUVsAndWeights(
+    float3 worldPos, float3 normal,
+    float3 position, float scale, float3 rotation, float sharpness,
+    out float2 uvX, out float2 uvY, out float2 uvZ, out float3 weights)
 {
     float3 localPos = RotateVector(worldPos - position, -rotation);
-    float3 weights = abs(normal);
-    weights = pow(weights, sharpness);
-    weights /= dot(weights, 1.0.xxx);
-    float2 uvX = localPos.yz / scale;
-    float2 uvY = localPos.xz / scale;
-    float2 uvZ = localPos.xy / scale;
+    weights = pow(abs(normal), sharpness);
+    weights /= dot(weights, 1.0.xxx); // normalise the weights
+    uvX = localPos.yz / scale;
+    uvY = localPos.xz / scale;
+    uvZ = localPos.xy / scale;
+}
+
+// triplanar texture sampling
+float4 SampleTriplanar(
+    Texture2D tex, SamplerState texSampler,
+    float2 uvX, float2 uvY, float2 uvZ, float3 weights,
+    bool isTiling)
+{
     float4 sampleX, sampleY, sampleZ;
     if (isTiling)
     {
-        // typically for shadows or overlays, where we want the texture to repeat
+        // for repeating patterns, use frac() to tile the texture
         sampleX = tex.Sample(texSampler, frac(uvX));
         sampleY = tex.Sample(texSampler, frac(uvY));
         sampleZ = tex.Sample(texSampler, frac(uvZ));
     }
     else
     {
-        // typically for decals, where we only want 1 image overlayed
+        // for single decals, we only sample if the UV is within the 0-1 range
         uvX += 0.5;
         uvY += 0.5;
         uvZ += 0.5;
         sampleX = 0;
-        if (all(saturate(uvX) == uvX)) { sampleX = tex.Sample(texSampler, uvX); }
+        if (all(saturate(uvX) == uvX))
+        {
+            sampleX = tex.Sample(texSampler, uvX);
+        }
         sampleY = 0;
-        if (all(saturate(uvY) == uvY)) { sampleY = tex.Sample(texSampler, uvY); }
+        if (all(saturate(uvY) == uvY))
+        {
+            sampleY = tex.Sample(texSampler, uvY);
+        }
         sampleZ = 0;
-        if (all(saturate(uvZ) == uvZ)) { sampleZ = tex.Sample(texSampler, uvZ); }
+        if (all(saturate(uvZ) == uvZ))
+        {
+            sampleZ = tex.Sample(texSampler, uvZ);
+        }
     }
     return sampleX * weights.x + sampleY * weights.y + sampleZ * weights.z;
+}
+
+// wrapper for all triplanar in one
+float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, float3 normal, float3 position, float scale, float3 rotation, float sharpness, bool isTiling)
+{
+    // step one~ coords n weights
+    float2 uvX, uvY, uvZ;
+    float3 weights;
+    GetTriplanarUVsAndWeights(worldPos, normal, position, scale, rotation, sharpness, uvX, uvY, uvZ, weights);
+    // step two~ sample tex
+    return SampleTriplanar(tex, texSampler, uvX, uvY, uvZ, weights, isTiling);
+}
+
+float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, float fps, float scrub)
+{
+    float frame = floor(frac(fps * _Time.y + scrub) * totalFrames);
+    float col = fmod(frame, columns);
+    float row = floor(frame / columns);
+    float2 cellSize = 1.0 / float2(columns, rows);
+    row = (rows - 1) - row;
+    float2 outputUVs = (uvs * cellSize) + float2(col, row) * cellSize;   
+    return outputUVs;
 }
 
 // decals-only features

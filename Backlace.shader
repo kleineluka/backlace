@@ -3,6 +3,11 @@ Shader "luka/indev/backlace"
 
     Properties
     {
+
+        // CORE FEATURES
+        [Space(70)]
+        [Header(Core Variant Features)]
+
         // RENDERING SETTINGS
         [Space(35)]
         [Header(Rendering Settings)]
@@ -35,8 +40,36 @@ Shader "luka/indev/backlace"
         _UV_Scale_X ("UV Scale X", Float) = 1
         _UV_Scale_Y ("UV Scale Y", Float) = 1
         _UV_Rotation ("UV Rotation", Range(0, 360)) = 0
+        _UV_Scroll_X_Speed ("UV Scroll X Speed", Float) = 0
+        _UV_Scroll_Y_Speed ("UV Scroll Y Speed", Float) = 0
 
         // UV EFFECTS
+        [Space(35)]
+        [Header(UV Effects)]
+        [Space(10)]
+        [Toggle(_BACKLACE_UV_EFFECTS)] _ToggleUVEffects ("Enable UV Effects", Float) = 0.0
+        // triplanar
+        [Enum(Disabled, 0, Enabled, 1)] _UVTriplanarMapping ("Enable Triplanar Mapping", Float) = 0.0
+        _UVTriplanarPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
+        _UVTriplanarScale ("World Scale", Float) = 1.0
+        _UVTriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
+        _UVTriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        // screenspace
+        [Enum(Disabled, 0, Enabled, 1)] _UVScreenspaceMapping ("Enable Screenspace Mapping", Float) = 0.0
+        _UVScreenspaceTiling ("Screenspace Tiling", Float) = 1.0
+        // flipbook
+        [Enum(Disabled, 0, Enabled, 1)] _UVFlipbook ("Enable Flipbook Animation", Float) = 0.0
+        _UVFlipbookRows ("Flipbook Rows", Int) = 1
+        _UVFlipbookColumns ("Flipbook Columns", Int) = 1
+        _UVFlipbookFrames ("Total Frames", Int) = 1
+        _UVFlipbookFPS ("Flipbook FPS", Float) = 30.0
+        _UVFlipbookScrub ("Manual Scrub", Float) = 0.0
+        // flowmap
+        [Enum(Disabled, 0, Enabled, 1)] _UVFlowmap ("Enable Flowmap", Float) = 0.0
+        _UVFlowmapTex ("Flowmap Texture (RG)", 2D) = "gray" { }
+        _UVFlowmapStrength ("Flowmap Strength", Range(0, 1)) = 0.5
+        _UVFlowmapSpeed ("Flowmap Speed", Float) = 1.0
+        _UVFlowmapDistortion ("Flowmap Distortion", Range(0, 1)) = 0.5
 
         // VERTEX MANIPULATION
 
@@ -177,51 +210,6 @@ Shader "luka/indev/backlace"
         [Enum(OFF, 0, ON, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
-        // CUBEMAP
-        [Space(35)]
-        [Header(Cubemap)]
-        [Space(10)]
-        [Toggle(_BACKLACE_CUBEMAP)] _ToggleCubemap ("Enable Cubemap", Float) = 0.0
-        [NoScaleOffset] _CubemapTex ("Cubemap", Cube) = "" { }
-        [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
-        _CubemapIntensity ("Cubemap Intensity", Range(0, 2)) = 1.0
-        [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
-
-        // PARALLAX MAPPING
-        [Space(35)]
-        [Header(Parallax Mapping)]
-        [Space(10)]
-        [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
-        [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
-        [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
-        _ParallaxStrength ("Parallax Strength", Range(0, 0.1)) = 0.02
-        _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
-        [Toggle(_BACKLACE_PARALLAX_SHADOWS)] _ToggleParallaxShadows ("Enable Self-Shadowing", Float) = 0.0
-        _ParallaxShadowSteps ("Shadow Quality Steps", Range(2, 16)) = 8
-        _ParallaxShadowStrength ("Shadow Strength", Range(0, 1)) = 0.75 
-
-        // SUBSURFACE SCATTERING
-        [Space(35)]
-        [Header(Subsurface Scattering)]
-        [Space(10)]
-        [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
-        [NoScaleOffset] _ThicknessMap ("Thickness Map (R)", 2D) = "white" { }
-        [HDR] _SSSColor ("Scattering Tint", Color) = (1, 1, 1, 1)
-        _SSSStrength ("Strength", Range(0, 2)) = 1.0
-        _SSSDistortion ("Distortion", Range(0, 1)) = 0.5
-        _SSSSpread ("Spread", Range(16, 0.01)) = 2.0
-        _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
-
-        // DETAIL MAPPING
-        [Space(35)]
-        [Header(Detail Mapping)]
-        [Space(10)]
-        [Toggle(_BACKLACE_DETAIL)] _ToggleDetail ("Enable Detail Maps", Float) = 0.0
-        [NoScaleOffset] _DetailAlbedoMap ("Detail Albedo (A=Strength)", 2D) = "gray" { }
-        [NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" { }
-        _DetailTiling ("Detail Tiling", Float) = 16
-        _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
-
         // DECAL 1
         [Space(35)]
         [Header(Decal 1)]
@@ -276,6 +264,59 @@ Shader "luka/indev/backlace"
         _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
         _Brightness ("Brightness", Range(0, 2)) = 1.0
 
+        // ADVANCED FEATURES
+        [Space(70)]
+        [Header(Advanced Variant Features)]
+
+        // CUBEMAP
+        [Space(35)]
+        [Header(Cubemap)]
+        [Space(10)]
+        [Toggle(_BACKLACE_CUBEMAP)] _ToggleCubemap ("Enable Cubemap", Float) = 0.0
+        [NoScaleOffset] _CubemapTex ("Cubemap", Cube) = "" { }
+        [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
+        _CubemapIntensity ("Cubemap Intensity", Range(0, 2)) = 1.0
+        [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
+
+        // PARALLAX MAPPING
+        [Space(35)]
+        [Header(Parallax Mapping)]
+        [Space(10)]
+        [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
+        [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
+        [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
+        _ParallaxStrength ("Parallax Strength", Range(0, 0.1)) = 0.02
+        _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
+        [Toggle(_BACKLACE_PARALLAX_SHADOWS)] _ToggleParallaxShadows ("Enable Self-Shadowing", Float) = 0.0
+        _ParallaxShadowSteps ("Shadow Quality Steps", Range(2, 16)) = 8
+        _ParallaxShadowStrength ("Shadow Strength", Range(0, 1)) = 0.75
+
+        // SUBSURFACE SCATTERING
+        [Space(35)]
+        [Header(Subsurface Scattering)]
+        [Space(10)]
+        [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
+        [NoScaleOffset] _ThicknessMap ("Thickness Map (R)", 2D) = "white" { }
+        [HDR] _SSSColor ("Scattering Tint", Color) = (1, 1, 1, 1)
+        _SSSStrength ("Strength", Range(0, 2)) = 1.0
+        _SSSDistortion ("Distortion", Range(0, 1)) = 0.5
+        _SSSSpread ("Spread", Range(16, 0.01)) = 2.0
+        _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
+
+        // DETAIL MAPPING
+        [Space(35)]
+        [Header(Detail Mapping)]
+        [Space(10)]
+        [Toggle(_BACKLACE_DETAIL)] _ToggleDetail ("Enable Detail Maps", Float) = 0.0
+        [NoScaleOffset] _DetailAlbedoMap ("Detail Albedo (A=Strength)", 2D) = "gray" { }
+        [NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" { }
+        _DetailTiling ("Detail Tiling", Float) = 16
+        _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
+
+        // FUN FEATURES
+        [Space(70)]
+        [Header(Fun Variant Features)]
+
         // GLITTER
         [Space(35)]
         [Header(Glitter)]
@@ -325,6 +366,9 @@ Shader "luka/indev/backlace"
         _IridescenceFrequency ("Rainbow Frequency", Range(0.1, 20)) = 5.0
 
         // SHADOW TEXTURE
+        [Space(35)]
+        [Header(Shadow Texture)]
+        [Space(10)]
         [Toggle(_BACKLACE_SHADOW_TEXTURE)] _ToggleShadowTexture ("Enable Shadow Texture", Float) = 0.0
         [Enum(UV Albedo, 0, Screen Pattern, 1, Triplanar Pattern, 2)] _ShadowTextureMappingMode ("Shadow Mode", Int) = 0
         _ShadowTextureIntensity ("Shadow Intensity", Range(0, 1)) = 1.0
@@ -333,6 +377,10 @@ Shader "luka/indev/backlace"
         _ShadowPatternScale ("Pattern Scale / Tiling", Float) = 5.0
         _ShadowPatternTriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
         _ShadowPatternTransparency ("Pattern Transparency", Range(0, 1)) = 1
+
+        // MISC STUFF
+        [Space(70)]
+        [Header(Other Stuffs)]
 
         // INDIRECT LIGHTING
         [Space(35)]
@@ -366,6 +414,7 @@ Shader "luka/indev/backlace"
         _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
         _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
         _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
+        _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
 
         // DO NOT CHANGE
         [Space(35)]

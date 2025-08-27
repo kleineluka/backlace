@@ -7,8 +7,11 @@ float4 Fragment(FragmentData i) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
     LoadUVs();
-    Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y);
+    Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
     GetGeometryVectors(Surface, FragData);
+    #if defined(_BACKLACE_UV_EFFECTS)
+        ApplyUVEffects(Uvs[0], Surface);
+    #endif // _BACKLACE_UV_EFFECTS
     #if defined(_BACKLACE_DISTANCE_FADE)
         bool isNearFading;
         float fadeFactor;

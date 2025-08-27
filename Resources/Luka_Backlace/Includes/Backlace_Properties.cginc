@@ -60,6 +60,8 @@ float _UV_Offset_Y;
 float _UV_Scale_X;
 float _UV_Scale_Y;
 float _UV_Rotation;
+float _UV_Scroll_X_Speed;
+float _UV_Scroll_Y_Speed;
 
 // dither feature
 #if defined(_ALPHAMODULATE_ON) || defined(_BACKLACE_DISTANCE_FADE)
@@ -272,6 +274,33 @@ float _UV_Rotation;
     float _BlackAndWhite;
     float _Brightness;
 #endif // _BACKLACE_POST_PROCESSING
+
+// uv effects
+#if defined(_BACKLACE_UV_EFFECTS)
+    // triplanar
+    float _UVTriplanarMapping;
+    float3 _UVTriplanarPosition;
+    float _UVTriplanarScale;
+    float3 _UVTriplanarRotation;
+    float _UVTriplanarSharpness;
+    // screenspace
+    float _UVScreenspaceMapping;
+    float _UVScreenspaceTiling;
+    // flipbook
+    float _UVFlipbook;
+    float _UVFlipbookRows;
+    float _UVFlipbookColumns;
+    float _UVFlipbookFrames;
+    float _UVFlipbookFPS;
+    float _UVFlipbookScrub;
+    // flowmap
+    float _UVFlowmap;
+    UNITY_DECLARE_TEX2D(_UVFlowmapTex);
+    float _UVFlowmapStrength;
+    float _UVFlowmapSpeed;
+    float _UVFlowmapDistortion;
+    float _UVFlowmap_UV;
+#endif // _BACKLACE_UV_EFFECTS
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

@@ -15,7 +15,7 @@ void ClipAlpha(inout BacklaceSurfaceData Surface)
 }
 
 // manipulate uvs
-float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, float offsetx, float offsety)
+float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, float offsetx, float offsety, float scrollx, float scrolly)
 {
     float2 finalUV = uv;
     if (rotation != 0)
@@ -30,6 +30,7 @@ float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, floa
     }
     finalUV *= float2(scalex, scaley);
     finalUV += float2(offsetx, offsety);
+    finalUV += float2(scrollx, scrolly) * _Time.y;
     return finalUV;
 }
 
@@ -915,5 +916,37 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         Surface.FinalColor.rgb = finalColor;
     }
 #endif // _BACKLACE_POST_PROCESSING
+
+#if defined(_BACKLACE_UV_EFFECTS)
+    void ApplyUVEffects(inout float2 uv, in BacklaceSurfaceData Surface)
+    {
+        // triplanar uv mapping
+        [branch] if (_UVTriplanarMapping == 1) 
+        {
+            float2 uvX, uvY, uvZ;
+            float3 weights;
+            GetTriplanarUVsAndWeights(
+                FragData.worldPos, Surface.NormalDir,
+                _UVTriplanarPosition, _UVTriplanarScale, _UVTriplanarRotation, _UVTriplanarSharpness,
+                uvX, uvY, uvZ, weights
+            );
+            uv = uvX * weights.x + uvY * weights.y + uvZ * weights.z;
+        }
+        // screen space uv
+        [branch] if (_UVScreenspaceMapping == 1) 
+        {
+            uv = frac(Surface.ScreenCoords * _UVScreenspaceTiling);
+        }
+        // flipbook
+        [branch] if (_UVFlipbook == 1) {
+            uv = ApplyFlipbook(uv, _UVFlipbookColumns, _UVFlipbookRows, _UVFlipbookFrames, _UVFlipbookFPS, _UVFlipbookScrub);
+        }
+        // flow map
+        [branch] if (_UVFlowmap == 1) {
+            float2 flow = UNITY_SAMPLE_TEX2D(_UVFlowmapTex, uv).rg * 2.0 - 1.0;
+            uv += flow * _UVFlowmapStrength * frac(_Time.y * _UVFlowmapSpeed);
+        }
+    }
+#endif // _BACKLACE_UV_EFFECTS
 
 #endif // BACKLACE_SHADING_CGINC

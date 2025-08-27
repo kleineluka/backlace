@@ -8,11 +8,13 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity.
 
 **Core Features:**
+- Basic Texture Features (Albedo, Normal, etc.)
 - Multiple Lighting Models (Backlace, PoiCustom, OpenLit, Standard, Mochie)
 - Various Specular Modes (PBR, Anisotropic, Toon, Hair, Cloth)
 - Various Diffuse Modes (PBR, Ramp Toon, Anime Toon)
 - Light Direction Modes (Backlace, Forced, View Direction)
 - UV Manipulation
+- UV Effects (Triplanar, Screenspace, Flipbook, Flowmap)
 - Emission
 - Light Limiting
 - Rim Lighting

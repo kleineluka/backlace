@@ -17,6 +17,7 @@
 #pragma shader_feature_local _ _BACKLACE_DECAL1
 #pragma shader_feature_local _ _BACKLACE_DECAL2
 #pragma shader_feature_local _ _BACKLACE_POST_PROCESSING
+#pragma shader_feature_local _ _BACKLACE_UV_EFFECTS
 
 // ADVANCED KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_CUBEMAP
