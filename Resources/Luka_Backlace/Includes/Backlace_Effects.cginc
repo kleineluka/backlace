@@ -190,6 +190,61 @@
     }
 #endif // _BACKLACE_IRIDESCENCE
 
+// shadow texture-only features
+#if defined(_BACKLACE_SHADOW_TEXTURE)
+    UNITY_DECLARE_TEX2D(_ShadowTex);
+    float _ShadowTex_UV;
+    float4 _ShadowPatternColor;
+    float _ShadowPatternScale;
+    float _ShadowTextureIntensity;
+    int _ShadowTextureMappingMode;
+    float _ShadowPatternTriplanarSharpness;
+    float _ShadowPatternTransparency;
+
+    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface, float3 shadowTint)
+    {
+        float3 finalShadowColor;
+        float3 albedoTintedShadow = shadowTint * Surface.Albedo.rgb;
+        float3 baseShadowColour = Surface.Albedo.rgb * lerp(Surface.IndirectDiffuse, 1.0, _ShadowPatternTransparency);
+        switch(_ShadowTextureMappingMode)
+        {
+            case 0: // uv albedo
+            {
+                float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
+                finalShadowColor = lerp(baseShadowColour, shadowAlbedoSample.rgb, shadowAlbedoSample.a);
+                break;
+            }
+            case 1: // screen pattern
+            {
+                float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
+                float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
+                float blendFactor = patternSample.r * patternSample.a;
+                finalShadowColor = lerp(baseShadowColour, albedoTintedShadow, blendFactor);
+                break;
+            }
+            case 2: // triplanar
+            {
+                float4 patternSample = SampleTextureTriplanar(
+                    _ShadowTex, sampler_MainTex,
+                    FragData.worldPos, Surface.NormalDir,
+                    float3(0, 0, 0), _ShadowPatternScale, float3(0, 0, 0),
+                    _ShadowPatternTriplanarSharpness, true
+                );
+                float blendFactor = patternSample.r * patternSample.a;
+                finalShadowColor = lerp(baseShadowColour, albedoTintedShadow, blendFactor);
+                break;
+            }
+        }
+        float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
+        return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);
+    }
+
+    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface)
+    {
+        return GetTexturedShadowColor(Surface, _ShadowPatternColor.rgb);
+    }
+#endif // _BACKLACE_SHADOW_TEXTURE
+
 #endif // BACKLACE_EFFECTS_CGINC
 
   

@@ -106,6 +106,11 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
     #endif // _BACKLACE_PARALLAX_SHADOWS
     Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * ramp + Surface.IndirectDiffuse);
     Surface.Attenuation = ramp;
+    #if defined(_BACKLACE_SHADOW_TEXTURE)
+        float3 litColor = Surface.Diffuse;
+        float3 shadowColor = GetTexturedShadowColor(Surface);
+        Surface.Diffuse = lerp(shadowColor, litColor, Surface.Attenuation);
+    #endif // _BACKLACE_SHADOW_TEXTURE
 }
 
 //modified version of Shade4PointLights
@@ -270,11 +275,24 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
                 ramp *= ParallaxShadow;
             #endif // _BACKLACE_PARALLAX_SHADOWS
-            #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-                Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
-            #else
-                Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
-            #endif
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 litColor;
+                #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+                    litColor = Surface.Albedo * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+                #else // DIRECTIONAL || DIRECTIONAL_COOKIE
+                    litColor = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a;
+                #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
+                float3 shadowColor = GetTexturedShadowColor(Surface);
+                // The ramp itself is our mask. We use its brightness to blend between shadow and light.
+                Surface.Diffuse = lerp(shadowColor, litColor, GetLuma(ramp.rgb));
+            #else // _BACKLACE_SHADOW_TEXTURE
+                // original portion of the code before shadow texture
+                #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+                    Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+                #else // DIRECTIONAL || DIRECTIONAL_COOKIE
+                    Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
+                #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
+            #endif // _BACKLACE_SHADOW_TEXTURE
             Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
             ApplyAreaTint(Surface);
         }
@@ -311,8 +329,16 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             float3 finalColor = Surface.Albedo.rgb * unity_AmbientSky.rgb;
             float halftoneShadow = smoothstep(_AnimeHalftoneThreshold + _AnimeShadowSoftness, _AnimeHalftoneThreshold - _AnimeShadowSoftness, lightTerm);
             float coreShadow = smoothstep(_AnimeShadowThreshold + _AnimeShadowSoftness, _AnimeShadowThreshold - _AnimeShadowSoftness, lightTerm);
-            finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeHalftoneColor.rgb, halftoneShadow);
-            finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeShadowColor.rgb, coreShadow);
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 texturedHalftone = GetTexturedShadowColor(Surface, _AnimeHalftoneColor.rgb * _ShadowPatternColor.rgb);
+                float3 texturedCore = GetTexturedShadowColor(Surface, _AnimeShadowColor.rgb * _ShadowPatternColor.rgb);
+                finalColor = lerp(finalColor, texturedHalftone, halftoneShadow);
+                finalColor = lerp(finalColor, texturedCore, coreShadow);
+            #else // _BACKLACE_SHADOW_TEXTURE
+                // original portion of the code before shadow texture
+                finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeHalftoneColor.rgb, halftoneShadow);
+                finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeShadowColor.rgb, coreShadow);
+            #endif // _BACKLACE_SHADOW_TEXTURE
             float3 directLight = Surface.LightColor.rgb * Surface.Albedo.rgb;
             float lightMask = 1.0 - halftoneShadow;
             finalColor = lerp(finalColor, directLight, lightMask);

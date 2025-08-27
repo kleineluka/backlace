@@ -189,32 +189,35 @@ float3 RotateVector(float3 pos, float3 rotation)
 }
 
 // triplanar texture sampling
-float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, float3 normal, float3 position, float scale, float3 rotation, float sharpness)
+float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, float3 normal, float3 position, float scale, float3 rotation, float sharpness, bool isTiling)
 {
     float3 localPos = RotateVector(worldPos - position, -rotation);
     float3 weights = abs(normal);
     weights = pow(weights, sharpness);
     weights /= dot(weights, 1.0.xxx);
-    // projection from X-axis
-    float2 uvX = (localPos.yz / scale) + 0.5; // 0.5 = centering
-    float4 sampleX = 0; // default to transparent black
-    if (all(saturate(uvX) == uvX)) //check if uvX is between 0 and 1
+    float2 uvX = localPos.yz / scale;
+    float2 uvY = localPos.xz / scale;
+    float2 uvZ = localPos.xy / scale;
+    float4 sampleX, sampleY, sampleZ;
+    if (isTiling)
     {
-        sampleX = tex.Sample(texSampler, uvX);
+        // typically for shadows or overlays, where we want the texture to repeat
+        sampleX = tex.Sample(texSampler, frac(uvX));
+        sampleY = tex.Sample(texSampler, frac(uvY));
+        sampleZ = tex.Sample(texSampler, frac(uvZ));
     }
-    // projection from Y-axis
-    float2 uvY = (localPos.xz / scale) + 0.5;
-    float4 sampleY = 0;
-    if (all(saturate(uvY) == uvY))
+    else
     {
-        sampleY = tex.Sample(texSampler, uvY);
-    }
-    // projection from z-axis
-    float2 uvZ = (localPos.xy / scale) + 0.5;
-    float4 sampleZ = 0;
-    if (all(saturate(uvZ) == uvZ))
-    {
-        sampleZ = tex.Sample(texSampler, uvZ);
+        // typically for decals, where we only want 1 image overlayed
+        uvX += 0.5;
+        uvY += 0.5;
+        uvZ += 0.5;
+        sampleX = 0;
+        if (all(saturate(uvX) == uvX)) { sampleX = tex.Sample(texSampler, uvX); }
+        sampleY = 0;
+        if (all(saturate(uvY) == uvY)) { sampleY = tex.Sample(texSampler, uvY); }
+        sampleZ = 0;
+        if (all(saturate(uvZ) == uvZ)) { sampleZ = tex.Sample(texSampler, uvZ); }
     }
     return sampleX * weights.x + sampleY * weights.y + sampleZ * weights.z;
 }
@@ -243,7 +246,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
 
     void ApplyDecal_Triplanar(inout float4 baseAlbedo, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler, float4 tint, float3 position, float scale, float3 rotation, float sharpness, int blendMode)
     {
-        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, position, scale, rotation, sharpness);
+        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, position, scale, rotation, sharpness, false);
         decalColor *= tint;
         switch(blendMode)
         {

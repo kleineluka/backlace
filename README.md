@@ -5,6 +5,8 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 > **This is inherently not necessarily a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). As such, many features are a naïve implementation.** While fully usable as a stand-alone shader, it is much more lightweight.
 
 ## Features 🌈
+Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity.
+
 **Core Features:**
 - Multiple Lighting Models (Backlace, PoiCustom, OpenLit, Standard, Mochie)
 - Various Specular Modes (PBR, Anisotropic, Toon, Hair, Cloth)
@@ -16,20 +18,21 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 - Rim Lighting
 - Clearcoat
 - Matcap
-- Cubemap
-- Subsurface Scattering
-- Detail Mapping
 - Decal (2 Slots)
 - Texture Post-Processing
 
 **Advanced Features:**
+- Cubemap Reflection
 - Parallax Mapping (Fasty and Fancy)
-- Fur
+- Subsurface Scattering
+- Detail Mapping
+- AudioLink Support
 
 **Fun Features:**
 - Glitter
 - Distance Fading
 - Iridescence
+- Shadow Textures
 
 **Presets:**
 - Fabric Texture
@@ -40,7 +43,8 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 - Lightweight and Keyword Optimised
 - VR Optimised
 
-There is a large roadmap ahead for this shader, and I am open to suggestions and contributions.
+## Where Else Backlaced Is Used 🌨️
+This section will be updated when I make things with it!
 
 ## Building Off Of Backlace 🫧
 Backlace is split into a lot of CGInclude files to make it easier to edit, build off of, and maintain.

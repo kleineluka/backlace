@@ -14,21 +14,23 @@
 #pragma shader_feature_local _ _BACKLACE_RIMLIGHT
 #pragma shader_feature_local _ _BACKLACE_CLEARCOAT
 #pragma shader_feature_local _ _BACKLACE_MATCAP
-#pragma shader_feature_local _ _BACKLACE_CUBEMAP
-#pragma shader_feature_local _ _BACKLACE_SSS
-#pragma shader_feature_local _ _BACKLACE_DETAIL
 #pragma shader_feature_local _ _BACKLACE_DECAL1
 #pragma shader_feature_local _ _BACKLACE_DECAL2
 #pragma shader_feature_local _ _BACKLACE_POST_PROCESSING
 
-// ADVANCED FEATURES
+// ADVANCED KEYWORDS
+#pragma shader_feature_local _ _BACKLACE_CUBEMAP
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
 #pragma shader_feature_local _ _BACKLACE_PARALLAX_SHADOWS
+#pragma shader_feature_local _ _BACKLACE_SSS
+#pragma shader_feature_local _ _BACKLACE_DETAIL
+
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
 #pragma shader_feature_local _ _BACKLACE_DISTANCE_FADE
 #pragma shader_feature_local _ _BACKLACE_IRIDESCENCE
+#pragma shader_feature_local _ _BACKLACE_SHADOW_TEXTURE
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

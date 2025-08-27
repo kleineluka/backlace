@@ -324,6 +324,16 @@ Shader "luka/indev/backlace"
         _IridescencePower ("Ramp Power", Range(0.1, 10)) = 1.0
         _IridescenceFrequency ("Rainbow Frequency", Range(0.1, 20)) = 5.0
 
+        // SHADOW TEXTURE
+        [Toggle(_BACKLACE_SHADOW_TEXTURE)] _ToggleShadowTexture ("Enable Shadow Texture", Float) = 0.0
+        [Enum(UV Albedo, 0, Screen Pattern, 1, Triplanar Pattern, 2)] _ShadowTextureMappingMode ("Shadow Mode", Int) = 0
+        _ShadowTextureIntensity ("Shadow Intensity", Range(0, 1)) = 1.0
+        [NoScaleOffset] _ShadowTex ("Shadow Texture / Pattern", 2D) = "white" { }
+        _ShadowPatternColor ("Pattern Tint", Color) = (0, 0, 0, 1)
+        _ShadowPatternScale ("Pattern Scale / Tiling", Float) = 5.0
+        _ShadowPatternTriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        _ShadowPatternTransparency ("Pattern Transparency", Range(0, 1)) = 1
+
         // INDIRECT LIGHTING
         [Space(35)]
         [Header(Indirect Lighting)]
@@ -331,12 +341,6 @@ Shader "luka/indev/backlace"
         _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
         _IndirectOverride ("Indirect Override", Float) = 0.0
         _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
-
-        // GEOMETRY EFFECTS
-        [Space(35)]
-        [Header(Geometry Effects)]
-        [Space(10)]
-        [Toggle(_BACKLACE_GEOMETRY_EFFECTS)] _ToggleGeometryEffects ("Enable Geometry Effects", Float) = 0.0
 
         // UV SETTINGS
         [Space(35)]
@@ -361,8 +365,7 @@ Shader "luka/indev/backlace"
         _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
         _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
         _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
-        _FuzzMap_UV ("Fuzz Map UV Set", Float) = 0.0
-        _ThreadMap_UV ("Thread Map UV Set", Float) = 0.0
+        _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]
