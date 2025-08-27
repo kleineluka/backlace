@@ -73,7 +73,6 @@ Shader "luka/indev/backlace"
 
         // VERTEX MANIPULATION
 
-        // VERTEX EFFECTS
 
         // EMISSION
         [Space(35)]
@@ -377,6 +376,17 @@ Shader "luka/indev/backlace"
         _ShadowPatternScale ("Pattern Scale / Tiling", Float) = 5.0
         _ShadowPatternTriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
         _ShadowPatternTransparency ("Pattern Transparency", Range(0, 1)) = 1
+
+        // FLAT MODEL
+        [Space(35)]
+        [Header(Flat Model)]
+        [Space(10)]
+        [Toggle(_BACKLACE_FLAT_MODEL)] _ToggleFlatModel ("Enable Flat Model", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _FlatModeAutoflip ("Auto-Flip", Float) = 0.0
+        _FlatModel ("Flat Model Strength", Range(0, 1)) = 0.0
+        _FlatModelDepthCorrection ("Depth Correction", Range(-0.2, 0.2)) = -0.1
+        _FlatModelFacing ("Facing Direction", Range(-1, 1)) = 0.0
+        [Enum(Disabled, 1, Enabled, 0)] _FlatModelLockAxis ("Follow Camera", Range(0, 1)) = 1.0
 
         // MISC STUFF
         [Space(70)]

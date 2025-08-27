@@ -8,9 +8,7 @@
 // compiler directives
 #pragma target 5.0
 #pragma vertex Vertex
-#if defined(_BACKLACE_GEOMETRY_EFFECTS)
-    #pragma geometry Geometry
-#endif // _BACKLACE_GEOMETRY_EFFECTS
+//#pragma geometry Geometry
 #pragma fragment Fragment
 #pragma multi_compile_fog
 #pragma multi_compile_instancing
@@ -66,9 +64,6 @@ struct FragmentData
     #endif // _BACKLACE_MATCAP
     float3 worldObjectCenter : TEXCOORD11;
     UNITY_VERTEX_OUTPUT_STEREO
-    #if defined(_BACKLACE_GEOMETRY_EFFECTS)
-        float4 geomColor : COLOR;
-    #endif // _BACKLACE_GEOMETRY_EFFECTS
 };
 
 struct Unity_GlossyEnvironmentData
@@ -84,7 +79,7 @@ struct Unity_GlossyEnvironmentData
 #include "./Backlace_Effects.cginc"
 #include "./Backlace_Shading.cginc"
 #include "./Backlace_Fragment.cginc"
-#include "./Backlace_Geometry.cginc"
+// #include "./Backlace_Geometry.cginc"
 #include "./Backlace_Vertex.cginc"
 
 #endif // BACKLACE_FORWARD_CGINC

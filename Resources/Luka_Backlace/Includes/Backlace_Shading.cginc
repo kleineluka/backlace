@@ -917,6 +917,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 #endif // _BACKLACE_POST_PROCESSING
 
+// uv effects-only features
 #if defined(_BACKLACE_UV_EFFECTS)
     void ApplyUVEffects(inout float2 uv, in BacklaceSurfaceData Surface)
     {

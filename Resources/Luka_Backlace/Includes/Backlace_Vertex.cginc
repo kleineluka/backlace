@@ -18,6 +18,10 @@ FragmentData Vertex(VertexData v)
     i.uv1 = v.uv1;
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
+
+    #if defined(_BACKLACE_FLAT_MODEL)
+        FlattenModel(v, i.pos, i.worldPos, i.normal);
+    #endif // _BACKLACE_FLAT_MODEL
     
     UNITY_TRANSFER_SHADOW(i, v.uv);
     UNITY_TRANSFER_FOG(i, i.pos);
@@ -35,10 +39,6 @@ FragmentData Vertex(VertexData v)
         float3 viewN = mul((float3x3)UNITY_MATRIX_V, worldN);
         i.matcapUV = viewN.xy * 0.5 + 0.5;
     #endif // _BACKLACE_MATCAP
-
-    #if defined(_BACKLACE_GEOMETRY_EFFECTS)
-        i.geomColor = float4(0, 0, 0, 0);
-    #endif // _BACKLACE_GEOMETRY_EFFECTS
     
     return i;
 }

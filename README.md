@@ -35,6 +35,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Distance Fading
 - Iridescence
 - Shadow Textures
+- Flatten Model (2D Effect)
 
 **Presets:**
 - Fabric Texture
@@ -66,3 +67,4 @@ The shader itself is under the **MIT license**, with the additional clauses that
 ## Attributions 🎨
 - This shader was originally a fork of the [Toony Standard Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuil) shader by VRLabs, which is under the MIT license. However, most of the original code has been rewritten or removed.
 - Various lighting modes are derived from other projects, specifically [Poiyomi Toon](https://github.com/poiyomi/PoiyomiToonShader), [lilToon/OpenLit](https://github.com/lilxyzw/lilToon), and [Mochies Unity Shaders](https://github.com/MochiesCode/Mochies-Unity-Shaders/). Thesse are all under the MIT license and usages are limited to lighting modes with those names (ex. \"Poi Custom\", \"OpenLit\", \"Mochies\").
+- The 2D effect in the Fun variant is inspired directly by [Lyuma's Waifu2D Shader](https://github.com/lyuma/LyumaShader), which is under the MIT license. Although  please note it is simplified and their code is better if a flat model is purely the goal of your project!

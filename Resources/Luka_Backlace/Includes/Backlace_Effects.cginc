@@ -245,6 +245,45 @@
     }
 #endif // _BACKLACE_SHADOW_TEXTURE
 
+// flat model feature
+#if defined(_BACKLACE_FLAT_MODEL)
+    float _FlatModel;
+    float _FlatModelDepthCorrection;
+    float _FlatModelFacing;
+    float _FlatModelLockAxis;
+    float _FlatModelEnable;
+    float _FlatModeAutoflip;
+
+    // inspired by lyuma's waifu2d shader, but a much worse (and a bit simpler) implementation
+    void FlattenModel(inout VertexData v, out float4 finalClipPos, out float3 finalWorldPos, out float3 finalWorldNormal)
+    {
+        float facingAngle = _FlatModelFacing * - UNITY_PI / 2.0;
+        float s, c;
+        sincos(facingAngle, s, c);
+        float3 targetFwd_object = float3(s, 0, c);
+        float3 camPos_object = mul(unity_WorldToObject, float4(GetCameraPos(), 1.0)).xyz;
+        float flipSign = sign(dot(camPos_object, targetFwd_object));
+        if (flipSign == 0.0) flipSign = 1.0;
+        if (_FlatModeAutoflip == 0) flipSign = 1.0;
+        float3 virtualCamDir_object = targetFwd_object * flipSign * length(camPos_object);
+        float3 virtualCamPos_world = mul(unity_ObjectToWorld, float4(virtualCamDir_object, 1.0)).xyz;
+        float3 finalCamPos_world = lerp(GetCameraPos(), virtualCamPos_world, _FlatModelLockAxis);
+        float3 worldObjectPivot = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
+        float3 billboardFwd = normalize(finalCamPos_world - worldObjectPivot);
+        float3 billboardUp = float3(0, 1, 0);
+        float3 billboardRight = normalize(cross(billboardUp, billboardFwd));
+        billboardUp = cross(billboardFwd, billboardRight);
+        float3 flattenedWorldPos = worldObjectPivot;
+        flattenedWorldPos += billboardRight * v.vertex.x;
+        flattenedWorldPos += billboardUp * v.vertex.y;
+        flattenedWorldPos -= billboardFwd * v.vertex.z * _FlatModelDepthCorrection;
+        float3 originalWorldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+        finalWorldPos = lerp(originalWorldPos, flattenedWorldPos, _FlatModel);
+        finalClipPos = UnityWorldToClipPos(float4(finalWorldPos, 1.0));
+        finalWorldNormal = UnityObjectToWorldNormal(v.normal);
+    }
+#endif // _BACKLACE_FLAT_MODEL
+
 #endif // BACKLACE_EFFECTS_CGINC
 
   
