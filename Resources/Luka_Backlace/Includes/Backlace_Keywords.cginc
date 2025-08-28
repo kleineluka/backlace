@@ -27,7 +27,6 @@
 #pragma shader_feature_local _ _BACKLACE_DETAIL
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE
 
-
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
 #pragma shader_feature_local _ _BACKLACE_DISTANCE_FADE
@@ -35,6 +34,7 @@
 #pragma shader_feature_local _ _BACKLACE_SHADOW_TEXTURE
 #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
 #pragma shader_feature_local _ _BACKLACE_WORLD_EFFECT
+#pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

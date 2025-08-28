@@ -329,6 +329,44 @@
     }
 #endif // _BACKLACE_WORLD_EFFECT
 
+// vrchat mirror detection feature
+#if defined(_BACKLACE_VRCHAT_MIRROR)
+    UNITY_DECLARE_TEX2D(_MirrorDetectionTexture);
+    float _MirrorDetectionTexture_UV;
+    float _MirrorDetectionMode; // 0 = texture, 1 = hide, 2 = only show
+
+    float _VRChatMirrorMode; // assigned by vrchat, 0 = none, 1 = mirror in vr, 2 = mirror in desktop
+    bool IsInMirrorView()
+    {
+        if (_VRChatMirrorMode > 0.5) return true;
+        // otherwise, try and check for a generic mirror
+        return unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f;
+    }
+
+    // run after sampling albedo but before lighting
+    void ApplyMirrorDetectionPre(inout BacklaceSurfaceData Surface)
+    {
+        if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
+        {
+            float mask = UNITY_SAMPLE_TEX2D(_MirrorDetectionTexture, Uvs[_MirrorDetectionTexture_UV]).r;
+            Surface.FinalColor.a *= mask;
+        }
+    }
+
+    // run at the end of the shader
+    void ApplyMirrorDetectionPost(inout BacklaceSurfaceData Surface)
+    {
+        if (_MirrorDetectionMode == 1 && IsInMirrorView()) // hide
+        {
+            Surface.FinalColor.a = 0;
+        }
+        else if (_MirrorDetectionMode == 2 && !IsInMirrorView()) // only show
+        {
+            Surface.FinalColor.a = 0;
+        }
+    }
+#endif // _BACKLACE_VRCHAT_MIRROR
+
 #endif // BACKLACE_EFFECTS_CGINC
 
   

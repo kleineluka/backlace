@@ -425,6 +425,14 @@ Shader "luka/indev/backlace"
         _WorldEffectPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _WorldEffectRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
 
+        // VRCHAT MIRROR DETECTION
+        [Space(35)]
+        [Header(VRChat Mirror Detection)]
+        [Space(10)]
+        [Toggle(_BACKLACE_VRCHAT_MIRROR)] _ToggleMirrorDetection ("Enable VRChat Mirror Detection", Float) = 0.0
+        [Enum(Texture, 0, Hide, 1, Only Show, 2)] _MirrorDetectionMode ("Mirror Mode", Int) = 0
+        _MirrorDetectionTexture ("Mirror Detection Texture", 2D) = "white" { }
+
         // MISC STUFF
         [Space(70)]
         [Header(Other Stuffs)]
@@ -462,6 +470,7 @@ Shader "luka/indev/backlace"
         _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
         _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
         _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
+        _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]
