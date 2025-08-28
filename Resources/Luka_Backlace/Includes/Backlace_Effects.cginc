@@ -284,6 +284,51 @@
     }
 #endif // _BACKLACE_FLAT_MODEL
 
+// world aligned texture feature
+#if defined(_BACKLACE_WORLD_EFFECT)
+    UNITY_DECLARE_TEX2D(_WorldEffectTex);
+    float4 _WorldEffectColor;
+    float4 _WorldEffectDirection;
+    float _WorldEffectScale;
+    float _WorldEffectBlendSharpness;
+    float _WorldEffectIntensity;
+    int _WorldEffectBlendMode;
+    float3 _WorldEffectPosition;
+    float3 _WorldEffectRotation;
+
+    void ApplyWorldAlignedEffect(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float3 effectDir = normalize(_WorldEffectDirection.xyz);
+        float directionMask = saturate(dot(Surface.NormalDir, effectDir));
+        directionMask = pow(directionMask, _WorldEffectBlendSharpness);
+        if (directionMask <= 0.001)
+        {
+            return;
+        }
+        float4 effectSample = SampleTextureTriplanar(
+            _WorldEffectTex, sampler_WorldEffectTex,
+            i.worldPos, Surface.NormalDir,
+            _WorldEffectPosition, _WorldEffectScale, _WorldEffectRotation,
+            1.0,
+            true
+        );
+        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
+        float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity;
+        switch(_WorldEffectBlendMode)
+        {
+            case 1: // Additive
+                Surface.FinalColor.rgb += finalEffectColor * blendStrength;
+                break;
+            case 2: // Multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
+                break;
+            default: // Alpha Blend
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
+                break;
+        }
+    }
+#endif // _BACKLACE_WORLD_EFFECT
+
 #endif // BACKLACE_EFFECTS_CGINC
 
   

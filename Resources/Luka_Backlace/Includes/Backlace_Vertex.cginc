@@ -19,10 +19,11 @@ FragmentData Vertex(VertexData v)
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
 
+    // flat model feature
     #if defined(_BACKLACE_FLAT_MODEL)
         FlattenModel(v, i.pos, i.worldPos, i.normal);
     #endif // _BACKLACE_FLAT_MODEL
-    
+
     UNITY_TRANSFER_SHADOW(i, v.uv);
     UNITY_TRANSFER_FOG(i, i.pos);
     

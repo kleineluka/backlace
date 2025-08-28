@@ -33,6 +33,7 @@
 #pragma shader_feature_local _ _BACKLACE_IRIDESCENCE
 #pragma shader_feature_local _ _BACKLACE_SHADOW_TEXTURE
 #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
+#pragma shader_feature_local _ _BACKLACE_WORLD_EFFECT
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

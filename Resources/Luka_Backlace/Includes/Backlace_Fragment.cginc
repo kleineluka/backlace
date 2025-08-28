@@ -98,6 +98,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_GLITTER)
         ApplyGlitter(Surface);
     #endif // _BACKLACE_GLITTER
+    #if defined(_BACKLACE_WORLD_EFFECT)
+        ApplyWorldAlignedEffect(Surface, i);
+    #endif // _BACKLACE_WORLD_EFFECT
     #if defined(_BACKLACE_MATCAP)
         ApplyMatcap(Surface, i);
     #endif // _BACKLACE_MATCAP

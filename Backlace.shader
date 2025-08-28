@@ -388,6 +388,21 @@ Shader "luka/indev/backlace"
         _FlatModelFacing ("Facing Direction", Range(-1, 1)) = 0.0
         [Enum(Disabled, 1, Enabled, 0)] _FlatModelLockAxis ("Follow Camera", Range(0, 1)) = 1.0
 
+        // WORLD AFFECT
+        [Space(35)]
+        [Header(World Aligned Effect)]
+        [Space(10)]
+        [Toggle(_BACKLACE_WORLD_EFFECT)] _ToggleWorldEffect ("Enable World Effect", Float) = 0.0
+        [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2)] _WorldEffectBlendMode ("Blend Mode", Int) = 0
+        [NoScaleOffset] _WorldEffectTex ("Effect Texture (A=Mask)", 2D) = "white" { }
+        [HDR] _WorldEffectColor ("Effect Color", Color) = (1, 1, 1, 1)
+        _WorldEffectDirection ("Effect Direction (XYZ)", Vector) = (0, 1, 0, 0)
+        _WorldEffectScale ("Effect Scale", Float) = 1.0
+        _WorldEffectBlendSharpness ("Directional Blend Sharpness", Range(0.1, 20)) = 4.0
+        _WorldEffectIntensity ("Effect Intensity", Range(0, 2)) = 1.0
+        _WorldEffectPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
+        _WorldEffectRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
+
         // MISC STUFF
         [Space(70)]
         [Header(Other Stuffs)]

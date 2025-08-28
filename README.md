@@ -36,6 +36,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Iridescence
 - Shadow Textures
 - Flatten Model (2D Effect)
+- World Aligned Textures
 
 **Presets:**
 - Fabric Texture
