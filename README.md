@@ -13,6 +13,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Various Specular Modes (PBR, Anisotropic, Toon, Hair, Cloth)
 - Various Diffuse Modes (PBR, Ramp Toon, Anime Toon)
 - Light Direction Modes (Backlace, Forced, View Direction)
+- Vertex Manipulation
 - UV Manipulation
 - UV Effects (Triplanar, Screenspace, Flipbook, Flowmap)
 - Emission

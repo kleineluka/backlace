@@ -63,6 +63,10 @@ float _UV_Rotation;
 float _UV_Scroll_X_Speed;
 float _UV_Scroll_Y_Speed;
 
+// vertex manipulation
+float3 _VertexManipulationPosition;
+float3 _VertexManipulationScale;
+
 // dither feature
 #if defined(_ALPHAMODULATE_ON) || defined(_BACKLACE_DISTANCE_FADE)
     sampler3D _DitherMaskLOD;

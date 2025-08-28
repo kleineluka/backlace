@@ -7,6 +7,10 @@ FragmentData Vertex(VertexData v)
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_INITIALIZE_OUTPUT(FragmentData, i);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i);
+
+    // vertex manipulation
+    v.vertex.xyz *= _VertexManipulationScale; // scale
+    v.vertex.xyz += _VertexManipulationPosition; // position
     
     i.vertex = v.vertex;
     i.pos = UnityObjectToClipPos(v.vertex);
