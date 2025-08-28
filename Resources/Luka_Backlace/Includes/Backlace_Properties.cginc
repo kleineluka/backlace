@@ -302,5 +302,21 @@ float _UV_Scroll_Y_Speed;
     float _UVFlowmap_UV;
 #endif // _BACKLACE_UV_EFFECTS
 
+// dissolve feature
+#if defined(_BACKLACE_DISSOLVE)
+    float _DissolveProgress;
+    UNITY_DECLARE_TEX2D(_DissolveNoiseTex);
+    float _DissolveNoiseScale;
+    float4 _DissolveEdgeColor;
+    int _DissolveType;
+    float _DissolveEdgeWidth;
+    float4 _DissolveDirection;
+    int _DissolveDirectionSpace;
+    float _DissolveDirectionBounds;
+    float _DissolveVoxelDensity;
+    float _DissolveEdgeSharpness;
+    float _DissolveEdgeMode;
+#endif // _BACKLACE_DISSOLVE
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

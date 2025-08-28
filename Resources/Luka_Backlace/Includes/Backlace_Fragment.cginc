@@ -121,6 +121,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_DISTANCE_FADE)
         ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);
     #endif // _BACKLACE_DISTANCE_FADE
+    #if defined(_BACKLACE_DISSOLVE) // todo: move before lighting but store edge glow value if not culling
+        ApplyDissolve(Surface, i);
+    #endif // _BACKLACE_DISSOLVE
     return Surface.FinalColor;
 }
 

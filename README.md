@@ -28,7 +28,8 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Parallax Mapping (Fasty and Fancy)
 - Subsurface Scattering
 - Detail Mapping
-- AudioLink Support
+- Dissolve Effect
+- AudioLink Support (not yet implemented)
 
 **Fun Features:**
 - Glitter

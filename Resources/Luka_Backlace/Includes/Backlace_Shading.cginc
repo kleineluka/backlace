@@ -950,4 +950,61 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 #endif // _BACKLACE_UV_EFFECTS
 
+// dissolve-only features
+#if defined(_BACKLACE_DISSOLVE)
+    void ApplyDissolve(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float dissolveMapValue = 0;
+        switch(_DissolveType)
+        {
+            case 0: // noise
+            {
+                dissolveMapValue = SampleTextureTriplanar(
+                    _DissolveNoiseTex, sampler_DissolveNoiseTex,
+                    i.worldPos, Surface.NormalDir,
+                    float3(0,0,0), _DissolveNoiseScale, float3(0,0,0),
+                    2.0, true
+                ).r;
+                break;
+            }
+            case 1: // directional
+            {
+                float3 position = (_DissolveDirectionSpace == 0) ? i.vertex.xyz : i.worldPos;
+                float3 direction = normalize(_DissolveDirection.xyz);
+                dissolveMapValue = dot(position, direction) / max(_DissolveDirectionBounds, 0.001);
+                dissolveMapValue = saturate(dissolveMapValue * 0.5 + 0.5); // Remap from [-1,1] to [0,1]
+                break;
+            }
+            case 2: // voxel
+            {
+                float3 voxelID = floor(i.worldPos * _DissolveVoxelDensity);
+                dissolveMapValue = Hash(voxelID.xy + voxelID.z);
+                break;
+            }
+        }
+        float halfWidth = max(_DissolveEdgeWidth, 0.0001) * 0.5;
+        if (_DissolveEdgeMode == 0) // glow
+        {
+            float fadeIn = smoothstep(0.0, halfWidth, _DissolveProgress);
+            float fadeOut = 1.0 - smoothstep(1.0 - halfWidth, 1.0, _DissolveProgress);
+            float masterIntensity = fadeIn * fadeOut;
+            float distanceFromLine = abs(dissolveMapValue - _DissolveProgress);
+            float baseGradient = 1.0 - smoothstep(0, halfWidth, distanceFromLine);
+            float hardnessPower = lerp(1.0, 16.0, _DissolveEdgeSharpness);
+            float edgeGlow = pow(baseGradient, hardnessPower);
+            edgeGlow *= masterIntensity;
+            float surfaceAlpha = step(_DissolveProgress, dissolveMapValue);
+            Surface.FinalColor.rgb += _DissolveEdgeColor.rgb * edgeGlow * _DissolveEdgeColor.a;
+            Surface.FinalColor.a = max(surfaceAlpha, edgeGlow * _DissolveEdgeColor.a);
+        }
+        else // smooth fade
+        {
+            float startEdge = _DissolveProgress - halfWidth;
+            float endEdge = _DissolveProgress + halfWidth;
+            float alpha = saturate(smoothstep(startEdge, endEdge, dissolveMapValue));
+            Surface.FinalColor.a = alpha;
+        }
+    }
+#endif // _BACKLACE_DISSOLVE
+
 #endif // BACKLACE_SHADING_CGINC

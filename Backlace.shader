@@ -312,6 +312,28 @@ Shader "luka/indev/backlace"
         _DetailTiling ("Detail Tiling", Float) = 16
         _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
 
+        // DISSOLVE EFFECT
+        [Space(35)]
+        [Header(Dissolve Effect)]
+        [Space(10)]
+        [Toggle(_BACKLACE_DISSOLVE)] _ToggleDissolve ("Enable Dissolve", Float) = 0.0
+        _DissolveProgress ("Dissolve Progress", Range(0, 1.0)) = 0.0
+        [Enum(Noise, 0, Directional, 1, Voxel, 2)] _DissolveType ("Dissolve Type", Int) = 0
+        // edge glow
+        [HDR] _DissolveEdgeColor ("Edge Color", Color) = (1, 0.5, 0, 1)
+        _DissolveEdgeWidth ("Edge Width", Range(0.001, 0.25)) = 0.05
+        [Enum(Glow, 0, Smooth Fade, 1)] _DissolveEdgeMode ("Edge Mode", Float) = 0
+        _DissolveEdgeSharpness ("Edge Sharpness", Range(0.0, 1.0)) = 0.0
+        // noise
+        [NoScaleOffset] _DissolveNoiseTex ("Noise Texture (R)", 2D) = "gray" { }
+        _DissolveNoiseScale ("Noise Scale", Float) = 5.0
+        // directional
+        _DissolveDirection ("Wipe Direction (XYZ)", Vector) = (0, 1, 0, 0)
+        [Enum(Local Space, 0, World Space, 1)] _DissolveDirectionSpace ("Wipe Space", Int) = 0
+        _DissolveDirectionBounds ("Wipe Bounds Size", Float) = 1.0
+        // voxel
+        _DissolveVoxelDensity ("Voxel Density", Float) = 20.0
+
         // FUN FEATURES
         [Space(70)]
         [Header(Fun Variant Features)]
