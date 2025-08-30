@@ -35,6 +35,7 @@
 #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
 #pragma shader_feature_local _ _BACKLACE_WORLD_EFFECT
 #pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
+#pragma shader_feature_local _ _BACKLACE_TOUCH_REACTIVE
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

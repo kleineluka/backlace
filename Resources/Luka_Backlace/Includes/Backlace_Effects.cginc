@@ -367,6 +367,46 @@
     }
 #endif // _BACKLACE_VRCHAT_MIRROR
 
+
+// touch reactive effect
+#if defined(_BACKLACE_TOUCH_REACTIVE)
+    UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+    float4 _TouchColor;
+    float _TouchRadius;
+    float _TouchHardness;
+    int _TouchMode; // 0 = additive, 1 = replace, 2 = multiply, 3 = rainbow
+    float _TouchRainbowSpeed;
+    float _TouchRainbowSpread;
+
+    void ApplyTouchReactive(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float sceneDepthRaw = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)).r;
+        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
+        float depthDifference = sceneDepthLinear - i.scrPos.w;
+        float intersect = 1.0 - smoothstep(0, _TouchRadius, depthDifference);
+        if (intersect <= 0) return;
+        intersect = fastpow(intersect, _TouchHardness);
+        float3 touchEffect = _TouchColor.rgb * intersect * _TouchColor.a;
+        switch (_TouchMode) {
+            case 1: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+                break;
+            case 2: // multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
+                break;
+            case 3: // rainbow
+                float time = _Time.y * _TouchRainbowSpeed;
+                float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
+                touchEffect = rainbowColor * intersect * _TouchColor.a;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+                break;
+            default: // additive
+                Surface.FinalColor.rgb += touchEffect;
+                break;
+        }
+    }
+#endif // _BACKLACE_TOUCH_REACTIVE
+
 #endif // BACKLACE_EFFECTS_CGINC
 
   

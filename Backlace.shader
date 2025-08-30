@@ -434,6 +434,18 @@ Shader "luka/indev/backlace"
         [Enum(Texture, 0, Hide, 1, Only Show, 2)] _MirrorDetectionMode ("Mirror Mode", Int) = 0
         _MirrorDetectionTexture ("Mirror Detection Texture", 2D) = "white" { }
 
+        // TOUCH REACTIVE
+        [Space(35)]
+        [Header(Touch Reactive)]
+        [Space(10)]
+        [Toggle(_BACKLACE_TOUCH_REACTIVE)] _ToggleTouchReactive ("Enable Touch Reactive", Float) = 0.0
+        [HDR] _TouchColor ("Touch Color", Color) = (1, 0, 1, 1)
+        _TouchRadius ("Touch Radius", Range(0, .5)) = 0.1
+        _TouchHardness ("Touch Hardness", Range(0.01, 10)) = 2.0
+        [Enum(Additive, 0, Replace, 1, Multiply, 2, Rainbow, 3)] _TouchMode ("Touch Mode", Float) = 0.0
+        _TouchRainbowSpeed ("Touch Rainbow Speed", Float) = 0.1
+        _TouchRainbowSpread ("Touch Rainbow Spread", Float) = 1.0
+
         // MISC STUFF
         [Space(70)]
         [Header(Other Stuffs)]
@@ -487,7 +499,8 @@ Shader "luka/indev/backlace"
 
         // Rendering Settings
         // Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
+        //Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
+        Tags { "RenderType" = "TransparentCutout" "Queue" = "Transparent" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

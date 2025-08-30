@@ -12,8 +12,9 @@ FragmentData Vertex(VertexData v)
     v.vertex.xyz *= _VertexManipulationScale; // scale
     v.vertex.xyz += _VertexManipulationPosition; // position
     
+    // boilerplate assignments
     i.vertex = v.vertex;
-    i.pos = UnityObjectToClipPos(v.vertex);
+    i.pos = UnityObjectToClipPos(v.vertex); 
     i.normal = UnityObjectToWorldNormal(v.normal);
     i.worldPos = mul(unity_ObjectToWorld, v.vertex);
     i.worldObjectCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
@@ -22,6 +23,9 @@ FragmentData Vertex(VertexData v)
     i.uv1 = v.uv1;
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
+
+    // for screen related effects
+    i.scrPos = ComputeScreenPos(i.pos);
 
     // flat model feature
     #if defined(_BACKLACE_FLAT_MODEL)

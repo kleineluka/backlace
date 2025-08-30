@@ -78,6 +78,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
         GetIndirectSpecular(Surface);
     #endif // _BACKLACE_SPECULAR
     AddDiffuse(Surface);
+    #if defined(_BACKLACE_TOUCH_REACTIVE)
+        ApplyTouchReactive(Surface, i);
+    #endif // _BACKLACE_TOUCH_REACTIVE
     #if defined(_BACKLACE_POST_PROCESSING)
         ApplyPostProcessing(Surface);
     #endif // _BACKLACE_POST_PROCESSING

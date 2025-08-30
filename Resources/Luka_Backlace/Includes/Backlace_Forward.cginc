@@ -64,6 +64,7 @@ struct FragmentData
         float2 matcapUV : TEXCOORD10;
     #endif // _BACKLACE_MATCAP
     float3 worldObjectCenter : TEXCOORD11;
+    float4 scrPos : TEXCOORD12; // for grab pass
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

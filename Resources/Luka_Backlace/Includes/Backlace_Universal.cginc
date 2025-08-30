@@ -113,6 +113,13 @@ inline float GetLuma(float3 color)
     return dot(color, float3(0.299, 0.587, 0.114));
 }
 
+// approximation of pow(x, p) for x in [0, 1].
+// note: may not be faster for all hardware
+float fastpow(float x, float p)
+{
+    return exp2(p * log2(x));
+}
+
 // fast hash function
 float Hash(float2 p)
 {
