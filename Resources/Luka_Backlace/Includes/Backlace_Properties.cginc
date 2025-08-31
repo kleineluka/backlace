@@ -330,5 +330,22 @@ float3 _VertexManipulationScale;
     float _DissolveEdgeMode;
 #endif // _BACKLACE_DISSOLVE
 
+// pathing feature
+#if defined(_BACKLACE_PATHING)
+    UNITY_DECLARE_TEX2D(_PathingMap);
+    float2 _PathingMap_ST;
+    float4 _PathingColor;
+    float _PathingEmission;
+    int _PathingType;
+    float _PathingSpeed;
+    float _PathingWidth;
+    float _PathingSoftness;
+    float _PathingOffset;
+    float _PathingMap_UV;
+    float _PathingScale;
+    int _PathingBlendMode;
+    int _PathingMappingMode;
+#endif // _BACKLACE_PATHING
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

@@ -1007,4 +1007,59 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 #endif // _BACKLACE_DISSOLVE
 
+// pathing feature
+#if defined(_BACKLACE_PATHING)
+    void ApplyPathing(inout BacklaceSurfaceData Surface)
+    {
+        float pathValue;
+        if (_PathingMappingMode == 0) // albedo uv
+
+        {
+            pathValue = UNITY_SAMPLE_TEX2D(_PathingMap, frac(Uvs[_PathingMap_UV] * _PathingScale)).r;
+        }
+        else // triplanar
+        {
+            pathValue = SampleTextureTriplanar(
+                _PathingMap, sampler_PathingMap,
+                FragData.worldPos, Surface.NormalDir,
+                float3(0, 0, 0), _PathingScale, float3(0, 0, 0),
+                2.0, true
+            ).r;
+        }
+        float pathTime = frac(_Time.y * _PathingSpeed + _PathingOffset);
+        float pathAlpha = 0;
+        switch(_PathingType)
+        {
+            case 0: // fill
+                pathAlpha = pathTime > pathValue;
+                break;
+            case 1: // path
+                pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+                break;
+            case 2: // loop
+                float loop_dist = abs(pathTime - pathValue);
+                loop_dist = min(loop_dist, 1.0 - loop_dist);
+                pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
+            break;
+        }
+        pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
+        if (pathAlpha <= 0.001) return;
+        float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
+        switch(_PathingBlendMode)
+        {
+            case 0: // additive
+                Surface.FinalColor.rgb += pathEmission;
+                break;
+            case 1: // multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _PathingColor.rgb, pathAlpha);
+                break;
+            case 2: // alpha blend
+                float blendIntensity = pathAlpha * _PathingColor.a;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _PathingColor.rgb, blendIntensity);
+                Surface.FinalColor.rgb += pathEmission;
+                break;
+        }
+    }
+#endif // _BACKLACE_PATHING
+
 #endif // BACKLACE_SHADING_CGINC

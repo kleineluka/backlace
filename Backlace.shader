@@ -334,6 +334,23 @@ Shader "luka/indev/backlace"
         // voxel
         _DissolveVoxelDensity ("Voxel Density", Float) = 20.0
 
+        // PATHING
+        [Space(35)]
+        [Header(Pathing)]
+        [Space(10)]
+        [Toggle(_BACKLACE_PATHING)] _TogglePathing ("Enable Pathing", Float) = 0.0
+        [Enum(Albedo UV, 0, Triplanar, 1)] _PathingMappingMode ("Mapping Mode", Int) = 0
+        [NoScaleOffset] _PathingMap ("Path Map (R)", 2D) = "black" { }
+        _PathingScale ("Path Scale", Float) = 1.0
+        [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _PathingBlendMode ("Blend Mode", Int) = 0
+        [HDR] _PathingColor ("Path Color", Color) = (0, 1, 1, 1)
+        _PathingEmission ("Emission Strength", Float) = 2.0
+        [Enum(Fill, 0, Path, 1, Loop, 2)] _PathingType ("Path Type", Int) = 1
+        _PathingSpeed ("Speed", Float) = 0.5
+        _PathingWidth ("Path Width", Range(0.001, 0.5)) = 0.1
+        _PathingSoftness ("Softness", Range(0.001, 1.0)) = 0.5
+        _PathingOffset ("Time Offset", Range(0, 1)) = 0.0
+
         // FUN FEATURES
         [Space(70)]
         [Header(Fun Variant Features)]
@@ -513,6 +530,7 @@ Shader "luka/indev/backlace"
         _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
         _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
         _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
+        _PathingMap_UV ("Pathing Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]

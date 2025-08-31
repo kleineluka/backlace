@@ -26,6 +26,7 @@
 #pragma shader_feature_local _ _BACKLACE_SSS
 #pragma shader_feature_local _ _BACKLACE_DETAIL
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE
+#pragma shader_feature_local _ _BACKLACE_PATHING
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
