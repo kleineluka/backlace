@@ -407,6 +407,103 @@
     }
 #endif // _BACKLACE_TOUCH_REACTIVE
 
+    
+// refraction feature
+#if defined(_BACKLACE_REFRACTION)
+    UNITY_DECLARE_TEX2D(_RefractionMask);
+    float _RefractionMask_UV;
+    float4 _RefractionTint;
+    float _RefractionIOR;
+    float _RefractionFresnel;
+    UNITY_DECLARE_TEX2D(_CausticsTex);
+    float _CausticsTiling;
+    float _CausticsSpeed;
+    float _CausticsIntensity;
+    UNITY_DECLARE_TEX2D(_DistortionNoiseTex);
+    float _DistortionNoiseTiling;
+    float _DistortionNoiseStrength;
+    int _RefractionDistortionMode;
+    float _RefractionCAStrength;
+    float _RefractionBlurStrength;
+    float _RefractionOpacity;
+    float _RefractionMixStrength;
+    float _RefractionMode; // 0 = reverse fresnel, 1 = fresnel, 2 = soft fresnel, 3 = manual
+    float4 _CausticsColor;
+    float _RefractionBlendMode;
+    float _RefractionSeeThrough;
+
+    void ApplyRefraction(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float fresnel = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
+        fresnel = pow(fresnel, _RefractionFresnel);
+        float2 noise = (SampleTextureTriplanar(_DistortionNoiseTex, sampler_DistortionNoiseTex, i.worldPos, Surface.NormalDir, float3(0, 0, 0), _DistortionNoiseTiling, float3(0, 0, 0), 2.0, true).rg * 2.0 - 1.0) * _DistortionNoiseStrength;
+        float3 distortionNormal = Surface.NormalDir + float3(noise.x, noise.y, 0);
+        float3 refractionVector = distortionNormal * _RefractionIOR;
+        float4 screenPos = i.scrPos;
+        float2 baseUV = screenPos.xy / screenPos.w;
+        float2 distortedUV = baseUV + refractionVector.xy;
+        float3 refractedColor = 0;
+        switch(_RefractionDistortionMode)
+        {
+            case 1: // chromatic aberration
+            {
+                refractedColor.r = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV + float2(_RefractionBlurStrength, 0)).r * _RefractionCAStrength;
+                refractedColor.g = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).g;
+                refractedColor.b = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV - float2(_RefractionBlurStrength, 0)).b * _RefractionCAStrength;
+                break;
+            }
+            case 2: // blur
+            {
+                const int BLUR_SAMPLES = 8;
+                float2 blurOffset = _BacklaceGP_TexelSize.xy * _RefractionBlurStrength;
+                refractedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).rgb;
+                [unroll]
+                for (int i = 0; i < BLUR_SAMPLES; i++)
+                {
+                    float angle = (float)i / BLUR_SAMPLES * 2.0 * UNITY_PI;
+                    float s, c;
+                    sincos(angle, s, c);
+                    float2 offset = float2(c, s) * blurOffset;
+                    refractedColor += UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV + offset).rgb;
+                }
+                refractedColor /= (BLUR_SAMPLES + 1);
+                break;
+            }
+            default: // no extra distortion
+            {
+                refractedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).rgb;
+                break;
+            }
+        }
+        float3 reflectionVector = reflect(-Surface.ViewDir, Surface.NormalDir);
+        float2 causticsUV = reflectionVector.xy * _CausticsTiling + (_Time.y * _CausticsSpeed);
+        float3 caustics = UNITY_SAMPLE_TEX2D(_CausticsTex, causticsUV).rgb * _CausticsIntensity;
+        float mask = UNITY_SAMPLE_TEX2D(_RefractionMask, Uvs[_RefractionMask_UV]).r;
+        float3 crystalColor = lerp(_RefractionTint.rgb + caustics, lerp(_RefractionTint.rgb, _CausticsColor.rgb, caustics), _RefractionBlendMode);
+        float3 finalColor;
+        switch(int(_RefractionMode))
+        {
+            case 1: // fresnel
+                finalColor = lerp(refractedColor, crystalColor, fresnel * _RefractionMixStrength);
+                break;
+            case 2: // soft fresnel (Gummy...)
+                finalColor = lerp(refractedColor, crystalColor, fastpow(fresnel, _RefractionMixStrength));
+                break;
+            case 3: // manual
+                finalColor = lerp(refractedColor, crystalColor, _RefractionMixStrength);
+                break;
+            default: // reverse fresnel
+                finalColor = lerp(refractedColor, crystalColor, (1.0 - fresnel) * _RefractionMixStrength);
+                break;
+        }
+        finalColor = lerp(finalColor, _RefractionTint.rgb, _RefractionTint.a * (1.0 - fresnel));
+        float finalAlpha = lerp(_RefractionTint.a, 1.0, fresnel) * mask;
+        Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalColor, finalAlpha);
+        Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, refractedColor, _RefractionSeeThrough); // extra see-through control
+        Surface.FinalColor.a = finalAlpha * _RefractionOpacity;
+    }
+#endif // _BACKLACE_REFRACTION
+
 #endif // BACKLACE_EFFECTS_CGINC
 
-  
+    

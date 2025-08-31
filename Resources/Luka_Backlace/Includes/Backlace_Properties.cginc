@@ -1,6 +1,14 @@
 #ifndef BACKLACE_PROPERTIES_CGINC
 #define BACKLACE_PROPERTIES_CGINC
 
+// only enable grabpass if we need it
+#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD)
+    #if defined(BACKLACE_GRABPASS)
+        UNITY_DECLARE_SCREENSPACE_TEXTURE(_BacklaceGP);
+        float4 _BacklaceGP_TexelSize;
+    #endif // BACKLACE_GRABPASS
+#endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD
+
 FragmentData FragData;
 float _LightingColorMode;
 float _LightingDirectionMode;

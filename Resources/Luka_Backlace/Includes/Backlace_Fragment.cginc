@@ -5,6 +5,7 @@
 float4 Fragment(FragmentData i) : SV_TARGET
 {
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
+    Surface.FinalColor.a = -1.0; // flag to indicate not set yet
     FragData = i;
     LoadUVs();
     Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
@@ -101,6 +102,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_IRIDESCENCE)
         ApplyIridescence(Surface);
     #endif // _BACKLACE_IRIDESCENCE
+    #if defined(_BACKLACE_REFRACTION)
+        ApplyRefraction(Surface, i);
+    #endif // _BACKLACE_REFRACTION
     #if defined(_BACKLACE_GLITTER)
         ApplyGlitter(Surface);
     #endif // _BACKLACE_GLITTER

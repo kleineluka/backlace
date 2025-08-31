@@ -5,7 +5,7 @@ Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary
 > **This is inherently not necessarily a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). As such, many features are a naïve implementation.** While fully usable as a stand-alone shader, it is much more lightweight.
 
 ## Features 🌈
-Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity.
+Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity. Additionally, there are "Fun Grabpass" and "Fun Outline" versions in order to preserve performance where otherwise unnecessary.
 
 **Core Features:**
 - Basic Texture Features (Albedo, Normal, etc.)
@@ -40,10 +40,14 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Flatten Model (2D Effect)
 - World Aligned Textures
 - VRChat Mirror Detection
+- Touch Interactions
+- Refraction
 
-**Presets:**
-- Fabric Texture
-- Wet Surface
+**Material Presets:**
+- Fabric
+- Wet
+- Slime
+- Crystal
 
 **Additional Perks:**
 - Custom Editor

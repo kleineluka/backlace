@@ -3,7 +3,6 @@ Shader "luka/indev/backlace"
 
     Properties
     {
-
         // CORE FEATURES
         [Space(70)]
         [Header(Core Variant Features)]
@@ -446,6 +445,35 @@ Shader "luka/indev/backlace"
         _TouchRainbowSpeed ("Touch Rainbow Speed", Float) = 0.1
         _TouchRainbowSpread ("Touch Rainbow Spread", Float) = 1.0
 
+        // REFREACTION
+        [Space(35)]
+        [Header(Refraction)]
+        [Space(10)]
+        [Toggle(_BACKLACE_REFRACTION)] _ToggleRefraction ("Enable Refraction Effect", Float) = 0.0
+        [NoScaleOffset] _RefractionMask ("Mask (R=Strength)", 2D) = "white" { }
+        _RefractionTint ("Refraction Tint", Color) = (0.8, 0.9, 1.0, 0.5)
+        _RefractionIOR ("Refraction Strength", Range(0.0, 1.0)) = 0.1
+        _RefractionFresnel ("Fresnel Power", Range(0.1, 20)) = 5.0
+        _RefractionOpacity ("Refraction Opacity", Range(0, 1)) = 0.5
+        _RefractionSeeThrough ("See Through Strength", Range(0, 1)) = 0
+        [Enum(Reverse Fresnel, 0, Fresnel, 1, Soft Fresnel, 2, Manual, 3)] _RefractionMode ("Refraction Mode", Float) = 0.0
+        _RefractionMixStrength ("Mix Strength", Float) = 0
+        _RefractionBlendMode ("Refraction Additive<->Replace", Range(0, 1)) = 0
+        // caustics
+        [NoScaleOffset] _CausticsTex ("Internal Caustics Texture", 2D) = "gray" { }
+        _CausticsColor ("Caustics Color", Color) = (1, 1, 1, 1)
+        _CausticsTiling ("Caustics Tiling", Float) = 2.0
+        _CausticsSpeed ("Caustics Animation Speed", Float) = 0.2
+        _CausticsIntensity ("Caustics Intensity", Range(0, 5)) = 1.5
+        // uv distortion
+        [NoScaleOffset] _DistortionNoiseTex ("Distortion Noise (RG)", 2D) = "gray" { }
+        _DistortionNoiseTiling ("Distortion Noise Tiling", Float) = 5.0
+        _DistortionNoiseStrength ("Distortion Noise Strength", Range(0, 1.0)) = 0.2
+        // colour distortion
+        [Enum(Disabled, 0, Chromatic Aberration, 1, Blur, 2)] _RefractionDistortionMode ("Blur Mode", Int) = 1
+        _RefractionCAStrength ("Chromatic Aberration Strength", Range(0, 5)) = 2
+        _RefractionBlurStrength ("Blur Strength", Range(0, 10)) = 2.0
+
         // MISC STUFF
         [Space(70)]
         [Header(Other Stuffs)]
@@ -484,6 +512,7 @@ Shader "luka/indev/backlace"
         _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
         _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
         _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
+        _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]
@@ -498,27 +527,26 @@ Shader "luka/indev/backlace"
     {
 
         // Rendering Settings
-        // Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        //Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
-        Tags { "RenderType" = "TransparentCutout" "Queue" = "Transparent" }
+        // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
+        Tags { "RenderType" = "TransparentCutout" "Queue" = "Transparent" "VRCFallback"="Toon" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]
-        Stencil
-        {
-            Ref [_StencilID]
-            Comp [_StencilComp]
-            Pass [_StencilOp]
-        }
+        Stencil { Ref [_StencilID] Comp [_StencilComp] Pass [_StencilOp] }
+        GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
 
         // Forward Base Pass
         Pass
         {  
+            Name "ForwardBase"
             Tags { "LightMode" = "ForwardBase" }
             CGPROGRAM
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
             #endif // UNITY_PASS_FORWARDBASE
+            #ifndef BACKLACE_GRABPASS
+                #define BACKLACE_GRABPASS
+            #endif // BACKLACE_GRABPASS
             #include "Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -526,14 +554,18 @@ Shader "luka/indev/backlace"
         // Forward Add Pass
         Pass
         {
+            Name "ForwardAdd"
             Tags { "LightMode" = "ForwardAdd" }
-            Blend [_SrcBlend] One // make it, well, *additive
+            Blend [_SrcBlend] One // make it, well, additive
             Fog { Color(0, 0, 0, 0) } // additive should have black fog
             ZWrite Off
             CGPROGRAM
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
             #endif // UNITY_PASS_FORWARDADD
+            #ifndef BACKLACE_GRABPASS
+                #define BACKLACE_GRABPASS
+            #endif // BACKLACE_GRABPASS
             #include "Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -541,6 +573,7 @@ Shader "luka/indev/backlace"
         // Shadow Pass
         Pass
         {
+            Name "ShadowCaster"
             Tags { "LightMode" = "ShadowCaster" }
             ZWrite On 
             ZTest LEqual
@@ -555,6 +588,7 @@ Shader "luka/indev/backlace"
         // Meta Pass
         Pass
         {
+            Name "Meta"
             Tags { "LightMode" = "Meta" }
             Cull Off
             CGPROGRAM

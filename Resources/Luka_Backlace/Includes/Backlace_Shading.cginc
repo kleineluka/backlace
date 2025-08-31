@@ -87,7 +87,7 @@ void PremultiplyAlpha(inout BacklaceSurfaceData Surface)
     #endif
 }
 
-//unity's base diffuse based on disney implementation
+// unity's base diffuse based on disney implementation
 float DisneyDiffuse(half perceptualRoughness, inout BacklaceSurfaceData Surface)
 {
     float fd90 = 0.5 + 2 * Surface.LdotH * Surface.LdotH * perceptualRoughness;
@@ -198,18 +198,14 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         // for toon lighting, we use a ramp texture
         float4 RampDotL(inout BacklaceSurfaceData Surface)
         {
-            //Adding the occlusion into the offset of the ramp
             float offset = _RampOffset + (Surface.Occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
-            //Calculating ramp uvs based on offset
             float newMin = max(offset, 0);
             float newMax = max(offset +1, 0);
             float rampUv = remap(Surface.UnmaxedNdotL, -1, 1, newMin, newMax);
             float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampUv)).rgb;
-            //Adding the color and remapping it based on the shadow intensity stored into the alpha channel of the ramp color
             ramp *= _RampColor.rgb;
             float intensity = max(_ShadowIntensity, 0.001);
             ramp = remap(ramp, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1));
-            //getting the modified ramp for highlights and all lights that are not directional
             float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
             float3 rampA = remap(ramp, rmin, 1, 0, 1);
             float rampGrey = max(max(rampA.r, rampA.g), rampA.b);
@@ -221,7 +217,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
 
         }
 
-        // ...
+        // Specific Shade4PointLights function for ramp toon shading
         void RampDotLVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
         {
             //from Shade4PointLights function to get NdotL + attenuation
@@ -270,7 +266,6 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         void GetRampDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.Diffuse = 0;
-            //diffuse color
             float4 ramp = RampDotL(Surface);
             ApplyAmbientGradient(Surface);
             #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
@@ -284,7 +279,6 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                     litColor = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a;
                 #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
                 float3 shadowColor = GetTexturedShadowColor(Surface);
-                // The ramp itself is our mask. We use its brightness to blend between shadow and light.
                 Surface.Diffuse = lerp(shadowColor, litColor, GetLuma(ramp.rgb));
             #else // _BACKLACE_SHADOW_TEXTURE
                 // original portion of the code before shadow texture
@@ -313,7 +307,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #endif
         }
     #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
-        // ...
+        // specific anime-style vertex light function
         void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
         {
             Shade4PointLights(normal, worldPos, color, direction);
@@ -407,7 +401,13 @@ void AddDiffuse(inout BacklaceSurfaceData Surface)
 // ...
 void AddAlpha(inout BacklaceSurfaceData Surface)
 {
-    Surface.FinalColor.a = Surface.Albedo.a;
+    // stored as -1 if not set
+    // note: if ever weird transparency blending, THIS is likely the cause
+    if (Surface.FinalColor.a == -1) {
+        Surface.FinalColor.a = Surface.Albedo.a;
+    } else {
+        Surface.FinalColor.a *= Surface.Albedo.a;
+    }
 }
 
 // ...
