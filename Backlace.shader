@@ -351,6 +351,17 @@ Shader "luka/indev/backlace"
         _PathingSoftness ("Softness", Range(0.001, 1.0)) = 0.5
         _PathingOffset ("Time Offset", Range(0, 1)) = 0.0
 
+        // SCREEN SPACE RIM LIGHTING
+        [Space(35)]
+        [Header(Depth Rim Lighting)]
+        [Space(10)]
+        [Toggle(_BACKLACE_DEPTH_RIMLIGHT)] _ToggleDepthRim ("Enable Depth Rim Lighting", Float) = 0.0
+        [HDR] _DepthRimColor ("Color", Color) = (0.5, 0.75, 1, 1)
+        _DepthRimWidth ("Width", Range(0, 0.5)) = 0.1
+        _DepthRimThreshold ("Threshold", Range(0.01, 1)) = 0.1
+        _DepthRimSharpness ("Sharpness", Range(0.01, 1)) = 0.1
+        [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
+
         // FUN FEATURES
         [Space(70)]
         [Header(Fun Variant Features)]
@@ -545,8 +556,8 @@ Shader "luka/indev/backlace"
     {
 
         // Rendering Settings
-        // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" }
-        Tags { "RenderType" = "TransparentCutout" "Queue" = "Transparent" "VRCFallback"="Toon" }
+        // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
+        Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" "VRCFallback"="Toon" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]
@@ -557,6 +568,7 @@ Shader "luka/indev/backlace"
         Pass
         {  
             Name "ForwardBase"
+            ZTest LEqual
             Tags { "LightMode" = "ForwardBase" }
             CGPROGRAM
             #ifndef UNITY_PASS_FORWARDBASE

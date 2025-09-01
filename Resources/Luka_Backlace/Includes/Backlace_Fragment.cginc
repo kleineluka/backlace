@@ -96,6 +96,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
         CalculateRimlight(Surface);
         Surface.FinalColor.rgb += Rimlight;
     #endif // _BACKLACE_RIMLIGHT
+    #if defined(_BACKLACE_DEPTH_RIMLIGHT)
+        ApplyDepthRim(Surface, i);
+    #endif // _BACKLACE_DEPTH_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
         Surface.FinalColor.rgb += Emission;
     #endif // _BACKLACE_EMISSION

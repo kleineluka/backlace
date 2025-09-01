@@ -380,11 +380,9 @@ void GetLightData(inout BacklaceSurfaceData Surface)
             case 0: default: GetBacklaceLightColor(lightData, Surface.NormalDir); break;
         }
     #endif
-
     //global modifiers for both passes
     float3 finalDirectColor = lightData.directColor;
     float3 finalIndirectColor = lightData.indirectColor;
-
     // light limiting
     #if defined(UNITY_PASS_FORWARDBASE)
         if (_EnableBaseLightLimit == 1)
@@ -398,7 +396,6 @@ void GetLightData(inout BacklaceSurfaceData Surface)
             finalDirectColor = LimitLightBrightness(finalDirectColor, _AddLightMin, _AddLightMax);
         }
     #endif // UNITY_PASS_FORWARDADD
-
     // greyscale lighting
     float3 combinedLight = finalDirectColor;
     if (_GreyscaleLighting != 0)
@@ -410,7 +407,6 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     {
         combinedLight = lerp(combinedLight, _ForcedLightColor.rgb, _ForceLightColor);
     }
-
     // finalize and output
     Surface.LightColor = float4(combinedLight, lightData.attenuation);
     Surface.SpecLightColor = Surface.LightColor;

@@ -18,7 +18,7 @@
     float _GlitterBrightness;
     float _GlitterContrast;
     float _GlitterRainbowSpeed;
-
+    
     // glitter with either a voronoi pattern or a noise texture
     void ApplyGlitter(inout BacklaceSurfaceData Surface)
     {
@@ -370,7 +370,11 @@
 
 // touch reactive effect
 #if defined(_BACKLACE_TOUCH_REACTIVE)
-    UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+    #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
+        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+        float4 _CameraDepthTexture_TexelSize;
+        #define BACKLACE_DEPTH
+    #endif // BACKLACE_DEPTH
     float4 _TouchColor;
     float _TouchRadius;
     float _TouchHardness;

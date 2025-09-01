@@ -1062,4 +1062,51 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     }
 #endif // _BACKLACE_PATHING
 
+// screen space rim feature
+#if defined(_BACKLACE_DEPTH_RIMLIGHT) 
+    // sobel point array
+    static const int2 sobelPoints[9] = {
+        int2(-1, -1), int2(0, -1), int2(1, -1),
+        int2(-1,  0), int2(0,  0), int2(1,  0),
+        int2(-1,  1), int2(0,  1), int2(1,  1)
+    };
+
+    // logic to keep rim consistent regardless of camera distance / depth
+    float ScaleRimWidth(float z) {
+        float scale = 1.0 / z;
+        return _DepthRimWidth * 50.0 / _ScreenParams.y * scale;
+    }
+
+    void ApplyDepthRim(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float sceneDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w)).r;
+        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
+        float modelDepthLinear = i.scrPos.w;;
+        float depthStatus = 0;
+        [unroll(9)]
+        for (int idx = 0; idx < 9; idx++)
+        {
+            float2 offset = sobelPoints[idx] * ScaleRimWidth(modelDepthLinear);
+            float sampleDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w) + offset).r;
+            float sampleDepthLinear = LinearEyeDepth(sampleDepthRaw);
+            depthStatus += step(modelDepthLinear + _DepthRimThreshold, sampleDepthLinear);
+        }
+        float edgeFactor = depthStatus / 9.0;
+        edgeFactor = pow(edgeFactor, _DepthRimSharpness);
+        float rimIntensity = edgeFactor * _DepthRimColor.a;
+        switch(_DepthRimBlendMode)
+        {
+            case 0: // additive
+                Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
+                break;
+            case 1: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
+                break;
+            default: // multiply (case 2)
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
+                break;
+        }
+    }
+#endif // _BACKLACE_DEPTH_RIMLIGHT
+
 #endif // BACKLACE_SHADING_CGINC

@@ -347,5 +347,19 @@ float3 _VertexManipulationScale;
     int _PathingMappingMode;
 #endif // _BACKLACE_PATHING
 
+// screen space rim feature
+#if defined(_BACKLACE_DEPTH_RIMLIGHT)
+    #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
+        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+        float4 _CameraDepthTexture_TexelSize;
+        #define BACKLACE_DEPTH
+    #endif // BACKLACE_DEPTH
+    float4 _DepthRimColor;
+    float _DepthRimWidth;
+    float _DepthRimThreshold;
+    float _DepthRimSharpness;
+    int _DepthRimBlendMode;
+#endif // _BACKLACE_DEPTH_RIMLIGHT
+
 #endif // BACKLACE_PROPERTIES_CGINC
 
