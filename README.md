@@ -2,10 +2,7 @@
 
 > *Remember that time when I told you to relax? You need some inner-#!&$&%!-peace!*
 
-Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary function is to serve as a base for other shaders. While primarily serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
-
-> [!NOTE]
-> This shader is inherently not necessarily a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). While fully usable as an anime shader, it may not be the power-user solution that you seek and may have naïve implementations of certain features.
+Backlace is a versatile anime (also toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
 
 ## Features 🌈
 Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity. Additionally, there are "Fun Grabpass" and "Fun Outline" versions in order to preserve performance where otherwise unnecessary.
@@ -58,6 +55,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Touch Interactions
 - Refraction
 - Vertex Distortion
+- Fake Screen Space Reflections
 </details>
 
 <details>
@@ -75,6 +73,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Custom Editor
 - Lightweight and Keyword Optimised
 - VR Optimised
+- [SPS](https://vrcfury.com/sps/) (by VRCFury) Compatible
 </details>
 
 ## Where Else Backlaced Is Used 🌨️

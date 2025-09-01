@@ -41,6 +41,7 @@
 #pragma shader_feature_local _ _BACKLACE_TOUCH_REACTIVE
 #pragma shader_feature_local _ _BACKLACE_REFRACTION
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
+#pragma shader_feature_local _ _BACKLACE_SSR
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

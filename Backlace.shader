@@ -520,6 +520,24 @@ Shader "luka/indev/backlace"
         _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
         _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
 
+        // FAKE SCREEN SPACE REFLECTIONS
+        [Space(35)]
+        [Header(Fake Screen Space Reflections)]
+        [Space(10)]
+        [Toggle(_BACKLACE_SSR)] _ToggleSSR ("Enable Screen Space Reflections", Float) = 0.0
+        [NoScaleOffset] _SSRMask ("Mask (R)", 2D) = "white" { }
+        [HDR] _SSRTint ("Reflection Tint", Color) = (1, 1, 1, 1)
+        _SSRIntensity ("Intensity", Range(0, 2)) = 1.0
+        [Enum(Additive, 0, Alpha Blend, 1)] _SSRBlendMode ("Blend Mode", Int) = 0
+        _SSRFresnelPower ("Fresnel Power", Range(0.1, 20)) = 5.0
+        _SSRFresnelScale ("Fresnel Scale", Range(0, 2)) = 1.0
+        _SSRFresnelBias ("Fresnel Bias", Range(0, 1)) = 0.0
+        _SSRParallax ("Parallax Strength", Range(0, 1)) = 0.1
+        [NoScaleOffset] _SSRDistortionMap ("Distortion Map (RG)", 2D) = "gray" { }
+        _SSRDistortionStrength ("Distortion Strength", Range(0, 0.25)) = 0.01
+        _SSRWorldDistortion ("World Distortion Strength", Range(0, 1)) = 0.0
+        _SSRBlur ("Blur Strength", Range(0, 10)) = 1.0
+
         // FEATURES THAT GET THEIR OWN VARIANTS
         [Space(70)]
         [Header(Specific Variants)]

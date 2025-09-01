@@ -535,6 +535,61 @@
     }
 #endif // _BACKLACE_VERTEX_DISTORTION
 
+// screen space reflection feature
+#if defined(_BACKLACE_SSR)
+    UNITY_DECLARE_TEX2D(_SSRMask);
+    float4 _SSRTint;
+    float _SSRIntensity;
+    int _SSRBlendMode;
+    float _SSRFresnelPower;
+    float _SSRFresnelScale;
+    float _SSRFresnelBias;
+    float _SSRParallax;
+    UNITY_DECLARE_TEX2D(_SSRDistortionMap);
+    float _SSRDistortionStrength;
+    float _SSRBlur;
+    float _SSRWorldDistortion;
+
+    void ApplyScreenSpaceReflections(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float2 screenUV = i.scrPos.xy / i.scrPos.w;
+        float3 reflectionVector = reflect(-Surface.ViewDir, Surface.NormalDir);
+        float2 distortionUV = lerp(screenUV, i.worldPos.xy, _SSRWorldDistortion);
+        float2 distortionOffset = (UNITY_SAMPLE_TEX2D(_SSRDistortionMap, distortionUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
+        float3 viewSpaceReflection = mul((float3x3)UNITY_MATRIX_V, reflectionVector);
+        float parallax = _SSRParallax * saturate(1.0 - viewSpaceReflection.z);
+        float2 reflectionOffset = viewSpaceReflection.xy * parallax;
+        float2 reflectionUV = screenUV + reflectionOffset +distortionOffset;
+        const int SSR_BLUR_SAMPLES = 8;
+        float3 reflectedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV).rgb;
+        float2 blurOffset = _BacklaceGP_TexelSize.xy * _SSRBlur;
+        [unroll]
+        for (int i = 0; i < SSR_BLUR_SAMPLES; i++)
+        {
+            float angle = (float)i / SSR_BLUR_SAMPLES * 2.0 * UNITY_PI;
+            float s, c;
+            sincos(angle, s, c);
+            float2 offset = float2(c, s) * blurOffset;
+            reflectedColor += UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV + offset).rgb;
+        }
+        reflectedColor /= (SSR_BLUR_SAMPLES + 1);
+        float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
+        float fresnel_powered = pow(fresnel_base, _SSRFresnelPower);
+        float fresnel = saturate(_SSRFresnelBias + fresnel_powered * _SSRFresnelScale);
+        float mask = UNITY_SAMPLE_TEX2D(_SSRMask, Uvs[0]).r;
+        float finalStrength = fresnel * mask * _SSRIntensity;
+        float3 finalReflection = reflectedColor * _SSRTint.rgb;
+        if (_SSRBlendMode == 0) // additive
+        {
+            Surface.FinalColor.rgb += finalReflection * finalStrength;
+        }
+        else // alpha blend
+        {
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalReflection, finalStrength);
+        }
+    }
+#endif // _BACKLACE_SSR
+
 #endif // BACKLACE_EFFECTS_CGINC
 
     

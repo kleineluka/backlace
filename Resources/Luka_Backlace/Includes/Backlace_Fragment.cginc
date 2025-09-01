@@ -120,6 +120,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_MATCAP)
         ApplyMatcap(Surface, i);
     #endif // _BACKLACE_MATCAP
+    #if defined(_BACKLACE_SSR)
+        ApplyScreenSpaceReflections(Surface, i);
+    #endif // _BACKLACE_SSR
     #if defined(_BACKLACE_CUBEMAP)
         ApplyCubemap(Surface);
     #endif // _BACKLACE_CUBEMAP
