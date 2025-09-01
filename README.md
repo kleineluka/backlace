@@ -5,7 +5,7 @@
 Backlace is a versatile PBR/Toon/Anime shader for Unity and VRChat whose primary function is to serve as a base for other shaders. While primarily serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
 
 > [!NOTE]
-> This shader is inherently not necessarily a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). As such, many features are a naïve implementation. While fully usable as an anime shader, it may not be the power-user solution that you seek.
+> This shader is inherently not necessarily a replacement for all-in-one shaders (ex. LilToon, Poiyomi, etc.). While fully usable as an anime shader, it may not be the power-user solution that you seek and may have naïve implementations of certain features.
 
 ## Features 🌈
 Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity. Additionally, there are "Fun Grabpass" and "Fun Outline" versions in order to preserve performance where otherwise unnecessary.
@@ -28,6 +28,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Matcap
 - Decal (2 Slots)
 - Texture Post-Processing
+- Outline
 </details>
 
 <details>
@@ -82,7 +83,7 @@ This section will be updated when I make things with it!
 ## Building Off Of Backlace 🫧
 Backlace is split into a lot of CGInclude files to make it easier to edit, build off of, and maintain.
 - You will find most code for the Forward Base and Add pass in `Backlace_Forward.cginc`, with the vertex and fragment shader for the Forward passes in `Backlace_Vertex.cginc` and `Backlace_Fragment.cginc` respectively.
-- Additional passes, such as Shadow and Meta, are in their own files (`Backlace_Shadow.cginc` and `Backlace_Meta.cginc`).
+- Additional passes, such as Outline, Shadow, Meta, are in their own files (`Backlace_Outline.cginc`, `Backlace_Shadow.cginc`, and `Backlace_Meta.cginc`).
 - If you wish to include a geometry shader, there is a template in `Backlace_Geometry.cginc` that you can use.
 - For anything related to lighting modes, you will find that in `Backlace_Lighting.cginc`, while anything related to surface properties and shading is in `Backlace_Shading.cginc`.
 - Fun variant effects are in `Backlace_Effects.cginc`.

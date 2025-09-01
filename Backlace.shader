@@ -520,6 +520,24 @@ Shader "luka/indev/backlace"
         _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
         _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
 
+        // FEATURES THAT GET THEIR OWN VARIANTS
+        [Space(70)]
+        [Header(Specific Variants)]
+
+        // OUTLINE
+        [Space(70)]
+        [Header(Outline)]
+        [Space(10)]
+        _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
+        _OutlineWidth ("Outline Width", Range(0, 0.1)) = 0.005
+        [Enum(Disabled, 0, Enabled, 1)] _OutlineVertexColorMask ("Use Vertex Color (R) Mask", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _OutlineDistanceFade ("Enable Distance Fade", Float) = 0.0
+        _OutlineFadeStart ("Fade Start Distance", Float) = 10.0
+        _OutlineFadeEnd ("Fade End Distance", Float) = 15.0
+        [Enum(Disabled, 0, Enabled, 1)] _OutlineHueShift ("Enable Hue Shift", Float) = 0.0 
+        _OutlineHueShiftSpeed ("Hue Shift Speed", Float) = 0.2
+        _OutlineOpacity ("Outline Opacity", Range(0, 1)) = 1.0
+
         // MISC STUFF
         [Space(70)]
         [Header(Other Stuffs)]
@@ -582,6 +600,22 @@ Shader "luka/indev/backlace"
         Cull [_Cull]
         Stencil { Ref [_StencilID] Comp [_StencilComp] Pass [_StencilOp] }
         GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
+
+        // Outline Pass
+        Pass
+        {
+            Name "Outline"
+            Tags { "LightMode" = "Always" }
+            Cull Front
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+            CGPROGRAM
+            #ifndef UNITY_PASS_OUTLINE
+                #define UNITY_PASS_OUTLINE
+            #endif // UNITY_PASS_OUTLINE
+            #include "Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
+            ENDCG
+        }
 
         // Forward Base Pass
         Pass
