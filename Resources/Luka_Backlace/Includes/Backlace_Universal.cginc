@@ -390,6 +390,7 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
             Emission = baseEmission * emissionMap * _EmissionStrength;
         }
     #endif // _BACKLACE_EMISSION
+
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
 
 #endif // BACKLACE_UNIVERSAL_CGINC

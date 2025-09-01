@@ -28,6 +28,7 @@
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE
 #pragma shader_feature_local _ _BACKLACE_PATHING
 #pragma shader_feature_local _ _BACKLACE_DEPTH_RIMLIGHT
+#pragma shader_feature_local _ _BACKLACE_SHADOW_MAP
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER

@@ -361,5 +361,12 @@ float3 _VertexManipulationScale;
     int _DepthRimBlendMode;
 #endif // _BACKLACE_DEPTH_RIMLIGHT
 
+// shadow map feature
+#if defined(_BACKLACE_SHADOW_MAP)
+    UNITY_DECLARE_TEX2D(_ShadowMap);
+    float _ShadowMap_UV;
+    float _ShadowMapIntensity;
+#endif // _BACKLACE_SHADOW_MAP
+
 #endif // BACKLACE_PROPERTIES_CGINC
 

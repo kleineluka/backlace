@@ -73,6 +73,10 @@ void GetDotProducts(inout BacklaceSurfaceData Surface)
 {
     Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);
     Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, Surface.LightColor.a);
+    #if defined(_BACKLACE_SHADOW_MAP)
+        float shadowMask = UNITY_SAMPLE_TEX2D(_ShadowMap, Uvs[_ShadowMap_UV]).r;
+        Surface.UnmaxedNdotL -= (shadowMask * _ShadowMapIntensity);
+    #endif // _BACKLACE_SHADOW_MAP
     Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
     Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
     Surface.NdotH = max(dot(Surface.NormalDir, Surface.HalfDir), 0);

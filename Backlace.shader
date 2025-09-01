@@ -302,6 +302,14 @@ Shader "luka/indev/backlace"
         _SSSSpread ("Spread", Range(16, 0.01)) = 2.0
         _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
 
+        // SHADOW MAP
+        [Space(35)]
+        [Header(Shadow Map)]
+        [Space(10)]
+        [Toggle(_BACKLACE_SHADOW_MAP)] _ToggleShadowMap ("Enable Shadow Map", Float) = 0.0
+        [NoScaleOffset] _ShadowMap ("Shadow Map (R=Mask)", 2D) = "white" { }
+        _ShadowMapIntensity ("Intensity", Range(0, 1)) = 1.0
+
         // DETAIL MAPPING
         [Space(35)]
         [Header(Detail Mapping)]
@@ -552,6 +560,7 @@ Shader "luka/indev/backlace"
         _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
         _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
         _PathingMap_UV ("Pathing Map UV Set", Float) = 0
+        _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         [Space(35)]
