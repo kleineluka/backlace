@@ -2,7 +2,7 @@
 
 > *Remember that time when I told you to relax? You need some inner-#!&$&%!-peace!*
 
-Backlace is a versatile anime (also toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
+Backlace is a versatile anime (as well as toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
 
 ## Features 🌈
 Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one by adding more features and complexity. Additionally, there are "Grabpass" and "Outline" sub-variants in order to preserve performance where otherwise unnecessary (ex. "Fun Grabpass" or "Core Outline"). The idea of this system is to allow you to **pick and choose** how heavy of a shader is needed for your project.
@@ -77,12 +77,13 @@ Some preset values for the shader are also provided to help give you a starting 
 - [SPS](https://vrcfury.com/sps/) (by VRCFury) Compatible
 </details>
 
-## Where Else Backlaced Is Used 🌨️
+## Where Backlace Is Used 🌨️
 This section will be updated when I make things with it!
 
 ## Building Off Of Backlace 🫧
 
->[!NOTE] This section is for developers who want to build off of Backlace. If you just want to use Backlace on your avatar, game, etc., you can skip this section. 🙂‍↕️
+> [!NOTE] 
+> This section is for developers who want to build off of Backlace. If you just want to use Backlace on your avatar, game, etc., you can skip this section. 🙂‍↕️
 
 Backlace is split into a lot of CGInclude files to make it easier to edit, build off of, and maintain.
 - You will find most code for the Forward Base and Add pass in `Backlace_Forward.cginc`, with the vertex and fragment shader for the Forward passes in `Backlace_Vertex.cginc` and `Backlace_Fragment.cginc` respectively.
