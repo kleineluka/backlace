@@ -5,7 +5,7 @@
 Backlace is a versatile anime (also toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
 
 ## Features 🌈
-Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one, adding more features and complexity. Additionally, there are "Fun Grabpass" and "Fun Outline" versions in order to preserve performance where otherwise unnecessary.
+Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one by adding more features and complexity. Additionally, there are "Grabpass" and "Outline" sub-variants in order to preserve performance where otherwise unnecessary (ex. "Fun Grabpass" or "Core Outline"). The idea of this system is to allow you to **pick and choose** how heavy of a shader is needed for your project.
 
 <details>
   <summary><b>Core Features</b></summary>
@@ -61,10 +61,11 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 <details>
   <summary><b>Material Presets</b></summary>
 
-- Fabric
-- Wet
-- Slime
-- Crystal
+Some preset values for the shader are also provided to help give you a starting point for various (typically more complex) materials. Some require specific variants to work.
+- Fabric (Any Variant)
+- Wet (Fun Variant)
+- Slime (Fun Variant)
+- Crystal (Fun Variant)
 </details>
 
 <details>
@@ -80,6 +81,9 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 This section will be updated when I make things with it!
 
 ## Building Off Of Backlace 🫧
+
+>[!NOTE] This section is for developers who want to build off of Backlace. If you just want to use Backlace on your avatar, game, etc., you can skip this section. 🙂‍↕️
+
 Backlace is split into a lot of CGInclude files to make it easier to edit, build off of, and maintain.
 - You will find most code for the Forward Base and Add pass in `Backlace_Forward.cginc`, with the vertex and fragment shader for the Forward passes in `Backlace_Vertex.cginc` and `Backlace_Fragment.cginc` respectively.
 - Additional passes, such as Outline, Shadow, Meta, are in their own files (`Backlace_Outline.cginc`, `Backlace_Shadow.cginc`, and `Backlace_Meta.cginc`).

@@ -631,7 +631,7 @@ Shader "luka/indev/backlace"
             #ifndef UNITY_PASS_OUTLINE
                 #define UNITY_PASS_OUTLINE
             #endif // UNITY_PASS_OUTLINE
-            #include "Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
             ENDCG
         }
 
@@ -648,7 +648,7 @@ Shader "luka/indev/backlace"
             #ifndef BACKLACE_GRABPASS
                 #define BACKLACE_GRABPASS
             #endif // BACKLACE_GRABPASS
-            #include "Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
           
@@ -667,7 +667,7 @@ Shader "luka/indev/backlace"
             #ifndef BACKLACE_GRABPASS
                 #define BACKLACE_GRABPASS
             #endif // BACKLACE_GRABPASS
-            #include "Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
 
@@ -682,7 +682,7 @@ Shader "luka/indev/backlace"
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER
             #endif // UNITY_PASS_SHADOWCASTER
-            #include "Resources/Luka_Backlace/Includes/Backlace_Shadow.cginc"
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Shadow.cginc"
             ENDCG
         }
         
@@ -696,7 +696,7 @@ Shader "luka/indev/backlace"
             #ifndef UNITY_PASS_META
                 #define UNITY_PASS_META
             #endif // UNITY_PASS_META
-            #include "Resources/Luka_Backlace/Includes/Backlace_Meta.cginc"
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Meta.cginc"
             ENDCG
         }
 
