@@ -83,7 +83,7 @@ This section will be updated when I make things with it!
 ## Building Off Of Backlace 🫧
 
 > [!NOTE] 
-> This section is for developers who want to build off of Backlace. If you just want to use Backlace on your avatar, game, etc., you can skip this section. 🙂‍↕️
+> This section is for developers who want to build off of Backlace. If you just want to use Backlace on your avatar, game, etc., you can skip this section. ( \*︾▽︾)
 
 Backlace is split into a lot of CGInclude files to make it easier to edit, build off of, and maintain.
 - You will find most code for the Forward Base and Add pass in `Backlace_Forward.cginc`, with the vertex and fragment shader for the Forward passes in `Backlace_Vertex.cginc` and `Backlace_Fragment.cginc` respectively.
