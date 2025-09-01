@@ -40,6 +40,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Dissolve Effect
 - Pathing
 - Depth Rim Lighting
+- Shadow Map
 - AudioLink Support (not yet implemented)
 </details>
 
