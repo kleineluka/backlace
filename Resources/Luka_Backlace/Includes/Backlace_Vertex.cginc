@@ -11,6 +11,11 @@ FragmentData Vertex(VertexData v)
     // vertex manipulation
     v.vertex.xyz *= _VertexManipulationScale; // scale
     v.vertex.xyz += _VertexManipulationPosition; // position
+
+    // vertex distortion
+    #if defined(_BACKLACE_VERTEX_DISTORTION)
+        DistortVertex(v);
+    #endif // _BACKLACE_VERTEX_DISTORTION
     
     // boilerplate assignments
     i.vertex = v.vertex;

@@ -39,6 +39,7 @@
 #pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
 #pragma shader_feature_local _ _BACKLACE_TOUCH_REACTIVE
 #pragma shader_feature_local _ _BACKLACE_REFRACTION
+#pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
 
 // GEOMETRY KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS

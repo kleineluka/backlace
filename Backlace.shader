@@ -502,6 +502,16 @@ Shader "luka/indev/backlace"
         _RefractionCAStrength ("Chromatic Aberration Strength", Range(0, 5)) = 2
         _RefractionBlurStrength ("Blur Strength", Range(0, 10)) = 2.0
 
+        // VERTEX DISTORTION
+        [Space(35)]
+        [Header(Vertex Distortion)]
+        [Space(10)]
+        [Toggle(_BACKLACE_VERTEX_DISTORTION)] _ToggleVertexDistortion ("Enable Vertex Distortion", Float) = 0.0
+        [Enum(Wave, 0, Jumble, 1)] _VertexDistortionMode ("Distortion Mode", Int) = 0
+        _VertexDistortionStrength ("Distortion Strength", Vector) = (0.1, 0.1, 0.1, 0)
+        _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
+        _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
+
         // MISC STUFF
         [Space(70)]
         [Header(Other Stuffs)]

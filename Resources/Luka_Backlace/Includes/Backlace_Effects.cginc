@@ -508,6 +508,33 @@
     }
 #endif // _BACKLACE_REFRACTION
 
+#if defined(_BACKLACE_VERTEX_DISTORTION)
+    int _VertexDistortionMode;
+    float3 _VertexDistortionStrength;
+    float3 _VertexDistortionSpeed;
+    float3 _VertexDistortionFrequency;
+
+    void DistortVertex(inout VertexData v)
+    {
+        float time = _Time.y;
+        float3 distortion = 0;
+        if (_VertexDistortionMode == 0) // wave
+        {
+            distortion.x = sin(v.vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
+            distortion.y = sin(v.vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
+            distortion.z = sin(v.vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
+        } 
+        else if (_VertexDistortionMode == 1) // jumble 
+        {
+            float offsetX = sin(v.vertex.x * _VertexDistortionFrequency.x) * cos(v.vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
+            float offsetY = cos(v.vertex.y * _VertexDistortionFrequency.y) * sin(v.vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
+            float offsetZ = sin(v.vertex.z * _VertexDistortionFrequency.z) * cos(v.vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
+            distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed);
+        }
+        v.vertex.xyz += distortion;
+    }
+#endif // _BACKLACE_VERTEX_DISTORTION
+
 #endif // BACKLACE_EFFECTS_CGINC
 
     

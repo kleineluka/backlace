@@ -55,6 +55,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - VRChat Mirror Detection
 - Touch Interactions
 - Refraction
+- Vertex Distortion
 </details>
 
 <details>
