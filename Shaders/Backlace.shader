@@ -107,6 +107,12 @@ Shader "luka/indev/backlace"
         _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
         _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
         _ViewDirectionOffsetY ("View Direction Offset Y", Float) = 0.0
+        _DirectIntensity ("RT Direct Intensity", Float) = 1.0
+        _IndirectIntensity ("RT Indirect Intensity", Float) = 1.0
+        _VertexIntensity ("RT Vertex Intensity", Float) = 1.0
+        _AdditiveIntensity ("RT Additive Intensity", Float) = 1.0
+        _BakedDirectIntensity ("Baked Direct Intensity", Float) = 1.0
+        _BakedIndirectIntensity ("Baked Indirect Intensity", Float) = 1.0
 
         // TOON LIGHTING
         [Space(35)]

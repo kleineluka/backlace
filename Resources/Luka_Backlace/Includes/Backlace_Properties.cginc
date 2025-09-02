@@ -62,6 +62,14 @@ UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
 Texture2D_float _DFG;
 SamplerState sampler_DFG;
 
+// lighting contributions
+float _DirectIntensity;
+float _IndirectIntensity;
+float _VertexIntensity;
+float _AdditiveIntensity;
+float _BakedDirectIntensity;
+float _BakedIndirectIntensity;
+
 // uv manipulation
 float _UV_Offset_X;
 float _UV_Offset_Y;

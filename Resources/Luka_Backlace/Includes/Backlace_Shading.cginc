@@ -307,7 +307,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                     float3 ignoredDir;
                     RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, ignoredDir);
                 #endif
-                Surface.VertexDirectDiffuse *= Surface.Albedo;
+                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
     #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
@@ -361,7 +361,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                     float3 ignoredDir;
                     AnimeVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, ignoredDir);
                 #endif
-                Surface.VertexDirectDiffuse *= Surface.Albedo;
+                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
     #endif // _TOONMODE_ANIME
@@ -392,7 +392,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float3 ignoredDir;
             Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
         #endif
-        Surface.VertexDirectDiffuse *= Surface.Albedo;
+        Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
     #endif
 }
 

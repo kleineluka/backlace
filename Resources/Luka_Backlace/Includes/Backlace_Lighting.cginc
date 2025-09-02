@@ -125,16 +125,20 @@ void OpenLitShadeSH9ToonDouble(float3 lightDirection, out float3 shMax, out floa
     #endif // LIGHTMAP_ON
 }
 
-// solution to get indirect lighting to apply to all lightm odes
+// solution to get indirect lighting to apply to all light modes
 float3 GetUniversalIndirectLight(float3 normal)
 {
     float3 indirectColor = float3(0, 0, 0);
     #if defined(UNITY_PASS_FORWARDBASE)
         indirectColor = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
         #if defined(LIGHTMAP_ON)
-            indirectColor = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
+            float3 indirectBaked = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
             #if defined(DIRLIGHTMAP_COMBINED)
-                indirectColor = DecodeDirectionalLightmap(indirectColor, LightmapDirection, normal);
+                float3 combinedBaked = DecodeDirectionalLightmap(indirectBaked, LightmapDirection, normal);
+                float3 directBaked = combinedBaked - indirectBaked;
+                indirectColor = (indirectBaked * _BakedIndirectIntensity) + (directBaked * _BakedDirectIntensity);
+            #else
+                indirectColor = indirectBaked * _BakedIndirectIntensity;
             #endif
         #endif
         #if defined(DYNAMICLIGHTMAP_ON)
@@ -385,12 +389,15 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     float3 finalIndirectColor = lightData.indirectColor;
     // light limiting
     #if defined(UNITY_PASS_FORWARDBASE)
+        finalDirectColor *= _DirectIntensity;
+        finalIndirectColor *= _IndirectIntensity;
         if (_EnableBaseLightLimit == 1)
         {
             finalDirectColor = LimitLightBrightness(finalDirectColor, _BaseLightMin, _BaseLightMax);
             finalIndirectColor = LimitLightBrightness(finalIndirectColor, _BaseLightMin, _BaseLightMax);
         }
     #else // UNITY_PASS_FORWARDADD
+        finalDirectColor *= _AdditiveIntensity;
         if (_EnableAddLightLimit == 1)
         {
             finalDirectColor = LimitLightBrightness(finalDirectColor, _AddLightMin, _AddLightMax);
