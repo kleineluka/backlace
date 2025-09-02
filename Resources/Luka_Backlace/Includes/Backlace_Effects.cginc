@@ -228,7 +228,7 @@
                     _ShadowTex, sampler_MainTex,
                     FragData.worldPos, Surface.NormalDir,
                     float3(0, 0, 0), _ShadowPatternScale, float3(0, 0, 0),
-                    _ShadowPatternTriplanarSharpness, true
+                    _ShadowPatternTriplanarSharpness, true, float2(0, 0)
                 );
                 float blendFactor = patternSample.r * patternSample.a;
                 finalShadowColor = lerp(baseShadowColour, albedoTintedShadow, blendFactor);
@@ -310,7 +310,8 @@
             i.worldPos, Surface.NormalDir,
             _WorldEffectPosition, _WorldEffectScale, _WorldEffectRotation,
             1.0,
-            true
+            true, 
+            float2(0, 0)
         );
         float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
         float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity;
@@ -440,7 +441,7 @@
     {
         float fresnel = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
         fresnel = pow(fresnel, _RefractionFresnel);
-        float2 noise = (SampleTextureTriplanar(_DistortionNoiseTex, sampler_DistortionNoiseTex, i.worldPos, Surface.NormalDir, float3(0, 0, 0), _DistortionNoiseTiling, float3(0, 0, 0), 2.0, true).rg * 2.0 - 1.0) * _DistortionNoiseStrength;
+        float2 noise = (SampleTextureTriplanar(_DistortionNoiseTex, sampler_DistortionNoiseTex, i.worldPos, Surface.NormalDir, float3(0, 0, 0), _DistortionNoiseTiling, float3(0, 0, 0), 2.0, true, float2(0, 0)).rg * 2.0 - 1.0) * _DistortionNoiseStrength;
         float3 distortionNormal = Surface.NormalDir + float3(noise.x, noise.y, 0);
         float3 refractionVector = distortionNormal * _RefractionIOR;
         float4 screenPos = i.scrPos;

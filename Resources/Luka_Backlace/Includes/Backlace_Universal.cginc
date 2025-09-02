@@ -213,15 +213,16 @@ void GetTriplanarUVsAndWeights(
 float4 SampleTriplanar(
     Texture2D tex, SamplerState texSampler,
     float2 uvX, float2 uvY, float2 uvZ, float3 weights,
-    bool isTiling)
+    bool isTiling, float2 scroll)
 {
     float4 sampleX, sampleY, sampleZ;
+    float2 scrollOffset = scroll * _Time.y;
     if (isTiling)
     {
         // for repeating patterns, use frac() to tile the texture
-        sampleX = tex.Sample(texSampler, frac(uvX));
-        sampleY = tex.Sample(texSampler, frac(uvY));
-        sampleZ = tex.Sample(texSampler, frac(uvZ));
+        sampleX = tex.Sample(texSampler, frac(uvX + scrollOffset));
+        sampleY = tex.Sample(texSampler, frac(uvY + scrollOffset));
+        sampleZ = tex.Sample(texSampler, frac(uvZ + scrollOffset));
     }
     else
     {
@@ -249,14 +250,16 @@ float4 SampleTriplanar(
 }
 
 // wrapper for all triplanar in one
-float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, float3 normal, float3 position, float scale, float3 rotation, float sharpness, bool isTiling)
+float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 worldPos, 
+    float3 normal, float3 position, float scale, float3 rotation, 
+    float sharpness, bool isTiling, float2 scroll)
 {
     // step one~ coords n weights
     float2 uvX, uvY, uvZ;
     float3 weights;
     GetTriplanarUVsAndWeights(worldPos, normal, position, scale, rotation, sharpness, uvX, uvY, uvZ, weights);
     // step two~ sample tex
-    return SampleTriplanar(tex, texSampler, uvX, uvY, uvZ, weights, isTiling);
+    return SampleTriplanar(tex, texSampler, uvX, uvY, uvZ, weights, isTiling, scroll);
 }
 
 float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, float fps, float scrub)
@@ -272,8 +275,9 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
 
 // decals-only features
 #if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
-    void ApplyDecal_UVSpace(inout float4 baseAlbedo, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, float4 tint, float2 position, float2 scale, float rotation, int blendMode)
+    void ApplyDecal_UVSpace(inout float4 baseAlbedo, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, float4 tint, float2 position, float2 scale, float rotation, int blendMode, float repeat, float2 scroll, float hueShift, float autoCycle, float cycleSpeed)
     {
+        baseUV += scroll * _Time.y;
         float angle = -rotation * (UNITY_PI / 180.0);
         float s = sin(angle);
         float c = cos(angle);
@@ -282,20 +286,36 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
         localUV = mul(rotationMatrix, localUV);
         localUV /= max(scale, 0.0001);
         localUV += 0.5;
-        if (any(saturate(localUV) != localUV)) return;
+        if (repeat == 1) // repeating
+        {
+            localUV = frac(localUV); 
+
+        }
+        else // single instance
+        {
+            if (any(saturate(localUV) != localUV))
+            {
+                return;
+            }
+        }
         float4 decalColor = decalTex.Sample(decalSampler, localUV) * tint;
+        decalColor.rgb = ApplyHueShift(decalColor.rgb, hueShift, autoCycle, cycleSpeed);
         switch(blendMode)
         {
-            case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break;
-            case 1: baseAlbedo.rgb = lerp(baseAlbedo.rgb, baseAlbedo.rgb * decalColor.rgb, decalColor.a); break;
-            case 2: baseAlbedo.rgb = lerp(baseAlbedo.rgb, decalColor.rgb, decalColor.a); break;
+            case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break; // additive
+            case 1: baseAlbedo.rgb = lerp(baseAlbedo.rgb, baseAlbedo.rgb * decalColor.rgb, decalColor.a); break; // multiply
+            case 2: baseAlbedo.rgb = lerp(baseAlbedo.rgb, decalColor.rgb, decalColor.a); break; //alpha blend
+
         }
     }
 
-    void ApplyDecal_Triplanar(inout float4 baseAlbedo, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler, float4 tint, float3 position, float scale, float3 rotation, float sharpness, int blendMode)
+    void ApplyDecal_Triplanar(inout float4 baseAlbedo, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler, float4 tint, float3 position, float scale, float3 rotation, float sharpness, int blendMode, float repeat, float2 scroll, float hueShift, float autoCycle, float cycleSpeed)
     {
-        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, position, scale, rotation, sharpness, false);
+        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, position, scale, rotation, sharpness, repeat > 0.5, scroll);
         decalColor *= tint;
+        if (hueShift != 0) {
+            decalColor.rgb = ApplyHueShift(decalColor.rgb, hueShift, autoCycle, cycleSpeed);
+        }
         switch(blendMode)
         {
             case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break;
@@ -310,11 +330,11 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
         {
             [branch] if (_Decal1IsTriplanar == 1)
             {
-                ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1TriplanarPosition.xyz, _Decal1TriplanarScale, _Decal1TriplanarRotation.xyz, _Decal1TriplanarSharpness, _Decal1BlendMode);
+                ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1TriplanarPosition.xyz, _Decal1TriplanarScale, _Decal1TriplanarRotation.xyz, _Decal1TriplanarSharpness, _Decal1BlendMode, _Decal1Repeat, _Decal1Scroll.xy, _Decal1HueShift, _Decal1AutoCycleHue, _Decal1CycleSpeed);
             }
             else
             {
-                ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal1_UV], _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1Position.xy, _Decal1Scale.xy, _Decal1Rotation, _Decal1BlendMode);
+                ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal1_UV], _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1Position.xy, _Decal1Scale.xy, _Decal1Rotation, _Decal1BlendMode, _Decal1Repeat, _Decal1Scroll, _Decal1HueShift, _Decal1AutoCycleHue, _Decal1CycleSpeed);
             }
         }
     #endif // _BACKLACE_DECAL1
@@ -325,11 +345,11 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
         {
             [branch] if (_Decal2IsTriplanar == 1)
             {
-                ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2TriplanarPosition.xyz, _Decal2TriplanarScale, _Decal2TriplanarRotation.xyz, _Decal2TriplanarSharpness, _Decal2BlendMode);
+                ApplyDecal_Triplanar(Surface.Albedo, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2TriplanarPosition.xyz, _Decal2TriplanarScale, _Decal2TriplanarRotation.xyz, _Decal2TriplanarSharpness, _Decal2BlendMode, _Decal2Repeat, _Decal2Scroll, _Decal2HueShift, _Decal2AutoCycleHue, _Decal2CycleSpeed);
             }
             else
             {
-                ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal2_UV], _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2Position.xy, _Decal2Scale.xy, _Decal2Rotation, _Decal2BlendMode);
+                ApplyDecal_UVSpace(Surface.Albedo, Uvs[_Decal2_UV], _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2Position.xy, _Decal2Scale.xy, _Decal2Rotation, _Decal2BlendMode, _Decal2Repeat, _Decal2Scroll, _Decal2HueShift, _Decal2AutoCycleHue, _Decal2CycleSpeed);
             }
         }
     #endif // _BACKLACE_DECAL2
@@ -349,7 +369,7 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
                     _DissolveNoiseTex, sampler_DissolveNoiseTex,
                     worldPos, normalDir,
                     float3(0,0,0), _DissolveNoiseScale, float3(0,0,0),
-                    2.0, true
+                    2.0, true, float2(0, 0)
                 ).r;
                 break;
             }

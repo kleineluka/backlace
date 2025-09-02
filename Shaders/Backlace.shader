@@ -231,6 +231,11 @@ Shader "luka/indev/backlace"
         _Decal1TriplanarScale ("World Scale", Float) = 1.0
         _Decal1TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal1TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal1Repeat ("Repeat Pattern", Float) = 0.0
+        _Decal1Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
+        _Decal1HueShift ("Hue Shift", Range(-1, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal1AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
+        _Decal1CycleSpeed ("Cycle Speed", Float) = 0.1
 
         // DECAL 2
         [Space(35)]
@@ -248,6 +253,11 @@ Shader "luka/indev/backlace"
         _Decal2TriplanarScale ("World Scale", Float) = 1.0
         _Decal2TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal2Repeat ("Repeat Pattern", Float) = 0.0
+        _Decal2Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
+        _Decal2HueShift ("Hue Shift", Range(-1, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal2AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
+        _Decal2CycleSpeed ("Cycle Speed", Float) = 0.1
 
         // POST-PROCESSING
         [Space(35)]

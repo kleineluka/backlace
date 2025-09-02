@@ -82,8 +82,8 @@ float _MainTex_UV;
     float _ParallaxStrength;
 #endif // _BACKLACE_PARALLAX
 
-// decal1-only features
-#if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
+// decal1-only feature
+#if defined(_BACKLACE_DECAL1)
     UNITY_DECLARE_TEX2D(_Decal1Tex);
     float4 _Decal1Tint;
     float2 _Decal1Position;
@@ -92,14 +92,18 @@ float _MainTex_UV;
     float _Decal1_UV;
     float _Decal1TriplanarSharpness;
     int _Decal1BlendMode;
-    // not worth for extra compiler time to make these conditional
-    float _Decal1IsTriplanar;   
+    float  _Decal1IsTriplanar;
     float3 _Decal1TriplanarPosition;
     float _Decal1TriplanarScale;
     float3 _Decal1TriplanarRotation;
+    float _Decal1Repeat;
+    float2 _Decal1Scroll;
+    float _Decal1HueShift;
+    float _Decal1AutoCycleHue;
+    float _Decal1CycleSpeed;
 #endif // _BACKLACE_DECAL1
 
-// decal2-only features
+// decal2-only feature
 #if defined(_BACKLACE_DECAL2)
     UNITY_DECLARE_TEX2D(_Decal2Tex);
     float4 _Decal2Tint;
@@ -109,11 +113,15 @@ float _MainTex_UV;
     float _Decal2_UV;
     float _Decal2TriplanarSharpness;
     int _Decal2BlendMode;
-    // not worth for extra compiler time to make these conditional
     float _Decal2IsTriplanar;
     float3 _Decal2TriplanarPosition;
     float _Decal2TriplanarScale;
     float3 _Decal2TriplanarRotation;
+    float _Decal2Repeat;
+    float2 _Decal2Scroll;
+    float _Decal2HueShift;
+    float _Decal2AutoCycleHue;
+    float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECAL2
 
 #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)

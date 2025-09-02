@@ -553,29 +553,21 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         // kajiya-kay hair specular
         float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
         {
-            // Sample the flow map to get our hair direction
             float2 flow = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rg * 2 - 1;
             float3 hairTangent = normalize(flow.x * Surface.TangentDir + flow.y * Surface.BitangentDir);
-            
-            // Shift the tangent along the normal for the primary highlight
             float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * _PrimarySpecularShift);
             float dotT1L = dot(shiftedTangent1, lightDir);
             float dotT1V = dot(shiftedTangent1, Surface.ViewDir);
             float sinT1L = sqrt(1.0 - dotT1L * dotT1L);
             float sinT1V = sqrt(1.0 - dotT1V * dotT1V);
             float primarySpec = pow(saturate(dotT1L * dotT1V + sinT1L * sinT1V), _SpecularExponent);
-            
-            // Shift it again for the secondary highlight
             float3 shiftedTangent2 = normalize(hairTangent + Surface.NormalDir * _SecondarySpecularShift);
             float dotT2L = dot(shiftedTangent2, lightDir);
             float dotT2V = dot(shiftedTangent2, Surface.ViewDir);
             float sinT2L = sqrt(1.0 - dotT2L * dotT2L);
             float sinT2V = sqrt(1.0 - dotT2V * dotT2V);
             float secondarySpec = pow(saturate(dotT2L * dotT2V + sinT2L * sinT2V), _SpecularExponent);
-            
-            // The secondary highlight is often colored by the hair's albedo
             float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
-
             return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);
         }
     #elif defined(_SPECULARMODE_CLOTH)
@@ -1000,7 +992,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
                 _PathingMap, sampler_PathingMap,
                 FragData.worldPos, Surface.NormalDir,
                 float3(0, 0, 0), _PathingScale, float3(0, 0, 0),
-                2.0, true
+                2.0, true, float2(0, 0)
             ).r;
         }
         float pathTime = frac(_Time.y * _PathingSpeed + _PathingOffset);

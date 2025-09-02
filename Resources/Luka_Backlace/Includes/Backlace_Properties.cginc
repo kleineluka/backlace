@@ -256,7 +256,7 @@ float3 _VertexManipulationScale;
 #endif // _BACKLACE_DETAIL
 
 // decal1 feature
-#if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
+#if defined(_BACKLACE_DECAL1)
     UNITY_DECLARE_TEX2D(_Decal1Tex);
     float4 _Decal1Tint;
     float2 _Decal1Position;
@@ -269,6 +269,11 @@ float3 _VertexManipulationScale;
     float3 _Decal1TriplanarPosition;
     float _Decal1TriplanarScale;
     float3 _Decal1TriplanarRotation;
+    float _Decal1Repeat;
+    float2 _Decal1Scroll;
+    float _Decal1HueShift;
+    float _Decal1AutoCycleHue;
+    float _Decal1CycleSpeed;
 #endif // _BACKLACE_DECAL1
 
 // decal2 feature
@@ -285,6 +290,11 @@ float3 _VertexManipulationScale;
     float3 _Decal2TriplanarPosition;
     float _Decal2TriplanarScale;
     float3 _Decal2TriplanarRotation;
+    float _Decal2Repeat;
+    float2 _Decal2Scroll;
+    float _Decal2HueShift;
+    float _Decal2AutoCycleHue;
+    float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECAL2
 
 // post-processing feature
