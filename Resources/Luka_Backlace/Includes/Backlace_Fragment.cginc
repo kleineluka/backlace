@@ -22,14 +22,16 @@ float4 Fragment(FragmentData i) : SV_TARGET
         }
     #endif // _BACKLACE_DISTANCE_FADE
     #if defined(_BACKLACE_PARALLAX)
+        float2 parallax_uv = Uvs[_ParallaxMap_UV];
         [branch] if (_ParallaxMode == 0) // fast parallax
         {
-            ApplyParallax_Fast(Uvs[0], Surface);
+            ApplyParallax_Fast(parallax_uv, Surface);
         }
         else if (_ParallaxMode == 1) // fancy parallax
         {
-            ApplyParallax_Fancy(Uvs[0], Surface);
+            ApplyParallax_Fancy(parallax_uv, Surface);
         }
+        Uvs[0] = parallax_uv;
     #endif // _BACKLACE_PARALLAX
     SampleAlbedo(Surface);
     #if defined(_BACKLACE_VRCHAT_MIRROR)

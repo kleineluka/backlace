@@ -11,11 +11,10 @@ Shader "luka/indev/backlace"
         [Space(35)]
         [Header(Rendering Settings)]
         [Space(10)]
-        _SrcBlend ("Src Blend", Float) = 1.0
-        _DstBlend ("Dst Blend", Float) = 0.0
+        _SrcBlend ("Src Blend", Float) = 5
+        _DstBlend ("Dst Blend", Float) = 10
         _ZWrite ("ZWrite", Float) = 1.0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull Mode", Int) = 2
-        _Mode ("Blend mode", Int) = 0
         [IntRange] _StencilID ("Stencil ID (0-255)", Range(0, 255)) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 0
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
@@ -619,7 +618,7 @@ Shader "luka/indev/backlace"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" "VRCFallback"="Toon" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

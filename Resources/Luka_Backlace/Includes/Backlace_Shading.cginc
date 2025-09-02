@@ -958,34 +958,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
 #if defined(_BACKLACE_DISSOLVE)
     void ApplyDissolve(inout BacklaceSurfaceData Surface, FragmentData i)
     {
-        float dissolveMapValue = 0;
-        switch(_DissolveType)
-        {
-            case 0: // noise
-            {
-                dissolveMapValue = SampleTextureTriplanar(
-                    _DissolveNoiseTex, sampler_DissolveNoiseTex,
-                    i.worldPos, Surface.NormalDir,
-                    float3(0,0,0), _DissolveNoiseScale, float3(0,0,0),
-                    2.0, true
-                ).r;
-                break;
-            }
-            case 1: // directional
-            {
-                float3 position = (_DissolveDirectionSpace == 0) ? i.vertex.xyz : i.worldPos;
-                float3 direction = normalize(_DissolveDirection.xyz);
-                dissolveMapValue = dot(position, direction) / max(_DissolveDirectionBounds, 0.001);
-                dissolveMapValue = saturate(dissolveMapValue * 0.5 + 0.5); // Remap from [-1,1] to [0,1]
-                break;
-            }
-            case 2: // voxel
-            {
-                float3 voxelID = floor(i.worldPos * _DissolveVoxelDensity);
-                dissolveMapValue = Hash(voxelID.xy + voxelID.z);
-                break;
-            }
-        }
+        float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, Surface.NormalDir);
         float halfWidth = max(_DissolveEdgeWidth, 0.0001) * 0.5;
         if (_DissolveEdgeMode == 0) // glow
         {

@@ -335,6 +335,43 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
     #endif // _BACKLACE_DECAL2
 #endif // _BACKLACE_DECAL1 || _BACKLACE_DECAL2
 
+    
+// dissolve-only features
+#if defined(_BACKLACE_DISSOLVE)
+    float GetDissolveMapValue(float3 worldPos, float3 vertexPos, float3 normalDir)
+    {
+        float dissolveMapValue = 0;
+        switch(_DissolveType)
+        {
+            case 0: // noise
+            {
+                dissolveMapValue = SampleTextureTriplanar(
+                    _DissolveNoiseTex, sampler_DissolveNoiseTex,
+                    worldPos, normalDir,
+                    float3(0,0,0), _DissolveNoiseScale, float3(0,0,0),
+                    2.0, true
+                ).r;
+                break;
+            }
+            case 1: // directional
+            {
+                float3 position = (_DissolveDirectionSpace == 0) ? vertexPos : worldPos;
+                float3 direction = normalize(_DissolveDirection.xyz);
+                dissolveMapValue = dot(position, direction) / max(_DissolveDirectionBounds, 0.001);
+                dissolveMapValue = saturate(dissolveMapValue * 0.5 + 0.5); // remap from [-1,1] to [0,1]
+                break;
+            }
+            case 2: // voxel
+            {
+                float3 voxelID = floor(worldPos * _DissolveVoxelDensity);
+                dissolveMapValue = Hash(voxelID.xy + voxelID.z);
+                break;
+            }
+        }
+        return dissolveMapValue;
+    }
+#endif // _BACKLACE_DISSOLVE
+
 // here is where we leave out shadow pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
