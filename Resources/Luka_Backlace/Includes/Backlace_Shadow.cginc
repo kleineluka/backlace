@@ -88,6 +88,33 @@ float _UV_Scroll_Y_Speed;
 float3 _VertexManipulationPosition;
 float3 _VertexManipulationScale;
 
+// uv effects
+#if defined(_BACKLACE_UV_EFFECTS)
+    // triplanar
+    float _UVTriplanarMapping;
+    float3 _UVTriplanarPosition;
+    float _UVTriplanarScale;
+    float3 _UVTriplanarRotation;
+    float _UVTriplanarSharpness;
+    // screenspace
+    float _UVScreenspaceMapping;
+    float _UVScreenspaceTiling;
+    // flipbook
+    float _UVFlipbook;
+    float _UVFlipbookRows;
+    float _UVFlipbookColumns;
+    float _UVFlipbookFrames;
+    float _UVFlipbookFPS;
+    float _UVFlipbookScrub;
+    // flowmap
+    float _UVFlowmap;
+    UNITY_DECLARE_TEX2D(_UVFlowmapTex);
+    float _UVFlowmapStrength;
+    float _UVFlowmapSpeed;
+    float _UVFlowmapDistortion;
+    float _UVFlowmap_UV;
+#endif // _BACKLACE_UV_EFFECTS
+
 // parallax-only features
 #if defined(_BACKLACE_PARALLAX)
     UNITY_DECLARE_TEX2D(_ParallaxMap);
@@ -221,6 +248,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
         LoadUVs();
         Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
+        #if defined(_BACKLACE_UV_EFFECTS)
+            ApplyUVEffects(Uvs[0], Surface);
+        #endif // _BACKLACE_UV_EFFECTS
         SampleAlbedo(Surface);
         #if defined(_BACKLACE_DECAL1)
             ApplyDecal1(Surface, FragData, Uvs);

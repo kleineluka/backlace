@@ -273,6 +273,26 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
     return outputUVs;
 }
 
+// manipulate uvs
+float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, float offsetx, float offsety, float scrollx, float scrolly)
+{
+    float2 finalUV = uv;
+    if (rotation != 0)
+    {
+        finalUV = uv - 0.5;
+        float angle = -rotation * (UNITY_PI / 180.0);
+        float s = sin(angle);
+        float c = cos(angle);
+        float2x2 rotationMatrix = float2x2(c, -s, s, c);
+        finalUV = mul(rotationMatrix, finalUV);
+        finalUV += 0.5;
+    }
+    finalUV *= float2(scalex, scaley);
+    finalUV += float2(offsetx, offsety);
+    finalUV += float2(scrollx, scrolly) * _Time.y;
+    return finalUV;
+}
+
 // decals-only features
 #if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
     void ApplyDecal_UVSpace(inout float4 baseAlbedo, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, float4 tint, float2 position, float2 scale, float rotation, int blendMode, float repeat, float2 scroll, float hueShift, float autoCycle, float cycleSpeed)
@@ -355,7 +375,39 @@ float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, f
     #endif // _BACKLACE_DECAL2
 #endif // _BACKLACE_DECAL1 || _BACKLACE_DECAL2
 
-    
+// uv effects-only features
+#if defined(_BACKLACE_UV_EFFECTS)
+    void ApplyUVEffects(inout float2 uv, in BacklaceSurfaceData Surface)
+    {
+        // triplanar uv mapping
+        [branch] if (_UVTriplanarMapping == 1) 
+        {
+            float2 uvX, uvY, uvZ;
+            float3 weights;
+            GetTriplanarUVsAndWeights(
+                FragData.worldPos, Surface.NormalDir,
+                _UVTriplanarPosition, _UVTriplanarScale, _UVTriplanarRotation, _UVTriplanarSharpness,
+                uvX, uvY, uvZ, weights
+            );
+            uv = uvX * weights.x + uvY * weights.y + uvZ * weights.z;
+        }
+        // screen space uv
+        [branch] if (_UVScreenspaceMapping == 1) 
+        {
+            uv = frac(Surface.ScreenCoords * _UVScreenspaceTiling);
+        }
+        // flipbook
+        [branch] if (_UVFlipbook == 1) {
+            uv = ApplyFlipbook(uv, _UVFlipbookColumns, _UVFlipbookRows, _UVFlipbookFrames, _UVFlipbookFPS, _UVFlipbookScrub);
+        }
+        // flow map
+        [branch] if (_UVFlowmap == 1) {
+            float2 flow = UNITY_SAMPLE_TEX2D(_UVFlowmapTex, uv).rg * 2.0 - 1.0;
+            uv += flow * _UVFlowmapStrength * frac(_Time.y * _UVFlowmapSpeed);
+        }
+    }
+#endif // _BACKLACE_UV_EFFECTS
+
 // dissolve-only features
 #if defined(_BACKLACE_DISSOLVE)
     float GetDissolveMapValue(float3 worldPos, float3 vertexPos, float3 normalDir)
