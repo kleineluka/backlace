@@ -194,7 +194,7 @@ VertexOutput  Vertex(VertexData v)
     v.vertex.xyz *= _VertexManipulationScale;
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        DistortVertex(v);
+        DistortVertex(v.vertex);
     #endif // _BACKLACE_VERTEX_DISTORTION
     i.vertex = v.vertex;
     i.normal = UnityObjectToWorldNormal(v.normal);

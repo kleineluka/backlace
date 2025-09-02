@@ -71,6 +71,9 @@ Shader "luka/indev/backlace"
         _UVFlowmapDistortion ("Flowmap Distortion", Range(0, 1)) = 0.5
 
         // VERTEX MANIPULATION
+        [Space(35)]
+        [Header(Vertex Manipulation)]
+        [Space(10)]
         _VertexManipulationPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _VertexManipulationScale ("World Scale (XYZ)", Vector) = (1, 1, 1, 0)
 

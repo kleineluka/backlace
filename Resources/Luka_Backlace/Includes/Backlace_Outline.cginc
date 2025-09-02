@@ -5,8 +5,11 @@
 #pragma vertex vert
 #pragma fragment frag
 
-// dissolve support for the outline
+// keywords
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE
+#pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
+
+// dissolve support for the outline
 #if defined(_BACKLACE_DISSOLVE)
     float _DissolveProgress;
     UNITY_DECLARE_TEX2D(_DissolveNoiseTex);
@@ -18,9 +21,14 @@
     float _DissolveVoxelDensity;
 #endif
 
+// vertex manipulation
+float3 _VertexManipulationPosition;
+float3 _VertexManipulationScale;
+
 // includes
 #include "UnityCG.cginc"
 #include "./Backlace_Universal.cginc"
+#include "./Backlace_Effects.cginc"
 
 // properties
 float4 _OutlineColor;
@@ -56,6 +64,12 @@ struct v2f
 v2f vert(appdata v)
 {
     v2f o;
+    // vertex effects from forward passes
+    v.vertex.xyz *= _VertexManipulationScale;
+    v.vertex.xyz += _VertexManipulationPosition;
+    #if defined(_BACKLACE_VERTEX_DISTORTION)
+        DistortVertex(v.vertex);
+    #endif // _BACKLACE_VERTEX_DISTORTION
     float mask = lerp(1.0, v.color.r, _OutlineVertexColorMask);
     float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
     float3 worldNormal = UnityObjectToWorldNormal(v.normal);

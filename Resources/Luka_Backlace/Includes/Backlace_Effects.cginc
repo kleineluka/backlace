@@ -368,7 +368,6 @@
     }
 #endif // _BACKLACE_VRCHAT_MIRROR
 
-
 // touch reactive effect
 #if defined(_BACKLACE_TOUCH_REACTIVE)
     #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
@@ -411,8 +410,7 @@
         }
     }
 #endif // _BACKLACE_TOUCH_REACTIVE
-
-    
+  
 // refraction feature
 #if defined(_BACKLACE_REFRACTION)
     UNITY_DECLARE_TEX2D(_RefractionMask);
@@ -515,24 +513,24 @@
     float3 _VertexDistortionSpeed;
     float3 _VertexDistortionFrequency;
 
-    void DistortVertex(inout VertexData v)
+    void DistortVertex(inout float4 vertex)
     {
         float time = _Time.y;
         float3 distortion = 0;
         if (_VertexDistortionMode == 0) // wave
         {
-            distortion.x = sin(v.vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
-            distortion.y = sin(v.vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
-            distortion.z = sin(v.vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
+            distortion.x = sin(vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
+            distortion.y = sin(vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
+            distortion.z = sin(vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
         } 
         else if (_VertexDistortionMode == 1) // jumble 
         {
-            float offsetX = sin(v.vertex.x * _VertexDistortionFrequency.x) * cos(v.vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
-            float offsetY = cos(v.vertex.y * _VertexDistortionFrequency.y) * sin(v.vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
-            float offsetZ = sin(v.vertex.z * _VertexDistortionFrequency.z) * cos(v.vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
+            float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
+            float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
+            float offsetZ = sin(vertex.z * _VertexDistortionFrequency.z) * cos(vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
             distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed);
         }
-        v.vertex.xyz += distortion;
+        vertex.xyz += distortion;
     }
 #endif // _BACKLACE_VERTEX_DISTORTION
 

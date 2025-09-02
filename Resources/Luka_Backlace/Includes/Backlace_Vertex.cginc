@@ -14,7 +14,7 @@ FragmentData Vertex(VertexData v)
 
     // vertex distortion
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        DistortVertex(v);
+        DistortVertex(v.vertex);
     #endif // _BACKLACE_VERTEX_DISTORTION
     
     // boilerplate assignments
