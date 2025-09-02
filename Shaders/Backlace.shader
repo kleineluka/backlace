@@ -29,6 +29,7 @@ Shader "luka/indev/backlace"
         _Cutoff ("Alpha Cutoff", Range(0, 1)) = 0.5
         _BumpMap ("Normal map", 2D) = "bump" { }
         _BumpScale ("Normal map scale", Float) = 1
+        _Alpha ("Alpha", Range(0, 1)) = 1.0
 
         // UV MANIPULATION
         [Space(35)]

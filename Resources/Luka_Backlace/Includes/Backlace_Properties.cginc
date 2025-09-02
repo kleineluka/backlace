@@ -9,58 +9,68 @@
     #endif // BACKLACE_GRABPASS
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD
 
+// global variables
 FragmentData FragData;
+float3 NormalMap;
+float3 Lightmap;
+float GFS;
+float3 NDF;
+float3 DynamicLightmap;
+float4 LightmapDirection;
+float4 DynamicLightmapDirection;
+float4 Msso;
+float RoughnessSquared;
+float RampAttenuation;
+float LightAttenuation;
+
+// main settings
+float _Alpha;
+UNITY_DECLARE_TEX2D(_MainTex);
+float4 _MainTex_ST;
+UNITY_DECLARE_TEX2D_NOSAMPLER(_BumpMap);
+float4 _BumpMap_ST;
+float4 _Color;
+float _Cutoff;
+float _BumpScale;
+float _DFGType;
+Texture2D_float _DFG;
+SamplerState sampler_DFG;
+float _IndirectFallbackMode;
+float _IndirectOverride;
+
+// specular settings
+float _Occlusion;
+float _Metallic;
+float _Glossiness;
+float _Specular;
+float _ReplaceSpecular;
+float _Anisotropy;
+float _EnableSpecular;
+samplerCUBE _FallbackCubemap;
+UNITY_DECLARE_TEX2D_NOSAMPLER(_MSSO);
+UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
+UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
+float4 _MSSO_ST;
+float4 _SpecularTintTexture_ST;
+float4 _SpecularTint;
+float4 _TangentMap_ST;
+
+// lighting settings
 float _LightingColorMode;
 float _LightingDirectionMode;
 float4 _ForcedLightDirection;
 float _ViewDirectionOffsetX;
 float _ViewDirectionOffsetY;
-float LightAttenuation;
-float _MainTex_UV;
-float _Occlusion;
-float _MSSO_UV;
-float _Cutoff;
-float _BumpScale;
-float _BumpMap_UV;
-float RampAttenuation;
-float _Metallic;
-float _Glossiness;
-float _Specular;
-float _ReplaceSpecular;
-float _SpecularTintTexture_UV;
-float GFS;
-float _DFGType;
-float _Anisotropy;
-float _TangentMap_UV;
-float _IndirectFallbackMode;
-float _IndirectOverride;
-float RoughnessSquared;
-float _EnableSpecular;
 float _GreyscaleLighting;
 float _ForceLightColor;
 float4 _ForcedLightColor;
-float3 NormalMap;
-float3 Lightmap;
-float3 DynamicLightmap;
-float3 NDF;
-float4 LightmapDirection;
-float4 DynamicLightmapDirection;
-float4 _MainTex_ST;
-float4 _Color;
-float4 _MSSO_ST;
-float4 Msso;
-float4 _BumpMap_ST;
-float4 _SpecularTintTexture_ST;
-float4 _SpecularTint;
-float4 _TangentMap_ST;
-samplerCUBE _FallbackCubemap;
-UNITY_DECLARE_TEX2D(_MainTex);
-UNITY_DECLARE_TEX2D_NOSAMPLER(_MSSO);
-UNITY_DECLARE_TEX2D_NOSAMPLER(_BumpMap);
-UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
-UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
-Texture2D_float _DFG;
-SamplerState sampler_DFG;
+
+// uv settings
+float _MainTex_UV;
+float _MSSO_UV;
+float _BumpMap_UV;
+float _TangentMap_UV;
+float _SpecularTintTexture_UV;
 
 // lighting contributions
 float _DirectIntensity;

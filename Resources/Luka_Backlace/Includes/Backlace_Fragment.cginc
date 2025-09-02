@@ -146,6 +146,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_DISSOLVE) // todo: move before lighting but store edge glow value if not culling
         ApplyDissolve(Surface, i);
     #endif // _BACKLACE_DISSOLVE
+    Surface.FinalColor.a *= _Alpha;
     return Surface.FinalColor;
 }
 
