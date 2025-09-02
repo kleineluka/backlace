@@ -75,6 +75,19 @@ float4 _Color;
 float _Cutoff;
 float _MainTex_UV;
 
+// uv manipulation
+float _UV_Offset_X;
+float _UV_Offset_Y;
+float _UV_Scale_X;
+float _UV_Scale_Y;
+float _UV_Rotation;
+float _UV_Scroll_X_Speed;
+float _UV_Scroll_Y_Speed;
+
+// vertex manipulation
+float3 _VertexManipulationPosition;
+float3 _VertexManipulationScale;
+
 // parallax-only features
 #if defined(_BACKLACE_PARALLAX)
     UNITY_DECLARE_TEX2D(_ParallaxMap);
@@ -144,11 +157,18 @@ float _MainTex_UV;
 
 // my includes
 #include "./Backlace_Universal.cginc"
+#include "./Backlace_Effects.cginc"
 
 // shadow vertex function
 VertexOutput  Vertex(VertexData v)
 {
     VertexOutput  i;
+    // vertex effects from forward passes
+    v.vertex.xyz *= _VertexManipulationScale;
+    v.vertex.xyz += _VertexManipulationPosition;
+    #if defined(_BACKLACE_VERTEX_DISTORTION)
+        DistortVertex(v);
+    #endif // _BACKLACE_VERTEX_DISTORTION
     i.vertex = v.vertex;
     i.normal = UnityObjectToWorldNormal(v.normal);
     i.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
@@ -167,13 +187,23 @@ VertexOutput  Vertex(VertexData v)
         parallaxWorldPos += offset.x * worldTangent + offset.y * worldBitangent;
         v.vertex.xyz = mul(unity_WorldToObject, float4(parallaxWorldPos, 1)).xyz;
     #endif // _BACKLACE_PARALLAX
-    #if defined(SHADOWS_CUBE)
-        i.pos = UnityObjectToClipPos(v.vertex);
-        i.lightVec = mul(unity_ObjectToWorld, v.vertex).xyz - _LightPositionRange.xyz;
-    #else // SHADOWS_CUBE
-        i.pos = UnityClipSpaceShadowCasterPos(v.vertex.xyz, v.normal);
-        i.pos = UnityApplyLinearShadowBias(i.pos);
-    #endif // SHADOWS_CUBE
+    // flat model shadow casting
+    #if defined(_BACKLACE_FLAT_MODEL)
+        float4 finalClipPos;
+        float3 finalWorldPos;
+        float3 finalWorldNormal;
+        FlattenModel(v, finalClipPos, finalWorldPos, finalWorldNormal);
+        i.pos = UnityClipSpaceShadowCasterPos(mul(unity_WorldToObject, float4(finalWorldPos, 1.0)).xyz, finalWorldNormal);
+    #else // _BACKLACE_FLAT_MODEL
+        // original shadow caster position calculation
+        #if defined(SHADOWS_CUBE)
+            i.pos = UnityObjectToClipPos(v.vertex);
+            i.lightVec = mul(unity_ObjectToWorld, v.vertex).xyz - _LightPositionRange.xyz;
+        #else
+            i.pos = UnityClipSpaceShadowCasterPos(v.vertex.xyz, v.normal);
+        #endif
+    #endif
+    i.pos = UnityApplyLinearShadowBias(i.pos);
     #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
         i.uv = v.uv;
         i.uv1 = v.uv1;
@@ -190,6 +220,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     FragData = i;
     #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
         LoadUVs();
+        Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
         SampleAlbedo(Surface);
         #if defined(_BACKLACE_DECAL1)
             ApplyDecal1(Surface, FragData, Uvs);
@@ -199,6 +230,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
         #endif // _BACKLACE_DECAL2
         ClipShadowAlpha(Surface);
     #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #if defined(_BACKLACE_DISSOLVE)
+        float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, i.normal);
+        clip(_DissolveProgress - dissolveMapValue); // dont need edge glow, just clip
+    #endif
     #if defined(SHADOWS_CUBE)
         float depth = length(i.lightVec) + unity_LightShadowBias.x;
         depth *= _LightPositionRange.w;
