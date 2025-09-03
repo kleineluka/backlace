@@ -410,12 +410,12 @@ float4 AudioLinkGetAudioSourcePosition()
         float decalHue;
         float decalEmission;
         float decalOpacity;
-        float vertexOffset;
-        float outlineWidth;
         float matcap;
         float pathing;
         float glitter;
         float iridescence;
+        float vertexScale;
+        float outlineWidth;
     };
 
     float _AudioLinkFallback;
@@ -475,7 +475,7 @@ float4 AudioLinkGetAudioSourcePosition()
             data.decalHue = _AudioLinkFallback;
             data.decalEmission = _AudioLinkFallback;
             data.decalOpacity = _AudioLinkFallback;
-            data.vertexOffset = _AudioLinkFallback;
+            data.vertexScale = _AudioLinkFallback;
             data.outlineWidth = _AudioLinkFallback;
             data.matcap = _AudioLinkFallback;
             data.pathing = _AudioLinkFallback;
@@ -489,7 +489,7 @@ float4 AudioLinkGetAudioSourcePosition()
         data.decalHue = CalculateAudioLinkEffect(_AudioLinkDecalHueBand, _AudioLinkDecalHueRange, _AudioLinkDecalHueStrength);
         data.decalEmission = CalculateAudioLinkEffect(_AudioLinkDecalEmissionBand, _AudioLinkDecalEmissionRange, _AudioLinkDecalEmissionStrength);
         data.decalOpacity = CalculateAudioLinkEffect(_AudioLinkDecalOpacityBand, _AudioLinkDecalOpacityRange, _AudioLinkDecalOpacityStrength);
-        data.vertexOffset = CalculateAudioLinkEffect(_AudioLinkVertexBand, _AudioLinkVertexRange, _AudioLinkVertexStrength);
+        data.vertexScale = CalculateAudioLinkEffect(_AudioLinkVertexBand, _AudioLinkVertexRange, _AudioLinkVertexStrength);
         data.outlineWidth = CalculateAudioLinkEffect(_AudioLinkOutlineBand, _AudioLinkOutlineRange, _AudioLinkOutlineStrength);
         data.matcap = CalculateAudioLinkEffect(_AudioLinkMatcapBand, _AudioLinkMatcapRange, _AudioLinkMatcapStrength);
         data.pathing = CalculateAudioLinkEffect(_AudioLinkPathingBand, _AudioLinkPathingRange, _AudioLinkPathingStrength);

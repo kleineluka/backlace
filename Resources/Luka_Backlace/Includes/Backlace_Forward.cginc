@@ -26,6 +26,11 @@
 #include "UnityStandardUtils.cginc"
 #include "AutoLight.cginc"
 
+// optional audiolink integration
+#if defined(_BACKLACE_AUDIOLINK)
+    #include "./Backlace_AudioLink.cginc"
+#endif // _BACKLACE_AUDIOLINK
+
 // data structures
 struct VertexData
 {
@@ -65,8 +70,10 @@ struct FragmentData
     float3 worldObjectCenter : TEXCOORD11;
     float4 scrPos : TEXCOORD12; // for grab pass
     #if defined(_BACKLACE_AUDIOLINK)
-        BacklaceAudioLinkData audioLink;
-    #endif
+        float4 alChannel1 : TEXCOORD13; // x=emission, y=rim, z=hueShift, w=matcap
+        float4 alChannel2 : TEXCOORD14; // x=pathing, y=glitter, z=iridescence, w=decalHue
+        float2 alChannel3 : TEXCOORD15; // x=decalEmission, y=decalOpacity
+    #endif // _BACKLACE_AUDIOLINK
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
@@ -75,11 +82,6 @@ struct Unity_GlossyEnvironmentData
     half roughness; // this is perceptualRoughness but compatability
     half3 reflUVW;
 };
-
-#if defined(_BACKLACE_AUDIOLINK)
-    #include "./Backlace_AudioLink.cginc"
-    uniform Texture2D<float4> _AudioTexture;
-#endif // _BACKLACE_AUDIOLINK
 
 // backlace includes
 #include "./Backlace_Properties.cginc"

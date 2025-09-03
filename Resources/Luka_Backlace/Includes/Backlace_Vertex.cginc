@@ -8,12 +8,18 @@ FragmentData Vertex(VertexData v)
     UNITY_INITIALIZE_OUTPUT(FragmentData, i);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i);
 
+    // set up audio link values
     #if defined(_BACKLACE_AUDIOLINK)
-        i.audioLink = CalculateAudioLinkEffects();
+        BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
+        i.alChannel1 = float4(al_data.emission, al_data.rim, al_data.hueShift, al_data.matcap);
+        i.alChannel2 = float4(al_data.pathing, al_data.glitter, al_data.iridescence, al_data.decalHue);
+        i.alChannel3 = float2(al_data.decalEmission, al_data.decalOpacity);
+        v.vertex.xyz *= _VertexManipulationScale * (al_data.vertexScale); // scale
+    #else // _BACKLACE_AUDIOLINK
+        v.vertex.xyz *= _VertexManipulationScale; // scale
     #endif // _BACKLACE_AUDIOLINK
 
-    // vertex manipulation
-    v.vertex.xyz *= _VertexManipulationScale; // scale
+    // vertex manipulation (continued)
     v.vertex.xyz += _VertexManipulationPosition; // position
 
     // vertex distortion

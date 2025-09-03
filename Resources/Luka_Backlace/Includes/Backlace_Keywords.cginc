@@ -31,7 +31,7 @@
 #pragma shader_feature_local _ _BACKLACE_PATHING
 #pragma shader_feature_local _ _BACKLACE_DEPTH_RIMLIGHT
 #pragma shader_feature_local _ _BACKLACE_SHADOW_MAP
-#pragma shader_feature_local _ _BACKLACE_AUDIOLINk
+#pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
