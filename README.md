@@ -43,7 +43,7 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Pathing
 - Depth Rim Lighting
 - Shadow Map
-- AudioLink Support (not yet implemented)
+- AudioLink Support
 </details>
 
 <details>

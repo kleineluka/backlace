@@ -85,7 +85,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         ApplyTouchReactive(Surface, i);
     #endif // _BACKLACE_TOUCH_REACTIVE
     #if defined(_BACKLACE_POST_PROCESSING)
-        ApplyPostProcessing(Surface);
+        ApplyPostProcessing(Surface, i);
     #endif // _BACKLACE_POST_PROCESSING
     #if defined(_BACKLACE_SPECULAR)
         AddDirectSpecular(Surface);
@@ -96,6 +96,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // _BACKLACE_SPECULAR
     #if defined(_BACKLACE_RIMLIGHT)
         CalculateRimlight(Surface);
+        #if defined(_BACKLACE_AUDIOLINK)
+            Rimlight *= i.alChannel1.y;
+        #endif // !_BACKLACE_AUDIOLINK
         Surface.FinalColor.rgb += Rimlight;
     #endif // _BACKLACE_RIMLIGHT
     #if defined(_BACKLACE_DEPTH_RIMLIGHT)

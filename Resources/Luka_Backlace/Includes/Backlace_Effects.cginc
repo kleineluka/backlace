@@ -69,7 +69,11 @@
             float rainbow_time = _Time.y * _GlitterRainbowSpeed;
             glitter_color = lerp(glitter_color, Sinebow(unique_flake_id + rainbow_time), _ToggleGlitterRainbow);
         }
-        final_glitter = glitter_mask * glitter_color * _GlitterBrightness;
+        float finalGlitterBrightness = _GlitterBrightness;
+        #if defined(_BACKLACE_AUDIOLINK)
+            finalGlitterBrightness *= i.alChannel2.y;
+        #endif // _BACKLACE_AUDIOLINK
+        final_glitter = glitter_mask * glitter_color * finalGlitterBrightness;
         float mask_val = UNITY_SAMPLE_TEX2D(_GlitterMask, Uvs[_GlitterMask_UV]).r;
         sparkle *= mask_val;
         Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, final_glitter, sparkle);
@@ -173,7 +177,11 @@
             iridescenceColor = Sinebow(hue);
         }
         float mask = UNITY_SAMPLE_TEX2D(_IridescenceMask, Uvs[_IridescenceMask_UV]).r;
-        float finalIntensity = _IridescenceIntensity * pow(fresnel_base, 2.0) * mask;
+        float finalIridescenceIntensity = _IridescenceIntensity;
+        #if defined(_BACKLACE_AUDIOLINK)
+            finalIridescenceIntensity *= i.alChannel2.z;
+        #endif // _BACKLACE_AUDIOLINK
+        float finalIntensity = finalIridescenceIntensity * pow(fresnel_base, 2.0) * mask;
         iridescenceColor *= _IridescenceTint.rgb * finalIntensity;
         [branch] switch(_IridescenceBlendMode)
         {

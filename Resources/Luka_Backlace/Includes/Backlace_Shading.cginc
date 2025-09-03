@@ -722,7 +722,11 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         }
         matcapColor *= _MatcapTint.rgb;
         float mask = UNITY_SAMPLE_TEX2D(_MatcapMask, Uvs[_MatcapMask_UV]).r;
-        float3 finalMatcap = matcapColor * _MatcapIntensity * mask;
+        float finalMatcapIntensity = _MatcapIntensity;
+        #if defined(_BACKLACE_AUDIOLINK)
+            finalMatcapIntensity *= i.alChannel1.w;
+        #endif // _BACKLACE_AUDIOLINK
+        float3 finalMatcap = matcapColor * finalMatcapIntensity * mask;
         switch(_MatcapBlendMode)
         {
             case 0: // additive
@@ -847,7 +851,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
 
 // post-processing-only features
 #if defined(_BACKLACE_POST_PROCESSING)
-    void ApplyPostProcessing(inout BacklaceSurfaceData Surface)
+    void ApplyPostProcessing(inout BacklaceSurfaceData Surface, FragmentData i)
     {
         float3 finalColor = Surface.FinalColor.rgb;
         // rgb tint/replace
@@ -871,7 +875,11 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         // hue shift/cycle
         [branch] if (_ToggleHueShift > 0)
         {
-            finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
+            #if defined(_BACKLACE_AUDIOLINK)
+                finalColor = ApplyHueShift(finalColor, _HueShift + i.alChannel1.z, _ToggleAutoCycle, _AutoCycleSpeed);
+            #else // _BACKLACE_AUDIOLINK
+                finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
+            #endif // _BACKLACE_AUDIOLINK
         }
         // colour grading
         [branch] if (_ColorGradingIntensity > 0)
@@ -957,6 +965,9 @@ inline half3 FresnelTerm(half3 F0, half cosA)
             break;
         }
         pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
+        #if defined(_BACKLACE_AUDIOLINK)
+            pathAlpha *= i.alChannel2.x;
+        #endif // _BACKLACE_AUDIOLINK
         if (pathAlpha <= 0.001) return;
         float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
         switch(_PathingBlendMode)
