@@ -1,4 +1,8 @@
-# Backlace 💗
+<p align="left">
+  <img src="./.assets/backlace.png" alt="Backlace Logo" width="500"/>
+</p>
+
+---
 
 > *Remember that time when I told you to relax? You need some inner-#!&$&%!-peace!*
 
