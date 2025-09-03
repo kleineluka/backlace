@@ -669,7 +669,6 @@ Shader "luka/indev/backlace"
         [NonModifiableTextureData][NoScaleOffset] _DFGType ("Lighing Type", Float) = 0
         _StencilSection ("Stencil Section Display", Int) = 0
     }
-
     SubShader
     {
 
@@ -764,5 +763,5 @@ Shader "luka/indev/backlace"
         }
 
     }
-
+    CustomEditor "Luka.Backlace.Interface"
 }
