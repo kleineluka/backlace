@@ -8,6 +8,10 @@ FragmentData Vertex(VertexData v)
     UNITY_INITIALIZE_OUTPUT(FragmentData, i);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i);
 
+    #if defined(_BACKLACE_AUDIOLINK)
+        i.audioLink = CalculateAudioLinkEffects();
+    #endif // _BACKLACE_AUDIOLINK
+
     // vertex manipulation
     v.vertex.xyz *= _VertexManipulationScale; // scale
     v.vertex.xyz += _VertexManipulationPosition; // position

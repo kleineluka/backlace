@@ -401,4 +401,102 @@ float4 AudioLinkGetAudioSourcePosition()
     return float4(AudioLinkData(ALPASS_GENERALVU_SOURCE_POS).xyz, 1);
 }
 
+#if defined(_BACKLACE_AUDIOLINK)
+    struct BacklaceAudioLinkData
+    {
+        float emission;
+        float rim;
+        float hueShift;
+        float decalHue;
+        float decalEmission;
+        float decalOpacity;
+        float vertexOffset;
+        float outlineWidth;
+        float matcap;
+        float pathing;
+        float glitter;
+        float iridescence;
+    };
+
+    float _AudioLinkFallback;
+    float _AudioLinkEmissionBand, _AudioLinkEmissionStrength;
+    float2 _AudioLinkEmissionRange;
+    float _AudioLinkRimBand, _AudioLinkRimStrength;
+    float2 _AudioLinkRimRange;
+    float _AudioLinkHueShiftBand, _AudioLinkHueShiftStrength;
+    float2 _AudioLinkHueShiftRange;
+    float _AudioLinkDecalHueBand, _AudioLinkDecalHueStrength;
+    float2 _AudioLinkDecalHueRange;
+    float _AudioLinkDecalEmissionBand, _AudioLinkDecalEmissionStrength;
+    float2 _AudioLinkDecalEmissionRange;
+    float _AudioLinkDecalOpacityBand, _AudioLinkDecalOpacityStrength;
+    float2 _AudioLinkDecalOpacityRange;
+    float _AudioLinkVertexBand, _AudioLinkVertexStrength;
+    float2 _AudioLinkVertexRange;
+    float _AudioLinkOutlineBand, _AudioLinkOutlineStrength;
+    float2 _AudioLinkOutlineRange;
+    float _AudioLinkMatcapBand, _AudioLinkMatcapStrength;
+    float2 _AudioLinkMatcapRange;
+    float _AudioLinkPathingBand, _AudioLinkPathingStrength;
+    float2 _AudioLinkPathingRange;
+    float _AudioLinkGlitterBand, _AudioLinkGlitterStrength;
+    float2 _AudioLinkGlitterRange;
+    float _AudioLinkIridescenceBand, _AudioLinkIridescenceStrength;
+    float2 _AudioLinkIridescenceRange;
+
+    float GetAudioLinkBandValue(float band)
+    {
+        if (band < 1) return 0;
+        float value = 0;
+        switch((int)band - 1)
+        {
+            case 0: value = AudioLinkData(ALPASS_AUDIOBASS).r; break; // bass
+            case 1: value = AudioLinkData(ALPASS_AUDIOLOWMIDS).r; break; // low mids
+            case 2: value = AudioLinkData(ALPASS_AUDIOHIGHMIDS).r; break; // high mids
+            case 3: value = AudioLinkData(ALPASS_AUDIOTREBLE).r; break; // treble
+            case 4: value = AudioLinkData(ALPASS_GENERALVU).z; break; // overall
+        }
+        return value;
+    }
+
+    float CalculateAudioLinkEffect(float band, float2 range, float strength)
+    {
+        float raw = GetAudioLinkBandValue(band);
+        return lerp(range.x, range.y, raw) * strength;
+    }
+
+    BacklaceAudioLinkData CalculateAudioLinkEffects() {
+        BacklaceAudioLinkData data = (BacklaceAudioLinkData)0;
+        if (!AudioLinkIsAvailable())
+        {
+            data.emission = _AudioLinkFallback;
+            data.rim = _AudioLinkFallback;
+            data.hueShift = _AudioLinkFallback;
+            data.decalHue = _AudioLinkFallback;
+            data.decalEmission = _AudioLinkFallback;
+            data.decalOpacity = _AudioLinkFallback;
+            data.vertexOffset = _AudioLinkFallback;
+            data.outlineWidth = _AudioLinkFallback;
+            data.matcap = _AudioLinkFallback;
+            data.pathing = _AudioLinkFallback;
+            data.glitter = _AudioLinkFallback;
+            data.iridescence = _AudioLinkFallback;
+            return data;
+        }
+        data.emission = CalculateAudioLinkEffect(_AudioLinkEmissionBand, _AudioLinkEmissionRange, _AudioLinkEmissionStrength);
+        data.rim = CalculateAudioLinkEffect(_AudioLinkRimBand, _AudioLinkRimRange, _AudioLinkRimStrength);
+        data.hueShift = CalculateAudioLinkEffect(_AudioLinkHueShiftBand, _AudioLinkHueShiftRange, _AudioLinkHueShiftStrength);
+        data.decalHue = CalculateAudioLinkEffect(_AudioLinkDecalHueBand, _AudioLinkDecalHueRange, _AudioLinkDecalHueStrength);
+        data.decalEmission = CalculateAudioLinkEffect(_AudioLinkDecalEmissionBand, _AudioLinkDecalEmissionRange, _AudioLinkDecalEmissionStrength);
+        data.decalOpacity = CalculateAudioLinkEffect(_AudioLinkDecalOpacityBand, _AudioLinkDecalOpacityRange, _AudioLinkDecalOpacityStrength);
+        data.vertexOffset = CalculateAudioLinkEffect(_AudioLinkVertexBand, _AudioLinkVertexRange, _AudioLinkVertexStrength);
+        data.outlineWidth = CalculateAudioLinkEffect(_AudioLinkOutlineBand, _AudioLinkOutlineRange, _AudioLinkOutlineStrength);
+        data.matcap = CalculateAudioLinkEffect(_AudioLinkMatcapBand, _AudioLinkMatcapRange, _AudioLinkMatcapStrength);
+        data.pathing = CalculateAudioLinkEffect(_AudioLinkPathingBand, _AudioLinkPathingRange, _AudioLinkPathingStrength);
+        data.glitter = CalculateAudioLinkEffect(_AudioLinkGlitterBand, _AudioLinkGlitterRange, _AudioLinkGlitterStrength);
+        data.iridescence = CalculateAudioLinkEffect(_AudioLinkIridescenceBand, _AudioLinkIridescenceRange, _AudioLinkIridescenceStrength);
+        return data;
+    }
+#endif // _BACKLACE_AUDIOLINK
+
 #endif // BACKLACE_AUDIOLINK_CGINC

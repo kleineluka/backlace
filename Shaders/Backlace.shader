@@ -390,6 +390,49 @@ Shader "luka/indev/backlace"
         _DepthRimSharpness ("Sharpness", Range(0.01, 1)) = 0.1
         [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
 
+        // AUDIOLINK
+        [Space(35)]
+        [Header(AudioLink)]
+        [Space(10)]
+        [Toggle(_BACKLACE_AUDIOLINK)] _ToggleAudioLink ("Enable AudioLink", Float) = 0.0
+        _AudioLinkFallback ("Fallback Level", Range(0, 1)) = 1.0
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkEmissionBand ("Emission Band", Float) = 0
+        _AudioLinkEmissionStrength ("  Strength", Range(0, 10)) = 1.0
+        _AudioLinkEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkRimBand ("Rim Light Band", Float) = 0
+        _AudioLinkRimStrength ("  Strength", Range(0, 10)) = 1.0
+        _AudioLinkRimRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkHueShiftBand ("Hue Shift Band", Float) = 0
+        _AudioLinkHueShiftStrength ("  Strength", Range(0, 1)) = 0.2
+        _AudioLinkHueShiftRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalHueBand ("Decal Hue Band", Float) = 0
+        _AudioLinkDecalHueStrength ("  Strength", Range(0, 10)) = 2.0
+        _AudioLinkDecalHueRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalEmissionBand ("Decal Emission Band", Float) = 0
+        _AudioLinkDecalEmissionStrength ("  Strength", Range(0, 10)) = 2.0
+        _AudioLinkDecalEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalOpacityBand ("Decal Opacity Band", Float) = 0
+        _AudioLinkDecalOpacityStrength ("  Strength", Range(0, 10)) = 2.0
+        _AudioLinkDecalOpacityRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkVertexBand ("Vertex Grow/Shrink Band", Float) = 0
+        _AudioLinkVertexStrength ("  Strength", Range(-0.2, 0.2)) = 0.05
+        _AudioLinkVertexRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkOutlineBand ("Outline Band", Float) = 0
+        _AudioLinkOutlineStrength ("  Strength", Range(0, 0.1)) = 0.01
+        _AudioLinkOutlineRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkMatcapBand ("Matcap Band", Float) = 0
+        _AudioLinkMatcapStrength ("  Strength", Range(0, 5)) = 1.0
+        _AudioLinkMatcapRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkPathingBand ("Pathing Band", Float) = 0
+        _AudioLinkPathingStrength ("  Strength", Range(0, 0.5)) = 0.1
+        _AudioLinkPathingRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkGlitterBand ("Glitter Band", Float) = 0
+        _AudioLinkGlitterStrength ("  Strength", Range(0, 1)) = 1.0
+        _AudioLinkGlitterRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkIridescenceBand ("Iridescence Band", Float) = 0
+        _AudioLinkIridescenceStrength ("  Strength", Range(0, 5)) = 1.0
+        _AudioLinkIridescenceRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+
         // FUN FEATURES
         [Space(70)]
         [Header(Fun Variant Features)]
