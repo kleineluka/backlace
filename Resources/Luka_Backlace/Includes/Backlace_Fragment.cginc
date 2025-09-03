@@ -102,7 +102,11 @@ float4 Fragment(FragmentData i) : SV_TARGET
         ApplyDepthRim(Surface, i);
     #endif // _BACKLACE_DEPTH_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
-        Surface.FinalColor.rgb += Emission;
+        #if defined(_BACKLACE_AUDIOLINK)
+            Surface.FinalColor.rgb += (Emission * i.alChannel1.x);
+        #else // !_BACKLACE_AUDIOLINK
+            Surface.FinalColor.rgb += Emission;
+        #endif // _BACKLACE_AUDIOLINK
     #endif // _BACKLACE_EMISSION
     #if defined(_BACKLACE_PATHING)
         ApplyPathing(Surface);

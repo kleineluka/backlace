@@ -446,7 +446,7 @@ float4 AudioLinkGetAudioSourcePosition()
 
     float GetAudioLinkBandValue(float band)
     {
-        if (band < 1) return 0;
+        if (band < 1) return _AudioLinkFallback;
         float value = 0;
         switch((int)band - 1)
         {
