@@ -94,9 +94,9 @@ float3 _VertexManipulationPosition;
 float3 _VertexManipulationScale;
 
 // dither feature
-#if defined(_ALPHAMODULATE_ON) || defined(_BACKLACE_DISTANCE_FADE)
+#if defined(_BLENDMODE_FADE) || defined(_BACKLACE_DISTANCE_FADE)
     sampler3D _DitherMaskLOD;
-#endif // _ALPHAMODULATE_ON || _BACKLACE_DISTANCE_FADE
+#endif // _BLENDMODE_FADE || _BACKLACE_DISTANCE_FADE
 
 // min/max light (base)
 #if defined(UNITY_PASS_FORWARDBASE)

@@ -2,7 +2,6 @@
 #define BACKLACE_FORWARD_CGINC
 
 // keywords
-#pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
 #include "./Backlace_Keywords.cginc"
 
 // compiler directives

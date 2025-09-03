@@ -9,7 +9,7 @@
 #pragma fragment Fragment
 
 // keywords
-#pragma shader_feature_local _ _ALPHATEST_ON _ALPHAMODULATE_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+#pragma multi_compile _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
 #pragma shader_feature_local _ _BACKLACE_DECAL1
 #pragma shader_feature_local _ _BACKLACE_DECAL2
@@ -32,12 +32,12 @@ struct VertexData
 struct VertexOutput
 {
     float4 pos : SV_POSITION;
-    #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
         float2 uv : TEXCOORD0;
         float2 uv1 : TEXCOORD1;
         float2 uv2 : TEXCOORD2;
         float2 uv3 : TEXCOORD3;
-    #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #if defined(SHADOWS_CUBE)
         float3 lightVec : TEXCOORD4;
     #endif // SHADOWS_CUBE
@@ -48,17 +48,17 @@ struct VertexOutput
 
 struct FragmentData
 {
-    #if defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #if defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
         UNITY_VPOS_TYPE pos : VPOS;
     #else
         float4 pos : SV_POSITION;
     #endif
-    #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
         float2 uv : TEXCOORD0;
         float2 uv1 : TEXCOORD1;
         float2 uv2 : TEXCOORD2;
         float2 uv3 : TEXCOORD3;
-    #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #if defined(SHADOWS_CUBE)
         float3 lightVec : TEXCOORD4;
     #endif // SHADOWS_CUBE
@@ -164,27 +164,26 @@ float3 _VertexManipulationScale;
     float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECAL2
 
-#if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-    float _DirectLightMode;
-    float _EnableSpecular;  
-    float _IndirectFallbackMode;
-    UNITY_DECLARE_TEX2D(_MainTex);
-    void ClipShadowAlpha(inout BacklaceSurfaceData Surface)
-    {
-        #if defined(_ALPHATEST_ON)
-            clip(Surface.Albedo.a - _Cutoff);
-        #else // _ALPHATEST_ON
-            #if defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-                float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Surface.Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
-                clip(dither - 0.01);
-            #endif // _ALPHABLEND_ON || _ALPHAPREMULTIPLY_ON || _ALPHAMODULATE_ON
-        #endif
-    }
-#endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
-
 // my includes
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Effects.cginc"
+
+#if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
+    float _DirectLightMode;
+    float _EnableSpecular;  
+    float _IndirectFallbackMode;
+    void ClipShadowAlpha(inout BacklaceSurfaceData Surface)
+    {
+        #if defined(_BLENDMODE_CUTOUT)
+            clip(Surface.Albedo.a - _Cutoff);
+        #else // _BLENDMODE_CUTOUT
+            #if defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
+                float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Surface.Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
+                clip(dither - 0.01);
+            #endif // _BLENDMODE_TRANSPARENT || _BLENDMODE_PREMULTIPLY || _BLENDMODE_FADE
+        #endif
+    }
+#endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
 
 // shadow vertex function
 VertexOutput  Vertex(VertexData v)
@@ -231,12 +230,12 @@ VertexOutput  Vertex(VertexData v)
         #endif
     #endif
     i.pos = UnityApplyLinearShadowBias(i.pos);
-    #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
         i.uv = v.uv;
         i.uv1 = v.uv1;
         i.uv2 = v.uv2;
         i.uv3 = v.uv3;
-    #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     return i;
 }
 
@@ -245,7 +244,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
 {
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     FragData = i;
-    #if defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
         LoadUVs();
         Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
         #if defined(_BACKLACE_UV_EFFECTS)
@@ -259,7 +258,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
             ApplyDecal2(Surface, FragData, Uvs);
         #endif // _BACKLACE_DECAL2
         ClipShadowAlpha(Surface);
-    #endif // defined(_ALPHATEST_ON) || defined(_ALPHABLEND_ON) || defined(_ALPHAPREMULTIPLY_ON) || defined(_ALPHAMODULATE_ON)
+    #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #if defined(_BACKLACE_DISSOLVE)
         float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, i.normal);
         clip(_DissolveProgress - dissolveMapValue); // dont need edge glow, just clip

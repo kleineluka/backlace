@@ -18,6 +18,7 @@ Shader "luka/indev/backlace"
         [IntRange] _StencilID ("Stencil ID (0-255)", Range(0, 255)) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 0
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
+        [KeywordEnum(Cutout, Fade, Transparent, Premultiply)] _BlendMode ("Blending Mode", Float) = 0
 
         // MAIN MAPS AND ALPHA
         [Space(35)]

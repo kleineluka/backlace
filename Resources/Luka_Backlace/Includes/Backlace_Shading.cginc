@@ -4,14 +4,12 @@
 // clip alpha based on the _Cutoff value or dither mask
 void ClipAlpha(inout BacklaceSurfaceData Surface)
 {
-    #if defined(_ALPHATEST_ON)
+    #if defined(_BLENDMODE_CUTOUT)
         clip(Surface.Albedo.a - _Cutoff);
-    #else // _ALPHATEST_ON
-        #if defined(_ALPHAMODULATE_ON)
-            float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Surface.Albedo.a * 0.9375)).a; //Dither16x16Bayer(FragData.pos.xy * 0.25) * Albedo.a;
-            clip(dither - 0.01);
-        #endif // _ALPHAMODULATE_ON
-    #endif // _ALPHATEST_ON
+    #elif defined(_BLENDMODE_FADE)
+        float dither = tex3D(_DitherMaskLOD, float3(FragData.pos.xy * 0.25, Surface.Albedo.a * 0.9375)).a;
+        clip(dither - 0.01);
+    #endif // _BLENDMODE_CUTOUT
 }
 
 // sample normal map
@@ -66,7 +64,7 @@ void GetDotProducts(inout BacklaceSurfaceData Surface)
 // premultiply alpha
 void PremultiplyAlpha(inout BacklaceSurfaceData Surface)
 {
-    #if defined(_ALPHAPREMULTIPLY_ON)
+    #if defined(_BLENDMODE_PREMULTIPLY)
         Surface.Albedo.rgb *= Surface.Albedo.a;
     #endif
 }
