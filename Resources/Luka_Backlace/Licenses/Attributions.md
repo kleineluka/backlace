@@ -1,15 +1,15 @@
-## VRLabs/Toony-Standard-Rebuild
+## Translations Notice
 
-This shader was originally a fork of the Toony Standard Rebuild shader by VRLabs, which can be found at their [Github Page](https://github.com/VRLabs/Toony-Standard-Rebuild). It is under the MIT license which can be found [here](https://github.com/VRLabs/Toony-Standard-Rebuild/blob/main/LICENSE) in their repository.
+Languages other than English are machine translated. If you would like to help translate June Lite into your language better, please reach out and I can add you to the credits! Because, as of now, they are machine translated, I cannot guarantee that they are 100% accurate. Only translations not in English are assisted by machines.
 
-## Poiyomi/PoiyomiToonShader
+## Artwork Notice
 
-\"Poi Custom\" lighting modes are derived from the Poiyomi Toon Shader by Poiyomi, which can be found at their [Github Page](https://github.com/poiyomi/PoiyomiToonShader). It is under the MIT license which can be found [here](https://github.com/poiyomi/PoiyomiToonShader/blob/master/LICENSE) in their repository.
+Artwork for my social media icon is provided by xan42705228 / xan13 / xan-gelx and commissioned by me. May not be reused or destributed. Note: I am not the artist, and as such, have no control over what they post on their social media - it may be NSFW, so visit at your own risk!
 
-## lilxyzw/lilToon
+## Social Media Icons Notice
 
-\"OpenLit" lighting modes are derived from the lilToon shader by lilxyzw, which can be found at their [Github Page](https://github.com/lilxyzw/lilToon). It is under the MIT license which can be found [here](https://github.com/lilxyzw/lilToon/blob/master/LICENSE).
+Icons for various social media platforms, such as Gumroad or Jinxxy, are all owned by their respective platforms, companies, and creators.
 
-## MochiesCode/Mochies-Unity-Shaders
+## Font Notice
 
-\"Mochies\" lighting modes are derived from the Mochies Unity Shaders by Mochie, which can be found at their [Github Page](https://github.com/MochiesCode/Mochies-Unity-Shaders/). It is under the MIT license which can be found [here](https://github.com/MochiesCode/Mochies-Unity-Shaders/blob/main/LICENSE) in their repository.
+Nunito and Noto Sans JP are both licensed under the SIL Open Font License, Version 1.1. You can learn more about this license at https://openfontlicense.org/open-font-license-official-text/.

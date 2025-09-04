@@ -138,7 +138,7 @@
         },
         {
             "key": "sub_tab_uv_sets",
-            "value": "Advanced: UV Sets"
+            "value": "UV Sets"
         },
         {
             "key": "tab_lighting",
@@ -149,8 +149,8 @@
             "value": "Lighting Model"
         },
         {
-            "key": "sub_tab_diffuse",
-            "value": "Diffuse / Toon Shading"
+            "key": "sub_tab_toon",
+            "value": "Anime Shading"
         },
         {
             "key": "sub_tab_specular",

@@ -92,10 +92,10 @@ Shader "luka/indev/backlace"
         // [Space(35)]
         // [Header(Light Limiting)]
         // [Space(10)]
-        [IntRange] _EnableBaseLightLimit ("Enable Base Pass Limit", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _EnableBaseLightLimit ("Enable Base Pass Limit", Range(0, 1)) = 0.0
         _BaseLightMin ("Base Light Min", Float) = 0.0
         _BaseLightMax ("Base Light Max", Float) = 2.0
-        [IntRange] _EnableAddLightLimit ("Enable Add Pass Limit", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _EnableAddLightLimit ("Enable Add Pass Limit", Range(0, 1)) = 0.0
         _AddLightMin ("Add Light Min", Float) = 0.0
         _AddLightMax ("Add Light Max", Float) = 2.0
         _GreyscaleLighting ("Greyscale Lighting", Range(0, 1)) = 0.0
@@ -193,7 +193,7 @@ Shader "luka/indev/backlace"
         [HDR] _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
         _RimWidth ("Rim Width", Range(20, 0.1)) = 2.5
         _RimIntensity ("Rim Intensity", Float) = 1.0
-        [IntRange] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
 
         // CLEARCOAT
         // [Space(35)]
