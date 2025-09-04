@@ -931,7 +931,7 @@ inline half3 FresnelTerm(half3 F0, half cosA)
 
 // pathing feature
 #if defined(_BACKLACE_PATHING)
-    void ApplyPathing(inout BacklaceSurfaceData Surface)
+    void ApplyPathing(inout BacklaceSurfaceData Surface, FragmentData i)
     {
         float pathValue;
         if (_PathingMappingMode == 0) // albedo uv

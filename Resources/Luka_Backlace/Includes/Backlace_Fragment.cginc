@@ -112,7 +112,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         #endif // _BACKLACE_AUDIOLINK
     #endif // _BACKLACE_EMISSION
     #if defined(_BACKLACE_PATHING)
-        ApplyPathing(Surface);
+        ApplyPathing(Surface, i);
     #endif // _BACKLACE_PATHING
     #if defined(_BACKLACE_IRIDESCENCE)
         ApplyIridescence(Surface);

@@ -1134,6 +1134,26 @@ namespace Luka.Backlace
                 sub_tab_matcap.draw();
                 if (sub_tab_matcap.is_expanded) {
                     // shading - matcap
+                    prop_ToggleMatcap = FindProperty("_ToggleMatcap", properties);
+                    prop_MatcapTex = FindProperty("_MatcapTex", properties);
+                    prop_MatcapTint = FindProperty("_MatcapTint", properties);
+                    prop_MatcapIntensity = FindProperty("_MatcapIntensity", properties);
+                    prop_MatcapBlendMode = FindProperty("_MatcapBlendMode", properties);
+                    prop_MatcapMask = FindProperty("_MatcapMask", properties);
+                    prop_MatcapSmoothnessEnabled = FindProperty("_MatcapSmoothnessEnabled", properties);
+                    prop_MatcapSmoothness = FindProperty("_MatcapSmoothness", properties);
+                    materialEditor.ShaderProperty(prop_ToggleMatcap, languages.speak("prop_ToggleMatcap"));
+                    Components.start_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_MatcapTex, languages.speak("prop_MatcapTex"));
+                    materialEditor.ShaderProperty(prop_MatcapTint, languages.speak("prop_MatcapTint"));
+                    materialEditor.ShaderProperty(prop_MatcapIntensity, languages.speak("prop_MatcapIntensity"));
+                    materialEditor.ShaderProperty(prop_MatcapBlendMode, languages.speak("prop_MatcapBlendMode"));
+                    materialEditor.ShaderProperty(prop_MatcapMask, languages.speak("prop_MatcapMask"));
+                    materialEditor.ShaderProperty(prop_MatcapSmoothnessEnabled, languages.speak("prop_MatcapSmoothnessEnabled"));
+                    Components.start_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_MatcapSmoothness, languages.speak("prop_MatcapSmoothness"));
+                    Components.end_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
+                    Components.end_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
                 }
                 sub_tab_cubemap.draw();
                 if (sub_tab_cubemap.is_expanded) {
@@ -1235,6 +1255,32 @@ namespace Luka.Backlace
                 sub_tab_pathing.draw();
                 if (sub_tab_pathing.is_expanded) {
                     // effects - pathing
+                    prop_TogglePathing = FindProperty("_TogglePathing", properties);
+                    prop_PathingMappingMode = FindProperty("_PathingMappingMode", properties);
+                    prop_PathingMap = FindProperty("_PathingMap", properties);
+                    prop_PathingScale = FindProperty("_PathingScale", properties);
+                    prop_PathingBlendMode = FindProperty("_PathingBlendMode", properties);
+                    prop_PathingColor = FindProperty("_PathingColor", properties);
+                    prop_PathingEmission = FindProperty("_PathingEmission", properties);
+                    prop_PathingType = FindProperty("_PathingType", properties);
+                    prop_PathingSpeed = FindProperty("_PathingSpeed", properties);
+                    prop_PathingWidth = FindProperty("_PathingWidth", properties);
+                    prop_PathingSoftness = FindProperty("_PathingSoftness", properties);
+                    prop_PathingOffset = FindProperty("_PathingOffset", properties);
+                    materialEditor.ShaderProperty(prop_TogglePathing, languages.speak("prop_TogglePathing"));
+                    Components.start_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_PathingMappingMode, languages.speak("prop_PathingMappingMode"));
+                    materialEditor.ShaderProperty(prop_PathingMap, languages.speak("prop_PathingMap"));
+                    materialEditor.ShaderProperty(prop_PathingScale, languages.speak("prop_PathingScale"));
+                    materialEditor.ShaderProperty(prop_PathingBlendMode, languages.speak("prop_PathingBlendMode"));
+                    materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
+                    materialEditor.ShaderProperty(prop_PathingEmission, languages.speak("prop_PathingEmission"));
+                    materialEditor.ShaderProperty(prop_PathingType, languages.speak("prop_PathingType"));
+                    materialEditor.ShaderProperty(prop_PathingSpeed, languages.speak("prop_PathingSpeed"));
+                    materialEditor.ShaderProperty(prop_PathingWidth, languages.speak("prop_PathingWidth"));
+                    materialEditor.ShaderProperty(prop_PathingSoftness, languages.speak("prop_PathingSoftness"));
+                    materialEditor.ShaderProperty(prop_PathingOffset, languages.speak("prop_PathingOffset"));
+                    Components.end_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                 }
                 sub_tab_audiolink.draw();
                 if (sub_tab_audiolink.is_expanded) {
