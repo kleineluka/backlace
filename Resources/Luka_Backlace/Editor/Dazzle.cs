@@ -1022,14 +1022,14 @@ namespace Luka.Backlace
         // start dynamic disable 
         public static void start_dynamic_disable(bool disable_conditional, Config config_manager = null)
         {
-            if (config_manager != null && !config_manager.json_data.@interface.grey_unused)
+            if (config_manager != null && config_manager.json_data.@interface.grey_unused)
             EditorGUI.BeginDisabledGroup(disable_conditional == true);
         }
 
         // end dynamic disable
         public static void end_dynamic_disable(bool disable_conditional, Config config_manager = null)
         {
-            if (config_manager != null && !config_manager.json_data.@interface.grey_unused)
+            if (config_manager != null && config_manager.json_data.@interface.grey_unused)
             if (disable_conditional) EditorGUI.EndDisabledGroup();
         }
 
