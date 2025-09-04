@@ -90,6 +90,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_StencilComp = null;
         private MaterialProperty prop_StencilOp = null;
         private MaterialProperty prop_BlendMode = null;
+        private MaterialProperty prop_VRCFallback = null;
         // texture properties
         private MaterialProperty prop_MainTex = null;
         private MaterialProperty prop_Color = null;
@@ -699,6 +700,7 @@ namespace Luka.Backlace
                     prop_StencilID = FindProperty("_StencilID", properties);
                     prop_StencilComp = FindProperty("_StencilComp", properties);
                     prop_StencilOp = FindProperty("_StencilOp", properties);
+                    prop_VRCFallback = FindProperty("_VRCFallback", properties);
                     materialEditor.ShaderProperty(prop_BlendMode, languages.speak("prop_BlendMode"));
                     materialEditor.ShaderProperty(prop_SrcBlend, languages.speak("prop_SrcBlend"));
                     materialEditor.ShaderProperty(prop_DstBlend, languages.speak("prop_DstBlend"));
@@ -707,6 +709,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_StencilID, languages.speak("prop_StencilID"));
                     materialEditor.ShaderProperty(prop_StencilComp, languages.speak("prop_StencilComp"));
                     materialEditor.ShaderProperty(prop_StencilOp, languages.speak("prop_StencilOp"));     
+                    materialEditor.ShaderProperty(prop_VRCFallback, languages.speak("prop_VRCFallback"));
                 }
                 sub_tab_textures.draw();
                 if (sub_tab_textures.is_expanded) {

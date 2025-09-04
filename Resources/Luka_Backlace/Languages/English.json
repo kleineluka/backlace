@@ -301,6 +301,10 @@
             "value": "Blending Mode"
         },
         {
+            "key": "prop_VRCFallback",
+            "value": "VRChat Fallback"
+        },
+        {
             "key": "prop_MainTex",
             "value": "Main texture"
         },

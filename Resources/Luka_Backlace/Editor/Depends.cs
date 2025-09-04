@@ -378,6 +378,70 @@ namespace Luka.Backlace
 
     }
 
+    // VRChat Fallback (duh, you fall on a cushion) Handler
+    public class Cushion
+    {
+        private int _currentFallback;
+        private int _currentBlendMode;
+
+        public Cushion(Material mat)
+        {
+            if (!mat.HasProperty("_VRCFallback") || !mat.HasProperty("_BlendMode")) return;
+            _currentFallback = mat.GetInt("_VRCFallback");
+            _currentBlendMode = mat.GetInt("_BlendMode");
+            SetTag(mat);
+        }
+
+        public void Update(Material mat)
+        {
+            if (!mat.HasProperty("_VRCFallback") || !mat.HasProperty("_BlendMode")) return;
+            int newFallback = mat.GetInt("_VRCFallback");
+            int newBlendMode = mat.GetInt("_BlendMode");
+            if (newFallback != _currentFallback || newBlendMode != _currentBlendMode)
+            {
+                _currentFallback = newFallback;
+                _currentBlendMode = newBlendMode;
+                SetTag(mat);
+            }
+        }
+
+        private void SetTag(Material mat)
+        {
+            string fallbackTag = "";
+            // _VRCFallback enum: Toon=0, DoubleSided=1, Unlit=2, Particle=3, Matcap=4, Sprite=5, Hidden=6
+            switch (_currentFallback)
+            {
+                case 0: fallbackTag = "Toon"; break;
+                case 1: fallbackTag = "DoubleSided"; break;
+                case 2: fallbackTag = "Unlit"; break;
+                case 3: fallbackTag = "Particle"; break;
+                case 4: fallbackTag = "Matcap"; break;
+                case 5: fallbackTag = "Sprite"; break;
+                case 6: fallbackTag = "Hidden"; break;
+                default: break;
+            }
+            if (_currentFallback != 6) // Not "Hidden"
+            {
+                // _BlendMode enum: Cutout=0, Fade=1, Transparent=2, Premultiply=3
+                switch (_currentBlendMode)
+                {
+                    case 0: // cutout
+                        fallbackTag += "Cutout";
+                        break;
+                    case 1: // fade
+                        fallbackTag += "Fade";
+                        break;
+                    case 2: // transparent
+                    case 3: // premultiply
+                        fallbackTag += "Transparent";
+                        break;
+                    default: break; // Opaque
+                }
+            }
+            mat.SetOverrideTag("VRCFallback", fallbackTag);
+        }
+    }
+
     // prefab manager
     public class Prefabulous
     {
