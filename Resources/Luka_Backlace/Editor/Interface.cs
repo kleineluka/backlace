@@ -37,7 +37,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_textures = null;
         private static Tab sub_tab_uv_manipulation = null;
         private static Tab sub_tab_uv_effects = null;
-        private static Tab sub_tab_vertex_effects = null;
+        private static Tab sub_tab_vertex_manipulation = null;
         private static Tab sub_tab_decal_one = null;
         private static Tab sub_tab_decal_two = null;
         private static Tab sub_tab_post_processing = null;
@@ -572,7 +572,7 @@ namespace Luka.Backlace
             sub_tab_textures = null;
             sub_tab_uv_manipulation = null;
             sub_tab_uv_effects = null;
-            sub_tab_vertex_effects = null;
+            sub_tab_vertex_manipulation = null;
             sub_tab_decal_one = null;
             sub_tab_decal_two = null;
             sub_tab_post_processing = null;
@@ -634,7 +634,7 @@ namespace Luka.Backlace
             sub_tab_textures = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_textures"));
             sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_uv_manipulation"));
             sub_tab_uv_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_effects"));
-            sub_tab_vertex_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_vertex_effects"));
+            sub_tab_vertex_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_vertex_manipulation"));
             sub_tab_decal_one = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_decal_one"));
             sub_tab_decal_two = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_decal_two"));
             sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_post_processing"));
@@ -691,26 +691,146 @@ namespace Luka.Backlace
                 sub_tab_rendering.draw();
                 if (sub_tab_rendering.is_expanded) {
                     // main - rendering
+                    prop_BlendMode = FindProperty("_BlendMode", properties);
+                    prop_SrcBlend = FindProperty("_SrcBlend", properties);
+                    prop_DstBlend = FindProperty("_DstBlend", properties);
+                    prop_ZWrite = FindProperty("_ZWrite", properties);
+                    prop_Cull = FindProperty("_Cull", properties);
+                    prop_StencilID = FindProperty("_StencilID", properties);
+                    prop_StencilComp = FindProperty("_StencilComp", properties);
+                    prop_StencilOp = FindProperty("_StencilOp", properties);
+                    materialEditor.ShaderProperty(prop_BlendMode, languages.speak("prop_BlendMode"));
+                    materialEditor.ShaderProperty(prop_SrcBlend, languages.speak("prop_SrcBlend"));
+                    materialEditor.ShaderProperty(prop_DstBlend, languages.speak("prop_DstBlend"));
+                    materialEditor.ShaderProperty(prop_ZWrite, languages.speak("prop_ZWrite"));
+                    materialEditor.ShaderProperty(prop_Cull, languages.speak("prop_Cull"));
+                    materialEditor.ShaderProperty(prop_StencilID, languages.speak("prop_StencilID"));
+                    materialEditor.ShaderProperty(prop_StencilComp, languages.speak("prop_StencilComp"));
+                    materialEditor.ShaderProperty(prop_StencilOp, languages.speak("prop_StencilOp"));     
                 }
                 sub_tab_textures.draw();
                 if (sub_tab_textures.is_expanded) {
                     // main - textures
+                    prop_MainTex = FindProperty("_MainTex", properties);
+                    prop_Color = FindProperty("_Color", properties);
+                    prop_Cutoff = FindProperty("_Cutoff", properties);
+                    prop_BumpMap = FindProperty("_BumpMap", properties);
+                    prop_BumpScale = FindProperty("_BumpScale", properties);
+                    prop_Alpha = FindProperty("_Alpha", properties);
+                    materialEditor.ShaderProperty(prop_MainTex, languages.speak("prop_MainTex"));
+                    materialEditor.ShaderProperty(prop_Color, languages.speak("prop_Color"));
+                    materialEditor.ShaderProperty(prop_Cutoff, languages.speak("prop_Cutoff"));
+                    materialEditor.ShaderProperty(prop_BumpMap, languages.speak("prop_BumpMap"));
+                    materialEditor.ShaderProperty(prop_BumpScale, languages.speak("prop_BumpScale"));
+                    materialEditor.ShaderProperty(prop_Alpha, languages.speak("prop_Alpha"));
                 }
                 sub_tab_uv_manipulation.draw();
                 if (sub_tab_uv_manipulation.is_expanded) {
                     // main - uv manipulation
+                    prop_UV_Offset_X = FindProperty("_UV_Offset_X", properties);
+                    prop_UV_Offset_Y = FindProperty("_UV_Offset_Y", properties);
+                    prop_UV_Scale_X = FindProperty("_UV_Scale_X", properties);
+                    prop_UV_Scale_Y = FindProperty("_UV_Scale_Y", properties);
+                    prop_UV_Rotation = FindProperty("_UV_Rotation", properties);
+                    prop_UV_Scroll_X_Speed = FindProperty("_UV_Scroll_X_Speed", properties);
+                    prop_UV_Scroll_Y_Speed = FindProperty("_UV_Scroll_Y_Speed", properties);
+                    materialEditor.ShaderProperty(prop_UV_Offset_X, languages.speak("prop_UV_Offset_X"));
+                    materialEditor.ShaderProperty(prop_UV_Offset_Y, languages.speak("prop_UV_Offset_Y"));
+                    materialEditor.ShaderProperty(prop_UV_Scale_X, languages.speak("prop_UV_Scale_X"));
+                    materialEditor.ShaderProperty(prop_UV_Scale_Y, languages.speak("prop_UV_Scale_Y"));
+                    materialEditor.ShaderProperty(prop_UV_Rotation, languages.speak("prop_UV_Rotation"));
+                    materialEditor.ShaderProperty(prop_UV_Scroll_X_Speed, languages.speak("prop_UV_Scroll_X_Speed"));
+                    materialEditor.ShaderProperty(prop_UV_Scroll_Y_Speed, languages.speak("prop_UV_Scroll_Y_Speed"));
                 }
                 sub_tab_uv_effects.draw();
                 if (sub_tab_uv_effects.is_expanded) {
                     // main - uv effects
+                    prop_ToggleUVEffects = FindProperty("_ToggleUVEffects", properties);
+                    prop_UVTriplanarMapping = FindProperty("_UVTriplanarMapping", properties);
+                    prop_UVTriplanarPosition = FindProperty("_UVTriplanarPosition", properties);
+                    prop_UVTriplanarScale = FindProperty("_UVTriplanarScale", properties);
+                    prop_UVTriplanarRotation = FindProperty("_UVTriplanarRotation", properties);
+                    prop_UVTriplanarSharpness = FindProperty("_UVTriplanarSharpness", properties);
+                    prop_UVScreenspaceMapping = FindProperty("_UVScreenspaceMapping", properties);
+                    prop_UVScreenspaceTiling = FindProperty("_UVScreenspaceTiling", properties);
+                    prop_UVFlipbook = FindProperty("_UVFlipbook", properties);
+                    prop_UVFlipbookRows = FindProperty("_UVFlipbookRows", properties);
+                    prop_UVFlipbookColumns = FindProperty("_UVFlipbookColumns", properties);
+                    prop_UVFlipbookFrames = FindProperty("_UVFlipbookFrames", properties);
+                    prop_UVFlipbookFPS = FindProperty("_UVFlipbookFPS", properties);
+                    prop_UVFlipbookScrub = FindProperty("_UVFlipbookScrub", properties);
+                    prop_UVFlowmap = FindProperty("_UVFlowmap", properties);
+                    prop_UVFlowmapTex = FindProperty("_UVFlowmapTex", properties);
+                    prop_UVFlowmapStrength = FindProperty("_UVFlowmapStrength", properties);
+                    prop_UVFlowmapSpeed = FindProperty("_UVFlowmapSpeed", properties);
+                    prop_UVFlowmapDistortion = FindProperty("_UVFlowmapDistortion", properties);
+                    materialEditor.ShaderProperty(prop_ToggleUVEffects, languages.speak("prop_ToggleUVEffects"));
+                    materialEditor.ShaderProperty(prop_UVTriplanarMapping, languages.speak("prop_UVTriplanarMapping"));
+                    materialEditor.ShaderProperty(prop_UVTriplanarPosition, languages.speak("prop_UVTriplanarPosition"));
+                    materialEditor.ShaderProperty(prop_UVTriplanarScale, languages.speak("prop_UVTriplanarScale"));
+                    materialEditor.ShaderProperty(prop_UVTriplanarRotation, languages.speak("prop_UVTriplanarRotation"));
+                    materialEditor.ShaderProperty(prop_UVTriplanarSharpness, languages.speak("prop_UVTriplanarSharpness"));
+                    materialEditor.ShaderProperty(prop_UVScreenspaceMapping, languages.speak("prop_UVScreenspaceMapping"));
+                    materialEditor.ShaderProperty(prop_UVScreenspaceTiling, languages.speak("prop_UVScreenspaceTiling"));
+                    materialEditor.ShaderProperty(prop_UVFlipbook, languages.speak("prop_UVFlipbook"));
+                    materialEditor.ShaderProperty(prop_UVFlipbookRows, languages.speak("prop_UVFlipbookRows"));
+                    materialEditor.ShaderProperty(prop_UVFlipbookColumns, languages.speak("prop_UVFlipbookColumns"));
+                    materialEditor.ShaderProperty(prop_UVFlipbookFrames, languages.speak("prop_UVFlipbookFrames"));
+                    materialEditor.ShaderProperty(prop_UVFlipbookFPS, languages.speak("prop_UVFlipbookFPS"));
+                    materialEditor.ShaderProperty(prop_UVFlipbookScrub, languages.speak("prop_UVFlipbookScrub"));
+                    materialEditor.ShaderProperty(prop_UVFlowmap, languages.speak("prop_UVFlowmap"));
+                    materialEditor.ShaderProperty(prop_UVFlowmapTex, languages.speak("prop_UVFlowmapTex"));
+                    materialEditor.ShaderProperty(prop_UVFlowmapStrength, languages.speak("prop_UVFlowmapStrength"));
+                    materialEditor.ShaderProperty(prop_UVFlowmapSpeed, languages.speak("prop_UVFlowmapSpeed"));
+                    materialEditor.ShaderProperty(prop_UVFlowmapDistortion, languages.speak("prop_UVFlowmapDistortion"));
                 }
-                sub_tab_vertex_effects.draw();
-                if (sub_tab_vertex_effects.is_expanded) {
-                    // main - vertex effects
+                sub_tab_vertex_manipulation.draw();
+                if (sub_tab_vertex_manipulation.is_expanded) {
+                    // main - vertex manipulation
+                    prop_VertexManipulationPosition = FindProperty("_VertexManipulationPosition", properties);
+                    prop_VertexManipulationScale = FindProperty("_VertexManipulationScale", properties);
+                    materialEditor.ShaderProperty(prop_VertexManipulationPosition, languages.speak("prop_VertexManipulationPosition"));
+                    materialEditor.ShaderProperty(prop_VertexManipulationScale, languages.speak("prop_VertexManipulationScale"));
                 }
                 sub_tab_decal_one.draw();
                 if (sub_tab_decal_one.is_expanded) {
                     // main - decal one
+                    prop_Decal1Enable = FindProperty("_Decal1Enable", properties);
+                    prop_Decal1Tex = FindProperty("_Decal1Tex", properties);
+                    prop_Decal1Tint = FindProperty("_Decal1Tint", properties);
+                    prop_Decal1BlendMode = FindProperty("_Decal1BlendMode", properties);
+                    prop_Decal1IsTriplanar = FindProperty("_Decal1IsTriplanar", properties);
+                    prop_Decal1Position = FindProperty("_Decal1Position", properties);
+                    prop_Decal1Scale = FindProperty("_Decal1Scale", properties);
+                    prop_Decal1Rotation = FindProperty("_Decal1Rotation", properties);
+                    prop_Decal1TriplanarPosition = FindProperty("_Decal1TriplanarPosition", properties);
+                    prop_Decal1TriplanarScale = FindProperty("_Decal1TriplanarScale", properties);
+                    prop_Decal1TriplanarRotation = FindProperty("_Decal1TriplanarRotation", properties);
+                    prop_Decal1TriplanarSharpness = FindProperty("_Decal1TriplanarSharpness", properties);
+                    prop_Decal1Repeat = FindProperty("_Decal1Repeat", properties);
+                    prop_Decal1Scroll = FindProperty("_Decal1Scroll", properties);
+                    prop_Decal1HueShift = FindProperty("_Decal1HueShift", properties);
+                    prop_Decal1AutoCycleHue = FindProperty("_Decal1AutoCycleHue", properties);
+                    prop_Decal1CycleSpeed = FindProperty("_Decal1CycleSpeed", properties);
+                    materialEditor.ShaderProperty(prop_Decal1Enable, languages.speak("prop_Decal1Enable"));
+                    Components.start_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_Decal1Tex, languages.speak("prop_Decal1Tex"));
+                    materialEditor.ShaderProperty(prop_Decal1Tint, languages.speak("prop_Decal1Tint"));
+                    materialEditor.ShaderProperty(prop_Decal1BlendMode, languages.speak("prop_Decal1BlendMode"));
+                    materialEditor.ShaderProperty(prop_Decal1IsTriplanar, languages.speak("prop_Decal1IsTriplanar"));
+                    materialEditor.ShaderProperty(prop_Decal1Position, languages.speak("prop_Decal1Position"));
+                    materialEditor.ShaderProperty(prop_Decal1Scale, languages.speak("prop_Decal1Scale"));
+                    materialEditor.ShaderProperty(prop_Decal1Rotation, languages.speak("prop_Decal1Rotation"));
+                    materialEditor.ShaderProperty(prop_Decal1TriplanarPosition, languages.speak("prop_Decal1TriplanarPosition"));
+                    materialEditor.ShaderProperty(prop_Decal1TriplanarScale, languages.speak("prop_Decal1TriplanarScale"));
+                    materialEditor.ShaderProperty(prop_Decal1TriplanarRotation, languages.speak("prop_Decal1TriplanarRotation"));
+                    materialEditor.ShaderProperty(prop_Decal1TriplanarSharpness, languages.speak("prop_Decal1TriplanarSharpness"));
+                    materialEditor.ShaderProperty(prop_Decal1Repeat, languages.speak("prop_Decal1Repeat"));
+                    materialEditor.ShaderProperty(prop_Decal1Scroll, languages.speak("prop_Decal1Scroll"));
+                    materialEditor.ShaderProperty(prop_Decal1HueShift, languages.speak("prop_Decal1HueShift"));
+                    materialEditor.ShaderProperty(prop_Decal1AutoCycleHue, languages.speak("prop_Decal1AutoCycleHue"));
+                    materialEditor.ShaderProperty(prop_Decal1CycleSpeed, languages.speak("prop_Decal1CycleSpeed"));
+                    Components.end_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
                 }
                 sub_tab_decal_two.draw();
                 if (sub_tab_decal_two.is_expanded) {
@@ -744,6 +864,16 @@ namespace Luka.Backlace
                 sub_tab_emission.draw();
                 if (sub_tab_emission.is_expanded) {
                     // lighting - emission
+                    prop_ToggleEmission = FindProperty("_ToggleEmission", properties);
+                    prop_EmissionColor = FindProperty("_EmissionColor", properties);
+                    prop_EmissionMap = FindProperty("_EmissionMap", properties);
+                    prop_UseAlbedoAsEmission = FindProperty("_UseAlbedoAsEmission", properties);
+                    prop_EmissionStrength = FindProperty("_EmissionStrength", properties);
+                    materialEditor.ShaderProperty(prop_ToggleEmission, languages.speak("prop_ToggleEmission"));
+                    materialEditor.ShaderProperty(prop_EmissionColor, languages.speak("prop_EmissionColor"));
+                    materialEditor.ShaderProperty(prop_EmissionMap, languages.speak("prop_EmissionMap"));
+                    materialEditor.ShaderProperty(prop_UseAlbedoAsEmission, languages.speak("prop_UseAlbedoAsEmission"));
+                    materialEditor.ShaderProperty(prop_EmissionStrength, languages.speak("prop_EmissionStrength"));
                 }
                 sub_tab_light_limiting.draw();
                 if (sub_tab_light_limiting.is_expanded) {

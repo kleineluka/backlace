@@ -1020,14 +1020,16 @@ namespace Luka.Backlace
         }
 
         // start dynamic disable 
-        public static void start_dynamic_disable(bool disable_conditional)
+        public static void start_dynamic_disable(bool disable_conditional, Config config_manager = null)
         {
+            if (config_manager != null && !config_manager.json_data.@interface.grey_unused)
             EditorGUI.BeginDisabledGroup(disable_conditional == true);
         }
 
         // end dynamic disable
-        public static void end_dynamic_disable(bool disable_conditional)
+        public static void end_dynamic_disable(bool disable_conditional, Config config_manager = null)
         {
+            if (config_manager != null && !config_manager.json_data.@interface.grey_unused)
             if (disable_conditional) EditorGUI.EndDisabledGroup();
         }
 
@@ -1400,6 +1402,14 @@ namespace Luka.Backlace
                 if (newAnnouncementIndex != currentAnnouncementIndex)
                 {
                     config.json_data.@interface.show_announcements = newAnnouncementIndex == 0;
+                }
+                // grey out unused properties
+                bool disableUnused = config.json_data.@interface.grey_unused;
+                int currentUnusedIndex = disableUnused ? 0 : 1;
+                int newUnusedIndex = EditorGUILayout.Popup(languages.speak("config_toggle_grey_unused"), currentUnusedIndex, toggleOptions);
+                if (newUnusedIndex != currentUnusedIndex)
+                {
+                    config.json_data.@interface.grey_unused = newUnusedIndex == 0;
                 }
                 // save / cancel button row
                 EditorGUILayout.BeginHorizontal();

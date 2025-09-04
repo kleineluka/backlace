@@ -49,6 +49,7 @@ namespace Luka.Backlace
         public string language;
         public bool show_updates;
         public bool show_announcements;
+        public bool grey_unused;
     }
 
     [System.Serializable]

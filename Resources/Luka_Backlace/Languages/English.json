@@ -97,6 +97,10 @@
             "value": "Show License in Unity"
         },
         {
+            "key": "config_toggle_grey_unused",
+            "value": "Grey Unused Settings"
+        },
+        {
             "key": "tab_main",
             "value": "Main Settings"
         },
@@ -117,7 +121,7 @@
             "value": "UV Effects"
         },
         {
-            "key": "sub_tab_vertex_effects",
+            "key": "sub_tab_vertex_manipulation",
             "value": "Vertex Manipulation"
         },
         {

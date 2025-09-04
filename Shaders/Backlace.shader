@@ -4,13 +4,13 @@ Shader "luka/indev/backlace"
     Properties
     {
         // CORE FEATURES
-        [Space(70)]
-        [Header(Core Variant Features)]
+        // [Space(70)]
+        // [Header(Core Variant Features)]
 
         // RENDERING SETTINGS
-        [Space(35)]
-        [Header(Rendering Settings)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Rendering Settings)]
+        // [Space(10)]
         _SrcBlend ("Src Blend", Float) = 5
         _DstBlend ("Dst Blend", Float) = 10
         _ZWrite ("ZWrite", Float) = 1.0
@@ -21,9 +21,9 @@ Shader "luka/indev/backlace"
         [KeywordEnum(Cutout, Fade, Transparent, Premultiply)] _BlendMode ("Blending Mode", Float) = 0
 
         // MAIN MAPS AND ALPHA
-        [Space(35)]
-        [Header(Main Maps and Alpha)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Main Maps and Alpha)]
+        // [Space(10)]
         _MainTex ("Main texture", 2D) = "white" { }
         _Color ("Albedo color", Color) = (1, 1, 1, 1)
         _Cutoff ("Alpha Cutoff", Range(0, 1)) = 0.5
@@ -32,9 +32,9 @@ Shader "luka/indev/backlace"
         _Alpha ("Alpha", Range(0, 1)) = 1.0
 
         // UV MANIPULATION
-        [Space(35)]
-        [Header(UV Manipulation)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(UV Manipulation)]
+        // [Space(10)]
         _UV_Offset_X ("UV Offset X", Float) = 0
         _UV_Offset_Y ("UV Offset Y", Float) = 0
         _UV_Scale_X ("UV Scale X", Float) = 1
@@ -44,9 +44,9 @@ Shader "luka/indev/backlace"
         _UV_Scroll_Y_Speed ("UV Scroll Y Speed", Float) = 0
 
         // UV EFFECTS
-        [Space(35)]
-        [Header(UV Effects)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(UV Effects)]
+        // [Space(10)]
         [Toggle(_BACKLACE_UV_EFFECTS)] _ToggleUVEffects ("Enable UV Effects", Float) = 0.0
         // triplanar
         [Enum(Disabled, 0, Enabled, 1)] _UVTriplanarMapping ("Enable Triplanar Mapping", Float) = 0.0
@@ -72,16 +72,16 @@ Shader "luka/indev/backlace"
         _UVFlowmapDistortion ("Flowmap Distortion", Range(0, 1)) = 0.5
 
         // VERTEX MANIPULATION
-        [Space(35)]
-        [Header(Vertex Manipulation)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Vertex Manipulation)]
+        // [Space(10)]
         _VertexManipulationPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _VertexManipulationScale ("World Scale (XYZ)", Vector) = (1, 1, 1, 0)
 
         // EMISSION
-        [Space(35)]
-        [Header(Emission)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Emission)]
+        // [Space(10)]
         [Toggle(_BACKLACE_EMISSION)] _ToggleEmission ("Enable Emission", Float) = 0.0
         [HDR] _EmissionColor ("Emission Color", Color) = (0, 0, 0, 1)
         _EmissionMap ("Emission Map (Mask)", 2D) = "black" { }
@@ -89,9 +89,9 @@ Shader "luka/indev/backlace"
         _EmissionStrength ("Emission Strength", Float) = 1.0
 
         // LIGHT LIMITING
-        [Space(35)]
-        [Header(Light Limiting)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Light Limiting)]
+        // [Space(10)]
         [IntRange] _EnableBaseLightLimit ("Enable Base Pass Limit", Range(0, 1)) = 0.0
         _BaseLightMin ("Base Light Min", Float) = 0.0
         _BaseLightMax ("Base Light Max", Float) = 2.0
@@ -103,9 +103,9 @@ Shader "luka/indev/backlace"
         _ForcedLightColor ("Forced Light Color", Color) = (1, 1, 1, 1)
 
         // LIGHTING MODELS
-        [Space(35)]
-        [Header(Lighting Model)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Lighting Model)]
+        // [Space(10)]
         [Enum(Backlace, 0, PoiCustom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
         [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
         _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
@@ -119,9 +119,9 @@ Shader "luka/indev/backlace"
         _BakedIndirectIntensity ("Baked Indirect Intensity", Float) = 1.0
 
         // TOON LIGHTING
-        [Space(35)]
-        [Header(Toon Lighting)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Toon Lighting)]
+        // [Space(10)]
         [Toggle(_BACKLACE_TOON)] _ToggleToonLighting ("Enable Toon Lighting", Float) = 0.0
         [KeywordEnum(Ramp, Anime)] _ToonMode ("Toon Mode", Int) = 0
         // ramp
@@ -153,9 +153,9 @@ Shader "luka/indev/backlace"
         _ShadowThreshold ("Shadow Coverage", Range(0, 1)) = 0.4
 
         // SPECULAR
-        [Space(35)]
-        [Header(Specular)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Specular)]
+        // [Space(10)]
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
         [KeywordEnum(Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
@@ -186,9 +186,9 @@ Shader "luka/indev/backlace"
         _SheenRoughness ("Sheen Roughness", Float) = 0.5
 
         // RIM LIGHTING
-        [Space(35)]
-        [Header(Rim Lighting)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Rim Lighting)]
+        // [Space(10)]
         [Toggle(_BACKLACE_RIMLIGHT)] _ToggleRimlight ("Enable Rim Lighting", Float) = 0.0
         [HDR] _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
         _RimWidth ("Rim Width", Range(20, 0.1)) = 2.5
@@ -196,9 +196,9 @@ Shader "luka/indev/backlace"
         [IntRange] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
 
         // CLEARCOAT
-        [Space(35)]
-        [Header(Clear Coat)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Clear Coat)]
+        // [Space(10)]
         [Toggle(_BACKLACE_CLEARCOAT)] _ToggleClearcoat ("Enable Clear Coat", Float) = 0.0
         _ClearcoatStrength ("Strength", Range(0, 1)) = 1.0
         _ClearcoatReflectionStrength ("Reflection Strength", Range(0, 2)) = 1.0
@@ -207,9 +207,9 @@ Shader "luka/indev/backlace"
         _ClearcoatColor ("Color", Color) = (1, 1, 1, 1)
 
         // MATCAP
-        [Space(35)]
-        [Header(Matcap)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Matcap)]
+        // [Space(10)]
         [Toggle(_BACKLACE_MATCAP)] _ToggleMatcap ("Enable Matcap", Float) = 0.0
         [NoScaleOffset] _MatcapTex ("Matcap Texture", 2D) = "white" { }
         [HDR] _MatcapTint ("Matcap Tint", Color) = (1, 1, 1, 1)
@@ -220,9 +220,9 @@ Shader "luka/indev/backlace"
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
         // DECAL 1
-        [Space(35)]
-        [Header(Decal 1)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Decal 1)]
+        // [Space(10)]
         [Toggle(_BACKLACE_DECAL1)] _Decal1Enable ("Enable Decal 1", Float) = 0.0
         [NoScaleOffset] _Decal1Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal1Tint ("Tint", Color) = (1, 1, 1, 1)
@@ -242,9 +242,9 @@ Shader "luka/indev/backlace"
         _Decal1CycleSpeed ("Cycle Speed", Float) = 0.1
 
         // DECAL 2
-        [Space(35)]
-        [Header(Decal 2)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Decal 2)]
+        // [Space(10)]
         [Toggle(_BACKLACE_DECAL2)] _Decal2Enable ("Enable Decal 2", Float) = 0.0
         [NoScaleOffset] _Decal2Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal2Tint ("Tint", Color) = (1, 1, 1, 1)
@@ -264,9 +264,9 @@ Shader "luka/indev/backlace"
         _Decal2CycleSpeed ("Cycle Speed", Float) = 0.1
 
         // POST-PROCESSING
-        [Space(35)]
-        [Header(Post Processing)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Post Processing)]
+        // [Space(10)]
         [Toggle(_BACKLACE_POST_PROCESSING)] _TogglePostProcessing ("Enable Post Processing", Float) = 0.0
         [HDR] _RGBColor ("RGB Tint", Color) = (1, 1, 1, 1)
         _RGBBlendMode ("RGB Multiply/Replace", Range(0, 1)) = 0.0
@@ -284,13 +284,13 @@ Shader "luka/indev/backlace"
         _Brightness ("Brightness", Range(0, 2)) = 1.0
 
         // ADVANCED FEATURES
-        [Space(70)]
-        [Header(Advanced Variant Features)]
+        // [Space(70)]
+        // [Header(Advanced Variant Features)]
 
         // CUBEMAP
-        [Space(35)]
-        [Header(Cubemap)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Cubemap)]
+        // [Space(10)]
         [Toggle(_BACKLACE_CUBEMAP)] _ToggleCubemap ("Enable Cubemap", Float) = 0.0
         [NoScaleOffset] _CubemapTex ("Cubemap", Cube) = "" { }
         [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
@@ -298,9 +298,9 @@ Shader "luka/indev/backlace"
         [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
 
         // PARALLAX MAPPING
-        [Space(35)]
-        [Header(Parallax Mapping)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Parallax Mapping)]
+        // [Space(10)]
         [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
         [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
         [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
@@ -311,9 +311,9 @@ Shader "luka/indev/backlace"
         _ParallaxShadowStrength ("Shadow Strength", Range(0, 1)) = 0.75
 
         // SUBSURFACE SCATTERING
-        [Space(35)]
-        [Header(Subsurface Scattering)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Subsurface Scattering)]
+        // [Space(10)]
         [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
         [NoScaleOffset] _ThicknessMap ("Thickness Map (R)", 2D) = "white" { }
         [HDR] _SSSColor ("Scattering Tint", Color) = (1, 1, 1, 1)
@@ -323,17 +323,17 @@ Shader "luka/indev/backlace"
         _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
 
         // SHADOW MAP
-        [Space(35)]
-        [Header(Shadow Map)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Shadow Map)]
+        // [Space(10)]
         [Toggle(_BACKLACE_SHADOW_MAP)] _ToggleShadowMap ("Enable Shadow Map", Float) = 0.0
         [NoScaleOffset] _ShadowMap ("Shadow Map (R=Mask)", 2D) = "white" { }
         _ShadowMapIntensity ("Intensity", Range(0, 1)) = 1.0
 
         // DETAIL MAPPING
-        [Space(35)]
-        [Header(Detail Mapping)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Detail Mapping)]
+        // [Space(10)]
         [Toggle(_BACKLACE_DETAIL)] _ToggleDetail ("Enable Detail Maps", Float) = 0.0
         [NoScaleOffset] _DetailAlbedoMap ("Detail Albedo (A=Strength)", 2D) = "gray" { }
         [NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" { }
@@ -341,9 +341,9 @@ Shader "luka/indev/backlace"
         _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
 
         // DISSOLVE EFFECT
-        [Space(35)]
-        [Header(Dissolve Effect)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Dissolve Effect)]
+        // [Space(10)]
         [Toggle(_BACKLACE_DISSOLVE)] _ToggleDissolve ("Enable Dissolve", Float) = 0.0
         _DissolveProgress ("Dissolve Progress", Range(0, 1.0)) = 0.0
         [Enum(Noise, 0, Directional, 1, Voxel, 2)] _DissolveType ("Dissolve Type", Int) = 0
@@ -363,9 +363,9 @@ Shader "luka/indev/backlace"
         _DissolveVoxelDensity ("Voxel Density", Float) = 20.0
 
         // PATHING
-        [Space(35)]
-        [Header(Pathing)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Pathing)]
+        // [Space(10)]
         [Toggle(_BACKLACE_PATHING)] _TogglePathing ("Enable Pathing", Float) = 0.0
         [Enum(Albedo UV, 0, Triplanar, 1)] _PathingMappingMode ("Mapping Mode", Int) = 0
         [NoScaleOffset] _PathingMap ("Path Map (R)", 2D) = "black" { }
@@ -380,9 +380,9 @@ Shader "luka/indev/backlace"
         _PathingOffset ("Time Offset", Range(0, 1)) = 0.0
 
         // SCREEN SPACE RIM LIGHTING
-        [Space(35)]
-        [Header(Depth Rim Lighting)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Depth Rim Lighting)]
+        // [Space(10)]
         [Toggle(_BACKLACE_DEPTH_RIMLIGHT)] _ToggleDepthRim ("Enable Depth Rim Lighting", Float) = 0.0
         [HDR] _DepthRimColor ("Color", Color) = (0.5, 0.75, 1, 1)
         _DepthRimWidth ("Width", Range(0, 0.5)) = 0.1
@@ -391,9 +391,9 @@ Shader "luka/indev/backlace"
         [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
 
         // AUDIOLINK
-        [Space(35)]
-        [Header(AudioLink)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(AudioLink)]
+        // [Space(10)]
         [Toggle(_BACKLACE_AUDIOLINK)] _ToggleAudioLink ("Enable AudioLink", Float) = 0.0
         _AudioLinkFallback ("Fallback Level", Range(0, 1)) = 1.0
         [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkEmissionBand ("Emission Band", Float) = 0
@@ -434,13 +434,13 @@ Shader "luka/indev/backlace"
         _AudioLinkIridescenceRange ("  Min/Max", Vector) = (0, 1, 0, 0)
 
         // FUN FEATURES
-        [Space(70)]
-        [Header(Fun Variant Features)]
+        // [Space(70)]
+        // [Header(Fun Variant Features)]
 
         // GLITTER
-        [Space(35)]
-        [Header(Glitter)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Glitter)]
+        // [Space(10)]
         [Toggle(_BACKLACE_GLITTER)] _ToggleGlitter ("Enable Glitter", Float) = 0.0
         [Enum(Procedural, 0, Texture, 1)] _GlitterMode ("Mode", Range(0, 1)) = 0.0
         [NoScaleOffset] _GlitterNoiseTex ("Noise Texture (R)", 2D) = "gray" { }
@@ -456,9 +456,9 @@ Shader "luka/indev/backlace"
         _GlitterRainbowSpeed ("Rainbow Speed", Float) = 0.1
 
         // DISTANCE FADING
-        [Space(35)]
-        [Header(Distance Fading)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Distance Fading)]
+        // [Space(10)]
         [Toggle(_BACKLACE_DISTANCE_FADE)] _ToggleDistanceFade ("Enable Distance Fading", Float) = 0.0
         [Enum(World Position, 0, Object Center, 1)] _DistanceFadeReference ("Fade Reference Point", Range(0, 1)) = 0
         [Enum(Disabled, 0, Enabled, 1)] _ToggleNearFade ("Enable Near Fade", Float) = 0.0
@@ -471,9 +471,9 @@ Shader "luka/indev/backlace"
         _FarFadeEnd ("Far Fade End", Float) = 50.0
 
         // IRIDESCENCE
-        [Space(35)]
-        [Header(Iridescence)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Iridescence)]
+        // [Space(10)]
         [Toggle(_BACKLACE_IRIDESCENCE)] _ToggleIridescence ("Enable Iridescence", Float) = 0.0
         [KeywordEnum(Texture, Procedural)] _IridescenceMode ("Mode", Int) = 0
         [NoScaleOffset] _IridescenceMask ("Mask (R)", 2D) = "white" { }
@@ -486,9 +486,9 @@ Shader "luka/indev/backlace"
         _IridescenceFrequency ("Rainbow Frequency", Range(0.1, 20)) = 5.0
 
         // SHADOW TEXTURE
-        [Space(35)]
-        [Header(Shadow Texture)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Shadow Texture)]
+        // [Space(10)]
         [Toggle(_BACKLACE_SHADOW_TEXTURE)] _ToggleShadowTexture ("Enable Shadow Texture", Float) = 0.0
         [Enum(UV Albedo, 0, Screen Pattern, 1, Triplanar Pattern, 2)] _ShadowTextureMappingMode ("Shadow Mode", Int) = 0
         _ShadowTextureIntensity ("Shadow Intensity", Range(0, 1)) = 1.0
@@ -499,9 +499,9 @@ Shader "luka/indev/backlace"
         _ShadowPatternTransparency ("Pattern Transparency", Range(0, 1)) = 1
 
         // FLAT MODEL
-        [Space(35)]
-        [Header(Flat Model)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Flat Model)]
+        // [Space(10)]
         [Toggle(_BACKLACE_FLAT_MODEL)] _ToggleFlatModel ("Enable Flat Model", Float) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _FlatModeAutoflip ("Auto-Flip", Float) = 0.0
         _FlatModel ("Flat Model Strength", Range(0, 1)) = 0.0
@@ -510,9 +510,9 @@ Shader "luka/indev/backlace"
         [Enum(Disabled, 1, Enabled, 0)] _FlatModelLockAxis ("Follow Camera", Range(0, 1)) = 1.0
 
         // WORLD AFFECT
-        [Space(35)]
-        [Header(World Aligned Effect)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(World Aligned Effect)]
+        // [Space(10)]
         [Toggle(_BACKLACE_WORLD_EFFECT)] _ToggleWorldEffect ("Enable World Effect", Float) = 0.0
         [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2)] _WorldEffectBlendMode ("Blend Mode", Int) = 0
         [NoScaleOffset] _WorldEffectTex ("Effect Texture (A=Mask)", 2D) = "white" { }
@@ -525,17 +525,17 @@ Shader "luka/indev/backlace"
         _WorldEffectRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
 
         // VRCHAT MIRROR DETECTION
-        [Space(35)]
-        [Header(VRChat Mirror Detection)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(VRChat Mirror Detection)]
+        // [Space(10)]
         [Toggle(_BACKLACE_VRCHAT_MIRROR)] _ToggleMirrorDetection ("Enable VRChat Mirror Detection", Float) = 0.0
         [Enum(Texture, 0, Hide, 1, Only Show, 2)] _MirrorDetectionMode ("Mirror Mode", Int) = 0
         _MirrorDetectionTexture ("Mirror Detection Texture", 2D) = "white" { }
 
         // TOUCH REACTIVE
-        [Space(35)]
-        [Header(Touch Reactive)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Touch Reactive)]
+        // [Space(10)]
         [Toggle(_BACKLACE_TOUCH_REACTIVE)] _ToggleTouchReactive ("Enable Touch Reactive", Float) = 0.0
         [HDR] _TouchColor ("Touch Color", Color) = (1, 0, 1, 1)
         _TouchRadius ("Touch Radius", Range(0, .5)) = 0.1
@@ -545,9 +545,9 @@ Shader "luka/indev/backlace"
         _TouchRainbowSpread ("Touch Rainbow Spread", Float) = 1.0
 
         // REFREACTION
-        [Space(35)]
-        [Header(Refraction)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Refraction)]
+        // [Space(10)]
         [Toggle(_BACKLACE_REFRACTION)] _ToggleRefraction ("Enable Refraction Effect", Float) = 0.0
         [NoScaleOffset] _RefractionMask ("Mask (R=Strength)", 2D) = "white" { }
         _RefractionTint ("Refraction Tint", Color) = (0.8, 0.9, 1.0, 0.5)
@@ -574,9 +574,9 @@ Shader "luka/indev/backlace"
         _RefractionBlurStrength ("Blur Strength", Range(0, 10)) = 2.0
 
         // VERTEX DISTORTION
-        [Space(35)]
-        [Header(Vertex Distortion)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Vertex Distortion)]
+        // [Space(10)]
         [Toggle(_BACKLACE_VERTEX_DISTORTION)] _ToggleVertexDistortion ("Enable Vertex Distortion", Float) = 0.0
         [Enum(Wave, 0, Jumble, 1)] _VertexDistortionMode ("Distortion Mode", Int) = 0
         _VertexDistortionStrength ("Distortion Strength", Vector) = (0.1, 0.1, 0.1, 0)
@@ -584,9 +584,9 @@ Shader "luka/indev/backlace"
         _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
 
         // FAKE SCREEN SPACE REFLECTIONS
-        [Space(35)]
-        [Header(Fake Screen Space Reflections)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Fake Screen Space Reflections)]
+        // [Space(10)]
         [Toggle(_BACKLACE_SSR)] _ToggleSSR ("Enable Screen Space Reflections", Float) = 0.0
         [NoScaleOffset] _SSRMask ("Mask (R)", 2D) = "white" { }
         [HDR] _SSRTint ("Reflection Tint", Color) = (1, 1, 1, 1)
@@ -602,13 +602,13 @@ Shader "luka/indev/backlace"
         _SSRBlur ("Blur Strength", Range(0, 10)) = 1.0
 
         // FEATURES THAT GET THEIR OWN VARIANTS
-        [Space(70)]
-        [Header(Specific Variants)]
+        // [Space(70)]
+        // [Header(Specific Variants)]
 
         // OUTLINE
-        [Space(70)]
-        [Header(Outline)]
-        [Space(10)]
+        // [Space(70)]
+        // [Header(Outline)]
+        // [Space(10)]
         _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
         _OutlineWidth ("Outline Width", Range(0, 0.1)) = 0.005
         [Enum(Disabled, 0, Enabled, 1)] _OutlineVertexColorMask ("Use Vertex Color (R) Mask", Float) = 0.0
@@ -620,21 +620,21 @@ Shader "luka/indev/backlace"
         _OutlineOpacity ("Outline Opacity", Range(0, 1)) = 1.0
 
         // MISC STUFF
-        [Space(70)]
-        [Header(Other Stuffs)]
+        // [Space(70)]
+        // [Header(Other Stuffs)]
 
         // INDIRECT LIGHTING
-        [Space(35)]
-        [Header(Indirect Lighting)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Indirect Lighting)]
+        // [Space(10)]
         _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
         _IndirectOverride ("Indirect Override", Float) = 0.0
         _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
 
         // UV SETTINGS
-        [Space(35)]
-        [Header(UV Settings)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(UV Settings)]
+        // [Space(10)]
         _UVCount ("UV Count", Float) = 0.0
         _UV1Index ("UV1 Index", Float) = 0.0
         _MainTex_UV ("Main texture UV set", Float) = 0
@@ -662,9 +662,9 @@ Shader "luka/indev/backlace"
         _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
 
         // DO NOT CHANGE
-        [Space(35)]
-        [Header(Do Not Change)]
-        [Space(10)]
+        // [Space(35)]
+        // [Header(Do Not Change)]
+        // [Space(10)]
         [NonModifiableTextureData][NoScaleOffset] _DFG ("DFG Lut", 2D) = "black" { }
         [NonModifiableTextureData][NoScaleOffset] _DFGType ("Lighing Type", Float) = 0
         _StencilSection ("Stencil Section Display", Int) = 0

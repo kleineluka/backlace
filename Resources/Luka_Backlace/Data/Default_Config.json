@@ -5,6 +5,7 @@
         "ui_size": "Comfy",
         "language": "English",
         "show_updates": true,
-        "show_announcements": true
+        "show_announcements": true,
+        "grey_unused": true
     }
 }
