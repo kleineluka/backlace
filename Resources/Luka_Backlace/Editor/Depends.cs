@@ -308,12 +308,12 @@ namespace Luka.Backlace
         // fetch
         private void fetch()
         {
-#if LUKA_DEVELOPER_MODE
-            Pretty.print("Developer mode is active, skipping metadata fetch...", Pretty.LogKind.Info);
-            full_metadata = null;
-            metadata_loaded = false;
-            return;
-#endif
+            #if LUKA_DEVELOPER_MODE
+                Pretty.print("Developer mode is active, skipping metadata fetch...", Pretty.LogKind.Info);
+                full_metadata = null;
+                metadata_loaded = false;
+                return;
+            #endif
             try
             {
                 using (var wc = new System.Net.WebClient())
@@ -378,7 +378,32 @@ namespace Luka.Backlace
 
     }
 
-    // VRChat Fallback (duh, you fall on a cushion) Handler
+    // unity can be a brat, but i can be brattier
+    public class Bratty
+    {
+
+        public static string GetFullPathFromResource(string resourcePath) 
+        {
+            UnityEngine.Object asset = Resources.Load(resourcePath);
+            if (asset == null)
+            {
+                Pretty.print($"Resource at path '{resourcePath}' not found.", Pretty.LogKind.Error);
+                return null;
+            }
+            // get the full asset path from that
+            string assetPath = AssetDatabase.GetAssetPath(asset);
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                Pretty.print($"Could not determine asset path for resource '{resourcePath}'.", Pretty.LogKind.Error);
+                return null;
+            }
+            string fullPath = Path.GetFullPath(assetPath);
+            return fullPath;
+        }
+
+    }
+
+    // you fall on a cushion, your shader falls back to others
     public class Cushion
     {
         private int _currentFallback;
@@ -408,7 +433,7 @@ namespace Luka.Backlace
         private void SetTag(Material mat)
         {
             string fallbackTag = "";
-            // _VRCFallback enum: Toon=0, DoubleSided=1, Unlit=2, Particle=3, Matcap=4, Sprite=5, Hidden=6
+            // Expected fallback enum: Toon=0, DoubleSided=1, Unlit=2, Particle=3, Matcap=4, Sprite=5, Hidden=6
             switch (_currentFallback)
             {
                 case 0: fallbackTag = "Toon"; break;
@@ -425,27 +450,323 @@ namespace Luka.Backlace
                 // _BlendMode enum: Cutout=0, Fade=1, Transparent=2, Premultiply=3
                 switch (_currentBlendMode)
                 {
-                    case 0: // cutout
+                    case 1: // cutout
                         fallbackTag += "Cutout";
                         break;
-                    case 1: // fade
+                    case 2: // fade
                         fallbackTag += "Fade";
                         break;
-                    case 2: // transparent
-                    case 3: // premultiply
+                    case 3: // transparent
+                    case 4: // premultiply
                         fallbackTag += "Transparent";
                         break;
-                    default: break; // Opaque
+                    // case 0 (Opaque)
+                    default: break;
                 }
             }
             mat.SetOverrideTag("VRCFallback", fallbackTag);
         }
     }
 
-    // prefab manager
+    // handle blend modes and render modes
+    public class BeautyBlender
+    {
+        private int _currentBlendMode;
+
+        public BeautyBlender(Material mat)
+        {
+            if (!mat.HasProperty("_BlendMode")) return;
+            _currentBlendMode = mat.GetInt("_BlendMode");
+            Apply(mat);
+        }
+
+        public void Update(Material mat)
+        {
+            if (!mat.HasProperty("_BlendMode")) return;
+            int newBlendMode = mat.GetInt("_BlendMode");
+            if (newBlendMode != _currentBlendMode)
+            {
+                _currentBlendMode = newBlendMode;
+                Apply(mat);
+            }
+        }
+
+        private void Apply(Material mat)
+        {
+            // Expected blend enum: 0=Opaque, 1=Cutout, 2=Fade, 3=Transparent, 4=Premultiply
+            switch (_currentBlendMode)
+            {
+                case 0: // opaque
+                    mat.SetOverrideTag("RenderType", "Opaque");
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    mat.SetInt("_ZWrite", 1);
+                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                    break;
+                case 1: // cutout
+                    mat.SetOverrideTag("RenderType", "TransparentCutout");
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    mat.SetInt("_ZWrite", 1);
+                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                    break;
+                case 2: // fade (standard alpha blending)
+                    mat.SetOverrideTag("RenderType", "Transparent");
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    mat.SetInt("_ZWrite", 0);
+                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    break;
+                case 3: // transparent (additive transparency)
+                    mat.SetOverrideTag("RenderType", "Transparent");
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    mat.SetInt("_ZWrite", 0);
+                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    break;
+                case 4: // premultiply (premultiplied alpha)
+                    mat.SetOverrideTag("RenderType", "Transparent");
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    mat.SetInt("_ZWrite", 0);
+                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    break;
+            }
+        }
+    }
+
+    // personal preset manager
+    public class Bags
+    {   
+        private static readonly string preset_extension = ".dazzlepreset";
+        private static readonly string project_preset_path = Project.project_path + "/Presets";
+        private static readonly string user_preset_path = project_preset_path + "/User";
+        public Languages language_manager = null;
+        public List<Material> projectPresets;
+        public List<Material> userPresets;
+
+        public Bags(ref Languages language)
+        {
+            language_manager = language;
+            LoadPresets();
+        }
+
+        public void LoadPresets()
+        {
+            projectPresets = LoadMaterialsFromPath(project_preset_path);
+            userPresets = LoadMaterialsFromPath(user_preset_path);
+        }
+
+        public static void ApplyPreset(Material preset, Material targetMaterial)
+        {
+            if (preset == null || targetMaterial == null)
+            {
+                Pretty.print("Preset or target material is null. Cannot apply.", Pretty.LogKind.Error);
+                return;
+            }
+            Undo.RecordObject(targetMaterial, "Apply Dazzle Preset '" + preset.name + "'");
+            // copy all shader properties
+            CopyMaterialProperties(preset, targetMaterial);
+            targetMaterial.shaderKeywords = preset.shaderKeywords;
+            targetMaterial.renderQueue = preset.renderQueue;
+            // trigger logic from beautyblender and cushion if needed
+            if (Project.shader_has_blendmodes) new BeautyBlender(targetMaterial);
+            if (Project.shader_has_fallback) new Cushion(targetMaterial);
+            EditorUtility.SetDirty(targetMaterial);
+        }
+
+        public bool SavePreset(Material sourceMaterial, string presetName)
+        {
+            if (sourceMaterial == null || string.IsNullOrEmpty(presetName))
+            {
+                Pretty.print("Source material is null or preset name is empty.", Pretty.LogKind.Error);
+                return false;
+            }
+            if (!Directory.Exists(user_preset_path))
+            {
+                Directory.CreateDirectory(user_preset_path);
+                AssetDatabase.Refresh();
+            }
+            string path = Path.Combine(user_preset_path, presetName + preset_extension);
+            if (File.Exists(path))
+            {
+                if (!EditorUtility.DisplayDialog(language_manager.speak("preset_overwrite_prompt_title"),
+                    language_manager.speak("preset_overwrite_prompt", presetName),
+                    language_manager.speak("preset_overwrite_prompt_yes"), language_manager.speak("preset_overwrite_prompt_no")))
+                {
+                    return false;
+                }
+            }
+            Material newPreset = new Material(sourceMaterial);
+            try
+            {
+                AssetDatabase.CreateAsset(newPreset, path);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                Pretty.print($"Saved preset '{presetName}' successfully.", Pretty.LogKind.Info);
+                LoadPresets(); 
+                return true;
+            }
+            catch (Exception e)
+            {
+                Pretty.print($"Failed to save preset: {e.Message}", Pretty.LogKind.Error);
+                return false;
+            }
+        }
+
+        public bool DeletePreset(string presetName)
+        {
+            if (string.IsNullOrEmpty(presetName))
+            {
+                Pretty.print("Preset name is empty.", Pretty.LogKind.Error);
+                return false;
+            }
+            string path = Path.Combine(user_preset_path, presetName + preset_extension);
+            if (!File.Exists(path))
+            {
+                Pretty.print($"Preset '{presetName}' not found at path: {path}", Pretty.LogKind.Warning);
+                return false;
+            }
+            if (AssetDatabase.DeleteAsset(path))
+            {
+                Pretty.print($"Deleted preset '{presetName}' successfully.", Pretty.LogKind.Info);
+                LoadPresets(); 
+                return true;
+            }
+            else
+            {
+                Pretty.print($"Failed to delete preset '{presetName}'.", Pretty.LogKind.Error);
+                return false;
+            }
+        }
+        
+        private static void CopyMaterialProperties(Material source, Material dest)
+        {
+            Shader shader = source.shader;
+            for (int i = 0; i < ShaderUtil.GetPropertyCount(shader); i++)
+            {
+                string propertyName = ShaderUtil.GetPropertyName(shader, i);
+                ShaderUtil.ShaderPropertyType type = ShaderUtil.GetPropertyType(shader, i);
+                switch (type)
+                {
+                    case ShaderUtil.ShaderPropertyType.Color:
+                        dest.SetColor(propertyName, source.GetColor(propertyName));
+                        break;
+                    case ShaderUtil.ShaderPropertyType.Vector:
+                        dest.SetVector(propertyName, source.GetVector(propertyName));
+                        break;
+                    case ShaderUtil.ShaderPropertyType.Float:
+                    case ShaderUtil.ShaderPropertyType.Range:
+                        dest.SetFloat(propertyName, source.GetFloat(propertyName));
+                        break;
+                    case ShaderUtil.ShaderPropertyType.TexEnv:
+                        dest.SetTexture(propertyName, source.GetTexture(propertyName));
+                        dest.SetTextureOffset(propertyName, source.GetTextureOffset(propertyName));
+                        dest.SetTextureScale(propertyName, source.GetTextureScale(propertyName));
+                        break;
+                }
+            }
+        }
+
+        private List<Material> LoadMaterialsFromPath(string path)
+        {
+            string assetPath = Bratty.GetFullPathFromResource(path);
+            List<Material> materials = new List<Material>();
+            if (!Directory.Exists(assetPath))
+            {
+                if (assetPath != Bratty.GetFullPathFromResource(user_preset_path))
+                {
+                    Pretty.print($"Preset directory not found: {assetPath}", Pretty.LogKind.Warning);
+                }
+                return materials;
+            }
+            string[] filePaths = Directory.GetFiles(assetPath);
+            foreach (string filePath in filePaths)
+            {
+                if (filePath.EndsWith(preset_extension))
+                {
+                    string relativePath = filePath;
+                    int assetsIndex = relativePath.IndexOf("Assets");
+                    if (assetsIndex != -1)
+                    {
+                        relativePath = relativePath.Substring(assetsIndex);
+                    }
+                    relativePath = relativePath.Replace('\\', '/');
+                    Material mat = AssetDatabase.LoadAssetAtPath<Material>(relativePath);
+                    if (mat != null)
+                    {
+                        materials.Add(mat);
+                    }
+                }
+            }
+            return materials;
+        }
+    }
+
+    // prefab spawner
     public class Prefabulous
     {
+        private static readonly string prefab_path = Project.project_path + "/Prefabs";
+        public List<GameObject> prefabs;
 
+        public Prefabulous()
+        {
+            LoadPrefabs();
+        }
+
+        public void LoadPrefabs()
+        {
+            prefabs = LoadPrefabsFromPath(prefab_path);
+        }
+
+        public void SpawnPrefab(GameObject prefab)
+        {
+            if (prefab == null)
+            {
+                Pretty.print("Prefab is null. Cannot spawn.", Pretty.LogKind.Error);
+                return;
+            }
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            string baseName = prefab.name;
+            string newName = baseName;
+            int counter = 1;
+            while (GameObject.Find(newName) != null)
+            {
+                newName = $"{baseName} ({counter++})";
+            }
+            instance.name = newName;
+            PrefabUtility.UnpackPrefabInstance(instance, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+            Undo.RegisterCreatedObjectUndo(instance, "Spawn Prefab " + instance.name);
+            Pretty.print($"Spawned and unpacked '{instance.name}' into the scene.", Pretty.LogKind.Info);
+        }
+
+        private List<GameObject> LoadPrefabsFromPath(string path)
+        {
+            string assetPath = Bratty.GetFullPathFromResource(path);
+            List<GameObject> loadedPrefabs = new List<GameObject>();
+            if (!Directory.Exists(assetPath))
+            {
+                // not necessarily an error, shader just doesn't use prefabs
+                return loadedPrefabs;
+            }
+            string[] filePaths = Directory.GetFiles(assetPath, "*.prefab");
+            foreach (string filePath in filePaths)
+            {
+                string relativePath = filePath;
+                int assetsIndex = relativePath.IndexOf("Assets");
+                if (assetsIndex != -1)
+                {
+                    relativePath = relativePath.Substring(assetsIndex);
+                }
+                relativePath = relativePath.Replace('\\', '/');
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(relativePath);
+                if (prefab != null)
+                {
+                    loadedPrefabs.Add(prefab);
+                }
+            }
+            return loadedPrefabs;
+        }
     }
 
 }

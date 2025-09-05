@@ -29,6 +29,7 @@ namespace Luka.Backlace
         private static Tab license_tab = null;
         private static ConfigMenu config_menu = null;
         private static LicenseMenu license_menu = null;
+        private static Cushion cushion = null;
         
         #region Tabs
         // main
@@ -562,6 +563,7 @@ namespace Luka.Backlace
             update = null;
             docs = null;
             socials_menu = null;
+            cushion = null;
             meta = null;
             config_tab = null;
             license_tab = null;
@@ -629,6 +631,7 @@ namespace Luka.Backlace
             update = new Update(ref theme);
             docs = new Docs(ref theme);
             socials_menu = new SocialsMenu(ref theme);
+            cushion = new Cushion(targetMat);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));

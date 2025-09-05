@@ -101,6 +101,22 @@
             "value": "Grey Unused Settings"
         },
         {
+            "key": "preset_overwrite_prompt_title",
+            "value": "Preset Manager"
+        },
+        {
+            "key": "preset_overwrite_prompt",
+            "value": "A preset with this name already exists, do you want to overwrite it?"
+        },
+        {
+            "key": "preset_overwrite_prompt_yes",
+            "value": "Overwrite it!"
+        },
+        {
+            "key": "preset_overwrite_prompt_no",
+            "value": "Keep existing."
+        },
+        {
             "key": "tab_main",
             "value": "Main Settings"
         },

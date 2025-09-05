@@ -15,6 +15,8 @@ namespace Luka.Backlace
         public static readonly string project_docs = "https://luka.moe/docs/backlace";
         public static readonly bool has_license = false; // if the project has a license file, or if you wanna show it
         public static readonly bool has_docs = false; // if the project has documentation, or if you wanna show it
+        public static readonly bool shader_has_fallback = true; // if the shader uses a vrchat fallback shader that needs to be set in the inspector
+        public static readonly bool shader_has_blendmodes = true; // if the shader has blendmodes that need to be set in the inspector
     }
 
 }
