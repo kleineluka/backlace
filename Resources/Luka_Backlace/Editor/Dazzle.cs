@@ -1646,10 +1646,7 @@ namespace Luka.Backlace
             tab.draw();
             if (tab.is_expanded)
             {
-
                 Components.start_foldout();
-
-                // Built-in presets
                 GUILayout.Label(theme.language_manager.speak("preset_builtin_header"), EditorStyles.boldLabel);
                 if (bags.projectPresets.Count == 0)
                 {
@@ -1673,10 +1670,7 @@ namespace Luka.Backlace
                     }
                     EditorGUILayout.EndHorizontal();
                 }
-
                 Components.draw_divider();
-
-                // Custom presets
                 GUILayout.Label(theme.language_manager.speak("preset_custom_header"), EditorStyles.boldLabel);
                 if (bags.userPresets.Count == 0)
                 {
@@ -1695,7 +1689,6 @@ namespace Luka.Backlace
                             Bags.ApplyPreset(bags.userPresets[selectedUserPresetIndex], material);
                         }
                     }
-
                     if (GUILayout.Button("X", GUILayout.Width(20)))
                     {
                         if (selectedUserPresetIndex >= 0 && selectedUserPresetIndex < bags.userPresets.Count)
@@ -1708,17 +1701,14 @@ namespace Luka.Backlace
                                 theme.language_manager.speak("preset_delete_prompt_no")))
                             {
                                 bags.DeletePreset(preset.name);
-                                bags.LoadPresets(); // Refresh
-                                selectedUserPresetIndex = 0; // Reset index
+                                bags.LoadPresets();
+                                selectedUserPresetIndex = 0; 
                             }
                         }
                     }
                     EditorGUILayout.EndHorizontal();
                 }
-
                 Components.draw_divider();
-
-                // Save preset
                 GUILayout.Label(theme.language_manager.speak("preset_save_header"), EditorStyles.boldLabel);
                 newUserPresetName = EditorGUILayout.TextField(theme.language_manager.speak("preset_name_label"), newUserPresetName);
                 if (GUILayout.Button(theme.language_manager.speak("preset_save_button")))
@@ -1737,7 +1727,6 @@ namespace Luka.Backlace
                             theme.language_manager.speak("dialog_okay"));
                     }
                 }
-
                 Components.end_foldout();
             }
         }

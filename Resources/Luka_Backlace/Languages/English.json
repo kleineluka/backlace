@@ -134,7 +134,7 @@
         },
         {
             "key": "preset_save_button",
-            "value": "Save Preset"
+            "value": "Save as Preset"
         },
         {
             "key": "preset_save_error_noname",
@@ -162,7 +162,7 @@
         },
         {
             "key": "preset_no_custom_found",
-            "value": "No custom presets were found!"
+            "value": "No custom presets were found! Why not make some? :o"
         },
         {
             "key": "load",

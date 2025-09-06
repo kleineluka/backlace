@@ -104,6 +104,7 @@ namespace Luka.Backlace
             public static readonly LogKind Info = new LogKind("Info", "#FFFFFF");
             public static readonly LogKind Warning = new LogKind("Warning", "#FFA500");
             public static readonly LogKind Error = new LogKind("Error", "#FF0000");
+            public static readonly LogKind Debug = new LogKind("Debug", "#00FFFF");
 
             public string Name { get; }
             public string HexColor { get; }
@@ -142,6 +143,12 @@ namespace Luka.Backlace
                     break;
                 case "Error":
                     Debug.LogError(formatted_message);
+                    break;
+                case "Debug":
+                    // only print debug messages in developer mode
+                    #if LUKA_DEVELOPER_MODE
+                        Debug.Log(formatted_message);
+                    #endif // LUKA_DEVELOPER_MODE
                     break;
                 default:
                     Debug.Log(formatted_message);
@@ -652,7 +659,7 @@ namespace Luka.Backlace
                 AssetDatabase.SaveAssets(); 
                 AssetDatabase.MoveAsset(tempAssetPath, finalAssetPath);
                 AssetDatabase.Refresh();
-                Pretty.print($"Saved preset '{presetName}' successfully.", Pretty.LogKind.Info);
+                Pretty.print($"Saved preset '{presetName}' successfully.", Pretty.LogKind.Debug);
                 LoadPresets();
                 return true;
             }
@@ -679,7 +686,7 @@ namespace Luka.Backlace
             }
             if (AssetDatabase.DeleteAsset(assetPath))
             {
-                Pretty.print($"Deleted preset '{presetName}' successfully.", Pretty.LogKind.Info);
+                Pretty.print($"Deleted preset '{presetName}' successfully.", Pretty.LogKind.Debug);
                 LoadPresets(); 
                 return true;
             }
