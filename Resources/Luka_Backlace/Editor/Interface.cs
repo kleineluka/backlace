@@ -14,8 +14,7 @@ namespace Luka.Backlace
     {
 
         private static bool loaded = false;
-        private static bool preview_loaded = false;
-        private static bool is_preview = false;
+        private static string loaded_material = null;
         private static Config configs = null;
         private static Languages languages = null;
         private static Theme theme = null;
@@ -27,9 +26,12 @@ namespace Luka.Backlace
         private static Metadata meta = null;
         private static Tab config_tab = null;
         private static Tab license_tab = null;
+        private static Tab presets_tab = null;
         private static ConfigMenu config_menu = null;
         private static LicenseMenu license_menu = null;
         private static Cushion cushion = null;
+        private static Bags bags = null;
+        private static PresetsMenu presets_menu = null;
         
         #region Tabs
         // main
@@ -553,8 +555,6 @@ namespace Luka.Backlace
         public static void unload()
         {
             loaded = false;
-            preview_loaded = false;
-            is_preview = false;
             configs = null;
             languages = null;
             theme = null;
@@ -564,11 +564,14 @@ namespace Luka.Backlace
             docs = null;
             socials_menu = null;
             cushion = null;
+            bags = null;
             meta = null;
             config_tab = null;
             license_tab = null;
             config_menu = null;
+            presets_tab = null;
             license_menu = null;
+            presets_menu = null;
             #region Tabs
             tab_main = null;
             sub_tab_rendering = null;
@@ -618,12 +621,14 @@ namespace Luka.Backlace
         // load (/reload) the interface (ex. on language change)
         public void load(ref Material targetMat)
         {
+            loaded_material = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
             configs = new Config();
             languages = new Languages(configs.json_data.@interface.language);
             meta = new Metadata();
             theme = new Theme(ref configs, ref languages, ref meta);
             license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_license"));
             config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_config"));
+            presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_presets"));
             config_menu = new ConfigMenu(ref theme, ref languages, ref configs, ref config_tab);
             license_menu = new LicenseMenu(ref theme, ref languages, ref license_tab);
             header = new Header(ref theme);
@@ -632,6 +637,8 @@ namespace Luka.Backlace
             docs = new Docs(ref theme);
             socials_menu = new SocialsMenu(ref theme);
             cushion = new Cushion(targetMat);
+            bags = new Bags(ref languages);
+            presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
@@ -679,12 +686,27 @@ namespace Luka.Backlace
             loaded = true;
         }
 
+        // determine if a load is needed or not
+        public void repaint_dazzle(ref Material targetMat)
+        {
+            if (!loaded) 
+            {
+                load(ref targetMat);
+                return;
+            }
+            if (loaded_material != AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat))) 
+            {
+                unload();
+                load(ref targetMat);
+                return;
+            }
+        }
+
         // per-shader ui here
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {
             Material targetMat = materialEditor.target as Material;
-            // load global
-            if (!loaded) load(ref targetMat);
+            repaint_dazzle(ref targetMat);
             EditorGUI.BeginChangeCheck();
             header.draw();
             update.draw();
@@ -1796,6 +1818,7 @@ namespace Luka.Backlace
             #endregion // Backlace
             license_menu.draw();
             config_menu.draw();
+            presets_menu.draw();
             announcement.draw();
             docs.draw();
             socials_menu.draw();

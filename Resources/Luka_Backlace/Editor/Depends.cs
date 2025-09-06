@@ -382,23 +382,54 @@ namespace Luka.Backlace
     public class Bratty
     {
 
-        public static string GetFullPathFromResource(string resourcePath) 
+        public static string GetFullPathFromResource(string resourcePath)
         {
-            UnityEngine.Object asset = Resources.Load(resourcePath);
-            if (asset == null)
+            resourcePath = resourcePath.Replace('\\', '/');
+            string[] guids = AssetDatabase.FindAssets($"t:DefaultAsset {Path.GetFileName(resourcePath)}");
+            foreach (string guid in guids)
             {
-                Pretty.print($"Resource at path '{resourcePath}' not found.", Pretty.LogKind.Error);
-                return null;
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (assetPath.Contains("/Resources/") && assetPath.EndsWith(resourcePath))
+                {
+                    return Path.GetFullPath(assetPath);
+                }
             }
-            // get the full asset path from that
-            string assetPath = AssetDatabase.GetAssetPath(asset);
-            if (string.IsNullOrEmpty(assetPath))
+            var asset = Resources.Load(resourcePath);
+            if (asset != null)
             {
-                Pretty.print($"Could not determine asset path for resource '{resourcePath}'.", Pretty.LogKind.Error);
-                return null;
+                string assetPath = AssetDatabase.GetAssetPath(asset);
+                if (!string.IsNullOrEmpty(assetPath))
+                {
+                    return Path.GetFullPath(assetPath);
+                }
             }
-            string fullPath = Path.GetFullPath(assetPath);
-            return fullPath;
+            Pretty.print($"Could not find a valid full path for resource '{resourcePath}'.", Pretty.LogKind.Warning);
+            return null;
+        }
+
+        public static string GetAssetPathFromResource(string resourcePath)
+        {
+            resourcePath = resourcePath.Replace('\\', '/');
+            string[] guids = AssetDatabase.FindAssets($"t:DefaultAsset {Path.GetFileName(resourcePath)}");
+            foreach (string guid in guids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (assetPath.Contains("/Resources/") && assetPath.EndsWith(resourcePath))
+                {
+                    return assetPath;
+                }
+            }
+            var asset = Resources.Load(resourcePath);
+            if (asset != null)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(asset);
+                if (!string.IsNullOrEmpty(assetPath))
+                {
+                    return assetPath;
+                }
+            }
+            Pretty.print($"Could not find a valid asset path for resource '{resourcePath}'.", Pretty.LogKind.Warning);
+            return null;
         }
 
     }
@@ -538,9 +569,13 @@ namespace Luka.Backlace
     // personal preset manager
     public class Bags
     {   
-        private static readonly string preset_extension = ".dazzlepreset";
+        private static readonly string preset_extension = ".asset";
         private static readonly string project_preset_path = Project.project_path + "/Presets";
         private static readonly string user_preset_path = project_preset_path + "/User";
+        private string asset_preset_path = null; // for unity assets, tba
+        private string asset_user_path = null; // for unity assets, tba
+        private string real_preset_path = null; // for working with directories, tba
+        private string real_user_path = null; // for working with directories, tba
         public Languages language_manager = null;
         public List<Material> projectPresets;
         public List<Material> userPresets;
@@ -548,13 +583,23 @@ namespace Luka.Backlace
         public Bags(ref Languages language)
         {
             language_manager = language;
+            LoadPaths();
             LoadPresets();
+        }
+
+        public void LoadPaths() {
+            // the real path matters most
+            asset_preset_path = Bratty.GetAssetPathFromResource(project_preset_path);
+            real_preset_path = Bratty.GetFullPathFromResource(project_preset_path);
+            // user path is optional, but we just add /User to the end of both
+            asset_user_path = Path.Combine(asset_preset_path, "User");
+            real_user_path = Path.Combine(real_preset_path, "User");
         }
 
         public void LoadPresets()
         {
-            projectPresets = LoadMaterialsFromPath(project_preset_path);
-            userPresets = LoadMaterialsFromPath(user_preset_path);
+            projectPresets = LoadMaterialsFromPath(real_preset_path, SearchOption.AllDirectories);
+            userPresets = LoadMaterialsFromPath(real_user_path, SearchOption.TopDirectoryOnly);
         }
 
         public static void ApplyPreset(Material preset, Material targetMaterial)
@@ -582,29 +627,33 @@ namespace Luka.Backlace
                 Pretty.print("Source material is null or preset name is empty.", Pretty.LogKind.Error);
                 return false;
             }
-            if (!Directory.Exists(user_preset_path))
+            if (!Directory.Exists(real_user_path))
             {
-                Directory.CreateDirectory(user_preset_path);
+                Directory.CreateDirectory(real_user_path);
                 AssetDatabase.Refresh();
             }
-            string path = Path.Combine(user_preset_path, presetName + preset_extension);
-            if (File.Exists(path))
+            string finalAssetPath = Path.Combine(asset_user_path, presetName + preset_extension);
+            string finalRealPath = Path.Combine(real_user_path, presetName + preset_extension);
+            if (File.Exists(finalRealPath))
             {
-                if (!EditorUtility.DisplayDialog(language_manager.speak("preset_overwrite_prompt_title"),
+                if (!EditorUtility.DisplayDialog(language_manager.speak("preset_title"),
                     language_manager.speak("preset_overwrite_prompt", presetName),
                     language_manager.speak("preset_overwrite_prompt_yes"), language_manager.speak("preset_overwrite_prompt_no")))
                 {
                     return false;
                 }
+                AssetDatabase.DeleteAsset(finalAssetPath);
             }
             Material newPreset = new Material(sourceMaterial);
             try
             {
-                AssetDatabase.CreateAsset(newPreset, path);
-                AssetDatabase.SaveAssets();
+                string tempAssetPath = Path.Combine(asset_user_path, presetName + ".asset");
+                AssetDatabase.CreateAsset(newPreset, tempAssetPath);
+                AssetDatabase.SaveAssets(); 
+                AssetDatabase.MoveAsset(tempAssetPath, finalAssetPath);
                 AssetDatabase.Refresh();
                 Pretty.print($"Saved preset '{presetName}' successfully.", Pretty.LogKind.Info);
-                LoadPresets(); 
+                LoadPresets();
                 return true;
             }
             catch (Exception e)
@@ -621,13 +670,14 @@ namespace Luka.Backlace
                 Pretty.print("Preset name is empty.", Pretty.LogKind.Error);
                 return false;
             }
-            string path = Path.Combine(user_preset_path, presetName + preset_extension);
-            if (!File.Exists(path))
+            string realPath = Path.Combine(real_user_path, presetName + preset_extension);
+            string assetPath = Path.Combine(asset_user_path, presetName + preset_extension);
+            if (!File.Exists(realPath))
             {
-                Pretty.print($"Preset '{presetName}' not found at path: {path}", Pretty.LogKind.Warning);
+                Pretty.print($"Preset '{presetName}' not found at path: {realPath}", Pretty.LogKind.Warning);
                 return false;
             }
-            if (AssetDatabase.DeleteAsset(path))
+            if (AssetDatabase.DeleteAsset(assetPath))
             {
                 Pretty.print($"Deleted preset '{presetName}' successfully.", Pretty.LogKind.Info);
                 LoadPresets(); 
@@ -642,65 +692,67 @@ namespace Luka.Backlace
         
         private static void CopyMaterialProperties(Material source, Material dest)
         {
-            Shader shader = source.shader;
-            for (int i = 0; i < ShaderUtil.GetPropertyCount(shader); i++)
+            dest.shader = source.shader;
+            int propertyCount = ShaderUtil.GetPropertyCount(source.shader);
+            for (int i = 0; i < propertyCount; i++)
             {
-                string propertyName = ShaderUtil.GetPropertyName(shader, i);
-                ShaderUtil.ShaderPropertyType type = ShaderUtil.GetPropertyType(shader, i);
-                switch (type)
+                string propertyName = ShaderUtil.GetPropertyName(source.shader, i);
+                if (dest.HasProperty(propertyName))
                 {
-                    case ShaderUtil.ShaderPropertyType.Color:
-                        dest.SetColor(propertyName, source.GetColor(propertyName));
-                        break;
-                    case ShaderUtil.ShaderPropertyType.Vector:
-                        dest.SetVector(propertyName, source.GetVector(propertyName));
-                        break;
-                    case ShaderUtil.ShaderPropertyType.Float:
-                    case ShaderUtil.ShaderPropertyType.Range:
-                        dest.SetFloat(propertyName, source.GetFloat(propertyName));
-                        break;
-                    case ShaderUtil.ShaderPropertyType.TexEnv:
-                        dest.SetTexture(propertyName, source.GetTexture(propertyName));
-                        dest.SetTextureOffset(propertyName, source.GetTextureOffset(propertyName));
-                        dest.SetTextureScale(propertyName, source.GetTextureScale(propertyName));
-                        break;
+                    switch (ShaderUtil.GetPropertyType(source.shader, i))
+                    {
+                        case ShaderUtil.ShaderPropertyType.Color:
+                            dest.SetColor(propertyName, source.GetColor(propertyName));
+                            break;
+                        case ShaderUtil.ShaderPropertyType.Vector:
+                            dest.SetVector(propertyName, source.GetVector(propertyName));
+                            break;
+                        case ShaderUtil.ShaderPropertyType.Float:
+                        case ShaderUtil.ShaderPropertyType.Range:
+                            dest.SetFloat(propertyName, source.GetFloat(propertyName));
+                            break;
+                        case ShaderUtil.ShaderPropertyType.TexEnv:
+                            Texture texture = source.GetTexture(propertyName);
+                            Vector2 offset = source.GetTextureOffset(propertyName);
+                            Vector2 scale = source.GetTextureScale(propertyName);
+                            dest.SetTexture(propertyName, texture);
+                            dest.SetTextureOffset(propertyName, offset);
+                            dest.SetTextureScale(propertyName, scale);
+                            break;
+                    }
                 }
             }
         }
 
-        private List<Material> LoadMaterialsFromPath(string path)
+        private List<Material> LoadMaterialsFromPath(string path, SearchOption searchOption)
         {
-            string assetPath = Bratty.GetFullPathFromResource(path);
             List<Material> materials = new List<Material>();
-            if (!Directory.Exists(assetPath))
+            if (!Directory.Exists(path))
             {
-                if (assetPath != Bratty.GetFullPathFromResource(user_preset_path))
+                if (path != real_user_path)
                 {
-                    Pretty.print($"Preset directory not found: {assetPath}", Pretty.LogKind.Warning);
+                    Pretty.print($"Preset directory not found: {path}", Pretty.LogKind.Warning);
                 }
                 return materials;
             }
-            string[] filePaths = Directory.GetFiles(assetPath);
-            foreach (string filePath in filePaths)
+            string[] presetFiles = Directory.GetFiles(path, $"*{preset_extension}", searchOption);
+            foreach (string filePath in presetFiles)
             {
-                if (filePath.EndsWith(preset_extension))
+                // ignore user presets in the main preset folder
+                if (path != real_user_path && filePath.StartsWith(real_user_path))
                 {
-                    string relativePath = filePath;
-                    int assetsIndex = relativePath.IndexOf("Assets");
-                    if (assetsIndex != -1)
-                    {
-                        relativePath = relativePath.Substring(assetsIndex);
-                    }
-                    relativePath = relativePath.Replace('\\', '/');
-                    Material mat = AssetDatabase.LoadAssetAtPath<Material>(relativePath);
-                    if (mat != null)
-                    {
-                        materials.Add(mat);
-                    }
+                    continue;
+                }
+                string assetPath = "Assets" + filePath.Substring(Application.dataPath.Length).Replace('\\', '/');
+                Material preset = AssetDatabase.LoadAssetAtPath<Material>(assetPath);
+                if (preset != null)
+                {
+                    materials.Add(preset);
                 }
             }
             return materials;
         }
+
     }
 
     // prefab spawner

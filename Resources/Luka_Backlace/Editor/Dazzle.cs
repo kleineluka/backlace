@@ -1621,6 +1621,129 @@ namespace Luka.Backlace
 
     }
 
+    // plug and play preset menu
+    public class PresetsMenu
+    {
+        private Theme theme;
+        private Bags bags;
+        private Material material;
+        private Tab tab;
+        private string newUserPresetName = "";
+        private int selectedProjectPresetIndex = 0;
+        private int selectedUserPresetIndex = 0;
+
+
+        public PresetsMenu(ref Theme theme, ref Bags bags, ref Material material, ref Tab tab)
+        {
+            this.theme = theme;
+            this.bags = bags;
+            this.material = material;
+            this.tab = tab;
+        }
+
+        public void draw()
+        {
+            tab.draw();
+            if (tab.is_expanded)
+            {
+
+                Components.start_foldout();
+
+                // Built-in presets
+                GUILayout.Label(theme.language_manager.speak("preset_builtin_header"), EditorStyles.boldLabel);
+                if (bags.projectPresets.Count == 0)
+                {
+                    EditorGUILayout.LabelField(theme.language_manager.speak("preset_no_builtin_found"));
+                }
+                else
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    string[] projectPresetNames = bags.projectPresets.ConvertAll(p => {
+                        string path = AssetDatabase.GetAssetPath(p);
+                        string relativePath = path.Substring(path.IndexOf("Presets/") + "Presets/".Length);
+                        return relativePath.Replace(".asset", "");
+                    }).ToArray();
+                    selectedProjectPresetIndex = EditorGUILayout.Popup(selectedProjectPresetIndex, projectPresetNames);
+                    if (GUILayout.Button(theme.language_manager.speak("load"), GUILayout.Width(60)))
+                    {
+                        if (selectedProjectPresetIndex >= 0 && selectedProjectPresetIndex < bags.projectPresets.Count)
+                        {
+                            Bags.ApplyPreset(bags.projectPresets[selectedProjectPresetIndex], material);
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                Components.draw_divider();
+
+                // Custom presets
+                GUILayout.Label(theme.language_manager.speak("preset_custom_header"), EditorStyles.boldLabel);
+                if (bags.userPresets.Count == 0)
+                {
+                    EditorGUILayout.LabelField(theme.language_manager.speak("preset_no_custom_found"));
+                }
+                else
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    string[] userPresetNames = bags.userPresets.ConvertAll(p => p.name).ToArray();
+                    selectedUserPresetIndex = EditorGUILayout.Popup(selectedUserPresetIndex, userPresetNames);
+
+                    if (GUILayout.Button(theme.language_manager.speak("load"), GUILayout.Width(60)))
+                    {
+                        if (selectedUserPresetIndex >= 0 && selectedUserPresetIndex < bags.userPresets.Count)
+                        {
+                            Bags.ApplyPreset(bags.userPresets[selectedUserPresetIndex], material);
+                        }
+                    }
+
+                    if (GUILayout.Button("X", GUILayout.Width(20)))
+                    {
+                        if (selectedUserPresetIndex >= 0 && selectedUserPresetIndex < bags.userPresets.Count)
+                        {
+                            var preset = bags.userPresets[selectedUserPresetIndex];
+                            if (EditorUtility.DisplayDialog(
+                                theme.language_manager.speak("preset_title"),
+                                theme.language_manager.speak("preset_delete_prompt", preset.name),
+                                theme.language_manager.speak("preset_delete_prompt_yes"),
+                                theme.language_manager.speak("preset_delete_prompt_no")))
+                            {
+                                bags.DeletePreset(preset.name);
+                                bags.LoadPresets(); // Refresh
+                                selectedUserPresetIndex = 0; // Reset index
+                            }
+                        }
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+
+                Components.draw_divider();
+
+                // Save preset
+                GUILayout.Label(theme.language_manager.speak("preset_save_header"), EditorStyles.boldLabel);
+                newUserPresetName = EditorGUILayout.TextField(theme.language_manager.speak("preset_name_label"), newUserPresetName);
+                if (GUILayout.Button(theme.language_manager.speak("preset_save_button")))
+                {
+                    if (!string.IsNullOrEmpty(newUserPresetName))
+                    {
+                        bags.SavePreset(material, newUserPresetName);
+                        newUserPresetName = "";
+                        bags.LoadPresets();
+                    }
+                    else
+                    {
+                        EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("preset_title"),
+                            theme.language_manager.speak("preset_save_error_noname"),
+                            theme.language_manager.speak("dialog_okay"));
+                    }
+                }
+
+                Components.end_foldout();
+            }
+        }
+    
+    }
+
 }
 
 #endif // UNITY_EDITOR

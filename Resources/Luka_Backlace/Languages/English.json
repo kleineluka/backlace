@@ -101,7 +101,7 @@
             "value": "Grey Unused Settings"
         },
         {
-            "key": "preset_overwrite_prompt_title",
+            "key": "preset_title",
             "value": "Preset Manager"
         },
         {
@@ -115,6 +115,58 @@
         {
             "key": "preset_overwrite_prompt_no",
             "value": "Keep existing."
+        },
+        {
+            "key": "preset_builtin_header",
+            "value": "Built-In Presets"
+        },
+        {
+            "key": "preset_custom_header",
+            "value": "Custom Presets"
+        },
+        {
+            "key": "preset_save_header",
+            "value": "Save This Material"
+        },
+        {
+            "key": "preset_name_label",
+            "value": "Preset Name"
+        },
+        {
+            "key": "preset_save_button",
+            "value": "Save Preset"
+        },
+        {
+            "key": "preset_save_error_noname",
+            "value": "Please set a name for your preset before saving! >.<"
+        },
+        {
+            "key": "preset_delete_prompt",
+            "value": "Do you want to delete this preset? It can't be undone..."
+        },
+        {
+            "key": "preset_delete_prompt_yes",
+            "value": "Delete Preset"
+        },
+        {
+            "key": "preset_delete_prompt_no",
+            "value": "Keep Preset"
+        },
+        {
+            "key": "tab_presets",
+            "value": "Presets"
+        },
+        {
+            "key": "preset_no_builtin_found",
+            "value": "No built-in presets were provided with this shader..."
+        },
+        {
+            "key": "preset_no_custom_found",
+            "value": "No custom presets were found!"
+        },
+        {
+            "key": "load",
+            "value": "Load"
         },
         {
             "key": "tab_main",
