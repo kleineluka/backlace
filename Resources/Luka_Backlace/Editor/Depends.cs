@@ -510,11 +510,13 @@ namespace Luka.Backlace
     public class BeautyBlender
     {
         private int _currentBlendMode;
+        private bool _isOverrideEnabled;
 
         public BeautyBlender(Material mat)
         {
             if (!mat.HasProperty("_BlendMode")) return;
             _currentBlendMode = mat.GetInt("_BlendMode");
+            _isOverrideEnabled = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
             Apply(mat);
         }
 
@@ -522,16 +524,20 @@ namespace Luka.Backlace
         {
             if (!mat.HasProperty("_BlendMode")) return;
             int newBlendMode = mat.GetInt("_BlendMode");
-            if (newBlendMode != _currentBlendMode)
+            bool newOverrideState = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
+            if (newBlendMode != _currentBlendMode || newOverrideState != _isOverrideEnabled)
             {
                 _currentBlendMode = newBlendMode;
+                _isOverrideEnabled = newOverrideState;
                 Apply(mat);
             }
         }
 
         private void Apply(Material mat)
         {
-            // Expected blend enum: 0=Opaque, 1=Cutout, 2=Fade, 3=Transparent, 4=Premultiply
+            // this is handled a bit different w the override controls
+            int newRenderQueue = mat.renderQueue; 
+            // expected blend enum: 0=Opaque, 1=Cutout, 2=Fade, 3=Transparent, 4=Premultiply
             switch (_currentBlendMode)
             {
                 case 0: // opaque
@@ -539,36 +545,41 @@ namespace Luka.Backlace
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
                     mat.SetInt("_ZWrite", 1);
-                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
                     break;
                 case 1: // cutout
                     mat.SetOverrideTag("RenderType", "TransparentCutout");
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
                     mat.SetInt("_ZWrite", 1);
-                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
                     break;
                 case 2: // fade (standard alpha blending)
                     mat.SetOverrideTag("RenderType", "Transparent");
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                     mat.SetInt("_ZWrite", 0);
-                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
                 case 3: // transparent (additive transparency)
                     mat.SetOverrideTag("RenderType", "Transparent");
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
                     mat.SetInt("_ZWrite", 0);
-                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
                 case 4: // premultiply (premultiplied alpha)
                     mat.SetOverrideTag("RenderType", "Transparent");
                     mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                     mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                     mat.SetInt("_ZWrite", 0);
-                    mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
+            }
+            // only set queue if the override is not enabled
+            if (!_isOverrideEnabled)
+            {
+                mat.renderQueue = newRenderQueue;
             }
         }
     }

@@ -2039,6 +2039,10 @@
         {
             "key": "prop_ShadowMap_UV",
             "value": "Shadow Map UV Set"
+        },
+        {
+            "key": "prop_OverrideRenderQueue",
+            "value": "Use Custom Render Queue"
         }
     ]
 }

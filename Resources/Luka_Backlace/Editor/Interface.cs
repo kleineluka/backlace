@@ -13,24 +13,28 @@ namespace Luka.Backlace
     public class Interface : ShaderGUI
     {
 
+        // editor states
         private static bool loaded = false;
         private static string loaded_material = null;
-        private static Config configs = null;
-        private static Languages languages = null;
-        private static Theme theme = null;
+        // core ui components
         private static Header header = null;
         private static Announcement announcement = null;
+        private static Theme theme = null;
+        private static Languages languages = null;
+        private static Config configs = null;
+        private static Tab config_tab = null;
+        private static ConfigMenu config_menu = null;
         private static Update update = null;
         private static Docs docs = null;
-        private static SocialsMenu socials_menu = null;
         private static Metadata meta = null;
-        private static Tab config_tab = null;
+        private static SocialsMenu socials_menu = null;
+        // additional ui integrations
         private static Tab license_tab = null;
-        private static Tab presets_tab = null;
-        private static ConfigMenu config_menu = null;
         private static LicenseMenu license_menu = null;
         private static Cushion cushion = null;
+        private static BeautyBlender beauty_blender = null;
         private static Bags bags = null;
+        private static Tab presets_tab = null;
         private static PresetsMenu presets_menu = null;
         
         #region Tabs
@@ -94,6 +98,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_StencilOp = null;
         private MaterialProperty prop_BlendMode = null;
         private MaterialProperty prop_VRCFallback = null;
+        private MaterialProperty prop_OverrideRenderQueue = null;
         // texture properties
         private MaterialProperty prop_MainTex = null;
         private MaterialProperty prop_Color = null;
@@ -564,6 +569,7 @@ namespace Luka.Backlace
             docs = null;
             socials_menu = null;
             cushion = null;
+            beauty_blender = null;
             bags = null;
             meta = null;
             config_tab = null;
@@ -637,6 +643,7 @@ namespace Luka.Backlace
             docs = new Docs(ref theme);
             socials_menu = new SocialsMenu(ref theme);
             cushion = new Cushion(targetMat);
+            beauty_blender = new BeautyBlender(targetMat);
             bags = new Bags(ref languages);
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
             #region Tabs
@@ -726,7 +733,12 @@ namespace Luka.Backlace
                     prop_StencilComp = FindProperty("_StencilComp", properties);
                     prop_StencilOp = FindProperty("_StencilOp", properties);
                     prop_VRCFallback = FindProperty("_VRCFallback", properties);
+                    prop_OverrideRenderQueue = FindProperty("_OverrideRenderQueue", properties);
                     materialEditor.ShaderProperty(prop_BlendMode, languages.speak("prop_BlendMode"));
+                    materialEditor.ShaderProperty(prop_OverrideRenderQueue, languages.speak("prop_OverrideRenderQueue"));
+                    Components.start_dynamic_disable(prop_OverrideRenderQueue.floatValue.Equals(0));
+                    materialEditor.RenderQueueField();
+                    Components.end_dynamic_disable(prop_OverrideRenderQueue.floatValue.Equals(0));
                     materialEditor.ShaderProperty(prop_SrcBlend, languages.speak("prop_SrcBlend"));
                     materialEditor.ShaderProperty(prop_DstBlend, languages.speak("prop_DstBlend"));
                     materialEditor.ShaderProperty(prop_ZWrite, languages.speak("prop_ZWrite"));
@@ -1823,6 +1835,11 @@ namespace Luka.Backlace
             docs.draw();
             socials_menu.draw();
             EditorGUI.EndChangeCheck();
+            if (EditorGUI.EndChangeCheck())
+            {
+                cushion.Update(targetMat);
+                beauty_blender.Update(targetMat);
+            }
         }
 
     }

@@ -19,6 +19,7 @@ Shader "luka/indev/backlace"
         [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 0
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
         //[KeywordEnum(Cutout, Fade, Transparent, Premultiply)] _BlendMode ("Blending Mode", Float) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _OverrideRenderQueue ("Override Render Queue", Float) = 0
         [KeywordEnum(Opaque, Cutout, Fade, Transparent, Premultiply)] _BlendMode ("Blending Mode", Float) = 0
         [Enum(Toon, 0, Double Sided, 1, Unlit, 2, Particle, 3, Matcap, 4, Sprite, 5, Hidden, 6)] _VRCFallback ("VRChat Fallback", Int) = 0
 
