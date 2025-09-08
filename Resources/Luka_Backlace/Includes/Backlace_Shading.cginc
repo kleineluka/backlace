@@ -288,7 +288,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
-    #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
+    #elif defined(_TOONMODE_PROCEDURAL) // _TOONMODE_RAMP
         // specific anime-style vertex light function
         void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
         {
@@ -299,7 +299,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         }
 
         // diffuse function for anime-style lighting
-        void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
+        void GetProceduralDiffuse(inout BacklaceSurfaceData Surface)
         {
             float lightTerm = saturate(Surface.UnmaxedNdotL * 0.5 + 0.5);
             lightTerm = saturate(lightTerm - (1.0 - Surface.Occlusion) * _AnimeOcclusionToShadow);
@@ -329,7 +329,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         }
 
         // get the vertex diffuse contribution using anime-style lighting
-        void GetAnimeVertexDiffuse(inout BacklaceSurfaceData Surface)
+        void GetProceduralVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
@@ -342,19 +342,19 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
-    #endif // _TOONMODE_ANIME
+    #endif // _TOONMODE_PROCEDURAL
 
     // wrapper function for toon diffuse
-    void GetToonDiffuse(inout BacklaceSurfaceData Surface)
+    void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
         #if defined(_TOONMODE_RAMP)
             // traditional toony ramp
             GetRampDiffuse(Surface);
             GetRampVertexDiffuse(Surface);
-        #elif defined(_TOONMODE_ANIME) // _TOONMODE_RAMP
+        #elif defined(_TOONMODE_PROCEDURAL) // _TOONMODE_RAMP
             // procedural anime style
-            GetAnimeDiffuse(Surface);
-            GetAnimeVertexDiffuse(Surface);
+            GetProceduralDiffuse(Surface);
+            GetProceduralVertexDiffuse(Surface);
         #endif // _TOONMODE_RAMP
     }
 #endif // _BACKLACE_TOON

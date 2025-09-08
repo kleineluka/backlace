@@ -52,7 +52,7 @@ namespace Luka.Backlace
         // lighting
         private static Tab tab_lighting = null;
         private static Tab sub_tab_lighting_model = null;
-        private static Tab sub_tab_toon = null;
+        private static Tab sub_tab_anime = null;
         private static Tab sub_tab_specular = null;
         private static Tab sub_tab_emission = null;
         private static Tab sub_tab_light_limiting = null;
@@ -591,7 +591,7 @@ namespace Luka.Backlace
             sub_tab_uv_sets = null;
             tab_lighting = null;
             sub_tab_lighting_model = null;
-            sub_tab_toon = null;
+            sub_tab_anime = null;
             sub_tab_specular = null;
             sub_tab_emission = null;
             sub_tab_light_limiting = null;
@@ -659,7 +659,7 @@ namespace Luka.Backlace
             sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_uv_sets"));
             tab_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_lighting"));
             sub_tab_lighting_model = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_lighting_model"));
-            sub_tab_toon = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_toon"));
+            sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"));
             sub_tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_specular"));
             sub_tab_emission = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_emission"));
             sub_tab_light_limiting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_light_limiting"));
@@ -764,6 +764,42 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_BumpScale, languages.speak("prop_BumpScale"));
                     materialEditor.ShaderProperty(prop_Alpha, languages.speak("prop_Alpha"));
                 }
+                sub_tab_post_processing.draw();
+                if (sub_tab_post_processing.is_expanded) {
+                    // main - post processing
+                    prop_TogglePostProcessing = FindProperty("_TogglePostProcessing", properties);
+                    prop_RGBColor = FindProperty("_RGBColor", properties);
+                    prop_RGBBlendMode = FindProperty("_RGBBlendMode", properties);
+                    prop_HSVMode = FindProperty("_HSVMode", properties);
+                    prop_HSVHue = FindProperty("_HSVHue", properties);
+                    prop_HSVSaturation = FindProperty("_HSVSaturation", properties);
+                    prop_HSVValue = FindProperty("_HSVValue", properties);
+                    prop_ToggleHueShift = FindProperty("_ToggleHueShift", properties);
+                    prop_HueShift = FindProperty("_HueShift", properties);
+                    prop_ToggleAutoCycle = FindProperty("_ToggleAutoCycle", properties);
+                    prop_AutoCycleSpeed = FindProperty("_AutoCycleSpeed", properties);
+                    prop_ColorGradingLUT = FindProperty("_ColorGradingLUT", properties);
+                    prop_ColorGradingIntensity = FindProperty("_ColorGradingIntensity", properties);
+                    prop_BlackAndWhite = FindProperty("_BlackAndWhite", properties);
+                    prop_Brightness = FindProperty("_Brightness", properties);
+                    materialEditor.ShaderProperty(prop_TogglePostProcessing, languages.speak("prop_TogglePostProcessing"));
+                    Components.start_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_RGBColor, languages.speak("prop_RGBColor"));
+                    materialEditor.ShaderProperty(prop_RGBBlendMode, languages.speak("prop_RGBBlendMode"));
+                    materialEditor.ShaderProperty(prop_HSVMode, languages.speak("prop_HSVMode"));
+                    materialEditor.ShaderProperty(prop_HSVHue, languages.speak("prop_HSVHue"));
+                    materialEditor.ShaderProperty(prop_HSVSaturation, languages.speak("prop_HSVSaturation"));
+                    materialEditor.ShaderProperty(prop_HSVValue, languages.speak("prop_HSVValue"));
+                    materialEditor.ShaderProperty(prop_ToggleHueShift, languages.speak("prop_ToggleHueShift"));
+                    materialEditor.ShaderProperty(prop_HueShift, languages.speak("prop_HueShift"));
+                    materialEditor.ShaderProperty(prop_ToggleAutoCycle, languages.speak("prop_ToggleAutoCycle"));
+                    materialEditor.ShaderProperty(prop_AutoCycleSpeed, languages.speak("prop_AutoCycleSpeed"));
+                    materialEditor.ShaderProperty(prop_ColorGradingLUT, languages.speak("prop_ColorGradingLUT"));
+                    materialEditor.ShaderProperty(prop_ColorGradingIntensity, languages.speak("prop_ColorGradingIntensity"));
+                    materialEditor.ShaderProperty(prop_BlackAndWhite, languages.speak("prop_BlackAndWhite"));
+                    materialEditor.ShaderProperty(prop_Brightness, languages.speak("prop_Brightness"));
+                    Components.end_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
+                }
                 sub_tab_decal_one.draw();
                 if (sub_tab_decal_one.is_expanded) {
                     // main - decal one
@@ -843,42 +879,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_Decal2AutoCycleHue, languages.speak("prop_Decal2AutoCycleHue"));
                     materialEditor.ShaderProperty(prop_Decal2CycleSpeed, languages.speak("prop_Decal2CycleSpeed"));
                     Components.end_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
-                }
-                sub_tab_post_processing.draw();
-                if (sub_tab_post_processing.is_expanded) {
-                    // main - post processing
-                    prop_TogglePostProcessing = FindProperty("_TogglePostProcessing", properties);
-                    prop_RGBColor = FindProperty("_RGBColor", properties);
-                    prop_RGBBlendMode = FindProperty("_RGBBlendMode", properties);
-                    prop_HSVMode = FindProperty("_HSVMode", properties);
-                    prop_HSVHue = FindProperty("_HSVHue", properties);
-                    prop_HSVSaturation = FindProperty("_HSVSaturation", properties);
-                    prop_HSVValue = FindProperty("_HSVValue", properties);
-                    prop_ToggleHueShift = FindProperty("_ToggleHueShift", properties);
-                    prop_HueShift = FindProperty("_HueShift", properties);
-                    prop_ToggleAutoCycle = FindProperty("_ToggleAutoCycle", properties);
-                    prop_AutoCycleSpeed = FindProperty("_AutoCycleSpeed", properties);
-                    prop_ColorGradingLUT = FindProperty("_ColorGradingLUT", properties);
-                    prop_ColorGradingIntensity = FindProperty("_ColorGradingIntensity", properties);
-                    prop_BlackAndWhite = FindProperty("_BlackAndWhite", properties);
-                    prop_Brightness = FindProperty("_Brightness", properties);
-                    materialEditor.ShaderProperty(prop_TogglePostProcessing, languages.speak("prop_TogglePostProcessing"));
-                    Components.start_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_RGBColor, languages.speak("prop_RGBColor"));
-                    materialEditor.ShaderProperty(prop_RGBBlendMode, languages.speak("prop_RGBBlendMode"));
-                    materialEditor.ShaderProperty(prop_HSVMode, languages.speak("prop_HSVMode"));
-                    materialEditor.ShaderProperty(prop_HSVHue, languages.speak("prop_HSVHue"));
-                    materialEditor.ShaderProperty(prop_HSVSaturation, languages.speak("prop_HSVSaturation"));
-                    materialEditor.ShaderProperty(prop_HSVValue, languages.speak("prop_HSVValue"));
-                    materialEditor.ShaderProperty(prop_ToggleHueShift, languages.speak("prop_ToggleHueShift"));
-                    materialEditor.ShaderProperty(prop_HueShift, languages.speak("prop_HueShift"));
-                    materialEditor.ShaderProperty(prop_ToggleAutoCycle, languages.speak("prop_ToggleAutoCycle"));
-                    materialEditor.ShaderProperty(prop_AutoCycleSpeed, languages.speak("prop_AutoCycleSpeed"));
-                    materialEditor.ShaderProperty(prop_ColorGradingLUT, languages.speak("prop_ColorGradingLUT"));
-                    materialEditor.ShaderProperty(prop_ColorGradingIntensity, languages.speak("prop_ColorGradingIntensity"));
-                    materialEditor.ShaderProperty(prop_BlackAndWhite, languages.speak("prop_BlackAndWhite"));
-                    materialEditor.ShaderProperty(prop_Brightness, languages.speak("prop_Brightness"));
-                    Components.end_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
                 }
                 sub_tab_vertex_manipulation.draw();
                 if (sub_tab_vertex_manipulation.is_expanded) {
@@ -1047,8 +1047,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_IndirectOverride, languages.speak("prop_IndirectOverride"));
                     materialEditor.ShaderProperty(prop_FallbackCubemap, languages.speak("prop_FallbackCubemap"));
                 }
-                sub_tab_toon.draw();
-                if (sub_tab_toon.is_expanded) {
+                sub_tab_anime.draw();
+                if (sub_tab_anime.is_expanded) {
                     // lighting - diffuse
                     prop_ToggleToonLighting = FindProperty("_ToggleToonLighting", properties);
                     prop_ToonMode = FindProperty("_ToonMode", properties);

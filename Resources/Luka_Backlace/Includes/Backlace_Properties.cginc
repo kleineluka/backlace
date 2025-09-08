@@ -133,14 +133,14 @@ float3 _VertexManipulationScale;
         float _ShadowIntensity;
         float _OcclusionOffsetIntensity;
         float3 _RampMin;
-    #elif defined(_TOONMODE_ANIME)
+    #elif defined(_TOONMODE_PROCEDURAL)
         float4 _AnimeShadowColor;
         float _AnimeShadowThreshold;
         float4 _AnimeHalftoneColor;
         float _AnimeHalftoneThreshold;
         float _AnimeShadowSoftness;
         float _AnimeOcclusionToShadow;
-    #endif // _TOONMODE_RAMP || _TOONMODE_ANIME
+    #endif // _TOONMODE_RAMP || _TOONMODE_PROCEDURAL
 #endif // _BACKLACE_TOON
 
 // emission feature

@@ -6,7 +6,7 @@
 #pragma multi_compile _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
 #pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON _SPECULARMODE_HAIR _SPECULARMODE_CLOTH
 // should light model be here too, same with light direction?
-#pragma multi_compile _TOONMODE_RAMP _TOONMODE_ANIME
+#pragma multi_compile _TOONMODE_RAMP _TOONMODE_PROCEDURAL
 
 // CORE FEATURES
 #pragma shader_feature_local _ _BACKLACE_TOON

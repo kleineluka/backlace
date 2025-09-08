@@ -64,7 +64,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
     #if defined(_BACKLACE_TOON) // TOON LIGHTING
-        GetToonDiffuse(Surface); // (includes vertex diffuse inside wrapper)
+        GetAnimeDiffuse(Surface); // (includes vertex diffuse inside wrapper)
     #else // REAL LIGHTING
         GetPBRDiffuse(Surface);
         GetPBRVertexDiffuse(Surface);
