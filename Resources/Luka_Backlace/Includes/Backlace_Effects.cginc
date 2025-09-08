@@ -159,7 +159,7 @@
     float _IridescenceMode;
     float _IridescenceParallax;;
 
-    void ApplyIridescence(inout BacklaceSurfaceData Surface)
+    void ApplyIridescence(inout BacklaceSurfaceData Surface, FragmentData i)
     {
         float3 shiftedNormal = normalize(Surface.NormalDir + Surface.ViewDir * _IridescenceParallax);
         float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));

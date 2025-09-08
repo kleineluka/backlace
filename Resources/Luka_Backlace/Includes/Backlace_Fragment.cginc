@@ -115,7 +115,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         ApplyPathing(Surface, i);
     #endif // _BACKLACE_PATHING
     #if defined(_BACKLACE_IRIDESCENCE)
-        ApplyIridescence(Surface);
+        ApplyIridescence(Surface, i);
     #endif // _BACKLACE_IRIDESCENCE
     #if defined(_BACKLACE_REFRACTION)
         ApplyRefraction(Surface, i);
