@@ -249,7 +249,6 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         {
             Surface.Diffuse = 0;
             float4 ramp = RampDotL(Surface);
-            ApplyAmbientGradient(Surface);
             #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
                 ramp *= ParallaxShadow;
             #endif // _BACKLACE_PARALLAX_SHADOWS
@@ -271,6 +270,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
             #endif // _BACKLACE_SHADOW_TEXTURE
             Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
+            ApplyAmbientGradient(Surface);
             ApplyAreaTint(Surface);
         }
 

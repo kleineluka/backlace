@@ -179,7 +179,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_AnimeHalftoneColor = null;
         private MaterialProperty prop_AnimeHalftoneThreshold = null;
         private MaterialProperty prop_AnimeShadowSoftness = null;
-        private MaterialProperty prop_ToggleAnimeAmbientGradient = null;
+        private MaterialProperty prop_ToggleAmbientGradient = null;
         private MaterialProperty prop_AnimeOcclusionToShadow = null;
         private MaterialProperty prop_AmbientUp = null;
         private MaterialProperty prop_AmbientSkyThreshold = null;
@@ -1063,7 +1063,7 @@ namespace Luka.Backlace
                     prop_AnimeHalftoneColor = FindProperty("_AnimeHalftoneColor", properties);
                     prop_AnimeHalftoneThreshold = FindProperty("_AnimeHalftoneThreshold", properties);
                     prop_AnimeShadowSoftness = FindProperty("_AnimeShadowSoftness", properties);
-                    prop_ToggleAnimeAmbientGradient = FindProperty("_ToggleAnimeAmbientGradient", properties);
+                    prop_ToggleAmbientGradient = FindProperty("_ToggleAmbientGradient", properties);
                     prop_AnimeOcclusionToShadow = FindProperty("_AnimeOcclusionToShadow", properties);
                     prop_AmbientUp = FindProperty("_AmbientUp", properties);
                     prop_AmbientSkyThreshold = FindProperty("_AmbientSkyThreshold", properties);
@@ -1076,30 +1076,49 @@ namespace Luka.Backlace
                     prop_ShadowTint = FindProperty("_ShadowTint", properties);
                     prop_ShadowThreshold = FindProperty("_ShadowThreshold", properties);
                     materialEditor.ShaderProperty(prop_ToggleAnimeLighting, languages.speak("prop_ToggleAnimeLighting"));
+                    Components.start_dynamic_disable(!prop_ToggleAnimeLighting.floatValue.Equals(1), configs);
+                    
                     materialEditor.ShaderProperty(prop_AnimeMode, languages.speak("prop_AnimeMode"));
-                    materialEditor.ShaderProperty(prop_Ramp, languages.speak("prop_Ramp"));
-                    materialEditor.ShaderProperty(prop_RampColor, languages.speak("prop_RampColor"));
-                    materialEditor.ShaderProperty(prop_RampOffset, languages.speak("prop_RampOffset"));
-                    materialEditor.ShaderProperty(prop_ShadowIntensity, languages.speak("prop_ShadowIntensity"));
-                    materialEditor.ShaderProperty(prop_OcclusionOffsetIntensity, languages.speak("prop_OcclusionOffsetIntensity"));
-                    materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
-                    materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
-                    materialEditor.ShaderProperty(prop_AnimeShadowThreshold, languages.speak("prop_AnimeShadowThreshold"));
-                    materialEditor.ShaderProperty(prop_AnimeHalftoneColor, languages.speak("prop_AnimeHalftoneColor"));
-                    materialEditor.ShaderProperty(prop_AnimeHalftoneThreshold, languages.speak("prop_AnimeHalftoneThreshold"));
-                    materialEditor.ShaderProperty(prop_AnimeShadowSoftness, languages.speak("prop_AnimeShadowSoftness"));
-                    materialEditor.ShaderProperty(prop_ToggleAnimeAmbientGradient, languages.speak("prop_ToggleAnimeAmbientGradient"));
-                    materialEditor.ShaderProperty(prop_AnimeOcclusionToShadow, languages.speak("prop_AnimeOcclusionToShadow"));
+
+                    // Ramp Mode
+                    if ((int)prop_AnimeMode.floatValue == 0)
+                    {
+                        materialEditor.ShaderProperty(prop_Ramp, languages.speak("prop_Ramp"));
+                        materialEditor.ShaderProperty(prop_RampColor, languages.speak("prop_RampColor"));
+                        materialEditor.ShaderProperty(prop_RampOffset, languages.speak("prop_RampOffset"));
+                        materialEditor.ShaderProperty(prop_ShadowIntensity, languages.speak("prop_ShadowIntensity"));
+                        materialEditor.ShaderProperty(prop_OcclusionOffsetIntensity, languages.speak("prop_OcclusionOffsetIntensity"));
+                        materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
+                    }
+                    // Procedural Mode
+                    else
+                    {
+                        materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
+                        materialEditor.ShaderProperty(prop_AnimeShadowThreshold, languages.speak("prop_AnimeShadowThreshold"));
+                        materialEditor.ShaderProperty(prop_AnimeHalftoneColor, languages.speak("prop_AnimeHalftoneColor"));
+                        materialEditor.ShaderProperty(prop_AnimeHalftoneThreshold, languages.speak("prop_AnimeHalftoneThreshold"));
+                        materialEditor.ShaderProperty(prop_AnimeShadowSoftness, languages.speak("prop_AnimeShadowSoftness"));
+                        materialEditor.ShaderProperty(prop_AnimeOcclusionToShadow, languages.speak("prop_AnimeOcclusionToShadow"));
+                    }
+                    // ambient gradient is used in both modes
+                    Components.draw_divider();
+                    materialEditor.ShaderProperty(prop_ToggleAmbientGradient, languages.speak("prop_ToggleAmbientGradient"));
+                    Components.start_dynamic_disable(!prop_ToggleAmbientGradient.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_AmbientUp, languages.speak("prop_AmbientUp"));
                     materialEditor.ShaderProperty(prop_AmbientSkyThreshold, languages.speak("prop_AmbientSkyThreshold"));
                     materialEditor.ShaderProperty(prop_AmbientDown, languages.speak("prop_AmbientDown"));
                     materialEditor.ShaderProperty(prop_AmbientGroundThreshold, languages.speak("prop_AmbientGroundThreshold"));
                     materialEditor.ShaderProperty(prop_AmbientIntensity, languages.speak("prop_AmbientIntensity"));
+                    Components.end_dynamic_disable(!prop_ToggleAmbientGradient.floatValue.Equals(1), configs);
+                    // and tinting is also used in both modes
+                    Components.draw_divider();
                     materialEditor.ShaderProperty(prop_TintMaskSource, languages.speak("prop_TintMaskSource"));
+                    Components.start_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
                     materialEditor.ShaderProperty(prop_LitTint, languages.speak("prop_LitTint"));
                     materialEditor.ShaderProperty(prop_LitThreshold, languages.speak("prop_LitThreshold"));
                     materialEditor.ShaderProperty(prop_ShadowTint, languages.speak("prop_ShadowTint"));
                     materialEditor.ShaderProperty(prop_ShadowThreshold, languages.speak("prop_ShadowThreshold"));
+                    Components.end_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
                 }
                 sub_tab_specular.draw();
                 if (sub_tab_specular.is_expanded) {
@@ -1133,6 +1152,8 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
                     materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
+                    Components.draw_divider();
+                    // "global" specular properties
                     materialEditor.ShaderProperty(prop_MSSO, languages.speak("prop_MSSO"));
                     materialEditor.ShaderProperty(prop_Metallic, languages.speak("prop_Metallic"));
                     materialEditor.ShaderProperty(prop_Glossiness, languages.speak("prop_Glossiness"));
@@ -1140,21 +1161,35 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_Specular, languages.speak("prop_Specular"));
                     materialEditor.ShaderProperty(prop_SpecularTintTexture, languages.speak("prop_SpecularTintTexture"));
                     materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
-                    materialEditor.ShaderProperty(prop_TangentMap, languages.speak("prop_TangentMap"));
-                    materialEditor.ShaderProperty(prop_Anisotropy, languages.speak("prop_Anisotropy"));
                     materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));
-                    materialEditor.ShaderProperty(prop_HighlightRamp, languages.speak("prop_HighlightRamp"));
-                    materialEditor.ShaderProperty(prop_HighlightRampColor, languages.speak("prop_HighlightRampColor"));
-                    materialEditor.ShaderProperty(prop_HighlightIntensity, languages.speak("prop_HighlightIntensity"));
-                    materialEditor.ShaderProperty(prop_HighlightRampOffset, languages.speak("prop_HighlightRampOffset"));
-                    materialEditor.ShaderProperty(prop_HairFlowMap, languages.speak("prop_HairFlowMap"));
-                    materialEditor.ShaderProperty(prop_PrimarySpecularShift, languages.speak("prop_PrimarySpecularShift"));
-                    materialEditor.ShaderProperty(prop_SecondarySpecularShift, languages.speak("prop_SecondarySpecularShift"));
-                    materialEditor.ShaderProperty(prop_SecondarySpecularColor, languages.speak("prop_SecondarySpecularColor"));
-                    materialEditor.ShaderProperty(prop_SpecularExponent, languages.speak("prop_SpecularExponent"));
-                    materialEditor.ShaderProperty(prop_SheenColor, languages.speak("prop_SheenColor"));
-                    materialEditor.ShaderProperty(prop_SheenIntensity, languages.speak("prop_SheenIntensity"));
-                    materialEditor.ShaderProperty(prop_SheenRoughness, languages.speak("prop_SheenRoughness"));
+                    Components.draw_divider();
+                    int specularMode = (int)prop_SpecularMode.floatValue;
+                    switch (specularMode)
+                    {
+                        case 1: // Anisotropic
+                            materialEditor.ShaderProperty(prop_TangentMap, languages.speak("prop_TangentMap"));
+                            materialEditor.ShaderProperty(prop_Anisotropy, languages.speak("prop_Anisotropy"));
+                            break;
+                        case 2: // Toon
+                            materialEditor.ShaderProperty(prop_HighlightRamp, languages.speak("prop_HighlightRamp"));
+                            materialEditor.ShaderProperty(prop_HighlightRampColor, languages.speak("prop_HighlightRampColor"));
+                            materialEditor.ShaderProperty(prop_HighlightIntensity, languages.speak("prop_HighlightIntensity"));
+                            materialEditor.ShaderProperty(prop_HighlightRampOffset, languages.speak("prop_HighlightRampOffset"));
+                            break;
+                        case 3: // Hair
+                            materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint")); // Hair uses this as primary color
+                            materialEditor.ShaderProperty(prop_HairFlowMap, languages.speak("prop_HairFlowMap"));
+                            materialEditor.ShaderProperty(prop_PrimarySpecularShift, languages.speak("prop_PrimarySpecularShift"));
+                            materialEditor.ShaderProperty(prop_SecondarySpecularShift, languages.speak("prop_SecondarySpecularShift"));
+                            materialEditor.ShaderProperty(prop_SecondarySpecularColor, languages.speak("prop_SecondarySpecularColor"));
+                            materialEditor.ShaderProperty(prop_SpecularExponent, languages.speak("prop_SpecularExponent"));
+                            break;
+                        case 4: // Cloth
+                            materialEditor.ShaderProperty(prop_SheenColor, languages.speak("prop_SheenColor"));
+                            materialEditor.ShaderProperty(prop_SheenIntensity, languages.speak("prop_SheenIntensity"));
+                            materialEditor.ShaderProperty(prop_SheenRoughness, languages.speak("prop_SheenRoughness"));
+                            break;
+                    }
                     Components.end_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
                 }
                 sub_tab_emission.draw();

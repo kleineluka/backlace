@@ -568,7 +568,7 @@ Material:
     - _TangentMap_UV: 0
     - _ThicknessMap_UV: 0
     - _TintMaskSource: 0
-    - _ToggleAnimeAmbientGradient: 0
+    - _ToggleAmbientGradient: 0
     - _ToggleAudioLink: 1
     - _ToggleAutoCycle: 0
     - _ToggleClearcoat: 0

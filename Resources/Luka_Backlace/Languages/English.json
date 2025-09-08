@@ -610,15 +610,15 @@
         },
         {
             "key": "prop_ToggleAnimeLighting",
-            "value": "Enable Toon Lighting"
+            "value": "Enable Anime Lighting"
         },
         {
             "key": "prop_AnimeMode",
-            "value": "Toon Mode"
+            "value": "Anime Mode"
         },
         {
             "key": "prop_Ramp",
-            "value": "Toon Ramp"
+            "value": "Anime Ramp"
         },
         {
             "key": "prop_RampColor",
@@ -661,7 +661,7 @@
             "value": "Shadow Softness"
         },
         {
-            "key": "prop_ToggleAnimeAmbientGradient",
+            "key": "prop_ToggleAmbientGradient",
             "value": "Enable Ambient Gradient"
         },
         {

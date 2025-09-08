@@ -141,7 +141,7 @@ Shader "luka/indev/backlace"
         _AnimeHalftoneThreshold ("Halftone Threshold", Range(0, 1)) = 0.6 // <-- ADD THIS
         _AnimeShadowSoftness ("Shadow Softness", Range(0.001, 1)) = 0.02
         // ambient gradient
-        [Enum(Disabled, 0, Enabled, 1)] _ToggleAnimeAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
         _AnimeOcclusionToShadow ("Occlusion To Shadow", Range(0, 1)) = 0.5
         _AmbientUp ("Sky Ambient", Color) = (0.8, 0.8, 1, 1)
         _AmbientSkyThreshold ("Sky Threshold", Range(0, 1)) = 0.5
