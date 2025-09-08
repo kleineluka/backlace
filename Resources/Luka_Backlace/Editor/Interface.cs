@@ -53,9 +53,12 @@ namespace Luka.Backlace
         private static Tab tab_lighting = null;
         private static Tab sub_tab_lighting_model = null;
         private static Tab sub_tab_anime = null;
-        private static Tab sub_tab_specular = null;
         private static Tab sub_tab_emission = null;
         private static Tab sub_tab_light_limiting = null;
+        // specular
+        private static Tab tab_specular = null;
+        private static Tab sub_tab_pbr_specular = null;
+        private static Tab sub_tab_stylised_specular = null;
         // shading
         private static Tab tab_shading = null;
         private static Tab sub_tab_rim_lighting = null;
@@ -592,7 +595,9 @@ namespace Luka.Backlace
             tab_lighting = null;
             sub_tab_lighting_model = null;
             sub_tab_anime = null;
-            sub_tab_specular = null;
+            tab_specular = null;
+            sub_tab_pbr_specular = null;
+            sub_tab_stylised_specular = null;
             sub_tab_emission = null;
             sub_tab_light_limiting = null;
             tab_shading = null;
@@ -660,10 +665,12 @@ namespace Luka.Backlace
             tab_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_lighting"));
             sub_tab_lighting_model = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_lighting_model"));
             sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"));
-            sub_tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_specular"));
+            tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_specular"));
+            sub_tab_pbr_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_pbr_specular"));
+            sub_tab_stylised_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_stylised_specular"));
             sub_tab_emission = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_emission"));
             sub_tab_light_limiting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_light_limiting"));
-            tab_shading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_shading"));
+            tab_shading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_shading"));
             sub_tab_rim_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rim_lighting"));
             sub_tab_depth_rim = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_depth_rim"));
             sub_tab_clear_coat = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_clear_coat"));
@@ -673,7 +680,7 @@ namespace Luka.Backlace
             sub_tab_subsurface = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_subsurface"));
             sub_tab_detail_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_detail_map"));
             sub_tab_shadow_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_shadow_map"));
-            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_effects"));
+            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_effects"));
             sub_tab_dissolve = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_dissolve"));
             sub_tab_pathing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_pathing"));
             sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"));
@@ -688,7 +695,7 @@ namespace Luka.Backlace
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_vertex_distortion"));
             sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"));
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_screenspace_reflection"));
-            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_outline"));
+            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"));
             #endregion // Tabs
             loaded = true;
         }
@@ -718,6 +725,7 @@ namespace Luka.Backlace
             header.draw();
             update.draw();
             #region Backlace
+            // main tab
             tab_main.draw();
             if (tab_main.is_expanded) {
                 Components.start_foldout();
@@ -1004,6 +1012,7 @@ namespace Luka.Backlace
                 }
                 Components.end_foldout();
             }
+            // lighting tab
             tab_lighting.draw();
             if (tab_lighting.is_expanded) {
                 Components.start_foldout();
@@ -1120,78 +1129,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowThreshold, languages.speak("prop_ShadowThreshold"));
                     Components.end_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
                 }
-                sub_tab_specular.draw();
-                if (sub_tab_specular.is_expanded) {
-                    // lighting - specular
-                    prop_ToggleSpecular = FindProperty("_ToggleSpecular", properties);
-                    prop_ToggleVertexSpecular = FindProperty("_ToggleVertexSpecular", properties);
-                    prop_SpecularMode = FindProperty("_SpecularMode", properties);
-                    prop_MSSO = FindProperty("_MSSO", properties);
-                    prop_Metallic = FindProperty("_Metallic", properties);
-                    prop_Glossiness = FindProperty("_Glossiness", properties);
-                    prop_Occlusion = FindProperty("_Occlusion", properties);
-                    prop_Specular = FindProperty("_Specular", properties);
-                    prop_SpecularTintTexture = FindProperty("_SpecularTintTexture", properties);
-                    prop_SpecularTint = FindProperty("_SpecularTint", properties);
-                    prop_TangentMap = FindProperty("_TangentMap", properties);
-                    prop_Anisotropy = FindProperty("_Anisotropy", properties);
-                    prop_ReplaceSpecular = FindProperty("_ReplaceSpecular", properties);
-                    prop_HighlightRamp = FindProperty("_HighlightRamp", properties);
-                    prop_HighlightRampColor = FindProperty("_HighlightRampColor", properties);
-                    prop_HighlightIntensity = FindProperty("_HighlightIntensity", properties);
-                    prop_HighlightRampOffset = FindProperty("_HighlightRampOffset", properties);
-                    prop_HairFlowMap = FindProperty("_HairFlowMap", properties);
-                    prop_PrimarySpecularShift = FindProperty("_PrimarySpecularShift", properties);
-                    prop_SecondarySpecularShift = FindProperty("_SecondarySpecularShift", properties);
-                    prop_SecondarySpecularColor = FindProperty("_SecondarySpecularColor", properties);
-                    prop_SpecularExponent = FindProperty("_SpecularExponent", properties);
-                    prop_SheenColor = FindProperty("_SheenColor", properties);
-                    prop_SheenIntensity = FindProperty("_SheenIntensity", properties);
-                    prop_SheenRoughness = FindProperty("_SheenRoughness", properties);
-                    materialEditor.ShaderProperty(prop_ToggleSpecular, languages.speak("prop_ToggleSpecular"));
-                    Components.start_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
-                    materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
-                    Components.draw_divider();
-                    // "global" specular properties
-                    materialEditor.ShaderProperty(prop_MSSO, languages.speak("prop_MSSO"));
-                    materialEditor.ShaderProperty(prop_Metallic, languages.speak("prop_Metallic"));
-                    materialEditor.ShaderProperty(prop_Glossiness, languages.speak("prop_Glossiness"));
-                    materialEditor.ShaderProperty(prop_Occlusion, languages.speak("prop_Occlusion"));
-                    materialEditor.ShaderProperty(prop_Specular, languages.speak("prop_Specular"));
-                    materialEditor.ShaderProperty(prop_SpecularTintTexture, languages.speak("prop_SpecularTintTexture"));
-                    materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
-                    materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));
-                    Components.draw_divider();
-                    int specularMode = (int)prop_SpecularMode.floatValue;
-                    switch (specularMode)
-                    {
-                        case 1: // Anisotropic
-                            materialEditor.ShaderProperty(prop_TangentMap, languages.speak("prop_TangentMap"));
-                            materialEditor.ShaderProperty(prop_Anisotropy, languages.speak("prop_Anisotropy"));
-                            break;
-                        case 2: // Toon
-                            materialEditor.ShaderProperty(prop_HighlightRamp, languages.speak("prop_HighlightRamp"));
-                            materialEditor.ShaderProperty(prop_HighlightRampColor, languages.speak("prop_HighlightRampColor"));
-                            materialEditor.ShaderProperty(prop_HighlightIntensity, languages.speak("prop_HighlightIntensity"));
-                            materialEditor.ShaderProperty(prop_HighlightRampOffset, languages.speak("prop_HighlightRampOffset"));
-                            break;
-                        case 3: // Hair
-                            materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint")); // Hair uses this as primary color
-                            materialEditor.ShaderProperty(prop_HairFlowMap, languages.speak("prop_HairFlowMap"));
-                            materialEditor.ShaderProperty(prop_PrimarySpecularShift, languages.speak("prop_PrimarySpecularShift"));
-                            materialEditor.ShaderProperty(prop_SecondarySpecularShift, languages.speak("prop_SecondarySpecularShift"));
-                            materialEditor.ShaderProperty(prop_SecondarySpecularColor, languages.speak("prop_SecondarySpecularColor"));
-                            materialEditor.ShaderProperty(prop_SpecularExponent, languages.speak("prop_SpecularExponent"));
-                            break;
-                        case 4: // Cloth
-                            materialEditor.ShaderProperty(prop_SheenColor, languages.speak("prop_SheenColor"));
-                            materialEditor.ShaderProperty(prop_SheenIntensity, languages.speak("prop_SheenIntensity"));
-                            materialEditor.ShaderProperty(prop_SheenRoughness, languages.speak("prop_SheenRoughness"));
-                            break;
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
-                }
                 sub_tab_emission.draw();
                 if (sub_tab_emission.is_expanded) {
                     // lighting - emission
@@ -1236,6 +1173,93 @@ namespace Luka.Backlace
                 }
                 Components.end_foldout();
             }
+            // specular tab
+            tab_specular.draw();
+            if (tab_specular.is_expanded)
+            {
+                Components.start_foldout();
+                prop_ToggleSpecular = FindProperty("_ToggleSpecular", properties);
+                prop_ToggleVertexSpecular = FindProperty("_ToggleVertexSpecular", properties);
+                prop_SpecularMode = FindProperty("_SpecularMode", properties);
+                materialEditor.ShaderProperty(prop_ToggleSpecular, languages.speak("prop_ToggleSpecular"));
+                Components.start_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
+                materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
+                materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
+                sub_tab_pbr_specular.draw();
+                if (sub_tab_pbr_specular.is_expanded) {
+                    // specular - pbr specualr
+                    prop_MSSO = FindProperty("_MSSO", properties);
+                    prop_Metallic = FindProperty("_Metallic", properties);
+                    prop_Glossiness = FindProperty("_Glossiness", properties);
+                    prop_Occlusion = FindProperty("_Occlusion", properties);
+                    prop_Specular = FindProperty("_Specular", properties);
+                    prop_SpecularTintTexture = FindProperty("_SpecularTintTexture", properties);
+                    prop_SpecularTint = FindProperty("_SpecularTint", properties);
+                    prop_ReplaceSpecular = FindProperty("_ReplaceSpecular", properties);
+                    materialEditor.ShaderProperty(prop_MSSO, languages.speak("prop_MSSO"));
+                    materialEditor.ShaderProperty(prop_Metallic, languages.speak("prop_Metallic"));
+                    materialEditor.ShaderProperty(prop_Glossiness, languages.speak("prop_Glossiness"));
+                    materialEditor.ShaderProperty(prop_Occlusion, languages.speak("prop_Occlusion"));
+                    materialEditor.ShaderProperty(prop_Specular, languages.speak("prop_Specular"));
+                    materialEditor.ShaderProperty(prop_SpecularTintTexture, languages.speak("prop_SpecularTintTexture"));
+                    materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
+                    materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));
+                }
+                sub_tab_stylised_specular.draw();
+                if (sub_tab_stylised_specular.is_expanded) {
+                    // specular - stylised specular
+                    prop_HighlightRamp = FindProperty("_HighlightRamp", properties);
+                    prop_HighlightRampColor = FindProperty("_HighlightRampColor", properties);
+                    prop_HighlightIntensity = FindProperty("_HighlightIntensity", properties);
+                    prop_HighlightRampOffset = FindProperty("_HighlightRampOffset", properties);
+                    prop_HairFlowMap = FindProperty("_HairFlowMap", properties);
+                    prop_PrimarySpecularShift = FindProperty("_PrimarySpecularShift", properties);
+                    prop_SecondarySpecularShift = FindProperty("_SecondarySpecularShift", properties);
+                    prop_SecondarySpecularColor = FindProperty("_SecondarySpecularColor", properties);
+                    prop_SpecularExponent = FindProperty("_SpecularExponent", properties);
+                    prop_SheenColor = FindProperty("_SheenColor", properties);
+                    prop_SheenIntensity = FindProperty("_SheenIntensity", properties);
+                    prop_SheenRoughness = FindProperty("_SheenRoughness", properties);
+                    prop_TangentMap = FindProperty("_TangentMap", properties);
+                    prop_Anisotropy = FindProperty("_Anisotropy", properties);
+                    prop_SpecularTint = FindProperty("_SpecularTint", properties); // hair uses it, so display twice
+                    int specularMode = (int)prop_SpecularMode.floatValue;
+                    switch (specularMode)
+                    {
+                        case 1: // anisotropic
+                            materialEditor.ShaderProperty(prop_TangentMap, languages.speak("prop_TangentMap"));
+                            materialEditor.ShaderProperty(prop_Anisotropy, languages.speak("prop_Anisotropy"));
+                            break;
+                        case 2: // toon
+                            materialEditor.ShaderProperty(prop_HighlightRamp, languages.speak("prop_HighlightRamp"));
+                            materialEditor.ShaderProperty(prop_HighlightRampColor, languages.speak("prop_HighlightRampColor"));
+                            materialEditor.ShaderProperty(prop_HighlightIntensity, languages.speak("prop_HighlightIntensity"));
+                            materialEditor.ShaderProperty(prop_HighlightRampOffset, languages.speak("prop_HighlightRampOffset"));
+                            break;
+                        case 3: // hair
+                            materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint")); // hair uses this as primary color
+                            materialEditor.ShaderProperty(prop_HairFlowMap, languages.speak("prop_HairFlowMap"));
+                            materialEditor.ShaderProperty(prop_PrimarySpecularShift, languages.speak("prop_PrimarySpecularShift"));
+                            materialEditor.ShaderProperty(prop_SecondarySpecularShift, languages.speak("prop_SecondarySpecularShift"));
+                            materialEditor.ShaderProperty(prop_SecondarySpecularColor, languages.speak("prop_SecondarySpecularColor"));
+                            materialEditor.ShaderProperty(prop_SpecularExponent, languages.speak("prop_SpecularExponent"));
+                            break;
+                        case 4: // cloth
+                            materialEditor.ShaderProperty(prop_SheenColor, languages.speak("prop_SheenColor"));
+                            materialEditor.ShaderProperty(prop_SheenIntensity, languages.speak("prop_SheenIntensity"));
+                            materialEditor.ShaderProperty(prop_SheenRoughness, languages.speak("prop_SheenRoughness"));
+                            break;
+                        default: // none, just a label
+                            GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
+                            boldWrap.wordWrap = true;
+                            GUILayout.Label(theme.language_manager.speak("specular_standard_stylised_info"), boldWrap);
+                            break;
+                    }
+                }
+                Components.end_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
+                Components.end_foldout();
+            }
+            // shading tab
             tab_shading.draw();
             if (tab_shading.is_expanded) {
                 Components.start_foldout();
@@ -1405,6 +1429,7 @@ namespace Luka.Backlace
                 }
                 Components.end_foldout();
             }
+            // effects tab
             tab_effects.draw();
             if (tab_effects.is_expanded) {
                 Components.start_foldout();
@@ -1838,6 +1863,7 @@ namespace Luka.Backlace
                 }
                 Components.end_foldout();
             }
+            // outline tab
             tab_outline.draw();
             if (tab_outline.is_expanded) {
                 Components.start_foldout();

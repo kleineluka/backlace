@@ -171,7 +171,7 @@ Shader "luka/indev/backlace"
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
         _TangentMap ("Tangent Map", 2D) = "white" { }
         _Anisotropy ("Ansotropy", Range(-1, 1)) = 0
-        _ReplaceSpecular ("Replace Specular", Float) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
         // toon highlights
         _HighlightRamp ("Highlight Ramp", 2D) = "white" { }
         _HighlightRampColor ("Highlight Color", Color) = (1, 1, 1, 1)

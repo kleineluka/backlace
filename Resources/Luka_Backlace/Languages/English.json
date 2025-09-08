@@ -221,8 +221,16 @@
             "value": "Anime Shading"
         },
         {
-            "key": "sub_tab_specular",
+            "key": "tab_specular",
             "value": "Specular"
+        },
+        {
+            "key": "sub_tab_pbr_specular",
+            "value": "PBR Specular"
+        },
+        {
+            "key": "sub_tab_stylised_specular",
+            "value": "Stylised Specular"
         },
         {
             "key": "sub_tab_emission",
@@ -2043,6 +2051,10 @@
         {
             "key": "prop_OverrideRenderQueue",
             "value": "Use Custom Render Queue"
+        },
+        {
+            "key": "specular_standard_stylised_info",
+            "value": "Standard Specular has no stylised options - try changing the specular mode to see settings here!"
         }
     ]
 }
