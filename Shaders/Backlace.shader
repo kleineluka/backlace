@@ -125,8 +125,8 @@ Shader "luka/indev/backlace"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [Toggle(_BACKLACE_TOON)] _ToggleToonLighting ("Enable Toon Lighting", Float) = 0.0
-        [KeywordEnum(Ramp, Procedural)] _ToonMode ("Toon Mode", Int) = 0
+        [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Float) = 0.0
+        [KeywordEnum(Ramp, Procedural)] _AnimeMode ("Anime Mode", Int) = 0
         // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)

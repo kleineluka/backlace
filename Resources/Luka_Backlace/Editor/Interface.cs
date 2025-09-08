@@ -166,8 +166,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_BakedDirectIntensity = null;
         private MaterialProperty prop_BakedIndirectIntensity = null;
         // toon lighting properties
-        private MaterialProperty prop_ToggleToonLighting = null;
-        private MaterialProperty prop_ToonMode = null;
+        private MaterialProperty prop_ToggleAnimeLighting = null;
+        private MaterialProperty prop_AnimeMode = null;
         private MaterialProperty prop_Ramp = null;
         private MaterialProperty prop_RampColor = null;
         private MaterialProperty prop_RampOffset = null;
@@ -1050,8 +1050,8 @@ namespace Luka.Backlace
                 sub_tab_anime.draw();
                 if (sub_tab_anime.is_expanded) {
                     // lighting - diffuse
-                    prop_ToggleToonLighting = FindProperty("_ToggleToonLighting", properties);
-                    prop_ToonMode = FindProperty("_ToonMode", properties);
+                    prop_ToggleAnimeLighting = FindProperty("_ToggleAnimeLighting", properties);
+                    prop_AnimeMode = FindProperty("_AnimeMode", properties);
                     prop_Ramp = FindProperty("_Ramp", properties);
                     prop_RampColor = FindProperty("_RampColor", properties);
                     prop_RampOffset = FindProperty("_RampOffset", properties);
@@ -1075,8 +1075,8 @@ namespace Luka.Backlace
                     prop_LitThreshold = FindProperty("_LitThreshold", properties);
                     prop_ShadowTint = FindProperty("_ShadowTint", properties);
                     prop_ShadowThreshold = FindProperty("_ShadowThreshold", properties);
-                    materialEditor.ShaderProperty(prop_ToggleToonLighting, languages.speak("prop_ToggleToonLighting"));
-                    materialEditor.ShaderProperty(prop_ToonMode, languages.speak("prop_ToonMode"));
+                    materialEditor.ShaderProperty(prop_ToggleAnimeLighting, languages.speak("prop_ToggleAnimeLighting"));
+                    materialEditor.ShaderProperty(prop_AnimeMode, languages.speak("prop_AnimeMode"));
                     materialEditor.ShaderProperty(prop_Ramp, languages.speak("prop_Ramp"));
                     materialEditor.ShaderProperty(prop_RampColor, languages.speak("prop_RampColor"));
                     materialEditor.ShaderProperty(prop_RampOffset, languages.speak("prop_RampOffset"));

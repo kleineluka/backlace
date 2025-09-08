@@ -609,11 +609,11 @@
             "value": "Baked Indirect Intensity"
         },
         {
-            "key": "prop_ToggleToonLighting",
+            "key": "prop_ToggleAnimeLighting",
             "value": "Enable Toon Lighting"
         },
         {
-            "key": "prop_ToonMode",
+            "key": "prop_AnimeMode",
             "value": "Toon Mode"
         },
         {

@@ -176,7 +176,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         }
     }
 
-    #if defined(_TOONMODE_RAMP)
+    #if defined(_ANIMEMODE_RAMP)
         // for toon lighting, we use a ramp texture
         float4 RampDotL(inout BacklaceSurfaceData Surface)
         {
@@ -288,7 +288,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
-    #elif defined(_TOONMODE_PROCEDURAL) // _TOONMODE_RAMP
+    #elif defined(_ANIMEMODE_PROCEDURAL) // _ANIMEMODE_RAMP
         // specific anime-style vertex light function
         void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
         {
@@ -342,20 +342,20 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
-    #endif // _TOONMODE_PROCEDURAL
+    #endif // _ANIMEMODE_PROCEDURAL
 
     // wrapper function for toon diffuse
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
-        #if defined(_TOONMODE_RAMP)
+        #if defined(_ANIMEMODE_RAMP)
             // traditional toony ramp
             GetRampDiffuse(Surface);
             GetRampVertexDiffuse(Surface);
-        #elif defined(_TOONMODE_PROCEDURAL) // _TOONMODE_RAMP
+        #elif defined(_ANIMEMODE_PROCEDURAL) // _ANIMEMODE_RAMP
             // procedural anime style
             GetProceduralDiffuse(Surface);
             GetProceduralVertexDiffuse(Surface);
-        #endif // _TOONMODE_RAMP
+        #endif // _ANIMEMODE_RAMP
     }
 #endif // _BACKLACE_TOON
 

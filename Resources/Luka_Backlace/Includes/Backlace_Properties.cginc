@@ -125,7 +125,7 @@ float3 _VertexManipulationScale;
     float _AmbientIntensity;
     float _AmbientSkyThreshold;
     float _AmbientGroundThreshold;
-    #if defined(_TOONMODE_RAMP)
+    #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
         float _Ramp_UV;
         float4 _RampColor;
@@ -133,14 +133,14 @@ float3 _VertexManipulationScale;
         float _ShadowIntensity;
         float _OcclusionOffsetIntensity;
         float3 _RampMin;
-    #elif defined(_TOONMODE_PROCEDURAL)
+    #elif defined(_ANIMEMODE_PROCEDURAL)
         float4 _AnimeShadowColor;
         float _AnimeShadowThreshold;
         float4 _AnimeHalftoneColor;
         float _AnimeHalftoneThreshold;
         float _AnimeShadowSoftness;
         float _AnimeOcclusionToShadow;
-    #endif // _TOONMODE_RAMP || _TOONMODE_PROCEDURAL
+    #endif // _ANIMEMODE_RAMP || _ANIMEMODE_PROCEDURAL
 #endif // _BACKLACE_TOON
 
 // emission feature
