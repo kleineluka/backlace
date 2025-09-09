@@ -174,7 +174,7 @@
         },
         {
             "key": "variant_popup_description",
-            "value": "This feature requires (at minimum) the '{0}' shader variant.\n\nShader variants are made in order to help ensure you only include code for the features you need. While other versions may have it (indicated by greyed out tabs or not), this is the \"lowest\" variant tier that supports it. Please see the docs for more info"
+            "value": "This feature requires (at minimum) the '{0}' shader variant.\n\nShader variants are made in order to help ensure you only include code for the features you need. While other versions may have it (indicated by greyed out tabs or not), this is the \"lowest\" variant tier that supports it. Please see the docs for more info! ^-^"
         },
         {
             "key": "tab_main",
@@ -301,8 +301,16 @@
             "value": "Pathing"
         },
         {
+            "key": "tab_third_party",
+            "value": "Third-Party"
+        },
+        {
             "key": "sub_tab_audiolink",
             "value": "AudioLink"
+        },
+        {
+            "key": "sub_tab_superplug",
+            "value": "Super Plug Shader"
         },
         {
             "key": "sub_tab_glitter",

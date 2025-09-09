@@ -3,6 +3,10 @@ Shader "luka/indev/backlace"
 
     Properties
     {
+
+        // UI ELEMENTS
+        [Hidden] _DazzleVariant_Fun ("Dazzle Variant", Range(0,0)) = 0.0
+
         // CORE FEATURES
         // [Space(70)]
         // [Header(Core Variant Features)]
@@ -670,7 +674,6 @@ Shader "luka/indev/backlace"
         // [Space(10)]
         [NonModifiableTextureData][NoScaleOffset] _DFG ("DFG Lut", 2D) = "black" { }
         [NonModifiableTextureData][NoScaleOffset] _DFGType ("Lighing Type", Float) = 0
-        _StencilSection ("Stencil Section Display", Int) = 0
     }
     SubShader
     {

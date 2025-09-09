@@ -16,6 +16,7 @@ namespace Luka.Backlace
         // editor states
         private static bool loaded = false;
         private static string loaded_material = null;
+        private static ShaderVariant detected_variant = null;
         // core ui components
         private static Header header = null;
         private static Announcement announcement = null;
@@ -74,7 +75,6 @@ namespace Luka.Backlace
         private static Tab tab_effects = null;
         private static Tab sub_tab_dissolve = null;
         private static Tab sub_tab_pathing = null;
-        private static Tab sub_tab_audiolink = null;
         private static Tab sub_tab_glitter = null;
         private static Tab sub_tab_distance_fading = null;
         private static Tab sub_tab_iridescence = null;
@@ -88,6 +88,10 @@ namespace Luka.Backlace
         private static Tab sub_tab_screenspace_reflection = null;
         // outline
         private static Tab tab_outline = null;
+        // third party
+        private static Tab tab_third_party = null;
+        private static Tab sub_tab_audiolink = null;
+        private static Tab sub_tab_superplug = null;
         #endregion // Tabs
 
         #region Properties
@@ -613,7 +617,6 @@ namespace Luka.Backlace
             tab_effects = null;
             sub_tab_dissolve = null;
             sub_tab_pathing = null;
-            sub_tab_audiolink = null;
             sub_tab_glitter = null;
             sub_tab_distance_fading = null;
             sub_tab_iridescence = null;
@@ -626,6 +629,9 @@ namespace Luka.Backlace
             sub_tab_refraction = null;
             sub_tab_screenspace_reflection = null;
             tab_outline = null;
+            tab_third_party = null;
+            sub_tab_audiolink = null;
+            sub_tab_superplug = null;
             #endregion // Tabs
         }
 
@@ -683,7 +689,6 @@ namespace Luka.Backlace
             tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_effects"));
             sub_tab_dissolve = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_dissolve"));
             sub_tab_pathing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_pathing"));
-            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"));
             sub_tab_glitter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_glitter"), Project.shader_variants[2]);
             sub_tab_distance_fading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_distance_fading"));
             sub_tab_iridescence = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_iridescence"));
@@ -696,6 +701,9 @@ namespace Luka.Backlace
             sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"));
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_screenspace_reflection"));
             tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"));
+            tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
+            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"), Project.shader_variants[1]);
+            sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_superplug"));
             #endregion // Tabs
             loaded = true;
         }
@@ -1495,88 +1503,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingOffset, languages.speak("prop_PathingOffset"));
                     Components.end_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                 }
-                sub_tab_audiolink.draw();
-                if (sub_tab_audiolink.is_expanded) {
-                    // effects - audiolink
-                    prop_ToggleAudioLink = FindProperty("_ToggleAudioLink", properties);
-                    prop_AudioLinkFallback = FindProperty("_AudioLinkFallback", properties);
-                    prop_AudioLinkEmissionBand = FindProperty("_AudioLinkEmissionBand", properties);
-                    prop_AudioLinkEmissionStrength = FindProperty("_AudioLinkEmissionStrength", properties);
-                    prop_AudioLinkEmissionRange = FindProperty("_AudioLinkEmissionRange", properties);
-                    prop_AudioLinkRimBand = FindProperty("_AudioLinkRimBand", properties);
-                    prop_AudioLinkRimStrength = FindProperty("_AudioLinkRimStrength", properties);
-                    prop_AudioLinkRimRange = FindProperty("_AudioLinkRimRange", properties);
-                    prop_AudioLinkHueShiftBand = FindProperty("_AudioLinkHueShiftBand", properties);
-                    prop_AudioLinkHueShiftStrength = FindProperty("_AudioLinkHueShiftStrength", properties);
-                    prop_AudioLinkHueShiftRange = FindProperty("_AudioLinkHueShiftRange", properties);
-                    prop_AudioLinkDecalHueBand = FindProperty("_AudioLinkDecalHueBand", properties);
-                    prop_AudioLinkDecalHueStrength = FindProperty("_AudioLinkDecalHueStrength", properties);
-                    prop_AudioLinkDecalHueRange = FindProperty("_AudioLinkDecalHueRange", properties);
-                    prop_AudioLinkDecalEmissionBand = FindProperty("_AudioLinkDecalEmissionBand", properties);
-                    prop_AudioLinkDecalEmissionStrength = FindProperty("_AudioLinkDecalEmissionStrength", properties);
-                    prop_AudioLinkDecalEmissionRange = FindProperty("_AudioLinkDecalEmissionRange", properties);
-                    prop_AudioLinkDecalOpacityBand = FindProperty("_AudioLinkDecalOpacityBand", properties);
-                    prop_AudioLinkDecalOpacityStrength = FindProperty("_AudioLinkDecalOpacityStrength", properties);
-                    prop_AudioLinkDecalOpacityRange = FindProperty("_AudioLinkDecalOpacityRange", properties);
-                    prop_AudioLinkVertexBand = FindProperty("_AudioLinkVertexBand", properties);
-                    prop_AudioLinkVertexStrength = FindProperty("_AudioLinkVertexStrength", properties);
-                    prop_AudioLinkVertexRange = FindProperty("_AudioLinkVertexRange", properties);
-                    prop_AudioLinkOutlineBand = FindProperty("_AudioLinkOutlineBand", properties);
-                    prop_AudioLinkOutlineStrength = FindProperty("_AudioLinkOutlineStrength", properties);
-                    prop_AudioLinkOutlineRange = FindProperty("_AudioLinkOutlineRange", properties);
-                    prop_AudioLinkMatcapBand = FindProperty("_AudioLinkMatcapBand", properties);
-                    prop_AudioLinkMatcapStrength = FindProperty("_AudioLinkMatcapStrength", properties);
-                    prop_AudioLinkMatcapRange = FindProperty("_AudioLinkMatcapRange", properties);
-                    prop_AudioLinkPathingBand = FindProperty("_AudioLinkPathingBand", properties);
-                    prop_AudioLinkPathingStrength = FindProperty("_AudioLinkPathingStrength", properties);
-                    prop_AudioLinkPathingRange = FindProperty("_AudioLinkPathingRange", properties);
-                    prop_AudioLinkGlitterBand = FindProperty("_AudioLinkGlitterBand", properties);
-                    prop_AudioLinkGlitterStrength = FindProperty("_AudioLinkGlitterStrength", properties);
-                    prop_AudioLinkGlitterRange = FindProperty("_AudioLinkGlitterRange", properties);
-                    prop_AudioLinkIridescenceBand = FindProperty("_AudioLinkIridescenceBand", properties);
-                    prop_AudioLinkIridescenceStrength = FindProperty("_AudioLinkIridescenceStrength", properties);
-                    prop_AudioLinkIridescenceRange = FindProperty("_AudioLinkIridescenceRange", properties);
-                    materialEditor.ShaderProperty(prop_ToggleAudioLink, languages.speak("prop_ToggleAudioLink"));
-                    Components.start_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkFallback, languages.speak("prop_AudioLinkFallback"));
-                    materialEditor.ShaderProperty(prop_AudioLinkEmissionBand, languages.speak("prop_AudioLinkEmissionBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkEmissionStrength, languages.speak("prop_AudioLinkEmissionStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkEmissionRange, languages.speak("prop_AudioLinkEmissionRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkRimBand, languages.speak("prop_AudioLinkRimBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkRimStrength, languages.speak("prop_AudioLinkRimStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkRimRange, languages.speak("prop_AudioLinkRimRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftBand, languages.speak("prop_AudioLinkHueShiftBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftStrength, languages.speak("prop_AudioLinkHueShiftStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftRange, languages.speak("prop_AudioLinkHueShiftRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueBand, languages.speak("prop_AudioLinkDecalHueBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueStrength, languages.speak("prop_AudioLinkDecalHueStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueRange, languages.speak("prop_AudioLinkDecalHueRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionBand, languages.speak("prop_AudioLinkDecalEmissionBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionStrength, languages.speak("prop_AudioLinkDecalEmissionStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionRange, languages.speak("prop_AudioLinkDecalEmissionRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityBand, languages.speak("prop_AudioLinkDecalOpacityBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityStrength, languages.speak("prop_AudioLinkDecalOpacityStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityRange, languages.speak("prop_AudioLinkDecalOpacityRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkVertexBand, languages.speak("prop_AudioLinkVertexBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkVertexStrength, languages.speak("prop_AudioLinkVertexStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkVertexRange, languages.speak("prop_AudioLinkVertexRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkOutlineBand, languages.speak("prop_AudioLinkOutlineBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkOutlineStrength, languages.speak("prop_AudioLinkOutlineStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkOutlineRange, languages.speak("prop_AudioLinkOutlineRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkMatcapBand, languages.speak("prop_AudioLinkMatcapBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkMatcapStrength, languages.speak("prop_AudioLinkMatcapStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkMatcapRange, languages.speak("prop_AudioLinkMatcapRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkPathingBand, languages.speak("prop_AudioLinkPathingBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkPathingStrength, languages.speak("prop_AudioLinkPathingStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkPathingRange, languages.speak("prop_AudioLinkPathingRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkGlitterBand, languages.speak("prop_AudioLinkGlitterBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkGlitterStrength, languages.speak("prop_AudioLinkGlitterStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkGlitterRange, languages.speak("prop_AudioLinkGlitterRange"));
-                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceBand, languages.speak("prop_AudioLinkIridescenceBand"));
-                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceStrength, languages.speak("prop_AudioLinkIridescenceStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceRange, languages.speak("prop_AudioLinkIridescenceRange"));
-                    Components.end_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
-                }
                 sub_tab_glitter.draw();
                 if (sub_tab_glitter.is_expanded) {
                     // effects - glitter
@@ -1886,6 +1812,98 @@ namespace Luka.Backlace
                 materialEditor.ShaderProperty(prop_OutlineHueShift, languages.speak("prop_OutlineHueShift"));
                 materialEditor.ShaderProperty(prop_OutlineHueShiftSpeed, languages.speak("prop_OutlineHueShiftSpeed"));
                 materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
+                Components.end_foldout();
+            }
+            // third party tab
+            tab_third_party.draw();
+            if (tab_third_party.is_expanded) {
+                Components.start_foldout();
+                sub_tab_audiolink.draw();
+                if (sub_tab_audiolink.is_expanded) {
+                    // third party - audiolink
+                    prop_ToggleAudioLink = FindProperty("_ToggleAudioLink", properties);
+                    prop_AudioLinkFallback = FindProperty("_AudioLinkFallback", properties);
+                    prop_AudioLinkEmissionBand = FindProperty("_AudioLinkEmissionBand", properties);
+                    prop_AudioLinkEmissionStrength = FindProperty("_AudioLinkEmissionStrength", properties);
+                    prop_AudioLinkEmissionRange = FindProperty("_AudioLinkEmissionRange", properties);
+                    prop_AudioLinkRimBand = FindProperty("_AudioLinkRimBand", properties);
+                    prop_AudioLinkRimStrength = FindProperty("_AudioLinkRimStrength", properties);
+                    prop_AudioLinkRimRange = FindProperty("_AudioLinkRimRange", properties);
+                    prop_AudioLinkHueShiftBand = FindProperty("_AudioLinkHueShiftBand", properties);
+                    prop_AudioLinkHueShiftStrength = FindProperty("_AudioLinkHueShiftStrength", properties);
+                    prop_AudioLinkHueShiftRange = FindProperty("_AudioLinkHueShiftRange", properties);
+                    prop_AudioLinkDecalHueBand = FindProperty("_AudioLinkDecalHueBand", properties);
+                    prop_AudioLinkDecalHueStrength = FindProperty("_AudioLinkDecalHueStrength", properties);
+                    prop_AudioLinkDecalHueRange = FindProperty("_AudioLinkDecalHueRange", properties);
+                    prop_AudioLinkDecalEmissionBand = FindProperty("_AudioLinkDecalEmissionBand", properties);
+                    prop_AudioLinkDecalEmissionStrength = FindProperty("_AudioLinkDecalEmissionStrength", properties);
+                    prop_AudioLinkDecalEmissionRange = FindProperty("_AudioLinkDecalEmissionRange", properties);
+                    prop_AudioLinkDecalOpacityBand = FindProperty("_AudioLinkDecalOpacityBand", properties);
+                    prop_AudioLinkDecalOpacityStrength = FindProperty("_AudioLinkDecalOpacityStrength", properties);
+                    prop_AudioLinkDecalOpacityRange = FindProperty("_AudioLinkDecalOpacityRange", properties);
+                    prop_AudioLinkVertexBand = FindProperty("_AudioLinkVertexBand", properties);
+                    prop_AudioLinkVertexStrength = FindProperty("_AudioLinkVertexStrength", properties);
+                    prop_AudioLinkVertexRange = FindProperty("_AudioLinkVertexRange", properties);
+                    prop_AudioLinkOutlineBand = FindProperty("_AudioLinkOutlineBand", properties);
+                    prop_AudioLinkOutlineStrength = FindProperty("_AudioLinkOutlineStrength", properties);
+                    prop_AudioLinkOutlineRange = FindProperty("_AudioLinkOutlineRange", properties);
+                    prop_AudioLinkMatcapBand = FindProperty("_AudioLinkMatcapBand", properties);
+                    prop_AudioLinkMatcapStrength = FindProperty("_AudioLinkMatcapStrength", properties);
+                    prop_AudioLinkMatcapRange = FindProperty("_AudioLinkMatcapRange", properties);
+                    prop_AudioLinkPathingBand = FindProperty("_AudioLinkPathingBand", properties);
+                    prop_AudioLinkPathingStrength = FindProperty("_AudioLinkPathingStrength", properties);
+                    prop_AudioLinkPathingRange = FindProperty("_AudioLinkPathingRange", properties);
+                    prop_AudioLinkGlitterBand = FindProperty("_AudioLinkGlitterBand", properties);
+                    prop_AudioLinkGlitterStrength = FindProperty("_AudioLinkGlitterStrength", properties);
+                    prop_AudioLinkGlitterRange = FindProperty("_AudioLinkGlitterRange", properties);
+                    prop_AudioLinkIridescenceBand = FindProperty("_AudioLinkIridescenceBand", properties);
+                    prop_AudioLinkIridescenceStrength = FindProperty("_AudioLinkIridescenceStrength", properties);
+                    prop_AudioLinkIridescenceRange = FindProperty("_AudioLinkIridescenceRange", properties);
+                    materialEditor.ShaderProperty(prop_ToggleAudioLink, languages.speak("prop_ToggleAudioLink"));
+                    Components.start_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_AudioLinkFallback, languages.speak("prop_AudioLinkFallback"));
+                    materialEditor.ShaderProperty(prop_AudioLinkEmissionBand, languages.speak("prop_AudioLinkEmissionBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkEmissionStrength, languages.speak("prop_AudioLinkEmissionStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkEmissionRange, languages.speak("prop_AudioLinkEmissionRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkRimBand, languages.speak("prop_AudioLinkRimBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkRimStrength, languages.speak("prop_AudioLinkRimStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkRimRange, languages.speak("prop_AudioLinkRimRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftBand, languages.speak("prop_AudioLinkHueShiftBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftStrength, languages.speak("prop_AudioLinkHueShiftStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftRange, languages.speak("prop_AudioLinkHueShiftRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueBand, languages.speak("prop_AudioLinkDecalHueBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueStrength, languages.speak("prop_AudioLinkDecalHueStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueRange, languages.speak("prop_AudioLinkDecalHueRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionBand, languages.speak("prop_AudioLinkDecalEmissionBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionStrength, languages.speak("prop_AudioLinkDecalEmissionStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionRange, languages.speak("prop_AudioLinkDecalEmissionRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityBand, languages.speak("prop_AudioLinkDecalOpacityBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityStrength, languages.speak("prop_AudioLinkDecalOpacityStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityRange, languages.speak("prop_AudioLinkDecalOpacityRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkVertexBand, languages.speak("prop_AudioLinkVertexBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkVertexStrength, languages.speak("prop_AudioLinkVertexStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkVertexRange, languages.speak("prop_AudioLinkVertexRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkOutlineBand, languages.speak("prop_AudioLinkOutlineBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkOutlineStrength, languages.speak("prop_AudioLinkOutlineStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkOutlineRange, languages.speak("prop_AudioLinkOutlineRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkMatcapBand, languages.speak("prop_AudioLinkMatcapBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkMatcapStrength, languages.speak("prop_AudioLinkMatcapStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkMatcapRange, languages.speak("prop_AudioLinkMatcapRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkPathingBand, languages.speak("prop_AudioLinkPathingBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkPathingStrength, languages.speak("prop_AudioLinkPathingStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkPathingRange, languages.speak("prop_AudioLinkPathingRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkGlitterBand, languages.speak("prop_AudioLinkGlitterBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkGlitterStrength, languages.speak("prop_AudioLinkGlitterStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkGlitterRange, languages.speak("prop_AudioLinkGlitterRange"));
+                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceBand, languages.speak("prop_AudioLinkIridescenceBand"));
+                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceStrength, languages.speak("prop_AudioLinkIridescenceStrength"));
+                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceRange, languages.speak("prop_AudioLinkIridescenceRange"));
+                    Components.end_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
+                }
+                sub_tab_superplug.draw();
+                if (sub_tab_superplug.is_expanded) {
+                    // third party - superplug
+                }
                 Components.end_foldout();
             }
             #endregion // Backlace
