@@ -306,6 +306,7 @@ namespace Luka.Backlace
         private GUIStyle style_announcement_header = null;
         private GUIStyle style_announcement_body = null;
         private GUIStyle style_docs = null;
+        private GUIStyle style_variant_badge = null;
 
         // pass theme for fonting
         public Styler(ref Fonts font_manager, ref Config config_manager)
@@ -326,6 +327,7 @@ namespace Luka.Backlace
             style_announcement_header = null;
             style_announcement_body = null;
             style_docs = null;
+            style_variant_badge = null;
         }
 
         // get the style for the primary tab
@@ -505,6 +507,22 @@ namespace Luka.Backlace
             return ref style_docs;
         }
 
+        // get a style for a variant badge
+        public ref GUIStyle load_style_variant_badge()
+        {
+            if (style_variant_badge == null)
+            {
+                style_variant_badge = new GUIStyle(EditorStyles.miniButton); 
+                style_variant_badge.font = this.font_manager.default_font;
+                style_variant_badge.fontSize = 9;
+                style_variant_badge.fontStyle = FontStyle.Bold;
+                style_variant_badge.alignment = TextAnchor.MiddleCenter;
+                style_variant_badge.normal.textColor = Color.white;
+                style_variant_badge.padding = new RectOffset(5, 5, 2, 2);
+            }
+            return ref style_variant_badge;
+        }
+
     }
 
     // reusable images
@@ -631,19 +649,21 @@ namespace Luka.Backlace
         private int tab_size = (int)tab_sizes.Primary;
         private int tab_index = -1;
         private string tab_label = null;
+        public ShaderVariant shader_variant = null;
 
         // tab state
         public bool is_expanded = false;
         public bool is_active = false;
 
         // constructor for a tab
-        public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label)
+        public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, ShaderVariant shader_variant = null)
         {
             this.theme = theme;
             this.material = material;
             this.tab_size = tab_size;
             this.tab_index = tab_index;
             this.tab_label = tab_label;
+            this.shader_variant = shader_variant;
         }
 
         // wrapper to draw the tab
@@ -717,6 +737,31 @@ namespace Luka.Backlace
             GUI.color = cache_col;
             // draw the box text
             GUI.Box(rect, tab_text, primary_style);
+            // draw a variant badge if needed
+            if (shader_variant != null && shader_variant != Project.shader_variants[0])
+            {
+                string badgeText = shader_variant.Name;
+                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge();
+                Vector2 badgeSize = badgeStyle.CalcSize(new GUIContent(badgeText));
+                Rect badgeRect = new Rect(
+                    rect.x + rect.width - badgeSize.x - 10f,
+                    rect.y + (rect.height - badgeSize.y) / 2,
+                    badgeSize.x,
+                    badgeSize.y
+                );
+                Color originalColor = GUI.backgroundColor;
+                GUI.backgroundColor = shader_variant.Color;
+                if (GUI.Button(badgeRect, badgeText, badgeStyle))
+                {
+                    EditorUtility.DisplayDialog(
+                        theme.language_manager.speak("variant_popup_title"),
+                        theme.language_manager.speak("variant_popup_description", shader_variant.Name),
+                        theme.language_manager.speak("dialog_okay")
+                    );
+                }
+                GUI.backgroundColor = originalColor; 
+            }
+            // handle foldout arrow
             Event currentEvent = Event.current;
             // calculate arrow position based on tab size
             float tab_primary_arrow_x;
@@ -760,6 +805,31 @@ namespace Luka.Backlace
             rect.position = new Vector2(rect.position.x, rect.position.y);
             rect.y += 2.5f;
             GUI.Box(rect, tab_text, sub_style);
+            // draw a variant badge if needed
+            if (shader_variant != null && shader_variant != Project.shader_variants[0])
+            {
+                string badgeText = shader_variant.Name;
+                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge();
+                Vector2 badgeSize = badgeStyle.CalcSize(new GUIContent(badgeText));
+                Rect badgeRect = new Rect(
+                    rect.x + rect.width - badgeSize.x - 10f,
+                    rect.y + (rect.height - badgeSize.y) / 2,
+                    badgeSize.x,
+                    badgeSize.y
+                );
+                Color originalColor = GUI.backgroundColor;
+                GUI.backgroundColor = shader_variant.Color;
+                if (GUI.Button(badgeRect, badgeText, badgeStyle))
+                {
+                    EditorUtility.DisplayDialog(
+                        theme.language_manager.speak("variant_popup_title"),
+                        theme.language_manager.speak("variant_popup_description", shader_variant.Name),
+                        theme.language_manager.speak("dialog_okay")
+                    );
+                }
+                GUI.backgroundColor = originalColor; 
+            }
+            // handle foldout arrow
             Event currentEvent = Event.current;
             // calculate arrow position based on tab size
             float tab_sub_arrow_x;
@@ -1736,3 +1806,23 @@ namespace Luka.Backlace
 }
 
 #endif // UNITY_EDITOR
+
+//
+//⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+//⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣶⣟⣛⠛⠋⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⢛⣛⣷⡦⠀⠀⠀⠀⠀⠀
+//⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠋⠉
+//⠀⠀⠀⠀⠀⠀⠀⠀⠀      
+//                Made by an Angel.
+// ⠀ ⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⢀⡀⠀
+//  ⣴⠛⠉⠉⠱⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠞⠉⠉⠙⣦
+//  ⣧⠀⠀⠀⠀⠀⠙⢦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡴⠋⠀⠀⠀⠀⠀⣼
+//  ⠹⣄⠀⠀⠀⠀⠀⠀⠈⠙⠲⠦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡴⠖⠋⠀⠀⠀⠀⠀⠀⠀⣠⠏
+//  ⠀⠙⢶⣄⡀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢦⡀⠀⠀⠀⠀⠀⢀⡴⠋⠁⠀⠀⠀⠀⠀⠀⠀⣀⣠⡾⠋⠀
+// ⠀ ⠀⡼⠋⠉⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⢹⡄⠀⠀⠀⢠⡟⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠉⠙⢧⠀⠀
+// ⠀ ⠈⢧⡀⠀⠀⠀⠀⠀⢀⠀⣴⠋⡉⢳⡄⣷⠀⠀⠀⣾⢠⡞⠉⠙⣦⠀⠀⢀⠀⠀⠀⠀⢀⡼⠀⠀
+//  ⠀⠀⠈⠙⠒⢲⡟⠀⠀⠀⠀⢻⣄⠙⠛⣱⠇⠀⠀⠀⠸⣎⠛⠋⣠⡟⠀⠀⠈⠀⢻⡗⠒⠋⠁⠀⠀
+//⠀ ⠀⠀ ⠀⠀⠈⠷⣄⣀⣀⣀⣤⠟⠛⠛⠁⠀⠀⠀⠀⠀⠈⠛⠛⠻⣤⣀⣀⣀⣤⠾⠁⠀⠀⠀⠀⠀
+//⠀⠀  ⠀⠀⠀⠀⠀⠈⠁⠉⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠉⠈⠀⠀⠀⠀⠀⠀⠀⠀
+//
+//         more of me: https://www.luka.moe
+//

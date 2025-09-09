@@ -169,6 +169,14 @@
             "value": "Load"
         },
         {
+            "key": "variant_popup_title",
+            "value": "Shader Variant Required"
+        },
+        {
+            "key": "variant_popup_description",
+            "value": "This feature requires (at minimum) the '{0}' shader variant.\n\nShader variants are made in order to help ensure you only include code for the features you need. While other versions may have it (indicated by greyed out tabs or not), this is the \"lowest\" variant tier that supports it. Please see the docs for more info"
+        },
+        {
             "key": "tab_main",
             "value": "Main Settings"
         },
