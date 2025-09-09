@@ -1903,6 +1903,12 @@ namespace Luka.Backlace
                 sub_tab_superplug.draw();
                 if (sub_tab_superplug.is_expanded) {
                     // third party - superplug
+                    GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
+                    boldWrap.wordWrap = true;
+                    GUILayout.Label(theme.language_manager.speak("superplug_notice"), boldWrap);
+                    if (GUILayout.Button(theme.language_manager.speak("superplug_button"))) {
+                        Components.open_external_website("https://vrcfury.com/sps/", ref theme);
+                    }
                 }
                 Components.end_foldout();
             }

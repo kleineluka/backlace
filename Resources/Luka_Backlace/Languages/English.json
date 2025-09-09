@@ -177,6 +177,22 @@
             "value": "This feature requires (at minimum) the '{0}' shader variant.\n\nShader variants are made in order to help ensure you only include code for the features you need. While other versions may have it (indicated by greyed out tabs or not), this is the \"lowest\" variant tier that supports it. Please see the docs for more info! ^-^"
         },
         {
+            "key": "warning_external_website_title",
+            "value": "Wait, listen!"
+        },
+        {
+            "key": "warning_external_website_description",
+            "value": "You are about to open an external website that is not owned or operated by me! Please proceed using caution!! It's probably safe, but I have no control over it or if it will change in the future. >.< Do you want to continue?"
+        },
+        {
+            "key": "warning_external_website_okay",
+            "value": "Open Website"
+        },
+        {
+            "key": "warning_external_website_cancel",
+            "value": "Go back!"
+        },
+        {
             "key": "tab_main",
             "value": "Main Settings"
         },
@@ -312,6 +328,14 @@
             "key": "sub_tab_superplug",
             "value": "Super Plug Shader"
         },
+        {
+            "key": "superplug_notice",
+            "value": "Super Plug Shader (by VRCFury) is a free mesh deformation system that can be used to deform meshes towards a target, and is a full backwards-compatible replacement for DPS (Dynamic Penetration System by Raliv) and TPS (Thry Penetration System in Poiyomi Pro). In addition to being free, it supports a wide variety of shaders without them needing to hard-code support, including Backlace! Please click the link below to open the documentation for it in order to set it up!"
+        },
+        {
+            "key": "superplug_button",
+            "value": "Open Super Plug Shader Website"
+        },        
         {
             "key": "sub_tab_glitter",
             "value": "Glitter"

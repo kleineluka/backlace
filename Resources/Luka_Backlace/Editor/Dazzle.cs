@@ -1140,6 +1140,21 @@ namespace Luka.Backlace
             EditorGUILayout.EndVertical();
         }
 
+        // open a third-party website with a warning
+        public static void open_external_website(string url, ref Theme theme)
+        {
+            bool proceed = EditorUtility.DisplayDialog(
+                theme.language_manager.speak("warning_external_website_title"),
+                theme.language_manager.speak("warning_external_website_description"),
+                theme.language_manager.speak("warning_external_website_okay"),
+                theme.language_manager.speak("warning_external_website_cancel")
+            );
+            if (proceed)
+            {
+                Application.OpenURL(url);
+            }
+        }
+
     }
 
     // plug and play header
