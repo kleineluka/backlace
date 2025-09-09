@@ -43,7 +43,6 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Pathing
 - Depth Rim Lighting
 - Shadow Map
-- AudioLink Support
 </details>
 
 <details>
@@ -60,6 +59,13 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Refraction
 - Vertex Distortion
 - Fake Screen Space Reflections
+</details>
+
+<details>
+  <summary><b>Third-Party Features</b></summary>
+
+- AudioLink (Advanced and Fun Variants)
+- Super Plug Shader (All Variants)
 </details>
 
 <details>
