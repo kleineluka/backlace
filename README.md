@@ -9,10 +9,10 @@
 Backlace is a versatile anime (as well as toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter.
 
 ## Features 🌈
-Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds off the previous one by adding more features and complexity. Additionally, there are "Grabpass" and "Outline" sub-variants in order to preserve performance where otherwise unnecessary (ex. "Fun Grabpass" or "Core Outline"). The idea of this system is to allow you to **pick and choose** how heavy of a shader is needed for your project.
+Backlace comes in three variants: Default, Grabpass, and Outline. While Default has most features, some features are exclusive to the other two variants in order to save on performance (ex. not rendering an additional outline pass and not capturing the screen as a grabpass texture).
 
 <details>
-  <summary><b>Core Features</b></summary>
+  <summary><b>Shader Features</b></summary>
 
 - Basic Texture Features (Albedo, Normal, etc.)
 - Multiple Lighting Models (Backlace, PoiCustom, OpenLit, Standard, Mochie)
@@ -29,12 +29,6 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Matcap
 - Decal (2 Slots)
 - Texture Post-Processing
-- Outline
-</details>
-
-<details>
-  <summary><b>Advanced Features</b></summary>
-
 - Cubemap Reflection
 - Parallax Mapping (Fasty and Fancy)
 - Subsurface Scattering
@@ -43,11 +37,6 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - Pathing
 - Depth Rim Lighting
 - Shadow Map
-</details>
-
-<details>
-  <summary><b>Fun Features</b></summary>
-
 - Glitter
 - Distance Fading
 - Iridescence
@@ -56,16 +45,17 @@ Backlace comes in three variants: Core, Advanced, and Fun. Each variant builds o
 - World Aligned Textures
 - VRChat Mirror Detection
 - Touch Interactions
-- Refraction
 - Vertex Distortion
-- Fake Screen Space Reflections
+- Refraction (Grabpass Variant Only)
+- Fake Screen Space Reflections (Grabpass Variant Only)
+- Outline (Outline Variant Only)
 </details>
 
 <details>
   <summary><b>Third-Party Features</b></summary>
 
-- AudioLink (Advanced and Fun Variants)
-- Super Plug Shader (All Variants)
+- AudioLink
+- Super Plug Shader
 </details>
 
 <details>
@@ -76,15 +66,6 @@ Some preset values for the shader are also provided to help give you a starting 
 - Wet (Fun Variant)
 - Slime (Fun Variant)
 - Crystal (Fun Variant)
-</details>
-
-<details>
-  <summary><b>Additional Perks</b></summary>
-
-- Custom Editor
-- Lightweight and Keyword Optimised
-- VR Optimised
-- [SPS](https://vrcfury.com/sps/) (by VRCFury) Compatible
 </details>
 
 ## Where Backlace Is Used 🌨️

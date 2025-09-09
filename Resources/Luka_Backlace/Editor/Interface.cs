@@ -689,7 +689,7 @@ namespace Luka.Backlace
             tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_effects"));
             sub_tab_dissolve = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_dissolve"));
             sub_tab_pathing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_pathing"));
-            sub_tab_glitter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_glitter"), Project.shader_variants[2]);
+            sub_tab_glitter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_glitter"));
             sub_tab_distance_fading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_distance_fading"));
             sub_tab_iridescence = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_iridescence"));
             sub_tab_shadow_textures = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_shadow_textures"));
@@ -698,11 +698,11 @@ namespace Luka.Backlace
             sub_tab_vrchat_mirror = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_vrchat_mirror"));
             sub_tab_touch_interactions = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_touch_interactions"));
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_vertex_distortion"));
-            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"));
-            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_screenspace_reflection"));
-            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"));
+            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"), Project.shader_variants[2]);
+            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2]);
+            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
             tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
-            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"), Project.shader_variants[1]);
+            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"));
             sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_superplug"));
             #endregion // Tabs
             loaded = true;
@@ -1287,44 +1287,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_RimLightBased, languages.speak("prop_RimLightBased"));
                     Components.end_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
                 }
-                sub_tab_depth_rim.draw();
-                if (sub_tab_depth_rim.is_expanded) {
-                    // shading - depth rim
-                    prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
-                    prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
-                    prop_DepthRimWidth = FindProperty("_DepthRimWidth", properties);
-                    prop_DepthRimThreshold = FindProperty("_DepthRimThreshold", properties);
-                    prop_DepthRimSharpness = FindProperty("_DepthRimSharpness", properties);
-                    prop_DepthRimBlendMode = FindProperty("_DepthRimBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDepthRim, languages.speak("prop_ToggleDepthRim"));
-                    Components.start_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DepthRimColor, languages.speak("prop_DepthRimColor"));
-                    materialEditor.ShaderProperty(prop_DepthRimWidth, languages.speak("prop_DepthRimWidth"));
-                    materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
-                    materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
-                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
-                    Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
-                }
-                sub_tab_subsurface.draw();
-                if (sub_tab_subsurface.is_expanded) {
-                    // shading - subsurface
-                    prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
-                    prop_ThicknessMap = FindProperty("_ThicknessMap", properties);
-                    prop_SSSColor = FindProperty("_SSSColor", properties);
-                    prop_SSSStrength = FindProperty("_SSSStrength", properties);
-                    prop_SSSDistortion = FindProperty("_SSSDistortion", properties);
-                    prop_SSSSpread = FindProperty("_SSSSpread", properties);
-                    prop_SSSBaseColorMix = FindProperty("_SSSBaseColorMix", properties);
-                    materialEditor.ShaderProperty(prop_ToggleSSS, languages.speak("prop_ToggleSSS"));
-                    Components.start_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ThicknessMap, languages.speak("prop_ThicknessMap"));
-                    materialEditor.ShaderProperty(prop_SSSColor, languages.speak("prop_SSSColor"));
-                    materialEditor.ShaderProperty(prop_SSSStrength, languages.speak("prop_SSSStrength"));
-                    materialEditor.ShaderProperty(prop_SSSDistortion, languages.speak("prop_SSSDistortion"));
-                    materialEditor.ShaderProperty(prop_SSSSpread, languages.speak("prop_SSSSpread"));
-                    materialEditor.ShaderProperty(prop_SSSBaseColorMix, languages.speak("prop_SSSBaseColorMix"));
-                    Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                }
                 sub_tab_clear_coat.draw();
                 if (sub_tab_clear_coat.is_expanded) {
                     // shading - clear coat
@@ -1366,6 +1328,44 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_MatcapSmoothness, languages.speak("prop_MatcapSmoothness"));
                     Components.end_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
+                }
+                sub_tab_depth_rim.draw();
+                if (sub_tab_depth_rim.is_expanded) {
+                    // shading - depth rim
+                    prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
+                    prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
+                    prop_DepthRimWidth = FindProperty("_DepthRimWidth", properties);
+                    prop_DepthRimThreshold = FindProperty("_DepthRimThreshold", properties);
+                    prop_DepthRimSharpness = FindProperty("_DepthRimSharpness", properties);
+                    prop_DepthRimBlendMode = FindProperty("_DepthRimBlendMode", properties);
+                    materialEditor.ShaderProperty(prop_ToggleDepthRim, languages.speak("prop_ToggleDepthRim"));
+                    Components.start_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_DepthRimColor, languages.speak("prop_DepthRimColor"));
+                    materialEditor.ShaderProperty(prop_DepthRimWidth, languages.speak("prop_DepthRimWidth"));
+                    materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
+                    materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
+                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
+                    Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
+                }
+                sub_tab_subsurface.draw();
+                if (sub_tab_subsurface.is_expanded) {
+                    // shading - subsurface
+                    prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
+                    prop_ThicknessMap = FindProperty("_ThicknessMap", properties);
+                    prop_SSSColor = FindProperty("_SSSColor", properties);
+                    prop_SSSStrength = FindProperty("_SSSStrength", properties);
+                    prop_SSSDistortion = FindProperty("_SSSDistortion", properties);
+                    prop_SSSSpread = FindProperty("_SSSSpread", properties);
+                    prop_SSSBaseColorMix = FindProperty("_SSSBaseColorMix", properties);
+                    materialEditor.ShaderProperty(prop_ToggleSSS, languages.speak("prop_ToggleSSS"));
+                    Components.start_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ThicknessMap, languages.speak("prop_ThicknessMap"));
+                    materialEditor.ShaderProperty(prop_SSSColor, languages.speak("prop_SSSColor"));
+                    materialEditor.ShaderProperty(prop_SSSStrength, languages.speak("prop_SSSStrength"));
+                    materialEditor.ShaderProperty(prop_SSSDistortion, languages.speak("prop_SSSDistortion"));
+                    materialEditor.ShaderProperty(prop_SSSSpread, languages.speak("prop_SSSSpread"));
+                    materialEditor.ShaderProperty(prop_SSSBaseColorMix, languages.speak("prop_SSSBaseColorMix"));
+                    Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
                 }
                 sub_tab_cubemap.draw();
                 if (sub_tab_cubemap.is_expanded) {

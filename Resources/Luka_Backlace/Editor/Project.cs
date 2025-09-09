@@ -23,9 +23,9 @@ namespace Luka.Backlace
         public static readonly bool shader_has_variants = true; // if the shader has variants that need to be set in the inspector
         public static readonly List<ShaderVariant> shader_variants = new List<ShaderVariant>
         {
-            new ShaderVariant("Core", Color.clear),
-            new ShaderVariant("Advanced", new Color(0.2f, 0.4f, 0.8f)),
-            new ShaderVariant("Fun", new Color(0.8f, 0.2f, 0.6f))
+            new ShaderVariant("Default", Color.clear),
+            new ShaderVariant("Outline", new Color(0.1f, 0.8f, 0.3f)),
+            new ShaderVariant("Grabpass", new Color(0.8f, 0.5f, 0.1f))
         };
     }
 

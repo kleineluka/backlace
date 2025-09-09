@@ -306,7 +306,8 @@ namespace Luka.Backlace
         private GUIStyle style_announcement_header = null;
         private GUIStyle style_announcement_body = null;
         private GUIStyle style_docs = null;
-        private GUIStyle style_variant_badge = null;
+        private GUIStyle style_variant_badge_large = null;
+        private GUIStyle style_variant_badge_small = null;
 
         // pass theme for fonting
         public Styler(ref Fonts font_manager, ref Config config_manager)
@@ -327,7 +328,8 @@ namespace Luka.Backlace
             style_announcement_header = null;
             style_announcement_body = null;
             style_docs = null;
-            style_variant_badge = null;
+            style_variant_badge_large = null;
+            style_variant_badge_small = null;
         }
 
         // get the style for the primary tab
@@ -463,7 +465,19 @@ namespace Luka.Backlace
             {
                 style_announcement_header = new GUIStyle(GUI.skin.label);
                 style_announcement_header.font = theme.font_manager.fun_font;
-                style_announcement_header.fontSize = 16;
+                switch (config_manager?.json_data?.@interface?.ui_size)
+                {
+                    case "Compact":
+                        style_announcement_header.fontSize = 14;
+                        break;
+                    case "Big Screen":
+                        style_announcement_header.fontSize = 18;
+                        break;
+                    case "Comfy":
+                    default:
+                        style_announcement_header.fontSize = 16;
+                        break;
+                }
                 style_announcement_header.alignment = TextAnchor.MiddleCenter;
                 style_announcement_header.richText = true;
                 style_announcement_header.wordWrap = true;
@@ -480,7 +494,19 @@ namespace Luka.Backlace
             {
                 style_announcement_body = new GUIStyle(GUI.skin.label);
                 style_announcement_body.font = theme.font_manager.fun_font;
-                style_announcement_body.fontSize = 12;
+                switch (config_manager?.json_data?.@interface?.ui_size)
+                {
+                    case "Compact":
+                        style_announcement_body.fontSize = 10;
+                        break;
+                    case "Big Screen":
+                        style_announcement_body.fontSize = 14;
+                        break;
+                    case "Comfy":
+                    default:
+                        style_announcement_body.fontSize = 12;
+                        break;
+                }
                 style_announcement_body.alignment = TextAnchor.MiddleCenter;
                 style_announcement_body.richText = true;
                 style_announcement_body.wordWrap = true;
@@ -507,20 +533,64 @@ namespace Luka.Backlace
             return ref style_docs;
         }
 
-        // get a style for a variant badge
-        public ref GUIStyle load_style_variant_badge()
+        // get a style for a variant badge (large)
+        public ref GUIStyle load_style_variant_badge_large()
         {
-            if (style_variant_badge == null)
+            if (style_variant_badge_large == null)
             {
-                style_variant_badge = new GUIStyle(EditorStyles.miniButton); 
-                style_variant_badge.font = this.font_manager.default_font;
-                style_variant_badge.fontSize = 9;
-                style_variant_badge.fontStyle = FontStyle.Bold;
-                style_variant_badge.alignment = TextAnchor.MiddleCenter;
-                style_variant_badge.normal.textColor = Color.white;
-                style_variant_badge.padding = new RectOffset(5, 5, 2, 2);
+                style_variant_badge_large = new GUIStyle(EditorStyles.miniButton);
+                style_variant_badge_large.font = this.font_manager.default_font;
+                style_variant_badge_large.fontStyle = FontStyle.Bold;
+                style_variant_badge_large.alignment = TextAnchor.MiddleCenter;
+                style_variant_badge_large.normal.textColor = Color.white;
+                switch (config_manager?.json_data?.@interface?.ui_size)
+                {
+                    case "Compact":
+                        style_variant_badge_large.fontSize = 11;
+                        style_variant_badge_large.padding = new RectOffset(8, 8, 3, 3);
+                        break;
+                    case "Big Screen":
+                        style_variant_badge_large.fontSize = 15;
+                        style_variant_badge_large.padding = new RectOffset(12, 12, 5, 5);
+                        break;
+                    case "Comfy":
+                    default:
+                        style_variant_badge_large.fontSize = 13;
+                        style_variant_badge_large.padding = new RectOffset(10, 10, 4, 4);
+                        break;
+                }
             }
-            return ref style_variant_badge;
+            return ref style_variant_badge_large;
+        }
+
+        // get a style for a variant badge (small)
+        public ref GUIStyle load_style_variant_badge_small()
+        {
+            if (style_variant_badge_small == null)
+            {
+                style_variant_badge_small = new GUIStyle(EditorStyles.miniButton);
+                style_variant_badge_small.font = this.font_manager.default_font;
+                style_variant_badge_small.fontStyle = FontStyle.Bold;
+                style_variant_badge_small.alignment = TextAnchor.MiddleCenter;
+                style_variant_badge_small.normal.textColor = Color.white;
+                switch (config_manager?.json_data?.@interface?.ui_size)
+                {
+                    case "Compact":
+                        style_variant_badge_small.fontSize = 8;
+                        style_variant_badge_small.padding = new RectOffset(4, 4, 2, 2);
+                        break;
+                    case "Big Screen":
+                        style_variant_badge_small.fontSize = 11;
+                        style_variant_badge_small.padding = new RectOffset(6, 6, 3, 3);
+                        break;
+                    case "Comfy":
+                    default:
+                        style_variant_badge_small.fontSize = 9;
+                        style_variant_badge_small.padding = new RectOffset(5, 5, 2, 2);
+                        break;
+                }
+            }
+            return ref style_variant_badge_small;
         }
 
     }
@@ -741,10 +811,10 @@ namespace Luka.Backlace
             if (shader_variant != null && shader_variant != Project.shader_variants[0])
             {
                 string badgeText = shader_variant.Name;
-                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge();
+                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge_large();
                 Vector2 badgeSize = badgeStyle.CalcSize(new GUIContent(badgeText));
                 Rect badgeRect = new Rect(
-                    rect.x + rect.width - badgeSize.x - 10f,
+                    rect.x + rect.width - badgeSize.x - 20f,
                     rect.y + (rect.height - badgeSize.y) / 2,
                     badgeSize.x,
                     badgeSize.y
@@ -809,7 +879,7 @@ namespace Luka.Backlace
             if (shader_variant != null && shader_variant != Project.shader_variants[0])
             {
                 string badgeText = shader_variant.Name;
-                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge();
+                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge_small();
                 Vector2 badgeSize = badgeStyle.CalcSize(new GUIContent(badgeText));
                 Rect badgeRect = new Rect(
                     rect.x + rect.width - badgeSize.x - 10f,

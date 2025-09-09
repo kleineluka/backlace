@@ -5,11 +5,7 @@ Shader "luka/indev/backlace"
     {
 
         // UI ELEMENTS
-        [Hidden] _DazzleVariant_Fun ("Dazzle Variant", Range(0,0)) = 0.0
-
-        // CORE FEATURES
-        // [Space(70)]
-        // [Header(Core Variant Features)]
+        [Hidden] _DazzleVariant_Default ("Dazzle Variant", Range(0,0)) = 0.0
 
         // RENDERING SETTINGS
         // [Space(35)]
@@ -290,10 +286,6 @@ Shader "luka/indev/backlace"
         _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
         _Brightness ("Brightness", Range(0, 2)) = 1.0
 
-        // ADVANCED FEATURES
-        // [Space(70)]
-        // [Header(Advanced Variant Features)]
-
         // CUBEMAP
         // [Space(35)]
         // [Header(Cubemap)]
@@ -439,10 +431,6 @@ Shader "luka/indev/backlace"
         [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkIridescenceBand ("Iridescence Band", Float) = 0
         _AudioLinkIridescenceStrength ("  Strength", Range(0, 5)) = 1.0
         _AudioLinkIridescenceRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-
-        // FUN FEATURES
-        // [Space(70)]
-        // [Header(Fun Variant Features)]
 
         // GLITTER
         // [Space(35)]
@@ -608,10 +596,6 @@ Shader "luka/indev/backlace"
         _SSRWorldDistortion ("World Distortion Strength", Range(0, 1)) = 0.0
         _SSRBlur ("Blur Strength", Range(0, 10)) = 1.0
 
-        // FEATURES THAT GET THEIR OWN VARIANTS
-        // [Space(70)]
-        // [Header(Specific Variants)]
-
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]
@@ -625,10 +609,6 @@ Shader "luka/indev/backlace"
         [Enum(Disabled, 0, Enabled, 1)] _OutlineHueShift ("Enable Hue Shift", Float) = 0.0 
         _OutlineHueShiftSpeed ("Hue Shift Speed", Float) = 0.2
         _OutlineOpacity ("Outline Opacity", Range(0, 1)) = 1.0
-
-        // MISC STUFF
-        // [Space(70)]
-        // [Header(Other Stuffs)]
 
         // INDIRECT LIGHTING
         // [Space(35)]
