@@ -1129,20 +1129,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowThreshold, languages.speak("prop_ShadowThreshold"));
                     Components.end_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
                 }
-                sub_tab_emission.draw();
-                if (sub_tab_emission.is_expanded) {
-                    // lighting - emission
-                    prop_ToggleEmission = FindProperty("_ToggleEmission", properties);
-                    prop_EmissionColor = FindProperty("_EmissionColor", properties);
-                    prop_EmissionMap = FindProperty("_EmissionMap", properties);
-                    prop_UseAlbedoAsEmission = FindProperty("_UseAlbedoAsEmission", properties);
-                    prop_EmissionStrength = FindProperty("_EmissionStrength", properties);
-                    materialEditor.ShaderProperty(prop_ToggleEmission, languages.speak("prop_ToggleEmission"));
-                    materialEditor.ShaderProperty(prop_EmissionColor, languages.speak("prop_EmissionColor"));
-                    materialEditor.ShaderProperty(prop_EmissionMap, languages.speak("prop_EmissionMap"));
-                    materialEditor.ShaderProperty(prop_UseAlbedoAsEmission, languages.speak("prop_UseAlbedoAsEmission"));
-                    materialEditor.ShaderProperty(prop_EmissionStrength, languages.speak("prop_EmissionStrength"));
-                }
                 sub_tab_light_limiting.draw();
                 if (sub_tab_light_limiting.is_expanded) {
                     // lighting - light limiting
@@ -1170,6 +1156,20 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(prop_ForceLightColor.floatValue.Equals(0), configs);
                     materialEditor.ShaderProperty(prop_ForcedLightColor, languages.speak("prop_ForcedLightColor"));
                     Components.end_dynamic_disable(prop_ForceLightColor.floatValue.Equals(0), configs);
+                }
+                sub_tab_emission.draw();
+                if (sub_tab_emission.is_expanded) {
+                    // lighting - emission
+                    prop_ToggleEmission = FindProperty("_ToggleEmission", properties);
+                    prop_EmissionColor = FindProperty("_EmissionColor", properties);
+                    prop_EmissionMap = FindProperty("_EmissionMap", properties);
+                    prop_UseAlbedoAsEmission = FindProperty("_UseAlbedoAsEmission", properties);
+                    prop_EmissionStrength = FindProperty("_EmissionStrength", properties);
+                    materialEditor.ShaderProperty(prop_ToggleEmission, languages.speak("prop_ToggleEmission"));
+                    materialEditor.ShaderProperty(prop_EmissionColor, languages.speak("prop_EmissionColor"));
+                    materialEditor.ShaderProperty(prop_EmissionMap, languages.speak("prop_EmissionMap"));
+                    materialEditor.ShaderProperty(prop_UseAlbedoAsEmission, languages.speak("prop_UseAlbedoAsEmission"));
+                    materialEditor.ShaderProperty(prop_EmissionStrength, languages.speak("prop_EmissionStrength"));
                 }
                 Components.end_foldout();
             }
@@ -1297,6 +1297,26 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
                     Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
                 }
+                sub_tab_subsurface.draw();
+                if (sub_tab_subsurface.is_expanded) {
+                    // shading - subsurface
+                    prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
+                    prop_ThicknessMap = FindProperty("_ThicknessMap", properties);
+                    prop_SSSColor = FindProperty("_SSSColor", properties);
+                    prop_SSSStrength = FindProperty("_SSSStrength", properties);
+                    prop_SSSDistortion = FindProperty("_SSSDistortion", properties);
+                    prop_SSSSpread = FindProperty("_SSSSpread", properties);
+                    prop_SSSBaseColorMix = FindProperty("_SSSBaseColorMix", properties);
+                    materialEditor.ShaderProperty(prop_ToggleSSS, languages.speak("prop_ToggleSSS"));
+                    Components.start_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ThicknessMap, languages.speak("prop_ThicknessMap"));
+                    materialEditor.ShaderProperty(prop_SSSColor, languages.speak("prop_SSSColor"));
+                    materialEditor.ShaderProperty(prop_SSSStrength, languages.speak("prop_SSSStrength"));
+                    materialEditor.ShaderProperty(prop_SSSDistortion, languages.speak("prop_SSSDistortion"));
+                    materialEditor.ShaderProperty(prop_SSSSpread, languages.speak("prop_SSSSpread"));
+                    materialEditor.ShaderProperty(prop_SSSBaseColorMix, languages.speak("prop_SSSBaseColorMix"));
+                    Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
+                }
                 sub_tab_clear_coat.draw();
                 if (sub_tab_clear_coat.is_expanded) {
                     // shading - clear coat
@@ -1378,26 +1398,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ParallaxShadowStrength, languages.speak("prop_ParallaxShadowStrength"));
                     Components.end_dynamic_disable(!prop_ToggleParallaxShadows.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
-                }
-                sub_tab_subsurface.draw();
-                if (sub_tab_subsurface.is_expanded) {
-                    // shading - subsurface
-                    prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
-                    prop_ThicknessMap = FindProperty("_ThicknessMap", properties);
-                    prop_SSSColor = FindProperty("_SSSColor", properties);
-                    prop_SSSStrength = FindProperty("_SSSStrength", properties);
-                    prop_SSSDistortion = FindProperty("_SSSDistortion", properties);
-                    prop_SSSSpread = FindProperty("_SSSSpread", properties);
-                    prop_SSSBaseColorMix = FindProperty("_SSSBaseColorMix", properties);
-                    materialEditor.ShaderProperty(prop_ToggleSSS, languages.speak("prop_ToggleSSS"));
-                    Components.start_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ThicknessMap, languages.speak("prop_ThicknessMap"));
-                    materialEditor.ShaderProperty(prop_SSSColor, languages.speak("prop_SSSColor"));
-                    materialEditor.ShaderProperty(prop_SSSStrength, languages.speak("prop_SSSStrength"));
-                    materialEditor.ShaderProperty(prop_SSSDistortion, languages.speak("prop_SSSDistortion"));
-                    materialEditor.ShaderProperty(prop_SSSSpread, languages.speak("prop_SSSSpread"));
-                    materialEditor.ShaderProperty(prop_SSSBaseColorMix, languages.speak("prop_SSSBaseColorMix"));
-                    Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
                 }
                 sub_tab_detail_map.draw();
                 if (sub_tab_detail_map.is_expanded) {

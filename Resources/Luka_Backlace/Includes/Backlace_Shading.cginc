@@ -399,6 +399,23 @@ inline half3 FresnelTerm(half3 F0, half cosA)
     return F0 + (1 - F0) * t;
 }
 
+// gtr2 distribution function (for specular and clearcoat)
+float GTR2(float NdotH, float a)
+{
+    float a2 = a * a;
+    float t = 1 + (a2 - 1) * NdotH * NdotH;
+    return a2 / (UNITY_PI * t * t + 1e-7f);
+}
+
+// ggx distribution function (for specular and clearcoat)
+float smithG_GGX(float NdotV, float alphaG)
+{
+    float a = alphaG * alphaG;
+    float b = NdotV * NdotV;
+    return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
+}
+
+
 // specular-only features
 #if defined(_BACKLACE_SPECULAR)
 
@@ -411,22 +428,6 @@ inline half3 FresnelTerm(half3 F0, half cosA)
         half3 R = glossIn.reflUVW;
         half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
         return float4(DecodeHDR(rgbm, hdr), rgbm.a);
-    }
-
-    // gtr2 distribution function
-    float GTR2(float NdotH, float a)
-    {
-        float a2 = a * a;
-        float t = 1 + (a2 - 1) * NdotH * NdotH;
-        return a2 / (UNITY_PI * t * t + 1e-7f);
-    }
-
-    // ggx distribution function
-    float smithG_GGX(float NdotV, float alphaG)
-    {
-        float a = alphaG * alphaG;
-        float b = NdotV * NdotV;
-        return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
     }
 
     // gets the indirect lighting color from a fallback cubemap using the reflected direction and remapped roughness

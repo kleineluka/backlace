@@ -238,7 +238,7 @@
         },
         {
             "key": "sub_tab_light_limiting",
-            "value": "Light Limiting"
+            "value": "Limit Light Levels"
         },
         {
             "key": "tab_shading",
@@ -278,7 +278,7 @@
         },
         {
             "key": "sub_tab_shadow_map",
-            "value": "Shadow Map"
+            "value": "Shadow Mapping"
         },
         {
             "key": "tab_effects",
