@@ -839,6 +839,42 @@ namespace Luka.Backlace
         }
     }
 
+    // shader variants
+    public class ShaderVariant
+    {
+        public string Name { get; private set; }
+        public string Token { get; private set; }
+        public Color Color { get; private set; }
+
+        public ShaderVariant(string name, string token, Color color)
+        {
+            Name = name;
+            Token = token;
+            Color = color;
+        }
+
+        public static List<ShaderVariant> DetectCapabilities(ref Material mat) 
+        {
+            var detectedCapabilities = new List<ShaderVariant>();
+            if (mat == null || mat.shader == null)
+            {
+                return detectedCapabilities; // how?
+            }
+            string shaderName = mat.shader.name.ToLower();
+            string[] nameParts = shaderName.Split('/');
+            string lastPart = nameParts[nameParts.Length - 1];
+            foreach (ShaderVariant variant in Project.shader_variants)
+            {
+                if (lastPart.Contains(variant.Token.ToLower()))
+                {
+                    detectedCapabilities.Add(new ShaderVariant(variant.Name, variant.Token, variant.Color));
+                }
+            }
+            return detectedCapabilities;
+        }
+
+    }
+
 }
 
 # endif // UNITY_EDITOR

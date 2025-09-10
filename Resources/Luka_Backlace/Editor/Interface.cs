@@ -2,6 +2,7 @@
 
 // imports
 using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace Luka.Backlace
         // editor states
         private static bool loaded = false;
         private static string loaded_material = null;
-        private static ShaderVariant detected_variant = null;
+        private static List<ShaderVariant> detected_variants = null;
         // core ui components
         private static Header header = null;
         private static Announcement announcement = null;
@@ -567,6 +568,7 @@ namespace Luka.Backlace
         public static void unload()
         {
             loaded = false;
+            detected_variants = null;
             configs = null;
             languages = null;
             theme = null;
@@ -639,6 +641,7 @@ namespace Luka.Backlace
         public void load(ref Material targetMat)
         {
             loaded_material = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
+            detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
             configs = new Config();
             languages = new Languages(configs.json_data.@interface.language);
             meta = new Metadata();
@@ -711,17 +714,21 @@ namespace Luka.Backlace
         // determine if a load is needed or not
         public void repaint_dazzle(ref Material targetMat)
         {
+            // first time loading
             if (!loaded) 
             {
                 load(ref targetMat);
                 return;
             }
+            // check if material changed
             if (loaded_material != AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat))) 
             {
                 unload();
                 load(ref targetMat);
                 return;
             }
+            // always update variants in case of shader swap
+            detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
         }
 
         // per-shader ui here
@@ -1287,23 +1294,23 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_RimLightBased, languages.speak("prop_RimLightBased"));
                     Components.end_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
                 }
-                sub_tab_clear_coat.draw();
-                if (sub_tab_clear_coat.is_expanded) {
-                    // shading - clear coat
-                    prop_ToggleClearcoat = FindProperty("_ToggleClearcoat", properties);
-                    prop_ClearcoatStrength = FindProperty("_ClearcoatStrength", properties);
-                    prop_ClearcoatReflectionStrength = FindProperty("_ClearcoatReflectionStrength", properties);
-                    prop_ClearcoatMap = FindProperty("_ClearcoatMap", properties);
-                    prop_ClearcoatRoughness = FindProperty("_ClearcoatRoughness", properties);
-                    prop_ClearcoatColor = FindProperty("_ClearcoatColor", properties);
-                    materialEditor.ShaderProperty(prop_ToggleClearcoat, languages.speak("prop_ToggleClearcoat"));
-                    Components.start_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ClearcoatStrength, languages.speak("prop_ClearcoatStrength"));
-                    materialEditor.ShaderProperty(prop_ClearcoatReflectionStrength, languages.speak("prop_ClearcoatReflectionStrength"));
-                    materialEditor.ShaderProperty(prop_ClearcoatMap, languages.speak("prop_ClearcoatMap"));
-                    materialEditor.ShaderProperty(prop_ClearcoatRoughness, languages.speak("prop_ClearcoatRoughness"));
-                    materialEditor.ShaderProperty(prop_ClearcoatColor, languages.speak("prop_ClearcoatColor"));
-                    Components.end_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
+                sub_tab_depth_rim.draw();
+                if (sub_tab_depth_rim.is_expanded) {
+                    // shading - depth rim
+                    prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
+                    prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
+                    prop_DepthRimWidth = FindProperty("_DepthRimWidth", properties);
+                    prop_DepthRimThreshold = FindProperty("_DepthRimThreshold", properties);
+                    prop_DepthRimSharpness = FindProperty("_DepthRimSharpness", properties);
+                    prop_DepthRimBlendMode = FindProperty("_DepthRimBlendMode", properties);
+                    materialEditor.ShaderProperty(prop_ToggleDepthRim, languages.speak("prop_ToggleDepthRim"));
+                    Components.start_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_DepthRimColor, languages.speak("prop_DepthRimColor"));
+                    materialEditor.ShaderProperty(prop_DepthRimWidth, languages.speak("prop_DepthRimWidth"));
+                    materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
+                    materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
+                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
+                    Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
                 }
                 sub_tab_matcap.draw();
                 if (sub_tab_matcap.is_expanded) {
@@ -1329,23 +1336,39 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
                 }
-                sub_tab_depth_rim.draw();
-                if (sub_tab_depth_rim.is_expanded) {
-                    // shading - depth rim
-                    prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
-                    prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
-                    prop_DepthRimWidth = FindProperty("_DepthRimWidth", properties);
-                    prop_DepthRimThreshold = FindProperty("_DepthRimThreshold", properties);
-                    prop_DepthRimSharpness = FindProperty("_DepthRimSharpness", properties);
-                    prop_DepthRimBlendMode = FindProperty("_DepthRimBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDepthRim, languages.speak("prop_ToggleDepthRim"));
-                    Components.start_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DepthRimColor, languages.speak("prop_DepthRimColor"));
-                    materialEditor.ShaderProperty(prop_DepthRimWidth, languages.speak("prop_DepthRimWidth"));
-                    materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
-                    materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
-                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
-                    Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
+                sub_tab_cubemap.draw();
+                if (sub_tab_cubemap.is_expanded) {
+                    // shading - cubemap
+                    prop_ToggleCubemap = FindProperty("_ToggleCubemap", properties);
+                    prop_CubemapTex = FindProperty("_CubemapTex", properties);
+                    prop_CubemapTint = FindProperty("_CubemapTint", properties);
+                    prop_CubemapIntensity = FindProperty("_CubemapIntensity", properties);
+                    prop_CubemapBlendMode = FindProperty("_CubemapBlendMode", properties);
+                    materialEditor.ShaderProperty(prop_ToggleCubemap, languages.speak("prop_ToggleCubemap"));
+                    Components.start_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_CubemapTex, languages.speak("prop_CubemapTex"));
+                    materialEditor.ShaderProperty(prop_CubemapTint, languages.speak("prop_CubemapTint"));
+                    materialEditor.ShaderProperty(prop_CubemapIntensity, languages.speak("prop_CubemapIntensity"));
+                    materialEditor.ShaderProperty(prop_CubemapBlendMode, languages.speak("prop_CubemapBlendMode"));
+                    Components.end_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
+                }
+                sub_tab_clear_coat.draw();
+                if (sub_tab_clear_coat.is_expanded) {
+                    // shading - clear coat
+                    prop_ToggleClearcoat = FindProperty("_ToggleClearcoat", properties);
+                    prop_ClearcoatStrength = FindProperty("_ClearcoatStrength", properties);
+                    prop_ClearcoatReflectionStrength = FindProperty("_ClearcoatReflectionStrength", properties);
+                    prop_ClearcoatMap = FindProperty("_ClearcoatMap", properties);
+                    prop_ClearcoatRoughness = FindProperty("_ClearcoatRoughness", properties);
+                    prop_ClearcoatColor = FindProperty("_ClearcoatColor", properties);
+                    materialEditor.ShaderProperty(prop_ToggleClearcoat, languages.speak("prop_ToggleClearcoat"));
+                    Components.start_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ClearcoatStrength, languages.speak("prop_ClearcoatStrength"));
+                    materialEditor.ShaderProperty(prop_ClearcoatReflectionStrength, languages.speak("prop_ClearcoatReflectionStrength"));
+                    materialEditor.ShaderProperty(prop_ClearcoatMap, languages.speak("prop_ClearcoatMap"));
+                    materialEditor.ShaderProperty(prop_ClearcoatRoughness, languages.speak("prop_ClearcoatRoughness"));
+                    materialEditor.ShaderProperty(prop_ClearcoatColor, languages.speak("prop_ClearcoatColor"));
+                    Components.end_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
                 }
                 sub_tab_subsurface.draw();
                 if (sub_tab_subsurface.is_expanded) {
@@ -1366,22 +1389,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_SSSSpread, languages.speak("prop_SSSSpread"));
                     materialEditor.ShaderProperty(prop_SSSBaseColorMix, languages.speak("prop_SSSBaseColorMix"));
                     Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                }
-                sub_tab_cubemap.draw();
-                if (sub_tab_cubemap.is_expanded) {
-                    // shading - cubemap
-                    prop_ToggleCubemap = FindProperty("_ToggleCubemap", properties);
-                    prop_CubemapTex = FindProperty("_CubemapTex", properties);
-                    prop_CubemapTint = FindProperty("_CubemapTint", properties);
-                    prop_CubemapIntensity = FindProperty("_CubemapIntensity", properties);
-                    prop_CubemapBlendMode = FindProperty("_CubemapBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleCubemap, languages.speak("prop_ToggleCubemap"));
-                    Components.start_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_CubemapTex, languages.speak("prop_CubemapTex"));
-                    materialEditor.ShaderProperty(prop_CubemapTint, languages.speak("prop_CubemapTint"));
-                    materialEditor.ShaderProperty(prop_CubemapIntensity, languages.speak("prop_CubemapIntensity"));
-                    materialEditor.ShaderProperty(prop_CubemapBlendMode, languages.speak("prop_CubemapBlendMode"));
-                    Components.end_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
                 }
                 sub_tab_parallax.draw();
                 if (sub_tab_parallax.is_expanded) {
@@ -1473,6 +1480,48 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DissolveVoxelDensity, languages.speak("prop_DissolveVoxelDensity"));
                     Components.end_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
                 }
+                sub_tab_distance_fading.draw();
+                if (sub_tab_distance_fading.is_expanded) {
+                    // effects - distance fading
+                    prop_ToggleDistanceFade = FindProperty("_ToggleDistanceFade", properties);
+                    prop_DistanceFadeReference = FindProperty("_DistanceFadeReference", properties);
+                    prop_ToggleNearFade = FindProperty("_ToggleNearFade", properties);
+                    prop_NearFadeMode = FindProperty("_NearFadeMode", properties);
+                    prop_NearFadeDitherScale = FindProperty("_NearFadeDitherScale", properties);
+                    prop_NearFadeStart = FindProperty("_NearFadeStart", properties);
+                    prop_NearFadeEnd = FindProperty("_NearFadeEnd", properties);
+                    prop_ToggleFarFade = FindProperty("_ToggleFarFade", properties);
+                    prop_FarFadeStart = FindProperty("_FarFadeStart", properties);
+                    prop_FarFadeEnd = FindProperty("_FarFadeEnd", properties);
+                    materialEditor.ShaderProperty(prop_ToggleDistanceFade, languages.speak("prop_ToggleDistanceFade"));
+                    Components.start_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_DistanceFadeReference, languages.speak("prop_DistanceFadeReference"));
+                    materialEditor.ShaderProperty(prop_ToggleNearFade, languages.speak("prop_ToggleNearFade"));
+                    Components.start_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_NearFadeMode, languages.speak("prop_NearFadeMode"));
+                    materialEditor.ShaderProperty(prop_NearFadeDitherScale, languages.speak("prop_NearFadeDitherScale"));
+                    materialEditor.ShaderProperty(prop_NearFadeStart, languages.speak("prop_NearFadeStart"));
+                    materialEditor.ShaderProperty(prop_NearFadeEnd, languages.speak("prop_NearFadeEnd"));
+                    Components.end_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ToggleFarFade, languages.speak("prop_ToggleFarFade"));
+                    Components.start_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_FarFadeStart, languages.speak("prop_FarFadeStart"));
+                    materialEditor.ShaderProperty(prop_FarFadeEnd, languages.speak("prop_FarFadeEnd"));
+                    Components.end_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
+                    Components.end_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
+                }
+                sub_tab_vrchat_mirror.draw();
+                if (sub_tab_vrchat_mirror.is_expanded) {
+                    // effects - vrchat mirror
+                    prop_ToggleMirrorDetection = FindProperty("_ToggleMirrorDetection", properties);
+                    prop_MirrorDetectionMode = FindProperty("_MirrorDetectionMode", properties);
+                    prop_MirrorDetectionTexture = FindProperty("_MirrorDetectionTexture", properties);
+                    materialEditor.ShaderProperty(prop_ToggleMirrorDetection, languages.speak("prop_ToggleMirrorDetection"));
+                    Components.start_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_MirrorDetectionMode, languages.speak("prop_MirrorDetectionMode"));
+                    materialEditor.ShaderProperty(prop_MirrorDetectionTexture, languages.speak("prop_MirrorDetectionTexture"));
+                    Components.end_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
+                }
                 sub_tab_pathing.draw();
                 if (sub_tab_pathing.is_expanded) {
                     // effects - pathing
@@ -1537,36 +1586,6 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleGlitterRainbow.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleGlitter.floatValue.Equals(1), configs);
                 }
-                sub_tab_distance_fading.draw();
-                if (sub_tab_distance_fading.is_expanded) {
-                    // effects - distance fading
-                    prop_ToggleDistanceFade = FindProperty("_ToggleDistanceFade", properties);
-                    prop_DistanceFadeReference = FindProperty("_DistanceFadeReference", properties);
-                    prop_ToggleNearFade = FindProperty("_ToggleNearFade", properties);
-                    prop_NearFadeMode = FindProperty("_NearFadeMode", properties);
-                    prop_NearFadeDitherScale = FindProperty("_NearFadeDitherScale", properties);
-                    prop_NearFadeStart = FindProperty("_NearFadeStart", properties);
-                    prop_NearFadeEnd = FindProperty("_NearFadeEnd", properties);
-                    prop_ToggleFarFade = FindProperty("_ToggleFarFade", properties);
-                    prop_FarFadeStart = FindProperty("_FarFadeStart", properties);
-                    prop_FarFadeEnd = FindProperty("_FarFadeEnd", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDistanceFade, languages.speak("prop_ToggleDistanceFade"));
-                    Components.start_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DistanceFadeReference, languages.speak("prop_DistanceFadeReference"));
-                    materialEditor.ShaderProperty(prop_ToggleNearFade, languages.speak("prop_ToggleNearFade"));
-                    Components.start_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_NearFadeMode, languages.speak("prop_NearFadeMode"));
-                    materialEditor.ShaderProperty(prop_NearFadeDitherScale, languages.speak("prop_NearFadeDitherScale"));
-                    materialEditor.ShaderProperty(prop_NearFadeStart, languages.speak("prop_NearFadeStart"));
-                    materialEditor.ShaderProperty(prop_NearFadeEnd, languages.speak("prop_NearFadeEnd"));
-                    Components.end_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ToggleFarFade, languages.speak("prop_ToggleFarFade"));
-                    Components.start_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_FarFadeStart, languages.speak("prop_FarFadeStart"));
-                    materialEditor.ShaderProperty(prop_FarFadeEnd, languages.speak("prop_FarFadeEnd"));
-                    Components.end_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
-                    Components.end_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
-                }
                 sub_tab_iridescence.draw();
                 if (sub_tab_iridescence.is_expanded) {
                     // effects - iridescence
@@ -1615,24 +1634,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowPatternTransparency, languages.speak("prop_ShadowPatternTransparency"));
                     Components.end_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
                 }
-                sub_tab_flatten_model.draw();
-                if (sub_tab_flatten_model.is_expanded) {
-                    // effects - flatten model
-                    prop_ToggleFlatModel = FindProperty("_ToggleFlatModel", properties);
-                    prop_FlatModeAutoflip = FindProperty("_FlatModeAutoflip", properties);
-                    prop_FlatModel = FindProperty("_FlatModel", properties);
-                    prop_FlatModelDepthCorrection = FindProperty("_FlatModelDepthCorrection", properties);
-                    prop_FlatModelFacing = FindProperty("_FlatModelFacing", properties);
-                    prop_FlatModelLockAxis = FindProperty("_FlatModelLockAxis", properties);
-                    materialEditor.ShaderProperty(prop_ToggleFlatModel, languages.speak("prop_ToggleFlatModel"));
-                    Components.start_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_FlatModeAutoflip, languages.speak("prop_FlatModeAutoflip"));
-                    materialEditor.ShaderProperty(prop_FlatModel, languages.speak("prop_FlatModel"));
-                    materialEditor.ShaderProperty(prop_FlatModelDepthCorrection, languages.speak("prop_FlatModelDepthCorrection"));
-                    materialEditor.ShaderProperty(prop_FlatModelFacing, languages.speak("prop_FlatModelFacing"));
-                    materialEditor.ShaderProperty(prop_FlatModelLockAxis, languages.speak("prop_FlatModelLockAxis"));
-                    Components.end_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
-                }
                 sub_tab_world_aligned.draw();
                 if (sub_tab_world_aligned.is_expanded) {
                     // effects - world aligned
@@ -1659,18 +1660,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_WorldEffectRotation, languages.speak("prop_WorldEffectRotation"));
                     Components.end_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
                 }
-                sub_tab_vrchat_mirror.draw();
-                if (sub_tab_vrchat_mirror.is_expanded) {
-                    // effects - vrchat mirror
-                    prop_ToggleMirrorDetection = FindProperty("_ToggleMirrorDetection", properties);
-                    prop_MirrorDetectionMode = FindProperty("_MirrorDetectionMode", properties);
-                    prop_MirrorDetectionTexture = FindProperty("_MirrorDetectionTexture", properties);
-                    materialEditor.ShaderProperty(prop_ToggleMirrorDetection, languages.speak("prop_ToggleMirrorDetection"));
-                    Components.start_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_MirrorDetectionMode, languages.speak("prop_MirrorDetectionMode"));
-                    materialEditor.ShaderProperty(prop_MirrorDetectionTexture, languages.speak("prop_MirrorDetectionTexture"));
-                    Components.end_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
-                }
                 sub_tab_touch_interactions.draw();
                 if (sub_tab_touch_interactions.is_expanded) {
                     // effects - touch interactions
@@ -1690,6 +1679,24 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_TouchRainbowSpeed, languages.speak("prop_TouchRainbowSpeed"));
                     materialEditor.ShaderProperty(prop_TouchRainbowSpread, languages.speak("prop_TouchRainbowSpread"));
                     Components.end_dynamic_disable(!prop_ToggleTouchReactive.floatValue.Equals(1), configs);
+                }
+                sub_tab_flatten_model.draw();
+                if (sub_tab_flatten_model.is_expanded) {
+                    // effects - flatten model
+                    prop_ToggleFlatModel = FindProperty("_ToggleFlatModel", properties);
+                    prop_FlatModeAutoflip = FindProperty("_FlatModeAutoflip", properties);
+                    prop_FlatModel = FindProperty("_FlatModel", properties);
+                    prop_FlatModelDepthCorrection = FindProperty("_FlatModelDepthCorrection", properties);
+                    prop_FlatModelFacing = FindProperty("_FlatModelFacing", properties);
+                    prop_FlatModelLockAxis = FindProperty("_FlatModelLockAxis", properties);
+                    materialEditor.ShaderProperty(prop_ToggleFlatModel, languages.speak("prop_ToggleFlatModel"));
+                    Components.start_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_FlatModeAutoflip, languages.speak("prop_FlatModeAutoflip"));
+                    materialEditor.ShaderProperty(prop_FlatModel, languages.speak("prop_FlatModel"));
+                    materialEditor.ShaderProperty(prop_FlatModelDepthCorrection, languages.speak("prop_FlatModelDepthCorrection"));
+                    materialEditor.ShaderProperty(prop_FlatModelFacing, languages.speak("prop_FlatModelFacing"));
+                    materialEditor.ShaderProperty(prop_FlatModelLockAxis, languages.speak("prop_FlatModelLockAxis"));
+                    Components.end_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
                 }
                 sub_tab_vertex_distortion.draw();
                 if (sub_tab_vertex_distortion.is_expanded) {

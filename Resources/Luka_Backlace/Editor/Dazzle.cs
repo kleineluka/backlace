@@ -494,7 +494,7 @@ namespace Luka.Backlace
             {
                 style_announcement_body = new GUIStyle(GUI.skin.label);
                 style_announcement_body.font = theme.font_manager.fun_font;
-                switch (config_manager?.json_data?.@interface?.ui_size)
+                switch (config_manager?.json_data?.@interface?.ui_size) 
                 {
                     case "Compact":
                         style_announcement_body.fontSize = 10;

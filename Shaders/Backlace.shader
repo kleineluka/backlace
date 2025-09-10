@@ -3,10 +3,6 @@ Shader "luka/indev/backlace"
 
     Properties
     {
-
-        // UI ELEMENTS
-        [Hidden] _DazzleVariant_Default ("Dazzle Variant", Range(0,0)) = 0.0
-
         // RENDERING SETTINGS
         // [Space(35)]
         // [Header(Rendering Settings)]

@@ -97,19 +97,6 @@ namespace Luka.Backlace
         public List<SocialLink> Socials;
     }
 
-    [System.Serializable]
-    public class ShaderVariant
-    {
-        public string Name;
-        public Color Color;
-
-        public ShaderVariant(string name, Color color)
-        {
-            this.Name = name;
-            this.Color = color;
-        }
-    }
-
 }
 
 #endif // UNITY_EDITOR
