@@ -578,7 +578,7 @@ float smithG_GGX(float NdotV, float alphaG)
             }
         #endif
         Surface.IndirectSpecular = indirectSpecularRGBA.rgb;
-        if ((_IndirectFallbackMode > 0 && indirectSpecularRGBA.a == 0) || (_IndirectOverride > 0))
+        if ((_IndirectFallbackMode > 0 && indirectSpecularRGBA.a == 0) || (_IndirectOverride == 1))
         {
             //using the fake specular probe toned down based on the average light, it's not phisically accurate
             //but having a probe that reflects arbitrary stuff isn't accurate to begin with
@@ -860,13 +860,13 @@ float smithG_GGX(float NdotV, float alphaG)
         finalColor = tintedColor;
         // hsv manipulation
         float3 hsv = RGBtoHSV(finalColor);
-        [branch] if (_HSVMode == 0) // additive
+        [branch] if (_HSVMode == 1) // additive
         {
             hsv.x = frac(hsv.x + _HSVHue);
             hsv.y += _HSVSaturation - 1.0;
             hsv.z += _HSVValue - 1.0;
         }
-        else // multiplicative
+        else if (_HSVMode == 2) // multiplicative
         {
             hsv.x = frac(hsv.x + _HSVHue);
             hsv.y *= _HSVSaturation;

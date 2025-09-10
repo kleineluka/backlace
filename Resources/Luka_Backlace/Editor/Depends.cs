@@ -511,12 +511,16 @@ namespace Luka.Backlace
     {
         private int _currentBlendMode;
         private bool _isOverrideEnabled;
+        private bool _isZWriteOverrideEnabled;
+        private bool _isBlendModeOverrideEnabled; 
 
         public BeautyBlender(Material mat)
         {
             if (!mat.HasProperty("_BlendMode")) return;
             _currentBlendMode = mat.GetInt("_BlendMode");
             _isOverrideEnabled = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
+            _isZWriteOverrideEnabled = mat.GetFloat("_OverrideZWrite") == 1.0f;
+            _isBlendModeOverrideEnabled = mat.GetFloat("_OverrideBlendMode") == 1.0f;
             Apply(mat);
         }
 
@@ -525,58 +529,70 @@ namespace Luka.Backlace
             if (!mat.HasProperty("_BlendMode")) return;
             int newBlendMode = mat.GetInt("_BlendMode");
             bool newOverrideState = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
-            if (newBlendMode != _currentBlendMode || newOverrideState != _isOverrideEnabled)
+            bool newZWriteOverrideState = mat.GetFloat("_OverrideZWrite") == 1.0f;
+            bool newBlendModeOverrideState = mat.GetFloat("_OverrideBlendMode") == 1.0f;
+            if (newBlendMode != _currentBlendMode || newOverrideState != _isOverrideEnabled || 
+            newZWriteOverrideState != _isZWriteOverrideEnabled || newBlendModeOverrideState != _isBlendModeOverrideEnabled)
             {
                 _currentBlendMode = newBlendMode;
                 _isOverrideEnabled = newOverrideState;
+                _isZWriteOverrideEnabled = newZWriteOverrideState;
+                _isBlendModeOverrideEnabled = newBlendModeOverrideState;
                 Apply(mat);
             }
         }
 
         private void Apply(Material mat)
         {
-            // this is handled a bit different w the override controls
             int newRenderQueue = mat.renderQueue; 
-            // expected blend enum: 0=Opaque, 1=Cutout, 2=Fade, 3=Transparent, 4=Premultiply
             switch (_currentBlendMode)
             {
                 case 0: // opaque
                     mat.SetOverrideTag("RenderType", "Opaque");
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                    mat.SetInt("_ZWrite", 1);
+                    if (!_isBlendModeOverrideEnabled) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    }
+                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 1);
                     newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
                     break;
                 case 1: // cutout
                     mat.SetOverrideTag("RenderType", "TransparentCutout");
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                    mat.SetInt("_ZWrite", 1);
+                    if (!_isBlendModeOverrideEnabled) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    }
+                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 1);
                     newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
                     break;
-                case 2: // fade (standard alpha blending)
+                case 2: // fade
                     mat.SetOverrideTag("RenderType", "Transparent");
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    mat.SetInt("_ZWrite", 0);
+                    if (!_isBlendModeOverrideEnabled) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    }
+                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 0);
                     newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
-                case 3: // transparent (additive transparency)
+                case 3: // transparent
                     mat.SetOverrideTag("RenderType", "Transparent");
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    mat.SetInt("_ZWrite", 0);
+                    if (!_isBlendModeOverrideEnabled) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    }
+                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 0);
                     newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
-                case 4: // premultiply (premultiplied alpha)
+                case 4: // premultiply
                     mat.SetOverrideTag("RenderType", "Transparent");
-                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    mat.SetInt("_ZWrite", 0);
+                    if (!_isBlendModeOverrideEnabled) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    }
+                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 0);
                     newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                     break;
-            }
-            // only set queue if the override is not enabled
+            }    
             if (!_isOverrideEnabled)
             {
                 mat.renderQueue = newRenderQueue;
@@ -876,7 +892,6 @@ namespace Luka.Backlace
     }
 
 }
-
 # endif // UNITY_EDITOR
 
 //

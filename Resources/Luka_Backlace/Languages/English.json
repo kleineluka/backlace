@@ -422,11 +422,11 @@
         },
         {
             "key": "prop_MainTex",
-            "value": "Main texture"
+            "value": "Main Texture"
         },
         {
             "key": "prop_Color",
-            "value": "Albedo color"
+            "value": "Albedo Colour"
         },
         {
             "key": "prop_Cutoff",
@@ -434,11 +434,11 @@
         },
         {
             "key": "prop_BumpMap",
-            "value": "Normal map"
+            "value": "Normal Map"
         },
         {
             "key": "prop_BumpScale",
-            "value": "Normal map scale"
+            "value": "Normal Map Scale"
         },
         {
             "key": "prop_Alpha",
@@ -562,7 +562,7 @@
         },
         {
             "key": "prop_EmissionColor",
-            "value": "Emission Color"
+            "value": "Emission Colour"
         },
         {
             "key": "prop_EmissionMap",
@@ -606,15 +606,15 @@
         },
         {
             "key": "prop_ForceLightColor",
-            "value": "Force Light Color"
+            "value": "Force Light Colour"
         },
         {
             "key": "prop_ForcedLightColor",
-            "value": "Forced Light Color"
+            "value": "Forced Light Colour"
         },
         {
             "key": "prop_LightingColorMode",
-            "value": "Light Color Mode"
+            "value": "Light Colour Mode"
         },
         {
             "key": "prop_LightingDirectionMode",
@@ -670,7 +670,7 @@
         },
         {
             "key": "prop_RampColor",
-            "value": "Ramp Color"
+            "value": "Ramp Colour"
         },
         {
             "key": "prop_RampOffset",
@@ -690,7 +690,7 @@
         },
         {
             "key": "prop_AnimeShadowColor",
-            "value": "Core Shadow Color"
+            "value": "Core Shadow Colour"
         },
         {
             "key": "prop_AnimeShadowThreshold",
@@ -698,7 +698,7 @@
         },
         {
             "key": "prop_AnimeHalftoneColor",
-            "value": "Halftone Color"
+            "value": "Halftone Colour"
         },
         {
             "key": "prop_AnimeHalftoneThreshold",
@@ -814,7 +814,7 @@
         },
         {
             "key": "prop_HighlightRampColor",
-            "value": "Highlight Color"
+            "value": "Highlight Colour"
         },
         {
             "key": "prop_HighlightIntensity",
@@ -838,7 +838,7 @@
         },
         {
             "key": "prop_SecondarySpecularColor",
-            "value": "Secondary Specular Color"
+            "value": "Secondary Specular Colour"
         },
         {
             "key": "prop_SpecularExponent",
@@ -846,7 +846,7 @@
         },
         {
             "key": "prop_SheenColor",
-            "value": "Sheen Color"
+            "value": "Sheen Colour"
         },
         {
             "key": "prop_SheenIntensity",
@@ -862,7 +862,7 @@
         },
         {
             "key": "prop_RimColor",
-            "value": "Rim Color"
+            "value": "Rim Colour"
         },
         {
             "key": "prop_RimWidth",
@@ -898,7 +898,7 @@
         },
         {
             "key": "prop_ClearcoatColor",
-            "value": "Color"
+            "value": "Clearcoat Colour"
         },
         {
             "key": "prop_ToggleMatcap",
@@ -1114,7 +1114,7 @@
         },
         {
             "key": "prop_ColorGradingLUT",
-            "value": "Color Grading LUT"
+            "value": "Colour Grading LUT"
         },
         {
             "key": "prop_ColorGradingIntensity",
@@ -1254,7 +1254,7 @@
         },
         {
             "key": "prop_DissolveEdgeColor",
-            "value": "Edge Color"
+            "value": "Edge Colour"
         },
         {
             "key": "prop_DissolveEdgeWidth",
@@ -1314,7 +1314,7 @@
         },
         {
             "key": "prop_PathingColor",
-            "value": "Path Color"
+            "value": "Path Colour"
         },
         {
             "key": "prop_PathingEmission",
@@ -1346,7 +1346,7 @@
         },
         {
             "key": "prop_DepthRimColor",
-            "value": "Color"
+            "value": "Rim Colour"
         },
         {
             "key": "prop_DepthRimWidth",
@@ -1638,7 +1638,7 @@
         },
         {
             "key": "prop_IridescenceRamp",
-            "value": "Color Ramp"
+            "value": "Colour Ramp"
         },
         {
             "key": "prop_IridescencePower",
@@ -1718,7 +1718,7 @@
         },
         {
             "key": "prop_WorldEffectColor",
-            "value": "Effect Color"
+            "value": "Effect Colour"
         },
         {
             "key": "prop_WorldEffectDirection",
@@ -1762,7 +1762,7 @@
         },
         {
             "key": "prop_TouchColor",
-            "value": "Touch Color"
+            "value": "Touch Colour"
         },
         {
             "key": "prop_TouchRadius",
@@ -1830,7 +1830,7 @@
         },
         {
             "key": "prop_CausticsColor",
-            "value": "Caustics Color"
+            "value": "Caustics Colour"
         },
         {
             "key": "prop_CausticsTiling",
@@ -1942,7 +1942,7 @@
         },
         {
             "key": "prop_OutlineColor",
-            "value": "Outline Color"
+            "value": "Outline Colour"
         },
         {
             "key": "prop_OutlineWidth",
@@ -1950,7 +1950,7 @@
         },
         {
             "key": "prop_OutlineVertexColorMask",
-            "value": "Use Vertex Color (R) Mask"
+            "value": "Use Vertex Colour (R) Mask"
         },
         {
             "key": "prop_OutlineDistanceFade",
@@ -1987,14 +1987,6 @@
         {
             "key": "prop_FallbackCubemap",
             "value": "Fallback Cubemap"
-        },
-        {
-            "key": "prop_UVCount",
-            "value": "UV Count"
-        },
-        {
-            "key": "prop_UV1Index",
-            "value": "UV1 Index"
         },
         {
             "key": "prop_MainTex_UV",
@@ -2091,6 +2083,14 @@
         {
             "key": "prop_OverrideRenderQueue",
             "value": "Use Custom Render Queue"
+        },
+        {
+            "key": "prop_OverrideBlendMode",
+            "value": "Use Custom Blend Values"
+        },
+        {
+            "key": "prop_OverrideZWrite",
+            "value": "Use Custom ZWrite"
         },
         {
             "key": "specular_standard_stylised_info",

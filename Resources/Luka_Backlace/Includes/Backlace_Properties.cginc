@@ -35,8 +35,8 @@ float _BumpScale;
 float _DFGType;
 Texture2D_float _DFG;
 SamplerState sampler_DFG;
-float _IndirectFallbackMode;
-float _IndirectOverride;
+int _IndirectFallbackMode;
+int _IndirectOverride;
 
 // specular settings
 float _Occlusion;

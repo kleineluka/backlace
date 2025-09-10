@@ -1225,6 +1225,32 @@ namespace Luka.Backlace
             }
         }
 
+        // for vectors that only care about x and y
+        public static void Vector2Property(MaterialEditor materialEditor, MaterialProperty prop, string label)
+        {
+            EditorGUI.BeginChangeCheck();
+            Vector2 currentValue = new Vector2(prop.vectorValue.x, prop.vectorValue.y);
+            Vector2 newValue = EditorGUILayout.Vector2Field(label, currentValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                // preserve the z and w values
+                prop.vectorValue = new Vector4(newValue.x, newValue.y, prop.vectorValue.z, prop.vectorValue.w);
+            }
+        }
+
+        // for vectors that only care about x, y, z
+        public static void Vector3Property(MaterialEditor materialEditor, MaterialProperty prop, string label)
+        {
+            EditorGUI.BeginChangeCheck();
+            Vector3 currentValue = new Vector3(prop.vectorValue.x, prop.vectorValue.y, prop.vectorValue.z);
+            Vector3 newValue = EditorGUILayout.Vector3Field(label, currentValue);
+            if (EditorGUI.EndChangeCheck())
+            {
+                // preserve the w value
+                prop.vectorValue = new Vector4(newValue.x, newValue.y, newValue.z, prop.vectorValue.w);
+            }
+        }
+
     }
 
     // plug and play header
@@ -1889,7 +1915,6 @@ namespace Luka.Backlace
     }
 
 }
-
 #endif // UNITY_EDITOR
 
 //

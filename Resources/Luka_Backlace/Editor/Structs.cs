@@ -98,7 +98,6 @@ namespace Luka.Backlace
     }
 
 }
-
 #endif // UNITY_EDITOR
 
 //

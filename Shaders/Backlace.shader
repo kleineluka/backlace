@@ -7,9 +7,11 @@ Shader "luka/indev/backlace"
         // [Space(35)]
         // [Header(Rendering Settings)]
         // [Space(10)]
-        _SrcBlend ("Src Blend", Float) = 5
-        _DstBlend ("Dst Blend", Float) = 10
-        _ZWrite ("ZWrite", Float) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _OverrideBlendMode ("Override Blend Mode", Range(0, 1)) = 0.0
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 5
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 10
+        [Enum(Disabled, 0, Enabled, 1)] _OverrideZWrite ("Override ZWrite", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ZWrite ("ZWrite", Float) = 1.0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull Mode", Int) = 2
         [IntRange] _StencilID ("Stencil ID (0-255)", Range(0, 255)) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 0
@@ -236,7 +238,7 @@ Shader "luka/indev/backlace"
         _Decal1TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal1Repeat ("Repeat Pattern", Float) = 0.0
         _Decal1Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
-        _Decal1HueShift ("Hue Shift", Range(-1, 1)) = 0.0
+        _Decal1HueShift ("Hue Shift", Range(0, 2)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal1AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
         _Decal1CycleSpeed ("Cycle Speed", Float) = 0.1
 
@@ -258,7 +260,7 @@ Shader "luka/indev/backlace"
         _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal2Repeat ("Repeat Pattern", Float) = 0.0
         _Decal2Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
-        _Decal2HueShift ("Hue Shift", Range(-1, 1)) = 0.0
+        _Decal2HueShift ("Hue Shift", Range(0, 2)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal2AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
         _Decal2CycleSpeed ("Cycle Speed", Float) = 0.1
 
@@ -269,8 +271,8 @@ Shader "luka/indev/backlace"
         [Toggle(_BACKLACE_POST_PROCESSING)] _TogglePostProcessing ("Enable Post Processing", Float) = 0.0
         [HDR] _RGBColor ("RGB Tint", Color) = (1, 1, 1, 1)
         _RGBBlendMode ("RGB Multiply/Replace", Range(0, 1)) = 0.0
-        [Enum(Additive, 0, Multiply, 1)] _HSVMode ("HSV Mode", Float) = 0.0
-        _HSVHue ("Hue", Range(-1, 1)) = 0.0
+        [Enum(Disabled, 0, Additive, 1, Multiply, 2)] _HSVMode ("HSV Mode", Float) = 0.0
+        _HSVHue ("Hue", Float) = 0.0
         _HSVSaturation ("Saturation", Float) = 1.0
         _HSVValue ("Value (Brightness)", Float) = 1.0
         [Enum(Disabled, 0, Enabled, 1)] _ToggleHueShift ("Enable Hue Shift", Range(0, 1)) = 0.0
@@ -610,39 +612,37 @@ Shader "luka/indev/backlace"
         // [Space(35)]
         // [Header(Indirect Lighting)]
         // [Space(10)]
-        _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
-        _IndirectOverride ("Indirect Override", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _IndirectOverride ("Indirect Override", Float) = 0.0
+        [Enum(Disabled, 0, Cubemap, 1)] _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
         _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
 
         // UV SETTINGS
         // [Space(35)]
         // [Header(UV Settings)]
         // [Space(10)]
-        _UVCount ("UV Count", Float) = 0.0
-        _UV1Index ("UV1 Index", Float) = 0.0
-        _MainTex_UV ("Main texture UV set", Float) = 0
-        _BumpMap_UV ("Bump map UV set", Float) = 0
-        _MSSO_UV ("MSSO UV set", Float) = 0
-        _SpecularTintTexture_UV ("Specular Tint UV Set", Float) = 0
-        _TangentMap_UV ("Tangent Map UV", Float) = 0
-        _EmissionMap_UV ("Emission Map UV Set", Float) = 0
-        _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
-        _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
-        _ParallaxMap_UV ("Height Map UV Set", Float) = 0
-        _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
-        _DetailMap_UV ("Detail Map UV Set", Float) = 0
-        _Decal1_UV ("Deca; 1 UV Set", Float) = 0
-        _Decal2_UV ("Decal 2 UV Set", Float) = 0
-        _Glitter_UV ("Glitter UV Set", Float) = 0.0
-        _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
-        _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
-        _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
-        _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
-        _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
-        _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
-        _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
-        _PathingMap_UV ("Pathing Map UV Set", Float) = 0
-        _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MainTex_UV ("Main texture UV set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _BumpMap_UV ("Bump map UV set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MSSO_UV ("MSSO UV set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SpecularTintTexture_UV ("Specular Tint UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _TangentMap_UV ("Tangent Map UV", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EmissionMap_UV ("Emission Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ParallaxMap_UV ("Height Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _DetailMap_UV ("Detail Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Deca; 1 UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal2_UV ("Decal 2 UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Glitter_UV ("Glitter UV Set", Float) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
 
         // DO NOT CHANGE
         // [Space(35)]
