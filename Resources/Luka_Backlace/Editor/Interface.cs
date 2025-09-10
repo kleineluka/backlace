@@ -1926,7 +1926,6 @@ namespace Luka.Backlace
             announcement.draw();
             docs.draw();
             socials_menu.draw();
-            EditorGUI.EndChangeCheck();
             if (EditorGUI.EndChangeCheck())
             {
                 cushion.Update(targetMat);
