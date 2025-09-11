@@ -1928,16 +1928,20 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_SSRMask, languages.speak("prop_SSRMask"));
                     materialEditor.ShaderProperty(prop_SSRTint, languages.speak("prop_SSRTint"));
-                    materialEditor.ShaderProperty(prop_SSRIntensity, languages.speak("prop_SSRIntensity"));
                     materialEditor.ShaderProperty(prop_SSRBlendMode, languages.speak("prop_SSRBlendMode"));
+                    materialEditor.ShaderProperty(prop_SSRIntensity, languages.speak("prop_SSRIntensity"));
                     materialEditor.ShaderProperty(prop_SSRFresnelPower, languages.speak("prop_SSRFresnelPower"));
                     materialEditor.ShaderProperty(prop_SSRFresnelScale, languages.speak("prop_SSRFresnelScale"));
                     materialEditor.ShaderProperty(prop_SSRFresnelBias, languages.speak("prop_SSRFresnelBias"));
                     materialEditor.ShaderProperty(prop_SSRParallax, languages.speak("prop_SSRParallax"));
+                    materialEditor.ShaderProperty(prop_SSRBlur, languages.speak("prop_SSRBlur"));
                     materialEditor.ShaderProperty(prop_SSRDistortionMap, languages.speak("prop_SSRDistortionMap"));
+                    Components.start_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_SSRDistortionStrength, languages.speak("prop_SSRDistortionStrength"));
                     materialEditor.ShaderProperty(prop_SSRWorldDistortion, languages.speak("prop_SSRWorldDistortion"));
-                    materialEditor.ShaderProperty(prop_SSRBlur, languages.speak("prop_SSRBlur"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
                     Components.end_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
                 }
                 Components.end_foldout();
