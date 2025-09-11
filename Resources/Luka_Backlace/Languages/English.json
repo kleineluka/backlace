@@ -1642,7 +1642,7 @@
         },
         {
             "key": "prop_IridescencePower",
-            "value": "Ramp Power"
+            "value": "Power"
         },
         {
             "key": "prop_IridescenceFrequency",
@@ -1822,7 +1822,7 @@
         },
         {
             "key": "prop_RefractionBlendMode",
-            "value": "Refraction Additive<->Replace"
+            "value": "Additive <-> Replace"
         },
         {
             "key": "prop_CausticsTex",

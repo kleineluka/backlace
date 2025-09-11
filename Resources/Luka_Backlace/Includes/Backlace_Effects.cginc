@@ -62,7 +62,7 @@
         if (glitter_mask <= 0) return;
         float time = _Time.y * _GlitterFlickerSpeed + unique_flake_id * 100;
         float3 glitter_normal = normalize(float3(sin(time * 1.2), cos(time * 1.7), sin(time * 1.5)));
-        float sparkle = pow(saturate(dot(Surface.ViewDir, glitter_normal)), _GlitterContrast);
+        float sparkle = fastpow(saturate(dot(Surface.ViewDir, glitter_normal)), _GlitterContrast);
         float3 glitter_color = _GlitterTint.rgb;
         if (_ToggleGlitterRainbow > 0)
         {
@@ -566,7 +566,7 @@
         float3 viewSpaceReflection = mul((float3x3)UNITY_MATRIX_V, reflectionVector);
         float parallax = _SSRParallax * saturate(1.0 - viewSpaceReflection.z);
         float2 reflectionOffset = viewSpaceReflection.xy * parallax;
-        float2 reflectionUV = screenUV + reflectionOffset +distortionOffset;
+        float2 reflectionUV = screenUV + reflectionOffset + distortionOffset;
         const int SSR_BLUR_SAMPLES = 8;
         float3 reflectedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV).rgb;
         float2 blurOffset = _BacklaceGP_TexelSize.xy * _SSRBlur;

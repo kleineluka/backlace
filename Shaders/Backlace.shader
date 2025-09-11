@@ -456,11 +456,11 @@ Shader "luka/indev/backlace"
         _GlitterFrequency ("Density", Float) = 50.0
         _GlitterThreshold ("Density Threshold", Range(0.01, 1.0)) = 0.5
         _GlitterSize ("Size", Range(0.01, 0.5)) = 0.1
-        _GlitterFlickerSpeed ("Flicker Speed", Float) = 1.0
-        _GlitterBrightness ("Brightness", Float) = 2.0
+        _GlitterFlickerSpeed ("Flicker Speed", Range(0, 5)) = 1.0
+        _GlitterBrightness ("Brightness", Range(0, 10)) = 2.0
         _GlitterContrast ("Contrast", Range(1, 256)) = 128.0
         _ToggleGlitterRainbow ("Enable Rainbow", Range(0, 1)) = 0.0
-        _GlitterRainbowSpeed ("Rainbow Speed", Float) = 0.1
+        _GlitterRainbowSpeed ("Rainbow Speed", Range(0, 5)) = 0.1
 
         // DISTANCE FADING
         // [Space(35)]
@@ -489,7 +489,7 @@ Shader "luka/indev/backlace"
         [Enum(Additive, 0, Screen, 1, Alpha Blend, 2)] _IridescenceBlendMode ("Blend Mode", Int) = 0
         _IridescenceParallax ("View Parallax", Range(0, 1)) = 0.5
         [NoScaleOffset] _IridescenceRamp ("Color Ramp", 2D) = "white" { }
-        _IridescencePower ("Ramp Power", Range(0.1, 10)) = 1.0
+        _IridescencePower ("Power", Range(0.1, 10)) = 1.0
         _IridescenceFrequency ("Rainbow Frequency", Range(0.1, 20)) = 5.0
 
         // SHADOW TEXTURE
@@ -569,7 +569,7 @@ Shader "luka/indev/backlace"
         [NoScaleOffset] _CausticsTex ("Internal Caustics Texture", 2D) = "gray" { }
         _CausticsColor ("Caustics Color", Color) = (1, 1, 1, 1)
         _CausticsTiling ("Caustics Tiling", Float) = 2.0
-        _CausticsSpeed ("Caustics Animation Speed", Float) = 0.2
+        _CausticsSpeed ("Caustics Animation Speed", Range(0, 3)) = 0.2
         _CausticsIntensity ("Caustics Intensity", Range(0, 5)) = 1.5
         // uv distortion
         [NoScaleOffset] _DistortionNoiseTex ("Distortion Noise (RG)", 2D) = "gray" { }
@@ -678,7 +678,7 @@ Shader "luka/indev/backlace"
         GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
 
         // Outline Pass
-        Pass
+        /*Pass
         {
             Name "Outline"
             Tags { "LightMode" = "Always" }
@@ -691,7 +691,7 @@ Shader "luka/indev/backlace"
             #endif // UNITY_PASS_OUTLINE
             #include "../Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
             ENDCG
-        }
+        }*/
 
         // Forward Base Pass
         Pass

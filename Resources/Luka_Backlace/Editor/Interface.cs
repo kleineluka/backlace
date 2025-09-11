@@ -1659,16 +1659,22 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_TogglePathing, languages.speak("prop_TogglePathing"));
                     Components.start_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_PathingMappingMode, languages.speak("prop_PathingMappingMode"));
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_PathingMap, languages.speak("prop_PathingMap"));
                     materialEditor.ShaderProperty(prop_PathingScale, languages.speak("prop_PathingScale"));
+                    EditorGUI.indentLevel--;
                     materialEditor.ShaderProperty(prop_PathingBlendMode, languages.speak("prop_PathingBlendMode"));
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
                     materialEditor.ShaderProperty(prop_PathingEmission, languages.speak("prop_PathingEmission"));
+                    EditorGUI.indentLevel--;
                     materialEditor.ShaderProperty(prop_PathingType, languages.speak("prop_PathingType"));
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_PathingSpeed, languages.speak("prop_PathingSpeed"));
                     materialEditor.ShaderProperty(prop_PathingWidth, languages.speak("prop_PathingWidth"));
                     materialEditor.ShaderProperty(prop_PathingSoftness, languages.speak("prop_PathingSoftness"));
                     materialEditor.ShaderProperty(prop_PathingOffset, languages.speak("prop_PathingOffset"));
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                 }
                 sub_tab_glitter.draw();
@@ -1690,7 +1696,11 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleGlitter, languages.speak("prop_ToggleGlitter"));
                     Components.start_dynamic_disable(!prop_ToggleGlitter.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_GlitterMode, languages.speak("prop_GlitterMode"));
-                    materialEditor.ShaderProperty(prop_GlitterNoiseTex, languages.speak("prop_GlitterNoiseTex"));
+                    if (prop_GlitterMode.floatValue.Equals(1)) {
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_GlitterNoiseTex, languages.speak("prop_GlitterNoiseTex"));
+                        EditorGUI.indentLevel--;
+                    }
                     materialEditor.ShaderProperty(prop_GlitterMask, languages.speak("prop_GlitterMask"));
                     materialEditor.ShaderProperty(prop_GlitterTint, languages.speak("prop_GlitterTint"));
                     materialEditor.ShaderProperty(prop_GlitterFrequency, languages.speak("prop_GlitterFrequency"));
@@ -1766,17 +1776,18 @@ namespace Luka.Backlace
                     prop_WorldEffectIntensity = FindProperty("_WorldEffectIntensity", properties);
                     prop_WorldEffectPosition = FindProperty("_WorldEffectPosition", properties);
                     prop_WorldEffectRotation = FindProperty("_WorldEffectRotation", properties);
+                    // Components.Vector3Property(materialEditor, prop_Decal1TriplanarPosition, languages.speak("prop_Decal1TriplanarPosition"));
                     materialEditor.ShaderProperty(prop_ToggleWorldEffect, languages.speak("prop_ToggleWorldEffect"));
                     Components.start_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_WorldEffectBlendMode, languages.speak("prop_WorldEffectBlendMode"));
                     materialEditor.ShaderProperty(prop_WorldEffectTex, languages.speak("prop_WorldEffectTex"));
                     materialEditor.ShaderProperty(prop_WorldEffectColor, languages.speak("prop_WorldEffectColor"));
-                    materialEditor.ShaderProperty(prop_WorldEffectDirection, languages.speak("prop_WorldEffectDirection"));
                     materialEditor.ShaderProperty(prop_WorldEffectScale, languages.speak("prop_WorldEffectScale"));
+                    Components.Vector3Property(materialEditor, prop_WorldEffectDirection, languages.speak("prop_WorldEffectDirection"));
+                    Components.Vector3Property(materialEditor, prop_WorldEffectPosition, languages.speak("prop_WorldEffectPosition"));
+                    Components.Vector3Property(materialEditor, prop_WorldEffectRotation, languages.speak("prop_WorldEffectRotation"));
                     materialEditor.ShaderProperty(prop_WorldEffectBlendSharpness, languages.speak("prop_WorldEffectBlendSharpness"));
                     materialEditor.ShaderProperty(prop_WorldEffectIntensity, languages.speak("prop_WorldEffectIntensity"));
-                    materialEditor.ShaderProperty(prop_WorldEffectPosition, languages.speak("prop_WorldEffectPosition"));
-                    materialEditor.ShaderProperty(prop_WorldEffectRotation, languages.speak("prop_WorldEffectRotation"));
                     Components.end_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
                 }
                 sub_tab_touch_interactions.draw();
@@ -1828,9 +1839,9 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleVertexDistortion, languages.speak("prop_ToggleVertexDistortion"));
                     Components.start_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_VertexDistortionMode, languages.speak("prop_VertexDistortionMode"));
-                    materialEditor.ShaderProperty(prop_VertexDistortionStrength, languages.speak("prop_VertexDistortionStrength"));
-                    materialEditor.ShaderProperty(prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
-                    materialEditor.ShaderProperty(prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
+                    Components.Vector3Property(materialEditor, prop_VertexDistortionStrength, languages.speak("prop_VertexDistortionStrength"));
+                    Components.Vector3Property(materialEditor, prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
+                    Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
                     Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
                 }
                 sub_tab_refraction.draw();
@@ -1860,25 +1871,41 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleRefraction, languages.speak("prop_ToggleRefraction"));
                     Components.start_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_RefractionMask, languages.speak("prop_RefractionMask"));
-                    materialEditor.ShaderProperty(prop_RefractionTint, languages.speak("prop_RefractionTint"));
                     materialEditor.ShaderProperty(prop_RefractionIOR, languages.speak("prop_RefractionIOR"));
-                    materialEditor.ShaderProperty(prop_RefractionFresnel, languages.speak("prop_RefractionFresnel"));
                     materialEditor.ShaderProperty(prop_RefractionOpacity, languages.speak("prop_RefractionOpacity"));
                     materialEditor.ShaderProperty(prop_RefractionSeeThrough, languages.speak("prop_RefractionSeeThrough"));
+                    materialEditor.ShaderProperty(prop_RefractionTint, languages.speak("prop_RefractionTint"));
+                    materialEditor.ShaderProperty(prop_RefractionFresnel, languages.speak("prop_RefractionFresnel"));
                     materialEditor.ShaderProperty(prop_RefractionMode, languages.speak("prop_RefractionMode"));
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_RefractionMixStrength, languages.speak("prop_RefractionMixStrength"));
-                    materialEditor.ShaderProperty(prop_RefractionBlendMode, languages.speak("prop_RefractionBlendMode"));
+                    EditorGUI.indentLevel--;
                     materialEditor.ShaderProperty(prop_CausticsTex, languages.speak("prop_CausticsTex"));
+                    Components.start_dynamic_disable(prop_CausticsTex.textureValue == null, configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_CausticsColor, languages.speak("prop_CausticsColor"));
                     materialEditor.ShaderProperty(prop_CausticsTiling, languages.speak("prop_CausticsTiling"));
+                    materialEditor.ShaderProperty(prop_RefractionBlendMode, languages.speak("prop_RefractionBlendMode"));
                     materialEditor.ShaderProperty(prop_CausticsSpeed, languages.speak("prop_CausticsSpeed"));
                     materialEditor.ShaderProperty(prop_CausticsIntensity, languages.speak("prop_CausticsIntensity"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_CausticsTex.textureValue == null, configs);
                     materialEditor.ShaderProperty(prop_DistortionNoiseTex, languages.speak("prop_DistortionNoiseTex"));
+                    Components.start_dynamic_disable(prop_DistortionNoiseTex.textureValue == null, configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_DistortionNoiseTiling, languages.speak("prop_DistortionNoiseTiling"));
                     materialEditor.ShaderProperty(prop_DistortionNoiseStrength, languages.speak("prop_DistortionNoiseStrength"));
                     materialEditor.ShaderProperty(prop_RefractionDistortionMode, languages.speak("prop_RefractionDistortionMode"));
-                    materialEditor.ShaderProperty(prop_RefractionCAStrength, languages.speak("prop_RefractionCAStrength"));
-                    materialEditor.ShaderProperty(prop_RefractionBlurStrength, languages.speak("prop_RefractionBlurStrength"));
+                    if (prop_RefractionDistortionMode.floatValue == 1) // chromatic aberration
+                    {
+                        materialEditor.ShaderProperty(prop_RefractionCAStrength, languages.speak("prop_RefractionCAStrength"));
+                    }
+                    else if (prop_RefractionDistortionMode.floatValue == 2) // blur
+                    {
+                        materialEditor.ShaderProperty(prop_RefractionBlurStrength, languages.speak("prop_RefractionBlurStrength"));
+                    }
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_DistortionNoiseTex.textureValue == null, configs);
                     Components.end_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
                 }
                 sub_tab_screenspace_reflection.draw();
