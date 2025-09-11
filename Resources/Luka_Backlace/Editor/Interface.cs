@@ -1571,16 +1571,28 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_DissolveType, languages.speak("prop_DissolveType"));
                     materialEditor.ShaderProperty(prop_DissolveProgress, languages.speak("prop_DissolveProgress"));
-                    materialEditor.ShaderProperty(prop_DissolveEdgeColor, languages.speak("prop_DissolveEdgeColor"));
-                    materialEditor.ShaderProperty(prop_DissolveEdgeWidth, languages.speak("prop_DissolveEdgeWidth"));
                     materialEditor.ShaderProperty(prop_DissolveEdgeMode, languages.speak("prop_DissolveEdgeMode"));
+                    EditorGUI.indentLevel++;
+                    Components.start_dynamic_disable(prop_DissolveEdgeMode.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_DissolveEdgeColor, languages.speak("prop_DissolveEdgeColor"));
+                    Components.end_dynamic_disable(prop_DissolveEdgeMode.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_DissolveEdgeWidth, languages.speak("prop_DissolveEdgeWidth"));
                     materialEditor.ShaderProperty(prop_DissolveEdgeSharpness, languages.speak("prop_DissolveEdgeSharpness"));
-                    materialEditor.ShaderProperty(prop_DissolveNoiseTex, languages.speak("prop_DissolveNoiseTex"));
-                    materialEditor.ShaderProperty(prop_DissolveNoiseScale, languages.speak("prop_DissolveNoiseScale"));
-                    materialEditor.ShaderProperty(prop_DissolveDirection, languages.speak("prop_DissolveDirection"));
-                    materialEditor.ShaderProperty(prop_DissolveDirectionSpace, languages.speak("prop_DissolveDirectionSpace"));
-                    materialEditor.ShaderProperty(prop_DissolveDirectionBounds, languages.speak("prop_DissolveDirectionBounds"));
-                    materialEditor.ShaderProperty(prop_DissolveVoxelDensity, languages.speak("prop_DissolveVoxelDensity"));
+                    EditorGUI.indentLevel--;
+                    switch ((int)prop_DissolveType.floatValue) {
+                        case 1: // directional
+                            materialEditor.ShaderProperty(prop_DissolveDirection, languages.speak("prop_DissolveDirection"));
+                            materialEditor.ShaderProperty(prop_DissolveDirectionSpace, languages.speak("prop_DissolveDirectionSpace"));
+                            materialEditor.ShaderProperty(prop_DissolveDirectionBounds, languages.speak("prop_DissolveDirectionBounds"));
+                            break;
+                        case 2: // voxel
+                            materialEditor.ShaderProperty(prop_DissolveVoxelDensity, languages.speak("prop_DissolveVoxelDensity"));
+                            break;
+                        default: // noise
+                            materialEditor.ShaderProperty(prop_DissolveNoiseTex, languages.speak("prop_DissolveNoiseTex"));
+                            materialEditor.ShaderProperty(prop_DissolveNoiseScale, languages.speak("prop_DissolveNoiseScale"));
+                            break;
+                    }
                     Components.end_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
                 }
                 sub_tab_distance_fading.draw();
@@ -1601,15 +1613,19 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DistanceFadeReference, languages.speak("prop_DistanceFadeReference"));
                     materialEditor.ShaderProperty(prop_ToggleNearFade, languages.speak("prop_ToggleNearFade"));
                     Components.start_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_NearFadeMode, languages.speak("prop_NearFadeMode"));
                     materialEditor.ShaderProperty(prop_NearFadeDitherScale, languages.speak("prop_NearFadeDitherScale"));
                     materialEditor.ShaderProperty(prop_NearFadeStart, languages.speak("prop_NearFadeStart"));
                     materialEditor.ShaderProperty(prop_NearFadeEnd, languages.speak("prop_NearFadeEnd"));
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_ToggleFarFade, languages.speak("prop_ToggleFarFade"));
                     Components.start_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_FarFadeStart, languages.speak("prop_FarFadeStart"));
                     materialEditor.ShaderProperty(prop_FarFadeEnd, languages.speak("prop_FarFadeEnd"));
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
                 }
