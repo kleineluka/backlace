@@ -31,6 +31,7 @@ float3 _VertexManipulationScale;
 #include "./Backlace_Effects.cginc"
 
 // properties
+float _Alpha;
 float4 _OutlineColor;
 float _OutlineWidth;
 int _OutlineVertexColorMask;
@@ -108,6 +109,7 @@ fixed4 frag(v2f i) : SV_Target
         finalColor.a *= saturate(fadeFactor);
     }
     finalColor.a *= _OutlineOpacity;
+    finalColor.a *= _Alpha;
     // dissolve support for the outline
     clip(finalColor.a - 0.001);
     return finalColor;

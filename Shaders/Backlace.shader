@@ -7,18 +7,32 @@ Shader "luka/indev/backlace"
         // [Space(35)]
         // [Header(Rendering Settings)]
         // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _OverrideBlendMode ("Override Blend Mode", Range(0, 1)) = 0.0
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 5
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 10
-        [Enum(Disabled, 0, Enabled, 1)] _OverrideZWrite ("Override ZWrite", Range(0, 1)) = 0.0
-        [Enum(Disabled, 0, Enabled, 1)] _ZWrite ("ZWrite", Float) = 1.0
+        //[Enum(Opaque, 0, Cutout, 1, Fade, 2, Transparent, 3, TransClipping, 4, Additive, 6, Multiplicative, 7)] _BlendMode ("Rendering Mode", Float) = 0 // removed 5=soft additive, 8=2x multiplicative
+        [Enum(Opaque, 0, Cutout, 1, Fade, 2, OpaqueFade, 3, Transparent, 4, Premultiply, 5, Additive, 6, Soft Additive, 7, Multiplicative, 8, 2Multiplicative, 9)] _BlendMode ("Rendering Mode", Float) = 0
+        // base blend
+        [Toggle] _OverrideBaseBlend ("Override Base Blend", Float) = 0
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
+        [Enum(UnityEngine.Rendering.BlendOp)] _BlendOp ("Blend Operation", Float) = 0
+        // additive blend
+        [Toggle] _OverrideAddBlend ("Override Additive Blend", Float) = 0
+        [Enum(UnityEngine.Rendering.BlendMode)] _AddSrcBlend ("Additive Src Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _AddDstBlend ("Additive Dst Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendOp)] _AddBlendOp ("Additive Blend Operation", Float) = 0
+        // zwrite
+        [Toggle] _OverrideZWrite ("Override ZWrite", Float) = 0
+        [Enum(Off, 0, On, 1)] _ZWrite ("ZWrite", Float) = 1
+        // render queue
+        [Toggle] _OverrideRenderQueue ("Override Render Queue", Float) = 0
+        // culling
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull Mode", Int) = 2
+        // ztest 
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest ("ZTest", Int) = 3
+        // stencil
         [IntRange] _StencilID ("Stencil ID (0-255)", Range(0, 255)) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 8 // default to Disabled
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
-        //[KeywordEnum(Cutout, Fade, Transparent, Premultiply)] _BlendMode ("Blending Mode", Float) = 0
-        [Enum(Disabled, 0, Enabled, 1)] _OverrideRenderQueue ("Override Render Queue", Float) = 0
-        [KeywordEnum(Opaque, Cutout, Fade, Transparent, Premultiply)] _BlendMode ("Blending Mode", Float) = 0
+        // vrchat fallback
         [Enum(Toon, 0, Double Sided, 1, Unlit, 2, Particle, 3, Matcap, 4, Sprite, 5, Hidden, 6)] _VRCFallback ("VRChat Fallback", Int) = 0
 
         // MAIN MAPS AND ALPHA
@@ -217,7 +231,7 @@ Shader "luka/indev/backlace"
         _MatcapIntensity ("Matcap Intensity", Range(0, 2)) = 1.0
         [Enum(Additive, 0, Multiply, 1, Replace, 2)] _MatcapBlendMode ("Blend Mode", Int) = 0
         [NoScaleOffset] _MatcapMask ("Matcap Mask (R)", 2D) = "white" { }
-        [Enum(OFF, 0, ON, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
         // DECAL 1
@@ -683,7 +697,7 @@ Shader "luka/indev/backlace"
         Pass
         {  
             Name "ForwardBase"
-            ZTest LEqual
+            ZTest [_ZTest]
             Tags { "LightMode" = "ForwardBase" }
             CGPROGRAM
             #ifndef UNITY_PASS_FORWARDBASE
@@ -721,7 +735,7 @@ Shader "luka/indev/backlace"
             Name "ShadowCaster"
             Tags { "LightMode" = "ShadowCaster" }
             ZWrite On 
-            ZTest LEqual
+            ZTest [_ZTest]
             CGPROGRAM
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER

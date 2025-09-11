@@ -770,7 +770,7 @@
         },
         {
             "key": "prop_MSSO",
-            "value": "MSSO"
+            "value": "MSSO (Metal, Smooth, Spec, Occl)"
         },
         {
             "key": "prop_Metallic",
@@ -2085,8 +2085,32 @@
             "value": "Use Custom Render Queue"
         },
         {
-            "key": "prop_OverrideBlendMode",
-            "value": "Use Custom Blend Values"
+            "key": "prop_OverrideBaseBlend",
+            "value": "Use Custom Base Blending"
+        },
+        {
+            "key": "prop_BlendOp",
+            "value": "Blend Operation"
+        },
+        {
+            "key": "prop_AddSrcBlend",
+            "value": "Source Blend"
+        },
+        {
+            "key": "prop_AddDstBlend",
+            "value": "Destination Blend"
+        },
+        {
+            "key": "prop_AddBlendOp",
+            "value": "Alpha Blend Operation"
+        },
+        {
+            "key": "prop_ZTest",
+            "value": "ZTest"
+        },
+        {
+            "key": "prop_OverrideAddBlend",
+            "value": "Use Custom Additive Blending"
         },
         {
             "key": "prop_OverrideZWrite",

@@ -510,17 +510,19 @@ namespace Luka.Backlace
     public class BeautyBlender
     {
         private int _currentBlendMode;
-        private bool _isOverrideEnabled;
-        private bool _isZWriteOverrideEnabled;
-        private bool _isBlendModeOverrideEnabled; 
+        private bool _isOverrideQueue;
+        private bool _isOverrideBaseBlend;
+        private bool _isOverrideAddBlend;
+        private bool _isOverrideZWrite;
 
         public BeautyBlender(Material mat)
         {
             if (!mat.HasProperty("_BlendMode")) return;
             _currentBlendMode = mat.GetInt("_BlendMode");
-            _isOverrideEnabled = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
-            _isZWriteOverrideEnabled = mat.GetFloat("_OverrideZWrite") == 1.0f;
-            _isBlendModeOverrideEnabled = mat.GetFloat("_OverrideBlendMode") == 1.0f;
+            _isOverrideQueue = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
+            _isOverrideBaseBlend = mat.GetFloat("_OverrideBaseBlend") == 1.0f;
+            _isOverrideAddBlend = mat.GetFloat("_OverrideAddBlend") == 1.0f;
+            _isOverrideZWrite = mat.GetFloat("_OverrideZWrite") == 1.0f;
             Apply(mat);
         }
 
@@ -528,74 +530,224 @@ namespace Luka.Backlace
         {
             if (!mat.HasProperty("_BlendMode")) return;
             int newBlendMode = mat.GetInt("_BlendMode");
-            bool newOverrideState = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
-            bool newZWriteOverrideState = mat.GetFloat("_OverrideZWrite") == 1.0f;
-            bool newBlendModeOverrideState = mat.GetFloat("_OverrideBlendMode") == 1.0f;
-            if (newBlendMode != _currentBlendMode || newOverrideState != _isOverrideEnabled || 
-            newZWriteOverrideState != _isZWriteOverrideEnabled || newBlendModeOverrideState != _isBlendModeOverrideEnabled)
+            bool newOverrideQueue = mat.GetFloat("_OverrideRenderQueue") == 1.0f;
+            bool newOverrideBaseBlend = mat.GetFloat("_OverrideBaseBlend") == 1.0f;
+            bool newOverrideAddBlend = mat.GetFloat("_OverrideAddBlend") == 1.0f;
+            bool newOverrideZWrite = mat.GetFloat("_OverrideZWrite") == 1.0f;
+            if (newBlendMode != _currentBlendMode || newOverrideQueue != _isOverrideQueue ||
+                newOverrideBaseBlend != _isOverrideBaseBlend || newOverrideAddBlend != _isOverrideAddBlend ||
+                newOverrideZWrite != _isOverrideZWrite)
             {
                 _currentBlendMode = newBlendMode;
-                _isOverrideEnabled = newOverrideState;
-                _isZWriteOverrideEnabled = newZWriteOverrideState;
-                _isBlendModeOverrideEnabled = newBlendModeOverrideState;
+                _isOverrideQueue = newOverrideQueue;
+                _isOverrideBaseBlend = newOverrideBaseBlend;
+                _isOverrideAddBlend = newOverrideAddBlend;
+                _isOverrideZWrite = newOverrideZWrite;
                 Apply(mat);
+            }
+        }
+
+        // make life easier
+        private static void SetBlendModeKeyword(Material mat, string keywordToEnable)
+        {
+            mat.DisableKeyword("_BLENDMODE_CUTOUT");
+            mat.DisableKeyword("_BLENDMODE_FADE");
+            mat.DisableKeyword("_BLENDMODE_TRANSPARENT");
+            mat.DisableKeyword("_BLENDMODE_PREMULTIPLY");
+            if (!string.IsNullOrEmpty(keywordToEnable))
+            {
+                mat.EnableKeyword(keywordToEnable);
             }
         }
 
         private void Apply(Material mat)
         {
-            int newRenderQueue = mat.renderQueue; 
+            int renderQueue;
+            string renderType;
             switch (_currentBlendMode)
             {
                 case 0: // opaque
-                    mat.SetOverrideTag("RenderType", "Opaque");
-                    if (!_isBlendModeOverrideEnabled) {
+                    if (!_isOverrideBaseBlend) {
                         mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                         mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
                     }
-                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 1);
-                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 1);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                    renderType = "Opaque";
+                    SetBlendModeKeyword(mat, null);
                     break;
                 case 1: // cutout
-                    mat.SetOverrideTag("RenderType", "TransparentCutout");
-                    if (!_isBlendModeOverrideEnabled) {
+                    if (!_isOverrideBaseBlend) {
                         mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                         mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
                     }
-                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 1);
-                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 1);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                    renderType = "TransparentCutout";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_CUTOUT");
                     break;
                 case 2: // fade
-                    mat.SetOverrideTag("RenderType", "Transparent");
-                    if (!_isBlendModeOverrideEnabled) {
+                    if (!_isOverrideBaseBlend) {
                         mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                         mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
                     }
-                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 0);
-                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_FADE");
                     break;
-                case 3: // transparent
-                    mat.SetOverrideTag("RenderType", "Transparent");
-                    if (!_isBlendModeOverrideEnabled) {
+                case 3: // opaque fade
+                    if (!_isOverrideBaseBlend) {
                         mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
                     }
-                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 0);
-                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 1);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_FADE");
                     break;
-                case 4: // premultiply
-                    mat.SetOverrideTag("RenderType", "Transparent");
-                    if (!_isBlendModeOverrideEnabled) {
+                case 4: // transparent
+                     if (!_isOverrideBaseBlend) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_TRANSPARENT");
+                    break;
+                case 5: // premultiply
+                    if (!_isOverrideBaseBlend) {
                         mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
                         mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
                     }
-                    if (!_isZWriteOverrideEnabled) mat.SetInt("_ZWrite", 0);
-                    newRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_PREMULTIPLY");
                     break;
-            }    
-            if (!_isOverrideEnabled)
+                case 6: // additive
+                    if (!_isOverrideBaseBlend) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_FADE");
+                    break;
+                case 7: // soft additive
+                    if (!_isOverrideBaseBlend) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusDstColor);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_FADE");
+                    break;
+                case 8: // multiplicative
+                    if (!_isOverrideBaseBlend) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.DstColor);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_FADE");
+                    break;
+                case 9: // 2x multiplicative 
+                    if (!_isOverrideBaseBlend) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.DstColor);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.SrcColor);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 0);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                    renderType = "Transparent";
+                    SetBlendModeKeyword(mat, "_BLENDMODE_FADE");
+                    break;
+                default: // fallback to opaque
+                    if (!_isOverrideBaseBlend) {
+                        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                        mat.SetInt("_BlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideAddBlend) {
+                        mat.SetInt("_AddSrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddDstBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                        mat.SetInt("_AddBlendOp", (int)UnityEngine.Rendering.BlendOp.Add);
+                    }
+                    if (!_isOverrideZWrite) mat.SetInt("_ZWrite", 1);
+                    renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                    renderType = "Opaque";
+                    SetBlendModeKeyword(mat, null);
+                    break;
+            }
+            // finally apply the tags and render queue
+            mat.SetOverrideTag("RenderType", renderType);
+            if (!_isOverrideQueue)
             {
-                mat.renderQueue = newRenderQueue;
+                mat.renderQueue = renderQueue;
             }
         }
     }

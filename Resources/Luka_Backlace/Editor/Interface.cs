@@ -97,18 +97,24 @@ namespace Luka.Backlace
 
         #region Properties
         // rendering properties
+        private MaterialProperty prop_BlendMode = null;
+        private MaterialProperty prop_OverrideBaseBlend = null;
         private MaterialProperty prop_SrcBlend = null;
         private MaterialProperty prop_DstBlend = null;
+        private MaterialProperty prop_BlendOp = null;
+        private MaterialProperty prop_OverrideAddBlend = null;
+        private MaterialProperty prop_AddSrcBlend = null;
+        private MaterialProperty prop_AddDstBlend = null;
+        private MaterialProperty prop_AddBlendOp = null;
+        private MaterialProperty prop_OverrideZWrite = null;
         private MaterialProperty prop_ZWrite = null;
+        private MaterialProperty prop_OverrideRenderQueue = null;
         private MaterialProperty prop_Cull = null;
+        private MaterialProperty prop_ZTest = null;
         private MaterialProperty prop_StencilID = null;
         private MaterialProperty prop_StencilComp = null;
         private MaterialProperty prop_StencilOp = null;
-        private MaterialProperty prop_BlendMode = null;
         private MaterialProperty prop_VRCFallback = null;
-        private MaterialProperty prop_OverrideRenderQueue = null;
-        private MaterialProperty prop_OverrideBlendMode = null;
-        private MaterialProperty prop_OverrideZWrite = null;
         // texture properties
         private MaterialProperty prop_MainTex = null;
         private MaterialProperty prop_Color = null;
@@ -748,36 +754,71 @@ namespace Luka.Backlace
                 if (sub_tab_rendering.is_expanded) {
                     // main - rendering
                     prop_BlendMode = FindProperty("_BlendMode", properties);
+                    prop_OverrideBaseBlend = FindProperty("_OverrideBaseBlend", properties);
                     prop_SrcBlend = FindProperty("_SrcBlend", properties);
                     prop_DstBlend = FindProperty("_DstBlend", properties);
+                    prop_BlendOp = FindProperty("_BlendOp", properties);
+                    prop_OverrideAddBlend = FindProperty("_OverrideAddBlend", properties);
+                    prop_AddSrcBlend = FindProperty("_AddSrcBlend", properties);
+                    prop_AddDstBlend = FindProperty("_AddDstBlend", properties);
+                    prop_AddBlendOp = FindProperty("_AddBlendOp", properties);
+                    prop_OverrideZWrite = FindProperty("_OverrideZWrite", properties);
                     prop_ZWrite = FindProperty("_ZWrite", properties);
+                    prop_OverrideRenderQueue = FindProperty("_OverrideRenderQueue", properties);
                     prop_Cull = FindProperty("_Cull", properties);
+                    prop_ZTest = FindProperty("_ZTest", properties);
                     prop_StencilID = FindProperty("_StencilID", properties);
                     prop_StencilComp = FindProperty("_StencilComp", properties);
                     prop_StencilOp = FindProperty("_StencilOp", properties);
                     prop_VRCFallback = FindProperty("_VRCFallback", properties);
-                    prop_OverrideRenderQueue = FindProperty("_OverrideRenderQueue", properties);
-                    prop_OverrideBlendMode = FindProperty("_OverrideBlendMode", properties);
-                    prop_OverrideZWrite = FindProperty("_OverrideZWrite", properties);
-                    materialEditor.ShaderProperty(prop_BlendMode, languages.speak("prop_BlendMode"));
+                    var blendModeNames = new string[] {
+                        "Opaque", "Cutout", "Fade", "Opaque Fade", "Transparent", "Premultiply",
+                        "Additive", "Soft Additive", "Multiplicative", "2x Multiplicative"
+                    };
+                    int currentMode = (int)prop_BlendMode.floatValue;
+                    int newMode = EditorGUILayout.Popup(languages.speak("prop_BlendMode"), currentMode, blendModeNames);
+                    if (newMode != currentMode)
+                    {
+                        prop_BlendMode.floatValue = newMode;
+                    }
                     materialEditor.ShaderProperty(prop_VRCFallback, languages.speak("prop_VRCFallback"));
-                    materialEditor.ShaderProperty(prop_OverrideRenderQueue, languages.speak("prop_OverrideRenderQueue"));
-                    Components.start_dynamic_disable(prop_OverrideRenderQueue.floatValue.Equals(0));
-                    materialEditor.RenderQueueField();
-                    Components.end_dynamic_disable(prop_OverrideRenderQueue.floatValue.Equals(0));
-                    materialEditor.ShaderProperty(prop_OverrideBlendMode, languages.speak("prop_OverrideBlendMode"));
-                    Components.start_dynamic_disable(prop_OverrideBlendMode.floatValue.Equals(0));
+                    materialEditor.ShaderProperty(prop_OverrideBaseBlend, languages.speak("prop_OverrideBaseBlend"));
+                    Components.start_dynamic_disable(!prop_OverrideBaseBlend.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_SrcBlend, languages.speak("prop_SrcBlend"));
                     materialEditor.ShaderProperty(prop_DstBlend, languages.speak("prop_DstBlend"));
-                    Components.end_dynamic_disable(prop_OverrideBlendMode.floatValue.Equals(0));
+                    materialEditor.ShaderProperty(prop_BlendOp, languages.speak("prop_BlendOp"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(!prop_OverrideBaseBlend.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_OverrideAddBlend, languages.speak("prop_OverrideAddBlend"));
+                    Components.start_dynamic_disable(!prop_OverrideAddBlend.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_AddSrcBlend, languages.speak("prop_AddSrcBlend"));
+                    materialEditor.ShaderProperty(prop_AddDstBlend, languages.speak("prop_AddDstBlend"));
+                    materialEditor.ShaderProperty(prop_AddBlendOp, languages.speak("prop_AddBlendOp"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(!prop_OverrideAddBlend.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_OverrideZWrite, languages.speak("prop_OverrideZWrite"));
-                    Components.start_dynamic_disable(prop_OverrideZWrite.floatValue.Equals(0));
+                    Components.start_dynamic_disable(!prop_OverrideZWrite.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_ZWrite, languages.speak("prop_ZWrite"));
-                    Components.end_dynamic_disable(prop_OverrideZWrite.floatValue.Equals(0));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(!prop_OverrideZWrite.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_OverrideRenderQueue, languages.speak("prop_OverrideRenderQueue"));
+                    Components.start_dynamic_disable(!prop_OverrideRenderQueue.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.RenderQueueField();
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(!prop_OverrideRenderQueue.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Cull, languages.speak("prop_Cull"));
+                    materialEditor.ShaderProperty(prop_ZTest, languages.speak("prop_ZTest"));
                     materialEditor.ShaderProperty(prop_StencilID, languages.speak("prop_StencilID"));
+                    Components.start_dynamic_disable(prop_StencilID.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_StencilComp, languages.speak("prop_StencilComp"));
-                    materialEditor.ShaderProperty(prop_StencilOp, languages.speak("prop_StencilOp"));     
+                    materialEditor.ShaderProperty(prop_StencilOp, languages.speak("prop_StencilOp"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_StencilID.floatValue.Equals(0), configs);
                 }
                 sub_tab_textures.draw();
                 if (sub_tab_textures.is_expanded) {
@@ -1241,10 +1282,12 @@ namespace Luka.Backlace
                     prop_UseAlbedoAsEmission = FindProperty("_UseAlbedoAsEmission", properties);
                     prop_EmissionStrength = FindProperty("_EmissionStrength", properties);
                     materialEditor.ShaderProperty(prop_ToggleEmission, languages.speak("prop_ToggleEmission"));
-                    materialEditor.ShaderProperty(prop_EmissionColor, languages.speak("prop_EmissionColor"));
+                    Components.start_dynamic_disable(!prop_ToggleEmission.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_EmissionMap, languages.speak("prop_EmissionMap"));
+                    materialEditor.ShaderProperty(prop_EmissionColor, languages.speak("prop_EmissionColor"));
                     materialEditor.ShaderProperty(prop_UseAlbedoAsEmission, languages.speak("prop_UseAlbedoAsEmission"));
                     materialEditor.ShaderProperty(prop_EmissionStrength, languages.speak("prop_EmissionStrength"));
+                    Components.end_dynamic_disable(!prop_ToggleEmission.floatValue.Equals(1), configs);
                 }
                 Components.end_foldout();
             }
@@ -1349,9 +1392,9 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleRimlight, languages.speak("prop_ToggleRimlight"));
                     Components.start_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_RimColor, languages.speak("prop_RimColor"));
-                    materialEditor.ShaderProperty(prop_RimWidth, languages.speak("prop_RimWidth"));
-                    materialEditor.ShaderProperty(prop_RimIntensity, languages.speak("prop_RimIntensity"));
                     materialEditor.ShaderProperty(prop_RimLightBased, languages.speak("prop_RimLightBased"));
+                    materialEditor.ShaderProperty(prop_RimIntensity, languages.speak("prop_RimIntensity"));
+                    materialEditor.ShaderProperty(prop_RimWidth, languages.speak("prop_RimWidth"));
                     Components.end_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
                 }
                 sub_tab_depth_rim.draw();
@@ -1366,10 +1409,10 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleDepthRim, languages.speak("prop_ToggleDepthRim"));
                     Components.start_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_DepthRimColor, languages.speak("prop_DepthRimColor"));
+                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
                     materialEditor.ShaderProperty(prop_DepthRimWidth, languages.speak("prop_DepthRimWidth"));
                     materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
                     materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
-                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
                     Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
                 }
                 sub_tab_matcap.draw();
@@ -1386,10 +1429,10 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleMatcap, languages.speak("prop_ToggleMatcap"));
                     Components.start_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_MatcapTex, languages.speak("prop_MatcapTex"));
-                    materialEditor.ShaderProperty(prop_MatcapTint, languages.speak("prop_MatcapTint"));
-                    materialEditor.ShaderProperty(prop_MatcapIntensity, languages.speak("prop_MatcapIntensity"));
-                    materialEditor.ShaderProperty(prop_MatcapBlendMode, languages.speak("prop_MatcapBlendMode"));
                     materialEditor.ShaderProperty(prop_MatcapMask, languages.speak("prop_MatcapMask"));
+                    materialEditor.ShaderProperty(prop_MatcapTint, languages.speak("prop_MatcapTint"));
+                    materialEditor.ShaderProperty(prop_MatcapBlendMode, languages.speak("prop_MatcapBlendMode"));
+                    materialEditor.ShaderProperty(prop_MatcapIntensity, languages.speak("prop_MatcapIntensity"));
                     materialEditor.ShaderProperty(prop_MatcapSmoothnessEnabled, languages.speak("prop_MatcapSmoothnessEnabled"));
                     Components.start_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_MatcapSmoothness, languages.speak("prop_MatcapSmoothness"));
@@ -1408,8 +1451,8 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_CubemapTex, languages.speak("prop_CubemapTex"));
                     materialEditor.ShaderProperty(prop_CubemapTint, languages.speak("prop_CubemapTint"));
-                    materialEditor.ShaderProperty(prop_CubemapIntensity, languages.speak("prop_CubemapIntensity"));
                     materialEditor.ShaderProperty(prop_CubemapBlendMode, languages.speak("prop_CubemapBlendMode"));
+                    materialEditor.ShaderProperty(prop_CubemapIntensity, languages.speak("prop_CubemapIntensity"));
                     Components.end_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
                 }
                 sub_tab_clear_coat.draw();
@@ -1423,11 +1466,11 @@ namespace Luka.Backlace
                     prop_ClearcoatColor = FindProperty("_ClearcoatColor", properties);
                     materialEditor.ShaderProperty(prop_ToggleClearcoat, languages.speak("prop_ToggleClearcoat"));
                     Components.start_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ClearcoatMap, languages.speak("prop_ClearcoatMap"));
+                    materialEditor.ShaderProperty(prop_ClearcoatColor, languages.speak("prop_ClearcoatColor"));
                     materialEditor.ShaderProperty(prop_ClearcoatStrength, languages.speak("prop_ClearcoatStrength"));
                     materialEditor.ShaderProperty(prop_ClearcoatReflectionStrength, languages.speak("prop_ClearcoatReflectionStrength"));
-                    materialEditor.ShaderProperty(prop_ClearcoatMap, languages.speak("prop_ClearcoatMap"));
                     materialEditor.ShaderProperty(prop_ClearcoatRoughness, languages.speak("prop_ClearcoatRoughness"));
-                    materialEditor.ShaderProperty(prop_ClearcoatColor, languages.speak("prop_ClearcoatColor"));
                     Components.end_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
                 }
                 sub_tab_subsurface.draw();
@@ -1526,8 +1569,8 @@ namespace Luka.Backlace
                     prop_DissolveVoxelDensity = FindProperty("_DissolveVoxelDensity", properties);
                     materialEditor.ShaderProperty(prop_ToggleDissolve, languages.speak("prop_ToggleDissolve"));
                     Components.start_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DissolveProgress, languages.speak("prop_DissolveProgress"));
                     materialEditor.ShaderProperty(prop_DissolveType, languages.speak("prop_DissolveType"));
+                    materialEditor.ShaderProperty(prop_DissolveProgress, languages.speak("prop_DissolveProgress"));
                     materialEditor.ShaderProperty(prop_DissolveEdgeColor, languages.speak("prop_DissolveEdgeColor"));
                     materialEditor.ShaderProperty(prop_DissolveEdgeWidth, languages.speak("prop_DissolveEdgeWidth"));
                     materialEditor.ShaderProperty(prop_DissolveEdgeMode, languages.speak("prop_DissolveEdgeMode"));
