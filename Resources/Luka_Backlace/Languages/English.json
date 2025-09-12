@@ -1386,11 +1386,11 @@
         },
         {
             "key": "prop_AudioLinkEmissionStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkEmissionRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkRimBand",
@@ -1398,11 +1398,11 @@
         },
         {
             "key": "prop_AudioLinkRimStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkRimRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkHueShiftBand",
@@ -1410,11 +1410,11 @@
         },
         {
             "key": "prop_AudioLinkHueShiftStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkHueShiftRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkDecalHueBand",
@@ -1422,11 +1422,11 @@
         },
         {
             "key": "prop_AudioLinkDecalHueStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkDecalHueRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkDecalEmissionBand",
@@ -1434,11 +1434,11 @@
         },
         {
             "key": "prop_AudioLinkDecalEmissionStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkDecalEmissionRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkDecalOpacityBand",
@@ -1446,11 +1446,11 @@
         },
         {
             "key": "prop_AudioLinkDecalOpacityStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkDecalOpacityRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkVertexBand",
@@ -1458,11 +1458,11 @@
         },
         {
             "key": "prop_AudioLinkVertexStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkVertexRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkOutlineBand",
@@ -1470,11 +1470,11 @@
         },
         {
             "key": "prop_AudioLinkOutlineStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkOutlineRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkMatcapBand",
@@ -1482,11 +1482,11 @@
         },
         {
             "key": "prop_AudioLinkMatcapStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkMatcapRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkPathingBand",
@@ -1494,11 +1494,11 @@
         },
         {
             "key": "prop_AudioLinkPathingStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkPathingRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkGlitterBand",
@@ -1506,11 +1506,11 @@
         },
         {
             "key": "prop_AudioLinkGlitterStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkGlitterRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_AudioLinkIridescenceBand",
@@ -1518,11 +1518,11 @@
         },
         {
             "key": "prop_AudioLinkIridescenceStrength",
-            "value": "  Strength"
+            "value": "Strength"
         },
         {
             "key": "prop_AudioLinkIridescenceRange",
-            "value": "  Min/Max"
+            "value": "Min-Max"
         },
         {
             "key": "prop_ToggleGlitter",

@@ -356,7 +356,7 @@ Shader "luka/indev/backlace"
         // [Header(Dissolve Effect)]
         // [Space(10)]
         [Toggle(_BACKLACE_DISSOLVE)] _ToggleDissolve ("Enable Dissolve", Float) = 0.0
-        _DissolveProgress ("Dissolve Progress", Range(0, 1.0)) = 0.0
+        _DissolveProgress ("Dissolve Progress", Range(0, 2.0)) = 0.0
         [Enum(Noise, 0, Directional, 1, Voxel, 2)] _DissolveType ("Dissolve Type", Int) = 0
         // edge glow
         [HDR] _DissolveEdgeColor ("Edge Color", Color) = (1, 0.5, 0, 1)
