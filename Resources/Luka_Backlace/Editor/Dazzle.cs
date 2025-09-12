@@ -1627,6 +1627,14 @@ namespace Luka.Backlace
                 {
                     config.json_data.@interface.grey_unused = newUnusedIndex == 0;
                 }
+                // show status badges
+                bool showStatus = config.json_data.@interface.show_status_badges;
+                int currentStatusIndex = showStatus ? 0 : 1;
+                int newStatusIndex = EditorGUILayout.Popup(languages.speak("config_toggle_status_badges"), currentStatusIndex, toggleOptions);
+                if (newStatusIndex != currentStatusIndex)
+                {
+                    config.json_data.@interface.show_status_badges = newStatusIndex == 0;
+                }
                 // save / cancel button row
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button(languages.speak("config_save")))
