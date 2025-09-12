@@ -101,6 +101,14 @@
             "value": "Grey Unused Settings"
         },
         {
+            "key": "config_toggle_status_badges",
+            "value": "Show Status Badges"
+        },
+        {
+            "key": "status_badge_enabled",
+            "value": "Activated"
+        },
+        {
             "key": "preset_title",
             "value": "Preset Manager"
         },

@@ -308,6 +308,7 @@ namespace Luka.Backlace
         private GUIStyle style_docs = null;
         private GUIStyle style_variant_badge_large = null;
         private GUIStyle style_variant_badge_small = null;
+        private Color colour_active_badge = new Color(0.3f, 0.8f, 0.3f); // non-nullable..
 
         // pass theme for fonting
         public Styler(ref Fonts font_manager, ref Config config_manager)
@@ -330,6 +331,7 @@ namespace Luka.Backlace
             style_docs = null;
             style_variant_badge_large = null;
             style_variant_badge_small = null;
+            colour_active_badge = new Color(0.3f, 0.8f, 0.3f); // non-nullable..
         }
 
         // get the style for the primary tab
@@ -593,6 +595,17 @@ namespace Luka.Backlace
             return ref style_variant_badge_small;
         }
 
+        // get the colour for an active badge
+        public ref Color load_colour_active_badge()
+        {
+            if (colour_active_badge == null)
+            {
+
+                colour_active_badge = Colours.is_dark() ? new Color(0.3f, 0.8f, 0.3f) : new Color(0.1f, 0.5f, 0.1f);
+            }
+            return ref colour_active_badge;
+        }
+
     }
 
     // reusable images
@@ -720,13 +733,14 @@ namespace Luka.Backlace
         private int tab_index = -1;
         private string tab_label = null;
         public ShaderVariant shader_variant = null;
+        private string toggle_property_name = null;
 
         // tab state
         public bool is_expanded = false;
         public bool is_active = false;
 
         // constructor for a tab
-        public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, ShaderVariant shader_variant = null)
+        public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, ShaderVariant shader_variant = null, string toggle_property_name = null)
         {
             this.theme = theme;
             this.material = material;
@@ -734,8 +748,34 @@ namespace Luka.Backlace
             this.tab_index = tab_index;
             this.tab_label = tab_label;
             this.shader_variant = shader_variant;
+            this.toggle_property_name = toggle_property_name;
         }
 
+        private void draw_badges(Rect parentRect, List<BadgeMetadata> badges, float initialXOffset, float padding)
+        {
+            if (badges == null || badges.Count == 0) return;
+            float currentXOffset = initialXOffset;
+            var originalBGColor = GUI.backgroundColor;
+            foreach (var badge in badges)
+            {
+                if (string.IsNullOrEmpty(badge.Text)) continue;
+                Vector2 badgeSize = badge.Style.CalcSize(new GUIContent(badge.Text));
+                Rect badgeRect = new Rect(
+                    parentRect.x + parentRect.width - badgeSize.x - currentXOffset,
+                    parentRect.y + (parentRect.height - badgeSize.y) / 2,
+                    badgeSize.x,
+                    badgeSize.y
+                );
+                GUI.backgroundColor = badge.Color;
+                if (GUI.Button(badgeRect, badge.Text, badge.Style))
+                {
+                    badge.OnClick?.Invoke();
+                }
+                currentXOffset += badgeSize.x + padding;
+            }
+            GUI.backgroundColor = originalBGColor;
+        }
+        
         // wrapper to draw the tab
         public void draw()
         {
@@ -749,20 +789,6 @@ namespace Luka.Backlace
                     draw_sub_tab(tab_text);
                     break;
             }
-        }
-
-        // helper to draw the background texture of a tab
-        private Texture2D make_background(int width, int height, Color col)
-        {
-            Color[] pix = new Color[width * height];
-            for (int i = 0; i < pix.Length; ++i)
-            {
-                pix[i] = col;
-            }
-            Texture2D result = new Texture2D(width, height);
-            result.SetPixels(pix);
-            result.Apply();
-            return result;
         }
 
         // foldout part of the primary tab
@@ -807,30 +833,27 @@ namespace Luka.Backlace
             GUI.color = cache_col;
             // draw the box text
             GUI.Box(rect, tab_text, primary_style);
-            // draw a variant badge if needed
+            // draw the badges
+            var badgesToDraw = new List<BadgeMetadata>();
             if (shader_variant != null && shader_variant != Project.shader_variants[0])
             {
-                string badgeText = shader_variant.Name;
-                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge_large();
-                Vector2 badgeSize = badgeStyle.CalcSize(new GUIContent(badgeText));
-                Rect badgeRect = new Rect(
-                    rect.x + rect.width - badgeSize.x - 20f,
-                    rect.y + (rect.height - badgeSize.y) / 2,
-                    badgeSize.x,
-                    badgeSize.y
-                );
-                Color originalColor = GUI.backgroundColor;
-                GUI.backgroundColor = shader_variant.Color;
-                if (GUI.Button(badgeRect, badgeText, badgeStyle))
+                Action variantBadgeClickAction = () =>
                 {
                     EditorUtility.DisplayDialog(
                         theme.language_manager.speak("variant_popup_title"),
                         theme.language_manager.speak("variant_popup_description", shader_variant.Name),
                         theme.language_manager.speak("dialog_okay")
                     );
-                }
-                GUI.backgroundColor = originalColor; 
+                };
+                badgesToDraw.Add(new BadgeMetadata
+                {
+                    Text = shader_variant.Name,
+                    Color = shader_variant.Color,
+                    Style = theme.styler_manager.load_style_variant_badge_large(),
+                    OnClick = variantBadgeClickAction
+                });
             }
+            draw_badges(rect, badgesToDraw, 20f, 5f);
             // handle foldout arrow
             Event currentEvent = Event.current;
             // calculate arrow position based on tab size
@@ -875,30 +898,42 @@ namespace Luka.Backlace
             rect.position = new Vector2(rect.position.x, rect.position.y);
             rect.y += 2.5f;
             GUI.Box(rect, tab_text, sub_style);
-            // draw a variant badge if needed
+            // draw the badges
+            var badgesToDraw = new List<BadgeMetadata>();
             if (shader_variant != null && shader_variant != Project.shader_variants[0])
             {
-                string badgeText = shader_variant.Name;
-                GUIStyle badgeStyle = theme.styler_manager.load_style_variant_badge_small();
-                Vector2 badgeSize = badgeStyle.CalcSize(new GUIContent(badgeText));
-                Rect badgeRect = new Rect(
-                    rect.x + rect.width - badgeSize.x - 10f,
-                    rect.y + (rect.height - badgeSize.y) / 2,
-                    badgeSize.x,
-                    badgeSize.y
-                );
-                Color originalColor = GUI.backgroundColor;
-                GUI.backgroundColor = shader_variant.Color;
-                if (GUI.Button(badgeRect, badgeText, badgeStyle))
+                // variant badge
+                Action variantBadgeClickAction = () =>
                 {
                     EditorUtility.DisplayDialog(
                         theme.language_manager.speak("variant_popup_title"),
                         theme.language_manager.speak("variant_popup_description", shader_variant.Name),
                         theme.language_manager.speak("dialog_okay")
                     );
-                }
-                GUI.backgroundColor = originalColor; 
+                };
+                badgesToDraw.Add(new BadgeMetadata
+                {
+                    Text = shader_variant.Name,
+                    Color = shader_variant.Color,
+                    Style = theme.styler_manager.load_style_variant_badge_small(),
+                    OnClick = variantBadgeClickAction
+                });
             }
+            if (toggle_property_name != null && material != null && material.HasProperty(toggle_property_name))
+            {
+                // activated badge
+                if (material.GetFloat(toggle_property_name) != 0f && this.theme.config_manager.json_data.@interface.show_status_badges)
+                {
+                    badgesToDraw.Add(new BadgeMetadata
+                    {
+                        Text = theme.language_manager.speak("status_badge_enabled"),
+                        Color = theme.styler_manager.load_colour_active_badge(),
+                        Style = theme.styler_manager.load_style_variant_badge_small(),
+                        OnClick = null 
+                    });
+                }
+            }
+            draw_badges(rect, badgesToDraw, 10f, 5f);
             // handle foldout arrow
             Event currentEvent = Event.current;
             // calculate arrow position based on tab size

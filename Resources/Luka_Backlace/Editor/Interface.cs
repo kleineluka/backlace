@@ -689,7 +689,7 @@ namespace Luka.Backlace
             sub_tab_rim_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rim_lighting"));
             sub_tab_depth_rim = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_depth_rim"));
             sub_tab_clear_coat = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_clear_coat"));
-            sub_tab_matcap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_matcap"));
+            sub_tab_matcap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_matcap"), null, "_ToggleMatcap");
             sub_tab_cubemap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_cubemap"));
             sub_tab_parallax = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_parallax"));
             sub_tab_subsurface = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_subsurface"));
@@ -707,7 +707,7 @@ namespace Luka.Backlace
             sub_tab_vrchat_mirror = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_vrchat_mirror"));
             sub_tab_touch_interactions = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_touch_interactions"));
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_vertex_distortion"));
-            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"), Project.shader_variants[2]);
+            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2]);
             tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
             tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
@@ -1806,8 +1806,10 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_TouchRadius, languages.speak("prop_TouchRadius"));
                     materialEditor.ShaderProperty(prop_TouchHardness, languages.speak("prop_TouchHardness"));
                     materialEditor.ShaderProperty(prop_TouchMode, languages.speak("prop_TouchMode"));
+                    Components.start_dynamic_disable(!prop_TouchMode.floatValue.Equals(3), configs); // rainbow mode
                     materialEditor.ShaderProperty(prop_TouchRainbowSpeed, languages.speak("prop_TouchRainbowSpeed"));
                     materialEditor.ShaderProperty(prop_TouchRainbowSpread, languages.speak("prop_TouchRainbowSpread"));
+                    Components.end_dynamic_disable(!prop_TouchMode.floatValue.Equals(3), configs);
                     Components.end_dynamic_disable(!prop_ToggleTouchReactive.floatValue.Equals(1), configs);
                 }
                 sub_tab_flatten_model.draw();

@@ -2,6 +2,7 @@
 #pragma warning disable CS0414
 
 // imports
+using System;
 using System.Collections.Generic;
 using UnityEngine; 
 
@@ -51,6 +52,7 @@ namespace Luka.Backlace
         public bool show_updates;
         public bool show_announcements;
         public bool grey_unused;
+        public bool show_status_badges;
     }
 
     [System.Serializable]
@@ -95,6 +97,15 @@ namespace Luka.Backlace
         public AnnouncementData Announcement;
         public List<VersionEntry> Versions;
         public List<SocialLink> Socials;
+    }
+
+    [System.Serializable]
+    public struct BadgeMetadata
+    {
+        public string Text;
+        public Color Color;
+        public GUIStyle Style;
+        public Action OnClick;
     }
 
 }
