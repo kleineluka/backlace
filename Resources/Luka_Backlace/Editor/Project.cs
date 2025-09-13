@@ -24,8 +24,8 @@ namespace Luka.Backlace
         public static readonly List<ShaderVariant> shader_variants = new List<ShaderVariant>
         {
             new ShaderVariant("Default", "", Color.clear),
-            new ShaderVariant("Outline", "Outline", new Color(0.1f, 0.8f, 0.3f)),
-            new ShaderVariant("Grabpass", "Grabpass", new Color(0.8f, 0.5f, 0.1f))
+            new ShaderVariant("Outline", "Outline", new Color(1.0f, 0.75f, 0.8f)),
+            new ShaderVariant("Grabpass", "Grabpass", new Color(0.77f, 0.93f, 0.77f))
         };
     }
 

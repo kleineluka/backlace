@@ -7,7 +7,6 @@ FragmentData Vertex(VertexData v)
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_INITIALIZE_OUTPUT(FragmentData, i);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i);
-
     // set up audio link values
     #if defined(_BACKLACE_AUDIOLINK)
         BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
@@ -18,15 +17,12 @@ FragmentData Vertex(VertexData v)
     #else // _BACKLACE_AUDIOLINK
         v.vertex.xyz *= _VertexManipulationScale; // scale
     #endif // _BACKLACE_AUDIOLINK
-
     // vertex manipulation (continued)
     v.vertex.xyz += _VertexManipulationPosition; // position
-
     // vertex distortion
     #if defined(_BACKLACE_VERTEX_DISTORTION)
         DistortVertex(v.vertex);
     #endif // _BACKLACE_VERTEX_DISTORTION
-    
     // boilerplate assignments
     i.vertex = v.vertex;
     i.pos = UnityObjectToClipPos(v.vertex); 
@@ -38,32 +34,25 @@ FragmentData Vertex(VertexData v)
     i.uv1 = v.uv1;
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
-
     // for screen related effects
     i.scrPos = ComputeScreenPos(i.pos);
-
     // flat model feature
     #if defined(_BACKLACE_FLAT_MODEL)
         FlattenModel(v.vertex, v.normal, i.pos, i.worldPos, i.normal);
     #endif // _BACKLACE_FLAT_MODEL
-
     UNITY_TRANSFER_SHADOW(i, v.uv);
     UNITY_TRANSFER_FOG(i, i.pos);
-    
     #if defined(LIGHTMAP_ON)
         i.lightmapUV = v.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
     #endif // LIGHTMAP_ON
-    
     #if defined(DYNAMICLIGHTMAP_ON)
         i.dynamicLightmapUV = v.uv2 * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
     #endif // DYNAMICLIGHTMAP_ON
-
     #if defined(_BACKLACE_MATCAP)
         float3 worldN = UnityObjectToWorldNormal(v.normal);
         float3 viewN = mul((float3x3)UNITY_MATRIX_V, worldN);
         i.matcapUV = viewN.xy * 0.5 + 0.5;
     #endif // _BACKLACE_MATCAP
-    
     return i;
 }
 

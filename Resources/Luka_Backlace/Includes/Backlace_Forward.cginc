@@ -41,7 +41,6 @@ struct VertexData
     float2 uv3 : TEXCOORD3;
     float3 normal : NORMAL;
     float4 tangentDir : TANGENT;
-    float4 color : COLOR; // note: NOT NEEDED if not using fun variant (for vertex colour gravity)
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 

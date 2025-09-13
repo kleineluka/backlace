@@ -678,7 +678,7 @@ Shader "luka/indev/backlace"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.0.0" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

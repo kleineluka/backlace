@@ -308,7 +308,7 @@ namespace Luka.Backlace
         private GUIStyle style_docs = null;
         private GUIStyle style_variant_badge_large = null;
         private GUIStyle style_variant_badge_small = null;
-        private Color colour_active_badge = new Color(0.3f, 0.8f, 0.3f); // non-nullable..
+        private Color colour_active_badge = new Color(0.67f, 0.84f, 0.9f); // non-nullable..
 
         // pass theme for fonting
         public Styler(ref Fonts font_manager, ref Config config_manager)
@@ -331,8 +331,8 @@ namespace Luka.Backlace
             style_docs = null;
             style_variant_badge_large = null;
             style_variant_badge_small = null;
-            colour_active_badge = new Color(0.3f, 0.8f, 0.3f); // non-nullable..
-        }
+            colour_active_badge = new Color(0.67f, 0.84f, 0.9f); // non-nullable..
+        } 
 
         // get the style for the primary tab
         public ref GUIStyle load_style_tab_primary()
@@ -601,7 +601,8 @@ namespace Luka.Backlace
             if (colour_active_badge == null)
             {
 
-                colour_active_badge = Colours.is_dark() ? new Color(0.3f, 0.8f, 0.3f) : new Color(0.1f, 0.5f, 0.1f);
+                //colour_active_badge = Colours.is_dark() ? new Color(0.3f, 0.8f, 0.3f) : new Color(0.1f, 0.5f, 0.1f);
+                colour_active_badge = new Color(0.67f, 0.84f, 0.9f);
             }
             return ref colour_active_badge;
         }

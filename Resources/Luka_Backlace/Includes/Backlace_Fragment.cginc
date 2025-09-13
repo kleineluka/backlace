@@ -117,9 +117,14 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_IRIDESCENCE)
         ApplyIridescence(Surface, i);
     #endif // _BACKLACE_IRIDESCENCE
-    #if defined(_BACKLACE_REFRACTION)
-        ApplyRefraction(Surface, i);
-    #endif // _BACKLACE_REFRACTION
+    #if defined(BACKLACE_GRABPASS)
+        #if defined(_BACKLACE_REFRACTION)
+            ApplyRefraction(Surface, i);
+        #endif // _BACKLACE_REFRACTION
+        #if defined(_BACKLACE_SSR)
+            ApplyScreenSpaceReflections(Surface, i);
+        #endif // _BACKLACE_SSR
+    #endif // BACKLACE_GRABPASS
     #if defined(_BACKLACE_GLITTER)
         ApplyGlitter(Surface);
     #endif // _BACKLACE_GLITTER
@@ -129,9 +134,6 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_MATCAP)
         ApplyMatcap(Surface, i);
     #endif // _BACKLACE_MATCAP
-    #if defined(_BACKLACE_SSR)
-        ApplyScreenSpaceReflections(Surface, i);
-    #endif // _BACKLACE_SSR
     #if defined(_BACKLACE_CUBEMAP)
         ApplyCubemap(Surface);
     #endif // _BACKLACE_CUBEMAP
