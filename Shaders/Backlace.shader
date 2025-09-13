@@ -608,6 +608,14 @@ Shader "luka/indev/backlace"
         _SSRWorldDistortion ("World Distortion Strength", Range(0, 1)) = 0.0
         _SSRBlur ("Blur Strength", Range(0, 10)) = 1.0
 
+        // DITHER
+        // [Space(35)]
+        // [Header(Dither)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_DITHER)] _ToggleDither ("Enable Dither", Float) = 0.0
+        _DitherAmount ("Dither Amount", Range(0, 1)) = 0
+        _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
+
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]

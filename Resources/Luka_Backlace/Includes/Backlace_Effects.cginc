@@ -93,15 +93,6 @@
     float _FarFadeStart;
     float _FarFadeEnd;
 
-    // fake dithering stylised as checkerboard pattern for the aesthetics
-    float GetTiltedCheckerboardPattern(float2 screenPos)
-    {
-        float u = screenPos.x + screenPos.y;
-        float v = screenPos.x - screenPos.y;
-        float2 gridPos = floor(float2(u, v) / _NearFadeDitherScale);
-        return fmod(gridPos.x + gridPos.y, 2.0);
-    }
-
     // fade based on how far or close the object is to the camera
     void CalculateDistanceFade(FragmentData i, inout bool isNearFading, out float fade_factor)
     {
@@ -137,7 +128,7 @@
     void ApplyDistanceFadePost(FragmentData i, float fade_factor, bool isNearFading, inout BacklaceSurfaceData Surface)
     {
         [branch] if (_NearFadeMode == 1 && isNearFading) {
-            float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy);
+            float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy, _NearFadeDitherScale);
             Surface.FinalColor.a *= step(fade_factor, pattern);
         } else {
             // just a normal fade
@@ -597,6 +588,16 @@
     }
 #endif // _BACKLACE_SSR
 
-#endif // BACKLACE_EFFECTS_CGINC
+// dither feature
+#if defined(_BACKLACE_DITHER)
+    float _DitherAmount;
+    float _DitherScale;
 
-    
+    void ApplyDither(inout BacklaceSurfaceData Surface)
+    {
+        float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy, _DitherScale);
+        Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
+    }
+#endif // _BACKLACE_DITHER
+
+#endif // BACKLACE_EFFECTS_CGINC

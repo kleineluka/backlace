@@ -84,6 +84,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_world_aligned = null;
         private static Tab sub_tab_vrchat_mirror = null;
         private static Tab sub_tab_touch_interactions = null;
+        private static Tab sub_tab_dither = null;
         private static Tab sub_tab_vertex_distortion = null;
         private static Tab sub_tab_refraction = null;
         private static Tab sub_tab_screenspace_reflection = null;
@@ -510,6 +511,10 @@ namespace Luka.Backlace
         private MaterialProperty prop_RefractionDistortionMode = null;
         private MaterialProperty prop_RefractionCAStrength = null;
         private MaterialProperty prop_RefractionBlurStrength = null;
+        // dither properties
+        private MaterialProperty prop_ToggleDither = null;
+        private MaterialProperty prop_DitherAmount = null;
+        private MaterialProperty prop_DitherScale = null;
         // vertex distortion properties
         private MaterialProperty prop_ToggleVertexDistortion = null;
         private MaterialProperty prop_VertexDistortionMode = null;
@@ -633,6 +638,7 @@ namespace Luka.Backlace
             sub_tab_world_aligned = null;
             sub_tab_vrchat_mirror = null;
             sub_tab_touch_interactions = null;
+            sub_tab_dither = null;
             sub_tab_vertex_distortion = null;
             sub_tab_refraction = null;
             sub_tab_screenspace_reflection = null;
@@ -706,9 +712,10 @@ namespace Luka.Backlace
             sub_tab_world_aligned = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_world_aligned"), null, "_ToggleWorldEffect");
             sub_tab_vrchat_mirror = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_vrchat_mirror"), null, "_ToggleMirrorDetection");
             sub_tab_touch_interactions = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_touch_interactions"), null, "_ToggleTouchReactive");
-            sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion");
-            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
-            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
+            sub_tab_dither = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_dither"), null, "_ToggleDither");
+            sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion");
+            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
+            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
             tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
             tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
             sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink");
@@ -1845,6 +1852,18 @@ namespace Luka.Backlace
                     Components.Vector3Property(materialEditor, prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
                     Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
                     Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
+                }
+                sub_tab_dither.draw();
+                if (sub_tab_dither.is_expanded) {
+                    // effects - dither
+                    prop_ToggleDither = FindProperty("_ToggleDither", properties);
+                    prop_DitherAmount = FindProperty("_DitherAmount", properties);
+                    prop_DitherScale = FindProperty("_DitherScale", properties);
+                    materialEditor.ShaderProperty(prop_ToggleDither, languages.speak("prop_ToggleDither"));
+                    Components.start_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
+                    materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
+                    Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
                 }
                 sub_tab_refraction.draw();
                 if (sub_tab_refraction.is_expanded) {

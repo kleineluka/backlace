@@ -293,6 +293,15 @@ float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, floa
     return finalUV;
 }
 
+// fake dithering stylised as checkerboard pattern for the aesthetics
+float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
+{
+    float u = screenPos.x + screenPos.y;
+    float v = screenPos.x - screenPos.y;
+    float2 gridPos = floor(float2(u, v) / scale);
+    return fmod(gridPos.x + gridPos.y, 2.0);
+}
+
 // decals-only features
 #if defined(_BACKLACE_DECAL1) || defined(_BACKLACE_DECAL2)
     void ApplyDecal_UVSpace(inout float4 baseAlbedo, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, float4 tint, float2 position, float2 scale, float rotation, int blendMode, float repeat, float2 scroll, float hueShift, float autoCycle, float cycleSpeed, float alHue, float alEmission, float alOpacity)

@@ -149,6 +149,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_DISTANCE_FADE)
         ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);
     #endif // _BACKLACE_DISTANCE_FADE
+    #if defined(_BACKLACE_DITHER)
+        ApplyDither(Surface);
+    #endif // _BACKLACE_DITHER
     #if defined(_BACKLACE_VRCHAT_MIRROR)
         ApplyMirrorDetectionPost(Surface); // todo: move before lighting but store alpha if not culling
     #endif // _BACKLACE_VRCHAT_MIRROR 

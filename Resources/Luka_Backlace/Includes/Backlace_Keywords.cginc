@@ -2,10 +2,8 @@
 #define BACKLACE_KEYWORDS_CGINC
 
 // BRANCHING KEYWORDS
-// #pragma shader_feature_local _ _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY (OLD FROM TOONY)
 #pragma multi_compile _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
 #pragma multi_compile _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON _SPECULARMODE_HAIR _SPECULARMODE_CLOTH
-// should light model be here too, same with light direction?
 #pragma multi_compile _ANIMEMODE_RAMP _ANIMEMODE_PROCEDURAL
 
 // CORE FEATURES
@@ -45,8 +43,6 @@
 #pragma shader_feature_local _ _BACKLACE_REFRACTION
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
 #pragma shader_feature_local _ _BACKLACE_SSR
-
-// GEOMETRY KEYWORDS
-#pragma shader_feature_local _ _BACKLACE_GEOMETRY_EFFECTS
+#pragma shader_feature_local _ _BACKLACE_DITHER
 
 #endif // BACKLACE_KEYWORDS_CGINC

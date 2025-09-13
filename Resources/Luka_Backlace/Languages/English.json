@@ -381,6 +381,10 @@
             "value": "Vertex Distortion"
         },
         {
+            "key": "sub_tab_dither",
+            "value": "Dithering"
+        },
+        {
             "key": "sub_tab_refraction",
             "value": "Refraction"
         },
@@ -1875,6 +1879,18 @@
         {
             "key": "prop_RefractionBlurStrength",
             "value": "Blur Strength"
+        },
+        {
+            "key": "prop_ToggleDither",
+            "value": "Enable Dithering"
+        },
+        {
+            "key": "prop_DitherAmount",
+            "value": "Dither Amount"
+        },
+        {
+            "key": "prop_DitherScale",
+            "value": "Dither Scale"
         },
         {
             "key": "prop_ToggleVertexDistortion",
