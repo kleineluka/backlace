@@ -686,7 +686,7 @@ Shader "luka/indev/backlace"
         GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
 
         // Outline Pass
-        /*Pass
+        Pass
         {
             Name "Outline"
             Tags { "LightMode" = "Always" }
@@ -699,7 +699,7 @@ Shader "luka/indev/backlace"
             #endif // UNITY_PASS_OUTLINE
             #include "../Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
             ENDCG
-        }*/
+        }
 
         // Forward Base Pass
         Pass

@@ -5,9 +5,13 @@
 #pragma vertex vert
 #pragma fragment frag
 
-// keywords
+// keywords that need alpha support in the outline
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
+#pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
+#pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
+#pragma shader_feature_local _ _BACKLACE_DITHER
+#pragma shader_feature_local _ _BLENDMODE_CUTOUT
 
 // dissolve support for the outline
 #if defined(_BACKLACE_DISSOLVE)
@@ -20,10 +24,6 @@
     float _DissolveDirectionBounds;
     float _DissolveVoxelDensity;
 #endif
-
-// vertex manipulation
-float3 _VertexManipulationPosition;
-float3 _VertexManipulationScale;
 
 // includes
 #include "UnityCG.cginc"
@@ -42,11 +42,21 @@ float _OutlineHueShiftSpeed;
 int _OutlineHueShift;
 float _OutlineOpacity;
 
+UNITY_DECLARE_TEX2D(_MainTex);
+float4 _MainTex_ST;
+float _Cutoff;
+float _MainTex_UV;
+
+// Vertex manipulation
+float3 _VertexManipulationPosition;
+float3 _VertexManipulationScale;
+
 // data structures
 struct appdata
 {
     float4 vertex : POSITION;
     float3 normal : NORMAL;
+    float2 uv : TEXCOORD0;
     fixed4 color : COLOR;
 };
 
@@ -54,55 +64,85 @@ struct v2f
 {
     float4 pos : SV_POSITION;
     float3 worldPos : TEXCOORD0;
-    // dissolve support for the outline
-    #if defined(_BACKLACE_DISSOLVE)
-        float4 vertex : TEXCOORD1;
-        float3 normal : TEXCOORD2;
-    #endif // _BACKLACE_DISSOLVE
+    float2 uv : TEXCOORD1;
+    float4 screenPos : TEXCOORD2;
+    float4 vertex : TEXCOORD3;
+    float3 normal : TEXCOORD4;
 };
 
-// vertex shader
+// outline vertex shader
 v2f vert(appdata v)
 {
     v2f o;
-    // vertex effects from forward passes
+    // apply vertex modifications
     v.vertex.xyz *= _VertexManipulationScale;
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
         DistortVertex(v.vertex);
     #endif // _BACKLACE_VERTEX_DISTORTION
-    float mask = lerp(1.0, v.color.r, _OutlineVertexColorMask);
+    // calculate boilerplate stuff
+    o.vertex = v.vertex;
+    o.normal = v.normal;
+    o.uv = v.uv;
     float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
     float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+    // optionally, flatten the model
+    #if defined(_BACKLACE_FLAT_MODEL)
+        float4 finalClipPos;
+        float3 finalWorldPos;
+        float3 finalWorldNormal;
+        FlattenModel(v.vertex, v.normal, finalClipPos, finalWorldPos, finalWorldNormal);
+        worldPos.xyz = finalWorldPos;
+        worldNormal = finalWorldNormal;
+    #endif
+    // outline extrusion logic
+    float mask = lerp(1.0, v.color.r, _OutlineVertexColorMask);
     float4 viewPos = mul(UNITY_MATRIX_V, worldPos);
     float3 viewNormal = mul((float3x3)UNITY_MATRIX_V, worldNormal);
     viewNormal = normalize(viewNormal);
     viewPos.xyz += viewNormal * _OutlineWidth * mask * viewPos.w;
     o.pos = mul(UNITY_MATRIX_P, viewPos);
     o.worldPos = worldPos.xyz;
-    // dissolve support for the outline
-    #if defined(_BACKLACE_DISSOLVE)
-        o.vertex = v.vertex;
-        o.normal = v.normal;
-    #endif // _BACKLACE_DISSOLVE
+    o.screenPos = ComputeScreenPos(o.pos); // for dithering
     return o;
 }
 
-// fragment shader
+// outline fragment shader
 fixed4 frag(v2f i) : SV_Target
 {
+    float baseAlpha = UNITY_SAMPLE_TEX2D(_MainTex, i.uv).a;
+    // handle cutout blending for the outline
+    #if defined(_BLENDMODE_CUTOUT)
+        float4 mainTex = UNITY_SAMPLE_TEX2D(_MainTex, i.uv);
+        clip(mainTex.a - _Cutoff);
+    #endif // _BLENDMODE_CUTOUT
+    // handle dissolve effect on the outline
     #if defined(_BACKLACE_DISSOLVE)
         float3 worldNormal = UnityObjectToWorldNormal(i.normal);
         float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, worldNormal);
         clip(dissolveMapValue - _DissolveProgress);
-    #endif // _BACKLACE_DISSOLVE
+    #endif
+    // mirror effect support for the outline
+    #if defined(_BACKLACE_VRCHAT_MIRROR)
+        if ((_MirrorDetectionMode == 1 && IsInMirrorView()) || (_MirrorDetectionMode == 2 && !IsInMirrorView()))
+        {
+            clip(-1);
+        }
+    #endif // _BACKLACE_VRCHAT_MIRROR
+    // handle dithering
+    #if defined(_BACKLACE_DITHER)
+        float ditheredAlpha = lerp(baseAlpha, 0.0, _DitherAmount);
+        float pattern = 1.0 - GetTiltedCheckerboardPattern(i.screenPos.xy / i.screenPos.w * _ScreenParams.xy, _DitherScale);
+        clip(ditheredAlpha - pattern);
+    #endif // _BACKLACE_DITHER
+    // finally, draw the outline
     fixed4 finalColor = _OutlineColor;
-    [branch] if (_OutlineHueShift > 0.5)
+    if (_OutlineHueShift == 1)
     {
         float3 rainbow = Sinebow(_Time.y * _OutlineHueShiftSpeed);
         finalColor.rgb = rainbow;
     }
-    [branch] if (_OutlineDistanceFade == 1)
+    if (_OutlineDistanceFade == 1)
     {
         float dist = distance(i.worldPos, GetCameraPos());
         float fadeFactor = 1.0 - smoothstep(_OutlineFadeStart, _OutlineFadeEnd, dist);
@@ -110,7 +150,7 @@ fixed4 frag(v2f i) : SV_Target
     }
     finalColor.a *= _OutlineOpacity;
     finalColor.a *= _Alpha;
-    // dissolve support for the outline
+    finalColor.a *= baseAlpha;
     clip(finalColor.a - 0.001);
     return finalColor;
 }

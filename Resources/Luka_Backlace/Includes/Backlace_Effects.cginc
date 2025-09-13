@@ -254,7 +254,7 @@
     float _FlatModeAutoflip;
 
     // inspired by lyuma's waifu2d shader, but a much worse (and a bit simpler) implementation
-    void FlattenModel(inout VertexData v, out float4 finalClipPos, out float3 finalWorldPos, out float3 finalWorldNormal)
+    void FlattenModel(inout float4 vertex, float3 normal, out float4 finalClipPos, out float3 finalWorldPos, out float3 finalWorldNormal)
     {
         float facingAngle = _FlatModelFacing * - UNITY_PI / 2.0;
         float s, c;
@@ -273,13 +273,14 @@
         float3 billboardRight = normalize(cross(billboardUp, billboardFwd));
         billboardUp = cross(billboardFwd, billboardRight);
         float3 flattenedWorldPos = worldObjectPivot;
-        flattenedWorldPos += billboardRight * v.vertex.x;
-        flattenedWorldPos += billboardUp * v.vertex.y;
-        flattenedWorldPos -= billboardFwd * v.vertex.z * _FlatModelDepthCorrection;
-        float3 originalWorldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+        // Here are the changes, my darling. So simple, so clean.
+        flattenedWorldPos += billboardRight * vertex.x;
+        flattenedWorldPos += billboardUp * vertex.y;
+        flattenedWorldPos -= billboardFwd * vertex.z * _FlatModelDepthCorrection;
+        float3 originalWorldPos = mul(unity_ObjectToWorld, vertex).xyz;
         finalWorldPos = lerp(originalWorldPos, flattenedWorldPos, _FlatModel);
         finalClipPos = UnityWorldToClipPos(float4(finalWorldPos, 1.0));
-        finalWorldNormal = UnityObjectToWorldNormal(v.normal);
+        finalWorldNormal = UnityObjectToWorldNormal(normal);
     }
 #endif // _BACKLACE_FLAT_MODEL
 
@@ -334,8 +335,8 @@
     UNITY_DECLARE_TEX2D(_MirrorDetectionTexture);
     float _MirrorDetectionTexture_UV;
     float _MirrorDetectionMode; // 0 = texture, 1 = hide, 2 = only show
-
     float _VRChatMirrorMode; // assigned by vrchat, 0 = none, 1 = mirror in vr, 2 = mirror in desktop
+    
     bool IsInMirrorView()
     {
         if (_VRChatMirrorMode > 0.5) return true;
@@ -343,28 +344,31 @@
         return unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f;
     }
 
-    // run after sampling albedo but before lighting
-    void ApplyMirrorDetectionPre(inout BacklaceSurfaceData Surface)
-    {
-        if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
+    // dont run things that need to sample uvs in the outline pass
+    #ifndef UNITY_PASS_OUTLINE
+        // run after sampling albedo but before lighting
+        void ApplyMirrorDetectionPre(inout BacklaceSurfaceData Surface)
         {
-            float mask = UNITY_SAMPLE_TEX2D(_MirrorDetectionTexture, Uvs[_MirrorDetectionTexture_UV]).r;
-            Surface.FinalColor.a *= mask;
+            if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
+            {
+                float mask = UNITY_SAMPLE_TEX2D(_MirrorDetectionTexture, Uvs[_MirrorDetectionTexture_UV]).r;
+                Surface.FinalColor.a *= mask;
+            }
         }
-    }
 
-    // run at the end of the shader
-    void ApplyMirrorDetectionPost(inout BacklaceSurfaceData Surface)
-    {
-        if (_MirrorDetectionMode == 1 && IsInMirrorView()) // hide
+        // run at the end of the shader
+        void ApplyMirrorDetectionPost(inout BacklaceSurfaceData Surface)
         {
-            Surface.FinalColor.a = 0;
+            if (_MirrorDetectionMode == 1 && IsInMirrorView()) // hide
+            {
+                Surface.FinalColor.a = 0;
+            }
+            else if (_MirrorDetectionMode == 2 && !IsInMirrorView()) // only show
+            {
+                Surface.FinalColor.a = 0;
+            }
         }
-        else if (_MirrorDetectionMode == 2 && !IsInMirrorView()) // only show
-        {
-            Surface.FinalColor.a = 0;
-        }
-    }
+    #endif // UNITY_PASS_OUTLINE
 #endif // _BACKLACE_VRCHAT_MIRROR
 
 // touch reactive effect
