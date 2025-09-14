@@ -1295,6 +1295,13 @@ namespace Luka.Backlace
 
         // values needed..
         private Theme theme = null;
+        private Texture2D banner_texture = null;
+
+        // configuration
+        private static readonly float header_height = 120f;
+        private static readonly float top_padding = 20f;
+        private static readonly float bottom_padding = 20f;
+        private static readonly float banner_to_version_gap = 5f;
 
         // to be filled in
         private Rect background_rectangle;
@@ -1302,19 +1309,45 @@ namespace Luka.Backlace
         // constructor
         public Header(ref Theme theme)
         {
-            this.theme = theme;
+            this.theme = theme; 
+            if (Project.has_banner)
+            {
+                string banner_path = Project.project_path + "/" + Project.banner_image;
+                banner_texture = Resources.Load<Texture2D>(banner_path);
+                if (banner_texture == null)
+                {
+                    Pretty.print($"Banner image not found at path: {banner_path}", Pretty.LogKind.Warning);
+                }
+            }
         }
 
-        // draw the header
-        public void draw()
+        // helper for drawing the header with an image
+        private void draw_header_image()
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.BeginVertical();
-            background_rectangle = EditorGUILayout.GetControlRect(false, 75);
-            Color cache_col = GUI.color;
-            GUI.color = Colours.get_background();
-            GUI.DrawTexture(new Rect(background_rectangle.x, background_rectangle.y, background_rectangle.width, background_rectangle.height), theme.image_manager.get_tile_background(), ScaleMode.StretchToFill);
-            GUI.color = cache_col;
+            string proj_version = theme.text_manager.texter("Version " + Project.version.print());
+            GUIStyle versionStyle = theme.styler_manager.load_style_header_smol(ref theme);
+            Vector2 version_size = versionStyle.CalcSize(new GUIContent(proj_version));
+            Rect projectVersionRect = new Rect(
+                background_rectangle.x,
+                background_rectangle.yMax - version_size.y - bottom_padding,
+                background_rectangle.width,
+                version_size.y
+            );
+            GUI.Label(projectVersionRect, proj_version, versionStyle);
+            float banner_top_y = background_rectangle.y + top_padding;
+            float banner_height = projectVersionRect.y - banner_top_y - banner_to_version_gap;
+            Rect bannerRect = new Rect(
+                background_rectangle.x + 10,
+                banner_top_y,
+                background_rectangle.width - 20,
+                banner_height
+            );
+            GUI.DrawTexture(bannerRect, banner_texture, ScaleMode.ScaleToFit);
+        }
+
+        // helper for drawing the header text
+        private void draw_header_text()
+        {
             string proj_name = theme.text_manager.texter(Project.project_name);
             string proj_version = theme.text_manager.texter("Version " + Project.version.print());
             Vector2 name_size = theme.styler_manager.load_style_header_beeg(ref theme).CalcSize(new GUIContent(proj_name));
@@ -1335,6 +1368,26 @@ namespace Luka.Backlace
                     version_size.y
                 );
             GUI.Label(projectVersionRect, proj_version, theme.styler_manager.load_style_header_smol(ref theme));
+        }
+
+        // draw the header
+        public void draw()
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginVertical();
+            background_rectangle = EditorGUILayout.GetControlRect(false, header_height);
+            Color cache_col = GUI.color;
+            GUI.color = Colours.get_background();
+            GUI.DrawTexture(new Rect(background_rectangle.x, background_rectangle.y, background_rectangle.width, background_rectangle.height), theme.image_manager.get_tile_background(), ScaleMode.StretchToFill);
+            GUI.color = cache_col;
+            if (Project.has_banner && banner_texture != null)
+            {
+                draw_header_image();
+            }
+            else
+            {
+                draw_header_text();
+            }
             EditorGUILayout.EndVertical();
             GUILayout.Space(20f);
             EditorGUILayout.EndHorizontal();

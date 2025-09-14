@@ -21,6 +21,8 @@ namespace Luka.Backlace
         public static readonly bool shader_has_fallback = true; // if the shader uses a vrchat fallback shader that needs to be set in the inspector
         public static readonly bool shader_has_blendmodes = true; // if the shader has blendmodes that need to be set in the inspector
         public static readonly bool shader_has_variants = true; // if the shader has variants that need to be set in the inspector
+        public static readonly bool has_banner = true; // if the ui should use a banner image instead of just text
+        public static readonly string banner_image = "Images/Backlace_Logo"; // where that banner image is located
         public static readonly List<ShaderVariant> shader_variants = new List<ShaderVariant>
         {
             new ShaderVariant("Default", "", Color.clear),
