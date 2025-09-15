@@ -413,16 +413,44 @@
             "value": "Cull Mode"
         },
         {
-            "key": "prop_StencilID",
-            "value": "Stencil ID (0-255)"
+            "key": "prop_StencilRef",
+            "value": "Stencil Reference"
         },
         {
             "key": "prop_StencilComp",
-            "value": "Stencil Comparison"
+            "value": "Comparison"
         },
         {
-            "key": "prop_StencilOp",
-            "value": "Stencil Operation"
+            "key": "prop_StencilPass",
+            "value": "Pass Operation"
+        },
+        {
+            "key": "prop_StencilFail",
+            "value": "Fail Operation"
+        },
+        {
+            "key": "prop_StencilZFail",
+            "value": "ZFail Operation"
+        },
+        {
+            "key": "prop_OutlineStencilRef",
+            "value": "Outline Stencil Reference"
+        },
+        {
+            "key": "prop_OutlineStencilComp",
+            "value": "Outline Comparison"
+        },
+        {
+            "key": "prop_OutlineStencilPass",
+            "value": "Outline Pass Operation"
+        },
+        {
+            "key": "prop_OutlineStencilFail",
+            "value": "Outline Fail Operation"
+        },
+        {
+            "key": "prop_OutlineStencilZFail",
+            "value": "Outline ZFail Operation"
         },
         {
             "key": "prop_BlendMode",

@@ -112,9 +112,16 @@ namespace Luka.Backlace
         private MaterialProperty prop_OverrideRenderQueue = null;
         private MaterialProperty prop_Cull = null;
         private MaterialProperty prop_ZTest = null;
-        private MaterialProperty prop_StencilID = null;
+        private MaterialProperty prop_StencilRef = null;
         private MaterialProperty prop_StencilComp = null;
-        private MaterialProperty prop_StencilOp = null;
+        private MaterialProperty prop_StencilPass = null;
+        private MaterialProperty prop_StencilFail = null;
+        private MaterialProperty prop_StencilZFail = null;
+        private MaterialProperty prop_OutlineStencilRef = null;
+        private MaterialProperty prop_OutlineStencilComp = null;
+        private MaterialProperty prop_OutlineStencilPass = null;
+        private MaterialProperty prop_OutlineStencilFail = null;
+        private MaterialProperty prop_OutlineStencilZFail = null;
         private MaterialProperty prop_VRCFallback = null;
         // texture properties
         private MaterialProperty prop_MainTex = null;
@@ -778,9 +785,16 @@ namespace Luka.Backlace
                     prop_OverrideRenderQueue = FindProperty("_OverrideRenderQueue", properties);
                     prop_Cull = FindProperty("_Cull", properties);
                     prop_ZTest = FindProperty("_ZTest", properties);
-                    prop_StencilID = FindProperty("_StencilID", properties);
+                    prop_StencilRef = FindProperty("_StencilRef", properties);
                     prop_StencilComp = FindProperty("_StencilComp", properties);
-                    prop_StencilOp = FindProperty("_StencilOp", properties);
+                    prop_StencilPass = FindProperty("_StencilPass", properties);
+                    prop_StencilFail = FindProperty("_StencilFail", properties);
+                    prop_StencilZFail = FindProperty("_StencilZFail", properties);
+                    prop_OutlineStencilRef = FindProperty("_OutlineStencilRef", properties);
+                    prop_OutlineStencilComp = FindProperty("_OutlineStencilComp", properties);
+                    prop_OutlineStencilPass = FindProperty("_OutlineStencilPass", properties);
+                    prop_OutlineStencilFail = FindProperty("_OutlineStencilFail", properties);
+                    prop_OutlineStencilZFail = FindProperty("_OutlineStencilZFail", properties);
                     prop_VRCFallback = FindProperty("_VRCFallback", properties);
                     var blendModeNames = new string[] {
                         "Opaque", "Cutout", "Fade", "Opaque Fade", "Transparent", "Premultiply",
@@ -823,13 +837,24 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_OverrideRenderQueue.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Cull, languages.speak("prop_Cull"));
                     materialEditor.ShaderProperty(prop_ZTest, languages.speak("prop_ZTest"));
-                    materialEditor.ShaderProperty(prop_StencilID, languages.speak("prop_StencilID"));
-                    Components.start_dynamic_disable(prop_StencilID.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_StencilRef, languages.speak("prop_StencilRef"));
+                    Components.start_dynamic_disable(prop_StencilRef.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_StencilComp, languages.speak("prop_StencilComp"));
-                    materialEditor.ShaderProperty(prop_StencilOp, languages.speak("prop_StencilOp"));
+                    materialEditor.ShaderProperty(prop_StencilPass, languages.speak("prop_StencilPass"));
+                    materialEditor.ShaderProperty(prop_StencilFail, languages.speak("prop_StencilFail"));
+                    materialEditor.ShaderProperty(prop_StencilZFail, languages.speak("prop_StencilZFail"));
                     EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_StencilID.floatValue.Equals(0), configs);
+                    Components.end_dynamic_disable(prop_StencilRef.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_OutlineStencilRef, languages.speak("prop_OutlineStencilRef"));
+                    Components.start_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_OutlineStencilComp, languages.speak("prop_OutlineStencilComp"));
+                    materialEditor.ShaderProperty(prop_OutlineStencilPass, languages.speak("prop_OutlineStencilPass"));
+                    materialEditor.ShaderProperty(prop_OutlineStencilFail, languages.speak("prop_OutlineStencilFail"));
+                    materialEditor.ShaderProperty(prop_OutlineStencilZFail, languages.speak("prop_OutlineStencilZFail"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
                 }
                 sub_tab_textures.draw();
                 if (sub_tab_textures.is_expanded) {

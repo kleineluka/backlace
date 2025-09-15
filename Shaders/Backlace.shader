@@ -29,9 +29,17 @@ Shader "luka/indev/backlace"
         // ztest 
         [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest ("ZTest", Int) = 3
         // stencil
-        [IntRange] _StencilID ("Stencil ID (0-255)", Range(0, 255)) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 8 // default to Disabled
-        [Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Int) = 0
+        [IntRange] _StencilRef ("Stencil Reference", Range(0, 255)) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 8 // Always
+        [Enum(UnityEngine.Rendering.StencilOp)] _StencilPass ("Stencil Pass Op", Int) = 0 // Keep
+        [Enum(UnityEngine.Rendering.StencilOp)] _StencilFail ("Stencil Fail Op", Int) = 0 // Keep
+        [Enum(UnityEngine.Rendering.StencilOp)] _StencilZFail ("Stencil ZFail Op", Int) = 0 // Keep
+        // outline stencil
+        [IntRange] _OutlineStencilRef ("Outline Stencil Reference", Range(0, 255)) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _OutlineStencilComp ("Outline Stencil Comparison", Int) = 8 // Always
+        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilPass ("Outline Stencil Pass Op", Int) = 0 // Keep
+        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilFail ("Outline Stencil Fail Op", Int) = 0 // Keep
+        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilZFail ("Outline Stencil ZFail Op", Int) = 0 // Keep
         // vrchat fallback
         [Enum(Toon, 0, Double Sided, 1, Unlit, 2, Particle, 3, Matcap, 4, Sprite, 5, Hidden, 6)] _VRCFallback ("VRChat Fallback", Int) = 0
 
@@ -686,7 +694,7 @@ Shader "luka/indev/backlace"
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]
-        Stencil { Ref [_StencilID] Comp [_StencilComp] Pass [_StencilOp] }
+        Stencil { Ref [_StencilRef] Comp [_StencilComp] Pass [_StencilPass] Fail [_StencilFail] ZFail [_StencilZFail] }
         GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
 
         // Outline Pass
@@ -697,6 +705,7 @@ Shader "luka/indev/backlace"
             Cull Front
             ZWrite Off
             Blend SrcAlpha OneMinusSrcAlpha
+            Stencil { Ref [_OutlineStencilRef] Comp [_OutlineStencilComp] Pass [_OutlineStencilPass] Fail [_OutlineStencilFail] ZFail [_OutlineStencilZFail] }
             CGPROGRAM
             #ifndef UNITY_PASS_OUTLINE
                 #define UNITY_PASS_OUTLINE
@@ -729,7 +738,7 @@ Shader "luka/indev/backlace"
             Tags { "LightMode" = "ForwardAdd" }
             Blend [_SrcBlend] One // make it, well, additive
             Fog { Color(0, 0, 0, 0) } // additive should have black fog
-            ZWrite Off
+            ZWrite Off // don't write to depth for additive
             CGPROGRAM
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
