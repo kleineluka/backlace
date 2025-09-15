@@ -34,6 +34,10 @@ FragmentData Vertex(VertexData v)
     i.uv1 = v.uv1;
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
+    // ps1 effect
+    #if defined(_BACKLACE_PS1)
+        ApplyPS1Vertex(i, v);
+    #endif // _BACKLACE_PS1
     // for screen related effects
     i.scrPos = ComputeScreenPos(i.pos);
     // flat model feature

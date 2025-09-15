@@ -629,6 +629,18 @@ Shader "luka/indev/backlace"
         _DitherAmount ("Dither Amount", Range(0, 1)) = 0
         _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
 
+        // LOW PRECISION
+        // [Space(35)]
+        // [Header(Low Precision)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_PS1)] _TogglePS1 ("Enable Low Precision (PS1)", Float) = 0.0
+        [Enum(Disabled, 0, World Space, 1, Screen Space, 2)] _PS1Rounding ("Rounding Style", Int) = 0.0
+        _PS1RoundingPrecision ("Rounding Precision", Float) = 64
+        [Enum(Disabled, 0, Enabled, 1)] _PS1Affine ("Enable Affine Texture Mapping", Int) = 0.0
+        _PS1AffineStrength ("Affine Strength", Range(0, 2)) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
+        _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
+
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]
@@ -775,5 +787,5 @@ Shader "luka/indev/backlace"
         }
 
     }
-    CustomEditor "Luka.Backlace.Interface"
+    //CustomEditor "Luka.Backlace.Interface"
 }

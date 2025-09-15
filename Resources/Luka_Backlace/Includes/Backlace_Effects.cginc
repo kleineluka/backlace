@@ -456,6 +456,55 @@
     }
 #endif // _BACKLACE_DITHER
 
+// ps1 feature
+#if defined(_BACKLACE_PS1)
+    int _PS1Rounding;
+    float _PS1RoundingPrecision;
+    int _PS1Affine;
+    float _PS1AffineStrength;
+    int _PS1Compression;
+    float _PS1CompressionPrecision;
+
+    void ApplyPS1Vertex(inout FragmentData i, in VertexData v)
+    {
+        if (_PS1Rounding == 1)
+        {
+            float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
+            worldPos.xyz = ceil(worldPos.xyz * _PS1RoundingPrecision) / _PS1RoundingPrecision;
+            i.pos = mul(UNITY_MATRIX_VP, worldPos);
+        }
+        else if (_PS1Rounding == 2)
+        {
+            float4 pos = i.pos;
+            pos.xy /= pos.w;
+            pos.xy = round(pos.xy * _PS1RoundingPrecision) / _PS1RoundingPrecision;
+            pos.xy *= pos.w;
+            i.pos = pos;
+        }
+        if (_PS1Affine == 1)
+        {
+            i.affineUV = float4(v.uv.x, v.uv.y, 0, 0) * i.pos.w;
+        }
+    }
+
+    void ApplyPS1AffineUV(inout float2 uv, in FragmentData i)
+    {
+        if (_PS1Affine == 1)
+        {
+            float2 warpedUV = i.affineUV.xy / i.pos.w;
+            uv = lerp(uv, warpedUV, _PS1AffineStrength);
+        }
+    }
+
+    void ApplyPS1ColorCompression(inout float4 finalColor)
+    {
+        if (_PS1Compression == 1)
+        {
+            finalColor.rgb = floor(finalColor.rgb * _PS1CompressionPrecision) / _PS1CompressionPrecision;
+        }
+    }
+#endif // _BACKLACE_PS1
+
 // grabpass only features
 #if defined(BACKLACE_GRABPASS)
     UNITY_DECLARE_SCREENSPACE_TEXTURE(_BacklaceGP);

@@ -9,6 +9,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
     FragData = i;
     LoadUVs();
     Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
+    #if defined(_BACKLACE_PS1)
+        ApplyPS1AffineUV(Uvs[0], i);
+    #endif // _BACKLACE_PS1
     GetGeometryVectors(Surface, FragData);
     #if defined(_BACKLACE_UV_EFFECTS)
         ApplyUVEffects(Uvs[0], Surface);
@@ -147,6 +150,9 @@ float4 Fragment(FragmentData i) : SV_TARGET
             AddClearcoatVertex(Surface);
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // _BACKLACE_CLEARCOAT
+    #if defined(_BACKLACE_PS1)
+        ApplyPS1ColorCompression(Surface.FinalColor);
+    #endif // _BACKLACE_PS1
     AddAlpha(Surface);
     #if defined(_BACKLACE_DISTANCE_FADE)
         ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);

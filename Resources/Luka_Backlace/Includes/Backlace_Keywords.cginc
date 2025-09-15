@@ -44,5 +44,6 @@
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
 #pragma shader_feature_local _ _BACKLACE_SSR
 #pragma shader_feature_local _ _BACKLACE_DITHER
+#pragma shader_feature_local _ _BACKLACE_PS1
 
 #endif // BACKLACE_KEYWORDS_CGINC
