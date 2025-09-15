@@ -365,6 +365,10 @@ float3 _VertexManipulationScale;
     float _PathingScale;
     int _PathingBlendMode;
     int _PathingMappingMode;
+    int _PathingColorMode;
+    float4 _PathingColor2;
+    UNITY_DECLARE_TEX2D(_PathingTexture);
+    float _PathingTexture_UV;
 #endif // _BACKLACE_PATHING
 
 // screen space rim feature

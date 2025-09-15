@@ -382,7 +382,10 @@ Shader "luka/indev/backlace"
         [NoScaleOffset] _PathingMap ("Path Map (R)", 2D) = "black" { }
         _PathingScale ("Path Scale", Float) = 1.0
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _PathingBlendMode ("Blend Mode", Int) = 0
+        [Enum(Colour, 0, Texture, 1, Gradient, 2)] _PathingColorMode ("Color Mode", Int) = 0
+        _PathingTexture ("Path Texture", 2D) = "white" { }
         [HDR] _PathingColor ("Path Color", Color) = (0, 1, 1, 1)
+        [HDR] _PathingColor2 ("Secondary Color", Color) = (1, 0, 0, 1)
         _PathingEmission ("Emission Strength", Float) = 2.0
         [Enum(Fill, 0, Path, 1, Loop, 2)] _PathingType ("Path Type", Int) = 1
         _PathingSpeed ("Speed", Float) = 0.5
@@ -665,6 +668,7 @@ Shader "luka/indev/backlace"
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Float) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Float) = 0
 
         // DO NOT CHANGE
         // [Space(35)]

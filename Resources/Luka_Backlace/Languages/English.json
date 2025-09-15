@@ -1329,6 +1329,18 @@
             "value": "Path Colour"
         },
         {
+            "key": "prop_PathingColorMode",
+            "value": "Path Colour Mode"
+        },
+        {
+            "key": "prop_PathingTexture",
+            "value": "Path Texture"
+        },
+        {
+            "key": "prop_PathingColor2",
+            "value": "Path Colour 2"
+        },
+        {
             "key": "prop_PathingEmission",
             "value": "Emission Strength"
         },

@@ -970,19 +970,36 @@ float smithG_GGX(float NdotV, float alphaG)
             pathAlpha *= i.alChannel2.x;
         #endif // _BACKLACE_AUDIOLINK
         if (pathAlpha <= 0.001) return;
-        float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
+        //float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
+        float3 pathEmission = pathAlpha * _PathingEmission;
+        float pathBlend = _PathingColor.a;
+        switch (_PathingColorMode)
+        {
+            case 1: // texture
+                float4 pathSample =  UNITY_SAMPLE_TEX2D(_PathingTexture, Uvs[_PathingTexture_UV]);
+                pathEmission *= pathSample.rgb;
+                pathBlend = pathSample.a;
+                break;
+            case 2: // gradient (two colours)
+                float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
+                pathEmission *= pathGradinet.rgb;
+                pathBlend = pathGradinet.a;
+                break;
+            default: // single colour
+                pathEmission *= _PathingColor.rgb;
+                break;
+        }
         switch(_PathingBlendMode)
         {
             case 0: // additive
                 Surface.FinalColor.rgb += pathEmission;
                 break;
             case 1: // multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _PathingColor.rgb, pathAlpha);
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
                 break;
             case 2: // alpha blend
-                float blendIntensity = pathAlpha * _PathingColor.a;
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _PathingColor.rgb, blendIntensity);
-                Surface.FinalColor.rgb += pathEmission;
+                float blendIntensity = pathAlpha * pathBlend;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
                 break;
         }
     }

@@ -368,6 +368,9 @@ namespace Luka.Backlace
         private MaterialProperty prop_PathingWidth = null;
         private MaterialProperty prop_PathingSoftness = null;
         private MaterialProperty prop_PathingOffset = null;
+        private MaterialProperty prop_PathingColorMode = null;
+        private MaterialProperty prop_PathingTexture = null;
+        private MaterialProperty prop_PathingColor2 = null;
         // screen space rim lighting properties
         private MaterialProperty prop_ToggleDepthRim = null;
         private MaterialProperty prop_DepthRimColor = null;
@@ -573,6 +576,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_RefractionMask_UV = null;
         private MaterialProperty prop_PathingMap_UV = null;
         private MaterialProperty prop_ShadowMap_UV = null;
+        private MaterialProperty prop_PathingTexture_UV = null;
         #endregion // Properties
 
         // unload the interface (ex. on shader change)
@@ -1109,6 +1113,7 @@ namespace Luka.Backlace
                     prop_RefractionMask_UV = FindProperty("_RefractionMask_UV", properties);
                     prop_PathingMap_UV = FindProperty("_PathingMap_UV", properties);
                     prop_ShadowMap_UV = FindProperty("_ShadowMap_UV", properties);
+                    prop_PathingTexture_UV = FindProperty("_PathingTexture_UV", properties);
                     materialEditor.ShaderProperty(prop_MainTex_UV, languages.speak("prop_MainTex_UV"));
                     materialEditor.ShaderProperty(prop_BumpMap_UV, languages.speak("prop_BumpMap_UV"));
                     materialEditor.ShaderProperty(prop_MSSO_UV, languages.speak("prop_MSSO_UV"));
@@ -1132,6 +1137,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_RefractionMask_UV, languages.speak("prop_RefractionMask_UV"));
                     materialEditor.ShaderProperty(prop_PathingMap_UV, languages.speak("prop_PathingMap_UV"));
                     materialEditor.ShaderProperty(prop_ShadowMap_UV, languages.speak("prop_ShadowMap_UV"));
+                    materialEditor.ShaderProperty(prop_PathingTexture_UV, languages.speak("prop_PathingTexture_UV"));
                 }
                 Components.end_foldout();
             }
@@ -1663,6 +1669,9 @@ namespace Luka.Backlace
                     prop_PathingWidth = FindProperty("_PathingWidth", properties);
                     prop_PathingSoftness = FindProperty("_PathingSoftness", properties);
                     prop_PathingOffset = FindProperty("_PathingOffset", properties);
+                    prop_PathingColorMode = FindProperty("_PathingColorMode", properties);
+                    prop_PathingTexture = FindProperty("_PathingTexture", properties);
+                    prop_PathingColor2 = FindProperty("_PathingColor2", properties);
                     materialEditor.ShaderProperty(prop_TogglePathing, languages.speak("prop_TogglePathing"));
                     Components.start_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_PathingMappingMode, languages.speak("prop_PathingMappingMode"));
@@ -1670,10 +1679,22 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingMap, languages.speak("prop_PathingMap"));
                     materialEditor.ShaderProperty(prop_PathingScale, languages.speak("prop_PathingScale"));
                     EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_PathingBlendMode, languages.speak("prop_PathingBlendMode"));
+                    materialEditor.ShaderProperty(prop_PathingColorMode, languages.speak("prop_PathingColorMode"));
                     EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
+                    materialEditor.ShaderProperty(prop_PathingBlendMode, languages.speak("prop_PathingBlendMode"));
                     materialEditor.ShaderProperty(prop_PathingEmission, languages.speak("prop_PathingEmission"));
+                    switch ((int)prop_PathingColorMode.floatValue) {
+                        case 1: // texture
+                            materialEditor.ShaderProperty(prop_PathingTexture, languages.speak("prop_PathingTexture"));
+                            break;
+                        case 2: // gradient
+                            materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
+                            materialEditor.ShaderProperty(prop_PathingColor2, languages.speak("prop_PathingColor2"));
+                            break;
+                        default: // single color
+                            materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
+                            break;
+                    }
                     EditorGUI.indentLevel--;
                     materialEditor.ShaderProperty(prop_PathingType, languages.speak("prop_PathingType"));
                     EditorGUI.indentLevel++;
