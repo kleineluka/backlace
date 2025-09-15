@@ -224,6 +224,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_Glossiness = null;
         private MaterialProperty prop_Occlusion = null;
         private MaterialProperty prop_Specular = null;
+        private MaterialProperty prop_SpecularIntensity = null;
         private MaterialProperty prop_SpecularTintTexture = null;
         private MaterialProperty prop_SpecularTint = null;
         private MaterialProperty prop_TangentMap = null;
@@ -1349,6 +1350,7 @@ namespace Luka.Backlace
                     prop_Glossiness = FindProperty("_Glossiness", properties);
                     prop_Occlusion = FindProperty("_Occlusion", properties);
                     prop_Specular = FindProperty("_Specular", properties);
+                    prop_SpecularIntensity = FindProperty("_SpecularIntensity", properties);
                     prop_SpecularTintTexture = FindProperty("_SpecularTintTexture", properties);
                     prop_SpecularTint = FindProperty("_SpecularTint", properties);
                     prop_ReplaceSpecular = FindProperty("_ReplaceSpecular", properties);
@@ -1357,6 +1359,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_Glossiness, languages.speak("prop_Glossiness"));
                     materialEditor.ShaderProperty(prop_Occlusion, languages.speak("prop_Occlusion"));
                     materialEditor.ShaderProperty(prop_Specular, languages.speak("prop_Specular"));
+                    materialEditor.ShaderProperty(prop_SpecularIntensity, languages.speak("prop_SpecularIntensity"));
                     materialEditor.ShaderProperty(prop_SpecularTintTexture, languages.speak("prop_SpecularTintTexture"));
                     materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
                     materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));

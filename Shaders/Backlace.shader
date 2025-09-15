@@ -186,6 +186,7 @@ Shader "luka/indev/backlace"
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0
         _Occlusion ("Occlusion", Range(0, 1)) = 1
+        [PowerSlider(2.0)] _SpecularIntensity ("Specular Intensity", Range(0.01, 25)) = 1.0
         _Specular ("Specular", Range(0, 1)) = 0.5
         _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
@@ -677,13 +678,6 @@ Shader "luka/indev/backlace"
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Float) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Float) = 0
-
-        // DO NOT CHANGE
-        // [Space(35)]
-        // [Header(Do Not Change)]
-        // [Space(10)]
-        [NonModifiableTextureData][NoScaleOffset] _DFG ("DFG Lut", 2D) = "black" { }
-        [NonModifiableTextureData][NoScaleOffset] _DFGType ("Lighing Type", Float) = 0
     }
     SubShader
     {

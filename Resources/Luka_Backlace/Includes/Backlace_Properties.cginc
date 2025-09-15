@@ -24,9 +24,6 @@ float4 _BumpMap_ST;
 float4 _Color;
 float _Cutoff;
 float _BumpScale;
-float _DFGType;
-Texture2D_float _DFG;
-SamplerState sampler_DFG;
 int _IndirectFallbackMode;
 int _IndirectOverride;
 
@@ -35,6 +32,7 @@ float _Occlusion;
 float _Metallic;
 float _Glossiness;
 float _Specular;
+float _SpecularIntensity;
 float _ReplaceSpecular;
 float _Anisotropy;
 float _EnableSpecular;

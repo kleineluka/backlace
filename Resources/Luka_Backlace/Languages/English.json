@@ -801,6 +801,10 @@
             "value": "Enable Specular"
         },
         {
+            "key": "prop_SpecularIntensity",
+            "value": "Highlights"
+        },
+        {
             "key": "prop_ToggleVertexSpecular",
             "value": "Enable Vertex Specular"
         },
@@ -826,7 +830,7 @@
         },
         {
             "key": "prop_Specular",
-            "value": "Specular"
+            "value": "Reflectivity"
         },
         {
             "key": "prop_SpecularTintTexture",

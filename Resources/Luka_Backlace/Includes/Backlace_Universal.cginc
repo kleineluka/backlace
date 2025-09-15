@@ -499,7 +499,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
         void SetupAlbedoAndSpecColor(inout BacklaceSurfaceData Surface)
         {
             float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
-            float sp = Surface.Specular * 0.08;
+            float sp = Surface.Specular;
             Surface.SpecularColor = lerp(float3(sp, sp, sp), Surface.Albedo.rgb, Surface.Metallic);
             if (_ReplaceSpecular == 1)
             {
