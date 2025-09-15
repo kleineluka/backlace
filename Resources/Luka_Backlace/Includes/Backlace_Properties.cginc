@@ -172,6 +172,7 @@ float3 _VertexManipulationScale;
         float4 _HighlightRampColor;
         float _HighlightIntensity;
         float _HighlightRampOffset;
+        float _HighlightHardness;
     #elif defined(_SPECULARMODE_HAIR) // HAIR SPECULAR
         UNITY_DECLARE_TEX2D(_HairFlowMap);
         float _HairFlowMap_UV;

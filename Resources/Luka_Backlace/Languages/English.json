@@ -857,6 +857,10 @@
             "value": "Highlight Ramp"
         },
         {
+            "key": "prop_HighlightHardness",
+            "value": "Highlight Hardness"
+        },
+        {
             "key": "prop_HighlightRampColor",
             "value": "Highlight Colour"
         },

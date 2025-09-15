@@ -231,6 +231,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_Anisotropy = null;
         private MaterialProperty prop_ReplaceSpecular = null;
         private MaterialProperty prop_HighlightRamp = null;
+        private MaterialProperty prop_HighlightHardness = null;
         private MaterialProperty prop_HighlightRampColor = null;
         private MaterialProperty prop_HighlightIntensity = null;
         private MaterialProperty prop_HighlightRampOffset = null;
@@ -1371,6 +1372,7 @@ namespace Luka.Backlace
                     prop_HighlightRampColor = FindProperty("_HighlightRampColor", properties);
                     prop_HighlightIntensity = FindProperty("_HighlightIntensity", properties);
                     prop_HighlightRampOffset = FindProperty("_HighlightRampOffset", properties);
+                    prop_HighlightHardness = FindProperty("_HighlightHardness", properties);
                     prop_HairFlowMap = FindProperty("_HairFlowMap", properties);
                     prop_PrimarySpecularShift = FindProperty("_PrimarySpecularShift", properties);
                     prop_SecondarySpecularShift = FindProperty("_SecondarySpecularShift", properties);
@@ -1394,6 +1396,7 @@ namespace Luka.Backlace
                             materialEditor.ShaderProperty(prop_HighlightRampColor, languages.speak("prop_HighlightRampColor"));
                             materialEditor.ShaderProperty(prop_HighlightIntensity, languages.speak("prop_HighlightIntensity"));
                             materialEditor.ShaderProperty(prop_HighlightRampOffset, languages.speak("prop_HighlightRampOffset"));
+                            materialEditor.ShaderProperty(prop_HighlightHardness, languages.speak("prop_HighlightHardness"));
                             break;
                         case 3: // hair
                             materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint")); // hair uses this as primary color

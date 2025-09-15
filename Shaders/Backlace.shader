@@ -198,6 +198,7 @@ Shader "luka/indev/backlace"
         _HighlightRampColor ("Highlight Color", Color) = (1, 1, 1, 1)
         _HighlightIntensity ("Highlight Intensity", Float) = 1.0
         _HighlightRampOffset ("Highlight Ramp Offset", Range(-1, 1)) = 0.0
+        _HighlightHardness ("Highlight Hardness", Range(0.01, 10)) = 0.1
         // hair specular
         [NoScaleOffset] _HairFlowMap ("Hair Flow/Tangent Map (RG)", 2D) = "gray" { }
         _PrimarySpecularShift ("Primary Specular Shift", Range(-1, 1)) = 0

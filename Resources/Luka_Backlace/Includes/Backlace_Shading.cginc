@@ -506,12 +506,13 @@ float smithG_GGX(float NdotV, float alphaG)
         }
     #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
         // toon highlights specular
-        float3 ApplyToonHighlights(float NDF, inout BacklaceSurfaceData Surface)
+        float3 ApplyToonHighlights(float3 F_Term, float ndotH, inout BacklaceSurfaceData Surface)
         {
-            float newMin = max(_HighlightRampOffset, 0);
-            float newMax = max(_HighlightRampOffset +1, 0);
-            float Duv = remap(clamp(NDF, 0, 2), 0, 2, newMin, newMax);
-            return UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(Duv, Duv)).rgb * _HighlightRampColor.rgb * _HighlightIntensity * 10 * (1 - Surface.Metallic + (0.2 * Surface.Metallic));
+            float hardness = _HighlightHardness * 200 + 1;
+            float highlightGradient = pow(ndotH, hardness);
+            float rampUV = saturate(highlightGradient + _HighlightRampOffset);
+            float3 rampColor = UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(rampUV, rampUV)).rgb;
+            return rampColor * _HighlightRampColor.rgb * _HighlightIntensity * F_Term;
         }
     #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
         // kajiya-kay hair specular
@@ -606,7 +607,7 @@ float smithG_GGX(float NdotV, float alphaG)
             specTerm = numerator / max(denominator, 0.001);
         #elif defined(_SPECULARMODE_TOON)
             StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
-            float3 ToonHighlight_Term = ApplyToonHighlights(NDF_Term, Surface);
+            float3 ToonHighlight_Term = ApplyToonHighlights(F_Term, ndotH, Surface);
             float3 numerator = GFS_Term * F_Term * ToonHighlight_Term;
             float denominator = 4.0 * ndotV * ndotL;
             specTerm = numerator / max(denominator, 0.001);
