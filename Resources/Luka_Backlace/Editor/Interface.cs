@@ -524,6 +524,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_RefractionDistortionMode = null;
         private MaterialProperty prop_RefractionCAStrength = null;
         private MaterialProperty prop_RefractionBlurStrength = null;
+        private MaterialProperty prop_RefractionCAUseFresnel = null;
+        private MaterialProperty prop_RefractionCAEdgeFade = null;
         // dither properties
         private MaterialProperty prop_ToggleDither = null;
         private MaterialProperty prop_DitherAmount = null;
@@ -1978,6 +1980,8 @@ namespace Luka.Backlace
                     prop_RefractionDistortionMode = FindProperty("_RefractionDistortionMode", properties);
                     prop_RefractionCAStrength = FindProperty("_RefractionCAStrength", properties);
                     prop_RefractionBlurStrength = FindProperty("_RefractionBlurStrength", properties);
+                    prop_RefractionCAUseFresnel = FindProperty("_RefractionCAUseFresnel", properties);
+                    prop_RefractionCAEdgeFade = FindProperty("_RefractionCAEdgeFade", properties);
                     materialEditor.ShaderProperty(prop_ToggleRefraction, languages.speak("prop_ToggleRefraction"));
                     Components.start_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_RefractionMask, languages.speak("prop_RefractionMask"));
@@ -2005,17 +2009,19 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_DistortionNoiseTiling, languages.speak("prop_DistortionNoiseTiling"));
                     materialEditor.ShaderProperty(prop_DistortionNoiseStrength, languages.speak("prop_DistortionNoiseStrength"));
-                    materialEditor.ShaderProperty(prop_RefractionDistortionMode, languages.speak("prop_RefractionDistortionMode"));
-                    if (prop_RefractionDistortionMode.floatValue == 1) // chromatic aberration
-                    {
-                        materialEditor.ShaderProperty(prop_RefractionCAStrength, languages.speak("prop_RefractionCAStrength"));
-                    }
-                    else if (prop_RefractionDistortionMode.floatValue == 2) // blur
-                    {
-                        materialEditor.ShaderProperty(prop_RefractionBlurStrength, languages.speak("prop_RefractionBlurStrength"));
-                    }
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_DistortionNoiseTex.textureValue == null, configs);
+                    materialEditor.ShaderProperty(prop_RefractionDistortionMode, languages.speak("prop_RefractionDistortionMode"));
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_RefractionCAStrength, languages.speak("prop_RefractionCAStrength"));
+                    materialEditor.ShaderProperty(prop_RefractionBlurStrength, languages.speak("prop_RefractionBlurStrength"));
+                    if (prop_RefractionDistortionMode.floatValue.Equals(1)) {
+                        materialEditor.ShaderProperty(prop_RefractionCAUseFresnel, languages.speak("prop_RefractionCAUseFresnel"));
+                        Components.start_dynamic_disable(!prop_RefractionCAUseFresnel.floatValue.Equals(1), configs);
+                        materialEditor.ShaderProperty(prop_RefractionCAEdgeFade, languages.speak("prop_RefractionCAEdgeFade"));
+                        Components.end_dynamic_disable(!prop_RefractionCAUseFresnel.floatValue.Equals(1), configs);
+                    }
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
                 }
                 sub_tab_screenspace_reflection.draw();

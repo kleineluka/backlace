@@ -527,6 +527,8 @@
         float _RefractionBlurStrength;
         float _RefractionOpacity;
         float _RefractionMixStrength;
+        int _RefractionCAUseFresnel;
+        float _RefractionCAEdgeFade;
         float _RefractionMode; // 0 = reverse fresnel, 1 = fresnel, 2 = soft fresnel, 3 = manual
         float4 _CausticsColor;
         float _RefractionBlendMode;
@@ -547,9 +549,15 @@
             {
                 case 1: // chromatic aberration
                 {
-                    refractedColor.r = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV + float2(_RefractionBlurStrength, 0)).r * _RefractionCAStrength;
+                    float caOffset = _RefractionBlurStrength;
+                    if (_RefractionCAUseFresnel == 1)
+                    {
+                        float caFresnel = fastpow(fresnel, _RefractionCAEdgeFade);
+                        caOffset *= caFresnel;
+                    }
+                    refractedColor.r = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV + float2(caOffset, 0)).r * _RefractionCAStrength;
                     refractedColor.g = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).g;
-                    refractedColor.b = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV - float2(_RefractionBlurStrength, 0)).b * _RefractionCAStrength;
+                    refractedColor.b = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV - float2(caOffset, 0)).b * _RefractionCAStrength;
                     break;
                 }
                 case 2: // blur

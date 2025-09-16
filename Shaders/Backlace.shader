@@ -591,7 +591,9 @@ Shader "luka/indev/backlace"
         // colour distortion
         [Enum(Disabled, 0, Chromatic Aberration, 1, Blur, 2)] _RefractionDistortionMode ("Blur Mode", Int) = 1
         _RefractionCAStrength ("Chromatic Aberration Strength", Range(0, 5)) = 2
-        _RefractionBlurStrength ("Blur Strength", Range(0, 10)) = 2.0
+        _RefractionBlurStrength ("Blur Strength", Range(0, 0.5)) = 0.05
+        [Enum(Disabled, 0, Enabled, 1)] _RefractionCAUseFresnel ("Use Fresnel for CA", Int) = 0.0 
+        _RefractionCAEdgeFade ("CA Fresnel Power", Range(0.1, 10)) = 2.0 
 
         // VERTEX DISTORTION
         // [Space(35)]

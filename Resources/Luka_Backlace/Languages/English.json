@@ -1933,6 +1933,14 @@
             "value": "Blur Strength"
         },
         {
+            "key": "prop_RefractionCAUseFresnel",
+            "value": "Fresnel Chromatic Aberration"
+        },
+        {
+            "key": "prop_RefractionCAEdgeFade",
+            "value": "CA Edge Fade"
+        },
+        {
             "key": "prop_ToggleDither",
             "value": "Enable Dithering"
         },
