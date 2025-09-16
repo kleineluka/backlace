@@ -1935,7 +1935,6 @@ namespace Luka.Backlace
                     prop_PS1Rounding = FindProperty("_PS1Rounding", properties);
                     prop_PS1RoundingPrecision = FindProperty("_PS1RoundingPrecision", properties);
                     prop_PS1Affine = FindProperty("_PS1Affine", properties);
-                    prop_PS1AffineStrength = FindProperty("_PS1AffineStrength", properties);
                     prop_PS1Compression = FindProperty("_PS1Compression", properties);
                     prop_PS1CompressionPrecision = FindProperty("_PS1CompressionPrecision", properties);
                     materialEditor.ShaderProperty(prop_TogglePS1, languages.speak("prop_TogglePS1"));
@@ -1950,11 +1949,6 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(prop_PS1Affine.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_PS1AffineStrength, languages.speak("prop_PS1AffineStrength"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_PS1Affine.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_PS1Compression, languages.speak("prop_PS1Compression"));
-                    Components.start_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_PS1CompressionPrecision, languages.speak("prop_PS1CompressionPrecision"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);

@@ -637,7 +637,6 @@ Shader "luka/indev/backlace"
         [Enum(Disabled, 0, World Space, 1, Screen Space, 2)] _PS1Rounding ("Rounding Style", Int) = 0.0
         _PS1RoundingPrecision ("Rounding Precision", Float) = 64
         [Enum(Disabled, 0, Enabled, 1)] _PS1Affine ("Enable Affine Texture Mapping", Int) = 0.0
-        _PS1AffineStrength ("Affine Strength", Range(0, 2)) = 1.0
         [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
         _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 

@@ -1961,10 +1961,6 @@
             "value": "Enable Affine Texture Mapping"
         },
         {
-            "key": "prop_PS1AffineStrength",
-            "value": "Affine Strength"
-        },
-        {
             "key": "prop_PS1Compression",
             "value": "Enable Color Compression"
         },

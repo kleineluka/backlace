@@ -461,7 +461,6 @@
     int _PS1Rounding;
     float _PS1RoundingPrecision;
     int _PS1Affine;
-    float _PS1AffineStrength;
     int _PS1Compression;
     float _PS1CompressionPrecision;
 
@@ -491,8 +490,7 @@
     {
         if (_PS1Affine == 1)
         {
-            float2 warpedUV = i.affineUV.xy / i.pos.w;
-            uv = lerp(uv, warpedUV, _PS1AffineStrength);
+            uv = i.affineUV.xy / i.pos.w;
         }
     }
 
