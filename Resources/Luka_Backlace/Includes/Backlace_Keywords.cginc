@@ -30,6 +30,7 @@
 #pragma shader_feature_local _ _BACKLACE_DEPTH_RIMLIGHT
 #pragma shader_feature_local _ _BACKLACE_SHADOW_MAP
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
+#pragma shader_feature_local _ _BACKLACE_LTCGI
 
 // FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER

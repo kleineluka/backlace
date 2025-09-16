@@ -57,7 +57,8 @@ Backlace comes in three variants: Default, Grabpass, and Outline. While Default 
   <summary><b>Third-Party Features</b></summary>
 
 - AudioLink
-- Super Plug Shader
+- Super Plug Shader *(also need it installed)*
+- LTCGI *(also need it installed)*
 </details>
 
 <details>
@@ -100,4 +101,4 @@ An example credit could be, for example, "My shader was built off of Backlace (h
 - Various lighting modes are derived from other projects, specifically [Poiyomi Toon](https://github.com/poiyomi/PoiyomiToonShader), [lilToon/OpenLit](https://github.com/lilxyzw/lilToon), and [Mochies Unity Shaders](https://github.com/MochiesCode/Mochies-Unity-Shaders/). Thesse are all under the MIT license and usages are limited to lighting modes with those names (ex. \"Poi Custom\", \"OpenLit\", \"Mochies\").
 - The 2D effect in the Fun variant is inspired directly by [Lyuma's Waifu2D Shader](https://github.com/lyuma/LyumaShader), which is under the MIT license. Although  please note it is simplified and their code is better if a flat model is purely the goal of your project!
 - AudioLink features, and a lot of the boilerplate code in `Backlace_AudioLink.cginc`, are from [AudioLink](https://github.com/llealloo/audiolink), which is under a modified MIT license.
-- Original inspiration for the Raymarched SSR feature came from [orel1's SSR module](github.com/orels1/orels-Unity-Shaders), which is an implementation of Mochie's fork of ERROR.mdl's SSR. Both are under MIT licenses. However, Backlace's implementation is much simpler and heavily modified, but the idea stemmed from there.
+- Original inspiration for the Raymarched SSR feature came from [orel1's SSR module](github.com/orels1/orels-Unity-Shaders), which is an implementation of [Mochie's](https://github.com/MochiesCode/Mochies-Unity-Shaders/) fork of ERROR.mdl's SSR. Both are under MIT licenses. However, Backlace's implementation is much simpler and heavily modified, but the idea stemmed from there.

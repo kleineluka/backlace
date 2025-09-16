@@ -95,6 +95,7 @@ namespace Luka.Backlace
         private static Tab tab_third_party = null;
         private static Tab sub_tab_audiolink = null;
         private static Tab sub_tab_superplug = null;
+        private static Tab sub_tab_ltcgi = null;
         #endregion // Tabs
 
         #region Properties
@@ -427,6 +428,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_AudioLinkIridescenceBand = null;
         private MaterialProperty prop_AudioLinkIridescenceStrength = null;
         private MaterialProperty prop_AudioLinkIridescenceRange = null;
+        // ltcgi properties
+        private MaterialProperty prop_ToggleLTCGI = null;
         // glitter properties
         private MaterialProperty prop_ToggleGlitter = null;
         private MaterialProperty prop_GlitterMode = null;
@@ -683,6 +686,7 @@ namespace Luka.Backlace
             tab_third_party = null;
             sub_tab_audiolink = null;
             sub_tab_superplug = null;
+            sub_tab_ltcgi = null;
             #endregion // Tabs
         }
 
@@ -756,8 +760,9 @@ namespace Luka.Backlace
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
             tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
             tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
-            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink");
-            sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_superplug"));
+            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink");
+            sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_superplug"));
+            sub_tab_ltcgi = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ltcgi"), null, "_ToggleLTCGI");
             #endregion // Tabs
             loaded = true;
         }
@@ -2283,6 +2288,18 @@ namespace Luka.Backlace
                     if (GUILayout.Button(theme.language_manager.speak("superplug_button"))) {
                         Components.open_external_website("https://vrcfury.com/sps/", ref theme);
                     }
+                }
+                sub_tab_ltcgi.draw();
+                if (sub_tab_ltcgi.is_expanded) {
+                    // third party - ltcgi
+                    prop_ToggleLTCGI = FindProperty("_ToggleLTCGI", properties);
+                    materialEditor.ShaderProperty(prop_ToggleLTCGI, languages.speak("prop_ToggleLTCGI"));
+                    GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
+                    boldWrap.wordWrap = true;
+                    GUILayout.Label(theme.language_manager.speak("ltcgi_notice"), boldWrap);
+                    if (GUILayout.Button(theme.language_manager.speak("ltcgi_button"))) {
+                        Components.open_external_website("https://github.com/PiMaker/ltcgi/", ref theme);
+                    }                  
                 }
                 Components.end_foldout();
             }

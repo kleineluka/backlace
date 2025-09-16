@@ -31,6 +31,11 @@
     #include "./Backlace_AudioLink.cginc"
 #endif // _BACKLACE_AUDIOLINK
 
+// optional ltcgi integration
+#if defined(_BACKLACE_LTCGI)
+    #include "./Backlace_LTCGI.cginc"
+#endif // _BACKLACE_LTCGI
+
 // data structures
 struct VertexData
 {

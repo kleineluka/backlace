@@ -343,7 +343,23 @@
         {
             "key": "superplug_button",
             "value": "Open Super Plug Shader Website"
-        },        
+        },     
+        {
+            "key": "sub_tab_ltcgi",
+            "value": "LTCGI Lighting"
+        },
+        {
+            "key": "ltcgi_notice",
+            "value": "LTCGI (by _pi_) is a plug-and-play realtime area lighting solution for VRChat. To enable this, please make sure you also include the LTCGI package in your project as it requires its own shader functions to work. When enabled, your material will then automatically use LTCGIs lighting."
+        },
+        {
+            "key": "ltcgi_button",
+            "value": "Open LTCGI Website"
+        },
+        {
+            "key": "prop_ToggleLTCGI",
+            "value": "Enable LTCGI Lighting"
+        },
         {
             "key": "sub_tab_glitter",
             "value": "Glitter"

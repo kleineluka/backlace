@@ -87,6 +87,21 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
     #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
         ramp *= ParallaxShadow;
     #endif // _BACKLACE_PARALLAX_SHADOWS
+    #if defined(_BACKLACE_LTCGI)
+        float2 ltcgi_lmUV = 0;
+        #if defined(LIGHTMAP_ON)
+            ltcgi_lmUV = FragData.lightmapUV;
+        #endif
+        LTCGI_Contribution(
+            FragData.worldPos,
+            Surface.NormalDir,
+            Surface.ViewDir,
+            Surface.Roughness,
+            ltcgi_lmUV,
+            Surface.IndirectDiffuse,
+            Surface.IndirectSpecular
+        );
+    #endif // _BACKLACE_LTCGI
     Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * ramp + Surface.IndirectDiffuse);
     Surface.Attenuation = ramp;
     #if defined(_BACKLACE_SHADOW_TEXTURE)
@@ -252,6 +267,21 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
                 ramp *= ParallaxShadow;
             #endif // _BACKLACE_PARALLAX_SHADOWS
+            #if defined(_BACKLACE_LTCGI)
+                float2 ltcgi_lmUV = 0;
+                #if defined(LIGHTMAP_ON)
+                    ltcgi_lmUV = FragData.lightmapUV;
+                #endif
+                LTCGI_Contribution(
+                    FragData.worldPos,
+                    Surface.NormalDir,
+                    Surface.ViewDir,
+                    Surface.Roughness,
+                    ltcgi_lmUV,
+                    Surface.IndirectDiffuse,
+                    Surface.IndirectSpecular
+                );
+            #endif // _BACKLACE_LTCGI
             #if defined(_BACKLACE_SHADOW_TEXTURE)
                 float3 litColor;
                 #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
@@ -303,7 +333,24 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         {
             float lightTerm = saturate(Surface.UnmaxedNdotL * 0.5 + 0.5);
             lightTerm = saturate(lightTerm - (1.0 - Surface.Occlusion) * _AnimeOcclusionToShadow);
-            float3 finalColor = Surface.Albedo.rgb * unity_AmbientSky.rgb;
+            #if defined(_BACKLACE_LTCGI)
+                float2 ltcgi_lmUV = 0;
+                #if defined(LIGHTMAP_ON)
+                    ltcgi_lmUV = FragData.lightmapUV;
+                #endif
+                LTCGI_Contribution(
+                    FragData.worldPos,
+                    Surface.NormalDir,
+                    Surface.ViewDir,
+                    Surface.Roughness,
+                    ltcgi_lmUV,
+                    Surface.IndirectDiffuse,
+                    Surface.IndirectSpecular
+                );
+                float3 finalColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
+            #else // _BACKLACE_LTCGI
+                float3 finalColor = Surface.Albedo.rgb * unity_AmbientSky.rgb;
+            #endif // _BACKLACE_LTCGI
             float halftoneShadow = smoothstep(_AnimeHalftoneThreshold + _AnimeShadowSoftness, _AnimeHalftoneThreshold - _AnimeShadowSoftness, lightTerm);
             float coreShadow = smoothstep(_AnimeShadowThreshold + _AnimeShadowSoftness, _AnimeShadowThreshold - _AnimeShadowSoftness, lightTerm);
             #if defined(_BACKLACE_SHADOW_TEXTURE)

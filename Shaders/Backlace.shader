@@ -457,6 +457,12 @@ Shader "luka/indev/backlace"
         _AudioLinkIridescenceStrength ("  Strength", Range(0, 5)) = 1.0
         _AudioLinkIridescenceRange ("  Min/Max", Vector) = (0, 1, 0, 0)
 
+        // LTCGI
+        // [Space(35)]
+        // [Header(LTCGI)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_LTCGI)] _ToggleLTCGI ("Enable LTCGI", Float) = 0.0
+
         // GLITTER
         // [Space(35)]
         // [Header(Glitter)]
