@@ -610,18 +610,32 @@ Shader "luka/indev/backlace"
         // [Header(Fake Screen Space Reflections)]
         // [Space(10)]
         [Toggle(_BACKLACE_SSR)] _ToggleSSR ("Enable Screen Space Reflections", Float) = 0.0
+        [Enum(Planar, 0, Raymarched, 1)] _SSRMode ("Reflection Mode", Int) = 0
         [NoScaleOffset] _SSRMask ("Mask (R)", 2D) = "white" { }
         [HDR] _SSRTint ("Reflection Tint", Color) = (1, 1, 1, 1)
         _SSRIntensity ("Intensity", Range(0, 2)) = 1.0
-        [Enum(Additive, 0, Alpha Blend, 1)] _SSRBlendMode ("Blend Mode", Int) = 0
+        [Enum(Additive, 0, Alpha Blend, 1, Multiply, 2, Screen, 3)] _SSRBlendMode ("Blend Mode", Int) = 0
         _SSRFresnelPower ("Fresnel Power", Range(0.1, 20)) = 5.0
         _SSRFresnelScale ("Fresnel Scale", Range(0, 2)) = 1.0
         _SSRFresnelBias ("Fresnel Bias", Range(0, 1)) = 0.0
+        _SSRCoverage ("Coverage", Range(0, 1)) = 0.0
+        // planar settings
         _SSRParallax ("Parallax Strength", Range(0, 1)) = 0.1
         [NoScaleOffset] _SSRDistortionMap ("Distortion Map (RG)", 2D) = "gray" { }
         _SSRDistortionStrength ("Distortion Strength", Range(0, 0.25)) = 0.01
         _SSRWorldDistortion ("World Distortion Strength", Range(0, 1)) = 0.0
         _SSRBlur ("Blur Strength", Range(0, 10)) = 1.0
+        // raymarched settings
+        [IntRange] _SSRMaxSteps ("Max Steps", Range(1, 50)) = 25
+        _SSRStepSize ("Step Size", Float) = 0.05
+        _SSREdgeFade ("Edge Fade", Range(0.01, 1)) = 0.1
+        [Enum(Disabled, 0, Enabled, 1)] _SSRCamFade ("Enable Camera Distance Fade", Int) = 0.0
+        _SSRCamFadeStart ("SSR Camera Fade Start", Float) = 20.0
+        _SSRCamFadeEnd ("SSR Camera Fade End", Float) = 50.0
+        _SSRFlipUV ("Flip Reflection UV", Range(0, 1)) = 0 // more stylised if on, less accurate
+        [Enum(Disabled, 0, Enabled, 1)] _SSRAdaptiveStep ("Enable Adaptive Step Size", Int) = 1
+        _SSRThickness ("Culling Thickness", Float) = 0.01
+        [Enum(Stretch, 0, Fade, 1, Cutoff, 2, Mirror, 3)] _SSROutOfViewMode ("Out Of View Mode", Int) = 0
 
         // DITHER
         // [Space(35)]

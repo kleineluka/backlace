@@ -2049,6 +2049,54 @@
             "value": "Blur Strength"
         },
         {
+            "key": "prop_SSRMode",
+            "value": "Reflection Quality"
+        },
+        {
+            "key": "prop_SSRMaxSteps",
+            "value": "Max Steps"
+        },
+        {
+            "key": "prop_SSRStepSize",
+            "value": "Step Size"
+        },
+        {
+            "key": "prop_SSRCoverage",
+            "value": "Coverage Boost"
+        },
+        {
+            "key": "prop_SSREdgeFade",
+            "value": "Edge Fade"
+        },
+        {
+            "key": "prop_SSRCamFade",
+            "value": "Enable Camera Distance Fade"
+        },
+        {
+            "key": "prop_SSRCamFadeStart",
+            "value": "SSR Camera Fade Start"
+        },
+        {
+            "key": "prop_SSRCamFadeEnd",
+            "value": "SSR Camera Fade End"
+        },
+        {
+            "key": "prop_SSRFlipUV",
+            "value": "Flip Reflection UV"
+        },
+        {
+            "key": "prop_SSRAdaptiveStep",
+            "value": "Enable Adaptive Step Size"
+        },
+        {
+            "key": "prop_SSRThickness",
+            "value": "Culling Thickness"
+        },
+        {
+            "key": "prop_SSROutOfViewMode",
+            "value": "Out Of View Mode"
+        },
+        {
             "key": "prop_OutlineColor",
             "value": "Outline Colour"
         },

@@ -558,6 +558,18 @@ namespace Luka.Backlace
         private MaterialProperty prop_SSRDistortionStrength = null;
         private MaterialProperty prop_SSRWorldDistortion = null;
         private MaterialProperty prop_SSRBlur = null;
+        private MaterialProperty prop_SSRMaxSteps = null;
+        private MaterialProperty prop_SSRStepSize = null;
+        private MaterialProperty prop_SSREdgeFade = null;
+        private MaterialProperty prop_SSRCoverage = null;
+        private MaterialProperty prop_SSRCamFade = null;
+        private MaterialProperty prop_SSRCamFadeStart = null;
+        private MaterialProperty prop_SSRCamFadeEnd = null;
+        private MaterialProperty prop_SSRFlipUV = null;
+        private MaterialProperty prop_SSRAdaptiveStep = null;
+        private MaterialProperty prop_SSRThickness = null;
+        private MaterialProperty prop_SSROutOfViewMode = null;
+        private MaterialProperty prop_SSRMode = null;
         // outline properties
         private MaterialProperty prop_OutlineColor = null;
         private MaterialProperty prop_OutlineWidth = null;
@@ -2040,8 +2052,21 @@ namespace Luka.Backlace
                     prop_SSRDistortionStrength = FindProperty("_SSRDistortionStrength", properties);
                     prop_SSRWorldDistortion = FindProperty("_SSRWorldDistortion", properties);
                     prop_SSRBlur = FindProperty("_SSRBlur", properties);
+                    prop_SSRMaxSteps = FindProperty("_SSRMaxSteps", properties);
+                    prop_SSRStepSize = FindProperty("_SSRStepSize", properties);
+                    prop_SSREdgeFade = FindProperty("_SSREdgeFade", properties);
+                    prop_SSRCoverage = FindProperty("_SSRCoverage", properties);
+                    prop_SSRCamFade = FindProperty("_SSRCamFade", properties);
+                    prop_SSRCamFadeStart = FindProperty("_SSRCamFadeStart", properties);
+                    prop_SSRCamFadeEnd = FindProperty("_SSRCamFadeEnd", properties);
+                    prop_SSRFlipUV = FindProperty("_SSRFlipUV", properties);
+                    prop_SSRAdaptiveStep = FindProperty("_SSRAdaptiveStep", properties);
+                    prop_SSRThickness = FindProperty("_SSRThickness", properties);
+                    prop_SSROutOfViewMode = FindProperty("_SSROutOfViewMode", properties);
+                    prop_SSRMode = FindProperty("_SSRMode", properties);
                     materialEditor.ShaderProperty(prop_ToggleSSR, languages.speak("prop_ToggleSSR"));
                     Components.start_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_SSRMode, languages.speak("prop_SSRMode"));
                     materialEditor.ShaderProperty(prop_SSRMask, languages.speak("prop_SSRMask"));
                     materialEditor.ShaderProperty(prop_SSRTint, languages.speak("prop_SSRTint"));
                     materialEditor.ShaderProperty(prop_SSRBlendMode, languages.speak("prop_SSRBlendMode"));
@@ -2049,15 +2074,35 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_SSRFresnelPower, languages.speak("prop_SSRFresnelPower"));
                     materialEditor.ShaderProperty(prop_SSRFresnelScale, languages.speak("prop_SSRFresnelScale"));
                     materialEditor.ShaderProperty(prop_SSRFresnelBias, languages.speak("prop_SSRFresnelBias"));
-                    materialEditor.ShaderProperty(prop_SSRParallax, languages.speak("prop_SSRParallax"));
-                    materialEditor.ShaderProperty(prop_SSRBlur, languages.speak("prop_SSRBlur"));
-                    materialEditor.ShaderProperty(prop_SSRDistortionMap, languages.speak("prop_SSRDistortionMap"));
-                    Components.start_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_SSRDistortionStrength, languages.speak("prop_SSRDistortionStrength"));
-                    materialEditor.ShaderProperty(prop_SSRWorldDistortion, languages.speak("prop_SSRWorldDistortion"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
+                    materialEditor.ShaderProperty(prop_SSRCoverage, languages.speak("prop_SSRCoverage")); 
+                    if (prop_SSRMode.floatValue.Equals(0)) {
+                        // planar
+                        materialEditor.ShaderProperty(prop_SSRParallax, languages.speak("prop_SSRParallax"));
+                        materialEditor.ShaderProperty(prop_SSRBlur, languages.speak("prop_SSRBlur"));
+                        materialEditor.ShaderProperty(prop_SSRDistortionMap, languages.speak("prop_SSRDistortionMap"));
+                        Components.start_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_SSRDistortionStrength, languages.speak("prop_SSRDistortionStrength"));
+                        materialEditor.ShaderProperty(prop_SSRWorldDistortion, languages.speak("prop_SSRWorldDistortion"));
+                        EditorGUI.indentLevel--;
+                        Components.end_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
+                    } else {
+                        // raymarched
+                        materialEditor.ShaderProperty(prop_SSRFlipUV, languages.speak("prop_SSRFlipUV"));
+                        materialEditor.ShaderProperty(prop_SSROutOfViewMode, languages.speak("prop_SSROutOfViewMode"));
+                        materialEditor.ShaderProperty(prop_SSRAdaptiveStep, languages.speak("prop_SSRAdaptiveStep"));
+                        materialEditor.ShaderProperty(prop_SSRMaxSteps, languages.speak("prop_SSRMaxSteps"));
+                        materialEditor.ShaderProperty(prop_SSRStepSize, languages.speak("prop_SSRStepSize"));
+                        materialEditor.ShaderProperty(prop_SSRThickness, languages.speak("prop_SSRThickness"));
+                        materialEditor.ShaderProperty(prop_SSREdgeFade, languages.speak("prop_SSREdgeFade"));
+                        materialEditor.ShaderProperty(prop_SSRCamFade, languages.speak("prop_SSRCamFade"));
+                        Components.start_dynamic_disable(!prop_SSRCamFade.floatValue.Equals(1), configs);
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_SSRCamFadeStart, languages.speak("prop_SSRCamFadeStart"));
+                        materialEditor.ShaderProperty(prop_SSRCamFadeEnd, languages.speak("prop_SSRCamFadeEnd"));
+                        EditorGUI.indentLevel--;
+                        Components.end_dynamic_disable(!prop_SSRCamFade.floatValue.Equals(1), configs);
+                    }
                     Components.end_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
                 }
                 Components.end_foldout();

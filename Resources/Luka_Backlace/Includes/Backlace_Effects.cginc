@@ -614,6 +614,7 @@
 
     // screen space reflection feature
     #if defined(_BACKLACE_SSR)
+        float _SSRMode;
         UNITY_DECLARE_TEX2D(_SSRMask);
         float4 _SSRTint;
         float _SSRIntensity;
@@ -621,48 +622,160 @@
         float _SSRFresnelPower;
         float _SSRFresnelScale;
         float _SSRFresnelBias;
+        float _SSRCoverage;
+        // planar
         float _SSRParallax;
         UNITY_DECLARE_TEX2D(_SSRDistortionMap);
         float _SSRDistortionStrength;
         float _SSRBlur;
         float _SSRWorldDistortion;
+        // raymarched
+        int _SSRMaxSteps;
+        float _SSRStepSize;
+        float _SSREdgeFade;
+        float _SSRThickness;
+        float _SSRAdaptiveStep;
+        float _SSRFlipUV;
+        int _SSROutOfViewMode;
+        int _SSRCamFade;
+        float _SSRCamFadeStart;
+        float _SSRCamFadeEnd;
 
-        void ApplyScreenSpaceReflections(inout BacklaceSurfaceData Surface, FragmentData i)
+        #ifndef BACKLACE_DEPTH
+            UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+            float4 _CameraDepthTexture_TexelSize;
+            #define BACKLACE_DEPTH
+        #endif
+
+        // somewhat based on the orels1/mochie method, but completely butchered by me for my purposes
+        float3 GetSSRMarched(inout BacklaceSurfaceData Surface, FragmentData i)
+        {
+            #if UNITY_SINGLE_PASS_STEREO
+                float x_min = 0.5 * unity_StereoEyeIndex;
+                float x_max = 0.5 + 0.5 * unity_StereoEyeIndex;
+            #else // UNITY_SINGLE_PASS_STEREO
+                float x_min = 0.0;
+                float x_max = 1.0;
+            #endif // UNITY_SINGLE_PASS_STEREO
+            float3 viewPos = mul(UNITY_MATRIX_V, float4(i.worldPos, 1.0)).xyz;
+            float3 viewRefl = mul((float3x3)UNITY_MATRIX_V, Surface.ReflectDir);
+            float3 currentRayPos = viewPos + viewRefl * (UNITY_MATRIX_P._33 * 0.1); 
+            float3 prevRayPos = viewPos;
+            [loop] for (int j = 0; j < _SSRMaxSteps; j++)
+            {
+                float4 screenPos = mul(UNITY_MATRIX_P, float4(currentRayPos, 1.0));
+                float2 screenUV = (screenPos.xy / screenPos.w) * 0.5 + 0.5;
+                if (screenUV.x > x_max || screenUV.x < x_min || screenUV.y > 1.0 || screenUV.y < 0.0)
+                {
+                    return 0;
+                }
+                // get and compare depths
+                float sceneDepth = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)).r);
+                float rayDepth = -currentRayPos.z;
+                if (rayDepth > sceneDepth - _SSRThickness)
+                {
+                    float4 finalClipPos = mul(UNITY_MATRIX_P, float4(currentRayPos, 1.0));
+                    finalClipPos.y = lerp(finalClipPos.y, -finalClipPos.y + finalClipPos.w, _SSRFlipUV);
+                    float fadeFactor = 1.0;
+                    float2 finalUV = finalClipPos.xy / finalClipPos.w;
+                    switch (_SSROutOfViewMode)
+                    {
+                        case 1: // fade
+                            fadeFactor = smoothstep(x_min, x_min + 0.05, finalUV.x) * smoothstep(1.0 - x_max, 1.0 - x_max + 0.05, finalUV.x);
+                            fadeFactor *= smoothstep(0.0, 0.05, finalUV.y) * smoothstep(1.0, 1.0 - 0.05, finalUV.y);
+                            break;
+                        case 2: // cutoff
+                            if (finalUV.x < x_min || finalUV.x > x_max || finalUV.y < 0.0 || finalUV.y > 1.0) fadeFactor = 0;
+                            break;
+                        case 3: // mirror
+                            if (finalUV.x < x_min) finalUV.x = x_min + (x_min - finalUV.x);
+                            if (finalUV.x > x_max) finalUV.x = x_max - (finalUV.x - x_max);
+                            if (finalUV.y < 0.0) finalUV.y = -finalUV.y;
+                            if (finalUV.y > 1.0) finalUV.y = 1.0 - (finalUV.y - 1.0);
+                            break;
+                    }
+                    float3 reflection = tex2D(_BacklaceGP, finalUV).rgb;
+                    finalUV = finalUV * 0.5 + 0.5;
+                    float2 fade = smoothstep(0.0, _SSREdgeFade, finalUV) * (1.0 - smoothstep(1.0 - _SSREdgeFade, 1.0, finalUV));
+                    reflection *= fade.x * fade.y * fadeFactor;
+                    return reflection;
+                }
+                // move to the next step
+                float depthDifference = sceneDepth - rayDepth;
+                float step = (_SSRAdaptiveStep) ? clamp(depthDifference * _SSRStepSize, 0.02, 0.5) : _SSRStepSize;
+                prevRayPos = currentRayPos;
+                currentRayPos += viewRefl * step;
+            }
+            return 0; // no hit
+        }
+
+        // simple grabpass with parallax distortion
+        float3 GetSSRPlanar(inout BacklaceSurfaceData Surface, FragmentData i)
         {
             float2 screenUV = i.scrPos.xy / i.scrPos.w;
-            float3 reflectionVector = reflect(-Surface.ViewDir, Surface.NormalDir);
             float2 distortionUV = lerp(screenUV, i.worldPos.xy, _SSRWorldDistortion);
             float2 distortionOffset = (UNITY_SAMPLE_TEX2D(_SSRDistortionMap, distortionUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
-            float3 viewSpaceReflection = mul((float3x3)UNITY_MATRIX_V, reflectionVector);
+            float3 viewSpaceReflection = mul((float3x3)UNITY_MATRIX_V, Surface.ReflectDir);
             float parallax = _SSRParallax * saturate(1.0 - viewSpaceReflection.z);
             float2 reflectionOffset = viewSpaceReflection.xy * parallax;
-            float2 reflectionUV = screenUV + reflectionOffset + distortionOffset;
+            float2 reflectionUV = screenUV + reflectionOffset +distortionOffset;
             const int SSR_BLUR_SAMPLES = 8;
             float3 reflectedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV).rgb;
             float2 blurOffset = _BacklaceGP_TexelSize.xy * _SSRBlur;
             [unroll]
-            for (int i = 0; i < SSR_BLUR_SAMPLES; i++)
+            for (int k = 0; k < SSR_BLUR_SAMPLES; k++)
             {
-                float angle = (float)i / SSR_BLUR_SAMPLES * 2.0 * UNITY_PI;
+                float angle = (float)k / SSR_BLUR_SAMPLES * 2.0 * UNITY_PI;
                 float s, c;
                 sincos(angle, s, c);
                 float2 offset = float2(c, s) * blurOffset;
                 reflectedColor += UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV + offset).rgb;
             }
             reflectedColor /= (SSR_BLUR_SAMPLES + 1);
+            return reflectedColor;
+        }
+
+        // master function to apply ssr
+        void ApplyScreenSpaceReflections(inout BacklaceSurfaceData Surface, FragmentData i)
+        {
+            float3 reflectedColor;
+            // branch between qualities
+            [branch] if (_SSRMode == 1)
+            {
+                reflectedColor = GetSSRMarched(Surface, i);
+            }
+            else
+            {
+                reflectedColor = GetSSRPlanar(Surface, i);
+            }
+            // additional fading
+            float fadeFactor = 1.0;
+            if (_SSRCamFade == 1) 
+            {
+                float camDistance = distance(i.worldPos, GetCameraPos());
+                fadeFactor *= 1.0 - saturate((camDistance - _SSRCamFadeStart) / (_SSRCamFadeEnd - _SSRCamFadeStart));
+            }
+            // fresnel, mask, etc.
             float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
             float fresnel_powered = pow(fresnel_base, _SSRFresnelPower);
-            float fresnel = saturate(_SSRFresnelBias + fresnel_powered * _SSRFresnelScale);
+            float fresnel = saturate(_SSRFresnelBias + fresnel_powered * _SSRFresnelScale + _SSRCoverage);
             float mask = UNITY_SAMPLE_TEX2D(_SSRMask, Uvs[0]).r;
-            float finalStrength = fresnel * mask * _SSRIntensity;
+            float finalStrength = fresnel * mask * _SSRIntensity * fadeFactor;
             float3 finalReflection = reflectedColor * _SSRTint.rgb;
-            if (_SSRBlendMode == 0) // additive
+            [branch] switch((int)_SSRBlendMode)
             {
-                Surface.FinalColor.rgb += finalReflection * finalStrength;
-            }
-            else // alpha blend
-            {
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalReflection, finalStrength);
+                case 0: // additive
+                    Surface.FinalColor.rgb += finalReflection * finalStrength;
+                    break;
+                case 1: // alpha blend
+                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalReflection, finalStrength);
+                    break;
+                case 2: // multiply
+                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalReflection, finalStrength);
+                    break;
+                default: // screen
+                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - finalReflection), finalStrength);
+                    break;
             }
         }
     #endif // _BACKLACE_SSR
