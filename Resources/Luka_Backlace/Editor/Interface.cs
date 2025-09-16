@@ -1946,9 +1946,9 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_PS1Rounding.floatValue.Equals(0), configs);
                     materialEditor.ShaderProperty(prop_PS1Affine, languages.speak("prop_PS1Affine"));
-                    Components.start_dynamic_disable(prop_PS1Affine.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_PS1Compression, languages.speak("prop_PS1Compression"));
+                    Components.start_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PS1AffineStrength, languages.speak("prop_PS1AffineStrength"));
                     materialEditor.ShaderProperty(prop_PS1CompressionPrecision, languages.speak("prop_PS1CompressionPrecision"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
