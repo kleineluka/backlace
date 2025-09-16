@@ -85,6 +85,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_vrchat_mirror = null;
         private static Tab sub_tab_touch_interactions = null;
         private static Tab sub_tab_dither = null;
+        private static Tab sub_tab_ps1 = null;
         private static Tab sub_tab_vertex_distortion = null;
         private static Tab sub_tab_refraction = null;
         private static Tab sub_tab_screenspace_reflection = null;
@@ -527,6 +528,14 @@ namespace Luka.Backlace
         private MaterialProperty prop_ToggleDither = null;
         private MaterialProperty prop_DitherAmount = null;
         private MaterialProperty prop_DitherScale = null;
+        // ps1 properties
+        private MaterialProperty prop_TogglePS1 = null;
+        private MaterialProperty prop_PS1Rounding = null;
+        private MaterialProperty prop_PS1RoundingPrecision = null;
+        private MaterialProperty prop_PS1Affine = null;
+        private MaterialProperty prop_PS1AffineStrength = null;
+        private MaterialProperty prop_PS1Compression = null;
+        private MaterialProperty prop_PS1CompressionPrecision = null;
         // vertex distortion properties
         private MaterialProperty prop_ToggleVertexDistortion = null;
         private MaterialProperty prop_VertexDistortionMode = null;
@@ -652,6 +661,7 @@ namespace Luka.Backlace
             sub_tab_vrchat_mirror = null;
             sub_tab_touch_interactions = null;
             sub_tab_dither = null;
+            sub_tab_ps1 = null;
             sub_tab_vertex_distortion = null;
             sub_tab_refraction = null;
             sub_tab_screenspace_reflection = null;
@@ -726,9 +736,10 @@ namespace Luka.Backlace
             sub_tab_vrchat_mirror = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_vrchat_mirror"), null, "_ToggleMirrorDetection");
             sub_tab_touch_interactions = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_touch_interactions"), null, "_ToggleTouchReactive");
             sub_tab_dither = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_dither"), null, "_ToggleDither");
-            sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion");
-            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
-            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
+            sub_tab_ps1 = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_ps1"), null, "_TogglePS1");
+            sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion");
+            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
+            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
             tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
             tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
             sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink");
@@ -1916,6 +1927,38 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
                     materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
                     Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
+                }
+                sub_tab_ps1.draw();
+                if (sub_tab_ps1.is_expanded) {
+                    // effects - ps1
+                    prop_TogglePS1 = FindProperty("_TogglePS1", properties);
+                    prop_PS1Rounding = FindProperty("_PS1Rounding", properties);
+                    prop_PS1RoundingPrecision = FindProperty("_PS1RoundingPrecision", properties);
+                    prop_PS1Affine = FindProperty("_PS1Affine", properties);
+                    prop_PS1AffineStrength = FindProperty("_PS1AffineStrength", properties);
+                    prop_PS1Compression = FindProperty("_PS1Compression", properties);
+                    prop_PS1CompressionPrecision = FindProperty("_PS1CompressionPrecision", properties);
+                    materialEditor.ShaderProperty(prop_TogglePS1, languages.speak("prop_TogglePS1"));
+                    Components.start_dynamic_disable(!prop_TogglePS1.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_PS1Rounding, languages.speak("prop_PS1Rounding"));
+                    Components.start_dynamic_disable(prop_PS1Rounding.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_PS1RoundingPrecision, languages.speak("prop_PS1RoundingPrecision"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_PS1Rounding.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_PS1Affine, languages.speak("prop_PS1Affine"));
+                    Components.start_dynamic_disable(prop_PS1Affine.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_PS1AffineStrength, languages.speak("prop_PS1AffineStrength"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_PS1Affine.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_PS1Compression, languages.speak("prop_PS1Compression"));
+                    Components.start_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_PS1CompressionPrecision, languages.speak("prop_PS1CompressionPrecision"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
+                    Components.end_dynamic_disable(!prop_TogglePS1.floatValue.Equals(1), configs);
                 }
                 sub_tab_refraction.draw();
                 if (sub_tab_refraction.is_expanded) {

@@ -385,6 +385,10 @@
             "value": "Dithering"
         },
         {
+            "key": "sub_tab_ps1",
+            "value": "Low-Precision (PS1)"
+        },
+        {
             "key": "sub_tab_refraction",
             "value": "Refraction"
         },
@@ -1939,6 +1943,34 @@
         {
             "key": "prop_DitherScale",
             "value": "Dither Scale"
+        },
+        {
+            "key": "prop_TogglePS1",
+            "value": "Enable Low Precision (PS1)"
+        },
+        {
+            "key": "prop_PS1Rounding",
+            "value": "Rounding Style"
+        },
+        {
+            "key": "prop_PS1RoundingPrecision",
+            "value": "Rounding Precision"
+        },
+        {
+            "key": "prop_PS1Affine",
+            "value": "Enable Affine Texture Mapping"
+        },
+        {
+            "key": "prop_PS1AffineStrength",
+            "value": "Affine Strength"
+        },
+        {
+            "key": "prop_PS1Compression",
+            "value": "Enable Color Compression"
+        },
+        {
+            "key": "prop_PS1CompressionPrecision",
+            "value": "Color Compression Precision"
         },
         {
             "key": "prop_ToggleVertexDistortion",

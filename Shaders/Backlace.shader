@@ -787,5 +787,5 @@ Shader "luka/indev/backlace"
         }
 
     }
-    //CustomEditor "Luka.Backlace.Interface"
+    CustomEditor "Luka.Backlace.Interface"
 }
