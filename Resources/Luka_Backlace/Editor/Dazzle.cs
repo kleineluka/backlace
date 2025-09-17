@@ -1206,7 +1206,7 @@ namespace Luka.Backlace
         public static void end_dynamic_disable(bool disable_conditional, Config config_manager = null)
         {
             if (config_manager == null || config_manager.json_data.@interface.grey_unused)
-            if (disable_conditional) EditorGUI.EndDisabledGroup();
+            EditorGUI.EndDisabledGroup();
         }
 
         // cull text given a certain length
