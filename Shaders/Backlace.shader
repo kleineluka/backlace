@@ -337,12 +337,12 @@ Shader "luka/indev/backlace"
         // [Header(Subsurface Scattering)]
         // [Space(10)]
         [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
-        [NoScaleOffset] _ThicknessMap ("Thickness Map (R)", 2D) = "white" { }
-        [HDR] _SSSColor ("Scattering Tint", Color) = (1, 1, 1, 1)
-        _SSSStrength ("Strength", Range(0, 2)) = 1.0
-        _SSSDistortion ("Distortion", Range(0, 1)) = 0.5
-        _SSSSpread ("Spread", Range(16, 0.01)) = 2.0
-        _SSSBaseColorMix ("Mix With Albedo", Range(0, 1)) = 0.0
+        _SSSColor ("SSS Color", Color) = (1, 0.8, 0.7, 1) // A warm, peachy color is a great start
+        _SSSStrength ("SSS Strength", Range(0, 5)) = 1.0
+        _SSSPower ("SSS Power", Range(0.1, 10)) = 2.0
+        _SSSDistortion ("SSS Distortion", Range(0, 1)) = 0.5
+        [NoScaleOffset] _SSSThicknessMap ("SSS Thickness Map (R)", 2D) = "white" { }
+        _SSSThickness ("SSS Thickness Attenuation", Range(0, 2)) = 1.0
 
         // SHADOW MAP
         // [Space(35)]
@@ -811,5 +811,5 @@ Shader "luka/indev/backlace"
         }
 
     }
-    CustomEditor "Luka.Backlace.Interface"
+    //CustomEditor "Luka.Backlace.Interface"
 }

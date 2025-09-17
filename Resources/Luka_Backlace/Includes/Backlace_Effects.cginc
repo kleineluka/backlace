@@ -120,23 +120,23 @@
 
 // subsurface scattering features
 #if defined(_BACKLACE_SSS)
-    UNITY_DECLARE_TEX2D(_ThicknessMap);
     float _ThicknessMap_UV;
     float4 _SSSColor;
     float _SSSStrength;
+    float _SSSPower;
     float _SSSDistortion;
-    float _SSSSpread;
-    float _SSSBaseColorMix;
+    UNITY_DECLARE_TEX2D(_SSSThicknessMap);
+    float _SSSThickness;
 
     void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
     {
-        float thickness = UNITY_SAMPLE_TEX2D(_ThicknessMap, Uvs[_ThicknessMap_UV]).r;
-        float3 distortedLightDir = normalize(Surface.LightDir + Surface.NormalDir * _SSSDistortion);
-        float sssDot = saturate(dot(Surface.ViewDir, -distortedLightDir));
-        sssDot = pow(sssDot, _SSSSpread);
-        float3 sssColor = sssDot * Surface.LightColor.rgb * _SSSColor.rgb * thickness * _SSSStrength;
-        sssColor = lerp(sssColor, sssColor * Surface.Albedo.rgb, _SSSBaseColorMix);
-        Surface.Diffuse += sssColor;
+        float thickness = UNITY_SAMPLE_TEX2D(_SSSThicknessMap, Uvs[_ThicknessMap_UV]).r * _SSSThickness;
+        float3 scatterDir = normalize(Surface.LightDir + Surface.NormalDir * _SSSDistortion);
+        float scatterDot = dot(Surface.ViewDir, -scatterDir);
+        scatterDot = saturate(scatterDot);
+        float scatterFalloff = pow(scatterDot, _SSSPower);
+        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * scatterFalloff * _SSSStrength * thickness;
+        Surface.Diffuse += sss;
     }
 #endif // _BACKLACE_SSS
 
