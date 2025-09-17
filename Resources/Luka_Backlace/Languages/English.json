@@ -1965,6 +1965,10 @@
             "value": "Dither Amount"
         },
         {
+            "key": "prop_DitherSpace",
+            "value": "Dither Space"
+        },
+        {
             "key": "prop_DitherScale",
             "value": "Dither Scale"
         },
@@ -2245,12 +2249,16 @@
             "value": "Refraction Mask UV Set"
         },
         {
-            "key": "prop_PathingMap_UV",
+            "key": "prop_PathingTexture_UV",
             "value": "Pathing Map UV Set"
         },
         {
             "key": "prop_ShadowMap_UV",
             "value": "Shadow Map UV Set"
+        },
+        {
+            "key": "prop_Dither_UV",
+            "value": "Dither UV Set"
         },
         {
             "key": "prop_OverrideRenderQueue",

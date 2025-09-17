@@ -448,10 +448,24 @@
 #if defined(_BACKLACE_DITHER)
     float _DitherAmount;
     float _DitherScale;
+    float _DitherSpace;
+    int _Dither_UV;
 
-    void ApplyDither(inout BacklaceSurfaceData Surface)
+    void ApplyDither(inout BacklaceSurfaceData Surface, float2 worldPos, float2 uvs)
     {
-        float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy, _DitherScale);
+        float2 ditherUV = 0;
+        switch (_DitherSpace) {
+            case 1: // world
+                ditherUV = frac(worldPos) * _ScreenParams.xy;
+                break;
+            case 2: // uv
+                ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
+                break;
+            default: // screen
+                ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
+                break;
+        }
+        float pattern = GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
         Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
     }
 #endif // _BACKLACE_DITHER

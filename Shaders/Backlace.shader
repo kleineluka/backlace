@@ -650,6 +650,7 @@ Shader "luka/indev/backlace"
         [Toggle(_BACKLACE_DITHER)] _ToggleDither ("Enable Dither", Float) = 0.0
         _DitherAmount ("Dither Amount", Range(0, 1)) = 0
         _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
+        [Enum(Screen, 0, World, 1, UV, 2)] _DitherSpace ("Dither Space", Int) = 0
 
         // LOW PRECISION
         // [Space(35)]
@@ -688,30 +689,31 @@ Shader "luka/indev/backlace"
         // [Space(35)]
         // [Header(UV Settings)]
         // [Space(10)]
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MainTex_UV ("Main texture UV set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _BumpMap_UV ("Bump map UV set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MSSO_UV ("MSSO UV set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SpecularTintTexture_UV ("Specular Tint UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _TangentMap_UV ("Tangent Map UV", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EmissionMap_UV ("Emission Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ClearcoatMap_UV ("Clear Coat Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MatcapMask_UV ("Clear Coat Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ParallaxMap_UV ("Height Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ThicknessMap_UV ("Thickness Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _DetailMap_UV ("Detail Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Deca; 1 UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal2_UV ("Decal 2 UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Glitter_UV ("Glitter UV Set", Float) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _IridescenceMask_UV ("Iridescence Mask UV Set", Float) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _GlitterMask_UV ("Glitter Mask UV Set", Float) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _HairFlowMap_UV ("Hair Flow Map UV Set", Float) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowTex_UV ("Shadow Texture UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Flowmap_UV ("Flowmap UV Set", Float) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _RefractionMask_UV ("Refraction Mask UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Float) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Float) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MainTex_UV ("Main texture UV set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _BumpMap_UV ("Bump map UV set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MSSO_UV ("MSSO UV set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SpecularTintTexture_UV ("Specular Tint UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _TangentMap_UV ("Tangent Map UV", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EmissionMap_UV ("Emission Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ClearcoatMap_UV ("Clear Coat Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MatcapMask_UV ("Clear Coat Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ParallaxMap_UV ("Height Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ThicknessMap_UV ("Thickness Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _DetailMap_UV ("Detail Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Deca; 1 UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal2_UV ("Decal 2 UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Glitter_UV ("Glitter UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _IridescenceMask_UV ("Iridescence Mask UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _GlitterMask_UV ("Glitter Mask UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _HairFlowMap_UV ("Hair Flow Map UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowTex_UV ("Shadow Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Flowmap_UV ("Flowmap UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _RefractionMask_UV ("Refraction Mask UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Dither_UV ("Dither UV Set", Int) = 0
     }
     SubShader
     {

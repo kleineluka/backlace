@@ -158,7 +158,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);
     #endif // _BACKLACE_DISTANCE_FADE
     #if defined(_BACKLACE_DITHER)
-        ApplyDither(Surface);
+        ApplyDither(Surface, i.worldPos.xy, Uvs[_Dither_UV]);
     #endif // _BACKLACE_DITHER
     #if defined(_BACKLACE_VRCHAT_MIRROR)
         ApplyMirrorDetectionPost(Surface); // todo: move before lighting but store alpha if not culling

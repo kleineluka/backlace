@@ -533,6 +533,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_ToggleDither = null;
         private MaterialProperty prop_DitherAmount = null;
         private MaterialProperty prop_DitherScale = null;
+        private MaterialProperty prop_DitherSpace = null;
         // ps1 properties
         private MaterialProperty prop_TogglePS1 = null;
         private MaterialProperty prop_PS1Rounding = null;
@@ -612,6 +613,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_PathingMap_UV = null;
         private MaterialProperty prop_ShadowMap_UV = null;
         private MaterialProperty prop_PathingTexture_UV = null;
+        private MaterialProperty prop_Dither_UV = null;
         #endregion // Properties
 
         // unload the interface (ex. on shader change)
@@ -1171,6 +1173,7 @@ namespace Luka.Backlace
                     prop_PathingMap_UV = FindProperty("_PathingMap_UV", properties);
                     prop_ShadowMap_UV = FindProperty("_ShadowMap_UV", properties);
                     prop_PathingTexture_UV = FindProperty("_PathingTexture_UV", properties);
+                    prop_Dither_UV = FindProperty("_Dither_UV", properties);
                     materialEditor.ShaderProperty(prop_MainTex_UV, languages.speak("prop_MainTex_UV"));
                     materialEditor.ShaderProperty(prop_BumpMap_UV, languages.speak("prop_BumpMap_UV"));
                     materialEditor.ShaderProperty(prop_MSSO_UV, languages.speak("prop_MSSO_UV"));
@@ -1195,6 +1198,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingMap_UV, languages.speak("prop_PathingMap_UV"));
                     materialEditor.ShaderProperty(prop_ShadowMap_UV, languages.speak("prop_ShadowMap_UV"));
                     materialEditor.ShaderProperty(prop_PathingTexture_UV, languages.speak("prop_PathingTexture_UV"));
+                    materialEditor.ShaderProperty(prop_Dither_UV, languages.speak("prop_Dither_UV"));
                 }
                 Components.end_foldout();
             }
@@ -1941,8 +1945,10 @@ namespace Luka.Backlace
                     prop_ToggleDither = FindProperty("_ToggleDither", properties);
                     prop_DitherAmount = FindProperty("_DitherAmount", properties);
                     prop_DitherScale = FindProperty("_DitherScale", properties);
+                    prop_DitherSpace = FindProperty("_DitherSpace", properties);
                     materialEditor.ShaderProperty(prop_ToggleDither, languages.speak("prop_ToggleDither"));
                     Components.start_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_DitherSpace, languages.speak("prop_DitherSpace"));
                     materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
                     materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
                     Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
