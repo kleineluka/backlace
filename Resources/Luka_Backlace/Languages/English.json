@@ -505,6 +505,10 @@
             "value": "Alpha"
         },
         {
+            "key": "prop_DecalStage",
+            "value": "Decal Stage (Shared)"
+        },
+        {
             "key": "prop_UV_Offset_X",
             "value": "UV Offset X"
         },

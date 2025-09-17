@@ -132,6 +132,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_BumpMap = null;
         private MaterialProperty prop_BumpScale = null;
         private MaterialProperty prop_Alpha = null;
+        private MaterialProperty prop_DecalStage = null;
         // uv manipulation properties
         private MaterialProperty prop_UV_Offset_X = null;
         private MaterialProperty prop_UV_Offset_Y = null;
@@ -974,7 +975,9 @@ namespace Luka.Backlace
                     prop_Decal1HueShift = FindProperty("_Decal1HueShift", properties);
                     prop_Decal1AutoCycleHue = FindProperty("_Decal1AutoCycleHue", properties);
                     prop_Decal1CycleSpeed = FindProperty("_Decal1CycleSpeed", properties);
+                    prop_DecalStage = FindProperty("_DecalStage", properties);
                     materialEditor.ShaderProperty(prop_Decal1Enable, languages.speak("prop_Decal1Enable"));
+                    materialEditor.ShaderProperty(prop_DecalStage, languages.speak("prop_DecalStage"));
                     Components.start_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Decal1Tex, languages.speak("prop_Decal1Tex"));
                     materialEditor.ShaderProperty(prop_Decal1Tint, languages.speak("prop_Decal1Tint"));
@@ -1027,7 +1030,9 @@ namespace Luka.Backlace
                     prop_Decal2HueShift = FindProperty("_Decal2HueShift", properties);
                     prop_Decal2AutoCycleHue = FindProperty("_Decal2AutoCycleHue", properties);
                     prop_Decal2CycleSpeed = FindProperty("_Decal2CycleSpeed", properties);
+                    prop_DecalStage = FindProperty("_DecalStage", properties);
                     materialEditor.ShaderProperty(prop_Decal2Enable, languages.speak("prop_Decal2Enable"));
+                    materialEditor.ShaderProperty(prop_DecalStage, languages.speak("prop_DecalStage"));
                     Components.start_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Decal2Tex, languages.speak("prop_Decal2Tex"));
                     materialEditor.ShaderProperty(prop_Decal2Tint, languages.speak("prop_Decal2Tint"));

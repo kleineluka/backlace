@@ -53,6 +53,7 @@ Shader "luka/indev/backlace"
         _BumpMap ("Normal map", 2D) = "bump" { }
         _BumpScale ("Normal map scale", Float) = 1
         _Alpha ("Alpha", Range(0, 1)) = 1.0
+        [Enum(Early, 0, Late, 1)] _DecalStage ("Decal Stage", Int) = 1
 
         // UV MANIPULATION
         // [Space(35)]
@@ -648,9 +649,9 @@ Shader "luka/indev/backlace"
         // [Header(Dither)]
         // [Space(10)]
         [Toggle(_BACKLACE_DITHER)] _ToggleDither ("Enable Dither", Float) = 0.0
+        [Enum(Screen, 0, World, 1, UV, 2)] _DitherSpace ("Dither Space", Int) = 0
         _DitherAmount ("Dither Amount", Range(0, 1)) = 0
         _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
-        [Enum(Screen, 0, World, 1, UV, 2)] _DitherSpace ("Dither Space", Int) = 0
 
         // LOW PRECISION
         // [Space(35)]

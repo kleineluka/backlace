@@ -67,6 +67,7 @@ struct FragmentData
     float3 normal : NORMAL;
 };
 
+// main properties
 sampler3D _DitherMaskLOD;
 FragmentData FragData;
 UNITY_DECLARE_TEX2D(_MainTex);
@@ -74,6 +75,7 @@ float4 _MainTex_ST;
 float4 _Color;
 float _Cutoff;
 float _MainTex_UV;
+int _DecalStage;
 
 // uv manipulation
 float _UV_Offset_X;

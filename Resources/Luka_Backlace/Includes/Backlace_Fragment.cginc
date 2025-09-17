@@ -41,10 +41,16 @@ float4 Fragment(FragmentData i) : SV_TARGET
         ApplyMirrorDetectionPre(Surface);
     #endif // _BACKLACE_VRCHAT_MIRROR
     #if defined(_BACKLACE_DECAL1)
-        ApplyDecal1(Surface, FragData, Uvs);
+        [branch] if (_DecalStage == 0) // early
+        {
+            ApplyDecal1(Surface, FragData, Uvs);
+        }
     #endif // _BACKLACE_DECAL1
     #if defined(_BACKLACE_DECAL2)
-        ApplyDecal2(Surface, FragData, Uvs);
+        [branch] if (_DecalStage == 0) // early
+        {
+            ApplyDecal2(Surface, FragData, Uvs);
+        }
     #endif // _BACKLACE_DECAL2
     ClipAlpha(Surface);
     SampleNormal();
@@ -153,6 +159,18 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_PS1)
         ApplyPS1ColorCompression(Surface.FinalColor);
     #endif // _BACKLACE_PS1
+    #if defined(_BACKLACE_DECAL1)
+        [branch] if (_DecalStage == 1) // late
+        {
+            ApplyDecal1(Surface, FragData, Uvs);
+        }
+    #endif // _BACKLACE_DECAL1
+    #if defined(_BACKLACE_DECAL2)
+        [branch] if (_DecalStage == 1) // late
+        {
+            ApplyDecal2(Surface, FragData, Uvs);
+        }
+    #endif // _BACKLACE_DECAL2
     AddAlpha(Surface);
     #if defined(_BACKLACE_DISTANCE_FADE)
         ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);
