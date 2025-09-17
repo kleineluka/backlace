@@ -152,6 +152,31 @@ float3 RGBtoHSV(float3 c) {
 	return float3(abs(q.z + (q.w - q.y) / (6.0 * d + E)), d / (q.x + E), q.x);
 }
 
+// fresnel term using Schlick's approximation
+inline half3 FresnelTerm(half3 F0, half cosA)
+{
+    half t = Pow5(1 - cosA);
+    return F0 + (1 - F0) * t;
+}
+
+// gtr2 distribution function (for specular and clearcoat)
+float GTR2(float NdotH, float a)
+{
+    float a2 = a * a;
+    float NdotH2 = NdotH * NdotH;
+    float denominator = NdotH2 * (a2 - 1.0) + 1.0;
+    denominator = UNITY_PI * denominator * denominator + 1e-7f;
+    return a2 / denominator;
+}
+
+// ggx distribution function (for specular and clearcoat)
+float smithG_GGX(float NdotV, float alphaG)
+{
+    float a = alphaG * alphaG;
+    float b = NdotV * NdotV;
+    return 1 / (NdotV + sqrt(a + b - a * b) + 1e-7f);
+}
+
 // apply a hue shift to a colour
 float3 ApplyHueShift(float3 inColor, float baseShift, float autoCycleToggle, float autoCycleSpeed)
 {
@@ -457,6 +482,19 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
 
 // dissolve-only features
 #if defined(_BACKLACE_DISSOLVE)
+    float _DissolveProgress;
+    UNITY_DECLARE_TEX2D(_DissolveNoiseTex);
+    float _DissolveNoiseScale;
+    float4 _DissolveEdgeColor;
+    int _DissolveType;
+    float _DissolveEdgeWidth;
+    float4 _DissolveDirection;
+    int _DissolveDirectionSpace;
+    float _DissolveDirectionBounds;
+    float _DissolveVoxelDensity;
+    float _DissolveEdgeSharpness;
+    float _DissolveEdgeMode;
+    
     float GetDissolveMapValue(float3 worldPos, float3 vertexPos, float3 normalDir)
     {
         float dissolveMapValue = 0;

@@ -13,18 +13,6 @@
 #pragma shader_feature_local _ _BACKLACE_DITHER
 #pragma shader_feature_local _ _BLENDMODE_CUTOUT
 
-// dissolve support for the outline
-#if defined(_BACKLACE_DISSOLVE)
-    float _DissolveProgress;
-    UNITY_DECLARE_TEX2D(_DissolveNoiseTex);
-    float _DissolveNoiseScale;
-    int _DissolveType;
-    float4 _DissolveDirection;
-    int _DissolveDirectionSpace;
-    float _DissolveDirectionBounds;
-    float _DissolveVoxelDensity;
-#endif
-
 // includes
 #include "UnityCG.cginc"
 #include "./Backlace_Universal.cginc"
@@ -132,7 +120,19 @@ fixed4 frag(v2f i) : SV_Target
     // handle dithering
     #if defined(_BACKLACE_DITHER)
         float ditheredAlpha = lerp(baseAlpha, 0.0, _DitherAmount);
-        float pattern = 1.0 - GetTiltedCheckerboardPattern(i.screenPos.xy / i.screenPos.w * _ScreenParams.xy, _DitherScale);
+        float2 ditherUV = 0;
+        switch (_DitherSpace) {
+            case 1: // world
+                ditherUV = frac(i.worldPos.xy) * _ScreenParams.xy;
+                break;
+            case 2: // uv
+                ditherUV = i.uv * _ScreenParams.xy;
+                break;
+            default: // screen
+                ditherUV = i.screenPos.xy / i.screenPos.w * _ScreenParams.xy;
+                break;
+        }
+        float pattern = 1.0 - GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
         clip(ditheredAlpha - pattern);
     #endif // _BACKLACE_DITHER
     // finally, draw the outline

@@ -305,7 +305,7 @@ Shader "luka/indev/backlace"
         [Enum(Disabled, 0, Enabled, 1)] _ToggleAutoCycle ("Enable Auto Cycle Hue", Float) = 0.0
         _AutoCycleSpeed ("Auto Cycle Speed", Float) = 0.1
         [NoScaleOffset] _ColorGradingLUT ("Color Grading LUT", 2D) = "white" { }
-        _ColorGradingIntensity ("Grading Intensity", Range(0, 1)) = 1.0
+        _ColorGradingIntensity ("Grading Intensity", Range(0, 1)) = 0.0
         _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
         _Brightness ("Brightness", Range(0, 2)) = 1.0
 

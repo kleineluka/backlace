@@ -144,26 +144,6 @@ float3 _VertexManipulationScale;
     UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
 #endif // _BACKLACE_EMISSION
 
-// rim feature
-#if defined(_BACKLACE_RIMLIGHT)
-    float3 Rimlight;
-    float4 _RimColor;
-    float _RimWidth;
-    float _RimIntensity;
-    float _RimLightBased;
-#endif // _BACKLACE_RIMLIGHT
-
-// clear coat feature
-#if defined(_BACKLACE_CLEARCOAT)
-    UNITY_DECLARE_TEX2D(_ClearcoatMap);
-    float4 _ClearcoatMap_ST;
-    float _ClearcoatStrength;
-    float _ClearcoatRoughness;
-    float _ClearcoatReflectionStrength;
-    float _ClearcoatMap_UV;
-    float4 _ClearcoatColor;
-#endif // _BACKLACE_CLEARCOAT
-
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
     // specific specular modes
@@ -190,61 +170,6 @@ float3 _VertexManipulationScale;
         float3 VertexLightDir;
     #endif // _BACKLACE_VERTEX_SPECULAR
 #endif // _BACKLACE_SPECULAR
-
-// matcap feature
-#if defined(_BACKLACE_MATCAP)
-    UNITY_DECLARE_TEX2D(_MatcapTex);
-    UNITY_DECLARE_TEX2D(_MatcapMask);
-    float4 _MatcapTex_ST;
-    float _MatcapIntensity;
-    float3 _MatcapTint;
-    float _MatcapSmoothnessEnabled;
-    float _MatcapSmoothness;
-    float _MatcapMask_UV;
-    int _MatcapBlendMode;
-#endif // _BACKLACE_MATCAP
-
-// cubemap feature
-#if defined(_BACKLACE_CUBEMAP)
-    samplerCUBE _CubemapTex;
-    float4 _CubemapTint;
-    float _CubemapIntensity;
-    int _CubemapBlendMode;
-#endif // _BACKLACE_CUBEMAP
-
-// parallax feature
-#if defined(_BACKLACE_PARALLAX)
-    UNITY_DECLARE_TEX2D(_ParallaxMap);
-    float _ParallaxMap_UV;
-    float _ParallaxStrength;
-    float _ParallaxMode;
-    float _ParallaxSteps;
-    #if defined(_BACKLACE_PARALLAX_SHADOWS)
-        float ParallaxShadow;
-        float _ParallaxShadowSteps;
-        float _ParallaxShadowStrength;
-    #endif // _BACKLACE_PARALLAX_SHADOWS
-#endif // _BACKLACE_PARALLAX
-
-// subsurface scattering feature
-#if defined(_BACKLACE_SSS)
-    UNITY_DECLARE_TEX2D(_ThicknessMap);
-    float _ThicknessMap_UV;
-    float4 _SSSColor;
-    float _SSSStrength;
-    float _SSSDistortion;
-    float _SSSSpread;
-    float _SSSBaseColorMix;
-#endif // _BACKLACE_SSS
-
-// detail feature
-#if defined(_BACKLACE_DETAIL)
-    UNITY_DECLARE_TEX2D(_DetailAlbedoMap);
-    UNITY_DECLARE_TEX2D(_DetailNormalMap);
-    float _DetailMap_UV;
-    float _DetailTiling;
-    float _DetailNormalStrength;
-#endif // _BACKLACE_DETAIL
 
 // decal1 feature
 #if defined(_BACKLACE_DECAL1)
@@ -288,24 +213,6 @@ float3 _VertexManipulationScale;
     float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECAL2
 
-// post-processing feature
-#if defined(_BACKLACE_POST_PROCESSING)
-    UNITY_DECLARE_TEX2D(_ColorGradingLUT);
-    float4 _RGBColor;
-    float _RGBBlendMode;
-    float _HSVMode;
-    float _HSVHue;
-    float _HSVSaturation;
-    float _HSVValue;
-    float _ToggleHueShift;
-    float _HueShift;
-    float _ToggleAutoCycle;
-    float _AutoCycleSpeed;
-    float _ColorGradingIntensity;   
-    float _BlackAndWhite;
-    float _Brightness;
-#endif // _BACKLACE_POST_PROCESSING
-
 // uv effects
 #if defined(_BACKLACE_UV_EFFECTS)
     // triplanar
@@ -332,57 +239,6 @@ float3 _VertexManipulationScale;
     float _UVFlowmapDistortion;
     float _UVFlowmap_UV;
 #endif // _BACKLACE_UV_EFFECTS
-
-// dissolve feature
-#if defined(_BACKLACE_DISSOLVE)
-    float _DissolveProgress;
-    UNITY_DECLARE_TEX2D(_DissolveNoiseTex);
-    float _DissolveNoiseScale;
-    float4 _DissolveEdgeColor;
-    int _DissolveType;
-    float _DissolveEdgeWidth;
-    float4 _DissolveDirection;
-    int _DissolveDirectionSpace;
-    float _DissolveDirectionBounds;
-    float _DissolveVoxelDensity;
-    float _DissolveEdgeSharpness;
-    float _DissolveEdgeMode;
-#endif // _BACKLACE_DISSOLVE
-
-// pathing feature
-#if defined(_BACKLACE_PATHING)
-    UNITY_DECLARE_TEX2D(_PathingMap);
-    float2 _PathingMap_ST;
-    float4 _PathingColor;
-    float _PathingEmission;
-    int _PathingType;
-    float _PathingSpeed;
-    float _PathingWidth;
-    float _PathingSoftness;
-    float _PathingOffset;
-    float _PathingMap_UV;
-    float _PathingScale;
-    int _PathingBlendMode;
-    int _PathingMappingMode;
-    int _PathingColorMode;
-    float4 _PathingColor2;
-    UNITY_DECLARE_TEX2D(_PathingTexture);
-    float _PathingTexture_UV;
-#endif // _BACKLACE_PATHING
-
-// screen space rim feature
-#if defined(_BACKLACE_DEPTH_RIMLIGHT)
-    #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
-        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-        float4 _CameraDepthTexture_TexelSize;
-        #define BACKLACE_DEPTH
-    #endif // BACKLACE_DEPTH
-    float4 _DepthRimColor;
-    float _DepthRimWidth;
-    float _DepthRimThreshold;
-    float _DepthRimSharpness;
-    int _DepthRimBlendMode;
-#endif // _BACKLACE_DEPTH_RIMLIGHT
 
 // shadow map feature
 #if defined(_BACKLACE_SHADOW_MAP)

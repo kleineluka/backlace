@@ -117,13 +117,6 @@ float3 _VertexManipulationScale;
     float _UVFlowmap_UV;
 #endif // _BACKLACE_UV_EFFECTS
 
-// parallax-only features
-#if defined(_BACKLACE_PARALLAX)
-    UNITY_DECLARE_TEX2D(_ParallaxMap);
-    float _ParallaxMap_UV;
-    float _ParallaxStrength;
-#endif // _BACKLACE_PARALLAX
-
 // decal1-only feature
 #if defined(_BACKLACE_DECAL1)
     UNITY_DECLARE_TEX2D(_Decal1Tex);
