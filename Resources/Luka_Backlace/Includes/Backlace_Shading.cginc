@@ -33,6 +33,12 @@ void GetGeometryVectors(inout BacklaceSurfaceData Surface, FragmentData FragData
     Surface.NormalDir = normalize(FragData.normal);
     Surface.TangentDir = normalize(UnityObjectToWorldDir(FragData.tangentDir.xyz));
     Surface.BitangentDir = normalize(cross(Surface.NormalDir, Surface.TangentDir) * FragData.tangentDir.w * unity_WorldTransformParams.w);
+    [branch] if (_FlipBackfaceNormals == 1 && !Surface.IsFrontFace)
+    {
+        Surface.NormalDir *= -1;
+        Surface.TangentDir *= -1;
+        Surface.BitangentDir *= -1;
+    }
     Surface.ViewDir = normalize(UnityWorldSpaceViewDir(FragData.worldPos));
     Surface.ScreenCoords = FragData.pos.xy / _ScreenParams.xy;
 }

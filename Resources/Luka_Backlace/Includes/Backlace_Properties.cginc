@@ -26,6 +26,7 @@ float _Cutoff;
 float _BumpScale;
 int _IndirectFallbackMode;
 int _IndirectOverride;
+int _FlipBackfaceNormals;
 
 // specular settings
 float _Occlusion;

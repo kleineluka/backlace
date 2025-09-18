@@ -49,6 +49,7 @@ struct BacklaceSurfaceData
     float3 CustomIndirect;
     // extra data cos we ball >.<
     float2 ScreenCoords;
+    bool IsFrontFace;
 };
 
 // loading uv function

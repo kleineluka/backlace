@@ -42,6 +42,8 @@ Shader "luka/indev/backlace"
         [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilZFail ("Outline Stencil ZFail Op", Int) = 0 // Keep
         // vrchat fallback
         [Enum(Toon, 0, Double Sided, 1, Unlit, 2, Particle, 3, Matcap, 4, Sprite, 5, Hidden, 6)] _VRCFallback ("VRChat Fallback", Int) = 0
+        // flip backface normals
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleFlipNormals ("Flip Backface Normals", Int) = 0
 
         // MAIN MAPS AND ALPHA
         // [Space(35)]
@@ -337,7 +339,7 @@ Shader "luka/indev/backlace"
         // [Header(Subsurface Scattering)]
         // [Space(10)]
         [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
-        _SSSColor ("SSS Color", Color) = (1, 0.8, 0.7, 1) // A warm, peachy color is a great start
+        _SSSColor ("SSS Color", Color) = (1, 0.8, 0.7, 1) 
         _SSSStrength ("SSS Strength", Range(0, 5)) = 1.0
         _SSSPower ("SSS Power", Range(0.1, 10)) = 2.0
         _SSSDistortion ("SSS Distortion", Range(0, 1)) = 0.5
@@ -811,5 +813,5 @@ Shader "luka/indev/backlace"
         }
 
     }
-    //CustomEditor "Luka.Backlace.Interface"
+    CustomEditor "Luka.Backlace.Interface"
 }

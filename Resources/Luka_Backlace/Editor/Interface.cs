@@ -125,6 +125,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_OutlineStencilFail = null;
         private MaterialProperty prop_OutlineStencilZFail = null;
         private MaterialProperty prop_VRCFallback = null;
+        private MaterialProperty prop_ToggleFlipNormals = null;
         // texture properties
         private MaterialProperty prop_MainTex = null;
         private MaterialProperty prop_Color = null;
@@ -337,12 +338,12 @@ namespace Luka.Backlace
         private MaterialProperty prop_ParallaxShadowStrength = null;
         // subsurface properties
         private MaterialProperty prop_ToggleSSS = null;
-        private MaterialProperty prop_ThicknessMap = null;
         private MaterialProperty prop_SSSColor = null;
         private MaterialProperty prop_SSSStrength = null;
+        private MaterialProperty prop_SSSPower = null;
         private MaterialProperty prop_SSSDistortion = null;
-        private MaterialProperty prop_SSSSpread = null;
-        private MaterialProperty prop_SSSBaseColorMix = null;
+        private MaterialProperty prop_SSSThicknessMap = null;
+        private MaterialProperty prop_SSSThickness = null;
         // shadow map properties
         private MaterialProperty prop_ToggleShadowMap = null;
         private MaterialProperty prop_ShadowMap = null;
@@ -831,6 +832,7 @@ namespace Luka.Backlace
                     prop_OutlineStencilFail = FindProperty("_OutlineStencilFail", properties);
                     prop_OutlineStencilZFail = FindProperty("_OutlineStencilZFail", properties);
                     prop_VRCFallback = FindProperty("_VRCFallback", properties);
+                    prop_ToggleFlipNormals = FindProperty("_ToggleFlipNormals", properties);
                     var blendModeNames = new string[] {
                         "Opaque", "Cutout", "Fade", "Opaque Fade", "Transparent", "Premultiply",
                         "Additive", "Soft Additive", "Multiplicative", "2x Multiplicative"
@@ -872,6 +874,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_OverrideRenderQueue.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Cull, languages.speak("prop_Cull"));
                     materialEditor.ShaderProperty(prop_ZTest, languages.speak("prop_ZTest"));
+                    materialEditor.ShaderProperty(prop_ToggleFlipNormals, languages.speak("prop_ToggleFlipNormals"));
                     materialEditor.ShaderProperty(prop_StencilRef, languages.speak("prop_StencilRef"));
                     Components.start_dynamic_disable(prop_StencilRef.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;
@@ -1560,20 +1563,24 @@ namespace Luka.Backlace
                 if (sub_tab_subsurface.is_expanded) {
                     // shading - subsurface
                     prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
-                    prop_ThicknessMap = FindProperty("_ThicknessMap", properties);
                     prop_SSSColor = FindProperty("_SSSColor", properties);
                     prop_SSSStrength = FindProperty("_SSSStrength", properties);
+                    prop_SSSPower = FindProperty("_SSSPower", properties);
                     prop_SSSDistortion = FindProperty("_SSSDistortion", properties);
-                    prop_SSSSpread = FindProperty("_SSSSpread", properties);
-                    prop_SSSBaseColorMix = FindProperty("_SSSBaseColorMix", properties);
+                    prop_SSSThicknessMap = FindProperty("_SSSThicknessMap", properties);
+                    prop_SSSThickness = FindProperty("_SSSThickness", properties);
                     materialEditor.ShaderProperty(prop_ToggleSSS, languages.speak("prop_ToggleSSS"));
                     Components.start_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ThicknessMap, languages.speak("prop_ThicknessMap"));
                     materialEditor.ShaderProperty(prop_SSSColor, languages.speak("prop_SSSColor"));
                     materialEditor.ShaderProperty(prop_SSSStrength, languages.speak("prop_SSSStrength"));
+                    materialEditor.ShaderProperty(prop_SSSPower, languages.speak("prop_SSSPower"));
                     materialEditor.ShaderProperty(prop_SSSDistortion, languages.speak("prop_SSSDistortion"));
-                    materialEditor.ShaderProperty(prop_SSSSpread, languages.speak("prop_SSSSpread"));
-                    materialEditor.ShaderProperty(prop_SSSBaseColorMix, languages.speak("prop_SSSBaseColorMix"));
+                    materialEditor.ShaderProperty(prop_SSSThicknessMap, languages.speak("prop_SSSThicknessMap"));
+                    Components.start_dynamic_disable(prop_SSSThicknessMap.textureValue == null, configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_SSSThickness, languages.speak("prop_SSSThickness"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_SSSThicknessMap.textureValue == null, configs);
                     Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
                 }
                 sub_tab_parallax.draw();

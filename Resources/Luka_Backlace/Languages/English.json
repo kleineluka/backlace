@@ -481,6 +481,10 @@
             "value": "VRChat Fallback"
         },
         {
+            "key": "prop_ToggleFlipNormals",
+            "value": "Flip Backface Normals"
+        },
+        {
             "key": "prop_MainTex",
             "value": "Main Texture"
         },
@@ -1257,28 +1261,28 @@
             "value": "Enable Subsurface Scattering"
         },
         {
-            "key": "prop_ThicknessMap",
-            "value": "Thickness Map (R)"
-        },
-        {
             "key": "prop_SSSColor",
-            "value": "Scattering Tint"
+            "value": "SSS Colour"
         },
         {
             "key": "prop_SSSStrength",
-            "value": "Strength"
+            "value": "SSS Strength"
+        },
+        {
+            "key": "prop_SSSPower",
+            "value": "SSS Power"
         },
         {
             "key": "prop_SSSDistortion",
-            "value": "Distortion"
+            "value": "SSS Distortion"
         },
         {
-            "key": "prop_SSSSpread",
-            "value": "Spread"
+            "key": "prop_SSSThicknessMap",
+            "value": "SSS Thickness Map (R)"
         },
         {
-            "key": "prop_SSSBaseColorMix",
-            "value": "Mix With Albedo"
+            "key": "prop_SSSThickness",
+            "value": "SSS Thickness Attenuation"
         },
         {
             "key": "prop_ToggleShadowMap",

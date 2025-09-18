@@ -2,9 +2,10 @@
 #define BACKLACE_FRAGMENT_CGINC
 
 // shared fragment between both base and add passes
-float4 Fragment(FragmentData i) : SV_TARGET
+float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
 {
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
+    Surface.IsFrontFace = (facing == 1);
     Surface.FinalColor.a = -1.0; // flag to indicate not set yet
     FragData = i;
     LoadUVs();
