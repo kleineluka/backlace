@@ -146,9 +146,9 @@ namespace Luka.Backlace
                     break;
                 case "Debug":
                     // only print debug messages in developer mode
-                    #if LUKA_DEVELOPER_MODE
+#if LUKA_DEVELOPER_MODE
                         Debug.Log(formatted_message);
-                    #endif // LUKA_DEVELOPER_MODE
+#endif // LUKA_DEVELOPER_MODE
                     break;
                 default:
                     Debug.Log(formatted_message);
@@ -315,12 +315,12 @@ namespace Luka.Backlace
         // fetch
         private void fetch()
         {
-            #if LUKA_DEVELOPER_MODE
+#if LUKA_DEVELOPER_MODE
                 Pretty.print("Developer mode is active, skipping metadata fetch...", Pretty.LogKind.Info);
                 full_metadata = null;
                 metadata_loaded = false;
                 return;
-            #endif
+#endif
             try
             {
                 using (var wc = new System.Net.WebClient())
@@ -1043,8 +1043,32 @@ namespace Luka.Backlace
 
     }
 
+    // shader capabilities
+    public class ShaderCapability
+    {
+        public string Name { get; private set; }
+        public string Definition { get; private set; } // should be a language file name, ex. "depth_popup_info"
+        public Color Color { get; private set; }
+
+        public ShaderCapability(string name, string definition, Color color)
+        {
+            Name = name;
+            Definition = definition;
+            Color = color;
+        }
+
+        public string GetDefinition(ref Languages language_manager)
+        {
+            if (language_manager != null && !string.IsNullOrEmpty(Definition))
+            {
+                return language_manager.speak(Definition);
+            }
+            return Definition;
+        }
+    }
+
 }
-# endif // UNITY_EDITOR
+#endif // UNITY_EDITOR
 
 //
 //⠀⠀⠀⠀⠀⠀⠀   ⠀⠀⠀ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

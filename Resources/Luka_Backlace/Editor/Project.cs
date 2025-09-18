@@ -29,6 +29,10 @@ namespace Luka.Backlace
             new ShaderVariant("Outline", "Outline", new Color(1.0f, 0.75f, 0.8f)),
             new ShaderVariant("Grabpass", "Grabpass", new Color(0.77f, 0.93f, 0.77f))
         };
+        public static readonly List<ShaderCapability> shader_capabilities = new List<ShaderCapability>
+        { 
+            new ShaderCapability("Depth", "depth_popup_info", new Color(0.4f, 0.8f, 1.0f))
+        };
     }
 
 }

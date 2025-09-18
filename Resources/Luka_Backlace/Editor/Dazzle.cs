@@ -735,13 +735,15 @@ namespace Luka.Backlace
         private string tab_label = null;
         public ShaderVariant shader_variant = null;
         private string toggle_property_name = null;
+        public ShaderCapability capability = null;
 
         // tab state
         public bool is_expanded = false;
         public bool is_active = false;
 
         // constructor for a tab
-        public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, ShaderVariant shader_variant = null, string toggle_property_name = null)
+        public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, 
+            ShaderVariant shader_variant = null, string toggle_property_name = null, ShaderCapability capability = null)
         {
             this.theme = theme;
             this.material = material;
@@ -750,6 +752,7 @@ namespace Luka.Backlace
             this.tab_label = tab_label;
             this.shader_variant = shader_variant;
             this.toggle_property_name = toggle_property_name;
+            this.capability = capability;
         }
 
         private void draw_badges(Rect parentRect, List<BadgeMetadata> badges, float initialXOffset, float padding)
@@ -836,6 +839,21 @@ namespace Luka.Backlace
             GUI.Box(rect, tab_text, primary_style);
             // draw the badges
             var badgesToDraw = new List<BadgeMetadata>();
+            // activated badge
+            if (toggle_property_name != null && material != null && material.HasProperty(toggle_property_name))
+            {
+                if (material.GetFloat(toggle_property_name) != 0f && this.theme.config_manager.json_data.@interface.show_status_badges)
+                {
+                    badgesToDraw.Add(new BadgeMetadata
+                    {
+                        Text = theme.language_manager.speak("status_badge_enabled"),
+                        Color = theme.styler_manager.load_colour_active_badge(),
+                        Style = theme.styler_manager.load_style_variant_badge_large(),
+                        OnClick = null 
+                    });
+                }
+            }
+            // variant badge
             if (shader_variant != null && shader_variant != Project.shader_variants[0])
             {
                 Action variantBadgeClickAction = () =>
@@ -852,6 +870,25 @@ namespace Luka.Backlace
                     Color = shader_variant.Color,
                     Style = theme.styler_manager.load_style_variant_badge_large(),
                     OnClick = variantBadgeClickAction
+                });
+            }
+            // feature badge
+            if (capability != null && capability != Project.shader_capabilities[0])
+            {
+                Action capabilityBadgeClickAction = () =>
+                {
+                    EditorUtility.DisplayDialog(
+                        theme.language_manager.speak("capability_popup_title"),
+                        capability.GetDefinition(ref theme.language_manager),
+                        theme.language_manager.speak("dialog_okay")
+                    );
+                };
+                badgesToDraw.Add(new BadgeMetadata
+                {
+                    Text = capability.Name,
+                    Color = capability.Color,
+                    Style = theme.styler_manager.load_style_variant_badge_large(),
+                    OnClick = capabilityBadgeClickAction
                 });
             }
             draw_badges(rect, badgesToDraw, 20f, 5f);
@@ -901,9 +938,23 @@ namespace Luka.Backlace
             GUI.Box(rect, tab_text, sub_style);
             // draw the badges
             var badgesToDraw = new List<BadgeMetadata>();
+            // activated badge
+            if (toggle_property_name != null && material != null && material.HasProperty(toggle_property_name))
+            {
+                if (material.GetFloat(toggle_property_name) != 0f && this.theme.config_manager.json_data.@interface.show_status_badges)
+                {
+                    badgesToDraw.Add(new BadgeMetadata
+                    {
+                        Text = theme.language_manager.speak("status_badge_enabled"),
+                        Color = theme.styler_manager.load_colour_active_badge(),
+                        Style = theme.styler_manager.load_style_variant_badge_small(),
+                        OnClick = null 
+                    });
+                }
+            }
+            // variant badge
             if (shader_variant != null && shader_variant != Project.shader_variants[0])
             {
-                // variant badge
                 Action variantBadgeClickAction = () =>
                 {
                     EditorUtility.DisplayDialog(
@@ -920,19 +971,24 @@ namespace Luka.Backlace
                     OnClick = variantBadgeClickAction
                 });
             }
-            if (toggle_property_name != null && material != null && material.HasProperty(toggle_property_name))
+            // feature badge
+            if (capability != null)
             {
-                // activated badge
-                if (material.GetFloat(toggle_property_name) != 0f && this.theme.config_manager.json_data.@interface.show_status_badges)
+                Action capabilityBadgeClickAction = () =>
                 {
-                    badgesToDraw.Add(new BadgeMetadata
-                    {
-                        Text = theme.language_manager.speak("status_badge_enabled"),
-                        Color = theme.styler_manager.load_colour_active_badge(),
-                        Style = theme.styler_manager.load_style_variant_badge_small(),
-                        OnClick = null 
-                    });
-                }
+                    EditorUtility.DisplayDialog(
+                        theme.language_manager.speak("capability_popup_title"),
+                        capability.GetDefinition(ref theme.language_manager),
+                        theme.language_manager.speak("dialog_okay")
+                    );
+                };
+                badgesToDraw.Add(new BadgeMetadata
+                {
+                    Text = capability.Name,
+                    Color = capability.Color,
+                    Style = theme.styler_manager.load_style_variant_badge_small(),
+                    OnClick = capabilityBadgeClickAction
+                });
             }
             draw_badges(rect, badgesToDraw, 10f, 5f);
             // handle foldout arrow
