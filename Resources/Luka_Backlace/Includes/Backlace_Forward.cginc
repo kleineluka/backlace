@@ -46,6 +46,9 @@ struct VertexData
     float2 uv3 : TEXCOORD3;
     float3 normal : NORMAL;
     float4 tangentDir : TANGENT;
+    #if defined(_BACKLACE_VERTEX_DISTORTION)
+        fixed4 color : COLOR;
+    #endif // _BACKLACE_VERTEX_DISTORTION
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 

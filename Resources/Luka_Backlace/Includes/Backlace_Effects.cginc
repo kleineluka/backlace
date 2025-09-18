@@ -914,28 +914,75 @@
 // vertex distortion feature
 #if defined(_BACKLACE_VERTEX_DISTORTION)
     int _VertexDistortionMode;
+    int _VertexDistortionColorMask; // 0 = disabled, 1 = red, 2 = green, 3 = blue, 4 = all
     float3 _VertexDistortionStrength;
     float3 _VertexDistortionSpeed;
     float3 _VertexDistortionFrequency;
+    float _WindStrength;
+    float _WindSpeed;
+    float _WindScale;
+    float4 _WindDirection;
+    UNITY_DECLARE_TEX2D(_WindNoiseTex);
+    float _BreathingStrength;
+    float _BreathingSpeed;
 
-    void DistortVertex(inout float4 vertex)
+    void DistortVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
     {
         float time = _Time.y;
         float3 distortion = 0;
-        if (_VertexDistortionMode == 0) // wave
-
+        // calculate vertex colour mask
+        float mask = 1.0;
+        switch (_VertexDistortionColorMask)
         {
-            distortion.x = sin(vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
-            distortion.y = sin(vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
-            distortion.z = sin(vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
+            case 1: // red
+                mask = vertexColor.r;
+                break;
+            case 2: // green
+                mask = vertexColor.g;
+                break;
+            case 3: // blue
+                mask = vertexColor.b;
+                break;
+            case 4: // all
+                mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
+                break;
+            default: // disabled
+                mask = 1.0;
+                break;
         }
-        else if (_VertexDistortionMode == 1) // jumble
-
+        // apply mask to strength
+        switch(_VertexDistortionMode)
         {
-            float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
-            float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
-            float offsetZ = sin(vertex.z * _VertexDistortionFrequency.z) * cos(vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
-            distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed);
+            case 0: // wave
+            {
+                distortion.x = sin(vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
+                distortion.y = sin(vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
+                distortion.z = sin(vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
+                break;
+            }
+            case 1: // jumble
+            {
+                float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
+                float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
+                float offsetZ = sin(vertex.z * _VertexDistortionFrequency.z) * cos(vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
+                distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed.x); // Use one speed channel for sync
+                break;
+            }
+            case 2: // wind
+            {
+                float2 windUV = worldPos.xz * _WindScale + (_Time.y * _WindSpeed * _WindDirection.xz);
+                float noise = UNITY_SAMPLE_TEX2D_LOD(_WindNoiseTex, windUV, 0).r * 2.0 - 1.0;
+                float sineWave = sin(_Time.y * _WindSpeed + worldPos.x + worldPos.z);
+                distortion = normalize(_WindDirection.xyz) * (noise + sineWave) * _WindStrength * mask;
+                break;
+            }
+            case 3: // breathing
+            {
+                float breath = (sin(_Time.y * _BreathingSpeed) + 1.0) * 0.5; 
+                float3 localNormal = normalize(vertex.xyz);
+                distortion = localNormal * breath * _BreathingStrength * mask;
+                break;
+            }
         }
         vertex.xyz += distortion;
     }

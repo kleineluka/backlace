@@ -66,7 +66,7 @@ v2f vert(appdata v)
     v.vertex.xyz *= _VertexManipulationScale;
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        DistortVertex(v.vertex);
+        DistortVertex(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
     #endif // _BACKLACE_VERTEX_DISTORTION
     // calculate boilerplate stuff
     o.vertex = v.vertex;

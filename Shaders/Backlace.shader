@@ -609,10 +609,21 @@ Shader "luka/indev/backlace"
         // [Header(Vertex Distortion)]
         // [Space(10)]
         [Toggle(_BACKLACE_VERTEX_DISTORTION)] _ToggleVertexDistortion ("Enable Vertex Distortion", Float) = 0.0
-        [Enum(Wave, 0, Jumble, 1)] _VertexDistortionMode ("Distortion Mode", Int) = 0
+        [Enum(Wave, 0, Jumble, 1, Wind, 2, Breathing, 3)] _VertexDistortionMode ("Distortion Mode", Int) = 0
+        [Enum(Disabled, 0, Red, 1, Green, 2, Blue, 3, All, 4)] _VertexDistortionColorMask ("Color Channel Mask", Int) = 0
+        // wave and jumble
         _VertexDistortionStrength ("Distortion Strength", Vector) = (0.1, 0.1, 0.1, 0)
         _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
         _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
+        // wind
+        _WindStrength ("Wind Strength", Range(0, 1)) = 0.1
+        _WindSpeed ("Wind Speed", Range(0, 5)) = 1.0
+        _WindScale ("Wind Noise Scale", Float) = 1.0
+        _WindDirection ("Wind Direction (XYZ)", Vector) = (1, 0, 0, 0)
+        [NoScaleOffset] _WindNoiseTex ("Wind Noise Texture (R)", 2D) = "gray" { }
+        // breathing
+        _BreathingStrength ("Breathing Strength", Range(0, 0.1)) = 0.01
+        _BreathingSpeed ("Breathing Speed", Range(0, 5)) = 1.0
 
         // FAKE SCREEN SPACE REFLECTIONS
         // [Space(35)]
@@ -813,5 +824,5 @@ Shader "luka/indev/backlace"
         }
 
     }
-    CustomEditor "Luka.Backlace.Interface"
+    //CustomEditor "Luka.Backlace.Interface"
 }
