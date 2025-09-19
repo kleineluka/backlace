@@ -709,26 +709,29 @@
     int _ShadowTextureMappingMode;
     float _ShadowPatternTriplanarSharpness;
     float _ShadowPatternTransparency;
+    int _ShadowTextureBlendMode;
 
     float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface, float3 shadowTint)
     {
-        float3 finalShadowColor;
+        float3 texturedShadow;
+        float blendFactor;
         float3 albedoTintedShadow = shadowTint * Surface.Albedo.rgb;
-        float3 baseShadowColour = Surface.Albedo.rgb * lerp(Surface.IndirectDiffuse, 1.0, _ShadowPatternTransparency);
+        float shadowMask = 1.0 - Surface.NdotL;
         switch(_ShadowTextureMappingMode)
         {
             case 0: // uv albedo
             {
                 float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
-                finalShadowColor = lerp(baseShadowColour, shadowAlbedoSample.rgb, shadowAlbedoSample.a);
+                texturedShadow = shadowAlbedoSample.rgb;
+                blendFactor = shadowAlbedoSample.a * shadowMask;
                 break;
             }
             case 1: // screen pattern
             {
                 float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
                 float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
-                float blendFactor = patternSample.r * patternSample.a;
-                finalShadowColor = lerp(baseShadowColour, albedoTintedShadow, blendFactor);
+                texturedShadow = albedoTintedShadow;
+                blendFactor = patternSample.r * patternSample.a * shadowMask;
                 break;
             }
             case 2: // triplanar
@@ -739,10 +742,24 @@
                     float3(0, 0, 0), _ShadowPatternScale, float3(0, 0, 0),
                     _ShadowPatternTriplanarSharpness, true, float2(0, 0)
                 );
-                float blendFactor = patternSample.r * patternSample.a;
-                finalShadowColor = lerp(baseShadowColour, albedoTintedShadow, blendFactor);
+                texturedShadow = albedoTintedShadow;
+                blendFactor = patternSample.r * patternSample.a * shadowMask;
                 break;
             }
+        }
+        float3 baseShadowColour = Surface.Albedo.rgb * lerp(Surface.IndirectDiffuse, 1.0, _ShadowPatternTransparency);
+        float3 finalShadowColor;
+        switch(_ShadowTextureBlendMode)
+        {
+            case 0: // additive
+                finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
+                break;
+            case 1: // multiply
+                finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
+                break;
+            default: // alpha blend (2)
+                finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
+                break;
         }
         float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
         return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);

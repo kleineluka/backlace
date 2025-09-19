@@ -477,6 +477,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_ShadowPatternScale = null;
         private MaterialProperty prop_ShadowPatternTriplanarSharpness = null;
         private MaterialProperty prop_ShadowPatternTransparency = null;
+        private MaterialProperty prop_ShadowTextureBlendMode;
         // flatten model properties
         private MaterialProperty prop_ToggleFlatModel = null;
         private MaterialProperty prop_FlatModeAutoflip = null;
@@ -1867,15 +1868,21 @@ namespace Luka.Backlace
                     prop_ShadowPatternScale = FindProperty("_ShadowPatternScale", properties);
                     prop_ShadowPatternTriplanarSharpness = FindProperty("_ShadowPatternTriplanarSharpness", properties);
                     prop_ShadowPatternTransparency = FindProperty("_ShadowPatternTransparency", properties);
+                    prop_ShadowTextureBlendMode = FindProperty("_ShadowTextureBlendMode", properties);
                     materialEditor.ShaderProperty(prop_ToggleShadowTexture, languages.speak("prop_ToggleShadowTexture"));
                     Components.start_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_ShadowTextureMappingMode, languages.speak("prop_ShadowTextureMappingMode"));
+                    materialEditor.ShaderProperty(prop_ShadowTextureBlendMode, languages.speak("prop_ShadowTextureBlendMode"));
                     materialEditor.ShaderProperty(prop_ShadowTextureIntensity, languages.speak("prop_ShadowTextureIntensity"));
+                    materialEditor.ShaderProperty(prop_ShadowPatternTransparency, languages.speak("prop_ShadowPatternTransparency"));
                     materialEditor.ShaderProperty(prop_ShadowTex, languages.speak("prop_ShadowTex"));
                     materialEditor.ShaderProperty(prop_ShadowPatternColor, languages.speak("prop_ShadowPatternColor"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternTriplanarSharpness, languages.speak("prop_ShadowPatternTriplanarSharpness"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternTransparency, languages.speak("prop_ShadowPatternTransparency"));
+                    if (prop_ShadowTextureMappingMode.floatValue.Equals(2)) {
+                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
+                        materialEditor.ShaderProperty(prop_ShadowPatternTriplanarSharpness, languages.speak("prop_ShadowPatternTriplanarSharpness"));
+                    } else if (prop_ShadowTextureMappingMode.floatValue.Equals(1)) {
+                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
+                    }
                     Components.end_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
                 }
                 sub_tab_world_aligned.draw();

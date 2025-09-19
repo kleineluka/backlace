@@ -1753,6 +1753,10 @@
             "value": "Shadow Intensity"
         },
         {
+            "key": "prop_ShadowTextureBlendMode",
+            "value": "Shadow Blend Mode"
+        },
+        {
             "key": "prop_ShadowTex",
             "value": "Shadow Texture / Pattern"
         },

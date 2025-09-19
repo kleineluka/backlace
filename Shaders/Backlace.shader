@@ -520,6 +520,7 @@ Shader "luka/indev/backlace"
         // [Space(10)]
         [Toggle(_BACKLACE_SHADOW_TEXTURE)] _ToggleShadowTexture ("Enable Shadow Texture", Float) = 0.0
         [Enum(UV Albedo, 0, Screen Pattern, 1, Triplanar Pattern, 2)] _ShadowTextureMappingMode ("Shadow Mode", Int) = 0
+        [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _ShadowTextureBlendMode ("Blend Mode", Int) = 1
         _ShadowTextureIntensity ("Shadow Intensity", Range(0, 1)) = 1.0
         [NoScaleOffset] _ShadowTex ("Shadow Texture / Pattern", 2D) = "white" { }
         _ShadowPatternColor ("Pattern Tint", Color) = (0, 0, 0, 1)

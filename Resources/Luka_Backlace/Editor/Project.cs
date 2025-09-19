@@ -31,7 +31,7 @@ namespace Luka.Backlace
         };
         public static readonly List<ShaderCapability> shader_capabilities = new List<ShaderCapability>
         { 
-            new ShaderCapability("Depth", "depth_popup_info", new Color(0.4f, 0.8f, 1.0f))
+            new ShaderCapability("Depth", "depth_popup_info", new Color(0.9f, 0.9f, 0.9f)),
         };
     }
 
