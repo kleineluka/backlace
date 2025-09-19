@@ -1892,7 +1892,6 @@ namespace Luka.Backlace
                     prop_WorldEffectIntensity = FindProperty("_WorldEffectIntensity", properties);
                     prop_WorldEffectPosition = FindProperty("_WorldEffectPosition", properties);
                     prop_WorldEffectRotation = FindProperty("_WorldEffectRotation", properties);
-                    // Components.Vector3Property(materialEditor, prop_Decal1TriplanarPosition, languages.speak("prop_Decal1TriplanarPosition"));
                     materialEditor.ShaderProperty(prop_ToggleWorldEffect, languages.speak("prop_ToggleWorldEffect"));
                     Components.start_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_WorldEffectBlendMode, languages.speak("prop_WorldEffectBlendMode"));

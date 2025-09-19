@@ -400,7 +400,7 @@ Shader "luka/indev/backlace"
         [HDR] _PathingColor ("Path Color", Color) = (0, 1, 1, 1)
         [HDR] _PathingColor2 ("Secondary Color", Color) = (1, 0, 0, 1)
         _PathingEmission ("Emission Strength", Float) = 2.0
-        [Enum(Fill, 0, Path, 1, Loop, 2)] _PathingType ("Path Type", Int) = 1
+        [Enum(Fill, 0, Path, 1, Loop, 2, PingPong, 3, Trail, 4, Converge, 5)] _PathingType ("Path Type", Int) = 1
         _PathingSpeed ("Speed", Float) = 0.5
         _PathingWidth ("Path Width", Range(0.001, 0.5)) = 0.1
         _PathingSoftness ("Softness", Range(0.001, 1.0)) = 0.5

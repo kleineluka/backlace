@@ -446,17 +446,30 @@
         float pathAlpha = 0;
         switch(_PathingType)
         {
-            case 0: // fill
-            pathAlpha = pathTime > pathValue;
-            break;
             case 1: // path
-            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
-            break;
+                pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+                break;
             case 2: // loop
-            float loop_dist = abs(pathTime - pathValue);
-            loop_dist = min(loop_dist, 1.0 - loop_dist);
-            pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
-            break;
+                float loop_dist = abs(pathTime - pathValue);
+                loop_dist = min(loop_dist, 1.0 - loop_dist);
+                pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
+                break;
+            case 3: // ping-pong
+                pathTime = 1.0 - abs(1.0 - 2.0 * pathTime); // goes from 0 -> 1 -> 0
+                pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+                break;
+            case 4: // trail
+                float trail_dist = pathTime - pathValue;
+                pathAlpha = smoothstep(0, _PathingWidth, trail_dist) - smoothstep(_PathingWidth, _PathingWidth + 0.001, trail_dist);
+                break;
+            case 5: // converge
+                float convergeTime = abs(1.0 - 2.0 * pathTime); // 1 -> 0 -> 1
+                float convergeDist = abs(convergeTime - (abs(1.0 - 2.0 * pathValue)));
+                pathAlpha = 1.0 - saturate(convergeDist / _PathingWidth);
+                break;
+            default: // fill (0)
+                pathAlpha = pathTime > pathValue;
+                break;
         }
         pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
         #if defined(_BACKLACE_AUDIOLINK)
