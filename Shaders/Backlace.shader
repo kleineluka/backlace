@@ -545,6 +545,7 @@ Shader "luka/indev/backlace"
         [Toggle(_BACKLACE_WORLD_EFFECT)] _ToggleWorldEffect ("Enable World Effect", Float) = 0.0
         [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2)] _WorldEffectBlendMode ("Blend Mode", Int) = 0
         [NoScaleOffset] _WorldEffectTex ("Effect Texture (A=Mask)", 2D) = "white" { }
+        [NoScaleOffset] _WorldEffectMask ("Effect Mask (R)", 2D) = "white" { }
         [HDR] _WorldEffectColor ("Effect Color", Color) = (1, 1, 1, 1)
         _WorldEffectDirection ("Effect Direction (XYZ)", Vector) = (0, 1, 0, 0)
         _WorldEffectScale ("Effect Scale", Float) = 1.0

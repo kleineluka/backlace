@@ -488,6 +488,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_ToggleWorldEffect = null;
         private MaterialProperty prop_WorldEffectBlendMode = null;
         private MaterialProperty prop_WorldEffectTex = null;
+        private MaterialProperty prop_WorldEffectMask = null;
         private MaterialProperty prop_WorldEffectColor = null;
         private MaterialProperty prop_WorldEffectDirection = null;
         private MaterialProperty prop_WorldEffectScale = null;
@@ -1883,6 +1884,7 @@ namespace Luka.Backlace
                     prop_ToggleWorldEffect = FindProperty("_ToggleWorldEffect", properties);
                     prop_WorldEffectBlendMode = FindProperty("_WorldEffectBlendMode", properties);
                     prop_WorldEffectTex = FindProperty("_WorldEffectTex", properties);
+                    prop_WorldEffectMask = FindProperty("_WorldEffectMask", properties);
                     prop_WorldEffectColor = FindProperty("_WorldEffectColor", properties);
                     prop_WorldEffectDirection = FindProperty("_WorldEffectDirection", properties);
                     prop_WorldEffectScale = FindProperty("_WorldEffectScale", properties);
@@ -1895,6 +1897,7 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_WorldEffectBlendMode, languages.speak("prop_WorldEffectBlendMode"));
                     materialEditor.ShaderProperty(prop_WorldEffectTex, languages.speak("prop_WorldEffectTex"));
+                    materialEditor.ShaderProperty(prop_WorldEffectMask, languages.speak("prop_WorldEffectMask"));
                     materialEditor.ShaderProperty(prop_WorldEffectColor, languages.speak("prop_WorldEffectColor"));
                     materialEditor.ShaderProperty(prop_WorldEffectScale, languages.speak("prop_WorldEffectScale"));
                     Components.Vector3Property(materialEditor, prop_WorldEffectDirection, languages.speak("prop_WorldEffectDirection"));

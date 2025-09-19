@@ -792,6 +792,7 @@
     int _WorldEffectBlendMode;
     float3 _WorldEffectPosition;
     float3 _WorldEffectRotation;
+    UNITY_DECLARE_TEX2D(_WorldEffectMask);
 
     void ApplyWorldAlignedEffect(inout BacklaceSurfaceData Surface, FragmentData i)
     {
@@ -811,7 +812,8 @@
             float2(0, 0)
         );
         float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
-        float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity;
+        float mask = UNITY_SAMPLE_TEX2D(_WorldEffectMask, Uvs[0]).r;
+        float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
         switch(_WorldEffectBlendMode)
         {
             case 1: // Additive

@@ -1809,6 +1809,10 @@
             "value": "Effect Texture (A=Mask)"
         },
         {
+            "key": "prop_WorldEffectMask",
+            "value": "Effect Mask"
+        },
+        {
             "key": "prop_WorldEffectColor",
             "value": "Effect Colour"
         },
