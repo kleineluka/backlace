@@ -547,9 +547,18 @@ namespace Luka.Backlace
         // vertex distortion properties
         private MaterialProperty prop_ToggleVertexDistortion = null;
         private MaterialProperty prop_VertexDistortionMode = null;
+        private MaterialProperty prop_VertexDistortionColorMask = null;
         private MaterialProperty prop_VertexDistortionStrength = null;
         private MaterialProperty prop_VertexDistortionSpeed = null;
         private MaterialProperty prop_VertexDistortionFrequency = null;
+        private MaterialProperty prop_WindStrength = null;
+        private MaterialProperty prop_WindSpeed = null;
+        private MaterialProperty prop_WindScale = null;
+        private MaterialProperty prop_WindDirection = null;
+        private MaterialProperty prop_WindNoiseTex = null;
+        // breathing
+        private MaterialProperty prop_BreathingStrength = null;
+        private MaterialProperty prop_BreathingSpeed = null;
         // fake screenspace reflection properties
         private MaterialProperty prop_ToggleSSR = null;
         private MaterialProperty prop_SSRMask = null;
@@ -1940,15 +1949,43 @@ namespace Luka.Backlace
                     // effects - vertex distortion
                     prop_ToggleVertexDistortion = FindProperty("_ToggleVertexDistortion", properties);
                     prop_VertexDistortionMode = FindProperty("_VertexDistortionMode", properties);
+                    prop_VertexDistortionColorMask = FindProperty("_VertexDistortionColorMask", properties);
                     prop_VertexDistortionStrength = FindProperty("_VertexDistortionStrength", properties);
                     prop_VertexDistortionSpeed = FindProperty("_VertexDistortionSpeed", properties);
                     prop_VertexDistortionFrequency = FindProperty("_VertexDistortionFrequency", properties);
+                    prop_WindStrength = FindProperty("_WindStrength", properties);
+                    prop_WindSpeed = FindProperty("_WindSpeed", properties);
+                    prop_WindScale = FindProperty("_WindScale", properties);
+                    prop_WindDirection = FindProperty("_WindDirection", properties);
+                    prop_WindNoiseTex = FindProperty("_WindNoiseTex", properties);
+                    prop_BreathingStrength = FindProperty("_BreathingStrength", properties);
+                    prop_BreathingSpeed = FindProperty("_BreathingSpeed", properties);
                     materialEditor.ShaderProperty(prop_ToggleVertexDistortion, languages.speak("prop_ToggleVertexDistortion"));
                     Components.start_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_VertexDistortionMode, languages.speak("prop_VertexDistortionMode"));
-                    Components.Vector3Property(materialEditor, prop_VertexDistortionStrength, languages.speak("prop_VertexDistortionStrength"));
-                    Components.Vector3Property(materialEditor, prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
-                    Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
+                    materialEditor.ShaderProperty(prop_VertexDistortionColorMask, languages.speak("prop_VertexDistortionColorMask"));
+                    int distortionMode = (int)prop_VertexDistortionMode.floatValue;
+                    switch (distortionMode)
+                    {
+                        case 0: // wave
+                            // fallthrough
+                        case 1: // jumble
+                            Components.Vector3Property(materialEditor, prop_VertexDistortionStrength, languages.speak("prop_VertexDistortionStrength"));
+                            Components.Vector3Property(materialEditor, prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
+                            Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
+                            break;
+                        case 2: // wind
+                            materialEditor.ShaderProperty(prop_WindStrength, languages.speak("prop_WindStrength"));
+                            materialEditor.ShaderProperty(prop_WindSpeed, languages.speak("prop_WindSpeed"));
+                            materialEditor.ShaderProperty(prop_WindScale, languages.speak("prop_WindScale"));
+                            Components.Vector3Property(materialEditor, prop_WindDirection, languages.speak("prop_WindDirection"));
+                            materialEditor.ShaderProperty(prop_WindNoiseTex, languages.speak("prop_WindNoiseTex"));
+                            break;
+                        case 3: // breathing
+                            materialEditor.ShaderProperty(prop_BreathingStrength, languages.speak("prop_BreathingStrength"));
+                            materialEditor.ShaderProperty(prop_BreathingSpeed, languages.speak("prop_BreathingSpeed"));
+                            break;
+                    }
                     Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
                 }
                 sub_tab_dither.draw();

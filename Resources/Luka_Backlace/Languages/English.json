@@ -2017,6 +2017,10 @@
             "value": "Distortion Mode"
         },
         {
+            "key": "prop_VertexDistortionColorMask",
+            "value": "Colour Channel Mask"
+        },
+        {
             "key": "prop_VertexDistortionStrength",
             "value": "Distortion Strength"
         },
@@ -2027,6 +2031,34 @@
         {
             "key": "prop_VertexDistortionFrequency",
             "value": "Distortion Frequency"
+        },
+        {
+            "key": "prop_WindStrength",
+            "value": "Wind Strength"
+        },
+        {
+            "key": "prop_WindSpeed",
+            "value": "Wind Speed"
+        },
+        {
+            "key": "prop_WindScale",
+            "value": "Wind Noise Scale"
+        },
+        {
+            "key": "prop_WindDirection",
+            "value": "Wind Direction (XYZ)"
+        },
+        {
+            "key": "prop_WindNoiseTex",
+            "value": "Wind Noise Texture (R)"
+        },
+        {
+            "key": "prop_BreathingStrength",
+            "value": "Breathing Strength"
+        },
+        {
+            "key": "prop_BreathingSpeed",
+            "value": "Breathing Speed"
         },
         {
             "key": "prop_ToggleSSR",

@@ -46,7 +46,7 @@ Backlace comes in three variants: Default, Grabpass, and Outline. While Default 
 - VRChat Mirror Detection
 - Touch Interactions
 - Dithering
-- Vertex Distortion
+- Vertex Distortion (Wave, Jumble, Wind, Breathing)
 - Low Precision (PS1/Low-Poly)
 - Refraction (Grabpass Variant Only)
 - Fake Screen Space Reflections (Planar and Raymarched) (Grabpass Variant Only)
