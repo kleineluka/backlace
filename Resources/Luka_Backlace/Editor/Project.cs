@@ -33,6 +33,16 @@ namespace Luka.Backlace
         { 
             new ShaderCapability("Depth", "depth_popup_info", new Color(0.9f, 0.9f, 0.9f)),
         };
+        public static readonly List<Footer.Segment> footer_parts = new List<Footer.Segment>
+        {
+            new Footer.Segment("Made with love and my open-source projects,"),
+            new Footer.Segment("Dazzle UI,", "https://luka.moe/god/github/dazzle"),
+            new Footer.Segment(""),
+            new Footer.Segment("Premonition Processor,", "https://luka.moe/god/github/premonition"),
+            new Footer.Segment("and"),
+            new Footer.Segment("Backlace Anime Shader.", "https://luka.moe/god/github/backlace"),
+            new Footer.Segment("❤"),
+        };
     }
 
 }

@@ -308,6 +308,8 @@ namespace Luka.Backlace
         private GUIStyle style_docs = null;
         private GUIStyle style_variant_badge_large = null;
         private GUIStyle style_variant_badge_small = null;
+        private GUIStyle style_footer_text = null;
+        private GUIStyle style_footer_link = null;
         private Color colour_active_badge = new Color(0.67f, 0.84f, 0.9f); // non-nullable..
 
         // pass theme for fonting
@@ -331,6 +333,8 @@ namespace Luka.Backlace
             style_docs = null;
             style_variant_badge_large = null;
             style_variant_badge_small = null;
+            style_footer_text = null;
+            style_footer_link = null;
             colour_active_badge = new Color(0.67f, 0.84f, 0.9f); // non-nullable..
         } 
 
@@ -605,6 +609,37 @@ namespace Luka.Backlace
                 colour_active_badge = new Color(0.67f, 0.84f, 0.9f);
             }
             return ref colour_active_badge;
+        }
+
+         public ref GUIStyle load_style_footer_text(ref Theme theme)
+        {
+            if (style_footer_text == null)
+            {
+                style_footer_text = new GUIStyle(GUI.skin.label);
+                style_footer_text.font = theme.font_manager.fun_font;
+                style_footer_text.fontSize = 11;
+                style_footer_text.alignment = TextAnchor.MiddleCenter;
+                style_footer_text.richText = true;
+                style_footer_text.normal.textColor = Colours.get_foreground();
+                style_footer_text.padding = new RectOffset(0, 0, 0, 0);
+            }
+            return ref style_footer_text;
+        }
+
+        // get the style for a footer link
+        public ref GUIStyle load_style_footer_link(ref Theme theme)
+        {
+            if (style_footer_link == null)
+            {
+                style_footer_link = new GUIStyle(GUI.skin.label);
+                style_footer_link.font = theme.font_manager.fun_font;
+                style_footer_link.fontSize = 11;
+                style_footer_link.alignment = TextAnchor.MiddleCenter;
+                style_footer_link.richText = true;
+                style_footer_link.normal.textColor = new Color(0.67f, 0.84f, 0.9f);
+                style_footer_link.padding = new RectOffset(0, 0, 0, 0);
+            }
+            return ref style_footer_link;
         }
 
     }
@@ -2065,6 +2100,90 @@ namespace Luka.Backlace
             }
         }
     
+    }
+
+    // plug and play footer
+    public class Footer
+    {
+        // to have multiple links
+        public class Segment
+        {
+            public string Text;
+            public string Url;
+            public Segment(string text, string url = null)
+            {
+                Text = text;
+                Url = url;
+            }
+        }
+
+        // values needed..
+        private Theme theme = null;
+        private List<Segment> segments;
+
+        // constructor
+        public Footer(ref Theme theme, List<Segment> segments)
+        {
+            this.theme = theme;
+            this.segments = segments;
+        }
+
+        // draw the footer
+       public void draw()
+        {
+            if (segments == null || segments.Count == 0) return;
+            EditorGUILayout.BeginVertical();
+            GUILayout.FlexibleSpace();
+            GUIStyle textStyle = theme.styler_manager.load_style_footer_text(ref theme);
+            GUIStyle linkStyle = theme.styler_manager.load_style_footer_link(ref theme);
+            float maxWidth = EditorGUIUtility.currentViewWidth - 60f;
+            float currentWidth = 0f;
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            foreach (var segment in segments)
+            {
+                GUIContent content;
+                GUIStyle style;
+                if (string.IsNullOrEmpty(segment.Url))
+                {
+                    content = new GUIContent(segment.Text);
+                    style = textStyle;
+                }
+                else
+                {
+                    content = new GUIContent(theme.text_manager.texter(segment.Text, 5));
+                    style = linkStyle;
+                }
+                Vector2 size = style.CalcSize(content);
+                if (currentWidth > 0 && currentWidth + size.x > maxWidth)
+                {
+                    // end current line, go to next
+                    GUILayout.FlexibleSpace();
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.FlexibleSpace();
+                    currentWidth = 0;
+                }
+                if (string.IsNullOrEmpty(segment.Url))
+                {
+                    GUILayout.Label(content, style, GUILayout.Width(size.x));
+                }
+                else
+                {
+                    if (GUILayout.Button(content, style, GUILayout.Width(size.x)))
+                    {
+                        Application.OpenURL(segment.Url);
+                    }
+                    Rect buttonRect = GUILayoutUtility.GetLastRect();
+                    EditorGUIUtility.AddCursorRect(buttonRect, MouseCursor.Link);
+                }
+                currentWidth += size.x;
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5f);
+            EditorGUILayout.EndVertical();
+        }
     }
 
 }

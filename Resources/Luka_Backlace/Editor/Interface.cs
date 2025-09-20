@@ -30,6 +30,7 @@ namespace Luka.Backlace
         private static Docs docs = null;
         private static Metadata meta = null;
         private static SocialsMenu socials_menu = null;
+        private static Footer footer = null;
         // additional ui integrations
         private static Tab license_tab = null;
         private static LicenseMenu license_menu = null;
@@ -652,6 +653,7 @@ namespace Luka.Backlace
             presets_tab = null;
             license_menu = null;
             presets_menu = null;
+            footer = null;
             #region Tabs
             tab_main = null;
             sub_tab_rendering = null;
@@ -728,6 +730,7 @@ namespace Luka.Backlace
             beauty_blender = new BeautyBlender(targetMat);
             bags = new Bags(ref languages);
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
+            footer = new Luka.Backlace.Footer(ref theme, Project.footer_parts);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
@@ -1613,8 +1616,10 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
                     materialEditor.ShaderProperty(prop_ToggleParallaxShadows, languages.speak("prop_ToggleParallaxShadows"));
                     Components.start_dynamic_disable(!prop_ToggleParallaxShadows.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_ParallaxShadowSteps, languages.speak("prop_ParallaxShadowSteps"));
                     materialEditor.ShaderProperty(prop_ParallaxShadowStrength, languages.speak("prop_ParallaxShadowStrength"));
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleParallaxShadows.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
                 }
@@ -1913,6 +1918,20 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_WorldEffectIntensity, languages.speak("prop_WorldEffectIntensity"));
                     Components.end_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
                 }
+                sub_tab_dither.draw();
+                if (sub_tab_dither.is_expanded) {
+                    // effects - dither
+                    prop_ToggleDither = FindProperty("_ToggleDither", properties);
+                    prop_DitherAmount = FindProperty("_DitherAmount", properties);
+                    prop_DitherScale = FindProperty("_DitherScale", properties);
+                    prop_DitherSpace = FindProperty("_DitherSpace", properties);
+                    materialEditor.ShaderProperty(prop_ToggleDither, languages.speak("prop_ToggleDither"));
+                    Components.start_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_DitherSpace, languages.speak("prop_DitherSpace"));
+                    materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
+                    materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
+                    Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
+                }
                 sub_tab_touch_interactions.draw();
                 if (sub_tab_touch_interactions.is_expanded) {
                     // effects - touch interactions
@@ -1996,20 +2015,6 @@ namespace Luka.Backlace
                             break;
                     }
                     Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
-                }
-                sub_tab_dither.draw();
-                if (sub_tab_dither.is_expanded) {
-                    // effects - dither
-                    prop_ToggleDither = FindProperty("_ToggleDither", properties);
-                    prop_DitherAmount = FindProperty("_DitherAmount", properties);
-                    prop_DitherScale = FindProperty("_DitherScale", properties);
-                    prop_DitherSpace = FindProperty("_DitherSpace", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDither, languages.speak("prop_ToggleDither"));
-                    Components.start_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DitherSpace, languages.speak("prop_DitherSpace"));
-                    materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
-                    materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
-                    Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
                 }
                 sub_tab_ps1.draw();
                 if (sub_tab_ps1.is_expanded) {
@@ -2374,6 +2379,7 @@ namespace Luka.Backlace
             announcement.draw();
             docs.draw();
             socials_menu.draw();
+            footer.draw();
             if (EditorGUI.EndChangeCheck())
             {
                 cushion.Update(targetMat);
