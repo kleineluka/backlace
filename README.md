@@ -90,11 +90,14 @@ Backlace is split into various .cginclude files to make it editing, building, an
 What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change.
 
 ## License ✨
-Anything in the [Editor](https://github.com/kleineluka/backlace/tree/main/Resources/Luka_Backlace/Editor) folder in this repository is not to be used in your transformative works. This code is provided as a demo UI, and has all of my socials and metadata hard-coded, so you do not want to redistribute this anyways. If you are redistributing Backlace as your primary shader and not making your own shader, you can of course include the editor as-is. (tl;dr- if you want to build off Backlace, make your own editor, otherwise ignore this!)
+Anything in the [Editor](https://github.com/kleineluka/backlace/tree/main/Resources/Luka_Backlace/Editor) folder is exempt from this license as it is a separate project used to build Backlace's UI. Backlace itself is licensed under the Backlace License (Version 1.0). For the full legal terms, please see the LICENSE file included in this repository. 
 
-The shader itself is under the **MIT license**, with the additional clauses that (1) you must credit Backlace/KleineLuka in your project if you use Backlace in any capacity and (2) the editor exemption stated above. 
+**TL;DR** —
+- You **are free to** use Backlace in any project, personal or commercial, for free.
+- You **must** give visible credit to "Backlace" in your project and (if creating a derivative shader) interface. For something like a game, a footnote in the game's credits is sufficient!
+- You **may not** sell Backlace as a standalone product - naturally, you have to build off of it to include it in a commercial product (ex. a shader that uses Backlace as a base or a game that uses Backlace to shade its characters).
 
-An example credit could be, for example, "My shader was built off of Backlace (hyperlinked to this repository) by KleineLuka."
+If you have any questions, or feel these terms are too restrictive, please feel free to reach out to me! I only add these clauses to make sure that maintaining Backlace is sustainable for me. 💗
 
 ## Attributions 🎨
 - This shader was originally a fork of the [Toony Standard Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild) shader by VRLabs, which is under the MIT license. However, essentially all of that code has been replaced, removed, or rewritten.
