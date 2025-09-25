@@ -1,6 +1,6 @@
 #if UNITY_EDITOR
 
-// Cache.cs is our lovely little storage for shared UI resources.
+// Cache.cs prevents reloading assets used between multiple materials
 namespace Luka.Backlace
 {
     public static class CacheManager
