@@ -1745,7 +1745,7 @@ namespace Luka.Backlace
                 if (newLanguageIndex != currentLanguageIndex)
                 {
                     config.json_data.@interface.language = languageNames[newLanguageIndex];
-                    this.languages = new Languages(config.json_data.@interface.language);
+                    this.languages = DataManager.get_languages(config.json_data.@interface.language);
                 }
                 // toggle update toasts
                 string[] toggleOptions = new string[] { languages.speak("config_toggle_enabled"), languages.speak("config_toggle_disabled") };

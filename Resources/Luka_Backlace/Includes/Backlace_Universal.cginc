@@ -54,22 +54,22 @@ struct BacklaceSurfaceData
 
 // loading uv function
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
+    #ifndef UNITY_PASS_OUTLINE
+        // load the uvs
+        float2 Uvs[4];
+        void LoadUVs()
+        {
+            Uvs[0] = FragData.uv;
+            Uvs[1] = FragData.uv1;
+            Uvs[2] = FragData.uv2;
+            Uvs[3] = FragData.uv3;
+        }
 
-    // load the uvs
-    float2 Uvs[4];
-    void LoadUVs()
-    {
-        Uvs[0] = FragData.uv;
-        Uvs[1] = FragData.uv1;
-        Uvs[2] = FragData.uv2;
-        Uvs[3] = FragData.uv3;
-    }
-
-    void SampleAlbedo(inout BacklaceSurfaceData Surface)
-    {
-        Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
-    }
-
+        void SampleAlbedo(inout BacklaceSurfaceData Surface)
+        {
+            Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
+        }
+    #endif // !UNITY_PASS_OUTLINE
 #endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
 
 // remap float from [oldMin, oldMax] to [newMin, newMax]

@@ -633,27 +633,17 @@ namespace Luka.Backlace
         // unload the interface (ex. on shader change)
         public static void unload()
         {
+            // shouldn't need to - DataManager.invalidate_caches();
             loaded = false;
             detected_variants = null;
-            configs = null;
-            languages = null;
-            theme = null;
-            header = null;
-            announcement = null;
-            update = null;
-            docs = null;
-            socials_menu = null;
             cushion = null;
             beauty_blender = null;
-            bags = null;
-            meta = null;
+            presets_menu = null;
             config_tab = null;
             license_tab = null;
             config_menu = null;
             presets_tab = null;
             license_menu = null;
-            presets_menu = null;
-            footer = null;
             #region Tabs
             tab_main = null;
             sub_tab_rendering = null;
@@ -710,27 +700,42 @@ namespace Luka.Backlace
         // load (/reload) the interface (ex. on language change)
         public void load(ref Material targetMat)
         {
+            // per-material properties
             loaded_material = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
             detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
-            configs = new Config();
-            languages = new Languages(configs.json_data.@interface.language);
-            meta = new Metadata();
-            theme = new Theme(ref configs, ref languages, ref meta);
+            // shared properties
+            configs = DataManager.Configs;
+            languages = DataManager.get_languages(configs.json_data.@interface.language);
+            meta = DataManager.Metadata;
+            theme = DataManager.Theme;
+            header = DataManager.Header;
+            announcement = DataManager.Announcement;
+            update = DataManager.Update;
+            docs = DataManager.Docs;
+            socials_menu = DataManager.SocialsMenu;
+            bags = DataManager.Bags;
+            footer = DataManager.Footer;
+            // tabs need to be per-material
             license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_license"));
             config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_config"));
             presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_presets"));
-            config_menu = new ConfigMenu(ref theme, ref languages, ref configs, ref config_tab);
+            // some of these menus as well (not social)
             license_menu = new LicenseMenu(ref theme, ref languages, ref license_tab);
-            header = new Header(ref theme);
-            announcement = new Announcement(ref theme);
-            update = new Update(ref theme);
-            docs = new Docs(ref theme);
-            socials_menu = new SocialsMenu(ref theme);
-            cushion = new Cushion(targetMat);
-            beauty_blender = new BeautyBlender(targetMat);
-            bags = new Bags(ref languages);
+            config_menu = new ConfigMenu(ref theme, ref languages, ref configs, ref config_tab);
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
-            footer = new Luka.Backlace.Footer(ref theme, Project.footer_parts);
+            // and then our keyword handlers need the material too
+            cushion = new Cushion(targetMat);
+            beauty_blender = new BeautyBlender(targetMat);     
+            // theme = new Theme(ref configs, ref languages, ref meta);
+            // languages = new Languages(configs.json_data.@interface.language);
+            // meta = new Metadata();
+            // header = new Header(ref theme);
+            // announcement = new Announcement(ref theme);
+            // update = new Update(ref theme);
+            // docs = new Docs(ref theme);
+            // socials_menu = new SocialsMenu(ref theme);
+            // bags = new Bags(ref languages);
+            // footer = new Luka.Backlace.Footer(ref theme, Project.footer_parts);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
@@ -752,7 +757,7 @@ namespace Luka.Backlace
             sub_tab_light_limiting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_light_limiting"));
             tab_shading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_shading"));
             sub_tab_rim_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rim_lighting"), null, "_ToggleRimlight");
-            sub_tab_depth_rim = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_depth_rim"), null, "_ToggleDepthRim");
+            sub_tab_depth_rim = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_depth_rim"), null, "_ToggleDepthRim", Project.shader_capabilities[0]);
             sub_tab_clear_coat = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_clear_coat"), null, "_ToggleClearcoat");
             sub_tab_matcap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_matcap"), null, "_ToggleMatcap");
             sub_tab_cubemap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_cubemap"), null, "_ToggleCubemap");

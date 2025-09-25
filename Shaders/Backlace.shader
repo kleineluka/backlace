@@ -504,7 +504,7 @@ Shader "luka/indev/backlace"
         // [Header(Iridescence)]
         // [Space(10)]
         [Toggle(_BACKLACE_IRIDESCENCE)] _ToggleIridescence ("Enable Iridescence", Float) = 0.0
-        [KeywordEnum(Texture, Procedural)] _IridescenceMode ("Mode", Int) = 0
+        [Enum(Texture, 0, Procedural, 1)] _IridescenceMode ("Mode", Int) = 0
         [NoScaleOffset] _IridescenceMask ("Mask (R)", 2D) = "white" { }
         [HDR] _IridescenceTint ("Tint", Color) = (1, 1, 1, 1)
         _IridescenceIntensity ("Intensity", Range(0, 5)) = 1.0
