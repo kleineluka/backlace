@@ -630,20 +630,30 @@ namespace Luka.Backlace
         private MaterialProperty prop_Dither_UV = null;
         #endregion // Properties
 
-        // unload the interface (ex. on shader change)
-        public static void unload()
+        // unload the material (ex. on shader change)
+        public static void unload_material()
         {
-            // shouldn't need to - DataManager.invalidate_caches();
             loaded = false;
             detected_variants = null;
+            configs = null;
+            languages = null;
+            theme = null;
+            header = null;
+            announcement = null;
+            update = null;
+            docs = null;
+            socials_menu = null;
             cushion = null;
             beauty_blender = null;
-            presets_menu = null;
+            bags = null;
+            meta = null;
             config_tab = null;
             license_tab = null;
             config_menu = null;
             presets_tab = null;
             license_menu = null;
+            presets_menu = null;
+            footer = null;
             #region Tabs
             tab_main = null;
             sub_tab_rendering = null;
@@ -697,45 +707,38 @@ namespace Luka.Backlace
             #endregion // Tabs
         }
 
+        // unload the whole interface (ex. on settings change)
+        public static void unload_interface()
+        {
+            unload_material();
+            CacheManager.clear_cache();
+        }
+
         // load (/reload) the interface (ex. on language change)
         public void load(ref Material targetMat)
         {
-            // per-material properties
+            CacheManager.init_cache();
             loaded_material = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
             detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
-            // shared properties
-            configs = DataManager.Configs;
-            languages = DataManager.get_languages(configs.json_data.@interface.language);
-            meta = DataManager.Metadata;
-            theme = DataManager.Theme;
-            header = DataManager.Header;
-            announcement = DataManager.Announcement;
-            update = DataManager.Update;
-            docs = DataManager.Docs;
-            socials_menu = DataManager.SocialsMenu;
-            bags = DataManager.Bags;
-            footer = DataManager.Footer;
-            // tabs need to be per-material
+            configs = CacheManager.configs;
+            languages = CacheManager.languages;
+            meta = CacheManager.meta;
+            theme = new Theme(ref configs, ref languages, ref meta);
             license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_license"));
             config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_config"));
             presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_presets"));
-            // some of these menus as well (not social)
-            license_menu = new LicenseMenu(ref theme, ref languages, ref license_tab);
             config_menu = new ConfigMenu(ref theme, ref languages, ref configs, ref config_tab);
-            presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
-            // and then our keyword handlers need the material too
+            license_menu = new LicenseMenu(ref theme, ref languages, ref license_tab);
+            header = new Header(ref theme);
+            announcement = new Announcement(ref theme);
+            update = new Update(ref theme);
+            docs = new Docs(ref theme);
+            socials_menu = new SocialsMenu(ref theme);
             cushion = new Cushion(targetMat);
-            beauty_blender = new BeautyBlender(targetMat);     
-            // theme = new Theme(ref configs, ref languages, ref meta);
-            // languages = new Languages(configs.json_data.@interface.language);
-            // meta = new Metadata();
-            // header = new Header(ref theme);
-            // announcement = new Announcement(ref theme);
-            // update = new Update(ref theme);
-            // docs = new Docs(ref theme);
-            // socials_menu = new SocialsMenu(ref theme);
-            // bags = new Bags(ref languages);
-            // footer = new Luka.Backlace.Footer(ref theme, Project.footer_parts);
+            beauty_blender = new BeautyBlender(targetMat);
+            bags = new Bags(ref languages);
+            presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
+            footer = new Luka.Backlace.Footer(ref theme, Project.footer_parts);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
@@ -802,7 +805,7 @@ namespace Luka.Backlace
             // check if material changed
             if (loaded_material != AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat))) 
             {
-                unload();
+                unload_material();
                 load(ref targetMat);
                 return;
             }

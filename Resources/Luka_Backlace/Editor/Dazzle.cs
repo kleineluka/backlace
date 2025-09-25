@@ -1745,7 +1745,7 @@ namespace Luka.Backlace
                 if (newLanguageIndex != currentLanguageIndex)
                 {
                     config.json_data.@interface.language = languageNames[newLanguageIndex];
-                    this.languages = DataManager.get_languages(config.json_data.@interface.language);
+                    this.languages = new Languages(config.json_data.@interface.language);
                 }
                 // toggle update toasts
                 string[] toggleOptions = new string[] { languages.speak("config_toggle_enabled"), languages.speak("config_toggle_disabled") };
@@ -1787,7 +1787,7 @@ namespace Luka.Backlace
                     if (config.save())
                     {
                         theme.styler_manager.flush();
-                        Interface.unload();
+                        Interface.unload_interface();
                         EditorUtility.DisplayDialog(Project.project_name, languages.speak("config_save_success"), languages.speak("dialog_okay"));
                     }
                     else
@@ -1800,7 +1800,7 @@ namespace Luka.Backlace
                     if (config.reset())
                     {
                         theme.styler_manager.flush();
-                        Interface.unload();
+                        Interface.unload_interface();
                         EditorUtility.DisplayDialog(Project.project_name, languages.speak("config_reset_success"), languages.speak("dialog_okay"));
                     }
                     else
