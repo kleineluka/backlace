@@ -10,6 +10,11 @@ namespace Luka.Backlace
         public static Config configs = null;
         public static Theme theme = null;
         public static SocialsMenu socials_menu = null;
+        public static Header header = null;
+        public static Announcement announcement = null;
+        public static Update update = null;
+        public static Docs docs = null;
+        public static Footer footer = null;
         public static bool _initialised = false;
 
         public static void init_cache()
@@ -21,6 +26,10 @@ namespace Luka.Backlace
             meta = new Metadata();
             theme = new Theme(ref configs, ref languages, ref meta);
             socials_menu = new SocialsMenu(ref theme);
+            header = new Header(ref theme);
+            announcement = new Announcement(ref theme);
+            update = new Update(ref theme);
+            docs = new Docs(ref theme);
             _initialised = true;
         }
 
@@ -33,6 +42,11 @@ namespace Luka.Backlace
             configs = null;
             theme = null;
             socials_menu = null;
+            header = null;
+            announcement = null;
+            update = null;
+            docs = null;
+            footer = null;
             _initialised = false;
         }
     }
