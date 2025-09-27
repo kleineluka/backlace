@@ -27,14 +27,14 @@ namespace Luka.Backlace.Premonition
             {
                 stringBuilder.Append(chars[random.Next(chars.Length)]);
             }
-            return "_Locked_" + stringBuilder.ToString();
+            return "_Compact_" + stringBuilder.ToString();
         }
 
         // generate a simple name based on the current unix timestamp
         public static string get_timestamp_name()
         {
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            return "_Locked_" + timestamp.ToString();
+            return "_Compact_" + timestamp.ToString();
         }
 
         // get the locked shader name based on the selected naming scheme
@@ -44,7 +44,7 @@ namespace Luka.Backlace.Premonition
             switch (shaderNameType)
             {
                 case ShaderNameType.Custom:
-                    lockedShaderName = customShaderName;
+                    lockedShaderName = "_Compact_" + customShaderName;
                     break;
                 case ShaderNameType.Random:
                     lockedShaderName = get_random_name(randomNameLength);
@@ -111,6 +111,31 @@ namespace Luka.Backlace.Premonition
         public static bool is_marked(string shaderCode)
         {
             return shaderCode.Contains("// ------------- PREMONITIONS -------------");
+        }
+
+        // take a source material and extract the commented source shader 
+        public static string extract_source_shader(Material sourceMaterial)
+        {
+            if (sourceMaterial == null || sourceMaterial.shader == null) return "Unknown";
+            string shaderCode = AssetDatabase.GetTextMetaFilePathFromAssetPath(AssetDatabase.GetAssetPath(sourceMaterial.shader));
+            if (string.IsNullOrEmpty(shaderCode)) return "Unknown";
+            Debug.Log("Reading shader file: " + shaderCode);
+            try
+            {
+                string[] lines = File.ReadAllLines(shaderCode);
+                foreach (string line in lines)
+                {
+                    if (line.StartsWith("// Source Shader: "))
+                    {
+                        return line.Substring("// Source Shader: ".Length).Trim();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[Premonitions] Failed to read shader file for material '{sourceMaterial.name}': {e.Message}");
+            }
+            return "Unknown";
         }
     }
 

@@ -39,6 +39,9 @@ namespace Luka.Backlace
         private static Bags bags = null;
         private static Tab presets_tab = null;
         private static PresetsMenu presets_menu = null;
+        private static Tab premonition_tab = null;
+        private static PremonitionMenu premonition_menu = null;
+        private static bool is_compact = false;
         
         #region Tabs
         // main
@@ -654,6 +657,9 @@ namespace Luka.Backlace
             license_menu = null;
             presets_menu = null;
             footer = null;
+            premonition_tab = null;
+            is_compact = false;
+            premonition_menu = null;
             #region Tabs
             tab_main = null;
             sub_tab_rendering = null;
@@ -741,6 +747,9 @@ namespace Luka.Backlace
             beauty_blender = new BeautyBlender(targetMat);
             bags = new Bags(ref languages);
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
+            premonition_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_premonition"));
+            is_compact = targetMat.shader.name.ToLower().Contains("_compact_");
+            premonition_menu = new PremonitionMenu(ref theme, ref targetMat, ref premonition_tab, is_compact);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
@@ -2383,10 +2392,10 @@ namespace Luka.Backlace
                 Components.end_foldout();
             }
             #endregion
-            // Backlace
             license_menu?.draw();
             config_menu?.draw();
             presets_menu?.draw();
+            premonition_menu?.draw();
             announcement?.draw();
             docs?.draw();
             socials_menu?.draw();

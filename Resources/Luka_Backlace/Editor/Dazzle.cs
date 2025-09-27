@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 #pragma warning disable CS0414
+#define PREMONITION_ENABLED
 
 using System;
 using UnityEditor;
@@ -2100,6 +2101,84 @@ namespace Luka.Backlace
             }
         }
     
+    }
+
+    // plug and play premonition integration
+    public class PremonitionMenu
+    {
+        private Theme theme;
+        private Material material;
+        private Tab tab;
+        private bool is_compact = false;
+
+        public PremonitionMenu(ref Theme theme, ref Material material, ref Tab tab, bool is_compact)
+        {
+            this.theme = theme;
+            this.material = material;
+            this.tab = tab;
+            this.is_compact = is_compact;
+        }
+
+#if PREMONITION_ENABLED
+        public void draw()
+        {
+            tab.draw();
+            if (tab.is_expanded)
+            {
+                Components.start_foldout();
+                GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
+                boldWrap.wordWrap = true;
+                GUILayout.Label(theme.language_manager.speak("premonition_notice"), boldWrap);
+                Components.draw_divider();
+                Components.start_dynamic_disable(is_compact);
+                if (GUILayout.Button(theme.language_manager.speak("premonition_generate_button"), GUILayout.Height(30)))
+                {
+                    Premonition.ProcessorSettings settings = new Premonition.ProcessorSettings(); // default settings
+                    Premonition.CompactResultData resultData = Premonition.Processor.compact_material(material, settings);
+                }
+                Components.end_dynamic_disable(is_compact);
+                Components.start_dynamic_disable(!is_compact);
+                if (GUILayout.Button(theme.language_manager.speak("premonition_restore_button"), GUILayout.Height(30)))
+                {
+                    string shader_name = Premonition.Markers.extract_source_shader(material);
+                    Debug.Log("Restoring shader: " + shader_name);
+                    if (shader_name != "Unknown")
+                    {
+                        Shader source_shader = Shader.Find(shader_name);
+                        if (source_shader != null)
+                        {
+                            material.shader = source_shader;
+                            EditorUtility.DisplayDialog(
+                                theme.language_manager.speak("premonition_success_title"),
+                                theme.language_manager.speak("premonition_success", shader_name),
+                                theme.language_manager.speak("dialog_okay"));
+                        }
+                        else
+                        {
+                            EditorUtility.DisplayDialog(
+                                theme.language_manager.speak("premonition_error_title"),
+                                theme.language_manager.speak("premonition_error_noshader", shader_name),
+                                theme.language_manager.speak("dialog_okay"));
+                        }
+                    }
+                    else
+                    {
+                        EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("premonition_error_title"),
+                            theme.language_manager.speak("premonition_error_nosource"),
+                            theme.language_manager.speak("dialog_okay"));
+                    }
+                }
+                Components.end_dynamic_disable(!is_compact);
+                Components.end_foldout();
+            }
+        }
+#else // PREMONITION_ENABLED
+        public void draw() 
+        {
+            // do nothing
+        }
+#endif // PREMONITION_ENABLED
     }
 
     // plug and play footer

@@ -30,6 +30,7 @@ namespace Luka.Backlace
             announcement = new Announcement(ref theme);
             update = new Update(ref theme);
             docs = new Docs(ref theme);
+            footer = new Footer(ref theme, Project.footer_parts);
             _initialised = true;
         }
 

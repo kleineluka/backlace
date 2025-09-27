@@ -181,6 +181,22 @@
             "value": "Load"
         },
         {
+            "key": "tab_premonition",
+            "value": "Compact Material"
+        },
+        {
+            "key": "premonition_notice",
+            "value": "Here, you can generate a compact version of your current material. This generates a new shader file that is smaller, has less compilation time, and is essentially a snapshot of your current settings. This smaller shader is redistributable and doesn't rely on anything else - you can just move the .shader as you please. It's suggested to always use this for your final materials in order to reduce shader count and improve performance! ^-^ (but don't worry, you can always go back to the normal shader if you need to make changes)"
+        },
+        {
+            "key": "premonition_generate_button",
+            "value": "Generate Compact Material"
+        },
+        {
+            "key": "premonition_restore_button",
+            "value": "Restore Original Material"
+        },
+        {
             "key": "variant_popup_title",
             "value": "Shader Variant Required"
         },

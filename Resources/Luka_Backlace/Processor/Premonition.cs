@@ -125,20 +125,6 @@ namespace Luka.Backlace.Premonition
             return new CompactResultData { Result = CompactResult.Success, ShaderName = lockedShaderName, ShaderPath = lockedShaderPath };
         }
 
-        // testing
-        [MenuItem("Assets/Premonitions/Generate Inlined Shader", true)]
-        private static bool ValidateGenerateLockedShader()
-        {
-            return Selection.activeObject is Material material && material.shader != null;
-        }
-
-        [MenuItem("Assets/Premonitions/Generate Inlined Shader", false, 1)]
-        private static void GenerateLockedShaderFromMenu()
-        {
-            Material material = Selection.activeObject as Material;
-            ProcessorSettings settings = new ProcessorSettings();
-            compact_material(material, settings);
-        }
     }
 
 }
