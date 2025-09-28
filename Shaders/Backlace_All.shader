@@ -1,4 +1,4 @@
-Shader "luka/backlace/default"
+Shader "luka/backlace/all"
 {
 
     Properties
@@ -741,6 +741,24 @@ Shader "luka/backlace/default"
         ZWrite [_ZWrite]
         Cull [_Cull]
         Stencil { Ref [_StencilRef] Comp [_StencilComp] Pass [_StencilPass] Fail [_StencilFail] ZFail [_StencilZFail] }
+        GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
+
+        // Outline Pass
+        Pass
+        {
+            Name "Outline"
+            Tags { "LightMode" = "Always" }
+            Cull Front
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+            Stencil { Ref [_OutlineStencilRef] Comp [_OutlineStencilComp] Pass [_OutlineStencilPass] Fail [_OutlineStencilFail] ZFail [_OutlineStencilZFail] }
+            CGPROGRAM
+            #ifndef UNITY_PASS_OUTLINE
+                #define UNITY_PASS_OUTLINE
+            #endif // UNITY_PASS_OUTLINE
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
+            ENDCG
+        }
 
         // Forward Base Pass
         Pass
@@ -752,6 +770,9 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
             #endif // UNITY_PASS_FORWARDBASE
+            #ifndef BACKLACE_GRABPASS
+                #define BACKLACE_GRABPASS
+            #endif // BACKLACE_GRABPASS
             #include "../Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -768,6 +789,9 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
             #endif // UNITY_PASS_FORWARDADD
+            #ifndef BACKLACE_GRABPASS
+                #define BACKLACE_GRABPASS
+            #endif // BACKLACE_GRABPASS
             #include "../Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
             ENDCG
         }

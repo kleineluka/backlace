@@ -1,4 +1,4 @@
-Shader "luka/backlace/default"
+Shader "luka/backlace/outline"
 {
 
     Properties
@@ -741,6 +741,23 @@ Shader "luka/backlace/default"
         ZWrite [_ZWrite]
         Cull [_Cull]
         Stencil { Ref [_StencilRef] Comp [_StencilComp] Pass [_StencilPass] Fail [_StencilFail] ZFail [_StencilZFail] }
+
+        // Outline Pass
+        Pass
+        {
+            Name "Outline"
+            Tags { "LightMode" = "Always" }
+            Cull Front
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+            Stencil { Ref [_OutlineStencilRef] Comp [_OutlineStencilComp] Pass [_OutlineStencilPass] Fail [_OutlineStencilFail] ZFail [_OutlineStencilZFail] }
+            CGPROGRAM
+            #ifndef UNITY_PASS_OUTLINE
+                #define UNITY_PASS_OUTLINE
+            #endif // UNITY_PASS_OUTLINE
+            #include "../Resources/Luka_Backlace/Includes/Backlace_Outline.cginc"
+            ENDCG
+        }
 
         // Forward Base Pass
         Pass
