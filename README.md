@@ -64,6 +64,15 @@ Backlace comes in three variants: Default, Grabpass, and Outline (as well as an 
 </details>
 
 <details>
+  <summary><b>Editor Features</b></summary>
+
+- Custom UI (via [Dazzle 🎶](https://github.com/kleineluka/dazzle))
+- Compact Shader Generation (via [Premonition 👁️](https://github.com/kleineluka/premonition))
+- Smart Badges (ex. `Depth` on depth-related effects, `Grabpass` on features that require the Grabpass variant, etc.)
+- Preset System (save and load presets for the shader)
+</details>
+
+<details>
   <summary><b>Material Presets</b></summary>
 
 Some preset values for the shader are also provided to help give you a starting point for various (typically more complex) materials. Some require specific variants to work.
@@ -107,3 +116,4 @@ If you have any questions, or feel these terms are too restrictive, please feel 
 - The 2D effect in the Fun variant is inspired directly by [Lyuma's Waifu2D Shader](https://github.com/lyuma/LyumaShader), which is under the MIT license. Although  please note it is simplified and their code is better if a flat model is purely the goal of your project!
 - AudioLink features, and a lot of the boilerplate code in `Backlace_AudioLink.cginc`, are from [AudioLink](https://github.com/llealloo/audiolink), which is under a modified MIT license.
 - Original inspiration for the Raymarched SSR feature came from [orel1's SSR module](github.com/orels1/orels-Unity-Shaders), which is an implementation of [Mochie's](https://github.com/MochiesCode/Mochies-Unity-Shaders/) fork of ERROR.mdl's SSR. Both are under MIT licenses. While Backlace's idea stemmed from there, the implementation here is much simpler and modified.
+- Default texture (ex. ramps and noises) are from a variety of sources online and are redistributed with many other open-source shaders. If there are any textures provided that are not free to use, please reach out to me!
