@@ -77,16 +77,7 @@ Backlace comes in three variants: Default, Grabpass, and Outline (as well as an 
   <summary><b>Material Presets</b></summary>
 
 Some preset values for the shader are also provided to help give you a starting point for various (typically more complex) materials. These are also to demonstrate that, while Backlace is an anime shader, it can also do a variety of other surfaces as well!
-- Metal
-  - Gold
-  - Steel
-- Slime Girl
-- Fancy Crystal
-- Fast Crystal
-- Plastic
-- Anime
-  - Simple
-  - Zenless
+- Will be filled when they are all done!
 </details>
 
 ## Where Backlace Is Used 🌨️
@@ -123,4 +114,4 @@ If you have any questions, or feel these terms are too restrictive, please feel 
 - The 2D effect in the Fun variant is inspired directly by [Lyuma's Waifu2D Shader](https://github.com/lyuma/LyumaShader), which is under the MIT license. Although  please note it is simplified and their code is better if a flat model is purely the goal of your project!
 - AudioLink features, and a lot of the boilerplate code in `Backlace_AudioLink.cginc`, are from [AudioLink](https://github.com/llealloo/audiolink), which is under a modified MIT license.
 - Original inspiration for the Raymarched SSR feature came from [orel1's SSR module](github.com/orels1/orels-Unity-Shaders), which is an implementation of [Mochie's](https://github.com/MochiesCode/Mochies-Unity-Shaders/) fork of ERROR.mdl's SSR. Both are under MIT licenses. While Backlace's idea stemmed from there, the implementation here is much simpler and modified.
-- Default textures (ex. ramps and noises) are from a variety of sources online, such as [Perlin Noise Maker](http://kitfox.com/projects/perlinNoiseMaker/) and [Booth Matcap Pack 2](https://booth.pm/ja/items/5755167).
+- Default textures (ex. ramps and noises) are from a variety of sources online, such as [Perlin Noise Maker](http://kitfox.com/projects/perlinNoiseMaker/), [OpenGameArt](https://opengameart.org/), and [Booth Matcap Pack 2](https://booth.pm/ja/items/5755167).

@@ -405,6 +405,8 @@ Shader "luka/backlace/grabpass"
         _PathingWidth ("Path Width", Range(0.001, 0.5)) = 0.1
         _PathingSoftness ("Softness", Range(0.001, 1.0)) = 0.5
         _PathingOffset ("Time Offset", Range(0, 1)) = 0.0
+        _PathingStart ("Path Start", Range(0, 1)) = 0.0
+        _PathingEnd ("Path End", Range(0, 1)) = 1.0
 
         // SCREEN SPACE RIM LIGHTING
         // [Space(35)]

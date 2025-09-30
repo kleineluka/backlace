@@ -423,6 +423,8 @@
     float4 _PathingColor2;
     UNITY_DECLARE_TEX2D(_PathingTexture);
     float _PathingTexture_UV;
+    float _PathingStart;
+    float _PathingEnd;
 
     void ApplyPathing(inout BacklaceSurfaceData Surface, FragmentData i)
     {
@@ -443,6 +445,7 @@
             ).r;
         }
         float pathTime = frac(_Time.y * _PathingSpeed + _PathingOffset);
+        pathTime = lerp(_PathingStart, _PathingEnd, pathTime);
         float pathAlpha = 0;
         switch(_PathingType)
         {
@@ -455,7 +458,8 @@
                 pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
                 break;
             case 3: // ping-pong
-                pathTime = 1.0 - abs(1.0 - 2.0 * pathTime); // goes from 0 -> 1 -> 0
+                pathTime = 1.0 - abs(1.0 - 2.0 *  frac(_Time.y * _PathingSpeed + _PathingOffset)); // goes from 0 -> 1 -> 0
+                pathTime = lerp(_PathingStart, _PathingEnd, pathTime);  
                 pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
                 break;
             case 4: // trail
@@ -482,30 +486,30 @@
         switch(_PathingColorMode)
         {
             case 1: // texture
-            float4 pathSample = UNITY_SAMPLE_TEX2D(_PathingTexture, Uvs[_PathingTexture_UV]);
-            pathEmission *= pathSample.rgb;
-            pathBlend = pathSample.a;
-            break;
+                float4 pathSample = UNITY_SAMPLE_TEX2D(_PathingTexture, Uvs[_PathingTexture_UV]);
+                pathEmission *= pathSample.rgb;
+                pathBlend = pathSample.a;
+                break;
             case 2: // gradient (two colours)
-            float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
-            pathEmission *= pathGradinet.rgb;
-            pathBlend = pathGradinet.a;
-            break;
+                float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
+                pathEmission *= pathGradinet.rgb;
+                pathBlend = pathGradinet.a;
+                break;
             default: // single colour
-            pathEmission *= _PathingColor.rgb;
-            break;
+                pathEmission *= _PathingColor.rgb;
+                break;
         }
         switch(_PathingBlendMode)
         {
             case 0: // additive
-            Surface.FinalColor.rgb += pathEmission;
-            break;
+                Surface.FinalColor.rgb += pathEmission;
+                break;
             case 1: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
+                break;
             case 2: // alpha blend
-            float blendIntensity = pathAlpha * pathBlend;
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
+                float blendIntensity = pathAlpha * pathBlend;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
             break;
         }
     }

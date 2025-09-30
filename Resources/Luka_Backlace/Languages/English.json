@@ -1413,6 +1413,14 @@
             "value": "Blend Mode"
         },
         {
+            "key": "prop_PathingStart",
+            "value": "Path Start"
+        },
+        {
+            "key": "prop_PathingEnd",
+            "value": "Path End"
+        },
+        {
             "key": "prop_PathingColor",
             "value": "Path Colour"
         },

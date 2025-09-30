@@ -389,6 +389,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_PathingColorMode = null;
         private MaterialProperty prop_PathingTexture = null;
         private MaterialProperty prop_PathingColor2 = null;
+        private MaterialProperty prop_PathingStart = null;
+        private MaterialProperty prop_PathingEnd = null;
         // screen space rim lighting properties
         private MaterialProperty prop_ToggleDepthRim = null;
         private MaterialProperty prop_DepthRimColor = null;
@@ -1814,6 +1816,8 @@ namespace Luka.Backlace
                     prop_PathingColorMode = FindProperty("_PathingColorMode", properties);
                     prop_PathingTexture = FindProperty("_PathingTexture", properties);
                     prop_PathingColor2 = FindProperty("_PathingColor2", properties);
+                    prop_PathingStart = FindProperty("_PathingStart", properties);
+                    prop_PathingEnd = FindProperty("_PathingEnd", properties);
                     materialEditor.ShaderProperty(prop_TogglePathing, languages.speak("prop_TogglePathing"));
                     Components.start_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_PathingMappingMode, languages.speak("prop_PathingMappingMode"));
@@ -1844,6 +1848,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingWidth, languages.speak("prop_PathingWidth"));
                     materialEditor.ShaderProperty(prop_PathingSoftness, languages.speak("prop_PathingSoftness"));
                     materialEditor.ShaderProperty(prop_PathingOffset, languages.speak("prop_PathingOffset"));
+                    materialEditor.ShaderProperty(prop_PathingStart, languages.speak("prop_PathingStart"));
+                    materialEditor.ShaderProperty(prop_PathingEnd, languages.speak("prop_PathingEnd"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                 }
