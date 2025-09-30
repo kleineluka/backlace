@@ -46,5 +46,6 @@
 #pragma shader_feature_local _ _BACKLACE_SSR
 #pragma shader_feature_local _ _BACKLACE_DITHER
 #pragma shader_feature_local _ _BACKLACE_PS1
+#pragma shader_feature_local _ _BACKLACE_STITCH
 
 #endif // BACKLACE_KEYWORDS_CGINC

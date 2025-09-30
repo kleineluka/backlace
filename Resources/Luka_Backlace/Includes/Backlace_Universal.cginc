@@ -65,9 +65,16 @@ struct BacklaceSurfaceData
             Uvs[3] = FragData.uv3;
         }
 
-        void SampleAlbedo(inout BacklaceSurfaceData Surface)
+        void SampleAlbedo(inout BacklaceSurfaceData Surface, float3 objectPos)
         {
             Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
+            #if defined(_BACKLACE_STITCH)
+                float stitch_check = objectPos[_StitchAxis];
+                if (stitch_check > _StitchOffset)
+                {
+                    Surface.Albedo = UNITY_SAMPLE_TEX2D(_StitchTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
+                }
+            #endif // _BACKLACE_STITCH
         }
     #endif // !UNITY_PASS_OUTLINE
 #endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)

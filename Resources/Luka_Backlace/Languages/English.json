@@ -233,6 +233,10 @@
             "value": "Core Maps"
         },
         {
+            "key": "sub_tab_stitching",
+            "value": "Texture Stitching"
+        },
+        {
             "key": "sub_tab_uv_manipulation",
             "value": "UV Manipulation"
         },
@@ -1929,6 +1933,18 @@
             "value": "See Through Strength"
         },
         {
+            "key": "prop_RefractionGrabpassTint",
+            "value": "Grabpass Tint"
+        },
+        {
+            "key": "prop_RefractionZoomToggle",
+            "value": "Fracture Zoom"
+        },
+        {
+            "key": "prop_RefractionZoom",
+            "value": "Zoom Amount"
+        },
+        {
             "key": "prop_RefractionMode",
             "value": "Refraction Mode"
         },
@@ -2031,6 +2047,26 @@
         {
             "key": "prop_PS1CompressionPrecision",
             "value": "Color Compression Precision"
+        },
+        {
+            "key": "prop_UseTextureStitching",
+            "value": "Enable Texture Stitching"
+        },
+        {
+            "key": "prop_StitchTex",
+            "value": "Stitch Texture"
+        },
+        {
+            "key": "prop_StitchAxis",
+            "value": "Stitch Axis"
+        },
+        {
+            "key": "prop_StitchOffset",
+            "value": "Stitch Seam Offset"
+        },
+        {
+            "key": "prop_StitchTex_UV",
+            "value": "Stitch Texture UV"
         },
         {
             "key": "prop_ToggleVertexDistortion",

@@ -1123,6 +1123,9 @@
         float4 _CausticsColor;
         float _RefractionBlendMode;
         float _RefractionSeeThrough;
+        float3 _RefractionGrabpassTint;
+        int _RefractionZoomToggle;
+        float _RefractionZoom;
 
         void ApplyRefraction(inout BacklaceSurfaceData Surface, FragmentData i)
         {
@@ -1134,6 +1137,13 @@
             float4 screenPos = i.scrPos;
             float2 baseUV = screenPos.xy / screenPos.w;
             float2 distortedUV = baseUV + refractionVector.xy;
+            if (_RefractionZoomToggle == 1)
+            {
+                float normalFactor = frac(dot(Surface.NormalDir, float3(12.9898, 78.233, 37.719))) * 2.0 - 1.0;
+                float zoomFactor = 1.0 - (normalFactor * _RefractionZoom);
+                float2 center = 0.5;
+                distortedUV = (distortedUV - center) * zoomFactor + center;
+            }
             float3 refractedColor = 0;
             switch(_RefractionDistortionMode)
             {
@@ -1173,6 +1183,7 @@
                     break;
                 }
             }
+            refractedColor *= _RefractionGrabpassTint;
             float3 reflectionVector = reflect(-Surface.ViewDir, Surface.NormalDir);
             float2 causticsUV = reflectionVector.xy * _CausticsTiling + (_Time.y * _CausticsSpeed);
             float3 caustics = UNITY_SAMPLE_TEX2D(_CausticsTex, causticsUV).rgb * _CausticsIntensity;

@@ -27,6 +27,7 @@ float _BumpScale;
 int _IndirectFallbackMode;
 int _IndirectOverride;
 int _FlipBackfaceNormals;
+int _DecalStage;
 
 // specular settings
 float _Occlusion;
@@ -247,6 +248,15 @@ float3 _VertexManipulationScale;
     float _ShadowMap_UV;
     float _ShadowMapIntensity;
 #endif // _BACKLACE_SHADOW_MAP
+
+// texture stitching feature
+#if defined(_BACKLACE_STITCH)
+    UNITY_DECLARE_TEX2D(_StitchTex);
+    float4 _StitchTex_ST;
+    int _StitchTex_UV;
+    int _StitchAxis;
+    float _StitchOffset;
+#endif // _BACKLACE_STITCH
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

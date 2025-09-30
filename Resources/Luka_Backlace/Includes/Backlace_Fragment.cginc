@@ -37,7 +37,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         }
         Uvs[0] = parallax_uv;
     #endif // _BACKLACE_PARALLAX
-    SampleAlbedo(Surface);
+    SampleAlbedo(Surface, i.vertex.xyz);
     #if defined(_BACKLACE_VRCHAT_MIRROR)
         ApplyMirrorDetectionPre(Surface);
     #endif // _BACKLACE_VRCHAT_MIRROR
@@ -97,6 +97,12 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_POST_PROCESSING)
         ApplyPostProcessing(Surface, i);
     #endif // _BACKLACE_POST_PROCESSING
+    #if defined(_BACKLACE_MATCAP)
+        ApplyMatcap(Surface, i);
+    #endif // _BACKLACE_MATCAP
+    #if defined(_BACKLACE_CUBEMAP)
+        ApplyCubemap(Surface);
+    #endif // _BACKLACE_CUBEMAP
     #if defined(_BACKLACE_SPECULAR)
         AddDirectSpecular(Surface);
         AddIndirectSpecular(Surface);
@@ -141,12 +147,6 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_WORLD_EFFECT)
         ApplyWorldAlignedEffect(Surface, i);
     #endif // _BACKLACE_WORLD_EFFECT
-    #if defined(_BACKLACE_MATCAP)
-        ApplyMatcap(Surface, i);
-    #endif // _BACKLACE_MATCAP
-    #if defined(_BACKLACE_CUBEMAP)
-        ApplyCubemap(Surface);
-    #endif // _BACKLACE_CUBEMAP
     #if defined(_BACKLACE_CLEARCOAT)
         float3 baseColor = Surface.FinalColor.rgb;
         float3 clearcoatHighlight;

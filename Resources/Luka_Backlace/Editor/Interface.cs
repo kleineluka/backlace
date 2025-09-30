@@ -48,6 +48,7 @@ namespace Luka.Backlace
         private static Tab tab_main = null;
         private static Tab sub_tab_rendering = null;
         private static Tab sub_tab_textures = null;
+        private static Tab sub_tab_stitching = null;
         private static Tab sub_tab_uv_manipulation = null;
         private static Tab sub_tab_uv_effects = null;
         private static Tab sub_tab_vertex_manipulation = null;
@@ -524,6 +525,9 @@ namespace Luka.Backlace
         private MaterialProperty prop_RefractionMode = null;
         private MaterialProperty prop_RefractionMixStrength = null;
         private MaterialProperty prop_RefractionBlendMode = null;
+        private MaterialProperty prop_RefractionGrabpassTint = null;
+        private MaterialProperty prop_RefractionZoomToggle = null;
+        private MaterialProperty prop_RefractionZoom = null;
         private MaterialProperty prop_CausticsTex = null;
         private MaterialProperty prop_CausticsColor = null;
         private MaterialProperty prop_CausticsTiling = null;
@@ -550,6 +554,11 @@ namespace Luka.Backlace
         private MaterialProperty prop_PS1AffineStrength = null;
         private MaterialProperty prop_PS1Compression = null;
         private MaterialProperty prop_PS1CompressionPrecision = null;
+        // texture stitching properties
+        private MaterialProperty prop_UseTextureStitching = null;
+        private MaterialProperty prop_StitchTex = null;
+        private MaterialProperty prop_StitchAxis = null;
+        private MaterialProperty prop_StitchOffset = null;
         // vertex distortion properties
         private MaterialProperty prop_ToggleVertexDistortion = null;
         private MaterialProperty prop_VertexDistortionMode = null;
@@ -625,6 +634,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_HairFlowMap_UV = null;
         private MaterialProperty prop_ShadowTex_UV = null;
         private MaterialProperty prop_Flowmap_UV = null;
+        private MaterialProperty prop_StitchTex_UV = null;
         private MaterialProperty prop_MirrorDetectionTexture_UV = null;
         private MaterialProperty prop_RefractionMask_UV = null;
         private MaterialProperty prop_PathingMap_UV = null;
@@ -663,6 +673,7 @@ namespace Luka.Backlace
             #region Tabs
             tab_main = null;
             sub_tab_rendering = null;
+            sub_tab_stitching = null;
             sub_tab_textures = null;
             sub_tab_uv_manipulation = null;
             sub_tab_uv_effects = null;
@@ -754,13 +765,14 @@ namespace Luka.Backlace
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
             sub_tab_textures = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_textures"));
-            sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_uv_manipulation"));
-            sub_tab_uv_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_effects"), null, "_ToggleUVEffects");
-            sub_tab_vertex_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_vertex_manipulation"));
-            sub_tab_decal_one = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_decal_one"), null, "_Decal1Enable");
-            sub_tab_decal_two = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_decal_two"), null, "_Decal2Enable");
-            sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
-            sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_uv_sets"));
+            sub_tab_stitching = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_stitching"));
+            sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_manipulation"));
+            sub_tab_uv_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_uv_effects"), null, "_ToggleUVEffects");
+            sub_tab_vertex_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_vertex_manipulation"));
+            sub_tab_decal_one = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_decal_one"), null, "_Decal1Enable");
+            sub_tab_decal_two = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_decal_two"), null, "_Decal2Enable");
+            sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
+            sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_uv_sets"));
             tab_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_lighting"));
             sub_tab_lighting_model = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_lighting_model"));
             sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"), null, "_ToggleAnimeLighting");
@@ -942,6 +954,22 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_BumpScale, languages.speak("prop_BumpScale"));
                     materialEditor.ShaderProperty(prop_Alpha, languages.speak("prop_Alpha"));
                     materialEditor.ShaderProperty(prop_Cutoff, languages.speak("prop_Cutoff"));
+                }
+                sub_tab_stitching.draw();
+                if (sub_tab_stitching.is_expanded) {
+                    // main - texture stitching
+                    prop_UseTextureStitching = FindProperty("_UseTextureStitching", properties);
+                    prop_StitchTex = FindProperty("_StitchTex", properties);
+                    prop_StitchAxis = FindProperty("_StitchAxis", properties);
+                    prop_StitchOffset = FindProperty("_StitchOffset", properties);
+                    materialEditor.ShaderProperty(prop_UseTextureStitching, languages.speak("prop_UseTextureStitching"));
+                    Components.start_dynamic_disable(!prop_UseTextureStitching.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_StitchTex, languages.speak("prop_StitchTex"));
+                    materialEditor.ShaderProperty(prop_StitchAxis, languages.speak("prop_StitchAxis"));
+                    materialEditor.ShaderProperty(prop_StitchOffset, languages.speak("prop_StitchOffset"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(!prop_UseTextureStitching.floatValue.Equals(1), configs);
                 }
                 sub_tab_post_processing.draw();
                 if (sub_tab_post_processing.is_expanded) {
@@ -1209,6 +1237,7 @@ namespace Luka.Backlace
                     prop_HairFlowMap_UV = FindProperty("_HairFlowMap_UV", properties);
                     prop_ShadowTex_UV = FindProperty("_ShadowTex_UV", properties);
                     prop_Flowmap_UV = FindProperty("_Flowmap_UV", properties);
+                    prop_StitchTex_UV = FindProperty("_StitchTex_UV", properties);
                     prop_MirrorDetectionTexture_UV = FindProperty("_MirrorDetectionTexture_UV", properties);
                     prop_RefractionMask_UV = FindProperty("_RefractionMask_UV", properties);
                     prop_PathingMap_UV = FindProperty("_PathingMap_UV", properties);
@@ -1240,6 +1269,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowMap_UV, languages.speak("prop_ShadowMap_UV"));
                     materialEditor.ShaderProperty(prop_PathingTexture_UV, languages.speak("prop_PathingTexture_UV"));
                     materialEditor.ShaderProperty(prop_Dither_UV, languages.speak("prop_Dither_UV"));
+                    materialEditor.ShaderProperty(prop_StitchTex_UV, languages.speak("prop_StitchTex_UV"));
                 }
                 Components.end_foldout();
             }
@@ -2087,12 +2117,16 @@ namespace Luka.Backlace
                     prop_RefractionBlurStrength = FindProperty("_RefractionBlurStrength", properties);
                     prop_RefractionCAUseFresnel = FindProperty("_RefractionCAUseFresnel", properties);
                     prop_RefractionCAEdgeFade = FindProperty("_RefractionCAEdgeFade", properties);
+                    prop_RefractionGrabpassTint = FindProperty("_RefractionGrabpassTint", properties);
+                    prop_RefractionZoomToggle = FindProperty("_RefractionZoomToggle", properties);
+                    prop_RefractionZoom = FindProperty("_RefractionZoom", properties);
                     materialEditor.ShaderProperty(prop_ToggleRefraction, languages.speak("prop_ToggleRefraction"));
                     Components.start_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_RefractionMask, languages.speak("prop_RefractionMask"));
                     materialEditor.ShaderProperty(prop_RefractionIOR, languages.speak("prop_RefractionIOR"));
                     materialEditor.ShaderProperty(prop_RefractionOpacity, languages.speak("prop_RefractionOpacity"));
                     materialEditor.ShaderProperty(prop_RefractionSeeThrough, languages.speak("prop_RefractionSeeThrough"));
+                    materialEditor.ShaderProperty(prop_RefractionGrabpassTint, languages.speak("prop_RefractionGrabpassTint"));
                     materialEditor.ShaderProperty(prop_RefractionTint, languages.speak("prop_RefractionTint"));
                     materialEditor.ShaderProperty(prop_RefractionFresnel, languages.speak("prop_RefractionFresnel"));
                     materialEditor.ShaderProperty(prop_RefractionMode, languages.speak("prop_RefractionMode"));
@@ -2114,6 +2148,10 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_DistortionNoiseTiling, languages.speak("prop_DistortionNoiseTiling"));
                     materialEditor.ShaderProperty(prop_DistortionNoiseStrength, languages.speak("prop_DistortionNoiseStrength"));
+                    materialEditor.ShaderProperty(prop_RefractionZoomToggle, languages.speak("prop_RefractionZoomToggle"));
+                    Components.start_dynamic_disable(!prop_RefractionZoomToggle.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_RefractionZoom, languages.speak("prop_RefractionZoom"));
+                    Components.end_dynamic_disable(!prop_RefractionZoomToggle.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_DistortionNoiseTex.textureValue == null, configs);
                     materialEditor.ShaderProperty(prop_RefractionDistortionMode, languages.speak("prop_RefractionDistortionMode"));

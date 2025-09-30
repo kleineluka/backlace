@@ -13,6 +13,7 @@
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
 #pragma shader_feature_local _ _BACKLACE_DECAL1
 #pragma shader_feature_local _ _BACKLACE_DECAL2
+#pragma shader_feature_local _ _BACKLACE_STITCH
 
 // unity includes
 #include "UnityCG.cginc"
@@ -159,6 +160,15 @@ float3 _VertexManipulationScale;
     float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECAL2
 
+// texture stitching feature
+#if defined(_BACKLACE_STITCH)
+    UNITY_DECLARE_TEX2D(_StitchTex);
+    float4 _StitchTex_ST;
+    int _StitchTex_UV;
+    int _StitchAxis;
+    float _StitchOffset;
+#endif // _BACKLACE_STITCH
+
 // my includes
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Effects.cginc"
@@ -245,7 +255,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         #if defined(_BACKLACE_UV_EFFECTS)
             ApplyUVEffects(Uvs[0], Surface);
         #endif // _BACKLACE_UV_EFFECTS
-        SampleAlbedo(Surface);
+        SampleAlbedo(Surface, i.vertex.xyz);
         #if defined(_BACKLACE_DECAL1)
             ApplyDecal1(Surface, FragData, Uvs);
         #endif // _BACKLACE_DECAL1

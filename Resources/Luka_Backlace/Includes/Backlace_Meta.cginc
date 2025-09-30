@@ -161,6 +161,15 @@ float _UV_Scroll_Y_Speed;
     float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECAL2
 
+// texture stitching feature
+#if defined(_BACKLACE_STITCH)
+    UNITY_DECLARE_TEX2D(_StitchTex);
+    float4 _StitchTex_ST;
+    int _StitchTex_UV;
+    int _StitchAxis;
+    float _StitchOffset;
+#endif // _BACKLACE_STITCH
+
 // my includes
 #include "./Backlace_Universal.cginc"
 
@@ -192,7 +201,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_UV_EFFECTS)
         ApplyUVEffects(Uvs[0], Surface);
     #endif // _BACKLACE_UV_EFFECTS
-    SampleAlbedo(Surface);
+    SampleAlbedo(Surface, i.vertex.xyz);
     #if defined(_BACKLACE_DETAIL)
         ApplyDetailMaps(Surface);
     #endif // _BACKLACE_DETAIL

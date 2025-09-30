@@ -151,7 +151,7 @@ Shader "luka/backlace/all"
         [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Float) = 0.0
         [KeywordEnum(Ramp, Procedural)] _AnimeMode ("Anime Mode", Int) = 0
         // ramp
-        _Ramp ("Toon Ramp", 2D) = "white" { }
+        _Ramp ("Toon Ramp", 2D) = "Gradient_Skin" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
         _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
@@ -589,6 +589,9 @@ Shader "luka/backlace/all"
         [Enum(Reverse Fresnel, 0, Fresnel, 1, Soft Fresnel, 2, Manual, 3)] _RefractionMode ("Refraction Mode", Float) = 0.0
         _RefractionMixStrength ("Mix Strength", Float) = 0
         _RefractionBlendMode ("Refraction Additive<->Replace", Range(0, 1)) = 0
+        _RefractionGrabpassTint ("Grabpass Tint", Color) = (1, 1, 1, 1)
+        [Enum(Disabled, 0, Enabled, 1)] _RefractionZoomToggle ("Enable Zoom", Float) = 0.0
+        _RefractionZoom ("Zoom Strength", Range(0, 1)) = 0.0
         // caustics
         [NoScaleOffset] _CausticsTex ("Internal Caustics Texture", 2D) = "gray" { }
         _CausticsColor ("Caustics Color", Color) = (1, 1, 1, 1)
@@ -679,6 +682,15 @@ Shader "luka/backlace/all"
         [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
         _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 
+        // TEXTURE STITCHING
+        // [Space(35)]
+        // [Header(Texture Stitching)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_STITCH)] _UseTextureStitching ("Enable Texture Stitching", Float) = 0
+        [NoScaleOffset] _StitchTex ("Stitch Texture (RGB)", 2D) = "white" { }
+        [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
+        _StitchOffset ("Stitch Seam Offset", Float) = 0
+
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]
@@ -730,6 +742,7 @@ Shader "luka/backlace/all"
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Dither_UV ("Dither UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _StitchTex_UV ("Stitch Texture UV Set", Int) = 0
     }
     SubShader
     {
