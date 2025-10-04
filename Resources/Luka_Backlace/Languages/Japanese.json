@@ -1,0 +1,2412 @@
+{
+    "entries": [
+        {
+            "key": "enabled",
+            "value": "有効"
+        },
+        {
+            "key": "disabled",
+            "value": "無効"
+        },
+        {
+            "key": "config_tab_theme",
+            "value": "タブのテーマ"
+        },
+        {
+            "key": "config_text_theme",
+            "value": "テキストのテーマ"
+        },
+        {
+            "key": "config_ui_size",
+            "value": "UIサイズ"
+        },
+        {
+            "key": "config_updates",
+            "value": "アップデートを確認"
+        },
+        {
+            "key": "config_language",
+            "value": "言語"
+        },
+        {
+            "key": "config_toggle_updates",
+            "value": "アップデートを表示"
+        },
+        {
+            "key": "config_toggle_announcements",
+            "value": "ニュースを表示"
+        },
+        {
+            "key": "config_toggle_enabled",
+            "value": "有効"
+        },
+        {
+            "key": "config_toggle_disabled",
+            "value": "無効"
+        },
+        {
+            "key": "config_save",
+            "value": "設定を保存"
+        },
+        {
+            "key": "config_reset",
+            "value": "設定をリセット"
+        },
+        {
+            "key": "config_save_success",
+            "value": "設定が正常に保存されました！ ^~^"
+        },
+        {
+            "key": "config_save_error",
+            "value": "設定の保存中に問題が発生しました。Unityパッケージを再インポートしてみてください！ >.<"
+        },
+        {
+            "key": "config_reset_success",
+            "value": "設定がデフォルト値にリセットされました！ ^~^"
+        },
+        {
+            "key": "config_reset_error",
+            "value": "設定のリセット中に問題が発生しました。Unityパッケージを再インポートしてみてください！ >.<"
+        },
+        {
+            "key": "dialog_okay",
+            "value": "オッケー！"
+        },
+        {
+            "key": "update_available",
+            "value": "アップデートがあります！"
+        },
+        {
+            "key": "update_description",
+            "value": "最新バージョンをダウンロードして、新機能やバグ修正をご利用ください！ <3"
+        },
+        {
+            "key": "tab_config",
+            "value": "設定"
+        },
+        {
+            "key": "open_docs",
+            "value": "ヘルプが必要ですか？ここをクリックしてドキュメントを開きます！"
+        },
+        {
+            "key": "tab_license",
+            "value": "ライセンス"
+        },
+        {
+            "key": "button_show_license",
+            "value": "Unityでライセンスを表示"
+        },
+        {
+            "key": "config_toggle_grey_unused",
+            "value": "未使用の設定をグレー表示"
+        },
+        {
+            "key": "config_toggle_status_badges",
+            "value": "ステータスバッジを表示"
+        },
+        {
+            "key": "status_badge_enabled",
+            "value": "有効化済み"
+        },
+        {
+            "key": "capability_popup_title",
+            "value": "機能に関するお知らせ！"
+        },
+        {
+            "key": "preset_title",
+            "value": "プリセットマネージャー"
+        },
+        {
+            "key": "preset_overwrite_prompt",
+            "value": "この名前のプリセットは既に存在します。上書きしますか？"
+        },
+        {
+            "key": "preset_overwrite_prompt_yes",
+            "value": "上書きする！"
+        },
+        {
+            "key": "preset_overwrite_prompt_no",
+            "value": "既存のものを保持する。"
+        },
+        {
+            "key": "preset_builtin_header",
+            "value": "組み込みプリセット"
+        },
+        {
+            "key": "preset_custom_header",
+            "value": "カスタムプリセット"
+        },
+        {
+            "key": "preset_save_header",
+            "value": "このマテリアルを保存"
+        },
+        {
+            "key": "preset_name_label",
+            "value": "プリセット名"
+        },
+        {
+            "key": "preset_save_button",
+            "value": "プリセットとして保存"
+        },
+        {
+            "key": "preset_save_error_noname",
+            "value": "保存する前にプリセットの名前を設定してください！ >.<"
+        },
+        {
+            "key": "preset_delete_prompt",
+            "value": "このプリセットを削除しますか？この操作は元に戻せません..."
+        },
+        {
+            "key": "preset_delete_prompt_yes",
+            "value": "プリセットを削除"
+        },
+        {
+            "key": "preset_delete_prompt_no",
+            "value": "プリセットを保持"
+        },
+        {
+            "key": "tab_presets",
+            "value": "プリセット"
+        },
+        {
+            "key": "preset_no_builtin_found",
+            "value": "このシェーダーには組み込みプリセットが提供されていません..."
+        },
+        {
+            "key": "preset_no_custom_found",
+            "value": "カスタムプリセットが見つかりませんでした！作成してみませんか？ :o"
+        },
+        {
+            "key": "load",
+            "value": "読み込む"
+        },
+        {
+            "key": "tab_premonition",
+            "value": "コンパクトマテリアル"
+        },
+        {
+            "key": "premonition_notice",
+            "value": "ここでは、現在のマテリアルのコンパクトバージョンを生成できます。これにより、より小さく、コンパイル時間が短く、現在の設定のスナップショットである新しいシェーダーファイルが生成されます。この小さなシェーダーは再配布可能で、他に何も依存しません - .shaderファイルを好きなように移動できます。シェーダー数を減らし、パフォーマンスを向上させるために、最終的なマテリアルには常にこれを使用することをお勧めします！ ^-^（ただし、変更が必要な場合はいつでも通常のシェーダーに戻ることができるのでご安心ください）"
+        },
+        {
+            "key": "premonition_generate_button",
+            "value": "コンパクトマテリアルを生成"
+        },
+        {
+            "key": "premonition_restore_button",
+            "value": "元のマテリアルを復元"
+        },
+        {
+            "key": "variant_popup_title",
+            "value": "シェーダーバリアントが必要です"
+        },
+        {
+            "key": "variant_popup_description",
+            "value": "この機能には、少なくとも '{0}' シェーダーバリアントが必要です。\n\nシェーダーバリアントは、必要な機能のコードのみを含めるようにするために作成されます。他のバージョンにも含まれている場合がありますが（グレー表示のタブなどで示されます）、これをサポートする「最も低い」バリアント層です。詳細については、ドキュメントを参照してください！ ^-^"
+        },
+        {
+            "key": "warning_external_website_title",
+            "value": "待って、聞いてください！"
+        },
+        {
+            "key": "warning_external_website_description",
+            "value": "私によって所有または運営されていない外部ウェブサイトを開こうとしています！注意して進んでください！！おそらく安全ですが、私はそれを制御できず、将来変更される可能性もあります。 >.< 続行しますか？"
+        },
+        {
+            "key": "warning_external_website_okay",
+            "value": "ウェブサイトを開く"
+        },
+        {
+            "key": "warning_external_website_cancel",
+            "value": "戻る！"
+        },
+        {
+            "key": "tab_main",
+            "value": "メイン設定"
+        },
+        {
+            "key": "sub_tab_rendering",
+            "value": "レンダリング"
+        },
+        {
+            "key": "sub_tab_textures",
+            "value": "コアマップ"
+        },
+        {
+            "key": "sub_tab_stitching",
+            "value": "テクスチャスティッチング"
+        },
+        {
+            "key": "sub_tab_uv_manipulation",
+            "value": "UV操作"
+        },
+        {
+            "key": "sub_tab_uv_effects",
+            "value": "UVエフェクト"
+        },
+        {
+            "key": "sub_tab_vertex_manipulation",
+            "value": "頂点操作"
+        },
+        {
+            "key": "sub_tab_decal_one",
+            "value": "デカール1"
+        },
+        {
+            "key": "sub_tab_decal_two",
+            "value": "デカール2"
+        },
+        {
+            "key": "sub_tab_post_processing",
+            "value": "テクスチャ後処理"
+        },
+        {
+            "key": "sub_tab_uv_sets",
+            "value": "UVセット"
+        },
+        {
+            "key": "tab_lighting",
+            "value": "ライティング"
+        },
+        {
+            "key": "sub_tab_lighting_model",
+            "value": "ライティングモデル"
+        },
+        {
+            "key": "sub_tab_anime",
+            "value": "アニメシェーディング"
+        },
+        {
+            "key": "tab_specular",
+            "value": "スペキュラ"
+        },
+        {
+            "key": "sub_tab_pbr_specular",
+            "value": "PBRスペキュラ"
+        },
+        {
+            "key": "sub_tab_stylised_specular",
+            "value": "スタイル化スペキュラ"
+        },
+        {
+            "key": "sub_tab_emission",
+            "value": "エミッション"
+        },
+        {
+            "key": "sub_tab_light_limiting",
+            "value": "光レベルを制限"
+        },
+        {
+            "key": "tab_shading",
+            "value": "シェーディング"
+        },
+        {
+            "key": "sub_tab_rim_lighting",
+            "value": "フレネルリムライティング"
+        },
+        {
+            "key": "sub_tab_depth_rim",
+            "value": "深度リムライティング"
+        },
+        {
+            "key": "sub_tab_clear_coat",
+            "value": "クリアコート"
+        },
+        {
+            "key": "sub_tab_matcap",
+            "value": "マットキャップ"
+        },
+        {
+            "key": "sub_tab_cubemap",
+            "value": "キューブマップ"
+        },
+        {
+            "key": "sub_tab_parallax",
+            "value": "パララックスマッピング"
+        },
+        {
+            "key": "sub_tab_subsurface",
+            "value": "サブサーフェススキャッタリング"
+        },
+        {
+            "key": "sub_tab_detail_map",
+            "value": "ディテールマッピング"
+        },
+        {
+            "key": "sub_tab_shadow_map",
+            "value": "シャドウマッピング"
+        },
+        {
+            "key": "tab_effects",
+            "value": "エフェクト"
+        },
+        {
+            "key": "sub_tab_dissolve",
+            "value": "ディゾルブ"
+        },
+        {
+            "key": "sub_tab_pathing",
+            "value": "パッシング"
+        },
+        {
+            "key": "tab_third_party",
+            "value": "サードパーティ"
+        },
+        {
+            "key": "sub_tab_audiolink",
+            "value": "AudioLink"
+        },
+        {
+            "key": "sub_tab_superplug",
+            "value": "Super Plug Shader"
+        },
+        {
+            "key": "superplug_notice",
+            "value": "Super Plug Shader（VRCFury作）は、メッシュをターゲットに向かって変形させるために使用できる無料のメッシュ変形システムであり、DPS（Raliv作のDynamic Penetration System）およびTPS（Poiyomi ProのThry Penetration System）の完全な下位互換性のある代替品です。無料であることに加えて、Backlaceを含むさまざまなシェーダーをハードコードサポートなしでサポートしています！セットアップするために、以下のリンクをクリックしてドキュメントを開いてください！"
+        },
+        {
+            "key": "superplug_button",
+            "value": "Super Plug Shaderのウェブサイトを開く"
+        },
+        {
+            "key": "sub_tab_ltcgi",
+            "value": "LTCGIライティング"
+        },
+        {
+            "key": "ltcgi_notice",
+            "value": "LTCGI（_pi_作）は、VRChat向けのプラグアンドプレイのリアルタイムエリアライティングソリューションです。これを有効にするには、プロジェクトにLTCGIパッケージも含めてください。独自のシェーダー関数が必要なためです。有効にすると、マテリアルは自動的にLTCGIのライティングを使用します。"
+        },
+        {
+            "key": "ltcgi_button",
+            "value": "LTCGIのウェブサイトを開く"
+        },
+        {
+            "key": "prop_ToggleLTCGI",
+            "value": "LTCGIライティングを有効にする"
+        },
+        {
+            "key": "sub_tab_glitter",
+            "value": "グリッター"
+        },
+        {
+            "key": "sub_tab_distance_fading",
+            "value": "距離フェード"
+        },
+        {
+            "key": "sub_tab_iridescence",
+            "value": "イリデッセンス"
+        },
+        {
+            "key": "sub_tab_shadow_textures",
+            "value": "シャドウテクスチャ"
+        },
+        {
+            "key": "sub_tab_flatten_model",
+            "value": "モデルを平坦化"
+        },
+        {
+            "key": "sub_tab_world_aligned",
+            "value": "ワールド座標テクスチャ"
+        },
+        {
+            "key": "sub_tab_vrchat_mirror",
+            "value": "VRChatミラー検出"
+        },
+        {
+            "key": "sub_tab_touch_interactions",
+            "value": "タッチインタラクション"
+        },
+        {
+            "key": "sub_tab_vertex_distortion",
+            "value": "頂点ディストーション"
+        },
+        {
+            "key": "sub_tab_dither",
+            "value": "ディザリング"
+        },
+        {
+            "key": "sub_tab_ps1",
+            "value": "低精度（PS1）"
+        },
+        {
+            "key": "sub_tab_refraction",
+            "value": "屈折"
+        },
+        {
+            "key": "sub_tab_screenspace_reflection",
+            "value": "スクリーンスペースリフレクション"
+        },
+        {
+            "key": "tab_outline",
+            "value": "アウトライン"
+        },
+        {
+            "key": "prop_SrcBlend",
+            "value": "ソースブレンド"
+        },
+        {
+            "key": "prop_DstBlend",
+            "value": "デスティネーションブレンド"
+        },
+        {
+            "key": "prop_ZWrite",
+            "value": "ZWrite"
+        },
+        {
+            "key": "prop_Cull",
+            "value": "カリングモード"
+        },
+        {
+            "key": "prop_StencilRef",
+            "value": "ステンシルリファレンス"
+        },
+        {
+            "key": "prop_StencilComp",
+            "value": "比較"
+        },
+        {
+            "key": "prop_StencilPass",
+            "value": "パスオペレーション"
+        },
+        {
+            "key": "prop_StencilFail",
+            "value": "フェイルオペレーション"
+        },
+        {
+            "key": "prop_StencilZFail",
+            "value": "Zフェイルオペレーション"
+        },
+        {
+            "key": "prop_OutlineStencilRef",
+            "value": "アウトラインステンシルリファレンス"
+        },
+        {
+            "key": "prop_OutlineStencilComp",
+            "value": "アウトライン比較"
+        },
+        {
+            "key": "prop_OutlineStencilPass",
+            "value": "アウトラインパスオペレーション"
+        },
+        {
+            "key": "prop_OutlineStencilFail",
+            "value": "アウトラインフェイルオペレーション"
+        },
+        {
+            "key": "prop_OutlineStencilZFail",
+            "value": "アウトラインZフェイルオペレーション"
+        },
+        {
+            "key": "prop_BlendMode",
+            "value": "ブレンディングモード"
+        },
+        {
+            "key": "prop_VRCFallback",
+            "value": "VRChatフォールバック"
+        },
+        {
+            "key": "prop_ToggleFlipNormals",
+            "value": "裏面の法線を反転"
+        },
+        {
+            "key": "prop_MainTex",
+            "value": "メインテクスチャ"
+        },
+        {
+            "key": "prop_Color",
+            "value": "アルベドカラー"
+        },
+        {
+            "key": "prop_Cutoff",
+            "value": "アルファカットオフ"
+        },
+        {
+            "key": "prop_BumpMap",
+            "value": "ノーマルマップ"
+        },
+        {
+            "key": "prop_BumpScale",
+            "value": "ノーマルマップスケール"
+        },
+        {
+            "key": "prop_Alpha",
+            "value": "アルファ"
+        },
+        {
+            "key": "prop_DecalStage",
+            "value": "デカールステージ（共有）"
+        },
+        {
+            "key": "prop_UV_Offset_X",
+            "value": "UVオフセットX"
+        },
+        {
+            "key": "prop_UV_Offset_Y",
+            "value": "UVオフセットY"
+        },
+        {
+            "key": "prop_UV_Scale_X",
+            "value": "UVスケールX"
+        },
+        {
+            "key": "prop_UV_Scale_Y",
+            "value": "UVスケールY"
+        },
+        {
+            "key": "prop_UV_Rotation",
+            "value": "UV回転"
+        },
+        {
+            "key": "prop_UV_Scroll_X_Speed",
+            "value": "UVスクロールX速度"
+        },
+        {
+            "key": "prop_UV_Scroll_Y_Speed",
+            "value": "UVスクロールY速度"
+        },
+        {
+            "key": "prop_ToggleUVEffects",
+            "value": "UVエフェクトを有効にする"
+        },
+        {
+            "key": "prop_UVTriplanarMapping",
+            "value": "トライプラナーマッピングを有効にする"
+        },
+        {
+            "key": "prop_UVTriplanarPosition",
+            "value": "ワールド座標（XYZ）"
+        },
+        {
+            "key": "prop_UVTriplanarScale",
+            "value": "ワールドスケール"
+        },
+        {
+            "key": "prop_UVTriplanarRotation",
+            "value": "ワールド回転（XYZ）"
+        },
+        {
+            "key": "prop_UVTriplanarSharpness",
+            "value": "トライプラナーブレンドのシャープネス"
+        },
+        {
+            "key": "prop_UVScreenspaceMapping",
+            "value": "スクリーンスペースマッピングを有効にする"
+        },
+        {
+            "key": "prop_UVScreenspaceTiling",
+            "value": "スクリーンスペースタイリング"
+        },
+        {
+            "key": "prop_UVFlipbook",
+            "value": "フリップブックアニメーションを有効にする"
+        },
+        {
+            "key": "prop_UVFlipbookRows",
+            "value": "フリップブックの行"
+        },
+        {
+            "key": "prop_UVFlipbookColumns",
+            "value": "フリップブックの列"
+        },
+        {
+            "key": "prop_UVFlipbookFrames",
+            "value": "総フレーム数"
+        },
+        {
+            "key": "prop_UVFlipbookFPS",
+            "value": "フリップブックFPS"
+        },
+        {
+            "key": "prop_UVFlipbookScrub",
+            "value": "手動スクラブ"
+        },
+        {
+            "key": "prop_UVFlowmap",
+            "value": "フローマップを有効にする"
+        },
+        {
+            "key": "prop_UVFlowmapTex",
+            "value": "フローマップテクスチャ（RG）"
+        },
+        {
+            "key": "prop_UVFlowmapStrength",
+            "value": "フローマップの強度"
+        },
+        {
+            "key": "prop_UVFlowmapSpeed",
+            "value": "フローマップの速度"
+        },
+        {
+            "key": "prop_UVFlowmapDistortion",
+            "value": "フローマップの歪み"
+        },
+        {
+            "key": "prop_VertexManipulationPosition",
+            "value": "ワールド座標（XYZ）"
+        },
+        {
+            "key": "prop_VertexManipulationScale",
+            "value": "ワールドスケール（XYZ）"
+        },
+        {
+            "key": "prop_ToggleEmission",
+            "value": "エミッションを有効にする"
+        },
+        {
+            "key": "prop_EmissionColor",
+            "value": "エミッションカラー"
+        },
+        {
+            "key": "prop_EmissionMap",
+            "value": "エミッションマップ（マスク）"
+        },
+        {
+            "key": "prop_UseAlbedoAsEmission",
+            "value": "アルベドをエミッションに使用"
+        },
+        {
+            "key": "prop_EmissionStrength",
+            "value": "エミッション強度"
+        },
+        {
+            "key": "prop_EnableBaseLightLimit",
+            "value": "ベースパス制限を有効にする"
+        },
+        {
+            "key": "prop_BaseLightMin",
+            "value": "ベースライト最小値"
+        },
+        {
+            "key": "prop_BaseLightMax",
+            "value": "ベースライト最大値"
+        },
+        {
+            "key": "prop_EnableAddLightLimit",
+            "value": "追加パス制限を有効にする"
+        },
+        {
+            "key": "prop_AddLightMin",
+            "value": "追加ライト最小値"
+        },
+        {
+            "key": "prop_AddLightMax",
+            "value": "追加ライト最大値"
+        },
+        {
+            "key": "prop_GreyscaleLighting",
+            "value": "グレースケールライティング"
+        },
+        {
+            "key": "prop_ForceLightColor",
+            "value": "ライトカラーを強制"
+        },
+        {
+            "key": "prop_ForcedLightColor",
+            "value": "強制ライトカラー"
+        },
+        {
+            "key": "prop_LightingColorMode",
+            "value": "ライトカラーモード"
+        },
+        {
+            "key": "prop_LightingDirectionMode",
+            "value": "ライト方向モード"
+        },
+        {
+            "key": "prop_ForcedLightDirection",
+            "value": "強制ライト方向"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetX",
+            "value": "視線方向オフセットX"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetY",
+            "value": "視線方向オフセットY"
+        },
+        {
+            "key": "prop_DirectIntensity",
+            "value": "RT直接光強度"
+        },
+        {
+            "key": "prop_IndirectIntensity",
+            "value": "RT間接光強度"
+        },
+        {
+            "key": "prop_VertexIntensity",
+            "value": "RT頂点強度"
+        },
+        {
+            "key": "prop_AdditiveIntensity",
+            "value": "RT加算強度"
+        },
+        {
+            "key": "prop_BakedDirectIntensity",
+            "value": "ベイク済み直接光強度"
+        },
+        {
+            "key": "prop_BakedIndirectIntensity",
+            "value": "ベイク済み間接光強度"
+        },
+        {
+            "key": "prop_ToggleAnimeLighting",
+            "value": "アニメライティングを有効にする"
+        },
+        {
+            "key": "prop_AnimeMode",
+            "value": "アニメモード"
+        },
+        {
+            "key": "prop_Ramp",
+            "value": "アニメランプ"
+        },
+        {
+            "key": "prop_RampColor",
+            "value": "ランプカラー"
+        },
+        {
+            "key": "prop_RampOffset",
+            "value": "ランプオフセット"
+        },
+        {
+            "key": "prop_ShadowIntensity",
+            "value": "影の強度"
+        },
+        {
+            "key": "prop_OcclusionOffsetIntensity",
+            "value": "オクルージョンオフセット強度"
+        },
+        {
+            "key": "prop_RampMin",
+            "value": "ランプ最小値"
+        },
+        {
+            "key": "prop_RampNormalIntensity",
+            "value": "法線が強度に影響"
+        },
+        {
+            "key": "prop_AnimeShadowColor",
+            "value": "コアシャドウカラー"
+        },
+        {
+            "key": "prop_AnimeShadowThreshold",
+            "value": "コアシャドウしきい値"
+        },
+        {
+            "key": "prop_AnimeHalftoneColor",
+            "value": "ハーフトーンカラー"
+        },
+        {
+            "key": "prop_AnimeHalftoneThreshold",
+            "value": "ハーフトーンしきい値"
+        },
+        {
+            "key": "prop_AnimeShadowSoftness",
+            "value": "影の柔らかさ"
+        },
+        {
+            "key": "prop_ToggleAmbientGradient",
+            "value": "アンビエントグラデーションを有効にする"
+        },
+        {
+            "key": "prop_AnimeOcclusionToShadow",
+            "value": "オクルージョンを影に"
+        },
+        {
+            "key": "prop_AmbientUp",
+            "value": "天空アンビエント"
+        },
+        {
+            "key": "prop_AmbientSkyThreshold",
+            "value": "天空しきい値"
+        },
+        {
+            "key": "prop_AmbientDown",
+            "value": "地面アンビエント"
+        },
+        {
+            "key": "prop_AmbientGroundThreshold",
+            "value": "地面しきい値"
+        },
+        {
+            "key": "prop_AmbientIntensity",
+            "value": "グラデーション強度"
+        },
+        {
+            "key": "prop_TintMaskSource",
+            "value": "ティントマスクソース"
+        },
+        {
+            "key": "prop_LitTint",
+            "value": "照明領域ティント"
+        },
+        {
+            "key": "prop_LitThreshold",
+            "value": "照明カバレッジ"
+        },
+        {
+            "key": "prop_ShadowTint",
+            "value": "影領域ティント"
+        },
+        {
+            "key": "prop_ShadowThreshold",
+            "value": "影カバレッジ"
+        },
+        {
+            "key": "prop_ToggleSpecular",
+            "value": "スペキュラを有効にする"
+        },
+        {
+            "key": "prop_SpecularIntensity",
+            "value": "ハイライト"
+        },
+        {
+            "key": "prop_ToggleVertexSpecular",
+            "value": "頂点スペキュラを有効にする"
+        },
+        {
+            "key": "prop_SpecularMode",
+            "value": "スペキュラモード"
+        },
+        {
+            "key": "prop_MSSO",
+            "value": "MSSO（メタル、スムーズ、スペキュラ、オクルージョン）"
+        },
+        {
+            "key": "prop_Metallic",
+            "value": "メタリック"
+        },
+        {
+            "key": "prop_Glossiness",
+            "value": "光沢"
+        },
+        {
+            "key": "prop_Occlusion",
+            "value": "オクルージョン"
+        },
+        {
+            "key": "prop_Specular",
+            "value": "反射率"
+        },
+        {
+            "key": "prop_SpecularTintTexture",
+            "value": "スペキュラティントテクスチャ"
+        },
+        {
+            "key": "prop_SpecularTint",
+            "value": "スペキュラティント"
+        },
+        {
+            "key": "prop_TangentMap",
+            "value": "タンジェントマップ"
+        },
+        {
+            "key": "prop_Anisotropy",
+            "value": "異方性"
+        },
+        {
+            "key": "prop_ReplaceSpecular",
+            "value": "スペキュラを置き換える"
+        },
+        {
+            "key": "prop_HighlightRamp",
+            "value": "ハイライトランプ"
+        },
+        {
+            "key": "prop_HighlightHardness",
+            "value": "ハイライトの硬さ"
+        },
+        {
+            "key": "prop_HighlightRampColor",
+            "value": "ハイライトカラー"
+        },
+        {
+            "key": "prop_HighlightIntensity",
+            "value": "ハイライト強度"
+        },
+        {
+            "key": "prop_HighlightRampOffset",
+            "value": "ハイライトランプオフセット"
+        },
+        {
+            "key": "prop_HairFlowMap",
+            "value": "ヘアフロー/タンジェントマップ（RG）"
+        },
+        {
+            "key": "prop_PrimarySpecularShift",
+            "value": "プライマリスぺキュラシフト"
+        },
+        {
+            "key": "prop_SecondarySpecularShift",
+            "value": "セカンダリスぺキュラシフト"
+        },
+        {
+            "key": "prop_SecondarySpecularColor",
+            "value": "セカンダリスぺキュラカラー"
+        },
+        {
+            "key": "prop_SpecularExponent",
+            "value": "スペキュラ指数"
+        },
+        {
+            "key": "prop_SheenColor",
+            "value": "シーンカラー"
+        },
+        {
+            "key": "prop_SheenIntensity",
+            "value": "シーン強度"
+        },
+        {
+            "key": "prop_SheenRoughness",
+            "value": "シーンラフネス"
+        },
+        {
+            "key": "prop_ToggleRimlight",
+            "value": "リムライティングを有効にする"
+        },
+        {
+            "key": "prop_RimColor",
+            "value": "リムカラー"
+        },
+        {
+            "key": "prop_RimWidth",
+            "value": "リム幅"
+        },
+        {
+            "key": "prop_RimIntensity",
+            "value": "リム強度"
+        },
+        {
+            "key": "prop_RimLightBased",
+            "value": "ライトベースのリム"
+        },
+        {
+            "key": "prop_ToggleClearcoat",
+            "value": "クリアコートを有効にする"
+        },
+        {
+            "key": "prop_ClearcoatStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_ClearcoatReflectionStrength",
+            "value": "反射強度"
+        },
+        {
+            "key": "prop_ClearcoatMap",
+            "value": "マスク（R=強度、G=ラフネス）"
+        },
+        {
+            "key": "prop_ClearcoatRoughness",
+            "value": "ラフネス"
+        },
+        {
+            "key": "prop_ClearcoatColor",
+            "value": "クリアコートカラー"
+        },
+        {
+            "key": "prop_ToggleMatcap",
+            "value": "マットキャップを有効にする"
+        },
+        {
+            "key": "prop_MatcapTex",
+            "value": "マットキャップテクスチャ"
+        },
+        {
+            "key": "prop_MatcapTint",
+            "value": "マットキャップティント"
+        },
+        {
+            "key": "prop_MatcapIntensity",
+            "value": "マットキャップ強度"
+        },
+        {
+            "key": "prop_MatcapBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_MatcapMask",
+            "value": "マットキャップマスク（R）"
+        },
+        {
+            "key": "prop_MatcapSmoothnessEnabled",
+            "value": "スムーズネスを有効にする"
+        },
+        {
+            "key": "prop_MatcapSmoothness",
+            "value": "スムーズネス"
+        },
+        {
+            "key": "prop_Decal1Enable",
+            "value": "デカール1を有効にする"
+        },
+        {
+            "key": "prop_Decal1Tex",
+            "value": "デカールテクスチャ（A=マスク）"
+        },
+        {
+            "key": "prop_Decal1Tint",
+            "value": "ティント"
+        },
+        {
+            "key": "prop_Decal1BlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_Decal1IsTriplanar",
+            "value": "トライプラナーマッピングを使用"
+        },
+        {
+            "key": "prop_Decal1Position",
+            "value": "UV座標（XY）"
+        },
+        {
+            "key": "prop_Decal1Scale",
+            "value": "UVスケール（XY）"
+        },
+        {
+            "key": "prop_Decal1Rotation",
+            "value": "UV回転"
+        },
+        {
+            "key": "prop_Decal1TriplanarPosition",
+            "value": "ワールド座標（XYZ）"
+        },
+        {
+            "key": "prop_Decal1TriplanarScale",
+            "value": "ワールドスケール"
+        },
+        {
+            "key": "prop_Decal1TriplanarRotation",
+            "value": "ワールド回転（XYZ）"
+        },
+        {
+            "key": "prop_Decal1TriplanarSharpness",
+            "value": "トライプラナーブレンドのシャープネス"
+        },
+        {
+            "key": "prop_Decal1Repeat",
+            "value": "パターンを繰り返す"
+        },
+        {
+            "key": "prop_Decal1Scroll",
+            "value": "スクロール速度（XY）"
+        },
+        {
+            "key": "prop_Decal1HueShift",
+            "value": "色相シフト"
+        },
+        {
+            "key": "prop_Decal1AutoCycleHue",
+            "value": "色相を自動サイクル"
+        },
+        {
+            "key": "prop_Decal1CycleSpeed",
+            "value": "サイクル速度"
+        },
+        {
+            "key": "prop_Decal2Enable",
+            "value": "デカール2を有効にする"
+        },
+        {
+            "key": "prop_Decal2Tex",
+            "value": "デカールテクスチャ（A=マスク）"
+        },
+        {
+            "key": "prop_Decal2Tint",
+            "value": "ティント"
+        },
+        {
+            "key": "prop_Decal2BlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_Decal2IsTriplanar",
+            "value": "トライプラナーマッピングを使用"
+        },
+        {
+            "key": "prop_Decal2Position",
+            "value": "UV座標（XY）"
+        },
+        {
+            "key": "prop_Decal2Scale",
+            "value": "UVスケール（XY）"
+        },
+        {
+            "key": "prop_Decal2Rotation",
+            "value": "UV回転"
+        },
+        {
+            "key": "prop_Decal2TriplanarPosition",
+            "value": "ワールド座標（XYZ）"
+        },
+        {
+            "key": "prop_Decal2TriplanarScale",
+            "value": "ワールドスケール"
+        },
+        {
+            "key": "prop_Decal2TriplanarRotation",
+            "value": "ワールド回転（XYZ）"
+        },
+        {
+            "key": "prop_Decal2TriplanarSharpness",
+            "value": "トライプラナーブレンドのシャープネス"
+        },
+        {
+            "key": "prop_Decal2Repeat",
+            "value": "パターンを繰り返す"
+        },
+        {
+            "key": "prop_Decal2Scroll",
+            "value": "スクロール速度（XY）"
+        },
+        {
+            "key": "prop_Decal2HueShift",
+            "value": "色相シフト"
+        },
+        {
+            "key": "prop_Decal2AutoCycleHue",
+            "value": "色相を自動サイクル"
+        },
+        {
+            "key": "prop_Decal2CycleSpeed",
+            "value": "サイクル速度"
+        },
+        {
+            "key": "prop_TogglePostProcessing",
+            "value": "後処理を有効にする"
+        },
+        {
+            "key": "prop_RGBColor",
+            "value": "RGBティント"
+        },
+        {
+            "key": "prop_RGBBlendMode",
+            "value": "RGB乗算/置換"
+        },
+        {
+            "key": "prop_HSVMode",
+            "value": "HSVモード"
+        },
+        {
+            "key": "prop_HSVHue",
+            "value": "色相"
+        },
+        {
+            "key": "prop_HSVSaturation",
+            "value": "彩度"
+        },
+        {
+            "key": "prop_HSVValue",
+            "value": "明度（明るさ）"
+        },
+        {
+            "key": "prop_ToggleHueShift",
+            "value": "色相シフトを有効にする"
+        },
+        {
+            "key": "prop_HueShift",
+            "value": "色相シフト"
+        },
+        {
+            "key": "prop_ToggleAutoCycle",
+            "value": "色相の自動サイクルを有効にする"
+        },
+        {
+            "key": "prop_AutoCycleSpeed",
+            "value": "自動サイクル速度"
+        },
+        {
+            "key": "prop_ColorGradingLUT",
+            "value": "カラーグレーディングLUT"
+        },
+        {
+            "key": "prop_ColorGradingIntensity",
+            "value": "グレーディング強度"
+        },
+        {
+            "key": "prop_BlackAndWhite",
+            "value": "白黒"
+        },
+        {
+            "key": "prop_Brightness",
+            "value": "明るさ"
+        },
+        {
+            "key": "prop_ToggleCubemap",
+            "value": "キューブマップを有効にする"
+        },
+        {
+            "key": "prop_CubemapTex",
+            "value": "キューブマップ"
+        },
+        {
+            "key": "prop_CubemapTint",
+            "value": "キューブマップティント"
+        },
+        {
+            "key": "prop_CubemapIntensity",
+            "value": "キューブマップ強度"
+        },
+        {
+            "key": "prop_CubemapBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_ToggleParallax",
+            "value": "パララックスマッピングを有効にする"
+        },
+        {
+            "key": "prop_ParallaxMode",
+            "value": "パララックスモード"
+        },
+        {
+            "key": "prop_ParallaxMap",
+            "value": "ハイトマップ（R）"
+        },
+        {
+            "key": "prop_ParallaxStrength",
+            "value": "パララックス強度"
+        },
+        {
+            "key": "prop_ParallaxSteps",
+            "value": "高品質ステップ"
+        },
+        {
+            "key": "prop_ToggleSSS",
+            "value": "サブサーフェススキャッタリングを有効にする"
+        },
+        {
+            "key": "prop_SSSColor",
+            "value": "SSSカラー"
+        },
+        {
+            "key": "prop_SSSStrength",
+            "value": "SSS強度"
+        },
+        {
+            "key": "prop_SSSPower",
+            "value": "SSSパワー"
+        },
+        {
+            "key": "prop_SSSDistortion",
+            "value": "SSS歪み"
+        },
+        {
+            "key": "prop_SSSThicknessMap",
+            "value": "SSS厚みマップ（R）"
+        },
+        {
+            "key": "prop_SSSThickness",
+            "value": "SSS厚み減衰"
+        },
+        {
+            "key": "prop_ToggleShadowMap",
+            "value": "シャドウマップを有効にする"
+        },
+        {
+            "key": "prop_ShadowMap",
+            "value": "シャドウマップ（R=マスク）"
+        },
+        {
+            "key": "prop_ShadowMapIntensity",
+            "value": "強度"
+        },
+        {
+            "key": "prop_ToggleDetail",
+            "value": "ディテールマップを有効にする"
+        },
+        {
+            "key": "prop_DetailAlbedoMap",
+            "value": "ディテールアルベド（A=強度）"
+        },
+        {
+            "key": "prop_DetailNormalMap",
+            "value": "ディテールノーマルマップ"
+        },
+        {
+            "key": "prop_DetailTiling",
+            "value": "ディテールタイリング"
+        },
+        {
+            "key": "prop_DetailNormalStrength",
+            "value": "ディテールノーマル強度"
+        },
+        {
+            "key": "prop_ToggleDissolve",
+            "value": "ディゾルブを有効にする"
+        },
+        {
+            "key": "prop_DissolveProgress",
+            "value": "ディゾルブ進行度"
+        },
+        {
+            "key": "prop_DissolveType",
+            "value": "ディゾルブタイプ"
+        },
+        {
+            "key": "prop_DissolveEdgeColor",
+            "value": "エッジカラー"
+        },
+        {
+            "key": "prop_DissolveEdgeWidth",
+            "value": "エッジ幅"
+        },
+        {
+            "key": "prop_DissolveEdgeMode",
+            "value": "エッジモード"
+        },
+        {
+            "key": "prop_DissolveEdgeSharpness",
+            "value": "エッジのシャープネス"
+        },
+        {
+            "key": "prop_DissolveNoiseTex",
+            "value": "ノイズテクスチャ（R）"
+        },
+        {
+            "key": "prop_DissolveNoiseScale",
+            "value": "ノイズスケール"
+        },
+        {
+            "key": "prop_DissolveDirection",
+            "value": "ワイプ方向（XYZ）"
+        },
+        {
+            "key": "prop_DissolveDirectionSpace",
+            "value": "ワイプ空間"
+        },
+        {
+            "key": "prop_DissolveDirectionBounds",
+            "value": "ワイプ境界サイズ"
+        },
+        {
+            "key": "prop_DissolveVoxelDensity",
+            "value": "ボクセル密度"
+        },
+        {
+            "key": "prop_TogglePathing",
+            "value": "パッシングを有効にする"
+        },
+        {
+            "key": "prop_PathingMappingMode",
+            "value": "マッピングモード"
+        },
+        {
+            "key": "prop_PathingMap",
+            "value": "パスマップ（R）"
+        },
+        {
+            "key": "prop_PathingScale",
+            "value": "パススケール"
+        },
+        {
+            "key": "prop_PathingBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_PathingStart",
+            "value": "パス開始"
+        },
+        {
+            "key": "prop_PathingEnd",
+            "value": "パス終了"
+        },
+        {
+            "key": "prop_PathingColor",
+            "value": "パスカラー"
+        },
+        {
+            "key": "prop_PathingColorMode",
+            "value": "パスカラーモード"
+        },
+        {
+            "key": "prop_PathingTexture",
+            "value": "パステクスチャ"
+        },
+        {
+            "key": "prop_PathingColor2",
+            "value": "パスカラー2"
+        },
+        {
+            "key": "prop_PathingEmission",
+            "value": "エミッション強度"
+        },
+        {
+            "key": "prop_PathingType",
+            "value": "パスタイプ"
+        },
+        {
+            "key": "prop_PathingSpeed",
+            "value": "速度"
+        },
+        {
+            "key": "prop_PathingWidth",
+            "value": "パス幅"
+        },
+        {
+            "key": "prop_PathingSoftness",
+            "value": "柔らかさ"
+        },
+        {
+            "key": "prop_PathingOffset",
+            "value": "時間オフセット"
+        },
+        {
+            "key": "prop_ToggleDepthRim",
+            "value": "深度リムライティングを有効にする"
+        },
+        {
+            "key": "prop_DepthRimColor",
+            "value": "リムカラー"
+        },
+        {
+            "key": "prop_DepthRimWidth",
+            "value": "幅"
+        },
+        {
+            "key": "prop_DepthRimThreshold",
+            "value": "しきい値"
+        },
+        {
+            "key": "prop_DepthRimSharpness",
+            "value": "シャープネス"
+        },
+        {
+            "key": "prop_DepthRimBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_ToggleAudioLink",
+            "value": "AudioLinkを有効にする"
+        },
+        {
+            "key": "prop_AudioLinkFallback",
+            "value": "フォールバックレベル"
+        },
+        {
+            "key": "prop_AudioLinkEmissionBand",
+            "value": "エミッションバンド"
+        },
+        {
+            "key": "prop_AudioLinkEmissionStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkEmissionRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkRimBand",
+            "value": "リムライトバンド"
+        },
+        {
+            "key": "prop_AudioLinkRimStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkRimRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftBand",
+            "value": "色相シフトバンド"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueBand",
+            "value": "デカール色相バンド"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionBand",
+            "value": "デカールエミッションバンド"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityBand",
+            "value": "デカール不透明度バンド"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkVertexBand",
+            "value": "頂点拡大/縮小バンド"
+        },
+        {
+            "key": "prop_AudioLinkVertexStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkVertexRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkOutlineBand",
+            "value": "アウトラインバンド"
+        },
+        {
+            "key": "prop_AudioLinkOutlineStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkOutlineRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkMatcapBand",
+            "value": "マットキャップバンド"
+        },
+        {
+            "key": "prop_AudioLinkMatcapStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkMatcapRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkPathingBand",
+            "value": "パッシングバンド"
+        },
+        {
+            "key": "prop_AudioLinkPathingStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkPathingRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkGlitterBand",
+            "value": "グリッターバンド"
+        },
+        {
+            "key": "prop_AudioLinkGlitterStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkGlitterRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceBand",
+            "value": "イリデッセンスバンド"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceStrength",
+            "value": "強度"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceRange",
+            "value": "最小-最大"
+        },
+        {
+            "key": "prop_ToggleGlitter",
+            "value": "グリッターを有効にする"
+        },
+        {
+            "key": "prop_GlitterMode",
+            "value": "モード"
+        },
+        {
+            "key": "prop_GlitterNoiseTex",
+            "value": "ノイズテクスチャ（R）"
+        },
+        {
+            "key": "prop_GlitterMask",
+            "value": "マスク（R）"
+        },
+        {
+            "key": "prop_GlitterTint",
+            "value": "ティント"
+        },
+        {
+            "key": "prop_GlitterFrequency",
+            "value": "密度"
+        },
+        {
+            "key": "prop_GlitterThreshold",
+            "value": "密度しきい値"
+        },
+        {
+            "key": "prop_GlitterSize",
+            "value": "サイズ"
+        },
+        {
+            "key": "prop_GlitterFlickerSpeed",
+            "value": "ちらつき速度"
+        },
+        {
+            "key": "prop_GlitterBrightness",
+            "value": "明るさ"
+        },
+        {
+            "key": "prop_GlitterContrast",
+            "value": "コントラスト"
+        },
+        {
+            "key": "prop_ToggleGlitterRainbow",
+            "value": "虹を有効にする"
+        },
+        {
+            "key": "prop_GlitterRainbowSpeed",
+            "value": "虹の速度"
+        },
+        {
+            "key": "prop_ToggleDistanceFade",
+            "value": "距離フェードを有効にする"
+        },
+        {
+            "key": "prop_DistanceFadeReference",
+            "value": "フェード参照点"
+        },
+        {
+            "key": "prop_ToggleNearFade",
+            "value": "近距離フェードを有効にする"
+        },
+        {
+            "key": "prop_NearFadeMode",
+            "value": "近距離フェードモード"
+        },
+        {
+            "key": "prop_NearFadeDitherScale",
+            "value": "近距離フェードディザースケール"
+        },
+        {
+            "key": "prop_NearFadeStart",
+            "value": "近距離フェード開始"
+        },
+        {
+            "key": "prop_NearFadeEnd",
+            "value": "近距離フェード終了"
+        },
+        {
+            "key": "prop_ToggleFarFade",
+            "value": "遠距離フェードを有効にする"
+        },
+        {
+            "key": "prop_FarFadeStart",
+            "value": "遠距離フェード開始"
+        },
+        {
+            "key": "prop_FarFadeEnd",
+            "value": "遠距離フェード終了"
+        },
+        {
+            "key": "prop_ToggleIridescence",
+            "value": "イリデッセンスを有効にする"
+        },
+        {
+            "key": "prop_IridescenceMode",
+            "value": "モード"
+        },
+        {
+            "key": "prop_IridescenceMask",
+            "value": "マスク（R）"
+        },
+        {
+            "key": "prop_IridescenceTint",
+            "value": "ティント"
+        },
+        {
+            "key": "prop_IridescenceIntensity",
+            "value": "強度"
+        },
+        {
+            "key": "prop_IridescenceBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_IridescenceParallax",
+            "value": "ビューパララックス"
+        },
+        {
+            "key": "prop_IridescenceRamp",
+            "value": "カラーランプ"
+        },
+        {
+            "key": "prop_IridescencePower",
+            "value": "パワー"
+        },
+        {
+            "key": "prop_IridescenceFrequency",
+            "value": "虹の周波数"
+        },
+        {
+            "key": "prop_ToggleShadowTexture",
+            "value": "シャドウテクスチャを有効にする"
+        },
+        {
+            "key": "prop_ShadowTextureMappingMode",
+            "value": "シャドウモード"
+        },
+        {
+            "key": "prop_ShadowTextureIntensity",
+            "value": "シャドウ強度"
+        },
+        {
+            "key": "prop_ShadowTextureBlendMode",
+            "value": "シャドウブレンドモード"
+        },
+        {
+            "key": "prop_ShadowTex",
+            "value": "シャドウテクスチャ/パターン"
+        },
+        {
+            "key": "prop_ShadowPatternColor",
+            "value": "パターンティント"
+        },
+        {
+            "key": "prop_ShadowPatternScale",
+            "value": "パターンスケール/タイリング"
+        },
+        {
+            "key": "prop_ShadowPatternTriplanarSharpness",
+            "value": "トライプラナーブレンドのシャープネス"
+        },
+        {
+            "key": "prop_ShadowPatternTransparency",
+            "value": "パターンの透明度"
+        },
+        {
+            "key": "prop_ToggleFlatModel",
+            "value": "フラットモデルを有効にする"
+        },
+        {
+            "key": "prop_FlatModeAutoflip",
+            "value": "自動反転"
+        },
+        {
+            "key": "prop_FlatModel",
+            "value": "フラットモデル強度"
+        },
+        {
+            "key": "prop_FlatModelDepthCorrection",
+            "value": "深度補正"
+        },
+        {
+            "key": "prop_FlatModelFacing",
+            "value": "向き"
+        },
+        {
+            "key": "prop_FlatModelLockAxis",
+            "value": "カメラに追従"
+        },
+        {
+            "key": "prop_ToggleWorldEffect",
+            "value": "ワールドエフェクトを有効にする"
+        },
+        {
+            "key": "prop_WorldEffectBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_WorldEffectTex",
+            "value": "エフェクトテクスチャ（A=マスク）"
+        },
+        {
+            "key": "prop_WorldEffectMask",
+            "value": "エフェクトマスク"
+        },
+        {
+            "key": "prop_WorldEffectColor",
+            "value": "エフェクトカラー"
+        },
+        {
+            "key": "prop_WorldEffectDirection",
+            "value": "エフェクト方向（XYZ）"
+        },
+        {
+            "key": "prop_WorldEffectScale",
+            "value": "エフェクトスケール"
+        },
+        {
+            "key": "prop_WorldEffectBlendSharpness",
+            "value": "方向ブレンドのシャープネス"
+        },
+        {
+            "key": "prop_WorldEffectIntensity",
+            "value": "エフェクト強度"
+        },
+        {
+            "key": "prop_WorldEffectPosition",
+            "value": "ワールド座標（XYZ）"
+        },
+        {
+            "key": "prop_WorldEffectRotation",
+            "value": "ワールド回転（XYZ）"
+        },
+        {
+            "key": "prop_ToggleMirrorDetection",
+            "value": "VRChatミラー検出を有効にする"
+        },
+        {
+            "key": "prop_MirrorDetectionMode",
+            "value": "ミラーモード"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture",
+            "value": "ミラー検出テクスチャ"
+        },
+        {
+            "key": "prop_ToggleTouchReactive",
+            "value": "タッチリアクティブを有効にする"
+        },
+        {
+            "key": "prop_TouchColor",
+            "value": "タッチカラー"
+        },
+        {
+            "key": "prop_TouchRadius",
+            "value": "タッチ半径"
+        },
+        {
+            "key": "prop_TouchHardness",
+            "value": "タッチの硬さ"
+        },
+        {
+            "key": "prop_TouchMode",
+            "value": "タッチモード"
+        },
+        {
+            "key": "prop_TouchRainbowSpeed",
+            "value": "タッチ虹速度"
+        },
+        {
+            "key": "prop_TouchRainbowSpread",
+            "value": "タッチ虹の広がり"
+        },
+        {
+            "key": "prop_ToggleRefraction",
+            "value": "屈折効果を有効にする"
+        },
+        {
+            "key": "prop_RefractionMask",
+            "value": "マスク（R=強度）"
+        },
+        {
+            "key": "prop_RefractionTint",
+            "value": "屈折ティント"
+        },
+        {
+            "key": "prop_RefractionIOR",
+            "value": "屈折強度"
+        },
+        {
+            "key": "prop_RefractionFresnel",
+            "value": "フレネルパワー"
+        },
+        {
+            "key": "prop_RefractionOpacity",
+            "value": "屈折不透明度"
+        },
+        {
+            "key": "prop_RefractionSeeThrough",
+            "value": "シースルー強度"
+        },
+        {
+            "key": "prop_RefractionGrabpassTint",
+            "value": "グラブパスティント"
+        },
+        {
+            "key": "prop_RefractionZoomToggle",
+            "value": "フラクチャーズーム"
+        },
+        {
+            "key": "prop_RefractionZoom",
+            "value": "ズーム量"
+        },
+        {
+            "key": "prop_RefractionMode",
+            "value": "屈折モード"
+        },
+        {
+            "key": "prop_RefractionMixStrength",
+            "value": "ミックス強度"
+        },
+        {
+            "key": "prop_RefractionBlendMode",
+            "value": "加算 <-> 置換"
+        },
+        {
+            "key": "prop_CausticsTex",
+            "value": "内部コースティクステクスチャ"
+        },
+        {
+            "key": "prop_CausticsColor",
+            "value": "コースティクスカラー"
+        },
+        {
+            "key": "prop_CausticsTiling",
+            "value": "コースティクスタイリング"
+        },
+        {
+            "key": "prop_CausticsSpeed",
+            "value": "コースティクスアニメーション速度"
+        },
+        {
+            "key": "prop_CausticsIntensity",
+            "value": "コースティクス強度"
+        },
+        {
+            "key": "prop_DistortionNoiseTex",
+            "value": "歪みノイズ（RG）"
+        },
+        {
+            "key": "prop_DistortionNoiseTiling",
+            "value": "歪みノイズタイリング"
+        },
+        {
+            "key": "prop_DistortionNoiseStrength",
+            "value": "歪みノイズ強度"
+        },
+        {
+            "key": "prop_RefractionDistortionMode",
+            "value": "ぼかしモード"
+        },
+        {
+            "key": "prop_RefractionCAStrength",
+            "value": "色収差強度"
+        },
+        {
+            "key": "prop_RefractionBlurStrength",
+            "value": "ぼかし強度"
+        },
+        {
+            "key": "prop_RefractionCAUseFresnel",
+            "value": "フレネル色収差"
+        },
+        {
+            "key": "prop_RefractionCAEdgeFade",
+            "value": "CAエッジフェード"
+        },
+        {
+            "key": "prop_ToggleDither",
+            "value": "ディザリングを有効にする"
+        },
+        {
+            "key": "prop_DitherAmount",
+            "value": "ディザリング量"
+        },
+        {
+            "key": "prop_DitherSpace",
+            "value": "ディザリング空間"
+        },
+        {
+            "key": "prop_DitherScale",
+            "value": "ディザリングスケール"
+        },
+        {
+            "key": "prop_TogglePS1",
+            "value": "低精度（PS1）を有効にする"
+        },
+        {
+            "key": "prop_PS1Rounding",
+            "value": "丸めスタイル"
+        },
+        {
+            "key": "prop_PS1RoundingPrecision",
+            "value": "丸め精度"
+        },
+        {
+            "key": "prop_PS1Affine",
+            "value": "アフィンテクスチャマッピングを有効にする"
+        },
+        {
+            "key": "prop_PS1Compression",
+            "value": "色圧縮を有効にする"
+        },
+        {
+            "key": "prop_PS1CompressionPrecision",
+            "value": "色圧縮精度"
+        },
+        {
+            "key": "prop_UseTextureStitching",
+            "value": "テクスチャスティッチングを有効にする"
+        },
+        {
+            "key": "prop_StitchTex",
+            "value": "スティッチテクスチャ"
+        },
+        {
+            "key": "prop_StitchAxis",
+            "value": "スティッチ軸"
+        },
+        {
+            "key": "prop_StitchOffset",
+            "value": "スティッチ縫い目オフセット"
+        },
+        {
+            "key": "prop_StitchTex_UV",
+            "value": "スティッチテクスチャUV"
+        },
+        {
+            "key": "prop_ToggleVertexDistortion",
+            "value": "頂点ディストーションを有効にする"
+        },
+        {
+            "key": "prop_VertexDistortionMode",
+            "value": "ディストーションモード"
+        },
+        {
+            "key": "prop_VertexDistortionColorMask",
+            "value": "カラーチャンネルマスク"
+        },
+        {
+            "key": "prop_VertexDistortionStrength",
+            "value": "ディストーション強度"
+        },
+        {
+            "key": "prop_VertexDistortionSpeed",
+            "value": "ディストーション速度"
+        },
+        {
+            "key": "prop_VertexDistortionFrequency",
+            "value": "ディストーション周波数"
+        },
+        {
+            "key": "prop_WindStrength",
+            "value": "風の強さ"
+        },
+        {
+            "key": "prop_WindSpeed",
+            "value": "風速"
+        },
+        {
+            "key": "prop_WindScale",
+            "value": "風ノイズスケール"
+        },
+        {
+            "key": "prop_WindDirection",
+            "value": "風向（XYZ）"
+        },
+        {
+            "key": "prop_WindNoiseTex",
+            "value": "風ノイズテクスチャ（R）"
+        },
+        {
+            "key": "prop_BreathingStrength",
+            "value": "呼吸の強さ"
+        },
+        {
+            "key": "prop_BreathingSpeed",
+            "value": "呼吸の速さ"
+        },
+        {
+            "key": "prop_ToggleSSR",
+            "value": "スクリーンスペースリフレクションを有効にする"
+        },
+        {
+            "key": "prop_SSRMask",
+            "value": "マスク（R）"
+        },
+        {
+            "key": "prop_SSRTint",
+            "value": "反射ティント"
+        },
+        {
+            "key": "prop_SSRIntensity",
+            "value": "強度"
+        },
+        {
+            "key": "prop_SSRBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_SSRFresnelPower",
+            "value": "フレネルパワー"
+        },
+        {
+            "key": "prop_SSRFresnelScale",
+            "value": "フレネルスケール"
+        },
+        {
+            "key": "prop_SSRFresnelBias",
+            "value": "フレネルバイアス"
+        },
+        {
+            "key": "prop_SSRParallax",
+            "value": "パララックス強度"
+        },
+        {
+            "key": "prop_SSRDistortionMap",
+            "value": "歪みマップ（RG）"
+        },
+        {
+            "key": "prop_SSRDistortionStrength",
+            "value": "歪み強度"
+        },
+        {
+            "key": "prop_SSRWorldDistortion",
+            "value": "ワールド歪み強度"
+        },
+        {
+            "key": "prop_SSRBlur",
+            "value": "ぼかし強度"
+        },
+        {
+            "key": "prop_SSRMode",
+            "value": "反射品質"
+        },
+        {
+            "key": "prop_SSRMaxSteps",
+            "value": "最大ステップ数"
+        },
+        {
+            "key": "prop_SSRStepSize",
+            "value": "ステップサイズ"
+        },
+        {
+            "key": "prop_SSRCoverage",
+            "value": "カバレッジブースト"
+        },
+        {
+            "key": "prop_SSREdgeFade",
+            "value": "エッジフェード"
+        },
+        {
+            "key": "prop_SSRCamFade",
+            "value": "カメラ距離フェードを有効にする"
+        },
+        {
+            "key": "prop_SSRCamFadeStart",
+            "value": "SSRカメラフェード開始"
+        },
+        {
+            "key": "prop_SSRCamFadeEnd",
+            "value": "SSRカメラフェード終了"
+        },
+        {
+            "key": "prop_SSRFlipUV",
+            "value": "反射UVを反転"
+        },
+        {
+            "key": "prop_SSRAdaptiveStep",
+            "value": "適応ステップサイズを有効にする"
+        },
+        {
+            "key": "prop_SSRThickness",
+            "value": "カリングの厚さ"
+        },
+        {
+            "key": "prop_SSROutOfViewMode",
+            "value": "ビュー外モード"
+        },
+        {
+            "key": "prop_OutlineColor",
+            "value": "アウトラインカラー"
+        },
+        {
+            "key": "prop_OutlineWidth",
+            "value": "アウトライン幅"
+        },
+        {
+            "key": "prop_OutlineVertexColorMask",
+            "value": "頂点カラー（R）マスクを使用"
+        },
+        {
+            "key": "prop_OutlineDistanceFade",
+            "value": "距離フェードを有効にする"
+        },
+        {
+            "key": "prop_OutlineFadeStart",
+            "value": "フェード開始距離"
+        },
+        {
+            "key": "prop_OutlineFadeEnd",
+            "value": "フェード終了距離"
+        },
+        {
+            "key": "prop_OutlineHueShift",
+            "value": "色相シフトを有効にする"
+        },
+        {
+            "key": "prop_OutlineHueShiftSpeed",
+            "value": "色相シフト速度"
+        },
+        {
+            "key": "prop_OutlineOpacity",
+            "value": "アウトライン不透明度"
+        },
+        {
+            "key": "prop_IndirectFallbackMode",
+            "value": "間接光フォールバックモード"
+        },
+        {
+            "key": "prop_IndirectOverride",
+            "value": "間接光オーバーライド"
+        },
+        {
+            "key": "prop_FallbackCubemap",
+            "value": "フォールバックキューブマップ"
+        },
+        {
+            "key": "prop_MainTex_UV",
+            "value": "メインテクスチャUVセット"
+        },
+        {
+            "key": "prop_BumpMap_UV",
+            "value": "バンプマップUVセット"
+        },
+        {
+            "key": "prop_MSSO_UV",
+            "value": "MSSO UVセット"
+        },
+        {
+            "key": "prop_SpecularTintTexture_UV",
+            "value": "スペキュラティントUVセット"
+        },
+        {
+            "key": "prop_TangentMap_UV",
+            "value": "タンジェントマップUV"
+        },
+        {
+            "key": "prop_EmissionMap_UV",
+            "value": "エミッションマップUVセット"
+        },
+        {
+            "key": "prop_ClearcoatMap_UV",
+            "value": "クリアコートマップUVセット"
+        },
+        {
+            "key": "prop_MatcapMask_UV",
+            "value": "マットキャップマスクUVセット"
+        },
+        {
+            "key": "prop_ParallaxMap_UV",
+            "value": "ハイトマップUVセット"
+        },
+        {
+            "key": "prop_ThicknessMap_UV",
+            "value": "厚みマップUVセット"
+        },
+        {
+            "key": "prop_DetailMap_UV",
+            "value": "ディテールマップUVセット"
+        },
+        {
+            "key": "prop_Decal1_UV",
+            "value": "デカール1 UVセット"
+        },
+        {
+            "key": "prop_Decal2_UV",
+            "value": "デカール2 UVセット"
+        },
+        {
+            "key": "prop_Glitter_UV",
+            "value": "グリッターUVセット"
+        },
+        {
+            "key": "prop_IridescenceMask_UV",
+            "value": "イリデッセンスマスクUVセット"
+        },
+        {
+            "key": "prop_GlitterMask_UV",
+            "value": "グリッターマスクUVセット"
+        },
+        {
+            "key": "prop_HairFlowMap_UV",
+            "value": "ヘアフローマップUVセット"
+        },
+        {
+            "key": "prop_ShadowTex_UV",
+            "value": "シャドウテクスチャUVセット"
+        },
+        {
+            "key": "prop_Flowmap_UV",
+            "value": "フローマップUVセット"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture_UV",
+            "value": "ミラー検出テクスチャUVセット"
+        },
+        {
+            "key": "prop_RefractionMask_UV",
+            "value": "屈折マスクUVセット"
+        },
+        {
+            "key": "prop_PathingTexture_UV",
+            "value": "パッシングマップUVセット"
+        },
+        {
+            "key": "prop_ShadowMap_UV",
+            "value": "シャドウマップUVセット"
+        },
+        {
+            "key": "prop_Dither_UV",
+            "value": "ディザーUVセット"
+        },
+        {
+            "key": "prop_OverrideRenderQueue",
+            "value": "カスタムレンダーキューを使用"
+        },
+        {
+            "key": "prop_OverrideBaseBlend",
+            "value": "カスタムベースブレンディングを使用"
+        },
+        {
+            "key": "prop_BlendOp",
+            "value": "ブレンド操作"
+        },
+        {
+            "key": "prop_AddSrcBlend",
+            "value": "ソースブレンド"
+        },
+        {
+            "key": "prop_AddDstBlend",
+            "value": "デスティネーションブレンド"
+        },
+        {
+            "key": "prop_AddBlendOp",
+            "value": "アルファブレンド操作"
+        },
+        {
+            "key": "prop_ZTest",
+            "value": "ZTest"
+        },
+        {
+            "key": "prop_OverrideAddBlend",
+            "value": "カスタム加算ブレンディングを使用"
+        },
+        {
+            "key": "prop_OverrideZWrite",
+            "value": "カスタムZWriteを使用"
+        },
+        {
+            "key": "specular_standard_stylised_info",
+            "value": "標準スペキュラにはスタイル化オプションがありません - ここで設定を表示するには、スペキュラモードを変更してみてください！"
+        },
+        {
+            "key": "depth_popup_info",
+            "value": "このエフェクトはシーンから深度を読み取る必要があります！ワールドにリアルタイムライトが有効になっているか、シーンに深度ライタープレハブ（Backlaceに付属）があることを確認してください。"
+        }
+    ]
+}

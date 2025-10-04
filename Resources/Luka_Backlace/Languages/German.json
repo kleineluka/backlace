@@ -1,0 +1,2412 @@
+{
+    "entries": [
+        {
+            "key": "enabled",
+            "value": "Aktiviert"
+        },
+        {
+            "key": "disabled",
+            "value": "Deaktiviert"
+        },
+        {
+            "key": "config_tab_theme",
+            "value": "Tab-Thema"
+        },
+        {
+            "key": "config_text_theme",
+            "value": "Text-Thema"
+        },
+        {
+            "key": "config_ui_size",
+            "value": "UI-Größe"
+        },
+        {
+            "key": "config_updates",
+            "value": "Nach Updates suchen"
+        },
+        {
+            "key": "config_language",
+            "value": "Sprache"
+        },
+        {
+            "key": "config_toggle_updates",
+            "value": "Updates anzeigen"
+        },
+        {
+            "key": "config_toggle_announcements",
+            "value": "Neuigkeiten anzeigen"
+        },
+        {
+            "key": "config_toggle_enabled",
+            "value": "Aktiviert"
+        },
+        {
+            "key": "config_toggle_disabled",
+            "value": "Deaktiviert"
+        },
+        {
+            "key": "config_save",
+            "value": "Konfiguration speichern"
+        },
+        {
+            "key": "config_reset",
+            "value": "Konfiguration zurücksetzen"
+        },
+        {
+            "key": "config_save_success",
+            "value": "Deine Konfiguration wurde erfolgreich gespeichert! ^~^"
+        },
+        {
+            "key": "config_save_error",
+            "value": "Beim Speichern deiner Konfiguration ist etwas schiefgelaufen, versuche das Unity-Paket neu zu importieren! >.<"
+        },
+        {
+            "key": "config_reset_success",
+            "value": "Deine Konfiguration wurde auf die Standardwerte zurückgesetzt! ^~^"
+        },
+        {
+            "key": "config_reset_error",
+            "value": "Beim Zurücksetzen deiner Konfiguration ist etwas schiefgelaufen, versuche das Unity-Paket neu zu importieren! >.<"
+        },
+        {
+            "key": "dialog_okay",
+            "value": "Oki!"
+        },
+        {
+            "key": "update_available",
+            "value": "Update verfügbar!"
+        },
+        {
+            "key": "update_description",
+            "value": "Lade die neueste Version für neue Funktionen und Fehlerbehebungen herunter! <3"
+        },
+        {
+            "key": "tab_config",
+            "value": "Einstellungen"
+        },
+        {
+            "key": "open_docs",
+            "value": "Brauchst du Hilfe? Klicke hier, um die Dokumentation zu öffnen!"
+        },
+        {
+            "key": "tab_license",
+            "value": "Lizenz"
+        },
+        {
+            "key": "button_show_license",
+            "value": "Lizenz in Unity anzeigen"
+        },
+        {
+            "key": "config_toggle_grey_unused",
+            "value": "Ungenutzte Einstellungen ausgrauen"
+        },
+        {
+            "key": "config_toggle_status_badges",
+            "value": "Status-Badges anzeigen"
+        },
+        {
+            "key": "status_badge_enabled",
+            "value": "Aktiviert"
+        },
+        {
+            "key": "capability_popup_title",
+            "value": "Fähigkeitshinweis!"
+        },
+        {
+            "key": "preset_title",
+            "value": "Preset-Manager"
+        },
+        {
+            "key": "preset_overwrite_prompt",
+            "value": "Ein Preset mit diesem Namen existiert bereits, möchtest du es überschreiben?"
+        },
+        {
+            "key": "preset_overwrite_prompt_yes",
+            "value": "Überschreiben!"
+        },
+        {
+            "key": "preset_overwrite_prompt_no",
+            "value": "Bestehendes beibehalten."
+        },
+        {
+            "key": "preset_builtin_header",
+            "value": "Integrierte Presets"
+        },
+        {
+            "key": "preset_custom_header",
+            "value": "Benutzerdefinierte Presets"
+        },
+        {
+            "key": "preset_save_header",
+            "value": "Dieses Material speichern"
+        },
+        {
+            "key": "preset_name_label",
+            "value": "Preset-Name"
+        },
+        {
+            "key": "preset_save_button",
+            "value": "Als Preset speichern"
+        },
+        {
+            "key": "preset_save_error_noname",
+            "value": "Bitte gib einen Namen für dein Preset ein, bevor du speicherst! >.<"
+        },
+        {
+            "key": "preset_delete_prompt",
+            "value": "Möchtest du dieses Preset wirklich löschen? Dies kann nicht rückgängig gemacht werden..."
+        },
+        {
+            "key": "preset_delete_prompt_yes",
+            "value": "Preset löschen"
+        },
+        {
+            "key": "preset_delete_prompt_no",
+            "value": "Preset beibehalten"
+        },
+        {
+            "key": "tab_presets",
+            "value": "Presets"
+        },
+        {
+            "key": "preset_no_builtin_found",
+            "value": "Mit diesem Shader wurden keine integrierten Presets bereitgestellt..."
+        },
+        {
+            "key": "preset_no_custom_found",
+            "value": "Keine benutzerdefinierten Presets gefunden! Warum erstellst du nicht welche? :o"
+        },
+        {
+            "key": "load",
+            "value": "Laden"
+        },
+        {
+            "key": "tab_premonition",
+            "value": "Kompaktes Material"
+        },
+        {
+            "key": "premonition_notice",
+            "value": "Hier kannst du eine kompakte Version deines aktuellen Materials generieren. Dies erzeugt eine neue Shader-Datei, die kleiner ist, eine kürzere Kompilierungszeit hat und im Wesentlichen ein Schnappschuss deiner aktuellen Einstellungen ist. Dieser kleinere Shader ist weiterverteilbar und benötigt nichts anderes – du kannst die .shader-Datei nach Belieben verschieben. Es wird empfohlen, dies immer für deine endgültigen Materialien zu verwenden, um die Anzahl der Shader zu reduzieren und die Leistung zu verbessern! ^-^ (aber keine Sorge, du kannst jederzeit zum normalen Shader zurückkehren, wenn du Änderungen vornehmen musst)"
+        },
+        {
+            "key": "premonition_generate_button",
+            "value": "Kompaktes Material generieren"
+        },
+        {
+            "key": "premonition_restore_button",
+            "value": "Originalmaterial wiederherstellen"
+        },
+        {
+            "key": "variant_popup_title",
+            "value": "Shader-Variante erforderlich"
+        },
+        {
+            "key": "variant_popup_description",
+            "value": "Diese Funktion erfordert (mindestens) die Shader-Variante '{0}'.\n\nShader-Varianten wurden erstellt, um sicherzustellen, dass du nur den Code für die Funktionen einbindest, die du benötigst. Während andere Versionen sie möglicherweise haben (angezeigt durch ausgegraute oder nicht vorhandene Tabs), ist dies die \"niedrigste\" Variantenstufe, die sie unterstützt. Bitte lies die Dokumentation für weitere Informationen! ^-^"
+        },
+        {
+            "key": "warning_external_website_title",
+            "value": "Warte, hör zu!"
+        },
+        {
+            "key": "warning_external_website_description",
+            "value": "Du bist dabei, eine externe Website zu öffnen, die nicht mir gehört oder von mir betrieben wird! Bitte sei vorsichtig!! Sie ist wahrscheinlich sicher, aber ich habe keine Kontrolle darüber oder ob sie sich in Zukunft ändern wird. >.< Möchtest du fortfahren?"
+        },
+        {
+            "key": "warning_external_website_okay",
+            "value": "Website öffnen"
+        },
+        {
+            "key": "warning_external_website_cancel",
+            "value": "Zurückgehen!"
+        },
+        {
+            "key": "tab_main",
+            "value": "Haupteinstellungen"
+        },
+        {
+            "key": "sub_tab_rendering",
+            "value": "Rendering"
+        },
+        {
+            "key": "sub_tab_textures",
+            "value": "Kern-Maps"
+        },
+        {
+            "key": "sub_tab_stitching",
+            "value": "Textur-Stitching"
+        },
+        {
+            "key": "sub_tab_uv_manipulation",
+            "value": "UV-Manipulation"
+        },
+        {
+            "key": "sub_tab_uv_effects",
+            "value": "UV-Effekte"
+        },
+        {
+            "key": "sub_tab_vertex_manipulation",
+            "value": "Vertex-Manipulation"
+        },
+        {
+            "key": "sub_tab_decal_one",
+            "value": "Decal 1"
+        },
+        {
+            "key": "sub_tab_decal_two",
+            "value": "Decal 2"
+        },
+        {
+            "key": "sub_tab_post_processing",
+            "value": "Textur-Nachbearbeitung"
+        },
+        {
+            "key": "sub_tab_uv_sets",
+            "value": "UV-Sets"
+        },
+        {
+            "key": "tab_lighting",
+            "value": "Beleuchtung"
+        },
+        {
+            "key": "sub_tab_lighting_model",
+            "value": "Beleuchtungsmodell"
+        },
+        {
+            "key": "sub_tab_anime",
+            "value": "Anime-Shading"
+        },
+        {
+            "key": "tab_specular",
+            "value": "Spiegelglanz"
+        },
+        {
+            "key": "sub_tab_pbr_specular",
+            "value": "PBR-Spiegelglanz"
+        },
+        {
+            "key": "sub_tab_stylised_specular",
+            "value": "Stilisierter Spiegelglanz"
+        },
+        {
+            "key": "sub_tab_emission",
+            "value": "Emission"
+        },
+        {
+            "key": "sub_tab_light_limiting",
+            "value": "Lichtstärken begrenzen"
+        },
+        {
+            "key": "tab_shading",
+            "value": "Schattierung"
+        },
+        {
+            "key": "sub_tab_rim_lighting",
+            "value": "Fresnel-Randbeleuchtung"
+        },
+        {
+            "key": "sub_tab_depth_rim",
+            "value": "Tiefen-Randbeleuchtung"
+        },
+        {
+            "key": "sub_tab_clear_coat",
+            "value": "Klarlack"
+        },
+        {
+            "key": "sub_tab_matcap",
+            "value": "Matcap"
+        },
+        {
+            "key": "sub_tab_cubemap",
+            "value": "Cubemap"
+        },
+        {
+            "key": "sub_tab_parallax",
+            "value": "Parallax-Mapping"
+        },
+        {
+            "key": "sub_tab_subsurface",
+            "value": "Subsurface Scattering"
+        },
+        {
+            "key": "sub_tab_detail_map",
+            "value": "Detail-Mapping"
+        },
+        {
+            "key": "sub_tab_shadow_map",
+            "value": "Schatten-Mapping"
+        },
+        {
+            "key": "tab_effects",
+            "value": "Effekte"
+        },
+        {
+            "key": "sub_tab_dissolve",
+            "value": "Auflösen"
+        },
+        {
+            "key": "sub_tab_pathing",
+            "value": "Pfad-Effekt"
+        },
+        {
+            "key": "tab_third_party",
+            "value": "Drittanbieter"
+        },
+        {
+            "key": "sub_tab_audiolink",
+            "value": "AudioLink"
+        },
+        {
+            "key": "sub_tab_superplug",
+            "value": "Super Plug Shader"
+        },
+        {
+            "key": "superplug_notice",
+            "value": "Super Plug Shader (von VRCFury) ist ein kostenloses Mesh-Deformationssystem, das verwendet werden kann, um Meshes zu einem Ziel hin zu verformen, und ist ein vollständig abwärtskompatibler Ersatz für DPS (Dynamic Penetration System von Raliv) und TPS (Thry Penetration System in Poiyomi Pro). Zusätzlich dazu, dass es kostenlos ist, unterstützt es eine Vielzahl von Shadern, ohne dass diese eine feste Unterstützung einprogrammieren müssen, einschließlich Backlace! Bitte klicke auf den untenstehenden Link, um die Dokumentation zur Einrichtung zu öffnen!"
+        },
+        {
+            "key": "superplug_button",
+            "value": "Super Plug Shader Website öffnen"
+        },
+        {
+            "key": "sub_tab_ltcgi",
+            "value": "LTCGI-Beleuchtung"
+        },
+        {
+            "key": "ltcgi_notice",
+            "value": "LTCGI (von _pi_) ist eine Plug-and-Play-Echtzeit-Flächenbeleuchtungslösung für VRChat. Um dies zu aktivieren, stelle bitte sicher, dass du auch das LTCGI-Paket in deinem Projekt einbindest, da es eigene Shader-Funktionen benötigt, um zu funktionieren. Wenn aktiviert, wird dein Material automatisch die LTCGI-Beleuchtung verwenden."
+        },
+        {
+            "key": "ltcgi_button",
+            "value": "LTCGI-Website öffnen"
+        },
+        {
+            "key": "prop_ToggleLTCGI",
+            "value": "LTCGI-Beleuchtung aktivieren"
+        },
+        {
+            "key": "sub_tab_glitter",
+            "value": "Glitzern"
+        },
+        {
+            "key": "sub_tab_distance_fading",
+            "value": "Distanz-Fading"
+        },
+        {
+            "key": "sub_tab_iridescence",
+            "value": "Irisieren"
+        },
+        {
+            "key": "sub_tab_shadow_textures",
+            "value": "Schattentexturen"
+        },
+        {
+            "key": "sub_tab_flatten_model",
+            "value": "Modell abflachen"
+        },
+        {
+            "key": "sub_tab_world_aligned",
+            "value": "Welt-ausgerichtete Texturen"
+        },
+        {
+            "key": "sub_tab_vrchat_mirror",
+            "value": "VRChat-Spiegelerkennung"
+        },
+        {
+            "key": "sub_tab_touch_interactions",
+            "value": "Berührungsinteraktionen"
+        },
+        {
+            "key": "sub_tab_vertex_distortion",
+            "value": "Vertex-Verzerrung"
+        },
+        {
+            "key": "sub_tab_dither",
+            "value": "Dithering"
+        },
+        {
+            "key": "sub_tab_ps1",
+            "value": "Niedrige Präzision (PS1)"
+        },
+        {
+            "key": "sub_tab_refraction",
+            "value": "Brechung"
+        },
+        {
+            "key": "sub_tab_screenspace_reflection",
+            "value": "Screen-Space-Reflexionen"
+        },
+        {
+            "key": "tab_outline",
+            "value": "Umriss"
+        },
+        {
+            "key": "prop_SrcBlend",
+            "value": "Src-Mischung"
+        },
+        {
+            "key": "prop_DstBlend",
+            "value": "Dst-Mischung"
+        },
+        {
+            "key": "prop_ZWrite",
+            "value": "ZWrite"
+        },
+        {
+            "key": "prop_Cull",
+            "value": "Culling-Modus"
+        },
+        {
+            "key": "prop_StencilRef",
+            "value": "Stencil-Referenz"
+        },
+        {
+            "key": "prop_StencilComp",
+            "value": "Vergleich"
+        },
+        {
+            "key": "prop_StencilPass",
+            "value": "Pass-Operation"
+        },
+        {
+            "key": "prop_StencilFail",
+            "value": "Fail-Operation"
+        },
+        {
+            "key": "prop_StencilZFail",
+            "value": "ZFail-Operation"
+        },
+        {
+            "key": "prop_OutlineStencilRef",
+            "value": "Umriss-Stencil-Referenz"
+        },
+        {
+            "key": "prop_OutlineStencilComp",
+            "value": "Umriss-Vergleich"
+        },
+        {
+            "key": "prop_OutlineStencilPass",
+            "value": "Umriss-Pass-Operation"
+        },
+        {
+            "key": "prop_OutlineStencilFail",
+            "value": "Umriss-Fail-Operation"
+        },
+        {
+            "key": "prop_OutlineStencilZFail",
+            "value": "Umriss-ZFail-Operation"
+        },
+        {
+            "key": "prop_BlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_VRCFallback",
+            "value": "VRChat-Fallback"
+        },
+        {
+            "key": "prop_ToggleFlipNormals",
+            "value": "Rückseiten-Normalen umkehren"
+        },
+        {
+            "key": "prop_MainTex",
+            "value": "Haupttextur"
+        },
+        {
+            "key": "prop_Color",
+            "value": "Albedo-Farbe"
+        },
+        {
+            "key": "prop_Cutoff",
+            "value": "Alpha-Grenzwert"
+        },
+        {
+            "key": "prop_BumpMap",
+            "value": "Normal-Map"
+        },
+        {
+            "key": "prop_BumpScale",
+            "value": "Normal-Map-Skalierung"
+        },
+        {
+            "key": "prop_Alpha",
+            "value": "Alpha"
+        },
+        {
+            "key": "prop_DecalStage",
+            "value": "Decal-Phase (geteilt)"
+        },
+        {
+            "key": "prop_UV_Offset_X",
+            "value": "UV-Versatz X"
+        },
+        {
+            "key": "prop_UV_Offset_Y",
+            "value": "UV-Versatz Y"
+        },
+        {
+            "key": "prop_UV_Scale_X",
+            "value": "UV-Skalierung X"
+        },
+        {
+            "key": "prop_UV_Scale_Y",
+            "value": "UV-Skalierung Y"
+        },
+        {
+            "key": "prop_UV_Rotation",
+            "value": "UV-Rotation"
+        },
+        {
+            "key": "prop_UV_Scroll_X_Speed",
+            "value": "UV-Scroll-Geschwindigkeit X"
+        },
+        {
+            "key": "prop_UV_Scroll_Y_Speed",
+            "value": "UV-Scroll-Geschwindigkeit Y"
+        },
+        {
+            "key": "prop_ToggleUVEffects",
+            "value": "UV-Effekte aktivieren"
+        },
+        {
+            "key": "prop_UVTriplanarMapping",
+            "value": "Triplanar-Mapping aktivieren"
+        },
+        {
+            "key": "prop_UVTriplanarPosition",
+            "value": "Weltposition (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarScale",
+            "value": "Weltskalierung"
+        },
+        {
+            "key": "prop_UVTriplanarRotation",
+            "value": "Weltrotation (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarSharpness",
+            "value": "Triplanar-Mischschärfe"
+        },
+        {
+            "key": "prop_UVScreenspaceMapping",
+            "value": "Screenspace-Mapping aktivieren"
+        },
+        {
+            "key": "prop_UVScreenspaceTiling",
+            "value": "Screenspace-Kachelung"
+        },
+        {
+            "key": "prop_UVFlipbook",
+            "value": "Flipbook-Animation aktivieren"
+        },
+        {
+            "key": "prop_UVFlipbookRows",
+            "value": "Flipbook-Zeilen"
+        },
+        {
+            "key": "prop_UVFlipbookColumns",
+            "value": "Flipbook-Spalten"
+        },
+        {
+            "key": "prop_UVFlipbookFrames",
+            "value": "Gesamtbilder"
+        },
+        {
+            "key": "prop_UVFlipbookFPS",
+            "value": "Flipbook-FPS"
+        },
+        {
+            "key": "prop_UVFlipbookScrub",
+            "value": "Manuelles Scrubbing"
+        },
+        {
+            "key": "prop_UVFlowmap",
+            "value": "Flowmap aktivieren"
+        },
+        {
+            "key": "prop_UVFlowmapTex",
+            "value": "Flowmap-Textur (RG)"
+        },
+        {
+            "key": "prop_UVFlowmapStrength",
+            "value": "Flowmap-Stärke"
+        },
+        {
+            "key": "prop_UVFlowmapSpeed",
+            "value": "Flowmap-Geschwindigkeit"
+        },
+        {
+            "key": "prop_UVFlowmapDistortion",
+            "value": "Flowmap-Verzerrung"
+        },
+        {
+            "key": "prop_VertexManipulationPosition",
+            "value": "Weltposition (XYZ)"
+        },
+        {
+            "key": "prop_VertexManipulationScale",
+            "value": "Weltskalierung (XYZ)"
+        },
+        {
+            "key": "prop_ToggleEmission",
+            "value": "Emission aktivieren"
+        },
+        {
+            "key": "prop_EmissionColor",
+            "value": "Emissionsfarbe"
+        },
+        {
+            "key": "prop_EmissionMap",
+            "value": "Emissions-Map (Maske)"
+        },
+        {
+            "key": "prop_UseAlbedoAsEmission",
+            "value": "Albedo für Emission verwenden"
+        },
+        {
+            "key": "prop_EmissionStrength",
+            "value": "Emissionsstärke"
+        },
+        {
+            "key": "prop_EnableBaseLightLimit",
+            "value": "Basis-Pass-Limit aktivieren"
+        },
+        {
+            "key": "prop_BaseLightMin",
+            "value": "Basis-Licht Min"
+        },
+        {
+            "key": "prop_BaseLightMax",
+            "value": "Basis-Licht Max"
+        },
+        {
+            "key": "prop_EnableAddLightLimit",
+            "value": "Add-Pass-Limit aktivieren"
+        },
+        {
+            "key": "prop_AddLightMin",
+            "value": "Add-Licht Min"
+        },
+        {
+            "key": "prop_AddLightMax",
+            "value": "Add-Licht Max"
+        },
+        {
+            "key": "prop_GreyscaleLighting",
+            "value": "Graustufen-Beleuchtung"
+        },
+        {
+            "key": "prop_ForceLightColor",
+            "value": "Lichtfarbe erzwingen"
+        },
+        {
+            "key": "prop_ForcedLightColor",
+            "value": "Erzwungene Lichtfarbe"
+        },
+        {
+            "key": "prop_LightingColorMode",
+            "value": "Lichtfarben-Modus"
+        },
+        {
+            "key": "prop_LightingDirectionMode",
+            "value": "Lichtrichtungs-Modus"
+        },
+        {
+            "key": "prop_ForcedLightDirection",
+            "value": "Erzwungene Lichtrichtung"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetX",
+            "value": "Blickrichtungs-Versatz X"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetY",
+            "value": "Blickrichtungs-Versatz Y"
+        },
+        {
+            "key": "prop_DirectIntensity",
+            "value": "RT direkte Intensität"
+        },
+        {
+            "key": "prop_IndirectIntensity",
+            "value": "RT indirekte Intensität"
+        },
+        {
+            "key": "prop_VertexIntensity",
+            "value": "RT Vertex-Intensität"
+        },
+        {
+            "key": "prop_AdditiveIntensity",
+            "value": "RT additive Intensität"
+        },
+        {
+            "key": "prop_BakedDirectIntensity",
+            "value": "Gebackene direkte Intensität"
+        },
+        {
+            "key": "prop_BakedIndirectIntensity",
+            "value": "Gebackene indirekte Intensität"
+        },
+        {
+            "key": "prop_ToggleAnimeLighting",
+            "value": "Anime-Beleuchtung aktivieren"
+        },
+        {
+            "key": "prop_AnimeMode",
+            "value": "Anime-Modus"
+        },
+        {
+            "key": "prop_Ramp",
+            "value": "Anime-Rampe"
+        },
+        {
+            "key": "prop_RampColor",
+            "value": "Rampenfarbe"
+        },
+        {
+            "key": "prop_RampOffset",
+            "value": "Rampen-Versatz"
+        },
+        {
+            "key": "prop_ShadowIntensity",
+            "value": "Schattenintensität"
+        },
+        {
+            "key": "prop_OcclusionOffsetIntensity",
+            "value": "Okklusions-Versatz-Intensität"
+        },
+        {
+            "key": "prop_RampMin",
+            "value": "Rampe Min"
+        },
+        {
+            "key": "prop_RampNormalIntensity",
+            "value": "Normalen beeinflussen Intensität"
+        },
+        {
+            "key": "prop_AnimeShadowColor",
+            "value": "Kernschattenfarbe"
+        },
+        {
+            "key": "prop_AnimeShadowThreshold",
+            "value": "Kernschatten-Schwellenwert"
+        },
+        {
+            "key": "prop_AnimeHalftoneColor",
+            "value": "Halbtonfarbe"
+        },
+        {
+            "key": "prop_AnimeHalftoneThreshold",
+            "value": "Halbton-Schwellenwert"
+        },
+        {
+            "key": "prop_AnimeShadowSoftness",
+            "value": "Schattenweichheit"
+        },
+        {
+            "key": "prop_ToggleAmbientGradient",
+            "value": "Umgebungsgradient aktivieren"
+        },
+        {
+            "key": "prop_AnimeOcclusionToShadow",
+            "value": "Okklusion zu Schatten"
+        },
+        {
+            "key": "prop_AmbientUp",
+            "value": "Himmels-Umgebungslicht"
+        },
+        {
+            "key": "prop_AmbientSkyThreshold",
+            "value": "Himmels-Schwellenwert"
+        },
+        {
+            "key": "prop_AmbientDown",
+            "value": "Boden-Umgebungslicht"
+        },
+        {
+            "key": "prop_AmbientGroundThreshold",
+            "value": "Boden-Schwellenwert"
+        },
+        {
+            "key": "prop_AmbientIntensity",
+            "value": "Gradienten-Intensität"
+        },
+        {
+            "key": "prop_TintMaskSource",
+            "value": "Tönungsmasken-Quelle"
+        },
+        {
+            "key": "prop_LitTint",
+            "value": "Beleuchteter Bereich Tönung"
+        },
+        {
+            "key": "prop_LitThreshold",
+            "value": "Beleuchtete Abdeckung"
+        },
+        {
+            "key": "prop_ShadowTint",
+            "value": "Schattenbereich Tönung"
+        },
+        {
+            "key": "prop_ShadowThreshold",
+            "value": "Schattenabdeckung"
+        },
+        {
+            "key": "prop_ToggleSpecular",
+            "value": "Spiegelglanz aktivieren"
+        },
+        {
+            "key": "prop_SpecularIntensity",
+            "value": "Glanzlichter"
+        },
+        {
+            "key": "prop_ToggleVertexSpecular",
+            "value": "Vertex-Spiegelglanz aktivieren"
+        },
+        {
+            "key": "prop_SpecularMode",
+            "value": "Spiegelglanz-Modus"
+        },
+        {
+            "key": "prop_MSSO",
+            "value": "MSSO (Metall, Glätte, Spiegelglanz, Okkl.)"
+        },
+        {
+            "key": "prop_Metallic",
+            "value": "Metallisch"
+        },
+        {
+            "key": "prop_Glossiness",
+            "value": "Glanz"
+        },
+        {
+            "key": "prop_Occlusion",
+            "value": "Okklusion"
+        },
+        {
+            "key": "prop_Specular",
+            "value": "Reflektivität"
+        },
+        {
+            "key": "prop_SpecularTintTexture",
+            "value": "Spiegelglanz-Tönungstextur"
+        },
+        {
+            "key": "prop_SpecularTint",
+            "value": "Spiegelglanz-Tönung"
+        },
+        {
+            "key": "prop_TangentMap",
+            "value": "Tangenten-Map"
+        },
+        {
+            "key": "prop_Anisotropy",
+            "value": "Anisotropie"
+        },
+        {
+            "key": "prop_ReplaceSpecular",
+            "value": "Spiegelglanz ersetzen"
+        },
+        {
+            "key": "prop_HighlightRamp",
+            "value": "Glanzlicht-Rampe"
+        },
+        {
+            "key": "prop_HighlightHardness",
+            "value": "Glanzlicht-Härte"
+        },
+        {
+            "key": "prop_HighlightRampColor",
+            "value": "Glanzlicht-Farbe"
+        },
+        {
+            "key": "prop_HighlightIntensity",
+            "value": "Glanzlicht-Intensität"
+        },
+        {
+            "key": "prop_HighlightRampOffset",
+            "value": "Glanzlicht-Rampen-Versatz"
+        },
+        {
+            "key": "prop_HairFlowMap",
+            "value": "Haar-Flow/Tangenten-Map (RG)"
+        },
+        {
+            "key": "prop_PrimarySpecularShift",
+            "value": "Primärer Spiegelglanz-Versatz"
+        },
+        {
+            "key": "prop_SecondarySpecularShift",
+            "value": "Sekundärer Spiegelglanz-Versatz"
+        },
+        {
+            "key": "prop_SecondarySpecularColor",
+            "value": "Sekundäre Spiegelglanz-Farbe"
+        },
+        {
+            "key": "prop_SpecularExponent",
+            "value": "Spiegelglanz-Exponent"
+        },
+        {
+            "key": "prop_SheenColor",
+            "value": "Sheen-Farbe"
+        },
+        {
+            "key": "prop_SheenIntensity",
+            "value": "Sheen-Intensität"
+        },
+        {
+            "key": "prop_SheenRoughness",
+            "value": "Sheen-Rauheit"
+        },
+        {
+            "key": "prop_ToggleRimlight",
+            "value": "Randbeleuchtung aktivieren"
+        },
+        {
+            "key": "prop_RimColor",
+            "value": "Randfarbe"
+        },
+        {
+            "key": "prop_RimWidth",
+            "value": "Randbreite"
+        },
+        {
+            "key": "prop_RimIntensity",
+            "value": "Randintensität"
+        },
+        {
+            "key": "prop_RimLightBased",
+            "value": "Lichtbasierter Rand"
+        },
+        {
+            "key": "prop_ToggleClearcoat",
+            "value": "Klarlack aktivieren"
+        },
+        {
+            "key": "prop_ClearcoatStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_ClearcoatReflectionStrength",
+            "value": "Reflexionsstärke"
+        },
+        {
+            "key": "prop_ClearcoatMap",
+            "value": "Maske (R=Stärke, G=Rauheit)"
+        },
+        {
+            "key": "prop_ClearcoatRoughness",
+            "value": "Rauheit"
+        },
+        {
+            "key": "prop_ClearcoatColor",
+            "value": "Klarlack-Farbe"
+        },
+        {
+            "key": "prop_ToggleMatcap",
+            "value": "Matcap aktivieren"
+        },
+        {
+            "key": "prop_MatcapTex",
+            "value": "Matcap-Textur"
+        },
+        {
+            "key": "prop_MatcapTint",
+            "value": "Matcap-Tönung"
+        },
+        {
+            "key": "prop_MatcapIntensity",
+            "value": "Matcap-Intensität"
+        },
+        {
+            "key": "prop_MatcapBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_MatcapMask",
+            "value": "Matcap-Maske (R)"
+        },
+        {
+            "key": "prop_MatcapSmoothnessEnabled",
+            "value": "Glätte aktivieren"
+        },
+        {
+            "key": "prop_MatcapSmoothness",
+            "value": "Glätte"
+        },
+        {
+            "key": "prop_Decal1Enable",
+            "value": "Decal 1 aktivieren"
+        },
+        {
+            "key": "prop_Decal1Tex",
+            "value": "Decal-Textur (A=Maske)"
+        },
+        {
+            "key": "prop_Decal1Tint",
+            "value": "Tönung"
+        },
+        {
+            "key": "prop_Decal1BlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_Decal1IsTriplanar",
+            "value": "Triplanar-Mapping verwenden"
+        },
+        {
+            "key": "prop_Decal1Position",
+            "value": "UV-Position (XY)"
+        },
+        {
+            "key": "prop_Decal1Scale",
+            "value": "UV-Skalierung (XY)"
+        },
+        {
+            "key": "prop_Decal1Rotation",
+            "value": "UV-Rotation"
+        },
+        {
+            "key": "prop_Decal1TriplanarPosition",
+            "value": "Weltposition (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarScale",
+            "value": "Weltskalierung"
+        },
+        {
+            "key": "prop_Decal1TriplanarRotation",
+            "value": "Weltrotation (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarSharpness",
+            "value": "Triplanar-Mischschärfe"
+        },
+        {
+            "key": "prop_Decal1Repeat",
+            "value": "Muster wiederholen"
+        },
+        {
+            "key": "prop_Decal1Scroll",
+            "value": "Scroll-Geschwindigkeit (XY)"
+        },
+        {
+            "key": "prop_Decal1HueShift",
+            "value": "Farbtonverschiebung"
+        },
+        {
+            "key": "prop_Decal1AutoCycleHue",
+            "value": "Farbton automatisch wechseln"
+        },
+        {
+            "key": "prop_Decal1CycleSpeed",
+            "value": "Wechselgeschwindigkeit"
+        },
+        {
+            "key": "prop_Decal2Enable",
+            "value": "Decal 2 aktivieren"
+        },
+        {
+            "key": "prop_Decal2Tex",
+            "value": "Decal-Textur (A=Maske)"
+        },
+        {
+            "key": "prop_Decal2Tint",
+            "value": "Tönung"
+        },
+        {
+            "key": "prop_Decal2BlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_Decal2IsTriplanar",
+            "value": "Triplanar-Mapping verwenden"
+        },
+        {
+            "key": "prop_Decal2Position",
+            "value": "UV-Position (XY)"
+        },
+        {
+            "key": "prop_Decal2Scale",
+            "value": "UV-Skalierung (XY)"
+        },
+        {
+            "key": "prop_Decal2Rotation",
+            "value": "UV-Rotation"
+        },
+        {
+            "key": "prop_Decal2TriplanarPosition",
+            "value": "Weltposition (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarScale",
+            "value": "Weltskalierung"
+        },
+        {
+            "key": "prop_Decal2TriplanarRotation",
+            "value": "Weltrotation (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarSharpness",
+            "value": "Triplanar-Mischschärfe"
+        },
+        {
+            "key": "prop_Decal2Repeat",
+            "value": "Muster wiederholen"
+        },
+        {
+            "key": "prop_Decal2Scroll",
+            "value": "Scroll-Geschwindigkeit (XY)"
+        },
+        {
+            "key": "prop_Decal2HueShift",
+            "value": "Farbtonverschiebung"
+        },
+        {
+            "key": "prop_Decal2AutoCycleHue",
+            "value": "Farbton automatisch wechseln"
+        },
+        {
+            "key": "prop_Decal2CycleSpeed",
+            "value": "Wechselgeschwindigkeit"
+        },
+        {
+            "key": "prop_TogglePostProcessing",
+            "value": "Nachbearbeitung aktivieren"
+        },
+        {
+            "key": "prop_RGBColor",
+            "value": "RGB-Tönung"
+        },
+        {
+            "key": "prop_RGBBlendMode",
+            "value": "RGB Multiplizieren/Ersetzen"
+        },
+        {
+            "key": "prop_HSVMode",
+            "value": "HSV-Modus"
+        },
+        {
+            "key": "prop_HSVHue",
+            "value": "Farbton"
+        },
+        {
+            "key": "prop_HSVSaturation",
+            "value": "Sättigung"
+        },
+        {
+            "key": "prop_HSVValue",
+            "value": "Wert (Helligkeit)"
+        },
+        {
+            "key": "prop_ToggleHueShift",
+            "value": "Farbtonverschiebung aktivieren"
+        },
+        {
+            "key": "prop_HueShift",
+            "value": "Farbtonverschiebung"
+        },
+        {
+            "key": "prop_ToggleAutoCycle",
+            "value": "Farbton automatisch wechseln aktivieren"
+        },
+        {
+            "key": "prop_AutoCycleSpeed",
+            "value": "Automatische Wechselgeschwindigkeit"
+        },
+        {
+            "key": "prop_ColorGradingLUT",
+            "value": "Farbkorrektur-LUT"
+        },
+        {
+            "key": "prop_ColorGradingIntensity",
+            "value": "Korrektur-Intensität"
+        },
+        {
+            "key": "prop_BlackAndWhite",
+            "value": "Schwarz und Weiß"
+        },
+        {
+            "key": "prop_Brightness",
+            "value": "Helligkeit"
+        },
+        {
+            "key": "prop_ToggleCubemap",
+            "value": "Cubemap aktivieren"
+        },
+        {
+            "key": "prop_CubemapTex",
+            "value": "Cubemap"
+        },
+        {
+            "key": "prop_CubemapTint",
+            "value": "Cubemap-Tönung"
+        },
+        {
+            "key": "prop_CubemapIntensity",
+            "value": "Cubemap-Intensität"
+        },
+        {
+            "key": "prop_CubemapBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_ToggleParallax",
+            "value": "Parallax-Mapping aktivieren"
+        },
+        {
+            "key": "prop_ParallaxMode",
+            "value": "Parallax-Modus"
+        },
+        {
+            "key": "prop_ParallaxMap",
+            "value": "Höhen-Map (R)"
+        },
+        {
+            "key": "prop_ParallaxStrength",
+            "value": "Parallax-Stärke"
+        },
+        {
+            "key": "prop_ParallaxSteps",
+            "value": "Hochqualitative Schritte"
+        },
+        {
+            "key": "prop_ToggleSSS",
+            "value": "Subsurface Scattering aktivieren"
+        },
+        {
+            "key": "prop_SSSColor",
+            "value": "SSS-Farbe"
+        },
+        {
+            "key": "prop_SSSStrength",
+            "value": "SSS-Stärke"
+        },
+        {
+            "key": "prop_SSSPower",
+            "value": "SSS-Stärke (Power)"
+        },
+        {
+            "key": "prop_SSSDistortion",
+            "value": "SSS-Verzerrung"
+        },
+        {
+            "key": "prop_SSSThicknessMap",
+            "value": "SSS-Dicken-Map (R)"
+        },
+        {
+            "key": "prop_SSSThickness",
+            "value": "SSS-Dicken-Abschwächung"
+        },
+        {
+            "key": "prop_ToggleShadowMap",
+            "value": "Schatten-Map aktivieren"
+        },
+        {
+            "key": "prop_ShadowMap",
+            "value": "Schatten-Map (R=Maske)"
+        },
+        {
+            "key": "prop_ShadowMapIntensity",
+            "value": "Intensität"
+        },
+        {
+            "key": "prop_ToggleDetail",
+            "value": "Detail-Maps aktivieren"
+        },
+        {
+            "key": "prop_DetailAlbedoMap",
+            "value": "Detail-Albedo (A=Stärke)"
+        },
+        {
+            "key": "prop_DetailNormalMap",
+            "value": "Detail-Normal-Map"
+        },
+        {
+            "key": "prop_DetailTiling",
+            "value": "Detail-Kachelung"
+        },
+        {
+            "key": "prop_DetailNormalStrength",
+            "value": "Detail-Normal-Stärke"
+        },
+        {
+            "key": "prop_ToggleDissolve",
+            "value": "Auflösen aktivieren"
+        },
+        {
+            "key": "prop_DissolveProgress",
+            "value": "Auflösungsfortschritt"
+        },
+        {
+            "key": "prop_DissolveType",
+            "value": "Auflösungstyp"
+        },
+        {
+            "key": "prop_DissolveEdgeColor",
+            "value": "Kantenfarbe"
+        },
+        {
+            "key": "prop_DissolveEdgeWidth",
+            "value": "Kantenbreite"
+        },
+        {
+            "key": "prop_DissolveEdgeMode",
+            "value": "Kantenmodus"
+        },
+        {
+            "key": "prop_DissolveEdgeSharpness",
+            "value": "Kantenschärfe"
+        },
+        {
+            "key": "prop_DissolveNoiseTex",
+            "value": "Rauschtextur (R)"
+        },
+        {
+            "key": "prop_DissolveNoiseScale",
+            "value": "Rauschskalierung"
+        },
+        {
+            "key": "prop_DissolveDirection",
+            "value": "Wischrichtung (XYZ)"
+        },
+        {
+            "key": "prop_DissolveDirectionSpace",
+            "value": "Wisch-Raum"
+        },
+        {
+            "key": "prop_DissolveDirectionBounds",
+            "value": "Wisch-Begrenzungsgröße"
+        },
+        {
+            "key": "prop_DissolveVoxelDensity",
+            "value": "Voxel-Dichte"
+        },
+        {
+            "key": "prop_TogglePathing",
+            "value": "Pfad-Effekt aktivieren"
+        },
+        {
+            "key": "prop_PathingMappingMode",
+            "value": "Mapping-Modus"
+        },
+        {
+            "key": "prop_PathingMap",
+            "value": "Pfad-Map (R)"
+        },
+        {
+            "key": "prop_PathingScale",
+            "value": "Pfad-Skalierung"
+        },
+        {
+            "key": "prop_PathingBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_PathingStart",
+            "value": "Pfad-Anfang"
+        },
+        {
+            "key": "prop_PathingEnd",
+            "value": "Pfad-Ende"
+        },
+        {
+            "key": "prop_PathingColor",
+            "value": "Pfad-Farbe"
+        },
+        {
+            "key": "prop_PathingColorMode",
+            "value": "Pfad-Farbmodus"
+        },
+        {
+            "key": "prop_PathingTexture",
+            "value": "Pfad-Textur"
+        },
+        {
+            "key": "prop_PathingColor2",
+            "value": "Pfad-Farbe 2"
+        },
+        {
+            "key": "prop_PathingEmission",
+            "value": "Emissionsstärke"
+        },
+        {
+            "key": "prop_PathingType",
+            "value": "Pfad-Typ"
+        },
+        {
+            "key": "prop_PathingSpeed",
+            "value": "Geschwindigkeit"
+        },
+        {
+            "key": "prop_PathingWidth",
+            "value": "Pfad-Breite"
+        },
+        {
+            "key": "prop_PathingSoftness",
+            "value": "Weichheit"
+        },
+        {
+            "key": "prop_PathingOffset",
+            "value": "Zeitversatz"
+        },
+        {
+            "key": "prop_ToggleDepthRim",
+            "value": "Tiefen-Randbeleuchtung aktivieren"
+        },
+        {
+            "key": "prop_DepthRimColor",
+            "value": "Randfarbe"
+        },
+        {
+            "key": "prop_DepthRimWidth",
+            "value": "Breite"
+        },
+        {
+            "key": "prop_DepthRimThreshold",
+            "value": "Schwellenwert"
+        },
+        {
+            "key": "prop_DepthRimSharpness",
+            "value": "Schärfe"
+        },
+        {
+            "key": "prop_DepthRimBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_ToggleAudioLink",
+            "value": "AudioLink aktivieren"
+        },
+        {
+            "key": "prop_AudioLinkFallback",
+            "value": "Fallback-Level"
+        },
+        {
+            "key": "prop_AudioLinkEmissionBand",
+            "value": "Emissionsband"
+        },
+        {
+            "key": "prop_AudioLinkEmissionStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkEmissionRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkRimBand",
+            "value": "Randlicht-Band"
+        },
+        {
+            "key": "prop_AudioLinkRimStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkRimRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftBand",
+            "value": "Farbtonverschiebungs-Band"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueBand",
+            "value": "Decal-Farbton-Band"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionBand",
+            "value": "Decal-Emissions-Band"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityBand",
+            "value": "Decal-Deckkraft-Band"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkVertexBand",
+            "value": "Vertex Wachsen/Schrumpfen-Band"
+        },
+        {
+            "key": "prop_AudioLinkVertexStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkVertexRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkOutlineBand",
+            "value": "Umriss-Band"
+        },
+        {
+            "key": "prop_AudioLinkOutlineStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkOutlineRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkMatcapBand",
+            "value": "Matcap-Band"
+        },
+        {
+            "key": "prop_AudioLinkMatcapStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkMatcapRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkPathingBand",
+            "value": "Pfad-Effekt-Band"
+        },
+        {
+            "key": "prop_AudioLinkPathingStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkPathingRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkGlitterBand",
+            "value": "Glitzer-Band"
+        },
+        {
+            "key": "prop_AudioLinkGlitterStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkGlitterRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceBand",
+            "value": "Irisieren-Band"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceStrength",
+            "value": "Stärke"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceRange",
+            "value": "Min-Max"
+        },
+        {
+            "key": "prop_ToggleGlitter",
+            "value": "Glitzern aktivieren"
+        },
+        {
+            "key": "prop_GlitterMode",
+            "value": "Modus"
+        },
+        {
+            "key": "prop_GlitterNoiseTex",
+            "value": "Rauschtextur (R)"
+        },
+        {
+            "key": "prop_GlitterMask",
+            "value": "Maske (R)"
+        },
+        {
+            "key": "prop_GlitterTint",
+            "value": "Tönung"
+        },
+        {
+            "key": "prop_GlitterFrequency",
+            "value": "Dichte"
+        },
+        {
+            "key": "prop_GlitterThreshold",
+            "value": "Dichte-Schwellenwert"
+        },
+        {
+            "key": "prop_GlitterSize",
+            "value": "Größe"
+        },
+        {
+            "key": "prop_GlitterFlickerSpeed",
+            "value": "Flicker-Geschwindigkeit"
+        },
+        {
+            "key": "prop_GlitterBrightness",
+            "value": "Helligkeit"
+        },
+        {
+            "key": "prop_GlitterContrast",
+            "value": "Kontrast"
+        },
+        {
+            "key": "prop_ToggleGlitterRainbow",
+            "value": "Regenbogen aktivieren"
+        },
+        {
+            "key": "prop_GlitterRainbowSpeed",
+            "value": "Regenbogen-Geschwindigkeit"
+        },
+        {
+            "key": "prop_ToggleDistanceFade",
+            "value": "Distanz-Fading aktivieren"
+        },
+        {
+            "key": "prop_DistanceFadeReference",
+            "value": "Fade-Referenzpunkt"
+        },
+        {
+            "key": "prop_ToggleNearFade",
+            "value": "Nahes Fading aktivieren"
+        },
+        {
+            "key": "prop_NearFadeMode",
+            "value": "Naher Fade-Modus"
+        },
+        {
+            "key": "prop_NearFadeDitherScale",
+            "value": "Naher Fade Dither-Skalierung"
+        },
+        {
+            "key": "prop_NearFadeStart",
+            "value": "Nahes Fading Start"
+        },
+        {
+            "key": "prop_NearFadeEnd",
+            "value": "Nahes Fading Ende"
+        },
+        {
+            "key": "prop_ToggleFarFade",
+            "value": "Fernes Fading aktivieren"
+        },
+        {
+            "key": "prop_FarFadeStart",
+            "value": "Fernes Fading Start"
+        },
+        {
+            "key": "prop_FarFadeEnd",
+            "value": "Fernes Fading Ende"
+        },
+        {
+            "key": "prop_ToggleIridescence",
+            "value": "Irisieren aktivieren"
+        },
+        {
+            "key": "prop_IridescenceMode",
+            "value": "Modus"
+        },
+        {
+            "key": "prop_IridescenceMask",
+            "value": "Maske (R)"
+        },
+        {
+            "key": "prop_IridescenceTint",
+            "value": "Tönung"
+        },
+        {
+            "key": "prop_IridescenceIntensity",
+            "value": "Intensität"
+        },
+        {
+            "key": "prop_IridescenceBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_IridescenceParallax",
+            "value": "Sicht-Parallaxe"
+        },
+        {
+            "key": "prop_IridescenceRamp",
+            "value": "Farbrampe"
+        },
+        {
+            "key": "prop_IridescencePower",
+            "value": "Stärke (Power)"
+        },
+        {
+            "key": "prop_IridescenceFrequency",
+            "value": "Regenbogen-Frequenz"
+        },
+        {
+            "key": "prop_ToggleShadowTexture",
+            "value": "Schattentextur aktivieren"
+        },
+        {
+            "key": "prop_ShadowTextureMappingMode",
+            "value": "Schattenmodus"
+        },
+        {
+            "key": "prop_ShadowTextureIntensity",
+            "value": "Schattenintensität"
+        },
+        {
+            "key": "prop_ShadowTextureBlendMode",
+            "value": "Schatten-Mischmodus"
+        },
+        {
+            "key": "prop_ShadowTex",
+            "value": "Schattentextur / Muster"
+        },
+        {
+            "key": "prop_ShadowPatternColor",
+            "value": "Muster-Tönung"
+        },
+        {
+            "key": "prop_ShadowPatternScale",
+            "value": "Muster-Skalierung / Kachelung"
+        },
+        {
+            "key": "prop_ShadowPatternTriplanarSharpness",
+            "value": "Triplanar-Mischschärfe"
+        },
+        {
+            "key": "prop_ShadowPatternTransparency",
+            "value": "Muster-Transparenz"
+        },
+        {
+            "key": "prop_ToggleFlatModel",
+            "value": "Flaches Modell aktivieren"
+        },
+        {
+            "key": "prop_FlatModeAutoflip",
+            "value": "Auto-Flip"
+        },
+        {
+            "key": "prop_FlatModel",
+            "value": "Flaches Modell Stärke"
+        },
+        {
+            "key": "prop_FlatModelDepthCorrection",
+            "value": "Tiefenkorrektur"
+        },
+        {
+            "key": "prop_FlatModelFacing",
+            "value": "Blickrichtung"
+        },
+        {
+            "key": "prop_FlatModelLockAxis",
+            "value": "Kamera folgen"
+        },
+        {
+            "key": "prop_ToggleWorldEffect",
+            "value": "Welteffekt aktivieren"
+        },
+        {
+            "key": "prop_WorldEffectBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_WorldEffectTex",
+            "value": "Effekt-Textur (A=Maske)"
+        },
+        {
+            "key": "prop_WorldEffectMask",
+            "value": "Effekt-Maske"
+        },
+        {
+            "key": "prop_WorldEffectColor",
+            "value": "Effekt-Farbe"
+        },
+        {
+            "key": "prop_WorldEffectDirection",
+            "value": "Effekt-Richtung (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectScale",
+            "value": "Effekt-Skalierung"
+        },
+        {
+            "key": "prop_WorldEffectBlendSharpness",
+            "value": "Direktionale Mischschärfe"
+        },
+        {
+            "key": "prop_WorldEffectIntensity",
+            "value": "Effekt-Intensität"
+        },
+        {
+            "key": "prop_WorldEffectPosition",
+            "value": "Weltposition (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectRotation",
+            "value": "Weltrotation (XYZ)"
+        },
+        {
+            "key": "prop_ToggleMirrorDetection",
+            "value": "VRChat-Spiegelerkennung aktivieren"
+        },
+        {
+            "key": "prop_MirrorDetectionMode",
+            "value": "Spiegelmodus"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture",
+            "value": "Spiegelerkennungs-Textur"
+        },
+        {
+            "key": "prop_ToggleTouchReactive",
+            "value": "Berührungsreaktiv aktivieren"
+        },
+        {
+            "key": "prop_TouchColor",
+            "value": "Berührungsfarbe"
+        },
+        {
+            "key": "prop_TouchRadius",
+            "value": "Berührungsradius"
+        },
+        {
+            "key": "prop_TouchHardness",
+            "value": "Berührungshärte"
+        },
+        {
+            "key": "prop_TouchMode",
+            "value": "Berührungsmodus"
+        },
+        {
+            "key": "prop_TouchRainbowSpeed",
+            "value": "Berührungs-Regenbogen-Geschwindigkeit"
+        },
+        {
+            "key": "prop_TouchRainbowSpread",
+            "value": "Berührungs-Regenbogen-Verteilung"
+        },
+        {
+            "key": "prop_ToggleRefraction",
+            "value": "Brechungseffekt aktivieren"
+        },
+        {
+            "key": "prop_RefractionMask",
+            "value": "Maske (R=Stärke)"
+        },
+        {
+            "key": "prop_RefractionTint",
+            "value": "Brechungs-Tönung"
+        },
+        {
+            "key": "prop_RefractionIOR",
+            "value": "Brechungsstärke"
+        },
+        {
+            "key": "prop_RefractionFresnel",
+            "value": "Fresnel-Stärke"
+        },
+        {
+            "key": "prop_RefractionOpacity",
+            "value": "Brechungs-Deckkraft"
+        },
+        {
+            "key": "prop_RefractionSeeThrough",
+            "value": "Durchsicht-Stärke"
+        },
+        {
+            "key": "prop_RefractionGrabpassTint",
+            "value": "Grabpass-Tönung"
+        },
+        {
+            "key": "prop_RefractionZoomToggle",
+            "value": "Brechungs-Zoom"
+        },
+        {
+            "key": "prop_RefractionZoom",
+            "value": "Zoom-Betrag"
+        },
+        {
+            "key": "prop_RefractionMode",
+            "value": "Brechungsmodus"
+        },
+        {
+            "key": "prop_RefractionMixStrength",
+            "value": "Mischstärke"
+        },
+        {
+            "key": "prop_RefractionBlendMode",
+            "value": "Additiv <-> Ersetzen"
+        },
+        {
+            "key": "prop_CausticsTex",
+            "value": "Interne Kaustik-Textur"
+        },
+        {
+            "key": "prop_CausticsColor",
+            "value": "Kaustik-Farbe"
+        },
+        {
+            "key": "prop_CausticsTiling",
+            "value": "Kaustik-Kachelung"
+        },
+        {
+            "key": "prop_CausticsSpeed",
+            "value": "Kaustik-Animationsgeschwindigkeit"
+        },
+        {
+            "key": "prop_CausticsIntensity",
+            "value": "Kaustik-Intensität"
+        },
+        {
+            "key": "prop_DistortionNoiseTex",
+            "value": "Verzerrungsrauschen (RG)"
+        },
+        {
+            "key": "prop_DistortionNoiseTiling",
+            "value": "Verzerrungsrauschen-Kachelung"
+        },
+        {
+            "key": "prop_DistortionNoiseStrength",
+            "value": "Verzerrungsrauschen-Stärke"
+        },
+        {
+            "key": "prop_RefractionDistortionMode",
+            "value": "Unschärfe-Modus"
+        },
+        {
+            "key": "prop_RefractionCAStrength",
+            "value": "Chromatische Aberration-Stärke"
+        },
+        {
+            "key": "prop_RefractionBlurStrength",
+            "value": "Unschärfe-Stärke"
+        },
+        {
+            "key": "prop_RefractionCAUseFresnel",
+            "value": "Fresnel Chromatische Aberration"
+        },
+        {
+            "key": "prop_RefractionCAEdgeFade",
+            "value": "CA-Kanten-Fade"
+        },
+        {
+            "key": "prop_ToggleDither",
+            "value": "Dithering aktivieren"
+        },
+        {
+            "key": "prop_DitherAmount",
+            "value": "Dither-Menge"
+        },
+        {
+            "key": "prop_DitherSpace",
+            "value": "Dither-Raum"
+        },
+        {
+            "key": "prop_DitherScale",
+            "value": "Dither-Skalierung"
+        },
+        {
+            "key": "prop_TogglePS1",
+            "value": "Niedrige Präzision (PS1) aktivieren"
+        },
+        {
+            "key": "prop_PS1Rounding",
+            "value": "Rundungsstil"
+        },
+        {
+            "key": "prop_PS1RoundingPrecision",
+            "value": "Rundungspräzision"
+        },
+        {
+            "key": "prop_PS1Affine",
+            "value": "Affines Textur-Mapping aktivieren"
+        },
+        {
+            "key": "prop_PS1Compression",
+            "value": "Farbkompression aktivieren"
+        },
+        {
+            "key": "prop_PS1CompressionPrecision",
+            "value": "Farbkompressions-Präzision"
+        },
+        {
+            "key": "prop_UseTextureStitching",
+            "value": "Textur-Stitching aktivieren"
+        },
+        {
+            "key": "prop_StitchTex",
+            "value": "Stitch-Textur"
+        },
+        {
+            "key": "prop_StitchAxis",
+            "value": "Stitch-Achse"
+        },
+        {
+            "key": "prop_StitchOffset",
+            "value": "Stitch-Naht-Versatz"
+        },
+        {
+            "key": "prop_StitchTex_UV",
+            "value": "Stitch-Textur UV"
+        },
+        {
+            "key": "prop_ToggleVertexDistortion",
+            "value": "Vertex-Verzerrung aktivieren"
+        },
+        {
+            "key": "prop_VertexDistortionMode",
+            "value": "Verzerrungsmodus"
+        },
+        {
+            "key": "prop_VertexDistortionColorMask",
+            "value": "Farbkanal-Maske"
+        },
+        {
+            "key": "prop_VertexDistortionStrength",
+            "value": "Verzerrungsstärke"
+        },
+        {
+            "key": "prop_VertexDistortionSpeed",
+            "value": "Verzerrungsgeschwindigkeit"
+        },
+        {
+            "key": "prop_VertexDistortionFrequency",
+            "value": "Verzerrungsfrequenz"
+        },
+        {
+            "key": "prop_WindStrength",
+            "value": "Windstärke"
+        },
+        {
+            "key": "prop_WindSpeed",
+            "value": "Windgeschwindigkeit"
+        },
+        {
+            "key": "prop_WindScale",
+            "value": "Windrauschen-Skalierung"
+        },
+        {
+            "key": "prop_WindDirection",
+            "value": "Windrichtung (XYZ)"
+        },
+        {
+            "key": "prop_WindNoiseTex",
+            "value": "Windrauschen-Textur (R)"
+        },
+        {
+            "key": "prop_BreathingStrength",
+            "value": "Atmungsstärke"
+        },
+        {
+            "key": "prop_BreathingSpeed",
+            "value": "Atmungsgeschwindigkeit"
+        },
+        {
+            "key": "prop_ToggleSSR",
+            "value": "Screen-Space-Reflexionen aktivieren"
+        },
+        {
+            "key": "prop_SSRMask",
+            "value": "Maske (R)"
+        },
+        {
+            "key": "prop_SSRTint",
+            "value": "Reflexions-Tönung"
+        },
+        {
+            "key": "prop_SSRIntensity",
+            "value": "Intensität"
+        },
+        {
+            "key": "prop_SSRBlendMode",
+            "value": "Mischmodus"
+        },
+        {
+            "key": "prop_SSRFresnelPower",
+            "value": "Fresnel-Stärke"
+        },
+        {
+            "key": "prop_SSRFresnelScale",
+            "value": "Fresnel-Skalierung"
+        },
+        {
+            "key": "prop_SSRFresnelBias",
+            "value": "Fresnel-Bias"
+        },
+        {
+            "key": "prop_SSRParallax",
+            "value": "Parallax-Stärke"
+        },
+        {
+            "key": "prop_SSRDistortionMap",
+            "value": "Verzerrungs-Map (RG)"
+        },
+        {
+            "key": "prop_SSRDistortionStrength",
+            "value": "Verzerrungsstärke"
+        },
+        {
+            "key": "prop_SSRWorldDistortion",
+            "value": "Welt-Verzerrungsstärke"
+        },
+        {
+            "key": "prop_SSRBlur",
+            "value": "Unschärfe-Stärke"
+        },
+        {
+            "key": "prop_SSRMode",
+            "value": "Reflexionsqualität"
+        },
+        {
+            "key": "prop_SSRMaxSteps",
+            "value": "Max. Schritte"
+        },
+        {
+            "key": "prop_SSRStepSize",
+            "value": "Schrittgröße"
+        },
+        {
+            "key": "prop_SSRCoverage",
+            "value": "Abdeckungs-Boost"
+        },
+        {
+            "key": "prop_SSREdgeFade",
+            "value": "Kanten-Fade"
+        },
+        {
+            "key": "prop_SSRCamFade",
+            "value": "Kamera-Distanz-Fade aktivieren"
+        },
+        {
+            "key": "prop_SSRCamFadeStart",
+            "value": "SSR-Kamera-Fade Start"
+        },
+        {
+            "key": "prop_SSRCamFadeEnd",
+            "value": "SSR-Kamera-Fade Ende"
+        },
+        {
+            "key": "prop_SSRFlipUV",
+            "value": "Reflexions-UV umkehren"
+        },
+        {
+            "key": "prop_SSRAdaptiveStep",
+            "value": "Adaptive Schrittgröße aktivieren"
+        },
+        {
+            "key": "prop_SSRThickness",
+            "value": "Culling-Dicke"
+        },
+        {
+            "key": "prop_SSROutOfViewMode",
+            "value": "Außer-Sicht-Modus"
+        },
+        {
+            "key": "prop_OutlineColor",
+            "value": "Umrissfarbe"
+        },
+        {
+            "key": "prop_OutlineWidth",
+            "value": "Umrissbreite"
+        },
+        {
+            "key": "prop_OutlineVertexColorMask",
+            "value": "Vertex-Farbe (R) als Maske verwenden"
+        },
+        {
+            "key": "prop_OutlineDistanceFade",
+            "value": "Distanz-Fade aktivieren"
+        },
+        {
+            "key": "prop_OutlineFadeStart",
+            "value": "Fade-Start-Distanz"
+        },
+        {
+            "key": "prop_OutlineFadeEnd",
+            "value": "Fade-End-Distanz"
+        },
+        {
+            "key": "prop_OutlineHueShift",
+            "value": "Farbtonverschiebung aktivieren"
+        },
+        {
+            "key": "prop_OutlineHueShiftSpeed",
+            "value": "Farbtonverschiebungs-Geschwindigkeit"
+        },
+        {
+            "key": "prop_OutlineOpacity",
+            "value": "Umriss-Deckkraft"
+        },
+        {
+            "key": "prop_IndirectFallbackMode",
+            "value": "Indirekter Fallback-Modus"
+        },
+        {
+            "key": "prop_IndirectOverride",
+            "value": "Indirekte Überschreibung"
+        },
+        {
+            "key": "prop_FallbackCubemap",
+            "value": "Fallback-Cubemap"
+        },
+        {
+            "key": "prop_MainTex_UV",
+            "value": "Haupttextur UV-Set"
+        },
+        {
+            "key": "prop_BumpMap_UV",
+            "value": "Bump-Map UV-Set"
+        },
+        {
+            "key": "prop_MSSO_UV",
+            "value": "MSSO UV-Set"
+        },
+        {
+            "key": "prop_SpecularTintTexture_UV",
+            "value": "Spiegelglanz-Tönung UV-Set"
+        },
+        {
+            "key": "prop_TangentMap_UV",
+            "value": "Tangenten-Map UV"
+        },
+        {
+            "key": "prop_EmissionMap_UV",
+            "value": "Emissions-Map UV-Set"
+        },
+        {
+            "key": "prop_ClearcoatMap_UV",
+            "value": "Klarlack-Map UV-Set"
+        },
+        {
+            "key": "prop_MatcapMask_UV",
+            "value": "Matcap-Maske UV-Set"
+        },
+        {
+            "key": "prop_ParallaxMap_UV",
+            "value": "Höhen-Map UV-Set"
+        },
+        {
+            "key": "prop_ThicknessMap_UV",
+            "value": "Dicken-Map UV-Set"
+        },
+        {
+            "key": "prop_DetailMap_UV",
+            "value": "Detail-Map UV-Set"
+        },
+        {
+            "key": "prop_Decal1_UV",
+            "value": "Decal 1 UV-Set"
+        },
+        {
+            "key": "prop_Decal2_UV",
+            "value": "Decal 2 UV-Set"
+        },
+        {
+            "key": "prop_Glitter_UV",
+            "value": "Glitzer UV-Set"
+        },
+        {
+            "key": "prop_IridescenceMask_UV",
+            "value": "Irisieren-Maske UV-Set"
+        },
+        {
+            "key": "prop_GlitterMask_UV",
+            "value": "Glitzer-Maske UV-Set"
+        },
+        {
+            "key": "prop_HairFlowMap_UV",
+            "value": "Haar-Flow-Map UV-Set"
+        },
+        {
+            "key": "prop_ShadowTex_UV",
+            "value": "Schattentextur UV-Set"
+        },
+        {
+            "key": "prop_Flowmap_UV",
+            "value": "Flowmap UV-Set"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture_UV",
+            "value": "Spiegelerkennungs-Textur UV-Set"
+        },
+        {
+            "key": "prop_RefractionMask_UV",
+            "value": "Brechungsmaske UV-Set"
+        },
+        {
+            "key": "prop_PathingTexture_UV",
+            "value": "Pfad-Map UV-Set"
+        },
+        {
+            "key": "prop_ShadowMap_UV",
+            "value": "Schatten-Map UV-Set"
+        },
+        {
+            "key": "prop_Dither_UV",
+            "value": "Dither UV-Set"
+        },
+        {
+            "key": "prop_OverrideRenderQueue",
+            "value": "Benutzerdefinierte Render-Warteschlange verwenden"
+        },
+        {
+            "key": "prop_OverrideBaseBlend",
+            "value": "Benutzerdefinierte Basis-Mischung verwenden"
+        },
+        {
+            "key": "prop_BlendOp",
+            "value": "Mischoperation"
+        },
+        {
+            "key": "prop_AddSrcBlend",
+            "value": "Quell-Mischung"
+        },
+        {
+            "key": "prop_AddDstBlend",
+            "value": "Ziel-Mischung"
+        },
+        {
+            "key": "prop_AddBlendOp",
+            "value": "Alpha-Mischoperation"
+        },
+        {
+            "key": "prop_ZTest",
+            "value": "ZTest"
+        },
+        {
+            "key": "prop_OverrideAddBlend",
+            "value": "Benutzerdefinierte additive Mischung verwenden"
+        },
+        {
+            "key": "prop_OverrideZWrite",
+            "value": "Benutzerdefiniertes ZWrite verwenden"
+        },
+        {
+            "key": "specular_standard_stylised_info",
+            "value": "Standard-Spiegelglanz hat keine stilisierten Optionen - versuche, den Spiegelglanz-Modus zu ändern, um hier Einstellungen zu sehen!"
+        },
+        {
+            "key": "depth_popup_info",
+            "value": "Dieser Effekt muss die Tiefe aus der Szene lesen! Stelle sicher, dass deine Welt entweder ein Echtzeitlicht aktiviert hat oder dass das Depth-Writer-Prefab in der Szene ist (mit Backlace bereitgestellt)."
+        }
+    ]
+}

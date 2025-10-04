@@ -1,0 +1,2412 @@
+{
+    "entries": [
+        {
+            "key": "enabled",
+            "value": "已启用"
+        },
+        {
+            "key": "disabled",
+            "value": "已禁用"
+        },
+        {
+            "key": "config_tab_theme",
+            "value": "选项卡主题"
+        },
+        {
+            "key": "config_text_theme",
+            "value": "文本主题"
+        },
+        {
+            "key": "config_ui_size",
+            "value": "UI大小"
+        },
+        {
+            "key": "config_updates",
+            "value": "检查更新"
+        },
+        {
+            "key": "config_language",
+            "value": "语言"
+        },
+        {
+            "key": "config_toggle_updates",
+            "value": "显示更新"
+        },
+        {
+            "key": "config_toggle_announcements",
+            "value": "显示新闻"
+        },
+        {
+            "key": "config_toggle_enabled",
+            "value": "已启用"
+        },
+        {
+            "key": "config_toggle_disabled",
+            "value": "已禁用"
+        },
+        {
+            "key": "config_save",
+            "value": "保存配置"
+        },
+        {
+            "key": "config_reset",
+            "value": "重置配置"
+        },
+        {
+            "key": "config_save_success",
+            "value": "您的配置已成功保存！^~^"
+        },
+        {
+            "key": "config_save_error",
+            "value": "保存您的配置时出错，请尝试重新导入Unity包！>.<"
+        },
+        {
+            "key": "config_reset_success",
+            "value": "您的配置已重置为默认值！^~^"
+        },
+        {
+            "key": "config_reset_error",
+            "value": "重置您的配置时出错，请尝试重新导入Unity包！>.<"
+        },
+        {
+            "key": "dialog_okay",
+            "value": "好哦！"
+        },
+        {
+            "key": "update_available",
+            "value": "有可用更新！"
+        },
+        {
+            "key": "update_description",
+            "value": "下载最新版本以获取新功能和错误修复！<3"
+        },
+        {
+            "key": "tab_config",
+            "value": "设置"
+        },
+        {
+            "key": "open_docs",
+            "value": "需要帮助吗？点击此处打开文档！"
+        },
+        {
+            "key": "tab_license",
+            "value": "许可证"
+        },
+        {
+            "key": "button_show_license",
+            "value": "在Unity中显示许可证"
+        },
+        {
+            "key": "config_toggle_grey_unused",
+            "value": "灰显未使用的设置"
+        },
+        {
+            "key": "config_toggle_status_badges",
+            "value": "显示状态徽章"
+        },
+        {
+            "key": "status_badge_enabled",
+            "value": "已激活"
+        },
+        {
+            "key": "capability_popup_title",
+            "value": "功能通知！"
+        },
+        {
+            "key": "preset_title",
+            "value": "预设管理器"
+        },
+        {
+            "key": "preset_overwrite_prompt",
+            "value": "已存在同名预设，您想覆盖它吗？"
+        },
+        {
+            "key": "preset_overwrite_prompt_yes",
+            "value": "覆盖它！"
+        },
+        {
+            "key": "preset_overwrite_prompt_no",
+            "value": "保留现有的。"
+        },
+        {
+            "key": "preset_builtin_header",
+            "value": "内置预设"
+        },
+        {
+            "key": "preset_custom_header",
+            "value": "自定义预设"
+        },
+        {
+            "key": "preset_save_header",
+            "value": "保存此材质"
+        },
+        {
+            "key": "preset_name_label",
+            "value": "预设名称"
+        },
+        {
+            "key": "preset_save_button",
+            "value": "另存为预设"
+        },
+        {
+            "key": "preset_save_error_noname",
+            "value": "保存前请为您的预设设置一个名称！>.<"
+        },
+        {
+            "key": "preset_delete_prompt",
+            "value": "您想删除此预设吗？此操作无法撤销..."
+        },
+        {
+            "key": "preset_delete_prompt_yes",
+            "value": "删除预设"
+        },
+        {
+            "key": "preset_delete_prompt_no",
+            "value": "保留预设"
+        },
+        {
+            "key": "tab_presets",
+            "value": "预设"
+        },
+        {
+            "key": "preset_no_builtin_found",
+            "value": "此着色器未提供内置预设..."
+        },
+        {
+            "key": "preset_no_custom_found",
+            "value": "未找到自定义预设！为什么不创建一些呢？:o"
+        },
+        {
+            "key": "load",
+            "value": "加载"
+        },
+        {
+            "key": "tab_premonition",
+            "value": "紧凑材质"
+        },
+        {
+            "key": "premonition_notice",
+            "value": "在这里，您可以生成当前材质的紧凑版本。这将生成一个新的着色器文件，它更小，编译时间更短，并且本质上是您当前设置的快照。这个更小的着色器是可再发行的，不依赖于任何其他东西 - 您可以随意移动.shader文件。建议您始终在最终材质中使用它，以减少着色器数量并提高性能！^-^（但别担心，如果需要进行更改，您随时可以切换回普通着色器）"
+        },
+        {
+            "key": "premonition_generate_button",
+            "value": "生成紧凑材质"
+        },
+        {
+            "key": "premonition_restore_button",
+            "value": "恢复原始材质"
+        },
+        {
+            "key": "variant_popup_title",
+            "value": "需要着色器变体"
+        },
+        {
+            "key": "variant_popup_description",
+            "value": "此功能至少需要'{0}'着色器变体。\n\n创建着色器变体是为了帮助确保您只包含所需功能的代码。虽然其他版本也可能有它（由灰色选项卡或未显示指示），但这是支持它的“最低”变体层级。请参阅文档以获取更多信息！^-^"
+        },
+        {
+            "key": "warning_external_website_title",
+            "value": "等等，请听！"
+        },
+        {
+            "key": "warning_external_website_description",
+            "value": "您即将打开一个非我所有或运营的外部网站！请谨慎操作！！它可能是安全的，但我无法控制它或它将来是否会发生变化。>.< 您想继续吗？"
+        },
+        {
+            "key": "warning_external_website_okay",
+            "value": "打开网站"
+        },
+        {
+            "key": "warning_external_website_cancel",
+            "value": "返回！"
+        },
+        {
+            "key": "tab_main",
+            "value": "主设置"
+        },
+        {
+            "key": "sub_tab_rendering",
+            "value": "渲染"
+        },
+        {
+            "key": "sub_tab_textures",
+            "value": "核心贴图"
+        },
+        {
+            "key": "sub_tab_stitching",
+            "value": "纹理拼接"
+        },
+        {
+            "key": "sub_tab_uv_manipulation",
+            "value": "UV操作"
+        },
+        {
+            "key": "sub_tab_uv_effects",
+            "value": "UV效果"
+        },
+        {
+            "key": "sub_tab_vertex_manipulation",
+            "value": "顶点操作"
+        },
+        {
+            "key": "sub_tab_decal_one",
+            "value": "贴花 1"
+        },
+        {
+            "key": "sub_tab_decal_two",
+            "value": "贴花 2"
+        },
+        {
+            "key": "sub_tab_post_processing",
+            "value": "纹理后处理"
+        },
+        {
+            "key": "sub_tab_uv_sets",
+            "value": "UV集"
+        },
+        {
+            "key": "tab_lighting",
+            "value": "光照"
+        },
+        {
+            "key": "sub_tab_lighting_model",
+            "value": "光照模型"
+        },
+        {
+            "key": "sub_tab_anime",
+            "value": "动漫着色"
+        },
+        {
+            "key": "tab_specular",
+            "value": "高光"
+        },
+        {
+            "key": "sub_tab_pbr_specular",
+            "value": "PBR高光"
+        },
+        {
+            "key": "sub_tab_stylised_specular",
+            "value": "风格化高光"
+        },
+        {
+            "key": "sub_tab_emission",
+            "value": "自发光"
+        },
+        {
+            "key": "sub_tab_light_limiting",
+            "value": "限制光照级别"
+        },
+        {
+            "key": "tab_shading",
+            "value": "着色"
+        },
+        {
+            "key": "sub_tab_rim_lighting",
+            "value": "菲涅尔边缘光"
+        },
+        {
+            "key": "sub_tab_depth_rim",
+            "value": "深度边缘光"
+        },
+        {
+            "key": "sub_tab_clear_coat",
+            "value": "清漆"
+        },
+        {
+            "key": "sub_tab_matcap",
+            "value": "Matcap"
+        },
+        {
+            "key": "sub_tab_cubemap",
+            "value": "立方体贴图"
+        },
+        {
+            "key": "sub_tab_parallax",
+            "value": "视差贴图"
+        },
+        {
+            "key": "sub_tab_subsurface",
+            "value": "次表面散射"
+        },
+        {
+            "key": "sub_tab_detail_map",
+            "value": "细节贴图"
+        },
+        {
+            "key": "sub_tab_shadow_map",
+            "value": "阴影贴图"
+        },
+        {
+            "key": "tab_effects",
+            "value": "效果"
+        },
+        {
+            "key": "sub_tab_dissolve",
+            "value": "溶解"
+        },
+        {
+            "key": "sub_tab_pathing",
+            "value": "路径"
+        },
+        {
+            "key": "tab_third_party",
+            "value": "第三方"
+        },
+        {
+            "key": "sub_tab_audiolink",
+            "value": "AudioLink"
+        },
+        {
+            "key": "sub_tab_superplug",
+            "value": "Super Plug Shader"
+        },
+        {
+            "key": "superplug_notice",
+            "value": "Super Plug Shader (由 VRCFury 开发) 是一个免费的网格变形系统，可用于将网格向目标变形，并且是 DPS (Dynamic Penetration System by Raliv) 和 TPS (Thry Penetration System in Poiyomi Pro) 的完全向后兼容的替代品。除了免费之外，它还支持各种着色器，而无需对其进行硬编码支持，包括 Backlace！请点击下面的链接打开其文档以进行设置！"
+        },
+        {
+            "key": "superplug_button",
+            "value": "打开 Super Plug Shader 网站"
+        },
+        {
+            "key": "sub_tab_ltcgi",
+            "value": "LTCGI 光照"
+        },
+        {
+            "key": "ltcgi_notice",
+            "value": "LTCGI (由 _pi_ 开发) 是一个用于 VRChat 的即插即用实时区域光照解决方案。要启用此功能，请确保您也在项目中包含了 LTCGI 包，因为它需要自己的着色器函数才能工作。启用后，您的材质将自动使用 LTCGI 的光照。"
+        },
+        {
+            "key": "ltcgi_button",
+            "value": "打开 LTCGI 网站"
+        },
+        {
+            "key": "prop_ToggleLTCGI",
+            "value": "启用 LTCGI 光照"
+        },
+        {
+            "key": "sub_tab_glitter",
+            "value": "闪粉"
+        },
+        {
+            "key": "sub_tab_distance_fading",
+            "value": "距离渐变"
+        },
+        {
+            "key": "sub_tab_iridescence",
+            "value": "虹彩"
+        },
+        {
+            "key": "sub_tab_shadow_textures",
+            "value": "阴影纹理"
+        },
+        {
+            "key": "sub_tab_flatten_model",
+            "value": "平展模型"
+        },
+        {
+            "key": "sub_tab_world_aligned",
+            "value": "世界对齐纹理"
+        },
+        {
+            "key": "sub_tab_vrchat_mirror",
+            "value": "VRChat 镜像检测"
+        },
+        {
+            "key": "sub_tab_touch_interactions",
+            "value": "触摸交互"
+        },
+        {
+            "key": "sub_tab_vertex_distortion",
+            "value": "顶点失真"
+        },
+        {
+            "key": "sub_tab_dither",
+            "value": "抖动"
+        },
+        {
+            "key": "sub_tab_ps1",
+            "value": "低精度 (PS1)"
+        },
+        {
+            "key": "sub_tab_refraction",
+            "value": "折射"
+        },
+        {
+            "key": "sub_tab_screenspace_reflection",
+            "value": "屏幕空间反射"
+        },
+        {
+            "key": "tab_outline",
+            "value": "轮廓"
+        },
+        {
+            "key": "prop_SrcBlend",
+            "value": "源混合"
+        },
+        {
+            "key": "prop_DstBlend",
+            "value": "目标混合"
+        },
+        {
+            "key": "prop_ZWrite",
+            "value": "深度写入"
+        },
+        {
+            "key": "prop_Cull",
+            "value": "剔除模式"
+        },
+        {
+            "key": "prop_StencilRef",
+            "value": "模板引用"
+        },
+        {
+            "key": "prop_StencilComp",
+            "value": "比较"
+        },
+        {
+            "key": "prop_StencilPass",
+            "value": "通过操作"
+        },
+        {
+            "key": "prop_StencilFail",
+            "value": "失败操作"
+        },
+        {
+            "key": "prop_StencilZFail",
+            "value": "深度测试失败操作"
+        },
+        {
+            "key": "prop_OutlineStencilRef",
+            "value": "轮廓模板引用"
+        },
+        {
+            "key": "prop_OutlineStencilComp",
+            "value": "轮廓比较"
+        },
+        {
+            "key": "prop_OutlineStencilPass",
+            "value": "轮廓通过操作"
+        },
+        {
+            "key": "prop_OutlineStencilFail",
+            "value": "轮廓失败操作"
+        },
+        {
+            "key": "prop_OutlineStencilZFail",
+            "value": "轮廓深度测试失败操作"
+        },
+        {
+            "key": "prop_BlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_VRCFallback",
+            "value": "VRChat回退"
+        },
+        {
+            "key": "prop_ToggleFlipNormals",
+            "value": "翻转背面法线"
+        },
+        {
+            "key": "prop_MainTex",
+            "value": "主纹理"
+        },
+        {
+            "key": "prop_Color",
+            "value": "反照率颜色"
+        },
+        {
+            "key": "prop_Cutoff",
+            "value": "Alpha截止"
+        },
+        {
+            "key": "prop_BumpMap",
+            "value": "法线贴图"
+        },
+        {
+            "key": "prop_BumpScale",
+            "value": "法线贴图强度"
+        },
+        {
+            "key": "prop_Alpha",
+            "value": "透明度"
+        },
+        {
+            "key": "prop_DecalStage",
+            "value": "贴花阶段 (共享)"
+        },
+        {
+            "key": "prop_UV_Offset_X",
+            "value": "UV偏移 X"
+        },
+        {
+            "key": "prop_UV_Offset_Y",
+            "value": "UV偏移 Y"
+        },
+        {
+            "key": "prop_UV_Scale_X",
+            "value": "UV缩放 X"
+        },
+        {
+            "key": "prop_UV_Scale_Y",
+            "value": "UV缩放 Y"
+        },
+        {
+            "key": "prop_UV_Rotation",
+            "value": "UV旋转"
+        },
+        {
+            "key": "prop_UV_Scroll_X_Speed",
+            "value": "UV滚动 X 速度"
+        },
+        {
+            "key": "prop_UV_Scroll_Y_Speed",
+            "value": "UV滚动 Y 速度"
+        },
+        {
+            "key": "prop_ToggleUVEffects",
+            "value": "启用UV效果"
+        },
+        {
+            "key": "prop_UVTriplanarMapping",
+            "value": "启用三平面映射"
+        },
+        {
+            "key": "prop_UVTriplanarPosition",
+            "value": "世界位置 (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarScale",
+            "value": "世界缩放"
+        },
+        {
+            "key": "prop_UVTriplanarRotation",
+            "value": "世界旋转 (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarSharpness",
+            "value": "三平面混合锐度"
+        },
+        {
+            "key": "prop_UVScreenspaceMapping",
+            "value": "启用屏幕空间映射"
+        },
+        {
+            "key": "prop_UVScreenspaceTiling",
+            "value": "屏幕空间平铺"
+        },
+        {
+            "key": "prop_UVFlipbook",
+            "value": "启用翻书动画"
+        },
+        {
+            "key": "prop_UVFlipbookRows",
+            "value": "翻书行数"
+        },
+        {
+            "key": "prop_UVFlipbookColumns",
+            "value": "翻书列数"
+        },
+        {
+            "key": "prop_UVFlipbookFrames",
+            "value": "总帧数"
+        },
+        {
+            "key": "prop_UVFlipbookFPS",
+            "value": "翻书帧率"
+        },
+        {
+            "key": "prop_UVFlipbookScrub",
+            "value": "手动拖动"
+        },
+        {
+            "key": "prop_UVFlowmap",
+            "value": "启用流动图"
+        },
+        {
+            "key": "prop_UVFlowmapTex",
+            "value": "流动图纹理 (RG)"
+        },
+        {
+            "key": "prop_UVFlowmapStrength",
+            "value": "流动图强度"
+        },
+        {
+            "key": "prop_UVFlowmapSpeed",
+            "value": "流动图速度"
+        },
+        {
+            "key": "prop_UVFlowmapDistortion",
+            "value": "流动图失真"
+        },
+        {
+            "key": "prop_VertexManipulationPosition",
+            "value": "世界位置 (XYZ)"
+        },
+        {
+            "key": "prop_VertexManipulationScale",
+            "value": "世界缩放 (XYZ)"
+        },
+        {
+            "key": "prop_ToggleEmission",
+            "value": "启用自发光"
+        },
+        {
+            "key": "prop_EmissionColor",
+            "value": "自发光颜色"
+        },
+        {
+            "key": "prop_EmissionMap",
+            "value": "自发光贴图 (遮罩)"
+        },
+        {
+            "key": "prop_UseAlbedoAsEmission",
+            "value": "使用反照率作为自发光"
+        },
+        {
+            "key": "prop_EmissionStrength",
+            "value": "自发光强度"
+        },
+        {
+            "key": "prop_EnableBaseLightLimit",
+            "value": "启用基础通道限制"
+        },
+        {
+            "key": "prop_BaseLightMin",
+            "value": "基础光照最小值"
+        },
+        {
+            "key": "prop_BaseLightMax",
+            "value": "基础光照最大值"
+        },
+        {
+            "key": "prop_EnableAddLightLimit",
+            "value": "启用附加通道限制"
+        },
+        {
+            "key": "prop_AddLightMin",
+            "value": "附加光照最小值"
+        },
+        {
+            "key": "prop_AddLightMax",
+            "value": "附加光照最大值"
+        },
+        {
+            "key": "prop_GreyscaleLighting",
+            "value": "灰度光照"
+        },
+        {
+            "key": "prop_ForceLightColor",
+            "value": "强制光照颜色"
+        },
+        {
+            "key": "prop_ForcedLightColor",
+            "value": "强制光照颜色"
+        },
+        {
+            "key": "prop_LightingColorMode",
+            "value": "光照颜色模式"
+        },
+        {
+            "key": "prop_LightingDirectionMode",
+            "value": "光照方向模式"
+        },
+        {
+            "key": "prop_ForcedLightDirection",
+            "value": "强制光照方向"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetX",
+            "value": "视角方向偏移 X"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetY",
+            "value": "视角方向偏移 Y"
+        },
+        {
+            "key": "prop_DirectIntensity",
+            "value": "实时直接光强度"
+        },
+        {
+            "key": "prop_IndirectIntensity",
+            "value": "实时间接光强度"
+        },
+        {
+            "key": "prop_VertexIntensity",
+            "value": "实时顶点光强度"
+        },
+        {
+            "key": "prop_AdditiveIntensity",
+            "value": "实时附加光强度"
+        },
+        {
+            "key": "prop_BakedDirectIntensity",
+            "value": "烘焙直接光强度"
+        },
+        {
+            "key": "prop_BakedIndirectIntensity",
+            "value": "烘焙间接光强度"
+        },
+        {
+            "key": "prop_ToggleAnimeLighting",
+            "value": "启用动漫光照"
+        },
+        {
+            "key": "prop_AnimeMode",
+            "value": "动漫模式"
+        },
+        {
+            "key": "prop_Ramp",
+            "value": "动漫渐变"
+        },
+        {
+            "key": "prop_RampColor",
+            "value": "渐变颜色"
+        },
+        {
+            "key": "prop_RampOffset",
+            "value": "渐变偏移"
+        },
+        {
+            "key": "prop_ShadowIntensity",
+            "value": "阴影强度"
+        },
+        {
+            "key": "prop_OcclusionOffsetIntensity",
+            "value": "遮蔽偏移强度"
+        },
+        {
+            "key": "prop_RampMin",
+            "value": "渐变最小值"
+        },
+        {
+            "key": "prop_RampNormalIntensity",
+            "value": "法线影响强度"
+        },
+        {
+            "key": "prop_AnimeShadowColor",
+            "value": "核心阴影颜色"
+        },
+        {
+            "key": "prop_AnimeShadowThreshold",
+            "value": "核心阴影阈值"
+        },
+        {
+            "key": "prop_AnimeHalftoneColor",
+            "value": "半色调颜色"
+        },
+        {
+            "key": "prop_AnimeHalftoneThreshold",
+            "value": "半色调阈值"
+        },
+        {
+            "key": "prop_AnimeShadowSoftness",
+            "value": "阴影柔和度"
+        },
+        {
+            "key": "prop_ToggleAmbientGradient",
+            "value": "启用环境渐变"
+        },
+        {
+            "key": "prop_AnimeOcclusionToShadow",
+            "value": "遮蔽转阴影"
+        },
+        {
+            "key": "prop_AmbientUp",
+            "value": "天空环境光"
+        },
+        {
+            "key": "prop_AmbientSkyThreshold",
+            "value": "天空阈值"
+        },
+        {
+            "key": "prop_AmbientDown",
+            "value": "地面环境光"
+        },
+        {
+            "key": "prop_AmbientGroundThreshold",
+            "value": "地面阈值"
+        },
+        {
+            "key": "prop_AmbientIntensity",
+            "value": "渐变强度"
+        },
+        {
+            "key": "prop_TintMaskSource",
+            "value": "染色遮罩源"
+        },
+        {
+            "key": "prop_LitTint",
+            "value": "亮部区域染色"
+        },
+        {
+            "key": "prop_LitThreshold",
+            "value": "亮部覆盖范围"
+        },
+        {
+            "key": "prop_ShadowTint",
+            "value": "阴影区域染色"
+        },
+        {
+            "key": "prop_ShadowThreshold",
+            "value": "阴影覆盖范围"
+        },
+        {
+            "key": "prop_ToggleSpecular",
+            "value": "启用高光"
+        },
+        {
+            "key": "prop_SpecularIntensity",
+            "value": "高光"
+        },
+        {
+            "key": "prop_ToggleVertexSpecular",
+            "value": "启用顶点高光"
+        },
+        {
+            "key": "prop_SpecularMode",
+            "value": "高光模式"
+        },
+        {
+            "key": "prop_MSSO",
+            "value": "MSSO (金属, 光滑, 高光, 遮蔽)"
+        },
+        {
+            "key": "prop_Metallic",
+            "value": "金属度"
+        },
+        {
+            "key": "prop_Glossiness",
+            "value": "光泽度"
+        },
+        {
+            "key": "prop_Occlusion",
+            "value": "遮蔽"
+        },
+        {
+            "key": "prop_Specular",
+            "value": "反射率"
+        },
+        {
+            "key": "prop_SpecularTintTexture",
+            "value": "高光染色纹理"
+        },
+        {
+            "key": "prop_SpecularTint",
+            "value": "高光染色"
+        },
+        {
+            "key": "prop_TangentMap",
+            "value": "切线贴图"
+        },
+        {
+            "key": "prop_Anisotropy",
+            "value": "各向异性"
+        },
+        {
+            "key": "prop_ReplaceSpecular",
+            "value": "替换高光"
+        },
+        {
+            "key": "prop_HighlightRamp",
+            "value": "高光渐变"
+        },
+        {
+            "key": "prop_HighlightHardness",
+            "value": "高光硬度"
+        },
+        {
+            "key": "prop_HighlightRampColor",
+            "value": "高光颜色"
+        },
+        {
+            "key": "prop_HighlightIntensity",
+            "value": "高光强度"
+        },
+        {
+            "key": "prop_HighlightRampOffset",
+            "value": "高光渐变偏移"
+        },
+        {
+            "key": "prop_HairFlowMap",
+            "value": "头发流动/切线贴图 (RG)"
+        },
+        {
+            "key": "prop_PrimarySpecularShift",
+            "value": "主高光偏移"
+        },
+        {
+            "key": "prop_SecondarySpecularShift",
+            "value": "次高光偏移"
+        },
+        {
+            "key": "prop_SecondarySpecularColor",
+            "value": "次高光颜色"
+        },
+        {
+            "key": "prop_SpecularExponent",
+            "value": "高光指数"
+        },
+        {
+            "key": "prop_SheenColor",
+            "value": "光泽颜色"
+        },
+        {
+            "key": "prop_SheenIntensity",
+            "value": "光泽强度"
+        },
+        {
+            "key": "prop_SheenRoughness",
+            "value": "光泽粗糙度"
+        },
+        {
+            "key": "prop_ToggleRimlight",
+            "value": "启用边缘光"
+        },
+        {
+            "key": "prop_RimColor",
+            "value": "边缘光颜色"
+        },
+        {
+            "key": "prop_RimWidth",
+            "value": "边缘光宽度"
+        },
+        {
+            "key": "prop_RimIntensity",
+            "value": "边缘光强度"
+        },
+        {
+            "key": "prop_RimLightBased",
+            "value": "基于光照的边缘光"
+        },
+        {
+            "key": "prop_ToggleClearcoat",
+            "value": "启用清漆"
+        },
+        {
+            "key": "prop_ClearcoatStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_ClearcoatReflectionStrength",
+            "value": "反射强度"
+        },
+        {
+            "key": "prop_ClearcoatMap",
+            "value": "遮罩 (R=强度, G=粗糙度)"
+        },
+        {
+            "key": "prop_ClearcoatRoughness",
+            "value": "粗糙度"
+        },
+        {
+            "key": "prop_ClearcoatColor",
+            "value": "清漆颜色"
+        },
+        {
+            "key": "prop_ToggleMatcap",
+            "value": "启用 Matcap"
+        },
+        {
+            "key": "prop_MatcapTex",
+            "value": "Matcap 纹理"
+        },
+        {
+            "key": "prop_MatcapTint",
+            "value": "Matcap 染色"
+        },
+        {
+            "key": "prop_MatcapIntensity",
+            "value": "Matcap 强度"
+        },
+        {
+            "key": "prop_MatcapBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_MatcapMask",
+            "value": "Matcap 遮罩 (R)"
+        },
+        {
+            "key": "prop_MatcapSmoothnessEnabled",
+            "value": "启用平滑度"
+        },
+        {
+            "key": "prop_MatcapSmoothness",
+            "value": "平滑度"
+        },
+        {
+            "key": "prop_Decal1Enable",
+            "value": "启用贴花 1"
+        },
+        {
+            "key": "prop_Decal1Tex",
+            "value": "贴花纹理 (A=遮罩)"
+        },
+        {
+            "key": "prop_Decal1Tint",
+            "value": "染色"
+        },
+        {
+            "key": "prop_Decal1BlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_Decal1IsTriplanar",
+            "value": "使用三平面映射"
+        },
+        {
+            "key": "prop_Decal1Position",
+            "value": "UV位置 (XY)"
+        },
+        {
+            "key": "prop_Decal1Scale",
+            "value": "UV缩放 (XY)"
+        },
+        {
+            "key": "prop_Decal1Rotation",
+            "value": "UV旋转"
+        },
+        {
+            "key": "prop_Decal1TriplanarPosition",
+            "value": "世界位置 (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarScale",
+            "value": "世界缩放"
+        },
+        {
+            "key": "prop_Decal1TriplanarRotation",
+            "value": "世界旋转 (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarSharpness",
+            "value": "三平面混合锐度"
+        },
+        {
+            "key": "prop_Decal1Repeat",
+            "value": "重复图案"
+        },
+        {
+            "key": "prop_Decal1Scroll",
+            "value": "滚动速度 (XY)"
+        },
+        {
+            "key": "prop_Decal1HueShift",
+            "value": "色相偏移"
+        },
+        {
+            "key": "prop_Decal1AutoCycleHue",
+            "value": "自动循环色相"
+        },
+        {
+            "key": "prop_Decal1CycleSpeed",
+            "value": "循环速度"
+        },
+        {
+            "key": "prop_Decal2Enable",
+            "value": "启用贴花 2"
+        },
+        {
+            "key": "prop_Decal2Tex",
+            "value": "贴花纹理 (A=遮罩)"
+        },
+        {
+            "key": "prop_Decal2Tint",
+            "value": "染色"
+        },
+        {
+            "key": "prop_Decal2BlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_Decal2IsTriplanar",
+            "value": "使用三平面映射"
+        },
+        {
+            "key": "prop_Decal2Position",
+            "value": "UV位置 (XY)"
+        },
+        {
+            "key": "prop_Decal2Scale",
+            "value": "UV缩放 (XY)"
+        },
+        {
+            "key": "prop_Decal2Rotation",
+            "value": "UV旋转"
+        },
+        {
+            "key": "prop_Decal2TriplanarPosition",
+            "value": "世界位置 (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarScale",
+            "value": "世界缩放"
+        },
+        {
+            "key": "prop_Decal2TriplanarRotation",
+            "value": "世界旋转 (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarSharpness",
+            "value": "三平面混合锐度"
+        },
+        {
+            "key": "prop_Decal2Repeat",
+            "value": "重复图案"
+        },
+        {
+            "key": "prop_Decal2Scroll",
+            "value": "滚动速度 (XY)"
+        },
+        {
+            "key": "prop_Decal2HueShift",
+            "value": "色相偏移"
+        },
+        {
+            "key": "prop_Decal2AutoCycleHue",
+            "value": "自动循环色相"
+        },
+        {
+            "key": "prop_Decal2CycleSpeed",
+            "value": "循环速度"
+        },
+        {
+            "key": "prop_TogglePostProcessing",
+            "value": "启用后处理"
+        },
+        {
+            "key": "prop_RGBColor",
+            "value": "RGB染色"
+        },
+        {
+            "key": "prop_RGBBlendMode",
+            "value": "RGB 正片叠底/替换"
+        },
+        {
+            "key": "prop_HSVMode",
+            "value": "HSV模式"
+        },
+        {
+            "key": "prop_HSVHue",
+            "value": "色相"
+        },
+        {
+            "key": "prop_HSVSaturation",
+            "value": "饱和度"
+        },
+        {
+            "key": "prop_HSVValue",
+            "value": "明度"
+        },
+        {
+            "key": "prop_ToggleHueShift",
+            "value": "启用色相偏移"
+        },
+        {
+            "key": "prop_HueShift",
+            "value": "色相偏移"
+        },
+        {
+            "key": "prop_ToggleAutoCycle",
+            "value": "启用自动循环色相"
+        },
+        {
+            "key": "prop_AutoCycleSpeed",
+            "value": "自动循环速度"
+        },
+        {
+            "key": "prop_ColorGradingLUT",
+            "value": "颜色分级LUT"
+        },
+        {
+            "key": "prop_ColorGradingIntensity",
+            "value": "分级强度"
+        },
+        {
+            "key": "prop_BlackAndWhite",
+            "value": "黑白"
+        },
+        {
+            "key": "prop_Brightness",
+            "value": "亮度"
+        },
+        {
+            "key": "prop_ToggleCubemap",
+            "value": "启用立方体贴图"
+        },
+        {
+            "key": "prop_CubemapTex",
+            "value": "立方体贴图"
+        },
+        {
+            "key": "prop_CubemapTint",
+            "value": "立方体贴图染色"
+        },
+        {
+            "key": "prop_CubemapIntensity",
+            "value": "立方体贴图强度"
+        },
+        {
+            "key": "prop_CubemapBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_ToggleParallax",
+            "value": "启用视差贴图"
+        },
+        {
+            "key": "prop_ParallaxMode",
+            "value": "视差模式"
+        },
+        {
+            "key": "prop_ParallaxMap",
+            "value": "高度图 (R)"
+        },
+        {
+            "key": "prop_ParallaxStrength",
+            "value": "视差强度"
+        },
+        {
+            "key": "prop_ParallaxSteps",
+            "value": "高质量步数"
+        },
+        {
+            "key": "prop_ToggleSSS",
+            "value": "启用次表面散射"
+        },
+        {
+            "key": "prop_SSSColor",
+            "value": "SSS颜色"
+        },
+        {
+            "key": "prop_SSSStrength",
+            "value": "SSS强度"
+        },
+        {
+            "key": "prop_SSSPower",
+            "value": "SSS强度"
+        },
+        {
+            "key": "prop_SSSDistortion",
+            "value": "SSS失真"
+        },
+        {
+            "key": "prop_SSSThicknessMap",
+            "value": "SSS厚度图 (R)"
+        },
+        {
+            "key": "prop_SSSThickness",
+            "value": "SSS厚度衰减"
+        },
+        {
+            "key": "prop_ToggleShadowMap",
+            "value": "启用阴影贴图"
+        },
+        {
+            "key": "prop_ShadowMap",
+            "value": "阴影贴图 (R=遮罩)"
+        },
+        {
+            "key": "prop_ShadowMapIntensity",
+            "value": "强度"
+        },
+        {
+            "key": "prop_ToggleDetail",
+            "value": "启用细节贴图"
+        },
+        {
+            "key": "prop_DetailAlbedoMap",
+            "value": "细节反照率 (A=强度)"
+        },
+        {
+            "key": "prop_DetailNormalMap",
+            "value": "细节法线贴图"
+        },
+        {
+            "key": "prop_DetailTiling",
+            "value": "细节平铺"
+        },
+        {
+            "key": "prop_DetailNormalStrength",
+            "value": "细节法线强度"
+        },
+        {
+            "key": "prop_ToggleDissolve",
+            "value": "启用溶解"
+        },
+        {
+            "key": "prop_DissolveProgress",
+            "value": "溶解进度"
+        },
+        {
+            "key": "prop_DissolveType",
+            "value": "溶解类型"
+        },
+        {
+            "key": "prop_DissolveEdgeColor",
+            "value": "边缘颜色"
+        },
+        {
+            "key": "prop_DissolveEdgeWidth",
+            "value": "边缘宽度"
+        },
+        {
+            "key": "prop_DissolveEdgeMode",
+            "value": "边缘模式"
+        },
+        {
+            "key": "prop_DissolveEdgeSharpness",
+            "value": "边缘锐度"
+        },
+        {
+            "key": "prop_DissolveNoiseTex",
+            "value": "噪声纹理 (R)"
+        },
+        {
+            "key": "prop_DissolveNoiseScale",
+            "value": "噪声缩放"
+        },
+        {
+            "key": "prop_DissolveDirection",
+            "value": "擦除方向 (XYZ)"
+        },
+        {
+            "key": "prop_DissolveDirectionSpace",
+            "value": "擦除空间"
+        },
+        {
+            "key": "prop_DissolveDirectionBounds",
+            "value": "擦除边界大小"
+        },
+        {
+            "key": "prop_DissolveVoxelDensity",
+            "value": "体素密度"
+        },
+        {
+            "key": "prop_TogglePathing",
+            "value": "启用路径"
+        },
+        {
+            "key": "prop_PathingMappingMode",
+            "value": "映射模式"
+        },
+        {
+            "key": "prop_PathingMap",
+            "value": "路径图 (R)"
+        },
+        {
+            "key": "prop_PathingScale",
+            "value": "路径缩放"
+        },
+        {
+            "key": "prop_PathingBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_PathingStart",
+            "value": "路径起点"
+        },
+        {
+            "key": "prop_PathingEnd",
+            "value": "路径终点"
+        },
+        {
+            "key": "prop_PathingColor",
+            "value": "路径颜色"
+        },
+        {
+            "key": "prop_PathingColorMode",
+            "value": "路径颜色模式"
+        },
+        {
+            "key": "prop_PathingTexture",
+            "value": "路径纹理"
+        },
+        {
+            "key": "prop_PathingColor2",
+            "value": "路径颜色 2"
+        },
+        {
+            "key": "prop_PathingEmission",
+            "value": "自发光强度"
+        },
+        {
+            "key": "prop_PathingType",
+            "value": "路径类型"
+        },
+        {
+            "key": "prop_PathingSpeed",
+            "value": "速度"
+        },
+        {
+            "key": "prop_PathingWidth",
+            "value": "路径宽度"
+        },
+        {
+            "key": "prop_PathingSoftness",
+            "value": "柔和度"
+        },
+        {
+            "key": "prop_PathingOffset",
+            "value": "时间偏移"
+        },
+        {
+            "key": "prop_ToggleDepthRim",
+            "value": "启用深度边缘光"
+        },
+        {
+            "key": "prop_DepthRimColor",
+            "value": "边缘光颜色"
+        },
+        {
+            "key": "prop_DepthRimWidth",
+            "value": "宽度"
+        },
+        {
+            "key": "prop_DepthRimThreshold",
+            "value": "阈值"
+        },
+        {
+            "key": "prop_DepthRimSharpness",
+            "value": "锐度"
+        },
+        {
+            "key": "prop_DepthRimBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_ToggleAudioLink",
+            "value": "启用 AudioLink"
+        },
+        {
+            "key": "prop_AudioLinkFallback",
+            "value": "回退级别"
+        },
+        {
+            "key": "prop_AudioLinkEmissionBand",
+            "value": "自发光频段"
+        },
+        {
+            "key": "prop_AudioLinkEmissionStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkEmissionRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkRimBand",
+            "value": "边缘光频段"
+        },
+        {
+            "key": "prop_AudioLinkRimStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkRimRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftBand",
+            "value": "色相偏移频段"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueBand",
+            "value": "贴花色相频段"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionBand",
+            "value": "贴花自发光频段"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityBand",
+            "value": "贴花不透明度频段"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkVertexBand",
+            "value": "顶点增长/收缩频段"
+        },
+        {
+            "key": "prop_AudioLinkVertexStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkVertexRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkOutlineBand",
+            "value": "轮廓频段"
+        },
+        {
+            "key": "prop_AudioLinkOutlineStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkOutlineRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkMatcapBand",
+            "value": "Matcap 频段"
+        },
+        {
+            "key": "prop_AudioLinkMatcapStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkMatcapRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkPathingBand",
+            "value": "路径频段"
+        },
+        {
+            "key": "prop_AudioLinkPathingStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkPathingRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkGlitterBand",
+            "value": "闪粉频段"
+        },
+        {
+            "key": "prop_AudioLinkGlitterStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkGlitterRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceBand",
+            "value": "虹彩频段"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceStrength",
+            "value": "强度"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceRange",
+            "value": "最小-最大值"
+        },
+        {
+            "key": "prop_ToggleGlitter",
+            "value": "启用闪粉"
+        },
+        {
+            "key": "prop_GlitterMode",
+            "value": "模式"
+        },
+        {
+            "key": "prop_GlitterNoiseTex",
+            "value": "噪声纹理 (R)"
+        },
+        {
+            "key": "prop_GlitterMask",
+            "value": "遮罩 (R)"
+        },
+        {
+            "key": "prop_GlitterTint",
+            "value": "染色"
+        },
+        {
+            "key": "prop_GlitterFrequency",
+            "value": "密度"
+        },
+        {
+            "key": "prop_GlitterThreshold",
+            "value": "密度阈值"
+        },
+        {
+            "key": "prop_GlitterSize",
+            "value": "大小"
+        },
+        {
+            "key": "prop_GlitterFlickerSpeed",
+            "value": "闪烁速度"
+        },
+        {
+            "key": "prop_GlitterBrightness",
+            "value": "亮度"
+        },
+        {
+            "key": "prop_GlitterContrast",
+            "value": "对比度"
+        },
+        {
+            "key": "prop_ToggleGlitterRainbow",
+            "value": "启用彩虹"
+        },
+        {
+            "key": "prop_GlitterRainbowSpeed",
+            "value": "彩虹速度"
+        },
+        {
+            "key": "prop_ToggleDistanceFade",
+            "value": "启用距离渐变"
+        },
+        {
+            "key": "prop_DistanceFadeReference",
+            "value": "渐变参考点"
+        },
+        {
+            "key": "prop_ToggleNearFade",
+            "value": "启用近处渐变"
+        },
+        {
+            "key": "prop_NearFadeMode",
+            "value": "近处渐变模式"
+        },
+        {
+            "key": "prop_NearFadeDitherScale",
+            "value": "近处渐变抖动缩放"
+        },
+        {
+            "key": "prop_NearFadeStart",
+            "value": "近处渐变开始"
+        },
+        {
+            "key": "prop_NearFadeEnd",
+            "value": "近处渐变结束"
+        },
+        {
+            "key": "prop_ToggleFarFade",
+            "value": "启用远处渐变"
+        },
+        {
+            "key": "prop_FarFadeStart",
+            "value": "远处渐变开始"
+        },
+        {
+            "key": "prop_FarFadeEnd",
+            "value": "远处渐变结束"
+        },
+        {
+            "key": "prop_ToggleIridescence",
+            "value": "启用虹彩"
+        },
+        {
+            "key": "prop_IridescenceMode",
+            "value": "模式"
+        },
+        {
+            "key": "prop_IridescenceMask",
+            "value": "遮罩 (R)"
+        },
+        {
+            "key": "prop_IridescenceTint",
+            "value": "染色"
+        },
+        {
+            "key": "prop_IridescenceIntensity",
+            "value": "强度"
+        },
+        {
+            "key": "prop_IridescenceBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_IridescenceParallax",
+            "value": "视角视差"
+        },
+        {
+            "key": "prop_IridescenceRamp",
+            "value": "颜色渐变"
+        },
+        {
+            "key": "prop_IridescencePower",
+            "value": "强度"
+        },
+        {
+            "key": "prop_IridescenceFrequency",
+            "value": "彩虹频率"
+        },
+        {
+            "key": "prop_ToggleShadowTexture",
+            "value": "启用阴影纹理"
+        },
+        {
+            "key": "prop_ShadowTextureMappingMode",
+            "value": "阴影模式"
+        },
+        {
+            "key": "prop_ShadowTextureIntensity",
+            "value": "阴影强度"
+        },
+        {
+            "key": "prop_ShadowTextureBlendMode",
+            "value": "阴影混合模式"
+        },
+        {
+            "key": "prop_ShadowTex",
+            "value": "阴影纹理/图案"
+        },
+        {
+            "key": "prop_ShadowPatternColor",
+            "value": "图案染色"
+        },
+        {
+            "key": "prop_ShadowPatternScale",
+            "value": "图案缩放/平铺"
+        },
+        {
+            "key": "prop_ShadowPatternTriplanarSharpness",
+            "value": "三平面混合锐度"
+        },
+        {
+            "key": "prop_ShadowPatternTransparency",
+            "value": "图案透明度"
+        },
+        {
+            "key": "prop_ToggleFlatModel",
+            "value": "启用平展模型"
+        },
+        {
+            "key": "prop_FlatModeAutoflip",
+            "value": "自动翻转"
+        },
+        {
+            "key": "prop_FlatModel",
+            "value": "平展模型强度"
+        },
+        {
+            "key": "prop_FlatModelDepthCorrection",
+            "value": "深度校正"
+        },
+        {
+            "key": "prop_FlatModelFacing",
+            "value": "朝向"
+        },
+        {
+            "key": "prop_FlatModelLockAxis",
+            "value": "跟随相机"
+        },
+        {
+            "key": "prop_ToggleWorldEffect",
+            "value": "启用世界效果"
+        },
+        {
+            "key": "prop_WorldEffectBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_WorldEffectTex",
+            "value": "效果纹理 (A=遮罩)"
+        },
+        {
+            "key": "prop_WorldEffectMask",
+            "value": "效果遮罩"
+        },
+        {
+            "key": "prop_WorldEffectColor",
+            "value": "效果颜色"
+        },
+        {
+            "key": "prop_WorldEffectDirection",
+            "value": "效果方向 (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectScale",
+            "value": "效果缩放"
+        },
+        {
+            "key": "prop_WorldEffectBlendSharpness",
+            "value": "方向混合锐度"
+        },
+        {
+            "key": "prop_WorldEffectIntensity",
+            "value": "效果强度"
+        },
+        {
+            "key": "prop_WorldEffectPosition",
+            "value": "世界位置 (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectRotation",
+            "value": "世界旋转 (XYZ)"
+        },
+        {
+            "key": "prop_ToggleMirrorDetection",
+            "value": "启用VRChat镜像检测"
+        },
+        {
+            "key": "prop_MirrorDetectionMode",
+            "value": "镜像模式"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture",
+            "value": "镜像检测纹理"
+        },
+        {
+            "key": "prop_ToggleTouchReactive",
+            "value": "启用触摸反应"
+        },
+        {
+            "key": "prop_TouchColor",
+            "value": "触摸颜色"
+        },
+        {
+            "key": "prop_TouchRadius",
+            "value": "触摸半径"
+        },
+        {
+            "key": "prop_TouchHardness",
+            "value": "触摸硬度"
+        },
+        {
+            "key": "prop_TouchMode",
+            "value": "触摸模式"
+        },
+        {
+            "key": "prop_TouchRainbowSpeed",
+            "value": "触摸彩虹速度"
+        },
+        {
+            "key": "prop_TouchRainbowSpread",
+            "value": "触摸彩虹扩散"
+        },
+        {
+            "key": "prop_ToggleRefraction",
+            "value": "启用折射效果"
+        },
+        {
+            "key": "prop_RefractionMask",
+            "value": "遮罩 (R=强度)"
+        },
+        {
+            "key": "prop_RefractionTint",
+            "value": "折射染色"
+        },
+        {
+            "key": "prop_RefractionIOR",
+            "value": "折射强度"
+        },
+        {
+            "key": "prop_RefractionFresnel",
+            "value": "菲涅尔强度"
+        },
+        {
+            "key": "prop_RefractionOpacity",
+            "value": "折射不透明度"
+        },
+        {
+            "key": "prop_RefractionSeeThrough",
+            "value": "透视强度"
+        },
+        {
+            "key": "prop_RefractionGrabpassTint",
+            "value": "抓取通道染色"
+        },
+        {
+            "key": "prop_RefractionZoomToggle",
+            "value": "折射缩放"
+        },
+        {
+            "key": "prop_RefractionZoom",
+            "value": "缩放量"
+        },
+        {
+            "key": "prop_RefractionMode",
+            "value": "折射模式"
+        },
+        {
+            "key": "prop_RefractionMixStrength",
+            "value": "混合强度"
+        },
+        {
+            "key": "prop_RefractionBlendMode",
+            "value": "添加 <-> 替换"
+        },
+        {
+            "key": "prop_CausticsTex",
+            "value": "内部焦散纹理"
+        },
+        {
+            "key": "prop_CausticsColor",
+            "value": "焦散颜色"
+        },
+        {
+            "key": "prop_CausticsTiling",
+            "value": "焦散平铺"
+        },
+        {
+            "key": "prop_CausticsSpeed",
+            "value": "焦散动画速度"
+        },
+        {
+            "key": "prop_CausticsIntensity",
+            "value": "焦散强度"
+        },
+        {
+            "key": "prop_DistortionNoiseTex",
+            "value": "失真噪声 (RG)"
+        },
+        {
+            "key": "prop_DistortionNoiseTiling",
+            "value": "失真噪声平铺"
+        },
+        {
+            "key": "prop_DistortionNoiseStrength",
+            "value": "失真噪声强度"
+        },
+        {
+            "key": "prop_RefractionDistortionMode",
+            "value": "模糊模式"
+        },
+        {
+            "key": "prop_RefractionCAStrength",
+            "value": "色差强度"
+        },
+        {
+            "key": "prop_RefractionBlurStrength",
+            "value": "模糊强度"
+        },
+        {
+            "key": "prop_RefractionCAUseFresnel",
+            "value": "菲涅尔色差"
+        },
+        {
+            "key": "prop_RefractionCAEdgeFade",
+            "value": "色差边缘渐变"
+        },
+        {
+            "key": "prop_ToggleDither",
+            "value": "启用抖动"
+        },
+        {
+            "key": "prop_DitherAmount",
+            "value": "抖动量"
+        },
+        {
+            "key": "prop_DitherSpace",
+            "value": "抖动空间"
+        },
+        {
+            "key": "prop_DitherScale",
+            "value": "抖动缩放"
+        },
+        {
+            "key": "prop_TogglePS1",
+            "value": "启用低精度 (PS1)"
+        },
+        {
+            "key": "prop_PS1Rounding",
+            "value": "取整样式"
+        },
+        {
+            "key": "prop_PS1RoundingPrecision",
+            "value": "取整精度"
+        },
+        {
+            "key": "prop_PS1Affine",
+            "value": "启用仿射纹理映射"
+        },
+        {
+            "key": "prop_PS1Compression",
+            "value": "启用颜色压缩"
+        },
+        {
+            "key": "prop_PS1CompressionPrecision",
+            "value": "颜色压缩精度"
+        },
+        {
+            "key": "prop_UseTextureStitching",
+            "value": "启用纹理拼接"
+        },
+        {
+            "key": "prop_StitchTex",
+            "value": "拼接纹理"
+        },
+        {
+            "key": "prop_StitchAxis",
+            "value": "拼接轴"
+        },
+        {
+            "key": "prop_StitchOffset",
+            "value": "拼接缝隙偏移"
+        },
+        {
+            "key": "prop_StitchTex_UV",
+            "value": "拼接纹理UV"
+        },
+        {
+            "key": "prop_ToggleVertexDistortion",
+            "value": "启用顶点失真"
+        },
+        {
+            "key": "prop_VertexDistortionMode",
+            "value": "失真模式"
+        },
+        {
+            "key": "prop_VertexDistortionColorMask",
+            "value": "颜色通道遮罩"
+        },
+        {
+            "key": "prop_VertexDistortionStrength",
+            "value": "失真强度"
+        },
+        {
+            "key": "prop_VertexDistortionSpeed",
+            "value": "失真速度"
+        },
+        {
+            "key": "prop_VertexDistortionFrequency",
+            "value": "失真频率"
+        },
+        {
+            "key": "prop_WindStrength",
+            "value": "风力强度"
+        },
+        {
+            "key": "prop_WindSpeed",
+            "value": "风速"
+        },
+        {
+            "key": "prop_WindScale",
+            "value": "风噪声缩放"
+        },
+        {
+            "key": "prop_WindDirection",
+            "value": "风向 (XYZ)"
+        },
+        {
+            "key": "prop_WindNoiseTex",
+            "value": "风噪声纹理 (R)"
+        },
+        {
+            "key": "prop_BreathingStrength",
+            "value": "呼吸强度"
+        },
+        {
+            "key": "prop_BreathingSpeed",
+            "value": "呼吸速度"
+        },
+        {
+            "key": "prop_ToggleSSR",
+            "value": "启用屏幕空间反射"
+        },
+        {
+            "key": "prop_SSRMask",
+            "value": "遮罩 (R)"
+        },
+        {
+            "key": "prop_SSRTint",
+            "value": "反射染色"
+        },
+        {
+            "key": "prop_SSRIntensity",
+            "value": "强度"
+        },
+        {
+            "key": "prop_SSRBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_SSRFresnelPower",
+            "value": "菲涅尔强度"
+        },
+        {
+            "key": "prop_SSRFresnelScale",
+            "value": "菲涅尔缩放"
+        },
+        {
+            "key": "prop_SSRFresnelBias",
+            "value": "菲涅尔偏移"
+        },
+        {
+            "key": "prop_SSRParallax",
+            "value": "视差强度"
+        },
+        {
+            "key": "prop_SSRDistortionMap",
+            "value": "失真图 (RG)"
+        },
+        {
+            "key": "prop_SSRDistortionStrength",
+            "value": "失真强度"
+        },
+        {
+            "key": "prop_SSRWorldDistortion",
+            "value": "世界失真强度"
+        },
+        {
+            "key": "prop_SSRBlur",
+            "value": "模糊强度"
+        },
+        {
+            "key": "prop_SSRMode",
+            "value": "反射质量"
+        },
+        {
+            "key": "prop_SSRMaxSteps",
+            "value": "最大步数"
+        },
+        {
+            "key": "prop_SSRStepSize",
+            "value": "步长"
+        },
+        {
+            "key": "prop_SSRCoverage",
+            "value": "覆盖增强"
+        },
+        {
+            "key": "prop_SSREdgeFade",
+            "value": "边缘渐变"
+        },
+        {
+            "key": "prop_SSRCamFade",
+            "value": "启用相机距离渐变"
+        },
+        {
+            "key": "prop_SSRCamFadeStart",
+            "value": "SSR相机渐变开始"
+        },
+        {
+            "key": "prop_SSRCamFadeEnd",
+            "value": "SSR相机渐变结束"
+        },
+        {
+            "key": "prop_SSRFlipUV",
+            "value": "翻转反射UV"
+        },
+        {
+            "key": "prop_SSRAdaptiveStep",
+            "value": "启用自适应步长"
+        },
+        {
+            "key": "prop_SSRThickness",
+            "value": "剔除厚度"
+        },
+        {
+            "key": "prop_SSROutOfViewMode",
+            "value": "视野外模式"
+        },
+        {
+            "key": "prop_OutlineColor",
+            "value": "轮廓颜色"
+        },
+        {
+            "key": "prop_OutlineWidth",
+            "value": "轮廓宽度"
+        },
+        {
+            "key": "prop_OutlineVertexColorMask",
+            "value": "使用顶点颜色 (R) 遮罩"
+        },
+        {
+            "key": "prop_OutlineDistanceFade",
+            "value": "启用距离渐变"
+        },
+        {
+            "key": "prop_OutlineFadeStart",
+            "value": "渐变开始距离"
+        },
+        {
+            "key": "prop_OutlineFadeEnd",
+            "value": "渐变结束距离"
+        },
+        {
+            "key": "prop_OutlineHueShift",
+            "value": "启用色相偏移"
+        },
+        {
+            "key": "prop_OutlineHueShiftSpeed",
+            "value": "色相偏移速度"
+        },
+        {
+            "key": "prop_OutlineOpacity",
+            "value": "轮廓不透明度"
+        },
+        {
+            "key": "prop_IndirectFallbackMode",
+            "value": "间接光回退模式"
+        },
+        {
+            "key": "prop_IndirectOverride",
+            "value": "间接光覆盖"
+        },
+        {
+            "key": "prop_FallbackCubemap",
+            "value": "回退立方体贴图"
+        },
+        {
+            "key": "prop_MainTex_UV",
+            "value": "主纹理UV集"
+        },
+        {
+            "key": "prop_BumpMap_UV",
+            "value": "凹凸贴图UV集"
+        },
+        {
+            "key": "prop_MSSO_UV",
+            "value": "MSSO UV集"
+        },
+        {
+            "key": "prop_SpecularTintTexture_UV",
+            "value": "高光染色UV集"
+        },
+        {
+            "key": "prop_TangentMap_UV",
+            "value": "切线贴图UV"
+        },
+        {
+            "key": "prop_EmissionMap_UV",
+            "value": "自发光贴图UV集"
+        },
+        {
+            "key": "prop_ClearcoatMap_UV",
+            "value": "清漆贴图UV集"
+        },
+        {
+            "key": "prop_MatcapMask_UV",
+            "value": "Matcap遮罩UV集"
+        },
+        {
+            "key": "prop_ParallaxMap_UV",
+            "value": "高度图UV集"
+        },
+        {
+            "key": "prop_ThicknessMap_UV",
+            "value": "厚度图UV集"
+        },
+        {
+            "key": "prop_DetailMap_UV",
+            "value": "细节贴图UV集"
+        },
+        {
+            "key": "prop_Decal1_UV",
+            "value": "贴花1 UV集"
+        },
+        {
+            "key": "prop_Decal2_UV",
+            "value": "贴花2 UV集"
+        },
+        {
+            "key": "prop_Glitter_UV",
+            "value": "闪粉UV集"
+        },
+        {
+            "key": "prop_IridescenceMask_UV",
+            "value": "虹彩遮罩UV集"
+        },
+        {
+            "key": "prop_GlitterMask_UV",
+            "value": "闪粉遮罩UV集"
+        },
+        {
+            "key": "prop_HairFlowMap_UV",
+            "value": "头发流动图UV集"
+        },
+        {
+            "key": "prop_ShadowTex_UV",
+            "value": "阴影纹理UV集"
+        },
+        {
+            "key": "prop_Flowmap_UV",
+            "value": "流动图UV集"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture_UV",
+            "value": "镜像检测纹理UV集"
+        },
+        {
+            "key": "prop_RefractionMask_UV",
+            "value": "折射遮罩UV集"
+        },
+        {
+            "key": "prop_PathingTexture_UV",
+            "value": "路径图UV集"
+        },
+        {
+            "key": "prop_ShadowMap_UV",
+            "value": "阴影贴图UV集"
+        },
+        {
+            "key": "prop_Dither_UV",
+            "value": "抖动UV集"
+        },
+        {
+            "key": "prop_OverrideRenderQueue",
+            "value": "使用自定义渲染队列"
+        },
+        {
+            "key": "prop_OverrideBaseBlend",
+            "value": "使用自定义基础混合"
+        },
+        {
+            "key": "prop_BlendOp",
+            "value": "混合操作"
+        },
+        {
+            "key": "prop_AddSrcBlend",
+            "value": "源混合"
+        },
+        {
+            "key": "prop_AddDstBlend",
+            "value": "目标混合"
+        },
+        {
+            "key": "prop_AddBlendOp",
+            "value": "Alpha混合操作"
+        },
+        {
+            "key": "prop_ZTest",
+            "value": "深度测试"
+        },
+        {
+            "key": "prop_OverrideAddBlend",
+            "value": "使用自定义添加混合"
+        },
+        {
+            "key": "prop_OverrideZWrite",
+            "value": "使用自定义深度写入"
+        },
+        {
+            "key": "specular_standard_stylised_info",
+            "value": "标准高光没有风格化选项 - 尝试更改高光模式以在此处查看设置！"
+        },
+        {
+            "key": "depth_popup_info",
+            "value": "此效果需要从场景中读取深度！请确保您的世界启用了实时光照或场景中存在深度写入器预制件（随Backlace提供）。"
+        }
+    ]
+}

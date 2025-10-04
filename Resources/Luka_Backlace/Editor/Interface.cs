@@ -749,16 +749,16 @@ namespace Luka.Backlace
             docs = CacheManager.docs;
             footer = CacheManager.footer;
             // per-material loading
-            license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_license"));
-            config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_config"));
-            presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_presets"));
+            license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 10, languages.speak("tab_license"));
+            config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_config"));
+            presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_presets"));
             config_menu = new ConfigMenu(ref theme, ref languages, ref configs, ref config_tab);
             license_menu = new LicenseMenu(ref theme, ref languages, ref license_tab);
             cushion = new Cushion(targetMat);
             beauty_blender = new BeautyBlender(targetMat);
             bags = new Bags(ref languages);
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
-            premonition_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_premonition"));
+            premonition_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 9, languages.speak("tab_premonition"));
             is_compact = targetMat.shader.name.ToLower().Contains("_compact_");
             premonition_menu = new PremonitionMenu(ref theme, ref targetMat, ref premonition_tab, is_compact);
             #region Tabs
@@ -2426,10 +2426,10 @@ namespace Luka.Backlace
                 Components.end_foldout();
             }
             #endregion
-            license_menu?.draw();
             config_menu?.draw();
             presets_menu?.draw();
             premonition_menu?.draw();
+            license_menu?.draw();
             announcement?.draw();
             docs?.draw();
             socials_menu?.draw();

@@ -1,0 +1,2412 @@
+{
+    "entries": [
+        {
+            "key": "enabled",
+            "value": "Включено"
+        },
+        {
+            "key": "disabled",
+            "value": "Отключено"
+        },
+        {
+            "key": "config_tab_theme",
+            "value": "Тема вкладок"
+        },
+        {
+            "key": "config_text_theme",
+            "value": "Тема текста"
+        },
+        {
+            "key": "config_ui_size",
+            "value": "Размер интерфейса"
+        },
+        {
+            "key": "config_updates",
+            "value": "Проверить обновления"
+        },
+        {
+            "key": "config_language",
+            "value": "Язык"
+        },
+        {
+            "key": "config_toggle_updates",
+            "value": "Показывать обновления"
+        },
+        {
+            "key": "config_toggle_announcements",
+            "value": "Показывать новости"
+        },
+        {
+            "key": "config_toggle_enabled",
+            "value": "Включено"
+        },
+        {
+            "key": "config_toggle_disabled",
+            "value": "Отключено"
+        },
+        {
+            "key": "config_save",
+            "value": "Сохранить конфигурацию"
+        },
+        {
+            "key": "config_reset",
+            "value": "Сбросить конфигурацию"
+        },
+        {
+            "key": "config_save_success",
+            "value": "Ваша конфигурация была успешно сохранена! ^~^"
+        },
+        {
+            "key": "config_save_error",
+            "value": "Что-то пошло не так при попытке сохранить вашу конфигурацию, попробуйте переимпортировать пакет Unity! >.<"
+        },
+        {
+            "key": "config_reset_success",
+            "value": "Ваша конфигурация была сброшена до значений по умолчанию! ^~^"
+        },
+        {
+            "key": "config_reset_error",
+            "value": "Что-то пошло не так при попытке сбросить вашу конфигурацию, попробуйте переимпортировать пакет Unity! >.<"
+        },
+        {
+            "key": "dialog_okay",
+            "value": "Оки!"
+        },
+        {
+            "key": "update_available",
+            "value": "Доступно обновление!"
+        },
+        {
+            "key": "update_description",
+            "value": "Загрузите последнюю версию для новых функций и исправлений ошибок! <3"
+        },
+        {
+            "key": "tab_config",
+            "value": "Настройки"
+        },
+        {
+            "key": "open_docs",
+            "value": "Нужна помощь? Нажмите здесь, чтобы открыть документацию!"
+        },
+        {
+            "key": "tab_license",
+            "value": "Лицензия"
+        },
+        {
+            "key": "button_show_license",
+            "value": "Показать лицензию в Unity"
+        },
+        {
+            "key": "config_toggle_grey_unused",
+            "value": "Серые неиспользуемые настройки"
+        },
+        {
+            "key": "config_toggle_status_badges",
+            "value": "Показывать значки состояния"
+        },
+        {
+            "key": "status_badge_enabled",
+            "value": "Активировано"
+        },
+        {
+            "key": "capability_popup_title",
+            "value": "Уведомление о возможностях!"
+        },
+        {
+            "key": "preset_title",
+            "value": "Менеджер предустановок"
+        },
+        {
+            "key": "preset_overwrite_prompt",
+            "value": "Предустановка с таким именем уже существует, вы хотите ее перезаписать?"
+        },
+        {
+            "key": "preset_overwrite_prompt_yes",
+            "value": "Перезаписать!"
+        },
+        {
+            "key": "preset_overwrite_prompt_no",
+            "value": "Сохранить существующую."
+        },
+        {
+            "key": "preset_builtin_header",
+            "value": "Встроенные предустановки"
+        },
+        {
+            "key": "preset_custom_header",
+            "value": "Пользовательские предустановки"
+        },
+        {
+            "key": "preset_save_header",
+            "value": "Сохранить этот материал"
+        },
+        {
+            "key": "preset_name_label",
+            "value": "Имя предустановки"
+        },
+        {
+            "key": "preset_save_button",
+            "value": "Сохранить как предустановку"
+        },
+        {
+            "key": "preset_save_error_noname",
+            "value": "Пожалуйста, установите имя для вашей предустановки перед сохранением! >.<"
+        },
+        {
+            "key": "preset_delete_prompt",
+            "value": "Вы хотите удалить эту предустановку? Это действие нельзя будет отменить..."
+        },
+        {
+            "key": "preset_delete_prompt_yes",
+            "value": "Удалить предустановку"
+        },
+        {
+            "key": "preset_delete_prompt_no",
+            "value": "Сохранить предустановку"
+        },
+        {
+            "key": "tab_presets",
+            "value": "Предустановки"
+        },
+        {
+            "key": "preset_no_builtin_found",
+            "value": "С этим шейдером не было предоставлено встроенных предустановок..."
+        },
+        {
+            "key": "preset_no_custom_found",
+            "value": "Пользовательских предустановок не найдено! Почему бы не создать несколько? :o"
+        },
+        {
+            "key": "load",
+            "value": "Загрузить"
+        },
+        {
+            "key": "tab_premonition",
+            "value": "Компактный материал"
+        },
+        {
+            "key": "premonition_notice",
+            "value": "Здесь вы можете сгенерировать компактную версию вашего текущего материала. Это создает новый файл шейдера, который меньше, имеет меньшее время компиляции и, по сути, является снимком ваших текущих настроек. Этот меньший шейдер можно распространять, и он не зависит ни от чего другого - вы можете просто перемещать файл .shader по своему усмотрению. Рекомендуется всегда использовать это для ваших окончательных материалов, чтобы уменьшить количество шейдеров и улучшить производительность! ^-^ (но не волнуйтесь, вы всегда можете вернуться к обычному шейдеру, если вам нужно внести изменения)"
+        },
+        {
+            "key": "premonition_generate_button",
+            "value": "Сгенерировать компактный материал"
+        },
+        {
+            "key": "premonition_restore_button",
+            "value": "Восстановить исходный материал"
+        },
+        {
+            "key": "variant_popup_title",
+            "value": "Требуется вариант шейдера"
+        },
+        {
+            "key": "variant_popup_description",
+            "value": "Для этой функции требуется (как минимум) вариант шейдера '{0}'.\n\nВарианты шейдеров созданы для того, чтобы вы включали только код для необходимых вам функций. Хотя другие версии могут иметь его (на что указывают серые вкладки или их отсутствие), это «самый низкий» уровень варианта, который его поддерживает. Пожалуйста, обратитесь к документации для получения дополнительной информации! ^-^"
+        },
+        {
+            "key": "warning_external_website_title",
+            "value": "Подождите, послушайте!"
+        },
+        {
+            "key": "warning_external_website_description",
+            "value": "Вы собираетесь открыть внешний веб-сайт, который не принадлежит мне и не управляется мной! Пожалуйста, действуйте с осторожностью!! Вероятно, это безопасно, но я не контролирую его и не могу гарантировать, что он не изменится в будущем. >.< Вы хотите продолжить?"
+        },
+        {
+            "key": "warning_external_website_okay",
+            "value": "Открыть веб-сайт"
+        },
+        {
+            "key": "warning_external_website_cancel",
+            "value": "Вернуться!"
+        },
+        {
+            "key": "tab_main",
+            "value": "Основные настройки"
+        },
+        {
+            "key": "sub_tab_rendering",
+            "value": "Рендеринг"
+        },
+        {
+            "key": "sub_tab_textures",
+            "value": "Основные карты"
+        },
+        {
+            "key": "sub_tab_stitching",
+            "value": "Сшивание текстур"
+        },
+        {
+            "key": "sub_tab_uv_manipulation",
+            "value": "Манипуляции с UV"
+        },
+        {
+            "key": "sub_tab_uv_effects",
+            "value": "Эффекты UV"
+        },
+        {
+            "key": "sub_tab_vertex_manipulation",
+            "value": "Манипуляции с вершинами"
+        },
+        {
+            "key": "sub_tab_decal_one",
+            "value": "Декаль 1"
+        },
+        {
+            "key": "sub_tab_decal_two",
+            "value": "Декаль 2"
+        },
+        {
+            "key": "sub_tab_post_processing",
+            "value": "Постобработка текстур"
+        },
+        {
+            "key": "sub_tab_uv_sets",
+            "value": "Наборы UV"
+        },
+        {
+            "key": "tab_lighting",
+            "value": "Освещение"
+        },
+        {
+            "key": "sub_tab_lighting_model",
+            "value": "Модель освещения"
+        },
+        {
+            "key": "sub_tab_anime",
+            "value": "Аниме-затенение"
+        },
+        {
+            "key": "tab_specular",
+            "value": "Блики"
+        },
+        {
+            "key": "sub_tab_pbr_specular",
+            "value": "PBR блики"
+        },
+        {
+            "key": "sub_tab_stylised_specular",
+            "value": "Стилизованные блики"
+        },
+        {
+            "key": "sub_tab_emission",
+            "value": "Эмиссия"
+        },
+        {
+            "key": "sub_tab_light_limiting",
+            "value": "Ограничить уровни освещения"
+        },
+        {
+            "key": "tab_shading",
+            "value": "Затенение"
+        },
+        {
+            "key": "sub_tab_rim_lighting",
+            "value": "Контурное освещение по Френелю"
+        },
+        {
+            "key": "sub_tab_depth_rim",
+            "value": "Контурное освещение по глубине"
+        },
+        {
+            "key": "sub_tab_clear_coat",
+            "value": "Прозрачное покрытие"
+        },
+        {
+            "key": "sub_tab_matcap",
+            "value": "Matcap"
+        },
+        {
+            "key": "sub_tab_cubemap",
+            "value": "Cubemap"
+        },
+        {
+            "key": "sub_tab_parallax",
+            "value": "Параллакс-маппинг"
+        },
+        {
+            "key": "sub_tab_subsurface",
+            "value": "Подповерхностное рассеивание"
+        },
+        {
+            "key": "sub_tab_detail_map",
+            "value": "Детализированная карта"
+        },
+        {
+            "key": "sub_tab_shadow_map",
+            "value": "Карта теней"
+        },
+        {
+            "key": "tab_effects",
+            "value": "Эффекты"
+        },
+        {
+            "key": "sub_tab_dissolve",
+            "value": "Растворение"
+        },
+        {
+            "key": "sub_tab_pathing",
+            "value": "Пути"
+        },
+        {
+            "key": "tab_third_party",
+            "value": "Сторонние"
+        },
+        {
+            "key": "sub_tab_audiolink",
+            "value": "AudioLink"
+        },
+        {
+            "key": "sub_tab_superplug",
+            "value": "Super Plug Shader"
+        },
+        {
+            "key": "superplug_notice",
+            "value": "Super Plug Shader (от VRCFury) — это бесплатная система деформации мешей, которую можно использовать для деформации мешей к цели, и она является полной обратно совместимой заменой DPS (Dynamic Penetration System от Raliv) и TPS (Thry Penetration System в Poiyomi Pro). Помимо того, что она бесплатна, она поддерживает широкий спектр шейдеров без необходимости жесткого кодирования поддержки, включая Backlace! Пожалуйста, нажмите на ссылку ниже, чтобы открыть документацию по ней для настройки!"
+        },
+        {
+            "key": "superplug_button",
+            "value": "Открыть веб-сайт Super Plug Shader"
+        },
+        {
+            "key": "sub_tab_ltcgi",
+            "value": "Освещение LTCGI"
+        },
+        {
+            "key": "ltcgi_notice",
+            "value": "LTCGI (от _pi_) — это готовое решение для освещения области в реальном времени для VRChat. Чтобы включить это, убедитесь, что вы также включили пакет LTCGI в свой проект, так как для его работы требуются собственные функции шейдера. Когда включено, ваш материал будет автоматически использовать освещение LTCGI."
+        },
+        {
+            "key": "ltcgi_button",
+            "value": "Открыть веб-сайт LTCGI"
+        },
+        {
+            "key": "prop_ToggleLTCGI",
+            "value": "Включить освещение LTCGI"
+        },
+        {
+            "key": "sub_tab_glitter",
+            "value": "Блестки"
+        },
+        {
+            "key": "sub_tab_distance_fading",
+            "value": "Затухание на расстоянии"
+        },
+        {
+            "key": "sub_tab_iridescence",
+            "value": "Иризация"
+        },
+        {
+            "key": "sub_tab_shadow_textures",
+            "value": "Текстуры теней"
+        },
+        {
+            "key": "sub_tab_flatten_model",
+            "value": "Сплющить модель"
+        },
+        {
+            "key": "sub_tab_world_aligned",
+            "value": "Текстуры, выровненные по миру"
+        },
+        {
+            "key": "sub_tab_vrchat_mirror",
+            "value": "Обнаружение зеркала VRChat"
+        },
+        {
+            "key": "sub_tab_touch_interactions",
+            "value": "Взаимодействия прикосновением"
+        },
+        {
+            "key": "sub_tab_vertex_distortion",
+            "value": "Искажение вершин"
+        },
+        {
+            "key": "sub_tab_dither",
+            "value": "Дизеринг"
+        },
+        {
+            "key": "sub_tab_ps1",
+            "value": "Низкая точность (PS1)"
+        },
+        {
+            "key": "sub_tab_refraction",
+            "value": "Преломление"
+        },
+        {
+            "key": "sub_tab_screenspace_reflection",
+            "value": "Отражения в экранном пространстве"
+        },
+        {
+            "key": "tab_outline",
+            "value": "Контур"
+        },
+        {
+            "key": "prop_SrcBlend",
+            "value": "Исходное смешивание"
+        },
+        {
+            "key": "prop_DstBlend",
+            "value": "Целевое смешивание"
+        },
+        {
+            "key": "prop_ZWrite",
+            "value": "Запись в Z-буфер"
+        },
+        {
+            "key": "prop_Cull",
+            "value": "Режим отсечения"
+        },
+        {
+            "key": "prop_StencilRef",
+            "value": "Ссылка на трафарет"
+        },
+        {
+            "key": "prop_StencilComp",
+            "value": "Сравнение"
+        },
+        {
+            "key": "prop_StencilPass",
+            "value": "Операция при прохождении"
+        },
+        {
+            "key": "prop_StencilFail",
+            "value": "Операция при неудаче"
+        },
+        {
+            "key": "prop_StencilZFail",
+            "value": "Операция при неудаче Z-теста"
+        },
+        {
+            "key": "prop_OutlineStencilRef",
+            "value": "Ссылка на трафарет контура"
+        },
+        {
+            "key": "prop_OutlineStencilComp",
+            "value": "Сравнение контура"
+        },
+        {
+            "key": "prop_OutlineStencilPass",
+            "value": "Операция при прохождении контура"
+        },
+        {
+            "key": "prop_OutlineStencilFail",
+            "value": "Операция при неудаче контура"
+        },
+        {
+            "key": "prop_OutlineStencilZFail",
+            "value": "Операция при неудаче Z-теста контура"
+        },
+        {
+            "key": "prop_BlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_VRCFallback",
+            "value": "Резервный вариант VRChat"
+        },
+        {
+            "key": "prop_ToggleFlipNormals",
+            "value": "Инвертировать нормали задней поверхности"
+        },
+        {
+            "key": "prop_MainTex",
+            "value": "Основная текстура"
+        },
+        {
+            "key": "prop_Color",
+            "value": "Цвет альбедо"
+        },
+        {
+            "key": "prop_Cutoff",
+            "value": "Отсечение альфы"
+        },
+        {
+            "key": "prop_BumpMap",
+            "value": "Карта нормалей"
+        },
+        {
+            "key": "prop_BumpScale",
+            "value": "Масштаб карты нормалей"
+        },
+        {
+            "key": "prop_Alpha",
+            "value": "Альфа"
+        },
+        {
+            "key": "prop_DecalStage",
+            "value": "Стадия декали (общая)"
+        },
+        {
+            "key": "prop_UV_Offset_X",
+            "value": "Смещение UV по X"
+        },
+        {
+            "key": "prop_UV_Offset_Y",
+            "value": "Смещение UV по Y"
+        },
+        {
+            "key": "prop_UV_Scale_X",
+            "value": "Масштаб UV по X"
+        },
+        {
+            "key": "prop_UV_Scale_Y",
+            "value": "Масштаб UV по Y"
+        },
+        {
+            "key": "prop_UV_Rotation",
+            "value": "Вращение UV"
+        },
+        {
+            "key": "prop_UV_Scroll_X_Speed",
+            "value": "Скорость прокрутки UV по X"
+        },
+        {
+            "key": "prop_UV_Scroll_Y_Speed",
+            "value": "Скорость прокрутки UV по Y"
+        },
+        {
+            "key": "prop_ToggleUVEffects",
+            "value": "Включить эффекты UV"
+        },
+        {
+            "key": "prop_UVTriplanarMapping",
+            "value": "Включить трипланарное наложение"
+        },
+        {
+            "key": "prop_UVTriplanarPosition",
+            "value": "Мировая позиция (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarScale",
+            "value": "Мировой масштаб"
+        },
+        {
+            "key": "prop_UVTriplanarRotation",
+            "value": "Мировое вращение (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarSharpness",
+            "value": "Резкость смешивания трипланара"
+        },
+        {
+            "key": "prop_UVScreenspaceMapping",
+            "value": "Включить наложение в экранном пространстве"
+        },
+        {
+            "key": "prop_UVScreenspaceTiling",
+            "value": "Тайлинг в экранном пространстве"
+        },
+        {
+            "key": "prop_UVFlipbook",
+            "value": "Включить анимацию флипбука"
+        },
+        {
+            "key": "prop_UVFlipbookRows",
+            "value": "Ряды флипбука"
+        },
+        {
+            "key": "prop_UVFlipbookColumns",
+            "value": "Столбцы флипбука"
+        },
+        {
+            "key": "prop_UVFlipbookFrames",
+            "value": "Всего кадров"
+        },
+        {
+            "key": "prop_UVFlipbookFPS",
+            "value": "FPS флипбука"
+        },
+        {
+            "key": "prop_UVFlipbookScrub",
+            "value": "Ручная прокрутка"
+        },
+        {
+            "key": "prop_UVFlowmap",
+            "value": "Включить карту потока"
+        },
+        {
+            "key": "prop_UVFlowmapTex",
+            "value": "Текстура карты потока (RG)"
+        },
+        {
+            "key": "prop_UVFlowmapStrength",
+            "value": "Сила карты потока"
+        },
+        {
+            "key": "prop_UVFlowmapSpeed",
+            "value": "Скорость карты потока"
+        },
+        {
+            "key": "prop_UVFlowmapDistortion",
+            "value": "Искажение карты потока"
+        },
+        {
+            "key": "prop_VertexManipulationPosition",
+            "value": "Мировая позиция (XYZ)"
+        },
+        {
+            "key": "prop_VertexManipulationScale",
+            "value": "Мировой масштаб (XYZ)"
+        },
+        {
+            "key": "prop_ToggleEmission",
+            "value": "Включить эмиссию"
+        },
+        {
+            "key": "prop_EmissionColor",
+            "value": "Цвет эмиссии"
+        },
+        {
+            "key": "prop_EmissionMap",
+            "value": "Карта эмиссии (маска)"
+        },
+        {
+            "key": "prop_UseAlbedoAsEmission",
+            "value": "Использовать альбедо для эмиссии"
+        },
+        {
+            "key": "prop_EmissionStrength",
+            "value": "Сила эмиссии"
+        },
+        {
+            "key": "prop_EnableBaseLightLimit",
+            "value": "Включить ограничение базового прохода"
+        },
+        {
+            "key": "prop_BaseLightMin",
+            "value": "Минимум базового света"
+        },
+        {
+            "key": "prop_BaseLightMax",
+            "value": "Максимум базового света"
+        },
+        {
+            "key": "prop_EnableAddLightLimit",
+            "value": "Включить ограничение дополнительного прохода"
+        },
+        {
+            "key": "prop_AddLightMin",
+            "value": "Минимум дополнительного света"
+        },
+        {
+            "key": "prop_AddLightMax",
+            "value": "Максимум дополнительного света"
+        },
+        {
+            "key": "prop_GreyscaleLighting",
+            "value": "Освещение в оттенках серого"
+        },
+        {
+            "key": "prop_ForceLightColor",
+            "value": "Принудительный цвет света"
+        },
+        {
+            "key": "prop_ForcedLightColor",
+            "value": "Принудительный цвет света"
+        },
+        {
+            "key": "prop_LightingColorMode",
+            "value": "Режим цвета света"
+        },
+        {
+            "key": "prop_LightingDirectionMode",
+            "value": "Режим направления света"
+        },
+        {
+            "key": "prop_ForcedLightDirection",
+            "value": "Принудительное направление света"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetX",
+            "value": "Смещение направления взгляда по X"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetY",
+            "value": "Смещение направления взгляда по Y"
+        },
+        {
+            "key": "prop_DirectIntensity",
+            "value": "Интенсивность прямого RT"
+        },
+        {
+            "key": "prop_IndirectIntensity",
+            "value": "Интенсивность непрямого RT"
+        },
+        {
+            "key": "prop_VertexIntensity",
+            "value": "Интенсивность вершин RT"
+        },
+        {
+            "key": "prop_AdditiveIntensity",
+            "value": "Интенсивность аддитивного RT"
+        },
+        {
+            "key": "prop_BakedDirectIntensity",
+            "value": "Интенсивность запеченного прямого"
+        },
+        {
+            "key": "prop_BakedIndirectIntensity",
+            "value": "Интенсивность запеченного непрямого"
+        },
+        {
+            "key": "prop_ToggleAnimeLighting",
+            "value": "Включить аниме-освещение"
+        },
+        {
+            "key": "prop_AnimeMode",
+            "value": "Режим аниме"
+        },
+        {
+            "key": "prop_Ramp",
+            "value": "Рампа аниме"
+        },
+        {
+            "key": "prop_RampColor",
+            "value": "Цвет рампы"
+        },
+        {
+            "key": "prop_RampOffset",
+            "value": "Смещение рампы"
+        },
+        {
+            "key": "prop_ShadowIntensity",
+            "value": "Интенсивность тени"
+        },
+        {
+            "key": "prop_OcclusionOffsetIntensity",
+            "value": "Интенсивность смещения окклюзии"
+        },
+        {
+            "key": "prop_RampMin",
+            "value": "Минимум рампы"
+        },
+        {
+            "key": "prop_RampNormalIntensity",
+            "value": "Нормали влияют на интенсивность"
+        },
+        {
+            "key": "prop_AnimeShadowColor",
+            "value": "Цвет основной тени"
+        },
+        {
+            "key": "prop_AnimeShadowThreshold",
+            "value": "Порог основной тени"
+        },
+        {
+            "key": "prop_AnimeHalftoneColor",
+            "value": "Цвет полутона"
+        },
+        {
+            "key": "prop_AnimeHalftoneThreshold",
+            "value": "Порог полутона"
+        },
+        {
+            "key": "prop_AnimeShadowSoftness",
+            "value": "Мягкость тени"
+        },
+        {
+            "key": "prop_ToggleAmbientGradient",
+            "value": "Включить градиент окружающего света"
+        },
+        {
+            "key": "prop_AnimeOcclusionToShadow",
+            "value": "Окклюзия в тень"
+        },
+        {
+            "key": "prop_AmbientUp",
+            "value": "Небесный окружающий свет"
+        },
+        {
+            "key": "prop_AmbientSkyThreshold",
+            "value": "Порог неба"
+        },
+        {
+            "key": "prop_AmbientDown",
+            "value": "Земной окружающий свет"
+        },
+        {
+            "key": "prop_AmbientGroundThreshold",
+            "value": "Порог земли"
+        },
+        {
+            "key": "prop_AmbientIntensity",
+            "value": "Интенсивность градиента"
+        },
+        {
+            "key": "prop_TintMaskSource",
+            "value": "Источник маски оттенка"
+        },
+        {
+            "key": "prop_LitTint",
+            "value": "Оттенок освещенной области"
+        },
+        {
+            "key": "prop_LitThreshold",
+            "value": "Покрытие освещенной области"
+        },
+        {
+            "key": "prop_ShadowTint",
+            "value": "Оттенок затененной области"
+        },
+        {
+            "key": "prop_ShadowThreshold",
+            "value": "Покрытие затененной области"
+        },
+        {
+            "key": "prop_ToggleSpecular",
+            "value": "Включить блики"
+        },
+        {
+            "key": "prop_SpecularIntensity",
+            "value": "Блики"
+        },
+        {
+            "key": "prop_ToggleVertexSpecular",
+            "value": "Включить вершинные блики"
+        },
+        {
+            "key": "prop_SpecularMode",
+            "value": "Режим бликов"
+        },
+        {
+            "key": "prop_MSSO",
+            "value": "MSSO (Металл, Гладкость, Блик, Окклюзия)"
+        },
+        {
+            "key": "prop_Metallic",
+            "value": "Металличность"
+        },
+        {
+            "key": "prop_Glossiness",
+            "value": "Глянцевитость"
+        },
+        {
+            "key": "prop_Occlusion",
+            "value": "Окклюзия"
+        },
+        {
+            "key": "prop_Specular",
+            "value": "Отражательная способность"
+        },
+        {
+            "key": "prop_SpecularTintTexture",
+            "value": "Текстура оттенка бликов"
+        },
+        {
+            "key": "prop_SpecularTint",
+            "value": "Оттенок бликов"
+        },
+        {
+            "key": "prop_TangentMap",
+            "value": "Карта касательных"
+        },
+        {
+            "key": "prop_Anisotropy",
+            "value": "Анизотропия"
+        },
+        {
+            "key": "prop_ReplaceSpecular",
+            "value": "Заменить блики"
+        },
+        {
+            "key": "prop_HighlightRamp",
+            "value": "Рампа бликов"
+        },
+        {
+            "key": "prop_HighlightHardness",
+            "value": "Жесткость бликов"
+        },
+        {
+            "key": "prop_HighlightRampColor",
+            "value": "Цвет бликов"
+        },
+        {
+            "key": "prop_HighlightIntensity",
+            "value": "Интенсивность бликов"
+        },
+        {
+            "key": "prop_HighlightRampOffset",
+            "value": "Смещение рампы бликов"
+        },
+        {
+            "key": "prop_HairFlowMap",
+            "value": "Карта потока/касательных волос (RG)"
+        },
+        {
+            "key": "prop_PrimarySpecularShift",
+            "value": "Сдвиг первичных бликов"
+        },
+        {
+            "key": "prop_SecondarySpecularShift",
+            "value": "Сдвиг вторичных бликов"
+        },
+        {
+            "key": "prop_SecondarySpecularColor",
+            "value": "Цвет вторичных бликов"
+        },
+        {
+            "key": "prop_SpecularExponent",
+            "value": "Экспонента бликов"
+        },
+        {
+            "key": "prop_SheenColor",
+            "value": "Цвет блеска"
+        },
+        {
+            "key": "prop_SheenIntensity",
+            "value": "Интенсивность блеска"
+        },
+        {
+            "key": "prop_SheenRoughness",
+            "value": "Шероховатость блеска"
+        },
+        {
+            "key": "prop_ToggleRimlight",
+            "value": "Включить контурное освещение"
+        },
+        {
+            "key": "prop_RimColor",
+            "value": "Цвет контура"
+        },
+        {
+            "key": "prop_RimWidth",
+            "value": "Ширина контура"
+        },
+        {
+            "key": "prop_RimIntensity",
+            "value": "Интенсивность контура"
+        },
+        {
+            "key": "prop_RimLightBased",
+            "value": "Контур на основе света"
+        },
+        {
+            "key": "prop_ToggleClearcoat",
+            "value": "Включить прозрачное покрытие"
+        },
+        {
+            "key": "prop_ClearcoatStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_ClearcoatReflectionStrength",
+            "value": "Сила отражения"
+        },
+        {
+            "key": "prop_ClearcoatMap",
+            "value": "Маска (R=Сила, G=Шероховатость)"
+        },
+        {
+            "key": "prop_ClearcoatRoughness",
+            "value": "Шероховатость"
+        },
+        {
+            "key": "prop_ClearcoatColor",
+            "value": "Цвет прозрачного покрытия"
+        },
+        {
+            "key": "prop_ToggleMatcap",
+            "value": "Включить Matcap"
+        },
+        {
+            "key": "prop_MatcapTex",
+            "value": "Текстура Matcap"
+        },
+        {
+            "key": "prop_MatcapTint",
+            "value": "Оттенок Matcap"
+        },
+        {
+            "key": "prop_MatcapIntensity",
+            "value": "Интенсивность Matcap"
+        },
+        {
+            "key": "prop_MatcapBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_MatcapMask",
+            "value": "Маска Matcap (R)"
+        },
+        {
+            "key": "prop_MatcapSmoothnessEnabled",
+            "value": "Включить гладкость"
+        },
+        {
+            "key": "prop_MatcapSmoothness",
+            "value": "Гладкость"
+        },
+        {
+            "key": "prop_Decal1Enable",
+            "value": "Включить декаль 1"
+        },
+        {
+            "key": "prop_Decal1Tex",
+            "value": "Текстура декали (A=Маска)"
+        },
+        {
+            "key": "prop_Decal1Tint",
+            "value": "Оттенок"
+        },
+        {
+            "key": "prop_Decal1BlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_Decal1IsTriplanar",
+            "value": "Использовать трипланарное наложение"
+        },
+        {
+            "key": "prop_Decal1Position",
+            "value": "Позиция UV (XY)"
+        },
+        {
+            "key": "prop_Decal1Scale",
+            "value": "Масштаб UV (XY)"
+        },
+        {
+            "key": "prop_Decal1Rotation",
+            "value": "Вращение UV"
+        },
+        {
+            "key": "prop_Decal1TriplanarPosition",
+            "value": "Мировая позиция (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarScale",
+            "value": "Мировой масштаб"
+        },
+        {
+            "key": "prop_Decal1TriplanarRotation",
+            "value": "Мировое вращение (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarSharpness",
+            "value": "Резкость смешивания трипланара"
+        },
+        {
+            "key": "prop_Decal1Repeat",
+            "value": "Повторять узор"
+        },
+        {
+            "key": "prop_Decal1Scroll",
+            "value": "Скорость прокрутки (XY)"
+        },
+        {
+            "key": "prop_Decal1HueShift",
+            "value": "Сдвиг оттенка"
+        },
+        {
+            "key": "prop_Decal1AutoCycleHue",
+            "value": "Автоматический цикл оттенка"
+        },
+        {
+            "key": "prop_Decal1CycleSpeed",
+            "value": "Скорость цикла"
+        },
+        {
+            "key": "prop_Decal2Enable",
+            "value": "Включить декаль 2"
+        },
+        {
+            "key": "prop_Decal2Tex",
+            "value": "Текстура декали (A=Маска)"
+        },
+        {
+            "key": "prop_Decal2Tint",
+            "value": "Оттенок"
+        },
+        {
+            "key": "prop_Decal2BlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_Decal2IsTriplanar",
+            "value": "Использовать трипланарное наложение"
+        },
+        {
+            "key": "prop_Decal2Position",
+            "value": "Позиция UV (XY)"
+        },
+        {
+            "key": "prop_Decal2Scale",
+            "value": "Масштаб UV (XY)"
+        },
+        {
+            "key": "prop_Decal2Rotation",
+            "value": "Вращение UV"
+        },
+        {
+            "key": "prop_Decal2TriplanarPosition",
+            "value": "Мировая позиция (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarScale",
+            "value": "Мировой масштаб"
+        },
+        {
+            "key": "prop_Decal2TriplanarRotation",
+            "value": "Мировое вращение (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarSharpness",
+            "value": "Резкость смешивания трипланара"
+        },
+        {
+            "key": "prop_Decal2Repeat",
+            "value": "Повторять узор"
+        },
+        {
+            "key": "prop_Decal2Scroll",
+            "value": "Скорость прокрутки (XY)"
+        },
+        {
+            "key": "prop_Decal2HueShift",
+            "value": "Сдвиг оттенка"
+        },
+        {
+            "key": "prop_Decal2AutoCycleHue",
+            "value": "Автоматический цикл оттенка"
+        },
+        {
+            "key": "prop_Decal2CycleSpeed",
+            "value": "Скорость цикла"
+        },
+        {
+            "key": "prop_TogglePostProcessing",
+            "value": "Включить постобработку"
+        },
+        {
+            "key": "prop_RGBColor",
+            "value": "Оттенок RGB"
+        },
+        {
+            "key": "prop_RGBBlendMode",
+            "value": "Умножение/замена RGB"
+        },
+        {
+            "key": "prop_HSVMode",
+            "value": "Режим HSV"
+        },
+        {
+            "key": "prop_HSVHue",
+            "value": "Оттенок"
+        },
+        {
+            "key": "prop_HSVSaturation",
+            "value": "Насыщенность"
+        },
+        {
+            "key": "prop_HSVValue",
+            "value": "Значение (яркость)"
+        },
+        {
+            "key": "prop_ToggleHueShift",
+            "value": "Включить сдвиг оттенка"
+        },
+        {
+            "key": "prop_HueShift",
+            "value": "Сдвиг оттенка"
+        },
+        {
+            "key": "prop_ToggleAutoCycle",
+            "value": "Включить автоматический цикл оттенка"
+        },
+        {
+            "key": "prop_AutoCycleSpeed",
+            "value": "Скорость автоматического цикла"
+        },
+        {
+            "key": "prop_ColorGradingLUT",
+            "value": "LUT цветокоррекции"
+        },
+        {
+            "key": "prop_ColorGradingIntensity",
+            "value": "Интенсивность цветокоррекции"
+        },
+        {
+            "key": "prop_BlackAndWhite",
+            "value": "Черно-белый"
+        },
+        {
+            "key": "prop_Brightness",
+            "value": "Яркость"
+        },
+        {
+            "key": "prop_ToggleCubemap",
+            "value": "Включить Cubemap"
+        },
+        {
+            "key": "prop_CubemapTex",
+            "value": "Cubemap"
+        },
+        {
+            "key": "prop_CubemapTint",
+            "value": "Оттенок Cubemap"
+        },
+        {
+            "key": "prop_CubemapIntensity",
+            "value": "Интенсивность Cubemap"
+        },
+        {
+            "key": "prop_CubemapBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_ToggleParallax",
+            "value": "Включить параллакс-маппинг"
+        },
+        {
+            "key": "prop_ParallaxMode",
+            "value": "Режим параллакса"
+        },
+        {
+            "key": "prop_ParallaxMap",
+            "value": "Карта высот (R)"
+        },
+        {
+            "key": "prop_ParallaxStrength",
+            "value": "Сила параллакса"
+        },
+        {
+            "key": "prop_ParallaxSteps",
+            "value": "Шаги высокого качества"
+        },
+        {
+            "key": "prop_ToggleSSS",
+            "value": "Включить подповерхностное рассеивание"
+        },
+        {
+            "key": "prop_SSSColor",
+            "value": "Цвет SSS"
+        },
+        {
+            "key": "prop_SSSStrength",
+            "value": "Сила SSS"
+        },
+        {
+            "key": "prop_SSSPower",
+            "value": "Мощность SSS"
+        },
+        {
+            "key": "prop_SSSDistortion",
+            "value": "Искажение SSS"
+        },
+        {
+            "key": "prop_SSSThicknessMap",
+            "value": "Карта толщины SSS (R)"
+        },
+        {
+            "key": "prop_SSSThickness",
+            "value": "Затухание толщины SSS"
+        },
+        {
+            "key": "prop_ToggleShadowMap",
+            "value": "Включить карту теней"
+        },
+        {
+            "key": "prop_ShadowMap",
+            "value": "Карта теней (R=Маска)"
+        },
+        {
+            "key": "prop_ShadowMapIntensity",
+            "value": "Интенсивность"
+        },
+        {
+            "key": "prop_ToggleDetail",
+            "value": "Включить детализированные карты"
+        },
+        {
+            "key": "prop_DetailAlbedoMap",
+            "value": "Детализированное альбедо (A=Сила)"
+        },
+        {
+            "key": "prop_DetailNormalMap",
+            "value": "Детализированная карта нормалей"
+        },
+        {
+            "key": "prop_DetailTiling",
+            "value": "Тайлинг деталей"
+        },
+        {
+            "key": "prop_DetailNormalStrength",
+            "value": "Сила нормалей деталей"
+        },
+        {
+            "key": "prop_ToggleDissolve",
+            "value": "Включить растворение"
+        },
+        {
+            "key": "prop_DissolveProgress",
+            "value": "Прогресс растворения"
+        },
+        {
+            "key": "prop_DissolveType",
+            "value": "Тип растворения"
+        },
+        {
+            "key": "prop_DissolveEdgeColor",
+            "value": "Цвет края"
+        },
+        {
+            "key": "prop_DissolveEdgeWidth",
+            "value": "Ширина края"
+        },
+        {
+            "key": "prop_DissolveEdgeMode",
+            "value": "Режим края"
+        },
+        {
+            "key": "prop_DissolveEdgeSharpness",
+            "value": "Резкость края"
+        },
+        {
+            "key": "prop_DissolveNoiseTex",
+            "value": "Текстура шума (R)"
+        },
+        {
+            "key": "prop_DissolveNoiseScale",
+            "value": "Масштаб шума"
+        },
+        {
+            "key": "prop_DissolveDirection",
+            "value": "Направление стирания (XYZ)"
+        },
+        {
+            "key": "prop_DissolveDirectionSpace",
+            "value": "Пространство стирания"
+        },
+        {
+            "key": "prop_DissolveDirectionBounds",
+            "value": "Размер границ стирания"
+        },
+        {
+            "key": "prop_DissolveVoxelDensity",
+            "value": "Плотность вокселей"
+        },
+        {
+            "key": "prop_TogglePathing",
+            "value": "Включить пути"
+        },
+        {
+            "key": "prop_PathingMappingMode",
+            "value": "Режим наложения"
+        },
+        {
+            "key": "prop_PathingMap",
+            "value": "Карта пути (R)"
+        },
+        {
+            "key": "prop_PathingScale",
+            "value": "Масштаб пути"
+        },
+        {
+            "key": "prop_PathingBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_PathingStart",
+            "value": "Начало пути"
+        },
+        {
+            "key": "prop_PathingEnd",
+            "value": "Конец пути"
+        },
+        {
+            "key": "prop_PathingColor",
+            "value": "Цвет пути"
+        },
+        {
+            "key": "prop_PathingColorMode",
+            "value": "Режим цвета пути"
+        },
+        {
+            "key": "prop_PathingTexture",
+            "value": "Текстура пути"
+        },
+        {
+            "key": "prop_PathingColor2",
+            "value": "Цвет пути 2"
+        },
+        {
+            "key": "prop_PathingEmission",
+            "value": "Сила эмиссии"
+        },
+        {
+            "key": "prop_PathingType",
+            "value": "Тип пути"
+        },
+        {
+            "key": "prop_PathingSpeed",
+            "value": "Скорость"
+        },
+        {
+            "key": "prop_PathingWidth",
+            "value": "Ширина пути"
+        },
+        {
+            "key": "prop_PathingSoftness",
+            "value": "Мягкость"
+        },
+        {
+            "key": "prop_PathingOffset",
+            "value": "Смещение времени"
+        },
+        {
+            "key": "prop_ToggleDepthRim",
+            "value": "Включить контурное освещение по глубине"
+        },
+        {
+            "key": "prop_DepthRimColor",
+            "value": "Цвет контура"
+        },
+        {
+            "key": "prop_DepthRimWidth",
+            "value": "Ширина"
+        },
+        {
+            "key": "prop_DepthRimThreshold",
+            "value": "Порог"
+        },
+        {
+            "key": "prop_DepthRimSharpness",
+            "value": "Резкость"
+        },
+        {
+            "key": "prop_DepthRimBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_ToggleAudioLink",
+            "value": "Включить AudioLink"
+        },
+        {
+            "key": "prop_AudioLinkFallback",
+            "value": "Резервный уровень"
+        },
+        {
+            "key": "prop_AudioLinkEmissionBand",
+            "value": "Диапазон эмиссии"
+        },
+        {
+            "key": "prop_AudioLinkEmissionStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkEmissionRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkRimBand",
+            "value": "Диапазон контурного света"
+        },
+        {
+            "key": "prop_AudioLinkRimStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkRimRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftBand",
+            "value": "Диапазон сдвига оттенка"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueBand",
+            "value": "Диапазон оттенка декали"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionBand",
+            "value": "Диапазон эмиссии декали"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityBand",
+            "value": "Диапазон непрозрачности декали"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkVertexBand",
+            "value": "Диапазон роста/сжатия вершин"
+        },
+        {
+            "key": "prop_AudioLinkVertexStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkVertexRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkOutlineBand",
+            "value": "Диапазон контура"
+        },
+        {
+            "key": "prop_AudioLinkOutlineStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkOutlineRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkMatcapBand",
+            "value": "Диапазон Matcap"
+        },
+        {
+            "key": "prop_AudioLinkMatcapStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkMatcapRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkPathingBand",
+            "value": "Диапазон путей"
+        },
+        {
+            "key": "prop_AudioLinkPathingStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkPathingRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkGlitterBand",
+            "value": "Диапазон блесток"
+        },
+        {
+            "key": "prop_AudioLinkGlitterStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkGlitterRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceBand",
+            "value": "Диапазон иризации"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceStrength",
+            "value": "Сила"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceRange",
+            "value": "Мин-Макс"
+        },
+        {
+            "key": "prop_ToggleGlitter",
+            "value": "Включить блестки"
+        },
+        {
+            "key": "prop_GlitterMode",
+            "value": "Режим"
+        },
+        {
+            "key": "prop_GlitterNoiseTex",
+            "value": "Текстура шума (R)"
+        },
+        {
+            "key": "prop_GlitterMask",
+            "value": "Маска (R)"
+        },
+        {
+            "key": "prop_GlitterTint",
+            "value": "Оттенок"
+        },
+        {
+            "key": "prop_GlitterFrequency",
+            "value": "Плотность"
+        },
+        {
+            "key": "prop_GlitterThreshold",
+            "value": "Порог плотности"
+        },
+        {
+            "key": "prop_GlitterSize",
+            "value": "Размер"
+        },
+        {
+            "key": "prop_GlitterFlickerSpeed",
+            "value": "Скорость мерцания"
+        },
+        {
+            "key": "prop_GlitterBrightness",
+            "value": "Яркость"
+        },
+        {
+            "key": "prop_GlitterContrast",
+            "value": "Контрастность"
+        },
+        {
+            "key": "prop_ToggleGlitterRainbow",
+            "value": "Включить радугу"
+        },
+        {
+            "key": "prop_GlitterRainbowSpeed",
+            "value": "Скорость радуги"
+        },
+        {
+            "key": "prop_ToggleDistanceFade",
+            "value": "Включить затухание на расстоянии"
+        },
+        {
+            "key": "prop_DistanceFadeReference",
+            "value": "Точка отсчета затухания"
+        },
+        {
+            "key": "prop_ToggleNearFade",
+            "value": "Включить затухание вблизи"
+        },
+        {
+            "key": "prop_NearFadeMode",
+            "value": "Режим затухания вблизи"
+        },
+        {
+            "key": "prop_NearFadeDitherScale",
+            "value": "Масштаб дизеринга затухания вблизи"
+        },
+        {
+            "key": "prop_NearFadeStart",
+            "value": "Начало затухания вблизи"
+        },
+        {
+            "key": "prop_NearFadeEnd",
+            "value": "Конец затухания вблизи"
+        },
+        {
+            "key": "prop_ToggleFarFade",
+            "value": "Включить затухание вдали"
+        },
+        {
+            "key": "prop_FarFadeStart",
+            "value": "Начало затухания вдали"
+        },
+        {
+            "key": "prop_FarFadeEnd",
+            "value": "Конец затухания вдали"
+        },
+        {
+            "key": "prop_ToggleIridescence",
+            "value": "Включить иризацию"
+        },
+        {
+            "key": "prop_IridescenceMode",
+            "value": "Режим"
+        },
+        {
+            "key": "prop_IridescenceMask",
+            "value": "Маска (R)"
+        },
+        {
+            "key": "prop_IridescenceTint",
+            "value": "Оттенок"
+        },
+        {
+            "key": "prop_IridescenceIntensity",
+            "value": "Интенсивность"
+        },
+        {
+            "key": "prop_IridescenceBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_IridescenceParallax",
+            "value": "Параллакс вида"
+        },
+        {
+            "key": "prop_IridescenceRamp",
+            "value": "Цветовая рампа"
+        },
+        {
+            "key": "prop_IridescencePower",
+            "value": "Мощность"
+        },
+        {
+            "key": "prop_IridescenceFrequency",
+            "value": "Частота радуги"
+        },
+        {
+            "key": "prop_ToggleShadowTexture",
+            "value": "Включить текстуру тени"
+        },
+        {
+            "key": "prop_ShadowTextureMappingMode",
+            "value": "Режим тени"
+        },
+        {
+            "key": "prop_ShadowTextureIntensity",
+            "value": "Интенсивность тени"
+        },
+        {
+            "key": "prop_ShadowTextureBlendMode",
+            "value": "Режим смешивания тени"
+        },
+        {
+            "key": "prop_ShadowTex",
+            "value": "Текстура / узор тени"
+        },
+        {
+            "key": "prop_ShadowPatternColor",
+            "value": "Оттенок узора"
+        },
+        {
+            "key": "prop_ShadowPatternScale",
+            "value": "Масштаб / тайлинг узора"
+        },
+        {
+            "key": "prop_ShadowPatternTriplanarSharpness",
+            "value": "Резкость смешивания трипланара"
+        },
+        {
+            "key": "prop_ShadowPatternTransparency",
+            "value": "Прозрачность узора"
+        },
+        {
+            "key": "prop_ToggleFlatModel",
+            "value": "Включить плоскую модель"
+        },
+        {
+            "key": "prop_FlatModeAutoflip",
+            "value": "Автоматическое переворачивание"
+        },
+        {
+            "key": "prop_FlatModel",
+            "value": "Сила плоской модели"
+        },
+        {
+            "key": "prop_FlatModelDepthCorrection",
+            "value": "Коррекция глубины"
+        },
+        {
+            "key": "prop_FlatModelFacing",
+            "value": "Направление взгляда"
+        },
+        {
+            "key": "prop_FlatModelLockAxis",
+            "value": "Следовать за камерой"
+        },
+        {
+            "key": "prop_ToggleWorldEffect",
+            "value": "Включить мировой эффект"
+        },
+        {
+            "key": "prop_WorldEffectBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_WorldEffectTex",
+            "value": "Текстура эффекта (A=Маска)"
+        },
+        {
+            "key": "prop_WorldEffectMask",
+            "value": "Маска эффекта"
+        },
+        {
+            "key": "prop_WorldEffectColor",
+            "value": "Цвет эффекта"
+        },
+        {
+            "key": "prop_WorldEffectDirection",
+            "value": "Направление эффекта (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectScale",
+            "value": "Масштаб эффекта"
+        },
+        {
+            "key": "prop_WorldEffectBlendSharpness",
+            "value": "Резкость направленного смешивания"
+        },
+        {
+            "key": "prop_WorldEffectIntensity",
+            "value": "Интенсивность эффекта"
+        },
+        {
+            "key": "prop_WorldEffectPosition",
+            "value": "Мировая позиция (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectRotation",
+            "value": "Мировое вращение (XYZ)"
+        },
+        {
+            "key": "prop_ToggleMirrorDetection",
+            "value": "Включить обнаружение зеркала VRChat"
+        },
+        {
+            "key": "prop_MirrorDetectionMode",
+            "value": "Режим зеркала"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture",
+            "value": "Текстура обнаружения зеркала"
+        },
+        {
+            "key": "prop_ToggleTouchReactive",
+            "value": "Включить реакцию на прикосновение"
+        },
+        {
+            "key": "prop_TouchColor",
+            "value": "Цвет прикосновения"
+        },
+        {
+            "key": "prop_TouchRadius",
+            "value": "Радиус прикосновения"
+        },
+        {
+            "key": "prop_TouchHardness",
+            "value": "Жесткость прикосновения"
+        },
+        {
+            "key": "prop_TouchMode",
+            "value": "Режим прикосновения"
+        },
+        {
+            "key": "prop_TouchRainbowSpeed",
+            "value": "Скорость радуги прикосновения"
+        },
+        {
+            "key": "prop_TouchRainbowSpread",
+            "value": "Распространение радуги прикосновения"
+        },
+        {
+            "key": "prop_ToggleRefraction",
+            "value": "Включить эффект преломления"
+        },
+        {
+            "key": "prop_RefractionMask",
+            "value": "Маска (R=Сила)"
+        },
+        {
+            "key": "prop_RefractionTint",
+            "value": "Оттенок преломления"
+        },
+        {
+            "key": "prop_RefractionIOR",
+            "value": "Сила преломления"
+        },
+        {
+            "key": "prop_RefractionFresnel",
+            "value": "Мощность Френеля"
+        },
+        {
+            "key": "prop_RefractionOpacity",
+            "value": "Непрозрачность преломления"
+        },
+        {
+            "key": "prop_RefractionSeeThrough",
+            "value": "Сила прозрачности"
+        },
+        {
+            "key": "prop_RefractionGrabpassTint",
+            "value": "Оттенок Grabpass"
+        },
+        {
+            "key": "prop_RefractionZoomToggle",
+            "value": "Масштабирование преломления"
+        },
+        {
+            "key": "prop_RefractionZoom",
+            "value": "Величина масштабирования"
+        },
+        {
+            "key": "prop_RefractionMode",
+            "value": "Режим преломления"
+        },
+        {
+            "key": "prop_RefractionMixStrength",
+            "value": "Сила смешивания"
+        },
+        {
+            "key": "prop_RefractionBlendMode",
+            "value": "Аддитивный <-> Замена"
+        },
+        {
+            "key": "prop_CausticsTex",
+            "value": "Внутренняя текстура каустики"
+        },
+        {
+            "key": "prop_CausticsColor",
+            "value": "Цвет каустики"
+        },
+        {
+            "key": "prop_CausticsTiling",
+            "value": "Тайлинг каустики"
+        },
+        {
+            "key": "prop_CausticsSpeed",
+            "value": "Скорость анимации каустики"
+        },
+        {
+            "key": "prop_CausticsIntensity",
+            "value": "Интенсивность каустики"
+        },
+        {
+            "key": "prop_DistortionNoiseTex",
+            "value": "Шум искажения (RG)"
+        },
+        {
+            "key": "prop_DistortionNoiseTiling",
+            "value": "Тайлинг шума искажения"
+        },
+        {
+            "key": "prop_DistortionNoiseStrength",
+            "value": "Сила шума искажения"
+        },
+        {
+            "key": "prop_RefractionDistortionMode",
+            "value": "Режим размытия"
+        },
+        {
+            "key": "prop_RefractionCAStrength",
+            "value": "Сила хроматической аберрации"
+        },
+        {
+            "key": "prop_RefractionBlurStrength",
+            "value": "Сила размытия"
+        },
+        {
+            "key": "prop_RefractionCAUseFresnel",
+            "value": "Хроматическая аберрация по Френелю"
+        },
+        {
+            "key": "prop_RefractionCAEdgeFade",
+            "value": "Затухание края CA"
+        },
+        {
+            "key": "prop_ToggleDither",
+            "value": "Включить дизеринг"
+        },
+        {
+            "key": "prop_DitherAmount",
+            "value": "Величина дизеринга"
+        },
+        {
+            "key": "prop_DitherSpace",
+            "value": "Пространство дизеринга"
+        },
+        {
+            "key": "prop_DitherScale",
+            "value": "Масштаб дизеринга"
+        },
+        {
+            "key": "prop_TogglePS1",
+            "value": "Включить низкую точность (PS1)"
+        },
+        {
+            "key": "prop_PS1Rounding",
+            "value": "Стиль округления"
+        },
+        {
+            "key": "prop_PS1RoundingPrecision",
+            "value": "Точность округления"
+        },
+        {
+            "key": "prop_PS1Affine",
+            "value": "Включить аффинное наложение текстур"
+        },
+        {
+            "key": "prop_PS1Compression",
+            "value": "Включить сжатие цвета"
+        },
+        {
+            "key": "prop_PS1CompressionPrecision",
+            "value": "Точность сжатия цвета"
+        },
+        {
+            "key": "prop_UseTextureStitching",
+            "value": "Включить сшивание текстур"
+        },
+        {
+            "key": "prop_StitchTex",
+            "value": "Текстура для сшивания"
+        },
+        {
+            "key": "prop_StitchAxis",
+            "value": "Ось сшивания"
+        },
+        {
+            "key": "prop_StitchOffset",
+            "value": "Смещение шва сшивания"
+        },
+        {
+            "key": "prop_StitchTex_UV",
+            "value": "UV текстуры для сшивания"
+        },
+        {
+            "key": "prop_ToggleVertexDistortion",
+            "value": "Включить искажение вершин"
+        },
+        {
+            "key": "prop_VertexDistortionMode",
+            "value": "Режим искажения"
+        },
+        {
+            "key": "prop_VertexDistortionColorMask",
+            "value": "Маска цветового канала"
+        },
+        {
+            "key": "prop_VertexDistortionStrength",
+            "value": "Сила искажения"
+        },
+        {
+            "key": "prop_VertexDistortionSpeed",
+            "value": "Скорость искажения"
+        },
+        {
+            "key": "prop_VertexDistortionFrequency",
+            "value": "Частота искажения"
+        },
+        {
+            "key": "prop_WindStrength",
+            "value": "Сила ветра"
+        },
+        {
+            "key": "prop_WindSpeed",
+            "value": "Скорость ветра"
+        },
+        {
+            "key": "prop_WindScale",
+            "value": "Масштаб шума ветра"
+        },
+        {
+            "key": "prop_WindDirection",
+            "value": "Направление ветра (XYZ)"
+        },
+        {
+            "key": "prop_WindNoiseTex",
+            "value": "Текстура шума ветра (R)"
+        },
+        {
+            "key": "prop_BreathingStrength",
+            "value": "Сила дыхания"
+        },
+        {
+            "key": "prop_BreathingSpeed",
+            "value": "Скорость дыхания"
+        },
+        {
+            "key": "prop_ToggleSSR",
+            "value": "Включить отражения в экранном пространстве"
+        },
+        {
+            "key": "prop_SSRMask",
+            "value": "Маска (R)"
+        },
+        {
+            "key": "prop_SSRTint",
+            "value": "Оттенок отражения"
+        },
+        {
+            "key": "prop_SSRIntensity",
+            "value": "Интенсивность"
+        },
+        {
+            "key": "prop_SSRBlendMode",
+            "value": "Режим смешивания"
+        },
+        {
+            "key": "prop_SSRFresnelPower",
+            "value": "Мощность Френеля"
+        },
+        {
+            "key": "prop_SSRFresnelScale",
+            "value": "Масштаб Френеля"
+        },
+        {
+            "key": "prop_SSRFresnelBias",
+            "value": "Смещение Френеля"
+        },
+        {
+            "key": "prop_SSRParallax",
+            "value": "Сила параллакса"
+        },
+        {
+            "key": "prop_SSRDistortionMap",
+            "value": "Карта искажения (RG)"
+        },
+        {
+            "key": "prop_SSRDistortionStrength",
+            "value": "Сила искажения"
+        },
+        {
+            "key": "prop_SSRWorldDistortion",
+            "value": "Сила мирового искажения"
+        },
+        {
+            "key": "prop_SSRBlur",
+            "value": "Сила размытия"
+        },
+        {
+            "key": "prop_SSRMode",
+            "value": "Качество отражения"
+        },
+        {
+            "key": "prop_SSRMaxSteps",
+            "value": "Максимальное количество шагов"
+        },
+        {
+            "key": "prop_SSRStepSize",
+            "value": "Размер шага"
+        },
+        {
+            "key": "prop_SSRCoverage",
+            "value": "Увеличение покрытия"
+        },
+        {
+            "key": "prop_SSREdgeFade",
+            "value": "Затухание края"
+        },
+        {
+            "key": "prop_SSRCamFade",
+            "value": "Включить затухание на расстоянии от камеры"
+        },
+        {
+            "key": "prop_SSRCamFadeStart",
+            "value": "Начало затухания SSR от камеры"
+        },
+        {
+            "key": "prop_SSRCamFadeEnd",
+            "value": "Конец затухания SSR от камеры"
+        },
+        {
+            "key": "prop_SSRFlipUV",
+            "value": "Инвертировать UV отражения"
+        },
+        {
+            "key": "prop_SSRAdaptiveStep",
+            "value": "Включить адаптивный размер шага"
+        },
+        {
+            "key": "prop_SSRThickness",
+            "value": "Толщина отсечения"
+        },
+        {
+            "key": "prop_SSROutOfViewMode",
+            "value": "Режим вне поля зрения"
+        },
+        {
+            "key": "prop_OutlineColor",
+            "value": "Цвет контура"
+        },
+        {
+            "key": "prop_OutlineWidth",
+            "value": "Ширина контура"
+        },
+        {
+            "key": "prop_OutlineVertexColorMask",
+            "value": "Использовать маску цвета вершин (R)"
+        },
+        {
+            "key": "prop_OutlineDistanceFade",
+            "value": "Включить затухание на расстоянии"
+        },
+        {
+            "key": "prop_OutlineFadeStart",
+            "value": "Начальное расстояние затухания"
+        },
+        {
+            "key": "prop_OutlineFadeEnd",
+            "value": "Конечное расстояние затухания"
+        },
+        {
+            "key": "prop_OutlineHueShift",
+            "value": "Включить сдвиг оттенка"
+        },
+        {
+            "key": "prop_OutlineHueShiftSpeed",
+            "value": "Скорость сдвига оттенка"
+        },
+        {
+            "key": "prop_OutlineOpacity",
+            "value": "Непрозрачность контура"
+        },
+        {
+            "key": "prop_IndirectFallbackMode",
+            "value": "Режим резервного непрямого"
+        },
+        {
+            "key": "prop_IndirectOverride",
+            "value": "Переопределение непрямого"
+        },
+        {
+            "key": "prop_FallbackCubemap",
+            "value": "Резервный Cubemap"
+        },
+        {
+            "key": "prop_MainTex_UV",
+            "value": "Набор UV основной текстуры"
+        },
+        {
+            "key": "prop_BumpMap_UV",
+            "value": "Набор UV карты рельефа"
+        },
+        {
+            "key": "prop_MSSO_UV",
+            "value": "Набор UV MSSO"
+        },
+        {
+            "key": "prop_SpecularTintTexture_UV",
+            "value": "Набор UV оттенка бликов"
+        },
+        {
+            "key": "prop_TangentMap_UV",
+            "value": "UV карты касательных"
+        },
+        {
+            "key": "prop_EmissionMap_UV",
+            "value": "Набор UV карты эмиссии"
+        },
+        {
+            "key": "prop_ClearcoatMap_UV",
+            "value": "Набор UV карты прозрачного покрытия"
+        },
+        {
+            "key": "prop_MatcapMask_UV",
+            "value": "Набор UV маски Matcap"
+        },
+        {
+            "key": "prop_ParallaxMap_UV",
+            "value": "Набор UV карты высот"
+        },
+        {
+            "key": "prop_ThicknessMap_UV",
+            "value": "Набор UV карты толщины"
+        },
+        {
+            "key": "prop_DetailMap_UV",
+            "value": "Набор UV детализированной карты"
+        },
+        {
+            "key": "prop_Decal1_UV",
+            "value": "Набор UV декали 1"
+        },
+        {
+            "key": "prop_Decal2_UV",
+            "value": "Набор UV декали 2"
+        },
+        {
+            "key": "prop_Glitter_UV",
+            "value": "Набор UV блесток"
+        },
+        {
+            "key": "prop_IridescenceMask_UV",
+            "value": "Набор UV маски иризации"
+        },
+        {
+            "key": "prop_GlitterMask_UV",
+            "value": "Набор UV маски блесток"
+        },
+        {
+            "key": "prop_HairFlowMap_UV",
+            "value": "Набор UV карты потока волос"
+        },
+        {
+            "key": "prop_ShadowTex_UV",
+            "value": "Набор UV текстуры тени"
+        },
+        {
+            "key": "prop_Flowmap_UV",
+            "value": "Набор UV карты потока"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture_UV",
+            "value": "Набор UV текстуры обнаружения зеркала"
+        },
+        {
+            "key": "prop_RefractionMask_UV",
+            "value": "Набор UV маски преломления"
+        },
+        {
+            "key": "prop_PathingTexture_UV",
+            "value": "Набор UV карты путей"
+        },
+        {
+            "key": "prop_ShadowMap_UV",
+            "value": "Набор UV карты теней"
+        },
+        {
+            "key": "prop_Dither_UV",
+            "value": "Набор UV дизеринга"
+        },
+        {
+            "key": "prop_OverrideRenderQueue",
+            "value": "Использовать пользовательскую очередь рендеринга"
+        },
+        {
+            "key": "prop_OverrideBaseBlend",
+            "value": "Использовать пользовательское базовое смешивание"
+        },
+        {
+            "key": "prop_BlendOp",
+            "value": "Операция смешивания"
+        },
+        {
+            "key": "prop_AddSrcBlend",
+            "value": "Исходное смешивание"
+        },
+        {
+            "key": "prop_AddDstBlend",
+            "value": "Целевое смешивание"
+        },
+        {
+            "key": "prop_AddBlendOp",
+            "value": "Операция смешивания альфы"
+        },
+        {
+            "key": "prop_ZTest",
+            "value": "ZTest"
+        },
+        {
+            "key": "prop_OverrideAddBlend",
+            "value": "Использовать пользовательское аддитивное смешивание"
+        },
+        {
+            "key": "prop_OverrideZWrite",
+            "value": "Использовать пользовательскую запись в Z-буфер"
+        },
+        {
+            "key": "specular_standard_stylised_info",
+            "value": "Стандартные блики не имеют стилизованных опций - попробуйте изменить режим бликов, чтобы увидеть здесь настройки!"
+        },
+        {
+            "key": "depth_popup_info",
+            "value": "Этому эффекту необходимо считывать глубину из сцены! Убедитесь, что в вашем мире либо включен свет в реальном времени, либо в сцене присутствует префаб Depth Writer (предоставляется с Backlace)."
+        }
+    ]
+}

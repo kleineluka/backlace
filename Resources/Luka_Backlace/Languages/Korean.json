@@ -1,0 +1,2412 @@
+{
+    "entries": [
+        {
+            "key": "enabled",
+            "value": "활성화됨"
+        },
+        {
+            "key": "disabled",
+            "value": "비활성화됨"
+        },
+        {
+            "key": "config_tab_theme",
+            "value": "탭 테마"
+        },
+        {
+            "key": "config_text_theme",
+            "value": "텍스트 테마"
+        },
+        {
+            "key": "config_ui_size",
+            "value": "UI 크기"
+        },
+        {
+            "key": "config_updates",
+            "value": "업데이트 확인"
+        },
+        {
+            "key": "config_language",
+            "value": "언어"
+        },
+        {
+            "key": "config_toggle_updates",
+            "value": "업데이트 표시"
+        },
+        {
+            "key": "config_toggle_announcements",
+            "value": "새소식 표시"
+        },
+        {
+            "key": "config_toggle_enabled",
+            "value": "활성화됨"
+        },
+        {
+            "key": "config_toggle_disabled",
+            "value": "비활성화됨"
+        },
+        {
+            "key": "config_save",
+            "value": "설정 저장"
+        },
+        {
+            "key": "config_reset",
+            "value": "설정 초기화"
+        },
+        {
+            "key": "config_save_success",
+            "value": "설정이 성공적으로 저장되었습니다! ^~^"
+        },
+        {
+            "key": "config_save_error",
+            "value": "설정을 저장하는 중에 문제가 발생했습니다. Unity 패키지를 다시 가져와 보세요! >.<"
+        },
+        {
+            "key": "config_reset_success",
+            "value": "설정이 기본값으로 초기화되었습니다! ^~^"
+        },
+        {
+            "key": "config_reset_error",
+            "value": "설정을 초기화하는 중에 문제가 발생했습니다. Unity 패키지를 다시 가져와 보세요! >.<"
+        },
+        {
+            "key": "dialog_okay",
+            "value": "오키!"
+        },
+        {
+            "key": "update_available",
+            "value": "업데이트 가능!"
+        },
+        {
+            "key": "update_description",
+            "value": "새로운 기능과 버그 수정을 위해 최신 버전을 다운로드하세요! <3"
+        },
+        {
+            "key": "tab_config",
+            "value": "설정"
+        },
+        {
+            "key": "open_docs",
+            "value": "도움이 필요하신가요? 여기를 클릭하여 문서를 여세요!"
+        },
+        {
+            "key": "tab_license",
+            "value": "라이선스"
+        },
+        {
+            "key": "button_show_license",
+            "value": "Unity에서 라이선스 표시"
+        },
+        {
+            "key": "config_toggle_grey_unused",
+            "value": "사용하지 않는 설정 회색으로 표시"
+        },
+        {
+            "key": "config_toggle_status_badges",
+            "value": "상태 배지 표시"
+        },
+        {
+            "key": "status_badge_enabled",
+            "value": "활성화됨"
+        },
+        {
+            "key": "capability_popup_title",
+            "value": "기능 알림!"
+        },
+        {
+            "key": "preset_title",
+            "value": "프리셋 관리자"
+        },
+        {
+            "key": "preset_overwrite_prompt",
+            "value": "이 이름의 프리셋이 이미 존재합니다. 덮어쓰시겠습니까?"
+        },
+        {
+            "key": "preset_overwrite_prompt_yes",
+            "value": "덮어쓰기!"
+        },
+        {
+            "key": "preset_overwrite_prompt_no",
+            "value": "기존 항목 유지."
+        },
+        {
+            "key": "preset_builtin_header",
+            "value": "내장 프리셋"
+        },
+        {
+            "key": "preset_custom_header",
+            "value": "사용자 지정 프리셋"
+        },
+        {
+            "key": "preset_save_header",
+            "value": "이 머티리얼 저장"
+        },
+        {
+            "key": "preset_name_label",
+            "value": "프리셋 이름"
+        },
+        {
+            "key": "preset_save_button",
+            "value": "프리셋으로 저장"
+        },
+        {
+            "key": "preset_save_error_noname",
+            "value": "저장하기 전에 프리셋의 이름을 설정해주세요! >.<"
+        },
+        {
+            "key": "preset_delete_prompt",
+            "value": "이 프리셋을 삭제하시겠습니까? 되돌릴 수 없습니다..."
+        },
+        {
+            "key": "preset_delete_prompt_yes",
+            "value": "프리셋 삭제"
+        },
+        {
+            "key": "preset_delete_prompt_no",
+            "value": "프리셋 유지"
+        },
+        {
+            "key": "tab_presets",
+            "value": "프리셋"
+        },
+        {
+            "key": "preset_no_builtin_found",
+            "value": "이 셰이더와 함께 제공된 내장 프리셋이 없습니다..."
+        },
+        {
+            "key": "preset_no_custom_found",
+            "value": "사용자 지정 프리셋을 찾을 수 없습니다! 만들어보는 건 어떨까요? :o"
+        },
+        {
+            "key": "load",
+            "value": "로드"
+        },
+        {
+            "key": "tab_premonition",
+            "value": "컴팩트 머티리얼"
+        },
+        {
+            "key": "premonition_notice",
+            "value": "여기에서 현재 머티리얼의 컴팩트 버전을 생성할 수 있습니다. 이것은 더 작고 컴파일 시간이 짧으며 본질적으로 현재 설정의 스냅샷인 새로운 셰이더 파일을 생성합니다. 이 더 작은 셰이더는 재배포가 가능하며 다른 것에 의존하지 않습니다. 원하는 대로 .shader를 이동할 수 있습니다. 셰이더 수를 줄이고 성능을 향상시키기 위해 최종 머티리얼에 항상 이것을 사용하는 것이 좋습니다! ^-^ (하지만 걱정하지 마세요. 변경해야 하는 경우 언제든지 일반 셰이더로 돌아갈 수 있습니다)"
+        },
+        {
+            "key": "premonition_generate_button",
+            "value": "컴팩트 머티리얼 생성"
+        },
+        {
+            "key": "premonition_restore_button",
+            "value": "원본 머티리얼 복원"
+        },
+        {
+            "key": "variant_popup_title",
+            "value": "셰이더 변형 필요"
+        },
+        {
+            "key": "variant_popup_description",
+            "value": "이 기능에는 (최소) '{0}' 셰이더 변형이 필요합니다.\n\n셰이더 변형은 필요한 기능에 대한 코드만 포함하도록 돕기 위해 만들어졌습니다. 다른 버전에도 있을 수 있지만(회색으로 표시된 탭으로 표시되거나 표시되지 않음), 이것이 이를 지원하는 \"가장 낮은\" 변형 계층입니다. 자세한 내용은 문서를 참조하세요! ^-^"
+        },
+        {
+            "key": "warning_external_website_title",
+            "value": "잠깐, 들어보세요!"
+        },
+        {
+            "key": "warning_external_website_description",
+            "value": "내가 소유하거나 운영하지 않는 외부 웹사이트를 열려고 합니다! 주의해서 진행해주세요!! 아마도 안전하겠지만, 나는 그것을 통제할 수 없으며 미래에 변경될지 여부도 알 수 없습니다. >.< 계속하시겠습니까?"
+        },
+        {
+            "key": "warning_external_website_okay",
+            "value": "웹사이트 열기"
+        },
+        {
+            "key": "warning_external_website_cancel",
+            "value": "돌아가기!"
+        },
+        {
+            "key": "tab_main",
+            "value": "주요 설정"
+        },
+        {
+            "key": "sub_tab_rendering",
+            "value": "렌더링"
+        },
+        {
+            "key": "sub_tab_textures",
+            "value": "코어 맵"
+        },
+        {
+            "key": "sub_tab_stitching",
+            "value": "텍스처 스티칭"
+        },
+        {
+            "key": "sub_tab_uv_manipulation",
+            "value": "UV 조작"
+        },
+        {
+            "key": "sub_tab_uv_effects",
+            "value": "UV 효과"
+        },
+        {
+            "key": "sub_tab_vertex_manipulation",
+            "value": "정점 조작"
+        },
+        {
+            "key": "sub_tab_decal_one",
+            "value": "데칼 1"
+        },
+        {
+            "key": "sub_tab_decal_two",
+            "value": "데칼 2"
+        },
+        {
+            "key": "sub_tab_post_processing",
+            "value": "텍스처 후처리"
+        },
+        {
+            "key": "sub_tab_uv_sets",
+            "value": "UV 세트"
+        },
+        {
+            "key": "tab_lighting",
+            "value": "조명"
+        },
+        {
+            "key": "sub_tab_lighting_model",
+            "value": "조명 모델"
+        },
+        {
+            "key": "sub_tab_anime",
+            "value": "애니메이션 셰이딩"
+        },
+        {
+            "key": "tab_specular",
+            "value": "스페큘러"
+        },
+        {
+            "key": "sub_tab_pbr_specular",
+            "value": "PBR 스페큘러"
+        },
+        {
+            "key": "sub_tab_stylised_specular",
+            "value": "스타일화된 스페큘러"
+        },
+        {
+            "key": "sub_tab_emission",
+            "value": "이미션"
+        },
+        {
+            "key": "sub_tab_light_limiting",
+            "value": "조명 수준 제한"
+        },
+        {
+            "key": "tab_shading",
+            "value": "셰이딩"
+        },
+        {
+            "key": "sub_tab_rim_lighting",
+            "value": "프레넬 림 조명"
+        },
+        {
+            "key": "sub_tab_depth_rim",
+            "value": "깊이 림 조명"
+        },
+        {
+            "key": "sub_tab_clear_coat",
+            "value": "클리어코트"
+        },
+        {
+            "key": "sub_tab_matcap",
+            "value": "Matcap"
+        },
+        {
+            "key": "sub_tab_cubemap",
+            "value": "큐브맵"
+        },
+        {
+            "key": "sub_tab_parallax",
+            "value": "패럴랙스 매핑"
+        },
+        {
+            "key": "sub_tab_subsurface",
+            "value": "표면 하 산란"
+        },
+        {
+            "key": "sub_tab_detail_map",
+            "value": "디테일 매핑"
+        },
+        {
+            "key": "sub_tab_shadow_map",
+            "value": "그림자 매핑"
+        },
+        {
+            "key": "tab_effects",
+            "value": "효과"
+        },
+        {
+            "key": "sub_tab_dissolve",
+            "value": "디졸브"
+        },
+        {
+            "key": "sub_tab_pathing",
+            "value": "경로 설정"
+        },
+        {
+            "key": "tab_third_party",
+            "value": "타사"
+        },
+        {
+            "key": "sub_tab_audiolink",
+            "value": "AudioLink"
+        },
+        {
+            "key": "sub_tab_superplug",
+            "value": "슈퍼 플러그 셰이더"
+        },
+        {
+            "key": "superplug_notice",
+            "value": "슈퍼 플러그 셰이더(VRCFury 제작)는 메시를 대상 쪽으로 변형하는 데 사용할 수 있는 무료 메시 변형 시스템이며 DPS(Raliv의 동적 침투 시스템) 및 TPS(Poiyomi Pro의 Thry 침투 시스템)를 완벽하게 하위 호환하는 대체품입니다. 무료일 뿐만 아니라 Backlace를 포함하여 하드 코딩 지원 없이 다양한 셰이더를 지원합니다! 아래 링크를 클릭하여 설정에 대한 문서를 여세요!"
+        },
+        {
+            "key": "superplug_button",
+            "value": "슈퍼 플러그 셰이더 웹사이트 열기"
+        },
+        {
+            "key": "sub_tab_ltcgi",
+            "value": "LTCGI 조명"
+        },
+        {
+            "key": "ltcgi_notice",
+            "value": "LTCGI(_pi_ 제작)는 VRChat을 위한 플러그 앤 플레이 실시간 영역 조명 솔루션입니다. 이를 활성화하려면 프로젝트에 LTCGI 패키지도 포함해야 합니다. 작동하려면 자체 셰이더 기능이 필요하기 때문입니다. 활성화되면 머티리얼이 자동으로 LTCGI 조명을 사용합니다."
+        },
+        {
+            "key": "ltcgi_button",
+            "value": "LTCGI 웹사이트 열기"
+        },
+        {
+            "key": "prop_ToggleLTCGI",
+            "value": "LTCGI 조명 활성화"
+        },
+        {
+            "key": "sub_tab_glitter",
+            "value": "글리터"
+        },
+        {
+            "key": "sub_tab_distance_fading",
+            "value": "거리 페이딩"
+        },
+        {
+            "key": "sub_tab_iridescence",
+            "value": "무지갯빛"
+        },
+        {
+            "key": "sub_tab_shadow_textures",
+            "value": "그림자 텍스처"
+        },
+        {
+            "key": "sub_tab_flatten_model",
+            "value": "모델 평면화"
+        },
+        {
+            "key": "sub_tab_world_aligned",
+            "value": "월드 정렬 텍스처"
+        },
+        {
+            "key": "sub_tab_vrchat_mirror",
+            "value": "VRChat 거울 감지"
+        },
+        {
+            "key": "sub_tab_touch_interactions",
+            "value": "터치 상호 작용"
+        },
+        {
+            "key": "sub_tab_vertex_distortion",
+            "value": "정점 왜곡"
+        },
+        {
+            "key": "sub_tab_dither",
+            "value": "디더링"
+        },
+        {
+            "key": "sub_tab_ps1",
+            "value": "저정밀도(PS1)"
+        },
+        {
+            "key": "sub_tab_refraction",
+            "value": "굴절"
+        },
+        {
+            "key": "sub_tab_screenspace_reflection",
+            "value": "스크린 스페이스 반사"
+        },
+        {
+            "key": "tab_outline",
+            "value": "외곽선"
+        },
+        {
+            "key": "prop_SrcBlend",
+            "value": "소스 블렌드"
+        },
+        {
+            "key": "prop_DstBlend",
+            "value": "대상 블렌드"
+        },
+        {
+            "key": "prop_ZWrite",
+            "value": "ZWrite"
+        },
+        {
+            "key": "prop_Cull",
+            "value": "컬 모드"
+        },
+        {
+            "key": "prop_StencilRef",
+            "value": "스텐실 참조"
+        },
+        {
+            "key": "prop_StencilComp",
+            "value": "비교"
+        },
+        {
+            "key": "prop_StencilPass",
+            "value": "패스 연산"
+        },
+        {
+            "key": "prop_StencilFail",
+            "value": "실패 연산"
+        },
+        {
+            "key": "prop_StencilZFail",
+            "value": "ZFail 연산"
+        },
+        {
+            "key": "prop_OutlineStencilRef",
+            "value": "외곽선 스텐실 참조"
+        },
+        {
+            "key": "prop_OutlineStencilComp",
+            "value": "외곽선 비교"
+        },
+        {
+            "key": "prop_OutlineStencilPass",
+            "value": "외곽선 패스 연산"
+        },
+        {
+            "key": "prop_OutlineStencilFail",
+            "value": "외곽선 실패 연산"
+        },
+        {
+            "key": "prop_OutlineStencilZFail",
+            "value": "외곽선 ZFail 연산"
+        },
+        {
+            "key": "prop_BlendMode",
+            "value": "블렌딩 모드"
+        },
+        {
+            "key": "prop_VRCFallback",
+            "value": "VRChat 폴백"
+        },
+        {
+            "key": "prop_ToggleFlipNormals",
+            "value": "뒷면 법선 뒤집기"
+        },
+        {
+            "key": "prop_MainTex",
+            "value": "주 텍스처"
+        },
+        {
+            "key": "prop_Color",
+            "value": "알베도 색상"
+        },
+        {
+            "key": "prop_Cutoff",
+            "value": "알파 컷오프"
+        },
+        {
+            "key": "prop_BumpMap",
+            "value": "노멀 맵"
+        },
+        {
+            "key": "prop_BumpScale",
+            "value": "노멀 맵 스케일"
+        },
+        {
+            "key": "prop_Alpha",
+            "value": "알파"
+        },
+        {
+            "key": "prop_DecalStage",
+            "value": "데칼 단계 (공유)"
+        },
+        {
+            "key": "prop_UV_Offset_X",
+            "value": "UV 오프셋 X"
+        },
+        {
+            "key": "prop_UV_Offset_Y",
+            "value": "UV 오프셋 Y"
+        },
+        {
+            "key": "prop_UV_Scale_X",
+            "value": "UV 스케일 X"
+        },
+        {
+            "key": "prop_UV_Scale_Y",
+            "value": "UV 스케일 Y"
+        },
+        {
+            "key": "prop_UV_Rotation",
+            "value": "UV 회전"
+        },
+        {
+            "key": "prop_UV_Scroll_X_Speed",
+            "value": "UV 스크롤 X 속도"
+        },
+        {
+            "key": "prop_UV_Scroll_Y_Speed",
+            "value": "UV 스크롤 Y 속도"
+        },
+        {
+            "key": "prop_ToggleUVEffects",
+            "value": "UV 효과 활성화"
+        },
+        {
+            "key": "prop_UVTriplanarMapping",
+            "value": "트라이플래너 매핑 활성화"
+        },
+        {
+            "key": "prop_UVTriplanarPosition",
+            "value": "월드 위치 (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarScale",
+            "value": "월드 스케일"
+        },
+        {
+            "key": "prop_UVTriplanarRotation",
+            "value": "월드 회전 (XYZ)"
+        },
+        {
+            "key": "prop_UVTriplanarSharpness",
+            "value": "트라이플래너 블렌드 선명도"
+        },
+        {
+            "key": "prop_UVScreenspaceMapping",
+            "value": "스크린스페이스 매핑 활성화"
+        },
+        {
+            "key": "prop_UVScreenspaceTiling",
+            "value": "스크린스페이스 타일링"
+        },
+        {
+            "key": "prop_UVFlipbook",
+            "value": "플립북 애니메이션 활성화"
+        },
+        {
+            "key": "prop_UVFlipbookRows",
+            "value": "플립북 행"
+        },
+        {
+            "key": "prop_UVFlipbookColumns",
+            "value": "플립북 열"
+        },
+        {
+            "key": "prop_UVFlipbookFrames",
+            "value": "총 프레임"
+        },
+        {
+            "key": "prop_UVFlipbookFPS",
+            "value": "플립북 FPS"
+        },
+        {
+            "key": "prop_UVFlipbookScrub",
+            "value": "수동 스크럽"
+        },
+        {
+            "key": "prop_UVFlowmap",
+            "value": "플로우맵 활성화"
+        },
+        {
+            "key": "prop_UVFlowmapTex",
+            "value": "플로우맵 텍스처 (RG)"
+        },
+        {
+            "key": "prop_UVFlowmapStrength",
+            "value": "플로우맵 강도"
+        },
+        {
+            "key": "prop_UVFlowmapSpeed",
+            "value": "플로우맵 속도"
+        },
+        {
+            "key": "prop_UVFlowmapDistortion",
+            "value": "플로우맵 왜곡"
+        },
+        {
+            "key": "prop_VertexManipulationPosition",
+            "value": "월드 위치 (XYZ)"
+        },
+        {
+            "key": "prop_VertexManipulationScale",
+            "value": "월드 스케일 (XYZ)"
+        },
+        {
+            "key": "prop_ToggleEmission",
+            "value": "이미션 활성화"
+        },
+        {
+            "key": "prop_EmissionColor",
+            "value": "이미션 색상"
+        },
+        {
+            "key": "prop_EmissionMap",
+            "value": "이미션 맵 (마스크)"
+        },
+        {
+            "key": "prop_UseAlbedoAsEmission",
+            "value": "이미션에 알베도 사용"
+        },
+        {
+            "key": "prop_EmissionStrength",
+            "value": "이미션 강도"
+        },
+        {
+            "key": "prop_EnableBaseLightLimit",
+            "value": "기본 패스 제한 활성화"
+        },
+        {
+            "key": "prop_BaseLightMin",
+            "value": "기본 조명 최소"
+        },
+        {
+            "key": "prop_BaseLightMax",
+            "value": "기본 조명 최대"
+        },
+        {
+            "key": "prop_EnableAddLightLimit",
+            "value": "추가 패스 제한 활성화"
+        },
+        {
+            "key": "prop_AddLightMin",
+            "value": "추가 조명 최소"
+        },
+        {
+            "key": "prop_AddLightMax",
+            "value": "추가 조명 최대"
+        },
+        {
+            "key": "prop_GreyscaleLighting",
+            "value": "그레이스케일 조명"
+        },
+        {
+            "key": "prop_ForceLightColor",
+            "value": "강제 조명 색상"
+        },
+        {
+            "key": "prop_ForcedLightColor",
+            "value": "강제된 조명 색상"
+        },
+        {
+            "key": "prop_LightingColorMode",
+            "value": "조명 색상 모드"
+        },
+        {
+            "key": "prop_LightingDirectionMode",
+            "value": "조명 방향 모드"
+        },
+        {
+            "key": "prop_ForcedLightDirection",
+            "value": "강제된 조명 방향"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetX",
+            "value": "시야 방향 오프셋 X"
+        },
+        {
+            "key": "prop_ViewDirectionOffsetY",
+            "value": "시야 방향 오프셋 Y"
+        },
+        {
+            "key": "prop_DirectIntensity",
+            "value": "RT 직접 강도"
+        },
+        {
+            "key": "prop_IndirectIntensity",
+            "value": "RT 간접 강도"
+        },
+        {
+            "key": "prop_VertexIntensity",
+            "value": "RT 정점 강도"
+        },
+        {
+            "key": "prop_AdditiveIntensity",
+            "value": "RT 추가 강도"
+        },
+        {
+            "key": "prop_BakedDirectIntensity",
+            "value": "구운 직접 강도"
+        },
+        {
+            "key": "prop_BakedIndirectIntensity",
+            "value": "구운 간접 강도"
+        },
+        {
+            "key": "prop_ToggleAnimeLighting",
+            "value": "애니메이션 조명 활성화"
+        },
+        {
+            "key": "prop_AnimeMode",
+            "value": "애니메이션 모드"
+        },
+        {
+            "key": "prop_Ramp",
+            "value": "애니메이션 램프"
+        },
+        {
+            "key": "prop_RampColor",
+            "value": "램프 색상"
+        },
+        {
+            "key": "prop_RampOffset",
+            "value": "램프 오프셋"
+        },
+        {
+            "key": "prop_ShadowIntensity",
+            "value": "그림자 강도"
+        },
+        {
+            "key": "prop_OcclusionOffsetIntensity",
+            "value": "오클루전 오프셋 강도"
+        },
+        {
+            "key": "prop_RampMin",
+            "value": "램프 최소"
+        },
+        {
+            "key": "prop_RampNormalIntensity",
+            "value": "법선 영향 강도"
+        },
+        {
+            "key": "prop_AnimeShadowColor",
+            "value": "코어 그림자 색상"
+        },
+        {
+            "key": "prop_AnimeShadowThreshold",
+            "value": "코어 그림자 임계값"
+        },
+        {
+            "key": "prop_AnimeHalftoneColor",
+            "value": "하프톤 색상"
+        },
+        {
+            "key": "prop_AnimeHalftoneThreshold",
+            "value": "하프톤 임계값"
+        },
+        {
+            "key": "prop_AnimeShadowSoftness",
+            "value": "그림자 부드러움"
+        },
+        {
+            "key": "prop_ToggleAmbientGradient",
+            "value": "앰비언트 그라데이션 활성화"
+        },
+        {
+            "key": "prop_AnimeOcclusionToShadow",
+            "value": "오클루전을 그림자로"
+        },
+        {
+            "key": "prop_AmbientUp",
+            "value": "하늘 앰비언트"
+        },
+        {
+            "key": "prop_AmbientSkyThreshold",
+            "value": "하늘 임계값"
+        },
+        {
+            "key": "prop_AmbientDown",
+            "value": "지면 앰비언트"
+        },
+        {
+            "key": "prop_AmbientGroundThreshold",
+            "value": "지면 임계값"
+        },
+        {
+            "key": "prop_AmbientIntensity",
+            "value": "그라데이션 강도"
+        },
+        {
+            "key": "prop_TintMaskSource",
+            "value": "틴트 마스크 소스"
+        },
+        {
+            "key": "prop_LitTint",
+            "value": "밝은 영역 틴트"
+        },
+        {
+            "key": "prop_LitThreshold",
+            "value": "밝은 영역 범위"
+        },
+        {
+            "key": "prop_ShadowTint",
+            "value": "그림자 영역 틴트"
+        },
+        {
+            "key": "prop_ShadowThreshold",
+            "value": "그림자 영역 범위"
+        },
+        {
+            "key": "prop_ToggleSpecular",
+            "value": "스페큘러 활성화"
+        },
+        {
+            "key": "prop_SpecularIntensity",
+            "value": "하이라이트"
+        },
+        {
+            "key": "prop_ToggleVertexSpecular",
+            "value": "정점 스페큘러 활성화"
+        },
+        {
+            "key": "prop_SpecularMode",
+            "value": "스페큘러 모드"
+        },
+        {
+            "key": "prop_MSSO",
+            "value": "MSSO (메탈, 스무스, 스펙, 오클)"
+        },
+        {
+            "key": "prop_Metallic",
+            "value": "메탈릭"
+        },
+        {
+            "key": "prop_Glossiness",
+            "value": "광택"
+        },
+        {
+            "key": "prop_Occlusion",
+            "value": "오클루전"
+        },
+        {
+            "key": "prop_Specular",
+            "value": "반사도"
+        },
+        {
+            "key": "prop_SpecularTintTexture",
+            "value": "스페큘러 틴트 텍스처"
+        },
+        {
+            "key": "prop_SpecularTint",
+            "value": "스페큘러 틴트"
+        },
+        {
+            "key": "prop_TangentMap",
+            "value": "탄젠트 맵"
+        },
+        {
+            "key": "prop_Anisotropy",
+            "value": "이방성"
+        },
+        {
+            "key": "prop_ReplaceSpecular",
+            "value": "스페큘러 교체"
+        },
+        {
+            "key": "prop_HighlightRamp",
+            "value": "하이라이트 램프"
+        },
+        {
+            "key": "prop_HighlightHardness",
+            "value": "하이라이트 경도"
+        },
+        {
+            "key": "prop_HighlightRampColor",
+            "value": "하이라이트 색상"
+        },
+        {
+            "key": "prop_HighlightIntensity",
+            "value": "하이라이트 강도"
+        },
+        {
+            "key": "prop_HighlightRampOffset",
+            "value": "하이라이트 램프 오프셋"
+        },
+        {
+            "key": "prop_HairFlowMap",
+            "value": "헤어 플로우/탄젠트 맵 (RG)"
+        },
+        {
+            "key": "prop_PrimarySpecularShift",
+            "value": "주 스페큘러 시프트"
+        },
+        {
+            "key": "prop_SecondarySpecularShift",
+            "value": "보조 스페큘러 시프트"
+        },
+        {
+            "key": "prop_SecondarySpecularColor",
+            "value": "보조 스페큘러 색상"
+        },
+        {
+            "key": "prop_SpecularExponent",
+            "value": "스페큘러 지수"
+        },
+        {
+            "key": "prop_SheenColor",
+            "value": "광택 색상"
+        },
+        {
+            "key": "prop_SheenIntensity",
+            "value": "광택 강도"
+        },
+        {
+            "key": "prop_SheenRoughness",
+            "value": "광택 거칠기"
+        },
+        {
+            "key": "prop_ToggleRimlight",
+            "value": "림 조명 활성화"
+        },
+        {
+            "key": "prop_RimColor",
+            "value": "림 색상"
+        },
+        {
+            "key": "prop_RimWidth",
+            "value": "림 너비"
+        },
+        {
+            "key": "prop_RimIntensity",
+            "value": "림 강도"
+        },
+        {
+            "key": "prop_RimLightBased",
+            "value": "조명 기반 림"
+        },
+        {
+            "key": "prop_ToggleClearcoat",
+            "value": "클리어 코트 활성화"
+        },
+        {
+            "key": "prop_ClearcoatStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_ClearcoatReflectionStrength",
+            "value": "반사 강도"
+        },
+        {
+            "key": "prop_ClearcoatMap",
+            "value": "마스크 (R=강도, G=거칠기)"
+        },
+        {
+            "key": "prop_ClearcoatRoughness",
+            "value": "거칠기"
+        },
+        {
+            "key": "prop_ClearcoatColor",
+            "value": "클리어코트 색상"
+        },
+        {
+            "key": "prop_ToggleMatcap",
+            "value": "Matcap 활성화"
+        },
+        {
+            "key": "prop_MatcapTex",
+            "value": "Matcap 텍스처"
+        },
+        {
+            "key": "prop_MatcapTint",
+            "value": "Matcap 틴트"
+        },
+        {
+            "key": "prop_MatcapIntensity",
+            "value": "Matcap 강도"
+        },
+        {
+            "key": "prop_MatcapBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_MatcapMask",
+            "value": "Matcap 마스크 (R)"
+        },
+        {
+            "key": "prop_MatcapSmoothnessEnabled",
+            "value": "부드러움 활성화"
+        },
+        {
+            "key": "prop_MatcapSmoothness",
+            "value": "부드러움"
+        },
+        {
+            "key": "prop_Decal1Enable",
+            "value": "데칼 1 활성화"
+        },
+        {
+            "key": "prop_Decal1Tex",
+            "value": "데칼 텍스처 (A=마스크)"
+        },
+        {
+            "key": "prop_Decal1Tint",
+            "value": "틴트"
+        },
+        {
+            "key": "prop_Decal1BlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_Decal1IsTriplanar",
+            "value": "트라이플래너 매핑 사용"
+        },
+        {
+            "key": "prop_Decal1Position",
+            "value": "UV 위치 (XY)"
+        },
+        {
+            "key": "prop_Decal1Scale",
+            "value": "UV 스케일 (XY)"
+        },
+        {
+            "key": "prop_Decal1Rotation",
+            "value": "UV 회전"
+        },
+        {
+            "key": "prop_Decal1TriplanarPosition",
+            "value": "월드 위치 (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarScale",
+            "value": "월드 스케일"
+        },
+        {
+            "key": "prop_Decal1TriplanarRotation",
+            "value": "월드 회전 (XYZ)"
+        },
+        {
+            "key": "prop_Decal1TriplanarSharpness",
+            "value": "트라이플래너 블렌드 선명도"
+        },
+        {
+            "key": "prop_Decal1Repeat",
+            "value": "패턴 반복"
+        },
+        {
+            "key": "prop_Decal1Scroll",
+            "value": "스크롤 속도 (XY)"
+        },
+        {
+            "key": "prop_Decal1HueShift",
+            "value": "색조 시프트"
+        },
+        {
+            "key": "prop_Decal1AutoCycleHue",
+            "value": "자동 색조 순환"
+        },
+        {
+            "key": "prop_Decal1CycleSpeed",
+            "value": "순환 속도"
+        },
+        {
+            "key": "prop_Decal2Enable",
+            "value": "데칼 2 활성화"
+        },
+        {
+            "key": "prop_Decal2Tex",
+            "value": "데칼 텍스처 (A=마스크)"
+        },
+        {
+            "key": "prop_Decal2Tint",
+            "value": "틴트"
+        },
+        {
+            "key": "prop_Decal2BlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_Decal2IsTriplanar",
+            "value": "트라이플래너 매핑 사용"
+        },
+        {
+            "key": "prop_Decal2Position",
+            "value": "UV 위치 (XY)"
+        },
+        {
+            "key": "prop_Decal2Scale",
+            "value": "UV 스케일 (XY)"
+        },
+        {
+            "key": "prop_Decal2Rotation",
+            "value": "UV 회전"
+        },
+        {
+            "key": "prop_Decal2TriplanarPosition",
+            "value": "월드 위치 (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarScale",
+            "value": "월드 스케일"
+        },
+        {
+            "key": "prop_Decal2TriplanarRotation",
+            "value": "월드 회전 (XYZ)"
+        },
+        {
+            "key": "prop_Decal2TriplanarSharpness",
+            "value": "트라이플래너 블렌드 선명도"
+        },
+        {
+            "key": "prop_Decal2Repeat",
+            "value": "패턴 반복"
+        },
+        {
+            "key": "prop_Decal2Scroll",
+            "value": "스크롤 속도 (XY)"
+        },
+        {
+            "key": "prop_Decal2HueShift",
+            "value": "색조 시프트"
+        },
+        {
+            "key": "prop_Decal2AutoCycleHue",
+            "value": "자동 색조 순환"
+        },
+        {
+            "key": "prop_Decal2CycleSpeed",
+            "value": "순환 속도"
+        },
+        {
+            "key": "prop_TogglePostProcessing",
+            "value": "후처리 활성화"
+        },
+        {
+            "key": "prop_RGBColor",
+            "value": "RGB 틴트"
+        },
+        {
+            "key": "prop_RGBBlendMode",
+            "value": "RGB 곱하기/교체"
+        },
+        {
+            "key": "prop_HSVMode",
+            "value": "HSV 모드"
+        },
+        {
+            "key": "prop_HSVHue",
+            "value": "색조"
+        },
+        {
+            "key": "prop_HSVSaturation",
+            "value": "채도"
+        },
+        {
+            "key": "prop_HSVValue",
+            "value": "명도 (밝기)"
+        },
+        {
+            "key": "prop_ToggleHueShift",
+            "value": "색조 시프트 활성화"
+        },
+        {
+            "key": "prop_HueShift",
+            "value": "색조 시프트"
+        },
+        {
+            "key": "prop_ToggleAutoCycle",
+            "value": "자동 색조 순환 활성화"
+        },
+        {
+            "key": "prop_AutoCycleSpeed",
+            "value": "자동 순환 속도"
+        },
+        {
+            "key": "prop_ColorGradingLUT",
+            "value": "색상 그레이딩 LUT"
+        },
+        {
+            "key": "prop_ColorGradingIntensity",
+            "value": "그레이딩 강도"
+        },
+        {
+            "key": "prop_BlackAndWhite",
+            "value": "흑백"
+        },
+        {
+            "key": "prop_Brightness",
+            "value": "밝기"
+        },
+        {
+            "key": "prop_ToggleCubemap",
+            "value": "큐브맵 활성화"
+        },
+        {
+            "key": "prop_CubemapTex",
+            "value": "큐브맵"
+        },
+        {
+            "key": "prop_CubemapTint",
+            "value": "큐브맵 틴트"
+        },
+        {
+            "key": "prop_CubemapIntensity",
+            "value": "큐브맵 강도"
+        },
+        {
+            "key": "prop_CubemapBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_ToggleParallax",
+            "value": "패럴랙스 매핑 활성화"
+        },
+        {
+            "key": "prop_ParallaxMode",
+            "value": "패럴랙스 모드"
+        },
+        {
+            "key": "prop_ParallaxMap",
+            "value": "높이 맵 (R)"
+        },
+        {
+            "key": "prop_ParallaxStrength",
+            "value": "패럴랙스 강도"
+        },
+        {
+            "key": "prop_ParallaxSteps",
+            "value": "고품질 단계"
+        },
+        {
+            "key": "prop_ToggleSSS",
+            "value": "표면 하 산란 활성화"
+        },
+        {
+            "key": "prop_SSSColor",
+            "value": "SSS 색상"
+        },
+        {
+            "key": "prop_SSSStrength",
+            "value": "SSS 강도"
+        },
+        {
+            "key": "prop_SSSPower",
+            "value": "SSS 파워"
+        },
+        {
+            "key": "prop_SSSDistortion",
+            "value": "SSS 왜곡"
+        },
+        {
+            "key": "prop_SSSThicknessMap",
+            "value": "SSS 두께 맵 (R)"
+        },
+        {
+            "key": "prop_SSSThickness",
+            "value": "SSS 두께 감쇠"
+        },
+        {
+            "key": "prop_ToggleShadowMap",
+            "value": "그림자 맵 활성화"
+        },
+        {
+            "key": "prop_ShadowMap",
+            "value": "그림자 맵 (R=마스크)"
+        },
+        {
+            "key": "prop_ShadowMapIntensity",
+            "value": "강도"
+        },
+        {
+            "key": "prop_ToggleDetail",
+            "value": "디테일 맵 활성화"
+        },
+        {
+            "key": "prop_DetailAlbedoMap",
+            "value": "디테일 알베도 (A=강도)"
+        },
+        {
+            "key": "prop_DetailNormalMap",
+            "value": "디테일 노멀 맵"
+        },
+        {
+            "key": "prop_DetailTiling",
+            "value": "디테일 타일링"
+        },
+        {
+            "key": "prop_DetailNormalStrength",
+            "value": "디테일 노멀 강도"
+        },
+        {
+            "key": "prop_ToggleDissolve",
+            "value": "디졸브 활성화"
+        },
+        {
+            "key": "prop_DissolveProgress",
+            "value": "디졸브 진행률"
+        },
+        {
+            "key": "prop_DissolveType",
+            "value": "디졸브 유형"
+        },
+        {
+            "key": "prop_DissolveEdgeColor",
+            "value": "가장자리 색상"
+        },
+        {
+            "key": "prop_DissolveEdgeWidth",
+            "value": "가장자리 너비"
+        },
+        {
+            "key": "prop_DissolveEdgeMode",
+            "value": "가장자리 모드"
+        },
+        {
+            "key": "prop_DissolveEdgeSharpness",
+            "value": "가장자리 선명도"
+        },
+        {
+            "key": "prop_DissolveNoiseTex",
+            "value": "노이즈 텍스처 (R)"
+        },
+        {
+            "key": "prop_DissolveNoiseScale",
+            "value": "노이즈 스케일"
+        },
+        {
+            "key": "prop_DissolveDirection",
+            "value": "와이프 방향 (XYZ)"
+        },
+        {
+            "key": "prop_DissolveDirectionSpace",
+            "value": "와이프 공간"
+        },
+        {
+            "key": "prop_DissolveDirectionBounds",
+            "value": "와이프 경계 크기"
+        },
+        {
+            "key": "prop_DissolveVoxelDensity",
+            "value": "복셀 밀도"
+        },
+        {
+            "key": "prop_TogglePathing",
+            "value": "경로 설정 활성화"
+        },
+        {
+            "key": "prop_PathingMappingMode",
+            "value": "매핑 모드"
+        },
+        {
+            "key": "prop_PathingMap",
+            "value": "경로 맵 (R)"
+        },
+        {
+            "key": "prop_PathingScale",
+            "value": "경로 스케일"
+        },
+        {
+            "key": "prop_PathingBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_PathingStart",
+            "value": "경로 시작"
+        },
+        {
+            "key": "prop_PathingEnd",
+            "value": "경로 끝"
+        },
+        {
+            "key": "prop_PathingColor",
+            "value": "경로 색상"
+        },
+        {
+            "key": "prop_PathingColorMode",
+            "value": "경로 색상 모드"
+        },
+        {
+            "key": "prop_PathingTexture",
+            "value": "경로 텍스처"
+        },
+        {
+            "key": "prop_PathingColor2",
+            "value": "경로 색상 2"
+        },
+        {
+            "key": "prop_PathingEmission",
+            "value": "이미션 강도"
+        },
+        {
+            "key": "prop_PathingType",
+            "value": "경로 유형"
+        },
+        {
+            "key": "prop_PathingSpeed",
+            "value": "속도"
+        },
+        {
+            "key": "prop_PathingWidth",
+            "value": "경로 너비"
+        },
+        {
+            "key": "prop_PathingSoftness",
+            "value": "부드러움"
+        },
+        {
+            "key": "prop_PathingOffset",
+            "value": "시간 오프셋"
+        },
+        {
+            "key": "prop_ToggleDepthRim",
+            "value": "깊이 림 조명 활성화"
+        },
+        {
+            "key": "prop_DepthRimColor",
+            "value": "림 색상"
+        },
+        {
+            "key": "prop_DepthRimWidth",
+            "value": "너비"
+        },
+        {
+            "key": "prop_DepthRimThreshold",
+            "value": "임계값"
+        },
+        {
+            "key": "prop_DepthRimSharpness",
+            "value": "선명도"
+        },
+        {
+            "key": "prop_DepthRimBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_ToggleAudioLink",
+            "value": "AudioLink 활성화"
+        },
+        {
+            "key": "prop_AudioLinkFallback",
+            "value": "폴백 레벨"
+        },
+        {
+            "key": "prop_AudioLinkEmissionBand",
+            "value": "이미션 밴드"
+        },
+        {
+            "key": "prop_AudioLinkEmissionStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkEmissionRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkRimBand",
+            "value": "림 조명 밴드"
+        },
+        {
+            "key": "prop_AudioLinkRimStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkRimRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftBand",
+            "value": "색조 시프트 밴드"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkHueShiftRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueBand",
+            "value": "데칼 색조 밴드"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkDecalHueRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionBand",
+            "value": "데칼 이미션 밴드"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkDecalEmissionRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityBand",
+            "value": "데칼 불투명도 밴드"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkDecalOpacityRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkVertexBand",
+            "value": "정점 성장/축소 밴드"
+        },
+        {
+            "key": "prop_AudioLinkVertexStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkVertexRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkOutlineBand",
+            "value": "외곽선 밴드"
+        },
+        {
+            "key": "prop_AudioLinkOutlineStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkOutlineRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkMatcapBand",
+            "value": "Matcap 밴드"
+        },
+        {
+            "key": "prop_AudioLinkMatcapStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkMatcapRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkPathingBand",
+            "value": "경로 설정 밴드"
+        },
+        {
+            "key": "prop_AudioLinkPathingStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkPathingRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkGlitterBand",
+            "value": "글리터 밴드"
+        },
+        {
+            "key": "prop_AudioLinkGlitterStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkGlitterRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceBand",
+            "value": "무지갯빛 밴드"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceStrength",
+            "value": "강도"
+        },
+        {
+            "key": "prop_AudioLinkIridescenceRange",
+            "value": "최소-최대"
+        },
+        {
+            "key": "prop_ToggleGlitter",
+            "value": "글리터 활성화"
+        },
+        {
+            "key": "prop_GlitterMode",
+            "value": "모드"
+        },
+        {
+            "key": "prop_GlitterNoiseTex",
+            "value": "노이즈 텍스처 (R)"
+        },
+        {
+            "key": "prop_GlitterMask",
+            "value": "마스크 (R)"
+        },
+        {
+            "key": "prop_GlitterTint",
+            "value": "틴트"
+        },
+        {
+            "key": "prop_GlitterFrequency",
+            "value": "밀도"
+        },
+        {
+            "key": "prop_GlitterThreshold",
+            "value": "밀도 임계값"
+        },
+        {
+            "key": "prop_GlitterSize",
+            "value": "크기"
+        },
+        {
+            "key": "prop_GlitterFlickerSpeed",
+            "value": "깜박임 속도"
+        },
+        {
+            "key": "prop_GlitterBrightness",
+            "value": "밝기"
+        },
+        {
+            "key": "prop_GlitterContrast",
+            "value": "대비"
+        },
+        {
+            "key": "prop_ToggleGlitterRainbow",
+            "value": "무지개 활성화"
+        },
+        {
+            "key": "prop_GlitterRainbowSpeed",
+            "value": "무지개 속도"
+        },
+        {
+            "key": "prop_ToggleDistanceFade",
+            "value": "거리 페이딩 활성화"
+        },
+        {
+            "key": "prop_DistanceFadeReference",
+            "value": "페이드 참조 지점"
+        },
+        {
+            "key": "prop_ToggleNearFade",
+            "value": "근거리 페이드 활성화"
+        },
+        {
+            "key": "prop_NearFadeMode",
+            "value": "근거리 페이드 모드"
+        },
+        {
+            "key": "prop_NearFadeDitherScale",
+            "value": "근거리 페이드 디더 스케일"
+        },
+        {
+            "key": "prop_NearFadeStart",
+            "value": "근거리 페이드 시작"
+        },
+        {
+            "key": "prop_NearFadeEnd",
+            "value": "근거리 페이드 끝"
+        },
+        {
+            "key": "prop_ToggleFarFade",
+            "value": "원거리 페이드 활성화"
+        },
+        {
+            "key": "prop_FarFadeStart",
+            "value": "원거리 페이드 시작"
+        },
+        {
+            "key": "prop_FarFadeEnd",
+            "value": "원거리 페이드 끝"
+        },
+        {
+            "key": "prop_ToggleIridescence",
+            "value": "무지갯빛 활성화"
+        },
+        {
+            "key": "prop_IridescenceMode",
+            "value": "모드"
+        },
+        {
+            "key": "prop_IridescenceMask",
+            "value": "마스크 (R)"
+        },
+        {
+            "key": "prop_IridescenceTint",
+            "value": "틴트"
+        },
+        {
+            "key": "prop_IridescenceIntensity",
+            "value": "강도"
+        },
+        {
+            "key": "prop_IridescenceBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_IridescenceParallax",
+            "value": "시야 패럴랙스"
+        },
+        {
+            "key": "prop_IridescenceRamp",
+            "value": "색상 램프"
+        },
+        {
+            "key": "prop_IridescencePower",
+            "value": "파워"
+        },
+        {
+            "key": "prop_IridescenceFrequency",
+            "value": "무지개 주파수"
+        },
+        {
+            "key": "prop_ToggleShadowTexture",
+            "value": "그림자 텍스처 활성화"
+        },
+        {
+            "key": "prop_ShadowTextureMappingMode",
+            "value": "그림자 모드"
+        },
+        {
+            "key": "prop_ShadowTextureIntensity",
+            "value": "그림자 강도"
+        },
+        {
+            "key": "prop_ShadowTextureBlendMode",
+            "value": "그림자 블렌드 모드"
+        },
+        {
+            "key": "prop_ShadowTex",
+            "value": "그림자 텍스처 / 패턴"
+        },
+        {
+            "key": "prop_ShadowPatternColor",
+            "value": "패턴 틴트"
+        },
+        {
+            "key": "prop_ShadowPatternScale",
+            "value": "패턴 스케일 / 타일링"
+        },
+        {
+            "key": "prop_ShadowPatternTriplanarSharpness",
+            "value": "트라이플래너 블렌드 선명도"
+        },
+        {
+            "key": "prop_ShadowPatternTransparency",
+            "value": "패턴 투명도"
+        },
+        {
+            "key": "prop_ToggleFlatModel",
+            "value": "평면 모델 활성화"
+        },
+        {
+            "key": "prop_FlatModeAutoflip",
+            "value": "자동 뒤집기"
+        },
+        {
+            "key": "prop_FlatModel",
+            "value": "평면 모델 강도"
+        },
+        {
+            "key": "prop_FlatModelDepthCorrection",
+            "value": "깊이 보정"
+        },
+        {
+            "key": "prop_FlatModelFacing",
+            "value": "향하는 방향"
+        },
+        {
+            "key": "prop_FlatModelLockAxis",
+            "value": "카메라 따라가기"
+        },
+        {
+            "key": "prop_ToggleWorldEffect",
+            "value": "월드 효과 활성화"
+        },
+        {
+            "key": "prop_WorldEffectBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_WorldEffectTex",
+            "value": "효과 텍스처 (A=마스크)"
+        },
+        {
+            "key": "prop_WorldEffectMask",
+            "value": "효과 마스크"
+        },
+        {
+            "key": "prop_WorldEffectColor",
+            "value": "효과 색상"
+        },
+        {
+            "key": "prop_WorldEffectDirection",
+            "value": "효과 방향 (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectScale",
+            "value": "효과 스케일"
+        },
+        {
+            "key": "prop_WorldEffectBlendSharpness",
+            "value": "방향성 블렌드 선명도"
+        },
+        {
+            "key": "prop_WorldEffectIntensity",
+            "value": "효과 강도"
+        },
+        {
+            "key": "prop_WorldEffectPosition",
+            "value": "월드 위치 (XYZ)"
+        },
+        {
+            "key": "prop_WorldEffectRotation",
+            "value": "월드 회전 (XYZ)"
+        },
+        {
+            "key": "prop_ToggleMirrorDetection",
+            "value": "VRChat 거울 감지 활성화"
+        },
+        {
+            "key": "prop_MirrorDetectionMode",
+            "value": "거울 모드"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture",
+            "value": "거울 감지 텍스처"
+        },
+        {
+            "key": "prop_ToggleTouchReactive",
+            "value": "터치 반응 활성화"
+        },
+        {
+            "key": "prop_TouchColor",
+            "value": "터치 색상"
+        },
+        {
+            "key": "prop_TouchRadius",
+            "value": "터치 반경"
+        },
+        {
+            "key": "prop_TouchHardness",
+            "value": "터치 경도"
+        },
+        {
+            "key": "prop_TouchMode",
+            "value": "터치 모드"
+        },
+        {
+            "key": "prop_TouchRainbowSpeed",
+            "value": "터치 무지개 속도"
+        },
+        {
+            "key": "prop_TouchRainbowSpread",
+            "value": "터치 무지개 확산"
+        },
+        {
+            "key": "prop_ToggleRefraction",
+            "value": "굴절 효과 활성화"
+        },
+        {
+            "key": "prop_RefractionMask",
+            "value": "마스크 (R=강도)"
+        },
+        {
+            "key": "prop_RefractionTint",
+            "value": "굴절 틴트"
+        },
+        {
+            "key": "prop_RefractionIOR",
+            "value": "굴절 강도"
+        },
+        {
+            "key": "prop_RefractionFresnel",
+            "value": "프레넬 파워"
+        },
+        {
+            "key": "prop_RefractionOpacity",
+            "value": "굴절 불투명도"
+        },
+        {
+            "key": "prop_RefractionSeeThrough",
+            "value": "투시 강도"
+        },
+        {
+            "key": "prop_RefractionGrabpassTint",
+            "value": "그랩패스 틴트"
+        },
+        {
+            "key": "prop_RefractionZoomToggle",
+            "value": "굴절 줌"
+        },
+        {
+            "key": "prop_RefractionZoom",
+            "value": "줌 양"
+        },
+        {
+            "key": "prop_RefractionMode",
+            "value": "굴절 모드"
+        },
+        {
+            "key": "prop_RefractionMixStrength",
+            "value": "혼합 강도"
+        },
+        {
+            "key": "prop_RefractionBlendMode",
+            "value": "추가 <-> 교체"
+        },
+        {
+            "key": "prop_CausticsTex",
+            "value": "내부 코스틱 텍스처"
+        },
+        {
+            "key": "prop_CausticsColor",
+            "value": "코스틱 색상"
+        },
+        {
+            "key": "prop_CausticsTiling",
+            "value": "코스틱 타일링"
+        },
+        {
+            "key": "prop_CausticsSpeed",
+            "value": "코스틱 애니메이션 속도"
+        },
+        {
+            "key": "prop_CausticsIntensity",
+            "value": "코스틱 강도"
+        },
+        {
+            "key": "prop_DistortionNoiseTex",
+            "value": "왜곡 노이즈 (RG)"
+        },
+        {
+            "key": "prop_DistortionNoiseTiling",
+            "value": "왜곡 노이즈 타일링"
+        },
+        {
+            "key": "prop_DistortionNoiseStrength",
+            "value": "왜곡 노이즈 강도"
+        },
+        {
+            "key": "prop_RefractionDistortionMode",
+            "value": "블러 모드"
+        },
+        {
+            "key": "prop_RefractionCAStrength",
+            "value": "색수차 강도"
+        },
+        {
+            "key": "prop_RefractionBlurStrength",
+            "value": "블러 강도"
+        },
+        {
+            "key": "prop_RefractionCAUseFresnel",
+            "value": "프레넬 색수차"
+        },
+        {
+            "key": "prop_RefractionCAEdgeFade",
+            "value": "CA 가장자리 페이드"
+        },
+        {
+            "key": "prop_ToggleDither",
+            "value": "디더링 활성화"
+        },
+        {
+            "key": "prop_DitherAmount",
+            "value": "디더 양"
+        },
+        {
+            "key": "prop_DitherSpace",
+            "value": "디더 공간"
+        },
+        {
+            "key": "prop_DitherScale",
+            "value": "디더 스케일"
+        },
+        {
+            "key": "prop_TogglePS1",
+            "value": "저정밀도 활성화 (PS1)"
+        },
+        {
+            "key": "prop_PS1Rounding",
+            "value": "반올림 스타일"
+        },
+        {
+            "key": "prop_PS1RoundingPrecision",
+            "value": "반올림 정밀도"
+        },
+        {
+            "key": "prop_PS1Affine",
+            "value": "아핀 텍스처 매핑 활성화"
+        },
+        {
+            "key": "prop_PS1Compression",
+            "value": "색상 압축 활성화"
+        },
+        {
+            "key": "prop_PS1CompressionPrecision",
+            "value": "색상 압축 정밀도"
+        },
+        {
+            "key": "prop_UseTextureStitching",
+            "value": "텍스처 스티칭 활성화"
+        },
+        {
+            "key": "prop_StitchTex",
+            "value": "스티치 텍스처"
+        },
+        {
+            "key": "prop_StitchAxis",
+            "value": "스티치 축"
+        },
+        {
+            "key": "prop_StitchOffset",
+            "value": "스티치 이음새 오프셋"
+        },
+        {
+            "key": "prop_StitchTex_UV",
+            "value": "스티치 텍스처 UV"
+        },
+        {
+            "key": "prop_ToggleVertexDistortion",
+            "value": "정점 왜곡 활성화"
+        },
+        {
+            "key": "prop_VertexDistortionMode",
+            "value": "왜곡 모드"
+        },
+        {
+            "key": "prop_VertexDistortionColorMask",
+            "value": "색상 채널 마스크"
+        },
+        {
+            "key": "prop_VertexDistortionStrength",
+            "value": "왜곡 강도"
+        },
+        {
+            "key": "prop_VertexDistortionSpeed",
+            "value": "왜곡 속도"
+        },
+        {
+            "key": "prop_VertexDistortionFrequency",
+            "value": "왜곡 주파수"
+        },
+        {
+            "key": "prop_WindStrength",
+            "value": "바람 강도"
+        },
+        {
+            "key": "prop_WindSpeed",
+            "value": "바람 속도"
+        },
+        {
+            "key": "prop_WindScale",
+            "value": "바람 노이즈 스케일"
+        },
+        {
+            "key": "prop_WindDirection",
+            "value": "바람 방향 (XYZ)"
+        },
+        {
+            "key": "prop_WindNoiseTex",
+            "value": "바람 노이즈 텍스처 (R)"
+        },
+        {
+            "key": "prop_BreathingStrength",
+            "value": "호흡 강도"
+        },
+        {
+            "key": "prop_BreathingSpeed",
+            "value": "호흡 속도"
+        },
+        {
+            "key": "prop_ToggleSSR",
+            "value": "스크린 스페이스 반사 활성화"
+        },
+        {
+            "key": "prop_SSRMask",
+            "value": "마스크 (R)"
+        },
+        {
+            "key": "prop_SSRTint",
+            "value": "반사 틴트"
+        },
+        {
+            "key": "prop_SSRIntensity",
+            "value": "강도"
+        },
+        {
+            "key": "prop_SSRBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_SSRFresnelPower",
+            "value": "프레넬 파워"
+        },
+        {
+            "key": "prop_SSRFresnelScale",
+            "value": "프레넬 스케일"
+        },
+        {
+            "key": "prop_SSRFresnelBias",
+            "value": "프레넬 바이어스"
+        },
+        {
+            "key": "prop_SSRParallax",
+            "value": "패럴랙스 강도"
+        },
+        {
+            "key": "prop_SSRDistortionMap",
+            "value": "왜곡 맵 (RG)"
+        },
+        {
+            "key": "prop_SSRDistortionStrength",
+            "value": "왜곡 강도"
+        },
+        {
+            "key": "prop_SSRWorldDistortion",
+            "value": "월드 왜곡 강도"
+        },
+        {
+            "key": "prop_SSRBlur",
+            "value": "블러 강도"
+        },
+        {
+            "key": "prop_SSRMode",
+            "value": "반사 품질"
+        },
+        {
+            "key": "prop_SSRMaxSteps",
+            "value": "최대 단계"
+        },
+        {
+            "key": "prop_SSRStepSize",
+            "value": "단계 크기"
+        },
+        {
+            "key": "prop_SSRCoverage",
+            "value": "커버리지 부스트"
+        },
+        {
+            "key": "prop_SSREdgeFade",
+            "value": "가장자리 페이드"
+        },
+        {
+            "key": "prop_SSRCamFade",
+            "value": "카메라 거리 페이드 활성화"
+        },
+        {
+            "key": "prop_SSRCamFadeStart",
+            "value": "SSR 카메라 페이드 시작"
+        },
+        {
+            "key": "prop_SSRCamFadeEnd",
+            "value": "SSR 카메라 페이드 끝"
+        },
+        {
+            "key": "prop_SSRFlipUV",
+            "value": "반사 UV 뒤집기"
+        },
+        {
+            "key": "prop_SSRAdaptiveStep",
+            "value": "적응형 단계 크기 활성화"
+        },
+        {
+            "key": "prop_SSRThickness",
+            "value": "컬링 두께"
+        },
+        {
+            "key": "prop_SSROutOfViewMode",
+            "value": "시야 밖 모드"
+        },
+        {
+            "key": "prop_OutlineColor",
+            "value": "외곽선 색상"
+        },
+        {
+            "key": "prop_OutlineWidth",
+            "value": "외곽선 너비"
+        },
+        {
+            "key": "prop_OutlineVertexColorMask",
+            "value": "정점 색상 (R) 마스크 사용"
+        },
+        {
+            "key": "prop_OutlineDistanceFade",
+            "value": "거리 페이드 활성화"
+        },
+        {
+            "key": "prop_OutlineFadeStart",
+            "value": "페이드 시작 거리"
+        },
+        {
+            "key": "prop_OutlineFadeEnd",
+            "value": "페이드 끝 거리"
+        },
+        {
+            "key": "prop_OutlineHueShift",
+            "value": "색조 시프트 활성화"
+        },
+        {
+            "key": "prop_OutlineHueShiftSpeed",
+            "value": "색조 시프트 속도"
+        },
+        {
+            "key": "prop_OutlineOpacity",
+            "value": "외곽선 불투명도"
+        },
+        {
+            "key": "prop_IndirectFallbackMode",
+            "value": "간접 폴백 모드"
+        },
+        {
+            "key": "prop_IndirectOverride",
+            "value": "간접 재정의"
+        },
+        {
+            "key": "prop_FallbackCubemap",
+            "value": "폴백 큐브맵"
+        },
+        {
+            "key": "prop_MainTex_UV",
+            "value": "주 텍스처 UV 세트"
+        },
+        {
+            "key": "prop_BumpMap_UV",
+            "value": "범프 맵 UV 세트"
+        },
+        {
+            "key": "prop_MSSO_UV",
+            "value": "MSSO UV 세트"
+        },
+        {
+            "key": "prop_SpecularTintTexture_UV",
+            "value": "스페큘러 틴트 UV 세트"
+        },
+        {
+            "key": "prop_TangentMap_UV",
+            "value": "탄젠트 맵 UV"
+        },
+        {
+            "key": "prop_EmissionMap_UV",
+            "value": "이미션 맵 UV 세트"
+        },
+        {
+            "key": "prop_ClearcoatMap_UV",
+            "value": "클리어 코트 맵 UV 세트"
+        },
+        {
+            "key": "prop_MatcapMask_UV",
+            "value": "Matcap 마스크 UV 세트"
+        },
+        {
+            "key": "prop_ParallaxMap_UV",
+            "value": "높이 맵 UV 세트"
+        },
+        {
+            "key": "prop_ThicknessMap_UV",
+            "value": "두께 맵 UV 세트"
+        },
+        {
+            "key": "prop_DetailMap_UV",
+            "value": "디테일 맵 UV 세트"
+        },
+        {
+            "key": "prop_Decal1_UV",
+            "value": "데칼 1 UV 세트"
+        },
+        {
+            "key": "prop_Decal2_UV",
+            "value": "데칼 2 UV 세트"
+        },
+        {
+            "key": "prop_Glitter_UV",
+            "value": "글리터 UV 세트"
+        },
+        {
+            "key": "prop_IridescenceMask_UV",
+            "value": "무지갯빛 마스크 UV 세트"
+        },
+        {
+            "key": "prop_GlitterMask_UV",
+            "value": "글리터 마스크 UV 세트"
+        },
+        {
+            "key": "prop_HairFlowMap_UV",
+            "value": "헤어 플로우 맵 UV 세트"
+        },
+        {
+            "key": "prop_ShadowTex_UV",
+            "value": "그림자 텍스처 UV 세트"
+        },
+        {
+            "key": "prop_Flowmap_UV",
+            "value": "플로우맵 UV 세트"
+        },
+        {
+            "key": "prop_MirrorDetectionTexture_UV",
+            "value": "거울 감지 텍스처 UV 세트"
+        },
+        {
+            "key": "prop_RefractionMask_UV",
+            "value": "굴절 마스크 UV 세트"
+        },
+        {
+            "key": "prop_PathingTexture_UV",
+            "value": "경로 맵 UV 세트"
+        },
+        {
+            "key": "prop_ShadowMap_UV",
+            "value": "그림자 맵 UV 세트"
+        },
+        {
+            "key": "prop_Dither_UV",
+            "value": "디더 UV 세트"
+        },
+        {
+            "key": "prop_OverrideRenderQueue",
+            "value": "사용자 지정 렌더 큐 사용"
+        },
+        {
+            "key": "prop_OverrideBaseBlend",
+            "value": "사용자 지정 기본 블렌딩 사용"
+        },
+        {
+            "key": "prop_BlendOp",
+            "value": "블렌드 연산"
+        },
+        {
+            "key": "prop_AddSrcBlend",
+            "value": "소스 블렌드"
+        },
+        {
+            "key": "prop_AddDstBlend",
+            "value": "대상 블렌드"
+        },
+        {
+            "key": "prop_AddBlendOp",
+            "value": "알파 블렌드 연산"
+        },
+        {
+            "key": "prop_ZTest",
+            "value": "ZTest"
+        },
+        {
+            "key": "prop_OverrideAddBlend",
+            "value": "사용자 지정 추가 블렌딩 사용"
+        },
+        {
+            "key": "prop_OverrideZWrite",
+            "value": "사용자 지정 ZWrite 사용"
+        },
+        {
+            "key": "specular_standard_stylised_info",
+            "value": "표준 스페큘러에는 스타일화된 옵션이 없습니다. 여기에서 설정을 보려면 스페큘러 모드를 변경해보세요!"
+        },
+        {
+            "key": "depth_popup_info",
+            "value": "이 효과는 장면에서 깊이를 읽어야 합니다! 월드에 실시간 조명이 활성화되어 있거나 장면(Backlace와 함께 제공)에 깊이 작성기 프리팹이 있는지 확인하세요."
+        }
+    ]
+}
