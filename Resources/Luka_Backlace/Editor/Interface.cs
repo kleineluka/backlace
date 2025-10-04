@@ -207,6 +207,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_ShadowIntensity = null;
         private MaterialProperty prop_OcclusionOffsetIntensity = null;
         private MaterialProperty prop_RampMin = null;
+        private MaterialProperty prop_RampNormalIntensity = null;
         private MaterialProperty prop_AnimeShadowColor = null;
         private MaterialProperty prop_AnimeShadowThreshold = null;
         private MaterialProperty prop_AnimeHalftoneColor = null;
@@ -338,9 +339,6 @@ namespace Luka.Backlace
         private MaterialProperty prop_ParallaxMap = null;
         private MaterialProperty prop_ParallaxStrength = null;
         private MaterialProperty prop_ParallaxSteps = null;
-        private MaterialProperty prop_ToggleParallaxShadows = null;
-        private MaterialProperty prop_ParallaxShadowSteps = null;
-        private MaterialProperty prop_ParallaxShadowStrength = null;
         // subsurface properties
         private MaterialProperty prop_ToggleSSS = null;
         private MaterialProperty prop_SSSColor = null;
@@ -1059,7 +1057,7 @@ namespace Luka.Backlace
                         Components.Vector3Property(materialEditor, prop_Decal1TriplanarPosition, languages.speak("prop_Decal1TriplanarPosition"));
                         materialEditor.ShaderProperty(prop_Decal1TriplanarScale, languages.speak("prop_Decal1TriplanarScale"));
                         materialEditor.ShaderProperty(prop_Decal1TriplanarRotation, languages.speak("prop_Decal1TriplanarRotation"));
-                        Components.Vector3Property(materialEditor, prop_Decal1TriplanarSharpness, languages.speak("prop_Decal1TriplanarSharpness"));
+                        materialEditor.ShaderProperty(prop_Decal1TriplanarSharpness, languages.speak("prop_Decal1TriplanarSharpness"));
                     }
                     materialEditor.ShaderProperty(prop_Decal1Repeat, languages.speak("prop_Decal1Repeat"));
                     Components.start_dynamic_disable(prop_Decal1Repeat.floatValue.Equals(0), configs);
@@ -1114,7 +1112,7 @@ namespace Luka.Backlace
                         Components.Vector3Property(materialEditor, prop_Decal2TriplanarPosition, languages.speak("prop_Decal2TriplanarPosition"));
                         materialEditor.ShaderProperty(prop_Decal2TriplanarScale, languages.speak("prop_Decal2TriplanarScale"));
                         materialEditor.ShaderProperty(prop_Decal2TriplanarRotation, languages.speak("prop_Decal2TriplanarRotation"));
-                        Components.Vector3Property(materialEditor, prop_Decal2TriplanarSharpness, languages.speak("prop_Decal2TriplanarSharpness"));
+                        materialEditor.ShaderProperty(prop_Decal2TriplanarSharpness, languages.speak("prop_Decal2TriplanarSharpness"));
                     }
                     materialEditor.ShaderProperty(prop_Decal2Repeat, languages.speak("prop_Decal2Repeat"));
                     Components.start_dynamic_disable(prop_Decal2Repeat.floatValue.Equals(0), configs);
@@ -1347,6 +1345,7 @@ namespace Luka.Backlace
                     prop_LitThreshold = FindProperty("_LitThreshold", properties);
                     prop_ShadowTint = FindProperty("_ShadowTint", properties);
                     prop_ShadowThreshold = FindProperty("_ShadowThreshold", properties);
+                    prop_RampNormalIntensity = FindProperty("_RampNormalIntensity", properties);
                     materialEditor.ShaderProperty(prop_ToggleAnimeLighting, languages.speak("prop_ToggleAnimeLighting"));
                     Components.start_dynamic_disable(!prop_ToggleAnimeLighting.floatValue.Equals(1), configs);
                     
@@ -1361,6 +1360,7 @@ namespace Luka.Backlace
                         materialEditor.ShaderProperty(prop_ShadowIntensity, languages.speak("prop_ShadowIntensity"));
                         materialEditor.ShaderProperty(prop_OcclusionOffsetIntensity, languages.speak("prop_OcclusionOffsetIntensity"));
                         materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
+                        materialEditor.ShaderProperty(prop_RampNormalIntensity, languages.speak("prop_RampNormalIntensity"));
                     }
                     // Procedural Mode
                     else
@@ -1656,22 +1656,12 @@ namespace Luka.Backlace
                     prop_ParallaxMap = FindProperty("_ParallaxMap", properties);
                     prop_ParallaxStrength = FindProperty("_ParallaxStrength", properties);
                     prop_ParallaxSteps = FindProperty("_ParallaxSteps", properties);
-                    prop_ToggleParallaxShadows = FindProperty("_ToggleParallaxShadows", properties);
-                    prop_ParallaxShadowSteps = FindProperty("_ParallaxShadowSteps", properties);
-                    prop_ParallaxShadowStrength = FindProperty("_ParallaxShadowStrength", properties);
                     materialEditor.ShaderProperty(prop_ToggleParallax, languages.speak("prop_ToggleParallax"));
                     Components.start_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_ParallaxMode, languages.speak("prop_ParallaxMode"));
                     materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxMap"));
                     materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
                     materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
-                    materialEditor.ShaderProperty(prop_ToggleParallaxShadows, languages.speak("prop_ToggleParallaxShadows"));
-                    Components.start_dynamic_disable(!prop_ToggleParallaxShadows.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_ParallaxShadowSteps, languages.speak("prop_ParallaxShadowSteps"));
-                    materialEditor.ShaderProperty(prop_ParallaxShadowStrength, languages.speak("prop_ParallaxShadowStrength"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_ToggleParallaxShadows.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
                 }
                 sub_tab_detail_map.draw();

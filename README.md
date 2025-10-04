@@ -96,7 +96,7 @@ Backlace is split into various .cginclude files to make it editing, building, an
 - `Backlace_Keywords.cginc`, `Backlace_Properties.cginc`, and `Backlace_Universal.cginc` contain various helper code used throughout the shader.
 - Third-party code (such as AudioLink) go into their own files, such as `Backlace_AudioLink.cginc`.
 
-What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change.
+What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change. This modular practice also makes it easy to dynamically add different versions of the shader (ex. `Outline` or `Grabpass`) - we can just add a new define (ex. `BACKLACE_GRABPASS`) and use that to conditionally compile code.
 
 ## License ✨
 Anything in the [Editor](https://github.com/kleineluka/backlace/tree/main/Resources/Luka_Backlace/Editor) folder is exempt from this license as it is a separate project used to build Backlace's UI. Backlace itself is licensed under the Backlace License (Version 1.0). For the full legal terms, please see the LICENSE file included in this repository. 

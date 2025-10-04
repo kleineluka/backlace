@@ -79,7 +79,7 @@ Shader "luka/backlace/default"
         _UVTriplanarPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _UVTriplanarScale ("World Scale", Float) = 1.0
         _UVTriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
-        _UVTriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        _UVTriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
         // screenspace
         [Enum(Disabled, 0, Enabled, 1)] _UVScreenspaceMapping ("Enable Screenspace Mapping", Float) = 0.0
         _UVScreenspaceTiling ("Screenspace Tiling", Float) = 1.0
@@ -157,11 +157,12 @@ Shader "luka/backlace/default"
         _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
         _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
+        [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Apply Normals to Intensity", Float) = 0
         // anime
-        [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1) // <-- RENAME THIS
-        _AnimeShadowThreshold ("Core Shadow Threshold", Range(0, 1)) = 0.3 // <-- RENAME and adjust default
-        [HDR] _AnimeHalftoneColor ("Halftone Color", Color) = (0.8, 0.8, 1, 1) // <-- ADD THIS
-        _AnimeHalftoneThreshold ("Halftone Threshold", Range(0, 1)) = 0.6 // <-- ADD THIS
+        [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1)
+        _AnimeShadowThreshold ("Core Shadow Threshold", Range(0, 1)) = 0.3
+        [HDR] _AnimeHalftoneColor ("Halftone Color", Color) = (0.8, 0.8, 1, 1)
+        _AnimeHalftoneThreshold ("Halftone Threshold", Range(0, 1)) = 0.6
         _AnimeShadowSoftness ("Shadow Softness", Range(0.001, 1)) = 0.02
         // ambient gradient
         [Enum(Disabled, 0, Enabled, 1)] _ToggleAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
@@ -262,7 +263,7 @@ Shader "luka/backlace/default"
         _Decal1TriplanarPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal1TriplanarScale ("World Scale", Float) = 1.0
         _Decal1TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
-        _Decal1TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        _Decal1TriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal1Repeat ("Repeat Pattern", Float) = 0.0
         _Decal1Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
         _Decal1HueShift ("Hue Shift", Range(0, 2)) = 0.0
@@ -284,7 +285,7 @@ Shader "luka/backlace/default"
         _Decal2TriplanarPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal2TriplanarScale ("World Scale", Float) = 1.0
         _Decal2TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
-        _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal2Repeat ("Repeat Pattern", Float) = 0.0
         _Decal2Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
         _Decal2HueShift ("Hue Shift", Range(0, 2)) = 0.0
@@ -328,11 +329,8 @@ Shader "luka/backlace/default"
         [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
         [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
         [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
-        _ParallaxStrength ("Parallax Strength", Range(0, 0.1)) = 0.02
+        _ParallaxStrength ("Parallax Strength", Range(0, 0.35)) = 0.02
         _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
-        [Toggle(_BACKLACE_PARALLAX_SHADOWS)] _ToggleParallaxShadows ("Enable Self-Shadowing", Float) = 0.0
-        _ParallaxShadowSteps ("Shadow Quality Steps", Range(2, 16)) = 8
-        _ParallaxShadowStrength ("Shadow Strength", Range(0, 1)) = 0.75
 
         // SUBSURFACE SCATTERING
         // [Space(35)]
@@ -527,7 +525,7 @@ Shader "luka/backlace/default"
         [NoScaleOffset] _ShadowTex ("Shadow Texture / Pattern", 2D) = "white" { }
         _ShadowPatternColor ("Pattern Tint", Color) = (0, 0, 0, 1)
         _ShadowPatternScale ("Pattern Scale / Tiling", Float) = 5.0
-        _ShadowPatternTriplanarSharpness ("Triplanar Blend Sharpness", Range(1, 10)) = 2.0
+        _ShadowPatternTriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
         _ShadowPatternTransparency ("Pattern Transparency", Range(0, 1)) = 1
 
         // FLAT MODEL

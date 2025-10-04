@@ -47,9 +47,9 @@ void GetGeometryVectors(inout BacklaceSurfaceData Surface, FragmentData FragData
 void GetDirectionVectors(inout BacklaceSurfaceData Surface)
 {
     CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
-    Surface.LightDir = normalize(UnityWorldSpaceLightDir(FragData.worldPos));
     Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
-    Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
+    //Surface.LightDir = normalize(UnityWorldSpaceLightDir(FragData.worldPos));
+    //Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
 }
 
 // get dot products
@@ -90,9 +90,6 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
 {
     Surface.Diffuse = 0;
     float ramp = DisneyDiffuse(Surface.Roughness, Surface) * Surface.NdotL;
-    #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
-        ramp *= ParallaxShadow;
-    #endif // _BACKLACE_PARALLAX_SHADOWS
     #if defined(_BACKLACE_LTCGI)
         float2 ltcgi_lmUV = 0;
         #if defined(LIGHTMAP_ON)
@@ -208,6 +205,10 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampUv)).rgb;
             ramp *= _RampColor.rgb;
             float intensity = max(_ShadowIntensity, 0.001);
+            if (_RampNormalIntensity == 1)
+            {
+                intensity *= saturate(Surface.NdotV + Surface.NdotL);
+            }
             ramp = remap(ramp, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1));
             float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
             float3 rampA = remap(ramp, rmin, 1, 0, 1);
@@ -217,7 +218,6 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #else // DIRECTIONAL || DIRECTIONAL_COOKIE
                 return float4(rampA, rampGrey);
             #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
-
         }
 
         // Specific Shade4PointLights function for ramp toon shading
@@ -270,9 +270,6 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         {
             Surface.Diffuse = 0;
             float4 ramp = RampDotL(Surface);
-            #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
-                ramp *= ParallaxShadow;
-            #endif // _BACKLACE_PARALLAX_SHADOWS
             #if defined(_BACKLACE_LTCGI)
                 float2 ltcgi_lmUV = 0;
                 #if defined(LIGHTMAP_ON)
@@ -316,10 +313,10 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
                 #if defined(_BACKLACE_VERTEX_SPECULAR)
-                    RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, VertexLightDir);
+                    RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, VertexLightDir);
                 #else
                     float3 ignoredDir;
-                    RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, VertexDirectDiffuse, ignoredDir);
+                    RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, ignoredDir);
                 #endif
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
@@ -374,9 +371,6 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             finalColor = lerp(finalColor, directLight, lightMask);
             Surface.Diffuse = finalColor;
             ApplyAmbientGradient(Surface);
-            #if defined(_BACKLACE_PARALLAX) && defined(_BACKLACE_PARALLAX_SHADOWS)
-                Surface.Diffuse *= ParallaxShadow;
-            #endif
             Surface.Attenuation = lightMask;
             ApplyAreaTint(Surface);
         }

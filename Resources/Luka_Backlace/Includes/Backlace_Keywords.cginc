@@ -22,7 +22,6 @@
 // ADVANCED KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_CUBEMAP
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
-#pragma shader_feature_local _ _BACKLACE_PARALLAX_SHADOWS
 #pragma shader_feature_local _ _BACKLACE_SSS
 #pragma shader_feature_local _ _BACKLACE_DETAIL
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE

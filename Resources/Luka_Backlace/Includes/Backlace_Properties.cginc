@@ -125,6 +125,7 @@ float3 _VertexManipulationScale;
         float _ShadowIntensity;
         float _OcclusionOffsetIntensity;
         float3 _RampMin;
+        int _RampNormalIntensity;
     #elif defined(_ANIMEMODE_PROCEDURAL)
         float4 _AnimeShadowColor;
         float _AnimeShadowThreshold;

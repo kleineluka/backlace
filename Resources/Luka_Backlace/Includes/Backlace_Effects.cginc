@@ -147,11 +147,6 @@
     float _ParallaxStrength;
     float _ParallaxMode;
     float _ParallaxSteps;
-    #if defined(_BACKLACE_PARALLAX_SHADOWS)
-        float ParallaxShadow;
-        float _ParallaxShadowSteps;
-        float _ParallaxShadowStrength;
-    #endif // _BACKLACE_PARALLAX_SHADOWS
 
     void ApplyParallax_Fast(inout float2 uv, in BacklaceSurfaceData Surface)
     {
@@ -188,25 +183,6 @@
                 break;
             }
         }
-        #if defined(_BACKLACE_PARALLAX_SHADOWS)
-            ParallaxShadow = 1.0;
-            float3 lightDirTS = float3(dot(Surface.LightDir, Surface.TangentDir), dot(Surface.LightDir, Surface.BitangentDir), dot(Surface.LightDir, Surface.NormalDir));
-            float shadowSteps = _ParallaxShadowSteps;
-            float shadowStepSize = 1.0 / shadowSteps;
-            float2 shadowStep = lightDirTS.xy * _ParallaxStrength * shadowStepSize;
-            float shadowRayHeight = surfaceHeight + shadowStepSize;
-            [loop] for (int j = 0; j < shadowSteps; j++)
-            {
-                float shadowSampleHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv + shadowStep * j, 0).r;
-                if (shadowSampleHeight > shadowRayHeight)
-                {
-                    ParallaxShadow = 0.0;
-                    break;
-                }
-                shadowRayHeight += shadowStepSize;
-            }
-            ParallaxShadow = lerp(1.0, ParallaxShadow, _ParallaxShadowStrength);
-        #endif // _BACKLACE_PARALLAX_SHADOWS
     }
 #endif // _BACKLACE_PARALLAX
 

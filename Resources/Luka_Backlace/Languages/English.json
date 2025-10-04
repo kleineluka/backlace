@@ -781,6 +781,10 @@
             "value": "Ramp Min"
         },
         {
+            "key": "prop_RampNormalIntensity",
+            "value": "Normals Affect Intensity"
+        },
+        {
             "key": "prop_AnimeShadowColor",
             "value": "Core Shadow Colour"
         },
@@ -1267,18 +1271,6 @@
         {
             "key": "prop_ParallaxSteps",
             "value": "High Quality Steps"
-        },
-        {
-            "key": "prop_ToggleParallaxShadows",
-            "value": "Enable Self-Shadowing"
-        },
-        {
-            "key": "prop_ParallaxShadowSteps",
-            "value": "Shadow Quality Steps"
-        },
-        {
-            "key": "prop_ParallaxShadowStrength",
-            "value": "Shadow Strength"
         },
         {
             "key": "prop_ToggleSSS",
