@@ -1275,6 +1275,11 @@
                             if (finalUV.y > 1.0) finalUV.y = 1.0 - (finalUV.y - 1.0);
                             break;
                     }
+                    if (_SSRDistortionStrength > 0)
+                    {
+                        float2 distortion = (UNITY_SAMPLE_TEX2D(_SSRDistortionMap, screenUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
+                        finalUV += distortion;
+                    }
                     float3 reflection = tex2D(_BacklaceGP, finalUV).rgb;
                     finalUV = finalUV * 0.5 + 0.5;
                     float2 fade = smoothstep(0.0, _SSREdgeFade, finalUV) * (1.0 - smoothstep(1.0 - _SSREdgeFade, 1.0, finalUV));

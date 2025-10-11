@@ -2221,6 +2221,12 @@ namespace Luka.Backlace
                         materialEditor.ShaderProperty(prop_SSRMaxSteps, languages.speak("prop_SSRMaxSteps"));
                         materialEditor.ShaderProperty(prop_SSRStepSize, languages.speak("prop_SSRStepSize"));
                         materialEditor.ShaderProperty(prop_SSRThickness, languages.speak("prop_SSRThickness"));
+                        materialEditor.ShaderProperty(prop_SSRDistortionMap, languages.speak("prop_SSRDistortionMap"));
+                        Components.start_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_SSRDistortionStrength, languages.speak("prop_SSRDistortionStrength"));
+                        EditorGUI.indentLevel--;
+                        Components.end_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
                         materialEditor.ShaderProperty(prop_SSREdgeFade, languages.speak("prop_SSREdgeFade"));
                         materialEditor.ShaderProperty(prop_SSRCamFade, languages.speak("prop_SSRCamFade"));
                         Components.start_dynamic_disable(!prop_SSRCamFade.floatValue.Equals(1), configs);

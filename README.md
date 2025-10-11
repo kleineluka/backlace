@@ -11,74 +11,24 @@ Backlace is a versatile anime (as well as toon/pbr) shader for Unity and VRChat.
 Integrating into Backlace are some of my other open-source shader projects, such as [Dazzle 🎶](https://github.com/kleineluka/dazzle) providing the user interface and [Premonition 👁️](https://github.com/kleineluka/premonition) providing the compact shader generation.
 
 ## Features 🌈
-Backlace comes in three variants: Default, Grabpass, and Outline (as well as an "All" version). While Default has most features, some features are exclusive to the other two variants in order to save on performance (ex. not rendering an additional outline pass and not capturing the screen as a grabpass texture).
-
-<details>
-  <summary><b>Shader Features</b></summary>
-
-- Basic Texture Features (Albedo, Normal, etc.)
-- Multiple Lighting Models (Backlace, PoiCustom, OpenLit, Standard, Mochie)
-- Various Specular Modes (PBR, Anisotropic, Toon, Hair, Cloth)
-- Various Diffuse Modes (PBR, Ramp Toon, Anime Toon)
-- Light Direction Modes (Backlace, Forced, View Direction)
-- Texture Stitching (Different Albedo Across Different Model Parts)
-- Vertex Manipulation
-- UV Manipulation
-- UV Effects (Triplanar, Screenspace, Flipbook, Flowmap)
-- Emission
-- Light Limiting
-- Rim Lighting
-- Clearcoat
-- Matcap
-- Decal (2 Slots)
-- Texture Post-Processing
-- Cubemap Reflection
-- Parallax Mapping (Fasty and Fancy)
-- Subsurface Scattering
-- Detail Mapping
-- Dissolve Effect
-- Pathing
-- Depth Rim Lighting
-- Shadow Map
-- Glitter
-- Distance Fading
-- Iridescence
-- Shadow Textures
-- Flatten Model (2D Effect)
-- World Aligned Textures
-- VRChat Mirror Detection
-- Touch Interactions
-- Dithering
-- Vertex Distortion (Wave, Jumble, Wind, Breathing)
-- Low Precision (PS1/Low-Poly)
-- Refraction (Grabpass Variant Only)
-- Fake Screen Space Reflections (Planar and Raymarched) (Grabpass Variant Only)
-- Outline (Outline Variant Only)
-</details>
-
-<details>
-  <summary><b>Third-Party Features</b></summary>
-
-- AudioLink
-- Super Plug Shader *(also need it installed)*
-- LTCGI *(also need it installed)*
-</details>
-
-<details>
-  <summary><b>Editor Features</b></summary>
-
-- Custom UI (via [Dazzle 🎶](https://github.com/kleineluka/dazzle))
-- Compact Shader Generation (via [Premonition 👁️](https://github.com/kleineluka/premonition))
-- Smart Badges (ex. `Depth` on depth-related effects, `Grabpass` on features that require the Grabpass variant, etc.)
-- Preset System (save and load presets for the shader)
-</details>
-
-<details>
-  <summary><b>Material Presets</b></summary>
-
-Some preset values for the shader are also provided to help give you a starting point for various (typically more complex) materials. These are also to demonstrate that, while Backlace is an anime shader, it can also do a variety of other surfaces as well!
-- Will be filled when they are all done!
-</details>
+- **Core Features:**
+	- Render Settings/Presets, Alebdo, Normal, Emission
+	- Texture Stitching, Texture Post-Processing, Decals
+	- Vertex and UV Manipulation, UV Sets
+	- Easy VRC Fallback Control
+ - **Lighting:**
+	 - Models: Backlace (Default), PoiCustom, OpenLit, Standard, Mochie
+	 - Direction Modes: Backlace (Default), Forced, View Direction
+	 - Diffuse Modes: PBR, Ramp Toon, Anime Toon
+- **Specular:** Vertex Specular, PBR Specular, Anisotropic, Toon, Hair, Cloth
+- **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping, Detail Mapping, Shadow Mapping
+- **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Shadow Textures, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion, Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
+- **Shader Variants:** Default, Grabpass, Outline, All
+- **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
+- **Custom UI** built with my open-source [Dazzle](https://github.com/kleineluka/dazzle) library!
+- **Compact Shader Generation** with my open-source [Premonition](https://github.com/kleineluka/premonition) library!
+- **Presets** system built in, alongside custom preset saving
+- **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 
 ## Where Backlace Is Used 🌨️
 This section will be updated when I make things with it!
@@ -99,14 +49,15 @@ Backlace is split into various .cginclude files to make it editing, building, an
 What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change. This modular practice also makes it easy to dynamically add different versions of the shader (ex. `Outline` or `Grabpass`) - we can just add a new define (ex. `BACKLACE_GRABPASS`) and use that to conditionally compile code.
 
 ## License ✨
-Anything in the [Editor](https://github.com/kleineluka/backlace/tree/main/Resources/Luka_Backlace/Editor) folder is exempt from this license as it is a separate project used to build Backlace's UI. Backlace itself is licensed under the Backlace License (Version 1.0). For the full legal terms, please see the LICENSE file included in this repository. 
+Anything in the `Editor` and `Processor` folders (which are for Dazzle and Premonition) are under their respective licenses found in their repositories, and not under the Backlace License. Backlace itself is licensed under the Backlace License (Version 1.2). Please see the `LICENSE.md` file for the full terms.
 
 **TL;DR** —
-- You **are free to** use Backlace in any project, personal or commercial, for free.
-- You **must** give visible credit to "Backlace" in your project and (if creating a derivative shader) interface. For something like a game, a footnote in the game's credits is sufficient!
-- You **may not** sell Backlace as a standalone product - naturally, you have to build off of it to include it in a commercial product (ex. a shader that uses Backlace as a base or a game that uses Backlace to shade its characters).
+- You’re free to use Backlace in any project (personal or commercial) at no cost.
+- You must credit “Backlace” somewhere visible (like your README, store page, or credits) with a link to the official GitHub.
+- If you make a derivative shader or tool based on Backlace, please include more visible credit. This doesn't apply to avatars, worlds, or games that use such shaders.
+- Anything you sell with Backlace must be transformative (adding significant new features or creativity). You can’t just rebrand or resell Backlace as-is.
 
-If you have any questions, or feel these terms are too restrictive, please feel free to reach out to me! I only add these clauses to make sure that maintaining Backlace is sustainable for me. 💗
+If you’re unsure whether your use fits the license or just want to talk about it, feel free to reach out! 💗
 
 ## Attributions 🎨
 - This shader was originally a fork of the [Toony Standard Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild) shader by VRLabs, which is under the MIT license. However, essentially all of that code has been replaced, removed, or rewritten.
