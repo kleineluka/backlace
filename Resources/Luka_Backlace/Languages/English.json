@@ -250,11 +250,11 @@
         },
         {
             "key": "sub_tab_decal_one",
-            "value": "Decal 1"
+            "value": "Sticker 1"
         },
         {
             "key": "sub_tab_decal_two",
-            "value": "Decal 2"
+            "value": "Sticker 2"
         },
         {
             "key": "sub_tab_post_processing",
@@ -534,7 +534,7 @@
         },
         {
             "key": "prop_DecalStage",
-            "value": "Decal Stage (Shared)"
+            "value": "Sticker Stage (Shared)"
         },
         {
             "key": "prop_UV_Offset_X",
@@ -1038,11 +1038,11 @@
         },
         {
             "key": "prop_Decal1Enable",
-            "value": "Enable Decal 1"
+            "value": "Enable Sticker 1"
         },
         {
             "key": "prop_Decal1Tex",
-            "value": "Decal Texture (A=Mask)"
+            "value": "Sticker Texture (A=Mask)"
         },
         {
             "key": "prop_Decal1Tint",
@@ -1106,11 +1106,11 @@
         },
         {
             "key": "prop_Decal2Enable",
-            "value": "Enable Decal 2"
+            "value": "Enable Sticker 2"
         },
         {
             "key": "prop_Decal2Tex",
-            "value": "Decal Texture (A=Mask)"
+            "value": "Sticker Texture (A=Mask)"
         },
         {
             "key": "prop_Decal2Tint",
@@ -2314,11 +2314,11 @@
         },
         {
             "key": "prop_Decal1_UV",
-            "value": "Decal 1 UV Set"
+            "value": "Sticker 1 UV Set"
         },
         {
             "key": "prop_Decal2_UV",
-            "value": "Decal 2 UV Set"
+            "value": "Sticker 2 UV Set"
         },
         {
             "key": "prop_Glitter_UV",

@@ -6,7 +6,7 @@
 
 > *Remember that time when I told you to relax? You need some inner-#!&$&%!-peace!*
 
-Backlace is a versatile anime (as well as toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. 
+Backlace 🎀 is a versatile anime (as well as toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. 
 
 Integrating into Backlace are some of my other open-source shader projects, such as [Dazzle 🎶](https://github.com/kleineluka/dazzle) providing the user interface and [Premonition 👁️](https://github.com/kleineluka/premonition) providing the compact shader generation.
 
@@ -32,6 +32,8 @@ Integrating into Backlace are some of my other open-source shader projects, such
 
 ## Where Backlace Is Used 🌨️
 This section will be updated when I make things with it!
+
+- The official distribution of Backlace itself!
 
 ## Building Off Of Backlace 🫧
 

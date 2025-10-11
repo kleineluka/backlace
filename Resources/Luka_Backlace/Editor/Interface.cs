@@ -17,6 +17,7 @@ namespace Luka.Backlace
         // editor states
         private static bool loaded = false;
         private static string loaded_material = null;
+        private static int loaded_material_id = -1;
         private static List<ShaderVariant> detected_variants = null;
         // core ui components
         private static Header header = null;
@@ -736,6 +737,7 @@ namespace Luka.Backlace
         {
             CacheManager.init_cache();
             loaded_material = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
+            loaded_material_id = targetMat.GetInstanceID();
             detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
             // load from shared cache
             configs = CacheManager.configs;
@@ -826,7 +828,8 @@ namespace Luka.Backlace
                 return;
             }
             // check if material changed
-            if (loaded_material != AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat))) 
+            string new_guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
+            if (loaded_material != new_guid || loaded_material_id != targetMat.GetInstanceID()) 
             {
                 unload_material();
                 load(ref targetMat);
