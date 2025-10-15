@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "此效果需要从场景中读取深度！请确保您的世界启用了实时光照或场景中存在深度写入器预制件（随Backlace提供）。"
+        },
+        {
+            "key": "footer_madewith",
+            "value": "用爱与我的开源项目制作，"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI，"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor，"
+        },
+        {
+            "key": "footer_and",
+            "value": "和"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader。"
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }

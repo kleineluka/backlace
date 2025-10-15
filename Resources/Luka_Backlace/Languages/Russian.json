@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "Этому эффекту необходимо считывать глубину из сцены! Убедитесь, что в вашем мире либо включен свет в реальном времени, либо в сцене присутствует префаб Depth Writer (предоставляется с Backlace)."
+        },
+        {
+            "key": "footer_madewith",
+            "value": "Сделано с любовью и моими проектами с открытым исходным кодом,"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI,"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor,"
+        },
+        {
+            "key": "footer_and",
+            "value": "и"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }

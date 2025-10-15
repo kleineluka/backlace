@@ -2223,14 +2223,15 @@ namespace Luka.Backlace
             {
                 GUIContent content;
                 GUIStyle style;
+                string text = theme.language_manager.speak(segment.Text);
                 if (string.IsNullOrEmpty(segment.Url))
                 {
-                    content = new GUIContent(segment.Text);
+                    content = new GUIContent(text);
                     style = textStyle;
                 }
                 else
                 {
-                    content = new GUIContent(theme.text_manager.texter(segment.Text, 5));
+                    content = new GUIContent(theme.text_manager.texter(text, 5));
                     style = linkStyle;
                 }
                 Vector2 size = style.CalcSize(content);

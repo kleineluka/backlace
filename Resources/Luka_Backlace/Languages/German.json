@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "Dieser Effekt muss die Tiefe aus der Szene lesen! Stelle sicher, dass deine Welt entweder ein Echtzeitlicht aktiviert hat oder dass das Depth-Writer-Prefab in der Szene ist (mit Backlace bereitgestellt)."
+        },
+        {
+            "key": "footer_madewith",
+            "value": "Mit Liebe und meinen Open-Source-Projekten gemacht,"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI,"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor,"
+        },
+        {
+            "key": "footer_and",
+            "value": "und"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }

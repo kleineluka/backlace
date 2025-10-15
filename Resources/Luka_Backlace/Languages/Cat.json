@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "This affect nyeeds tu wead Depth fwom da scene! Ensuwe dat ur wowld eithew has a weal-time wight enyabled ow dat da Depth Wwitew pwefab is in da scene (pwovided with Backwace), mrow~"
+        },
+        {
+            "key": "footer_madewith",
+            "value": "Made wit wub and mai open-source pwojects,"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI,"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor,"
+        },
+        {
+            "key": "footer_and",
+            "value": "n"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }

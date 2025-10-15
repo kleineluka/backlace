@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "This affect needs to read Depth from the scene! Ensure that your world either has a real-time light enabled or that the Depth Writer prefab is in the scene (provided with Backlace)."
+        },
+        {
+            "key": "footer_madewith",
+            "value": "Made with love and my open-source projects,"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI,"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor,"
+        },
+        {
+            "key": "footer_and",
+            "value": "and"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }

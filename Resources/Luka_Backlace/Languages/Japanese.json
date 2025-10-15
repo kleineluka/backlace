@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "このエフェクトはシーンから深度を読み取る必要があります！ワールドにリアルタイムライトが有効になっているか、シーンに深度ライタープレハブ（Backlaceに付属）があることを確認してください。"
+        },
+        {
+            "key": "footer_madewith",
+            "value": "愛と私のオープンソースプロジェクトで制作しました、"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI、"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor、"
+        },
+        {
+            "key": "footer_and",
+            "value": "と"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader。"
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }

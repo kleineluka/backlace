@@ -2407,6 +2407,30 @@
         {
             "key": "depth_popup_info",
             "value": "이 효과는 장면에서 깊이를 읽어야 합니다! 월드에 실시간 조명이 활성화되어 있거나 장면(Backlace와 함께 제공)에 깊이 작성기 프리팹이 있는지 확인하세요."
+        },
+        {
+            "key": "footer_madewith",
+            "value": "사랑과 저의 오픈소스 프로젝트로 만들었습니다,"
+        },
+        {
+            "key": "footer_dazzle",
+            "value": "Dazzle UI,"
+        },
+        {
+            "key": "footer_premonition",
+            "value": "Premonition Processor,"
+        },
+        {
+            "key": "footer_and",
+            "value": "그리고"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
         }
     ]
 }
