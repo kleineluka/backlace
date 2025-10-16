@@ -2410,23 +2410,11 @@
         },
         {
             "key": "footer_madewith",
-            "value": "사랑과 저의 오픈소스 프로젝트로 만들었습니다,"
-        },
-        {
-            "key": "footer_dazzle",
-            "value": "Dazzle UI,"
-        },
-        {
-            "key": "footer_premonition",
-            "value": "Premonition Processor,"
-        },
-        {
-            "key": "footer_and",
-            "value": "그리고"
+            "value": "사랑과 저의 오픈 소스 프로젝트로 만들었습니다"
         },
         {
             "key": "footer_backlace",
-            "value": "Backlace Anime Shader."
+            "value": "Backlace 애니메이션 셰이더."
         },
         {
             "key": "footer_heart",

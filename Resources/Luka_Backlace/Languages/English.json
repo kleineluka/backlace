@@ -2413,16 +2413,8 @@
             "value": "Made with love and my open-source projects,"
         },
         {
-            "key": "footer_dazzle",
-            "value": "Dazzle UI,"
-        },
-        {
-            "key": "footer_premonition",
-            "value": "Premonition Processor,"
-        },
-        {
-            "key": "footer_and",
-            "value": "and"
+            "key": "footer_madewith",
+            "value": "Made with love and my open-source project"
         },
         {
             "key": "footer_backlace",

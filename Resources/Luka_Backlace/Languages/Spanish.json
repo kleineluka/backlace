@@ -2410,19 +2410,7 @@
         },
         {
             "key": "footer_madewith",
-            "value": "Hecho con amor y mis proyectos de código abierto,"
-        },
-        {
-            "key": "footer_dazzle",
-            "value": "Dazzle UI,"
-        },
-        {
-            "key": "footer_premonition",
-            "value": "Premonition Processor,"
-        },
-        {
-            "key": "footer_and",
-            "value": "y"
+            "value": "Hecho con amor y mi proyecto de código abierto"
         },
         {
             "key": "footer_backlace",

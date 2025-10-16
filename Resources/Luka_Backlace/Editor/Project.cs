@@ -36,9 +36,6 @@ namespace Luka.Backlace
         public static readonly List<Footer.Segment> footer_parts = new List<Footer.Segment>
         {
             new Footer.Segment("footer_madewith"),
-            new Footer.Segment("footer_dazzle", "https://luka.moe/god/github/dazzle"),
-            new Footer.Segment("footer_premonition", "https://luka.moe/god/github/premonition"),
-            new Footer.Segment("footer_and"),
             new Footer.Segment("footer_backlace", "https://luka.moe/god/github/backlace"),
             new Footer.Segment("footer_heart"),
         };

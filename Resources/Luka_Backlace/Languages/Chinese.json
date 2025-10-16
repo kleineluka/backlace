@@ -2410,23 +2410,11 @@
         },
         {
             "key": "footer_madewith",
-            "value": "用爱与我的开源项目制作，"
-        },
-        {
-            "key": "footer_dazzle",
-            "value": "Dazzle UI，"
-        },
-        {
-            "key": "footer_premonition",
-            "value": "Premonition Processor，"
-        },
-        {
-            "key": "footer_and",
-            "value": "和"
+            "value": "用爱和我的开源项目制作"
         },
         {
             "key": "footer_backlace",
-            "value": "Backlace Anime Shader。"
+            "value": "Backlace 动漫着色器。"
         },
         {
             "key": "footer_heart",

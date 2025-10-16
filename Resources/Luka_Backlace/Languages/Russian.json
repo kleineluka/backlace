@@ -2410,23 +2410,11 @@
         },
         {
             "key": "footer_madewith",
-            "value": "Сделано с любовью и моими проектами с открытым исходным кодом,"
-        },
-        {
-            "key": "footer_dazzle",
-            "value": "Dazzle UI,"
-        },
-        {
-            "key": "footer_premonition",
-            "value": "Premonition Processor,"
-        },
-        {
-            "key": "footer_and",
-            "value": "и"
+            "value": "Сделано с любовью и моим проектом с открытым исходным кодом"
         },
         {
             "key": "footer_backlace",
-            "value": "Backlace Anime Shader."
+            "value": "Аниме-шейдер Backlace."
         },
         {
             "key": "footer_heart",
