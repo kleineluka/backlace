@@ -6,9 +6,7 @@
 
 > *Remember that time when I told you to relax? You need some inner-#!&$&%!-peace!*
 
-Backlace 🎀 is a versatile anime (as well as toon/pbr) shader for Unity and VRChat. Despite mainly serving as a starting point for future projects, you will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. 
-
-Integrating into Backlace are some of my other open-source shader projects, such as [Dazzle 🎶](https://github.com/kleineluka/dazzle) providing the user interface and [Premonition 👁️](https://github.com/kleineluka/premonition) providing the compact shader generation.
+Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. You will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
 
 ## Features 🌈
 - **Core Features:**
@@ -25,8 +23,8 @@ Integrating into Backlace are some of my other open-source shader projects, such
 - **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Shadow Textures, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion, Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
 - **Shader Variants:** Default, Grabpass, Outline, All
 - **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
-- **Custom UI** built with my open-source [Dazzle](https://github.com/kleineluka/dazzle) library!
-- **Compact Shader Generation** with my open-source [Premonition](https://github.com/kleineluka/premonition) library!
+- **Custom UI** built with my Dazzle library!
+- **Compact Shader Generation** with my Premonitions library!
 - **Presets** system built in, alongside custom preset saving
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 
@@ -36,7 +34,6 @@ This section will be updated when I make things with it!
 - The official distribution of Backlace itself!
 
 ## Building Off Of Backlace 🫧
-
 > [!NOTE] 
 > This section is for developers who want to build off of Backlace. If you just want to use Backlace on your avatar, game, etc., you can skip this section. ( \*︾▽︾)
 
@@ -51,7 +48,7 @@ Backlace is split into various .cginclude files to make it editing, building, an
 What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change. This modular practice also makes it easy to dynamically add different versions of the shader (ex. `Outline` or `Grabpass`) - we can just add a new define (ex. `BACKLACE_GRABPASS`) and use that to conditionally compile code.
 
 ## License ✨
-Anything in the `Editor` and `Processor` folders (which are for Dazzle and Premonition) are under their respective licenses and not under the Backlace License. Backlace itself is licensed under the Backlace License (Version 1.3). Please see the `LICENSE.md` file for the full terms.
+Anything in the `Editor` and `Processor` folders (which are for Dazzle and Premonitions) are under their respective licenses and not under the Backlace License. Backlace itself is licensed under the Backlace License (Version 1.3). Please see the `LICENSE.md` file for the full terms.
 
 **TL;DR** —
 - You’re free to use Backlace in any project (personal or commercial) at no cost.
@@ -68,3 +65,4 @@ If you’re unsure whether your use fits the license or just want to talk about 
 - AudioLink features, and a lot of the boilerplate code in `Backlace_AudioLink.cginc`, are from [AudioLink](https://github.com/llealloo/audiolink), which is under a modified MIT license.
 - Original inspiration for the Raymarched SSR feature came from [orel1's SSR module](github.com/orels1/orels-Unity-Shaders), which is an implementation of [Mochie's](https://github.com/MochiesCode/Mochies-Unity-Shaders/) fork of ERROR.mdl's SSR. Both are under MIT licenses. While Backlace's idea stemmed from there, the implementation here is much simpler and modified.
 - Default textures (ex. ramps and noises) are from a variety of sources online, such as [Perlin Noise Maker](http://kitfox.com/projects/perlinNoiseMaker/), [OpenGameArt](https://opengameart.org/), and [Booth Matcap Pack 2](https://booth.pm/ja/items/5755167).
+- The name is inspired by Miss Idiot Angel (literally me).
