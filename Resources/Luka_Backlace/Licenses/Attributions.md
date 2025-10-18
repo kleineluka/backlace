@@ -1,6 +1,6 @@
 ## Translations Notice
 
-Languages other than English are machine translated. If you would like to help translate June Lite into your language better, please reach out and I can add you to the credits! Because, as of now, they are machine translated, I cannot guarantee that they are 100% accurate. Only translations not in English are assisted by machines.
+Languages other than English are machine translated. If you would like to help translate into your language better, please reach out and I can add you to the credits! Because, as of now, they are machine translated, I cannot guarantee that they are 100% accurate. Only translations not in English are assisted by machines.
 
 ## Artwork Notice
 
@@ -13,7 +13,3 @@ Icons for various social media platforms, such as Gumroad or Jinxxy, are all own
 ## Font Notice
 
 Nunito and Noto Sans JP are both licensed under the SIL Open Font License, Version 1.1. You can learn more about this license at https://openfontlicense.org/open-font-license-official-text/.
-
-## Dazzle and Premonition
-
-Two of my other open source projects, Dazzle and Premonition, both are used in Backlace. Dazzle is used to build the shader interface while Premonition is used to generate compact shaders. Each are subject to their own licenses found in their respective repositories (https://github.com/kleineluka/dazzle and https://github.com/kleineluka/premonition). Premonition files are in the `Processor` folder and Dazzle files are in the `Editor` folder.
