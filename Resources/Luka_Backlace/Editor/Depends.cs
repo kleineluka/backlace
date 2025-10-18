@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-#define LUKA_DEVELOPER_MODE
 
 // imports
 using System;
@@ -320,7 +319,7 @@ namespace Luka.Backlace
                 full_metadata = null;
                 metadata_loaded = false;
                 return;
-#endif
+#endif // LUKA_DEVELOPER_MODE
             try
             {
                 using (var wc = new System.Net.WebClient())
