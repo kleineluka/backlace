@@ -195,7 +195,7 @@ Shader "luka/backlace/grabpass"
         _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
         _TangentMap ("Tangent Map", 2D) = "white" { }
-        _Anisotropy ("Ansotropy", Range(-1, 1)) = 0
+        _Anisotropy ("Anisotropy", Range(-1, 1)) = 0
         [Enum(Disabled, 0, Enabled, 1)] _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
         // toon highlights
         _HighlightRamp ("Highlight Ramp", 2D) = "white" { }
@@ -728,7 +728,7 @@ Shader "luka/backlace/grabpass"
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ParallaxMap_UV ("Height Map UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ThicknessMap_UV ("Thickness Map UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _DetailMap_UV ("Detail Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Deca; 1 UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Decal 1 UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal2_UV ("Decal 2 UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Glitter_UV ("Glitter UV Set", Int) = 0.0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _IridescenceMask_UV ("Iridescence Mask UV Set", Int) = 0.0

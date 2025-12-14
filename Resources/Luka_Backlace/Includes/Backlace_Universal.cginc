@@ -65,6 +65,15 @@ struct BacklaceSurfaceData
             Uvs[3] = FragData.uv3;
         }
 
+        void SafeLoadUVs()
+        {
+            // quick and dirty test, just see if uv0 is zero
+            if (all(Uvs[0] == float2(0,0)))
+            {
+                LoadUVs();
+            }
+        }
+
         void SampleAlbedo(inout BacklaceSurfaceData Surface, float3 objectPos)
         {
             Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;

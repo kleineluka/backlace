@@ -265,6 +265,8 @@ float4 Fragment(FragmentData i) : SV_TARGET
         ClipShadowAlpha(Surface);
     #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #if defined(_BACKLACE_DISSOLVE)
+        // if uvs not loaded
+        SafeLoadUVs();
         float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, i.normal);
         clip(_DissolveProgress - dissolveMapValue); // dont need edge glow, just clip
     #endif

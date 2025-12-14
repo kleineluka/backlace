@@ -330,17 +330,19 @@ void GetForwardAddLightData(out BacklaceLightData lightData)
     lightData.direction = normalize(_WorldSpaceLightPos0.xyz - FragData.worldPos.xyz * _WorldSpaceLightPos0.w);
     #if defined(POINT) || defined(POINT_COOKIE)
         unityShadowCoord3 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1)).xyz;
-        lightData.attenuation = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).r;
         #if defined(POINT_COOKIE)
+            lightData.attenuation = tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).r;
             lightData.attenuation *= texCUBE(_LightTexture0, lightCoord).w;
-        #endif
+        #else // POINT
+            lightData.attenuation = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).r;
+        #endif // POINT_COOKIE
     #elif defined(SPOT)
         unityShadowCoord4 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1));
         lightData.attenuation = (lightCoord.z > 0) * UnitySpotCookie(lightCoord) * UnitySpotAttenuate(lightCoord.xyz);
-    #else
+    #else // DIRECTIONAL
         UNITY_LIGHT_ATTENUATION(atten, FragData, FragData.worldPos);
         lightData.attenuation = atten;
-    #endif
+    #endif // DIRECTIONAL
     lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);
 }
 

@@ -109,15 +109,8 @@ float _UV_Scroll_Y_Speed;
     float _ReplaceSpecular;
 #endif // _BACKLACE_SPECULAR
 
-// detail-map features
-#if defined(_BACKLACE_DETAIL)
-    UNITY_DECLARE_TEX2D(_DetailAlbedoMap);
-    UNITY_DECLARE_TEX2D(_DetailNormalMap);
-    float _DetailMap_UV;
-    float _DetailTiling;
-    float _DetailNormalStrength;
-    float3 NormalMap; // NOTE: dummy variable, detail function needs it but we don't use the result here
-#endif // _BACKLACE_DETAIL
+//decal1/2-only features
+float _DecalStage;
 
 // decal1-only feature
 #if defined(_BACKLACE_DECAL1)
@@ -172,6 +165,25 @@ float _UV_Scroll_Y_Speed;
 
 // my includes
 #include "./Backlace_Universal.cginc"
+
+// detail-map features
+#if defined(_BACKLACE_DETAIL)
+UNITY_DECLARE_TEX2D(_DetailAlbedoMap);
+UNITY_DECLARE_TEX2D(_DetailNormalMap);
+float _DetailMap_UV;
+float _DetailTiling;
+float _DetailNormalStrength;
+float3 NormalMap; // NOTE: dummy variable, detail function needs it but we don't use the result here
+void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
+{
+    float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
+    float4 detailAlbedo = UNITY_SAMPLE_TEX2D(_DetailAlbedoMap, detailUV);
+    Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
+    float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D(_DetailNormalMap, detailUV), _DetailNormalStrength);
+    float3 baseNormalTS = NormalMap;
+    NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
+}
+#endif // _BACKLACE_DETAIL
 
 // meta vertex function
 FragmentData Vertex(VertexData v)
