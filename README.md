@@ -4,9 +4,9 @@
 
 ---
 
-> *Remember that time when I told you to relax? You need some inner-#!&$&%!-peace!*
+> *High heels, cute face, all the boys, they want a taste~*
 
-Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. You will find that Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
+Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
 
 ## Features 🌈
 - **Core Features:**
@@ -27,6 +27,7 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 - **Compact Shader Generation** with my Premonitions library!
 - **Presets** system built in, alongside custom preset saving
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
+- **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
 
 ## Where Backlace Is Used 🌨️
 This section will be updated when I make things with it!
@@ -48,7 +49,7 @@ Backlace is split into various .cginclude files to make it editing, building, an
 What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change. This modular practice also makes it easy to dynamically add different versions of the shader (ex. `Outline` or `Grabpass`) - we can just add a new define (ex. `BACKLACE_GRABPASS`) and use that to conditionally compile code.
 
 ## License ✨
-Anything in the `Editor` and `Processor` folders (which are for Dazzle and Premonitions) are under their respective licenses and not under the Backlace License. Backlace itself is licensed under the Backlace License (Version 1.3). Please see the `LICENSE.md` file for the full terms.
+Anything in the `Editor` and `Processor` folders are under their respective licenses and not under the Backlace License. That is because these are separate projects of mine that aren't made to be built off of like Backlace, the shader, is - they are just there for the users. Backlace itself is licensed under the Backlace License (Version 1.3). Please see the `LICENSE.md` file for the full terms.
 
 **TL;DR** —
 - You’re free to use Backlace in any project (personal or commercial) at no cost.
@@ -60,9 +61,10 @@ If you’re unsure whether your use fits the license or just want to talk about 
 
 ## Attributions 🎨
 - This shader was originally a fork of the [Toony Standard Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild) shader by VRLabs, which is under the MIT license. However, essentially all of that code has been replaced, removed, or rewritten.
-- Various lighting modes are derived from other projects, specifically [Poiyomi Toon](https://github.com/poiyomi/PoiyomiToonShader), [lilToon/OpenLit](https://github.com/lilxyzw/lilToon), and [Mochies Unity Shaders](https://github.com/MochiesCode/Mochies-Unity-Shaders/). Thesse are all under the MIT license and usages are limited to lighting modes with those names (ex. \"Poi Custom\", \"OpenLit\", \"Mochies\").
-- The 2D effect in the Fun variant is inspired directly by [Lyuma's Waifu2D Shader](https://github.com/lyuma/LyumaShader), which is under the MIT license. Although  please note it is simplified and their code is better if a flat model is purely the goal of your project!
-- AudioLink features, and a lot of the boilerplate code in `Backlace_AudioLink.cginc`, are from [AudioLink](https://github.com/llealloo/audiolink), which is under a modified MIT license.
+- Various lighting modes are derived from other projects, specifically [Poiyomi Toon](https://github.com/poiyomi/PoiyomiToonShader), [lilToon/OpenLit](https://github.com/lilxyzw/lilToon), and [Mochies Unity Shaders](https://github.com/MochiesCode/Mochies-Unity-Shaders/). Thesse are all under the MIT license and code references are limited to lighting modes with those names (ex. \"Poi Custom\", \"OpenLit\", \"Mochies\").
+- The \"Flatten Model\" effect is inspired directly by [Lyuma's Waifu2D Shader](https://github.com/lyuma/LyumaShader), which is under the MIT license. Although  please note it is simplified and their code is better if a flat model is purely the goal of your project!
 - Original inspiration for the Raymarched SSR feature came from [orel1's SSR module](github.com/orels1/orels-Unity-Shaders), which is an implementation of [Mochie's](https://github.com/MochiesCode/Mochies-Unity-Shaders/) fork of ERROR.mdl's SSR. Both are under MIT licenses. While Backlace's idea stemmed from there, the implementation here is much simpler and modified.
-- Default textures (ex. ramps and noises) are from a variety of sources online, such as [Perlin Noise Maker](http://kitfox.com/projects/perlinNoiseMaker/), [OpenGameArt](https://opengameart.org/), and [Booth Matcap Pack 2](https://booth.pm/ja/items/5755167).
-- The name is inspired by Miss Idiot Angel (literally me).
+- AudioLink features, and a lot of the boilerplate code in `Backlace_AudioLink.cginc`, are from [AudioLink](https://github.com/llealloo/audiolink), which is under a modified MIT license.
+- Third-party features such as [LTCGI](https://github.com/PiMaker/ltcgi) and [Super Plug Shader](https://vrcfury.com/sps/) are unassociated projects, under their own licenses, and require separate installation.
+- Default textures (ex. ramps and noises) are from a variety of sources online, notably [Perlin Noise Maker](http://kitfox.com/projects/perlinNoiseMaker/), [OpenGameArt](https://opengameart.org/), and [Booth Matcap Pack 2](https://booth.pm/ja/items/5755167).
+- The name is inspired by a certain vulgar and promiscious angel. (｡♥‿♥｡)
