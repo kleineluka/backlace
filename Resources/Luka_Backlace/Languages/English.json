@@ -73,6 +73,10 @@
             "value": "Oki!"
         },
         {
+            "key": "dialog_cancel",
+            "value": "Cancel"
+        },
+        {
             "key": "update_available",
             "value": "Update available!"
         },
@@ -87,6 +91,10 @@
         {
             "key": "open_docs",
             "value": "Need help? Click here to open the documentation!"
+        },
+        {
+            "key": "premonition_compact_notice",
+            "value": "This is a compact shader and won't have features that weren't enabled on the original shader! Please see the Compact Shader menu to restore it back to the full version if you need to make changes."
         },
         {
             "key": "tab_license",
@@ -219,6 +227,86 @@
         {
             "key": "warning_external_website_cancel",
             "value": "Go back!"
+        },
+        {
+            "key": "footer_madewith",
+            "value": "Made with love and my open-source project"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
+        },
+        {
+            "key": "config_toggle_expand_searches",
+            "value": "Expand Searches"
+        },
+        {
+            "key": "search_button",
+            "value": "Search"
+        },
+        {
+            "key": "search_clear",
+            "value": "Clear"
+        },
+        {
+            "key": "config_look_and_feel",
+            "value": "Look and Feel"
+        },
+        {
+            "key": "config_workflow",
+            "value": "Workflow Options"
+        },
+        {
+            "key": "config_extra_options",
+            "value": "Extra Options"
+        },
+        {
+            "key": "dependency_detected",
+            "value": "Dependency Found!"
+        },
+        {
+            "key": "dependency_not_detected",
+            "value": "Dependency Not Found"
+        },
+        {
+            "key": "dependency_popup_title",
+            "value": "Dependency Manager for '{0}'"
+        },
+        {
+            "key": "dependency_popup_detected",
+            "value": "Dependency '{0}' detected {1}!"
+        },
+        {
+            "key": "dependency_popup_not_detected",
+            "value": "Dependency '{0}' not detected!"
+        },
+        {
+            "key": "dependency_popup_open_link",
+            "value": "Open Dependency Link"
+        },
+        {
+            "key": "premonition_title",
+            "value": "Compact Shader Generation"
+        },
+        {
+            "key": "premonition_success",
+            "value": "Compact shader(s) were successfully generated and applied to your materials! ^^"
+        },
+        {
+            "key": "premonition_error_generic",
+            "value": "There was an error generating the compact shader(s). Please try again, and if the issue persists, see the console for errors! >.<"
+        },
+        {
+            "key": "premonition_error_noshader",
+            "value": "There was an error trying to restore this shader. Are you sure it is a compact shader? >.<"
+        },
+        {
+            "key": "premonition_restore_success",
+            "value": "Successfully restored the original shader for material(s)! ^^"
         },
         {
             "key": "tab_main",
@@ -2409,20 +2497,28 @@
             "value": "This affect needs to read Depth from the scene! Ensure that your world either has a real-time light enabled or that the Depth Writer prefab is in the scene (provided with Backlace)."
         },
         {
-            "key": "footer_madewith",
-            "value": "Made with love and my open-source projects,"
+            "key": "prop_OutlineSpace",
+            "value": "Outline Space"
         },
         {
-            "key": "footer_madewith",
-            "value": "Made with love and my open-source project"
+            "key": "prop_OutlineMode",
+            "value": "Outline Mode"
         },
         {
-            "key": "footer_backlace",
-            "value": "Backlace Anime Shader."
+            "key": "prop_OutlineTexMap",
+            "value": "Texture Mode"
         },
         {
-            "key": "footer_heart",
-            "value": "❤"
+            "key": "prop_OutlineTex",
+            "value": "Outline Texture"
+        },
+        {
+            "key": "prop_OutlineTexTiling",
+            "value": "Texture Tiling"
+        },
+        {
+            "key": "prop_OutlineTexScroll",
+            "value": "Texture Scroll"
         }
     ]
 }

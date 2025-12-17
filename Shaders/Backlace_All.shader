@@ -704,6 +704,12 @@ Shader "luka/backlace/all"
         [Enum(Disabled, 0, Enabled, 1)] _OutlineHueShift ("Enable Hue Shift", Float) = 0.0 
         _OutlineHueShiftSpeed ("Hue Shift Speed", Float) = 0.2
         _OutlineOpacity ("Outline Opacity", Range(0, 1)) = 1.0
+        [Enum(View, 0, World, 1)] _OutlineSpace ("Outline Scaled Width", Int) = 0
+        [Enum(Colour, 0, Texture, 1)] _OutlineMode ("Outline Mode", Int) = 0
+        [Enum(Screen Space, 0, World Space, 1, UV Space, 2)] _OutlineTexMap ("Outline Texture Mapping Mode", Int) = 0
+        _OutlineTex ("Outline Texture", 2D) = "white" { }
+        _OutlineTexTiling ("Outline Texture Tiling", Vector) = (1, 1, 0, 0)
+        _OutlineTexScroll ("Outline Texture Scroll", Vector) = (0, 0, 0, 0)
 
         // INDIRECT LIGHTING
         // [Space(35)]

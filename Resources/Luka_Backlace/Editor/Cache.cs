@@ -15,6 +15,7 @@ namespace Luka.Backlace
         public static Update update = null;
         public static Docs docs = null;
         public static Footer footer = null;
+        public static DependencyManager dependencies = null;
         public static bool _initialised = false;
 
         public static void init_cache()
@@ -31,6 +32,8 @@ namespace Luka.Backlace
             update = new Update(ref theme);
             docs = new Docs(ref theme);
             footer = new Footer(ref theme, Project.footer_parts);
+            dependencies = Project.dependency_manager;
+            dependencies.CheckAll();
             _initialised = true;
         }
 
@@ -48,6 +51,7 @@ namespace Luka.Backlace
             update = null;
             docs = null;
             footer = null;
+            dependencies = null;
             _initialised = false;
         }
     }

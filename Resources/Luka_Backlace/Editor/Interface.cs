@@ -16,6 +16,7 @@ namespace Luka.Backlace
 
         // editor states
         private static bool loaded = false;
+        private static bool has_indexed = false;
         private static string loaded_material = null;
         private static int loaded_material_id = -1;
         private static List<ShaderVariant> detected_variants = null;
@@ -32,6 +33,7 @@ namespace Luka.Backlace
         private static Metadata meta = null;
         private static SocialsMenu socials_menu = null;
         private static Footer footer = null;
+        private static SearchBar search_bar = null;
         // additional ui integrations
         private static Tab license_tab = null;
         private static LicenseMenu license_menu = null;
@@ -42,6 +44,7 @@ namespace Luka.Backlace
         private static PresetsMenu presets_menu = null;
         private static Tab premonition_tab = null;
         private static PremonitionMenu premonition_menu = null;
+        private static NoticeBox compact_notice = null;
         private static bool is_compact = false;
         
         #region Tabs
@@ -602,6 +605,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_SSROutOfViewMode = null;
         private MaterialProperty prop_SSRMode = null;
         // outline properties
+        private MaterialProperty prop_OutlineSpace = null;
         private MaterialProperty prop_OutlineColor = null;
         private MaterialProperty prop_OutlineWidth = null;
         private MaterialProperty prop_OutlineVertexColorMask = null;
@@ -611,6 +615,11 @@ namespace Luka.Backlace
         private MaterialProperty prop_OutlineHueShift = null;
         private MaterialProperty prop_OutlineHueShiftSpeed = null;
         private MaterialProperty prop_OutlineOpacity = null;
+        private MaterialProperty prop_OutlineMode = null;
+        private MaterialProperty prop_OutlineTexMap = null;
+        private MaterialProperty prop_OutlineTex = null;
+        private MaterialProperty prop_OutlineTexTiling = null;
+        private MaterialProperty prop_OutlineTexScroll = null;
         // indirect lighting
         private MaterialProperty prop_IndirectFallbackMode = null;
         private MaterialProperty prop_IndirectOverride = null;
@@ -645,6 +654,64 @@ namespace Luka.Backlace
         #endregion // Properties
 
         // unload the material (ex. on shader change)
+        public static void close_all_tabs()
+        {
+            if (config_tab != null) { config_tab.is_expanded = false; config_tab.is_active = false; }
+            if (license_tab != null) { license_tab.is_expanded = false; license_tab.is_active = false; }
+            if (presets_tab != null) { presets_tab.is_expanded = false; presets_tab.is_active = false; }
+            if (premonition_tab != null) { premonition_tab.is_expanded = false; premonition_tab.is_active = false; }
+            if (tab_main != null) { tab_main.is_expanded = false; tab_main.is_active = false; }
+            if (sub_tab_rendering != null) { sub_tab_rendering.is_expanded = false; sub_tab_rendering.is_active = false; }
+            if (sub_tab_textures != null) { sub_tab_textures.is_expanded = false; sub_tab_textures.is_active = false; }
+            if (sub_tab_stitching != null) { sub_tab_stitching.is_expanded = false; sub_tab_stitching.is_active = false; }
+            if (sub_tab_uv_manipulation != null) { sub_tab_uv_manipulation.is_expanded = false; sub_tab_uv_manipulation.is_active = false; }
+            if (sub_tab_uv_effects != null) { sub_tab_uv_effects.is_expanded = false; sub_tab_uv_effects.is_active = false; }
+            if (sub_tab_vertex_manipulation != null) { sub_tab_vertex_manipulation.is_expanded = false; sub_tab_vertex_manipulation.is_active = false; }
+            if (sub_tab_decal_one != null) { sub_tab_decal_one.is_expanded = false; sub_tab_decal_one.is_active = false; }
+            if (sub_tab_decal_two != null) { sub_tab_decal_two.is_expanded = false; sub_tab_decal_two.is_active = false; }
+            if (sub_tab_post_processing != null) { sub_tab_post_processing.is_expanded = false; sub_tab_post_processing.is_active = false; }
+            if (sub_tab_uv_sets != null) { sub_tab_uv_sets.is_expanded = false; sub_tab_uv_sets.is_active = false; }
+            if (tab_lighting != null) { tab_lighting.is_expanded = false; tab_lighting.is_active = false; }
+            if (sub_tab_lighting_model != null) { sub_tab_lighting_model.is_expanded = false; sub_tab_lighting_model.is_active = false; }
+            if (sub_tab_anime != null) { sub_tab_anime.is_expanded = false; sub_tab_anime.is_active = false; }
+            if (sub_tab_emission != null) { sub_tab_emission.is_expanded = false; sub_tab_emission.is_active = false; }
+            if (sub_tab_light_limiting != null) { sub_tab_light_limiting.is_expanded = false; sub_tab_light_limiting.is_active = false; }
+            if (tab_specular != null) { tab_specular.is_expanded = false; tab_specular.is_active = false; }
+            if (sub_tab_pbr_specular != null) { sub_tab_pbr_specular.is_expanded = false; sub_tab_pbr_specular.is_active = false; }
+            if (sub_tab_stylised_specular != null) { sub_tab_stylised_specular.is_expanded = false; sub_tab_stylised_specular.is_active = false; }
+            if (tab_shading != null) { tab_shading.is_expanded = false; tab_shading.is_active = false; }
+            if (sub_tab_rim_lighting != null) { sub_tab_rim_lighting.is_expanded = false; sub_tab_rim_lighting.is_active = false; }
+            if (sub_tab_depth_rim != null) { sub_tab_depth_rim.is_expanded = false; sub_tab_depth_rim.is_active = false; }
+            if (sub_tab_clear_coat != null) { sub_tab_clear_coat.is_expanded = false; sub_tab_clear_coat.is_active = false; }
+            if (sub_tab_matcap != null) { sub_tab_matcap.is_expanded = false; sub_tab_matcap.is_active = false; }
+            if (sub_tab_cubemap != null) { sub_tab_cubemap.is_expanded = false; sub_tab_cubemap.is_active = false; }
+            if (sub_tab_parallax != null) { sub_tab_parallax.is_expanded = false; sub_tab_parallax.is_active = false; }
+            if (sub_tab_subsurface != null) { sub_tab_subsurface.is_expanded = false; sub_tab_subsurface.is_active = false; }
+            if (sub_tab_detail_map != null) { sub_tab_detail_map.is_expanded = false; sub_tab_detail_map.is_active = false; }
+            if (sub_tab_shadow_map != null) { sub_tab_shadow_map.is_expanded = false; sub_tab_shadow_map.is_active = false; }
+            if (tab_effects != null) { tab_effects.is_expanded = false; tab_effects.is_active = false; }
+            if (sub_tab_dissolve != null) { sub_tab_dissolve.is_expanded = false; sub_tab_dissolve.is_active = false; }
+            if (sub_tab_pathing != null) { sub_tab_pathing.is_expanded = false; sub_tab_pathing.is_active = false; }
+            if (sub_tab_glitter != null) { sub_tab_glitter.is_expanded = false; sub_tab_glitter.is_active = false; }
+            if (sub_tab_distance_fading != null) { sub_tab_distance_fading.is_expanded = false; sub_tab_distance_fading.is_active = false; }
+            if (sub_tab_iridescence != null) { sub_tab_iridescence.is_expanded = false; sub_tab_iridescence.is_active = false; }
+            if (sub_tab_shadow_textures != null) { sub_tab_shadow_textures.is_expanded = false; sub_tab_shadow_textures.is_active = false; }
+            if (sub_tab_flatten_model != null) { sub_tab_flatten_model.is_expanded = false; sub_tab_flatten_model.is_active = false; }
+            if (sub_tab_world_aligned != null) { sub_tab_world_aligned.is_expanded = false; sub_tab_world_aligned.is_active = false; }
+            if (sub_tab_vrchat_mirror != null) { sub_tab_vrchat_mirror.is_expanded = false; sub_tab_vrchat_mirror.is_active = false; }
+            if (sub_tab_touch_interactions != null) { sub_tab_touch_interactions.is_expanded = false; sub_tab_touch_interactions.is_active = false; }
+            if (sub_tab_dither != null) { sub_tab_dither.is_expanded = false; sub_tab_dither.is_active = false; }
+            if (sub_tab_ps1 != null) { sub_tab_ps1.is_expanded = false; sub_tab_ps1.is_active = false; }
+            if (sub_tab_vertex_distortion != null) { sub_tab_vertex_distortion.is_expanded = false; sub_tab_vertex_distortion.is_active = false; }
+            if (sub_tab_refraction != null) { sub_tab_refraction.is_expanded = false; sub_tab_refraction.is_active = false; }
+            if (sub_tab_screenspace_reflection != null) { sub_tab_screenspace_reflection.is_expanded = false; sub_tab_screenspace_reflection.is_active = false; }
+            if (tab_outline != null) { tab_outline.is_expanded = false; tab_outline.is_active = false; }
+            if (tab_third_party != null) { tab_third_party.is_expanded = false; tab_third_party.is_active = false; }
+            if (sub_tab_audiolink != null) { sub_tab_audiolink.is_expanded = false; sub_tab_audiolink.is_active = false; }
+            if (sub_tab_superplug != null) { sub_tab_superplug.is_expanded = false; sub_tab_superplug.is_active = false; }
+            if (sub_tab_ltcgi != null) { sub_tab_ltcgi.is_expanded = false; sub_tab_ltcgi.is_active = false; }
+        }
+
         public static void unload_material()
         {
             loaded = false;
@@ -661,6 +728,7 @@ namespace Luka.Backlace
             beauty_blender = null;
             bags = null;
             meta = null;
+            search_bar = null;
             config_tab = null;
             license_tab = null;
             config_menu = null;
@@ -670,6 +738,7 @@ namespace Luka.Backlace
             footer = null;
             premonition_tab = null;
             is_compact = false;
+            compact_notice = null;
             premonition_menu = null;
             #region Tabs
             tab_main = null;
@@ -751,6 +820,7 @@ namespace Luka.Backlace
             docs = CacheManager.docs;
             footer = CacheManager.footer;
             // per-material loading
+            search_bar = new SearchBar();
             license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 10, languages.speak("tab_license"));
             config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_config"));
             presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_presets"));
@@ -762,6 +832,7 @@ namespace Luka.Backlace
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
             premonition_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 9, languages.speak("tab_premonition"));
             is_compact = targetMat.shader.name.ToLower().Contains("_compact_");
+            compact_notice = new NoticeBox(ref theme, languages.speak("premonition_compact_notice"));
             premonition_menu = new PremonitionMenu(ref theme, ref targetMat, ref premonition_tab, is_compact);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
@@ -811,49 +882,72 @@ namespace Luka.Backlace
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
             tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
             tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
-            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink");
-            sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_superplug"));
-            sub_tab_ltcgi = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ltcgi"), null, "_ToggleLTCGI");
+            sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink", null);
+            sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_superplug"), null, null, null, Project.dependencies[1]);
+            sub_tab_ltcgi = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ltcgi"), null, "_ToggleLTCGI", null, Project.dependencies[0]);
             #endregion // Tabs
             loaded = true;
         }
 
         // determine if a load is needed or not
-        public void repaint_dazzle(ref Material targetMat)
+        public void repaint_dazzle(MaterialEditor materialEditor, MaterialProperty[] properties, ref Material targetMat)
         {
             // first time loading
             if (!loaded) 
             {
                 load(ref targetMat);
-                return;
             }
             // check if material changed
-            string new_guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
-            if (loaded_material != new_guid || loaded_material_id != targetMat.GetInstanceID()) 
+            else
             {
-                unload_material();
-                load(ref targetMat);
-                return;
+                string new_guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(targetMat));
+                if (loaded_material != new_guid || loaded_material_id != targetMat.GetInstanceID()) 
+                {
+                    unload_material();
+                    load(ref targetMat);
+                }
+                else
+                {
+                    // always update variants in case of shader swap
+                    detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
+                }
             }
-            // always update variants in case of shader swap
-            detected_variants = ShaderVariant.DetectCapabilities(ref targetMat);
+            // indexing pass
+            if (!has_indexed && Event.current.type == EventType.Layout)
+            {
+                Tab.is_indexing = true;
+                try {
+                    DrawUI(materialEditor, properties);
+                } catch { }
+                Tab.is_indexing = false;
+                has_indexed = true;
+            }
         }
 
         // per-shader ui here
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {
             Material targetMat = materialEditor.target as Material;
-            repaint_dazzle(ref targetMat);
+            repaint_dazzle(materialEditor, properties, ref targetMat);
+            DrawUI(materialEditor, properties);
+        }
+
+        private void DrawUI(MaterialEditor materialEditor, MaterialProperty[] properties)
+        {
+            Material targetMat = materialEditor.target as Material;
             EditorGUI.BeginChangeCheck();
             header.draw();
             update.draw();
+            if (is_compact) {
+                compact_notice.draw();
+                GUILayout.Space(4);
+            }
+            search_bar.draw(ref theme);
             #region Backlace
             // main tab
-            tab_main.draw();
-            if (tab_main.is_expanded) {
+            tab_main.process(() => {
                 Components.start_foldout();
-                sub_tab_rendering.draw();
-                if (sub_tab_rendering.is_expanded) {
+                sub_tab_rendering.process(() => {
                     // main - rendering
                     prop_BlendMode = FindProperty("_BlendMode", properties);
                     prop_OverrideBaseBlend = FindProperty("_OverrideBaseBlend", properties);
@@ -941,9 +1035,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_OutlineStencilZFail, languages.speak("prop_OutlineStencilZFail"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
-                }
-                sub_tab_textures.draw();
-                if (sub_tab_textures.is_expanded) {
+                });
+                sub_tab_textures.process(() => {
                     // main - textures
                     prop_MainTex = FindProperty("_MainTex", properties);
                     prop_Color = FindProperty("_Color", properties);
@@ -957,9 +1050,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_BumpScale, languages.speak("prop_BumpScale"));
                     materialEditor.ShaderProperty(prop_Alpha, languages.speak("prop_Alpha"));
                     materialEditor.ShaderProperty(prop_Cutoff, languages.speak("prop_Cutoff"));
-                }
-                sub_tab_stitching.draw();
-                if (sub_tab_stitching.is_expanded) {
+                });
+                sub_tab_stitching.process(() => {
                     // main - texture stitching
                     prop_UseTextureStitching = FindProperty("_UseTextureStitching", properties);
                     prop_StitchTex = FindProperty("_StitchTex", properties);
@@ -973,9 +1065,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_StitchOffset, languages.speak("prop_StitchOffset"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_UseTextureStitching.floatValue.Equals(1), configs);
-                }
-                sub_tab_post_processing.draw();
-                if (sub_tab_post_processing.is_expanded) {
+                });
+                sub_tab_post_processing.process(() => {
                     // main - post processing
                     prop_TogglePostProcessing = FindProperty("_TogglePostProcessing", properties);
                     prop_RGBColor = FindProperty("_RGBColor", properties);
@@ -1021,9 +1112,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_BlackAndWhite, languages.speak("prop_BlackAndWhite"));
                     materialEditor.ShaderProperty(prop_Brightness, languages.speak("prop_Brightness"));
                     Components.end_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
-                }
-                sub_tab_decal_one.draw();
-                if (sub_tab_decal_one.is_expanded) {
+                });
+                sub_tab_decal_one.process(() => {
                     // main - decal one
                     prop_Decal1Enable = FindProperty("_Decal1Enable", properties);
                     prop_Decal1Tex = FindProperty("_Decal1Tex", properties);
@@ -1076,9 +1166,8 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_Decal1HueShift.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
-                }
-                sub_tab_decal_two.draw();
-                if (sub_tab_decal_two.is_expanded) {
+                });
+                sub_tab_decal_two.process(() => {
                     // main - decal two
                     prop_Decal2Enable = FindProperty("_Decal2Enable", properties);
                     prop_Decal2Tex = FindProperty("_Decal2Tex", properties);
@@ -1131,17 +1220,15 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_Decal2HueShift.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
-                }
-                sub_tab_vertex_manipulation.draw();
-                if (sub_tab_vertex_manipulation.is_expanded) {
+                });
+                sub_tab_vertex_manipulation.process(() => {
                     // main - vertex manipulation
                     prop_VertexManipulationPosition = FindProperty("_VertexManipulationPosition", properties);
                     prop_VertexManipulationScale = FindProperty("_VertexManipulationScale", properties);
                     Components.Vector3Property(materialEditor, prop_VertexManipulationPosition, languages.speak("prop_VertexManipulationPosition"));
                     Components.Vector3Property(materialEditor, prop_VertexManipulationScale, languages.speak("prop_VertexManipulationScale"));
-                }
-                sub_tab_uv_manipulation.draw();
-                if (sub_tab_uv_manipulation.is_expanded) {
+                });
+                sub_tab_uv_manipulation.process(() => {
                     // main - uv manipulation
                     prop_UV_Offset_X = FindProperty("_UV_Offset_X", properties);
                     prop_UV_Offset_Y = FindProperty("_UV_Offset_Y", properties);
@@ -1157,9 +1244,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_UV_Scroll_X_Speed, languages.speak("prop_UV_Scroll_X_Speed"));
                     materialEditor.ShaderProperty(prop_UV_Scroll_Y_Speed, languages.speak("prop_UV_Scroll_Y_Speed"));
                     materialEditor.ShaderProperty(prop_UV_Rotation, languages.speak("prop_UV_Rotation"));
-                }
-                sub_tab_uv_effects.draw();
-                if (sub_tab_uv_effects.is_expanded) {
+                });
+                sub_tab_uv_effects.process(() => {
                     // main - uv effects
                     prop_ToggleUVEffects = FindProperty("_ToggleUVEffects", properties);
                     prop_UVTriplanarMapping = FindProperty("_UVTriplanarMapping", properties);
@@ -1217,9 +1303,8 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_UVFlowmap.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleUVEffects.floatValue.Equals(1), configs);
-                }
-                sub_tab_uv_sets.draw();
-                if (sub_tab_uv_sets.is_expanded) {
+                });
+                sub_tab_uv_sets.process(() => {
                     // main - uv sets
                     prop_MainTex_UV = FindProperty("_MainTex_UV", properties);
                     prop_BumpMap_UV = FindProperty("_BumpMap_UV", properties);
@@ -1273,15 +1358,13 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingTexture_UV, languages.speak("prop_PathingTexture_UV"));
                     materialEditor.ShaderProperty(prop_Dither_UV, languages.speak("prop_Dither_UV"));
                     materialEditor.ShaderProperty(prop_StitchTex_UV, languages.speak("prop_StitchTex_UV"));
-                }
+                });
                 Components.end_foldout();
-            }
+            });
             // lighting tab
-            tab_lighting.draw();
-            if (tab_lighting.is_expanded) {
+            tab_lighting.process(() => {
                 Components.start_foldout();
-                sub_tab_lighting_model.draw();
-                if (sub_tab_lighting_model.is_expanded) {
+                sub_tab_lighting_model.process(() => {
                     // lighting - lighting model
                     prop_LightingColorMode = FindProperty("_LightingColorMode", properties);
                     prop_LightingDirectionMode = FindProperty("_LightingDirectionMode", properties);
@@ -1319,9 +1402,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_IndirectOverride, languages.speak("prop_IndirectOverride"));
                     materialEditor.ShaderProperty(prop_IndirectFallbackMode, languages.speak("prop_IndirectFallbackMode"));
                     materialEditor.ShaderProperty(prop_FallbackCubemap, languages.speak("prop_FallbackCubemap"));
-                }
-                sub_tab_anime.draw();
-                if (sub_tab_anime.is_expanded) {
+                });
+                sub_tab_anime.process(() => {
                     // lighting - diffuse
                     prop_ToggleAnimeLighting = FindProperty("_ToggleAnimeLighting", properties);
                     prop_AnimeMode = FindProperty("_AnimeMode", properties);
@@ -1351,10 +1433,8 @@ namespace Luka.Backlace
                     prop_RampNormalIntensity = FindProperty("_RampNormalIntensity", properties);
                     materialEditor.ShaderProperty(prop_ToggleAnimeLighting, languages.speak("prop_ToggleAnimeLighting"));
                     Components.start_dynamic_disable(!prop_ToggleAnimeLighting.floatValue.Equals(1), configs);
-                    
                     materialEditor.ShaderProperty(prop_AnimeMode, languages.speak("prop_AnimeMode"));
-
-                    // Ramp Mode
+                    // ramp mode
                     if ((int)prop_AnimeMode.floatValue == 0)
                     {
                         materialEditor.ShaderProperty(prop_Ramp, languages.speak("prop_Ramp"));
@@ -1365,7 +1445,7 @@ namespace Luka.Backlace
                         materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
                         materialEditor.ShaderProperty(prop_RampNormalIntensity, languages.speak("prop_RampNormalIntensity"));
                     }
-                    // Procedural Mode
+                    // procedural mode
                     else
                     {
                         materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
@@ -1394,9 +1474,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowTint, languages.speak("prop_ShadowTint"));
                     materialEditor.ShaderProperty(prop_ShadowThreshold, languages.speak("prop_ShadowThreshold"));
                     Components.end_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
-                }
-                sub_tab_light_limiting.draw();
-                if (sub_tab_light_limiting.is_expanded) {
+                });
+                sub_tab_light_limiting.process(() => {
                     // lighting - light limiting
                     prop_EnableBaseLightLimit = FindProperty("_EnableBaseLightLimit", properties);
                     prop_BaseLightMin = FindProperty("_BaseLightMin", properties);
@@ -1422,9 +1501,8 @@ namespace Luka.Backlace
                     Components.start_dynamic_disable(prop_ForceLightColor.floatValue.Equals(0), configs);
                     materialEditor.ShaderProperty(prop_ForcedLightColor, languages.speak("prop_ForcedLightColor"));
                     Components.end_dynamic_disable(prop_ForceLightColor.floatValue.Equals(0), configs);
-                }
-                sub_tab_emission.draw();
-                if (sub_tab_emission.is_expanded) {
+                });
+                sub_tab_emission.process(() => {
                     // lighting - emission
                     prop_ToggleEmission = FindProperty("_ToggleEmission", properties);
                     prop_EmissionColor = FindProperty("_EmissionColor", properties);
@@ -1438,13 +1516,11 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_UseAlbedoAsEmission, languages.speak("prop_UseAlbedoAsEmission"));
                     materialEditor.ShaderProperty(prop_EmissionStrength, languages.speak("prop_EmissionStrength"));
                     Components.end_dynamic_disable(!prop_ToggleEmission.floatValue.Equals(1), configs);
-                }
+                });
                 Components.end_foldout();
-            }
+            });
             // specular tab
-            tab_specular.draw();
-            if (tab_specular.is_expanded)
-            {
+            tab_specular.process(() => {
                 Components.start_foldout();
                 prop_ToggleSpecular = FindProperty("_ToggleSpecular", properties);
                 prop_ToggleVertexSpecular = FindProperty("_ToggleVertexSpecular", properties);
@@ -1453,8 +1529,7 @@ namespace Luka.Backlace
                 Components.start_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
                 materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
                 materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
-                sub_tab_pbr_specular.draw();
-                if (sub_tab_pbr_specular.is_expanded) {
+                sub_tab_pbr_specular.process(() => {
                     // specular - pbr specualr
                     prop_MSSO = FindProperty("_MSSO", properties);
                     prop_Metallic = FindProperty("_Metallic", properties);
@@ -1474,9 +1549,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_SpecularTintTexture, languages.speak("prop_SpecularTintTexture"));
                     materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
                     materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));
-                }
-                sub_tab_stylised_specular.draw();
-                if (sub_tab_stylised_specular.is_expanded) {
+                });
+                sub_tab_stylised_specular.process(() => {
                     // specular - stylised specular
                     prop_HighlightRamp = FindProperty("_HighlightRamp", properties);
                     prop_HighlightRampColor = FindProperty("_HighlightRampColor", properties);
@@ -1527,16 +1601,14 @@ namespace Luka.Backlace
                             GUILayout.Label(theme.language_manager.speak("specular_standard_stylised_info"), boldWrap);
                             break;
                     }
-                }
+                });
                 Components.end_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
                 Components.end_foldout();
-            }
+            });
             // shading tab
-            tab_shading.draw();
-            if (tab_shading.is_expanded) {
+            tab_shading.process(() => {
                 Components.start_foldout();
-                sub_tab_rim_lighting.draw();
-                if (sub_tab_rim_lighting.is_expanded) {
+                sub_tab_rim_lighting.process(() => {
                     // shading - rim lighting
                     prop_ToggleRimlight = FindProperty("_ToggleRimlight", properties);
                     prop_RimColor = FindProperty("_RimColor", properties);
@@ -1550,9 +1622,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_RimIntensity, languages.speak("prop_RimIntensity"));
                     materialEditor.ShaderProperty(prop_RimWidth, languages.speak("prop_RimWidth"));
                     Components.end_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
-                }
-                sub_tab_depth_rim.draw();
-                if (sub_tab_depth_rim.is_expanded) {
+                });
+                sub_tab_depth_rim.process(() => {
                     // shading - depth rim
                     prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
                     prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
@@ -1568,9 +1639,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
                     materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
                     Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
-                }
-                sub_tab_matcap.draw();
-                if (sub_tab_matcap.is_expanded) {
+                });
+                sub_tab_matcap.process(() => {
                     // shading - matcap
                     prop_ToggleMatcap = FindProperty("_ToggleMatcap", properties);
                     prop_MatcapTex = FindProperty("_MatcapTex", properties);
@@ -1592,9 +1662,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_MatcapSmoothness, languages.speak("prop_MatcapSmoothness"));
                     Components.end_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
-                }
-                sub_tab_cubemap.draw();
-                if (sub_tab_cubemap.is_expanded) {
+                });
+                sub_tab_cubemap.process(() => {
                     // shading - cubemap
                     prop_ToggleCubemap = FindProperty("_ToggleCubemap", properties);
                     prop_CubemapTex = FindProperty("_CubemapTex", properties);
@@ -1608,9 +1677,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_CubemapBlendMode, languages.speak("prop_CubemapBlendMode"));
                     materialEditor.ShaderProperty(prop_CubemapIntensity, languages.speak("prop_CubemapIntensity"));
                     Components.end_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
-                }
-                sub_tab_clear_coat.draw();
-                if (sub_tab_clear_coat.is_expanded) {
+                });
+                sub_tab_clear_coat.process(() => {
                     // shading - clear coat
                     prop_ToggleClearcoat = FindProperty("_ToggleClearcoat", properties);
                     prop_ClearcoatStrength = FindProperty("_ClearcoatStrength", properties);
@@ -1626,9 +1694,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ClearcoatReflectionStrength, languages.speak("prop_ClearcoatReflectionStrength"));
                     materialEditor.ShaderProperty(prop_ClearcoatRoughness, languages.speak("prop_ClearcoatRoughness"));
                     Components.end_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
-                }
-                sub_tab_subsurface.draw();
-                if (sub_tab_subsurface.is_expanded) {
+                });
+                sub_tab_subsurface.process(() => {
                     // shading - subsurface
                     prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
                     prop_SSSColor = FindProperty("_SSSColor", properties);
@@ -1650,9 +1717,8 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_SSSThicknessMap.textureValue == null, configs);
                     Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                }
-                sub_tab_parallax.draw();
-                if (sub_tab_parallax.is_expanded) {
+                });
+                sub_tab_parallax.process(() => {
                     // shading - parallax
                     prop_ToggleParallax = FindProperty("_ToggleParallax", properties);
                     prop_ParallaxMode = FindProperty("_ParallaxMode", properties);
@@ -1666,9 +1732,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
                     materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
-                }
-                sub_tab_detail_map.draw();
-                if (sub_tab_detail_map.is_expanded) {
+                });
+                sub_tab_detail_map.process(() => {
                     // shading - detail map
                     prop_ToggleDetail = FindProperty("_ToggleDetail", properties);
                     prop_DetailAlbedoMap = FindProperty("_DetailAlbedoMap", properties);
@@ -1682,9 +1747,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DetailTiling, languages.speak("prop_DetailTiling"));
                     materialEditor.ShaderProperty(prop_DetailNormalStrength, languages.speak("prop_DetailNormalStrength"));
                     Components.end_dynamic_disable(!prop_ToggleDetail.floatValue.Equals(1), configs);
-                }
-                sub_tab_shadow_map.draw();
-                if (sub_tab_shadow_map.is_expanded) {
+                });
+                sub_tab_shadow_map.process(() => {
                     // shading - shadow map
                     prop_ToggleShadowMap = FindProperty("_ToggleShadowMap", properties);
                     prop_ShadowMap = FindProperty("_ShadowMap", properties);
@@ -1694,15 +1758,13 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowMap, languages.speak("prop_ShadowMap"));
                     materialEditor.ShaderProperty(prop_ShadowMapIntensity, languages.speak("prop_ShadowMapIntensity"));
                     Components.end_dynamic_disable(!prop_ToggleShadowMap.floatValue.Equals(1), configs);
-                }
+                });
                 Components.end_foldout();
-            }
+            });
             // effects tab
-            tab_effects.draw();
-            if (tab_effects.is_expanded) {
+            tab_effects.process(() => {
                 Components.start_foldout();
-                sub_tab_dissolve.draw();
-                if (sub_tab_dissolve.is_expanded) {
+                sub_tab_dissolve.process(() => {
                     // effects - dissolve
                     prop_ToggleDissolve = FindProperty("_ToggleDissolve", properties);
                     prop_DissolveProgress = FindProperty("_DissolveProgress", properties);
@@ -1744,9 +1806,8 @@ namespace Luka.Backlace
                             break;
                     }
                     Components.end_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
-                }
-                sub_tab_distance_fading.draw();
-                if (sub_tab_distance_fading.is_expanded) {
+                });
+                sub_tab_distance_fading.process(() => {
                     // effects - distance fading
                     prop_ToggleDistanceFade = FindProperty("_ToggleDistanceFade", properties);
                     prop_DistanceFadeReference = FindProperty("_DistanceFadeReference", properties);
@@ -1778,9 +1839,8 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
-                }
-                sub_tab_vrchat_mirror.draw();
-                if (sub_tab_vrchat_mirror.is_expanded) {
+                });
+                sub_tab_vrchat_mirror.process(() => {
                     // effects - vrchat mirror
                     prop_ToggleMirrorDetection = FindProperty("_ToggleMirrorDetection", properties);
                     prop_MirrorDetectionMode = FindProperty("_MirrorDetectionMode", properties);
@@ -1790,9 +1850,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_MirrorDetectionMode, languages.speak("prop_MirrorDetectionMode"));
                     materialEditor.ShaderProperty(prop_MirrorDetectionTexture, languages.speak("prop_MirrorDetectionTexture"));
                     Components.end_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
-                }
-                sub_tab_pathing.draw();
-                if (sub_tab_pathing.is_expanded) {
+                });
+                sub_tab_pathing.process(() => {
                     // effects - pathing
                     prop_TogglePathing = FindProperty("_TogglePathing", properties);
                     prop_PathingMappingMode = FindProperty("_PathingMappingMode", properties);
@@ -1845,9 +1904,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingEnd, languages.speak("prop_PathingEnd"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
-                }
-                sub_tab_glitter.draw();
-                if (sub_tab_glitter.is_expanded) {
+                });
+                sub_tab_glitter.process(() => {
                     // effects - glitter
                     prop_ToggleGlitter = FindProperty("_ToggleGlitter", properties);
                     prop_GlitterMode = FindProperty("_GlitterMode", properties);
@@ -1883,9 +1941,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_GlitterRainbowSpeed, languages.speak("prop_GlitterRainbowSpeed"));
                     Components.end_dynamic_disable(!prop_ToggleGlitterRainbow.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleGlitter.floatValue.Equals(1), configs);
-                }
-                sub_tab_iridescence.draw();
-                if (sub_tab_iridescence.is_expanded) {
+                });
+                sub_tab_iridescence.process(() => {
                     // effects - iridescence
                     prop_ToggleIridescence = FindProperty("_ToggleIridescence", properties);
                     prop_IridescenceMode = FindProperty("_IridescenceMode", properties);
@@ -1909,9 +1966,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_IridescencePower, languages.speak("prop_IridescencePower"));
                     materialEditor.ShaderProperty(prop_IridescenceFrequency, languages.speak("prop_IridescenceFrequency"));
                     Components.end_dynamic_disable(!prop_ToggleIridescence.floatValue.Equals(1), configs);
-                }
-                sub_tab_shadow_textures.draw();
-                if (sub_tab_shadow_textures.is_expanded) {
+                });
+                sub_tab_shadow_textures.process(() => {
                     // effects - shadow textures
                     prop_ToggleShadowTexture = FindProperty("_ToggleShadowTexture", properties);
                     prop_ShadowTextureMappingMode = FindProperty("_ShadowTextureMappingMode", properties);
@@ -1937,9 +1993,8 @@ namespace Luka.Backlace
                         materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
                     }
                     Components.end_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
-                }
-                sub_tab_world_aligned.draw();
-                if (sub_tab_world_aligned.is_expanded) {
+                });
+                sub_tab_world_aligned.process(() => {
                     // effects - world aligned
                     prop_ToggleWorldEffect = FindProperty("_ToggleWorldEffect", properties);
                     prop_WorldEffectBlendMode = FindProperty("_WorldEffectBlendMode", properties);
@@ -1965,9 +2020,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_WorldEffectBlendSharpness, languages.speak("prop_WorldEffectBlendSharpness"));
                     materialEditor.ShaderProperty(prop_WorldEffectIntensity, languages.speak("prop_WorldEffectIntensity"));
                     Components.end_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
-                }
-                sub_tab_dither.draw();
-                if (sub_tab_dither.is_expanded) {
+                });
+                sub_tab_dither.process(() => {
                     // effects - dither
                     prop_ToggleDither = FindProperty("_ToggleDither", properties);
                     prop_DitherAmount = FindProperty("_DitherAmount", properties);
@@ -1979,9 +2033,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
                     materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
                     Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
-                }
-                sub_tab_touch_interactions.draw();
-                if (sub_tab_touch_interactions.is_expanded) {
+                });
+                sub_tab_touch_interactions.process(() => {
                     // effects - touch interactions
                     prop_ToggleTouchReactive = FindProperty("_ToggleTouchReactive", properties);
                     prop_TouchColor = FindProperty("_TouchColor", properties);
@@ -2001,9 +2054,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_TouchRainbowSpread, languages.speak("prop_TouchRainbowSpread"));
                     Components.end_dynamic_disable(!prop_TouchMode.floatValue.Equals(3), configs);
                     Components.end_dynamic_disable(!prop_ToggleTouchReactive.floatValue.Equals(1), configs);
-                }
-                sub_tab_flatten_model.draw();
-                if (sub_tab_flatten_model.is_expanded) {
+                });
+                sub_tab_flatten_model.process(() => {
                     // effects - flatten model
                     prop_ToggleFlatModel = FindProperty("_ToggleFlatModel", properties);
                     prop_FlatModeAutoflip = FindProperty("_FlatModeAutoflip", properties);
@@ -2019,9 +2071,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_FlatModelFacing, languages.speak("prop_FlatModelFacing"));
                     materialEditor.ShaderProperty(prop_FlatModelLockAxis, languages.speak("prop_FlatModelLockAxis"));
                     Components.end_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
-                }
-                sub_tab_vertex_distortion.draw();
-                if (sub_tab_vertex_distortion.is_expanded) {
+                });
+                sub_tab_vertex_distortion.process(() => {
                     // effects - vertex distortion
                     prop_ToggleVertexDistortion = FindProperty("_ToggleVertexDistortion", properties);
                     prop_VertexDistortionMode = FindProperty("_VertexDistortionMode", properties);
@@ -2063,9 +2114,8 @@ namespace Luka.Backlace
                             break;
                     }
                     Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
-                }
-                sub_tab_ps1.draw();
-                if (sub_tab_ps1.is_expanded) {
+                });
+                sub_tab_ps1.process(() => {
                     // effects - ps1
                     prop_TogglePS1 = FindProperty("_TogglePS1", properties);
                     prop_PS1Rounding = FindProperty("_PS1Rounding", properties);
@@ -2089,9 +2139,8 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_TogglePS1.floatValue.Equals(1), configs);
-                }
-                sub_tab_refraction.draw();
-                if (sub_tab_refraction.is_expanded) {
+                });
+                sub_tab_refraction.process(() => {
                     // effects - refraction
                     prop_ToggleRefraction = FindProperty("_ToggleRefraction", properties);
                     prop_RefractionMask = FindProperty("_RefractionMask", properties);
@@ -2165,9 +2214,8 @@ namespace Luka.Backlace
                     }
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
-                }
-                sub_tab_screenspace_reflection.draw();
-                if (sub_tab_screenspace_reflection.is_expanded) {
+                });
+                sub_tab_screenspace_reflection.process(() => {
                     // effects - screenspace reflection
                     prop_ToggleSSR = FindProperty("_ToggleSSR", properties);
                     prop_SSRMask = FindProperty("_SSRMask", properties);
@@ -2240,14 +2288,14 @@ namespace Luka.Backlace
                         Components.end_dynamic_disable(!prop_SSRCamFade.floatValue.Equals(1), configs);
                     }
                     Components.end_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
-                }
+                });
                 Components.end_foldout();
-            }
+            });
             // outline tab
-            tab_outline.draw();
-            if (tab_outline.is_expanded) {
+            tab_outline.process(() => {
                 Components.start_foldout();
                 // outline
+                prop_OutlineSpace = FindProperty("_OutlineSpace", properties);
                 prop_OutlineColor = FindProperty("_OutlineColor", properties);
                 prop_OutlineWidth = FindProperty("_OutlineWidth", properties);
                 prop_OutlineVertexColorMask = FindProperty("_OutlineVertexColorMask", properties);
@@ -2257,8 +2305,26 @@ namespace Luka.Backlace
                 prop_OutlineHueShift = FindProperty("_OutlineHueShift", properties);
                 prop_OutlineHueShiftSpeed = FindProperty("_OutlineHueShiftSpeed", properties);
                 prop_OutlineOpacity = FindProperty("_OutlineOpacity", properties);
-                materialEditor.ShaderProperty(prop_OutlineColor, languages.speak("prop_OutlineColor"));
+                prop_OutlineMode = FindProperty("_OutlineMode", properties);
+                prop_OutlineTexMap = FindProperty("_OutlineTexMap", properties);
+                prop_OutlineTex = FindProperty("_OutlineTex", properties);
+                prop_OutlineTexTiling = FindProperty("_OutlineTexTiling", properties);
+                prop_OutlineTexScroll = FindProperty("_OutlineTexScroll", properties);
+                materialEditor.ShaderProperty(prop_OutlineSpace, languages.speak("prop_OutlineSpace"));
                 materialEditor.ShaderProperty(prop_OutlineWidth, languages.speak("prop_OutlineWidth"));
+                materialEditor.ShaderProperty(prop_OutlineMode, languages.speak("prop_OutlineMode"));
+                EditorGUI.indentLevel++;
+                if (prop_OutlineMode.floatValue.Equals(1)) {
+                    // texture mode
+                    materialEditor.ShaderProperty(prop_OutlineTexMap, languages.speak("prop_OutlineTexMap"));
+                    materialEditor.ShaderProperty(prop_OutlineTex, languages.speak("prop_OutlineTex"));
+                    Components.Vector2Property(materialEditor, prop_OutlineTexTiling, languages.speak("prop_OutlineTexTiling"));
+                    Components.Vector2Property(materialEditor, prop_OutlineTexScroll, languages.speak("prop_OutlineTexScroll"));
+                } else {
+                    // colour mode
+                    materialEditor.ShaderProperty(prop_OutlineColor, languages.speak("prop_OutlineColor"));
+                }
+                EditorGUI.indentLevel--;
                 materialEditor.ShaderProperty(prop_OutlineVertexColorMask, languages.speak("prop_OutlineVertexColorMask"));
                 materialEditor.ShaderProperty(prop_OutlineDistanceFade, languages.speak("prop_OutlineDistanceFade"));
                 Components.start_dynamic_disable(!prop_OutlineDistanceFade.floatValue.Equals(1), configs);
@@ -2275,13 +2341,11 @@ namespace Luka.Backlace
                 EditorGUI.indentLevel--;
                 Components.end_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
                 Components.end_foldout();
-            }
+            });
             // third party tab
-            tab_third_party.draw();
-            if (tab_third_party.is_expanded) {
+            tab_third_party.process(() => {
                 Components.start_foldout();
-                sub_tab_audiolink.draw();
-                if (sub_tab_audiolink.is_expanded) {
+                sub_tab_audiolink.process(() => {
                     // third party - audiolink
                     prop_ToggleAudioLink = FindProperty("_ToggleAudioLink", properties);
                     prop_AudioLinkFallback = FindProperty("_AudioLinkFallback", properties);
@@ -2409,13 +2473,13 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_AudioLinkIridescenceBand.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
-                }
+                });
                 sub_tab_superplug.draw();
                 if (sub_tab_superplug.is_expanded) {
                     // third party - superplug
-                    GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
-                    boldWrap.wordWrap = true;
-                    GUILayout.Label(theme.language_manager.speak("superplug_notice"), boldWrap);
+                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
+                    wrappedStyle.wordWrap = true;
+                    GUILayout.Label(theme.language_manager.speak("superplug_notice"), wrappedStyle);
                     if (GUILayout.Button(theme.language_manager.speak("superplug_button"))) {
                         Components.open_external_website("https://vrcfury.com/sps/", ref theme);
                     }
@@ -2425,15 +2489,15 @@ namespace Luka.Backlace
                     // third party - ltcgi
                     prop_ToggleLTCGI = FindProperty("_ToggleLTCGI", properties);
                     materialEditor.ShaderProperty(prop_ToggleLTCGI, languages.speak("prop_ToggleLTCGI"));
-                    GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
-                    boldWrap.wordWrap = true;
-                    GUILayout.Label(theme.language_manager.speak("ltcgi_notice"), boldWrap);
+                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
+                    wrappedStyle.wordWrap = true;
+                    GUILayout.Label(theme.language_manager.speak("ltcgi_notice"), wrappedStyle);
                     if (GUILayout.Button(theme.language_manager.speak("ltcgi_button"))) {
                         Components.open_external_website("https://github.com/PiMaker/ltcgi/", ref theme);
                     }                  
                 }
                 Components.end_foldout();
-            }
+            });
             #endregion
             config_menu?.draw();
             presets_menu?.draw();

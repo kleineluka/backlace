@@ -117,12 +117,18 @@ namespace Luka.Backlace.Premonition
         public static string extract_source_shader(Material sourceMaterial)
         {
             if (sourceMaterial == null || sourceMaterial.shader == null) return "Unknown";
-            string shaderCode = AssetDatabase.GetTextMetaFilePathFromAssetPath(AssetDatabase.GetAssetPath(sourceMaterial.shader));
-            if (string.IsNullOrEmpty(shaderCode)) return "Unknown";
-            Debug.Log("Reading shader file: " + shaderCode);
+            string assetPath = AssetDatabase.GetAssetPath(sourceMaterial.shader);
+            if (string.IsNullOrEmpty(assetPath)) return "Unknown";
+            string fullPath = assetPath;
+            if (!Path.IsPathRooted(fullPath))
+            {
+                fullPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), assetPath));
+            }
             try
             {
-                string[] lines = File.ReadAllLines(shaderCode);
+                if (!File.Exists(fullPath)) return "Unknown";
+
+                string[] lines = File.ReadAllLines(fullPath);
                 foreach (string line in lines)
                 {
                     if (line.StartsWith("// Source Shader: "))

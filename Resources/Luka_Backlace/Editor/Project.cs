@@ -13,8 +13,8 @@ namespace Luka.Backlace
         public static readonly string project_name = "Backlace";
         public static readonly string project_path = "Luka_Backlace";
         public static readonly string project_license = "/Licenses/Backlace";
-        public static Version version = new Version("1.0.0");
-        public static readonly Version version_dazzle = new Version("3.0.0"); // just internally
+        public static Version version = new Version("1.5.0");
+        public static readonly Version version_dazzle = new Version("4.0.0"); // just internally
         public static readonly string project_docs = "https://luka.moe/docs/backlace";
         public static readonly bool has_license = true; // if the project has a license file, or if you wanna show it
         public static readonly bool has_docs = true; // if the project has documentation, or if you wanna show it
@@ -39,6 +39,12 @@ namespace Luka.Backlace
             new Footer.Segment("footer_backlace", "https://luka.moe/god/github/backlace"),
             new Footer.Segment("footer_heart"),
         };
+        public static readonly List<Dependency> dependencies = new List<Dependency>
+        {
+            new Dependency("LTCGI", DependencyType.Package, folderPath: "", packageName: "at.pimaker.ltcgi", infoUrl: "https://github.com/PiMaker/ltcgi"),
+            new Dependency("SPS", DependencyType.Package, folderPath: "", packageName: "com.vrcfury.vrcfury", infoUrl: "https://github.com/VRCFury/VRCFury"),
+        };
+        public static readonly DependencyManager dependency_manager = new DependencyManager(dependencies);
     }
 
 }

@@ -20,7 +20,7 @@
 
 // properties
 float _Alpha;
-float4 _OutlineColor;
+int _OutlineSpace;
 float _OutlineWidth;
 int _OutlineVertexColorMask;
 int _OutlineDistanceFade;
@@ -29,6 +29,12 @@ float _OutlineFadeEnd;
 float _OutlineHueShiftSpeed;
 int _OutlineHueShift;
 float _OutlineOpacity;
+int _OutlineMode;
+int _OutlineTexMap;
+UNITY_DECLARE_TEX2D(_OutlineTex);
+float2 _OutlineTexTiling;
+float2 _OutlineTexScroll;
+float4 _OutlineColor;
 
 UNITY_DECLARE_TEX2D(_MainTex);
 float4 _MainTex_ST;
@@ -85,11 +91,20 @@ v2f vert(appdata v)
     #endif
     // outline extrusion logic
     float mask = lerp(1.0, v.color.r, _OutlineVertexColorMask);
-    float4 viewPos = mul(UNITY_MATRIX_V, worldPos);
-    float3 viewNormal = mul((float3x3)UNITY_MATRIX_V, worldNormal);
-    viewNormal = normalize(viewNormal);
-    viewPos.xyz += viewNormal * _OutlineWidth * mask * viewPos.w;
-    o.pos = mul(UNITY_MATRIX_P, viewPos);
+    if (_OutlineSpace == 1) // world space
+    {
+        float3 extrusionDir = normalize(worldNormal);
+        float3 newWorldPos = worldPos.xyz + extrusionDir * _OutlineWidth * mask;
+        o.pos = mul(UNITY_MATRIX_VP, float4(newWorldPos, 1.0));
+    }
+    else // view space
+    {
+        float4 viewPos = mul(UNITY_MATRIX_V, worldPos);
+        float3 viewNormal = mul((float3x3)UNITY_MATRIX_V, worldNormal);
+        viewNormal = normalize(viewNormal);
+        viewPos.xyz += viewNormal * _OutlineWidth * mask * viewPos.w;
+        o.pos = mul(UNITY_MATRIX_P, viewPos);
+    }
     o.worldPos = worldPos.xyz;
     o.screenPos = ComputeScreenPos(o.pos); // for dithering
     return o;
@@ -137,6 +152,24 @@ fixed4 frag(v2f i) : SV_Target
     #endif // _BACKLACE_DITHER
     // finally, draw the outline
     fixed4 finalColor = _OutlineColor;
+    if (_OutlineMode == 1) // texture
+    {
+        float2 outlineTexUV;
+        switch (_OutlineTexMap) {
+            case 1: // world space
+                outlineTexUV = i.worldPos.xz;
+                break;
+            case 2: // uv space
+                outlineTexUV = i.uv;
+                break;
+            default: // screen space
+                outlineTexUV = i.screenPos.xy / i.screenPos.w;
+                break;
+        }
+        outlineTexUV = frac(frac(outlineTexUV * _OutlineTexTiling) + (_OutlineTexScroll * _Time.y));
+        fixed4 outlineTexColor = UNITY_SAMPLE_TEX2D(_OutlineTex, outlineTexUV);
+        finalColor.rgb = outlineTexColor;
+    }
     if (_OutlineHueShift == 1)
     {
         float3 rainbow = Sinebow(_Time.y * _OutlineHueShiftSpeed);

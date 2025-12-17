@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 // Dazzle.cs is my pretty GUI-building library!
 namespace Luka.Backlace
@@ -311,6 +312,8 @@ namespace Luka.Backlace
         private GUIStyle style_variant_badge_small = null;
         private GUIStyle style_footer_text = null;
         private GUIStyle style_footer_link = null;
+        private GUIStyle style_search_field = null;
+        private GUIStyle style_search_buttons = null;
         private Color colour_active_badge = new Color(0.67f, 0.84f, 0.9f); // non-nullable..
 
         // pass theme for fonting
@@ -336,6 +339,8 @@ namespace Luka.Backlace
             style_variant_badge_small = null;
             style_footer_text = null;
             style_footer_link = null;
+            style_search_field = null;
+            style_search_buttons = null;
             colour_active_badge = new Color(0.67f, 0.84f, 0.9f); // non-nullable..
         } 
 
@@ -643,6 +648,43 @@ namespace Luka.Backlace
             return ref style_footer_link;
         }
 
+        // get the style for the search field
+        public ref GUIStyle load_style_search_field()
+        {
+            if (style_search_field == null)
+            {
+                style_search_field = new GUIStyle(EditorStyles.toolbarTextField);
+                style_search_field.fixedHeight = 30f;
+                style_search_field.fontSize = 14;
+                style_search_field.alignment = TextAnchor.MiddleLeft;
+                style_search_field.padding = new RectOffset(8, 8, 0, 0);
+            }
+            return ref style_search_field;
+        }
+
+        // get the style for the clear button
+        public ref GUIStyle load_style_search_buttons()
+        {
+            if (style_search_buttons == null)
+            {
+                style_search_buttons = new GUIStyle(EditorStyles.toolbarButton);
+                style_search_buttons.fixedHeight = 28f;
+                style_search_buttons.margin.top = 2;
+                style_search_buttons.fontSize = 12;
+                style_search_buttons.fontStyle = FontStyle.Bold;
+                style_search_buttons.alignment = TextAnchor.MiddleCenter;
+                style_search_buttons.normal.background = null;
+                style_search_buttons.active.background = null;
+                style_search_buttons.hover.background = null;
+                style_search_buttons.focused.background = null;
+                style_search_buttons.onNormal.background = null;
+                style_search_buttons.onActive.background = null;
+                style_search_buttons.onHover.background = null;
+                style_search_buttons.onFocused.background = null;
+            }
+            return ref style_search_buttons;
+        }
+
     }
 
     // reusable images
@@ -751,6 +793,13 @@ namespace Luka.Backlace
         private static readonly float tab_sub_arrow_x_big = 5f;
         private static readonly float tab_sub_arrow_y_big = -1f;
 
+        // search and indexing static state
+        public static bool is_indexing = false;
+        private static Stack<Tab> active_tabs = new Stack<Tab>();
+
+        // instance search properties
+        private HashSet<string> keywords = new HashSet<string>();
+        
         // there are different kinds of tabs..
         public enum tab_sizes
         {
@@ -772,6 +821,7 @@ namespace Luka.Backlace
         public ShaderVariant shader_variant = null;
         private string toggle_property_name = null;
         public ShaderCapability capability = null;
+        public Dependency dependency = null;
 
         // tab state
         public bool is_expanded = false;
@@ -779,7 +829,7 @@ namespace Luka.Backlace
 
         // constructor for a tab
         public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, 
-            ShaderVariant shader_variant = null, string toggle_property_name = null, ShaderCapability capability = null)
+            ShaderVariant shader_variant = null, string toggle_property_name = null, ShaderCapability capability = null, Dependency dependency = null)
         {
             this.theme = theme;
             this.material = material;
@@ -789,11 +839,74 @@ namespace Luka.Backlace
             this.shader_variant = shader_variant;
             this.toggle_property_name = toggle_property_name;
             this.capability = capability;
+            this.dependency = dependency;
         }
 
+        // process method to wrap content and handle drawing logic
+        public void process(Action content_action)
+        {
+            // indexing mode
+            if (is_indexing)
+            {
+                // push self to active stack
+                active_tabs.Push(this);
+                // define listener
+                Action<string> listener = (str) => {
+                    // add keyword to current tab
+                    this.keywords.Add(str.ToLower());
+                    // bubble up to parent tabs in stack
+                    foreach(var t in active_tabs) {
+                        if (t != this) t.keywords.Add(str.ToLower());
+                    }
+                };
+                theme.language_manager.on_speak_event += listener; // subscribe
+                // run content to trigger speak events
+                try {
+                    content_action();
+                } catch {
+                    // ignore layout errors during indexing..
+                }
+                theme.language_manager.on_speak_event -= listener; // unsubscribe
+                active_tabs.Pop(); // pop self
+                return;
+            }
+            // search mode
+            if (SearchBar.is_searching)
+            {
+                string q = SearchBar.current_search_query.ToLower();
+                bool match = FuzzySearch.MatchesAny(keywords, q) || FuzzySearch.FuzzyMatch(tab_label, q);
+                if (match)
+                {
+                    // If matched, force expand and draw (only if config expand_searches is true)
+                    // But only force expand if user hasn't manually collapsed it
+                    if (theme.config_manager.json_data.@interface.expand_searches && !is_active) 
+                    {
+                        is_expanded = true;
+                        is_active = true;
+                    }
+                    draw();
+                    
+                    // Respect user's choice to collapse tabs even during search
+                    if (is_expanded)
+                    {
+                        content_action();
+                    }
+                }
+                return; // exit after search handling
+            }
+            // normal mode
+            draw();
+            if (is_expanded)
+            {
+                content_action();
+            }
+        }
+
+        // draw badges on the right side of the tab
         private void draw_badges(Rect parentRect, List<BadgeMetadata> badges, float initialXOffset, float padding)
         {
             if (badges == null || badges.Count == 0) return;
+            const float verticalOffset = -2f;
             float currentXOffset = initialXOffset;
             var originalBGColor = GUI.backgroundColor;
             foreach (var badge in badges)
@@ -802,7 +915,7 @@ namespace Luka.Backlace
                 Vector2 badgeSize = badge.Style.CalcSize(new GUIContent(badge.Text));
                 Rect badgeRect = new Rect(
                     parentRect.x + parentRect.width - badgeSize.x - currentXOffset,
-                    parentRect.y + (parentRect.height - badgeSize.y) / 2,
+                    parentRect.y + (parentRect.height - badgeSize.y) / 2 + verticalOffset,
                     badgeSize.x,
                     badgeSize.y
                 );
@@ -927,6 +1040,45 @@ namespace Luka.Backlace
                     OnClick = capabilityBadgeClickAction
                 });
             }
+            // dependency badge
+            if (dependency != null)
+            {
+                Color depColor = dependency.IsInstalled ? new Color(0.4f, 0.8f, 0.4f) : new Color(0.9f, 0.5f, 0.5f);
+                string depText = dependency.IsInstalled 
+                    ? theme.language_manager.speak("dependency_detected") 
+                    : theme.language_manager.speak("dependency_not_detected");
+                Action dependencyBadgeClickAction = () =>
+                {
+                    if (dependency.IsInstalled)
+                    {
+                        EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("dependency_popup_title", dependency.Name),
+                            theme.language_manager.speak("dependency_popup_detected", dependency.Name, dependency.GetDetectionInfo()),
+                            theme.language_manager.speak("dialog_okay")
+                        );
+                    }
+                    else
+                    {
+                        bool openUrl = EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("dependency_popup_title", dependency.Name),
+                            theme.language_manager.speak("dependency_popup_not_detected", dependency.Name),
+                            theme.language_manager.speak("dependency_popup_open_link"),
+                            theme.language_manager.speak("dialog_cancel")
+                        );
+                        if (openUrl && !string.IsNullOrEmpty(dependency.InfoUrl))
+                        {
+                            Components.open_external_website(dependency.InfoUrl, ref theme);
+                        }
+                    }
+                };
+                badgesToDraw.Add(new BadgeMetadata
+                {
+                    Text = depText,
+                    Color = depColor,
+                    Style = theme.styler_manager.load_style_variant_badge_large(),
+                    OnClick = dependencyBadgeClickAction
+                });
+            }
             draw_badges(rect, badgesToDraw, 20f, 5f);
             // handle foldout arrow
             Event currentEvent = Event.current;
@@ -1024,6 +1176,45 @@ namespace Luka.Backlace
                     Color = capability.Color,
                     Style = theme.styler_manager.load_style_variant_badge_small(),
                     OnClick = capabilityBadgeClickAction
+                });
+            }
+            // dependency badge
+            if (dependency != null)
+            {
+                Color depColor = dependency.IsInstalled ? new Color(0.4f, 0.8f, 0.4f) : new Color(0.9f, 0.5f, 0.5f);
+                string depText = dependency.IsInstalled 
+                    ? theme.language_manager.speak("dependency_detected") 
+                    : theme.language_manager.speak("dependency_not_detected");
+                Action dependencyBadgeClickAction = () =>
+                {
+                    if (dependency.IsInstalled)
+                    {
+                        EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("dependency_popup_title", dependency.Name),
+                            theme.language_manager.speak("dependency_popup_detected", dependency.Name, dependency.GetDetectionInfo()),
+                            theme.language_manager.speak("dialog_okay")
+                        );
+                    }
+                    else
+                    {
+                        bool openUrl = EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("dependency_popup_title", dependency.Name),
+                            theme.language_manager.speak("dependency_popup_not_detected", dependency.Name),
+                            theme.language_manager.speak("dependency_popup_open_link"),
+                            theme.language_manager.speak("dialog_cancel")
+                        );
+                        if (openUrl && !string.IsNullOrEmpty(dependency.InfoUrl))
+                        {
+                            Components.open_external_website(dependency.InfoUrl, ref theme);
+                        }
+                    }
+                };
+                badgesToDraw.Add(new BadgeMetadata
+                {
+                    Text = depText,
+                    Color = depColor,
+                    Style = theme.styler_manager.load_style_variant_badge_small(),
+                    OnClick = dependencyBadgeClickAction
                 });
             }
             draw_badges(rect, badgesToDraw, 10f, 5f);
@@ -1193,7 +1384,8 @@ namespace Luka.Backlace
     }
 
     // create a scrollable area
-    public class Scrollable {
+    public class Scrollable 
+    {
 
         // properties about the scrollable area
         private float scrollbar_height = 300f; // suggestion?
@@ -1707,7 +1899,20 @@ namespace Luka.Backlace
             tab.draw();
             if (tab.is_expanded)
             {
+                // this will be reused vv
+                string[] toggleOptions = new string[] { languages.speak("config_toggle_enabled"), languages.speak("config_toggle_disabled") };
                 Components.start_foldout();
+                GUILayout.Label(theme.language_manager.speak("config_look_and_feel"), EditorStyles.boldLabel);
+                // language
+                string[] languageNames = new string[] { "English", "German", "Japanese", "French", "Chinese", "Spanish", "Korean", "Russian", "Cat" };
+                int currentLanguageIndex = Array.IndexOf(languageNames, config.json_data.@interface.language);
+                if (currentLanguageIndex < 0) currentLanguageIndex = 0;
+                int newLanguageIndex = EditorGUILayout.Popup(languages.speak("config_language"), currentLanguageIndex, languageNames);
+                if (newLanguageIndex != currentLanguageIndex)
+                {
+                    config.json_data.@interface.language = languageNames[newLanguageIndex];
+                    this.languages = new Languages(config.json_data.@interface.language);
+                }
                 // tab themes
                 string[] tabThemeNames = theme.tab_manager.scheme_list.ToArray();
                 int currentTabThemeIndex = Array.IndexOf(tabThemeNames, config.json_data.@interface.tab_theme);
@@ -1719,7 +1924,7 @@ namespace Luka.Backlace
                     theme.tab_manager = new TabSchemes(config.json_data.@interface.tab_theme, true);
                 }
                 // text theme
-                    string[] textThemeNames = theme.text_manager.scheme_list.ToArray();
+                string[] textThemeNames = theme.text_manager.scheme_list.ToArray();
                 int currentTextThemeIndex = Array.IndexOf(textThemeNames, config.json_data.@interface.text_theme);
                 if (currentTextThemeIndex < 0) currentTextThemeIndex = 0;
                 int newTextThemeIndex = EditorGUILayout.Popup(languages.speak("config_text_theme"), currentTextThemeIndex, textThemeNames);
@@ -1738,33 +1943,8 @@ namespace Luka.Backlace
                     config.json_data.@interface.ui_size = uiSizeNames[newUiSizeIndex];
                     theme.styler_manager.flush();
                 }
-                // language
-                string[] languageNames = new string[] { "English", "German", "Japanese", "French", "Chinese", "Spanish", "Korean", "Russian", "Cat" };
-                int currentLanguageIndex = Array.IndexOf(languageNames, config.json_data.@interface.language);
-                if (currentLanguageIndex < 0) currentLanguageIndex = 0;
-                int newLanguageIndex = EditorGUILayout.Popup(languages.speak("config_language"), currentLanguageIndex, languageNames);
-                if (newLanguageIndex != currentLanguageIndex)
-                {
-                    config.json_data.@interface.language = languageNames[newLanguageIndex];
-                    this.languages = new Languages(config.json_data.@interface.language);
-                }
-                // toggle update toasts
-                string[] toggleOptions = new string[] { languages.speak("config_toggle_enabled"), languages.speak("config_toggle_disabled") };
-                bool showUpdates = config.json_data.@interface.show_updates;
-                int currentUpdateIndex = showUpdates ? 0 : 1;
-                int newUpdateIndex = EditorGUILayout.Popup(languages.speak("config_toggle_updates"), currentUpdateIndex, toggleOptions);
-                if (newUpdateIndex != currentUpdateIndex)
-                {
-                    config.json_data.@interface.show_updates = newUpdateIndex == 0;
-                }
-                // toggle announcement toasts
-                bool showAnnouncements = config.json_data.@interface.show_announcements;
-                int currentAnnouncementIndex = showAnnouncements ? 0 : 1;
-                int newAnnouncementIndex = EditorGUILayout.Popup(languages.speak("config_toggle_announcements"), currentAnnouncementIndex, toggleOptions);
-                if (newAnnouncementIndex != currentAnnouncementIndex)
-                {
-                    config.json_data.@interface.show_announcements = newAnnouncementIndex == 0;
-                }
+                Components.draw_divider();
+                GUILayout.Label(theme.language_manager.speak("config_workflow"), EditorStyles.boldLabel);
                 // grey out unused properties
                 bool disableUnused = config.json_data.@interface.grey_unused;
                 int currentUnusedIndex = disableUnused ? 0 : 1;
@@ -1780,6 +1960,32 @@ namespace Luka.Backlace
                 if (newStatusIndex != currentStatusIndex)
                 {
                     config.json_data.@interface.show_status_badges = newStatusIndex == 0;
+                }
+                // expand search (expand_searches)
+                bool expandSearches = config.json_data.@interface.expand_searches;
+                int currentExpandIndex = expandSearches ? 0 : 1;
+                int newExpandIndex = EditorGUILayout.Popup(languages.speak("config_toggle_expand_searches"), currentExpandIndex, toggleOptions);
+                if (newExpandIndex != currentExpandIndex)
+                {
+                    config.json_data.@interface.expand_searches = newExpandIndex == 0;
+                }
+                Components.draw_divider();
+                GUILayout.Label(theme.language_manager.speak("config_extra_options"), EditorStyles.boldLabel);
+                // toggle update toasts
+                bool showUpdates = config.json_data.@interface.show_updates;
+                int currentUpdateIndex = showUpdates ? 0 : 1;
+                int newUpdateIndex = EditorGUILayout.Popup(languages.speak("config_toggle_updates"), currentUpdateIndex, toggleOptions);
+                if (newUpdateIndex != currentUpdateIndex)
+                {
+                    config.json_data.@interface.show_updates = newUpdateIndex == 0;
+                }
+                // toggle announcement toasts
+                bool showAnnouncements = config.json_data.@interface.show_announcements;
+                int currentAnnouncementIndex = showAnnouncements ? 0 : 1;
+                int newAnnouncementIndex = EditorGUILayout.Popup(languages.speak("config_toggle_announcements"), currentAnnouncementIndex, toggleOptions);
+                if (newAnnouncementIndex != currentAnnouncementIndex)
+                {
+                    config.json_data.@interface.show_announcements = newAnnouncementIndex == 0;
                 }
                 // save / cancel button row
                 EditorGUILayout.BeginHorizontal();
@@ -1994,6 +2200,7 @@ namespace Luka.Backlace
     // plug and play preset menu
     public class PresetsMenu
     {
+
         private Theme theme;
         private Bags bags;
         private Material material;
@@ -2106,6 +2313,7 @@ namespace Luka.Backlace
     // plug and play premonition integration
     public class PremonitionMenu
     {
+
         private Theme theme;
         private Material material;
         private Tab tab;
@@ -2126,22 +2334,54 @@ namespace Luka.Backlace
             if (tab.is_expanded)
             {
                 Components.start_foldout();
-                GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
-                boldWrap.wordWrap = true;
-                GUILayout.Label(theme.language_manager.speak("premonition_notice"), boldWrap);
+                GUIStyle wrappedLabel = new GUIStyle(EditorStyles.label);
+                wrappedLabel.wordWrap = true;
+                GUILayout.Label(theme.language_manager.speak("premonition_notice"), wrappedLabel);
                 Components.draw_divider();
                 Components.start_dynamic_disable(is_compact);
                 if (GUILayout.Button(theme.language_manager.speak("premonition_generate_button"), GUILayout.Height(30)))
                 {
                     Premonition.ProcessorSettings settings = new Premonition.ProcessorSettings(); // default settings
                     Premonition.CompactResultData resultData = Premonition.Processor.compact_material(material, settings);
+                    if (resultData.Result == Premonition.CompactResult.Success)
+                    {
+                        // full path reconstructed will be: Hidden/current shader name+resultData.ShaderName
+                        string fulLShaderName = "Hidden/" + material.shader.name + resultData.ShaderName;
+                        Shader compactShader = Shader.Find(fulLShaderName);
+                        if (compactShader != null)
+                        {
+                            material.shader = compactShader;
+                            EditorUtility.DisplayDialog(
+                                theme.language_manager.speak("premonition_title"),
+                                theme.language_manager.speak("premonition_success", resultData.ShaderName),
+                                theme.language_manager.speak("dialog_okay"));
+                        } 
+                        else 
+                        {
+                            EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("premonition_title"),
+                            theme.language_manager.speak("premonition_error_generic", resultData.Result.ToString()),
+                            theme.language_manager.speak("dialog_okay"));
+                        }
+                    }
+                    else
+                    {
+                        EditorUtility.DisplayDialog(
+                            theme.language_manager.speak("premonition_title"),
+                            theme.language_manager.speak("premonition_error_generic", resultData.Result.ToString()),
+                            theme.language_manager.speak("dialog_okay"));
+                    }
+                    // force unload/reload of interface just to be safe
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                    Interface.unload_material();
                 }
                 Components.end_dynamic_disable(is_compact);
                 Components.start_dynamic_disable(!is_compact);
                 if (GUILayout.Button(theme.language_manager.speak("premonition_restore_button"), GUILayout.Height(30)))
                 {
+                    // get the original shader and restore it
                     string shader_name = Premonition.Markers.extract_source_shader(material);
-                    Debug.Log("Restoring shader: " + shader_name);
                     if (shader_name != "Unknown")
                     {
                         Shader source_shader = Shader.Find(shader_name);
@@ -2149,14 +2389,14 @@ namespace Luka.Backlace
                         {
                             material.shader = source_shader;
                             EditorUtility.DisplayDialog(
-                                theme.language_manager.speak("premonition_success_title"),
-                                theme.language_manager.speak("premonition_success", shader_name),
+                                theme.language_manager.speak("premonition_title"),
+                                theme.language_manager.speak("premonition_restore_success", shader_name),
                                 theme.language_manager.speak("dialog_okay"));
                         }
                         else
                         {
                             EditorUtility.DisplayDialog(
-                                theme.language_manager.speak("premonition_error_title"),
+                                theme.language_manager.speak("premonition_title"),
                                 theme.language_manager.speak("premonition_error_noshader", shader_name),
                                 theme.language_manager.speak("dialog_okay"));
                         }
@@ -2164,10 +2404,14 @@ namespace Luka.Backlace
                     else
                     {
                         EditorUtility.DisplayDialog(
-                            theme.language_manager.speak("premonition_error_title"),
-                            theme.language_manager.speak("premonition_error_nosource"),
+                            theme.language_manager.speak("premonition_title"),
+                            theme.language_manager.speak("premonition_error_noshader"),
                             theme.language_manager.speak("dialog_okay"));
                     }
+                    // force unload/reload of interface just to be safe
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                    Interface.unload_material();
                 }
                 Components.end_dynamic_disable(!is_compact);
                 Components.end_foldout();
@@ -2184,6 +2428,7 @@ namespace Luka.Backlace
     // plug and play footer
     public class Footer
     {
+
         // to have multiple links
         public class Segment
         {
@@ -2196,7 +2441,7 @@ namespace Luka.Backlace
             }
         }
 
-        // values needed..
+        // values needed
         private Theme theme = null;
         private List<Segment> segments;
 
@@ -2208,10 +2453,11 @@ namespace Luka.Backlace
         }
 
         // draw the footer
-       public void draw()
+        public void draw()
         {
             if (segments == null || segments.Count == 0) return;
             EditorGUILayout.BeginVertical();
+            EditorGUILayout.Space(4f);
             GUILayout.FlexibleSpace();
             GUIStyle textStyle = theme.styler_manager.load_style_footer_text(ref theme);
             GUIStyle linkStyle = theme.styler_manager.load_style_footer_link(ref theme);
@@ -2261,9 +2507,86 @@ namespace Luka.Backlace
             }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-            GUILayout.Space(5f);
+            GUILayout.Space(8f);
             EditorGUILayout.EndVertical();
         }
+
+    }
+
+    // search bar functionality
+    public class SearchBar
+    {
+
+        public static string current_search_query = "";
+        public static bool is_searching = false;
+        private static string pending_query = "";
+
+        // little helper because i want the buttons to be uniform..
+        private bool DrawSearchButton(string text, float width, Theme t)
+        {
+            Rect rect = GUILayoutUtility.GetRect(width, 30f, t.styler_manager.load_style_search_buttons());
+            var originalBGColor = GUI.backgroundColor;
+            GUI.backgroundColor = Colours.get_background();
+            EditorGUI.DrawRect(rect, Colours.get_background());
+            GUI.Label(rect, text, t.styler_manager.load_style_search_buttons());
+            GUI.backgroundColor = originalBGColor;
+            return GUI.Button(rect, "", GUIStyle.none);
+        }
+
+        public void draw(ref Theme theme)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(4f);
+            string searchText = theme.language_manager.speak("search_button");
+            string clearText = theme.language_manager.speak("search_clear");
+            GUI.SetNextControlName("SearchField");
+            // handle enter key
+            if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return && GUI.GetNameOfFocusedControl() == "SearchField")
+            {
+                current_search_query = pending_query;
+                is_searching = !string.IsNullOrEmpty(current_search_query);
+                if (string.IsNullOrEmpty(current_search_query))
+                {
+                    Interface.close_all_tabs();
+                }
+                Event.current.Use();
+                GUI.FocusControl(null);
+            }
+            EditorGUI.BeginChangeCheck();
+            pending_query = EditorGUILayout.TextField(pending_query, theme.styler_manager.load_style_search_field(), GUILayout.ExpandWidth(true));
+            // handle clearing the search when text is deleted
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (string.IsNullOrEmpty(pending_query))
+                {
+                    current_search_query = "";
+                    is_searching = false;
+                    Interface.close_all_tabs();
+                }
+            }
+            // buttons!
+            if (DrawSearchButton(searchText, 60, theme))
+            {
+                current_search_query = pending_query;
+                is_searching = !string.IsNullOrEmpty(current_search_query);
+                if (string.IsNullOrEmpty(current_search_query))
+                {
+                    Interface.close_all_tabs();
+                }
+            }
+            if (DrawSearchButton(clearText, 60, theme))
+            {
+                pending_query = "";
+                current_search_query = "";
+                is_searching = false;
+                Interface.close_all_tabs();
+                GUI.FocusControl(null);
+            }
+            GUILayout.Space(24f);
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(4f);
+        }
+
     }
 
 }

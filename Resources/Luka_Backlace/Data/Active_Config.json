@@ -7,6 +7,7 @@
         "show_updates": true,
         "show_announcements": true,
         "grey_unused": true,
-        "show_status_badges": true
+        "show_status_badges": true,
+        "expand_searches": true
     }
 }

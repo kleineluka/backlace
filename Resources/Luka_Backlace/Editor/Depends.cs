@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+#define LUKA_DEVELOPER_MODE
 
 // imports
 using System;
@@ -23,6 +24,9 @@ namespace Luka.Backlace
         private string language;
         private Dictionary<string, string> localised;
         private Dictionary<string, string> localised_fallback;
+
+        // event for auto-indexing search terms
+        public Action<string> on_speak_event;
 
         // constructor
         public Languages(string language)
@@ -77,15 +81,18 @@ namespace Luka.Backlace
         // speak that language
         public string speak(string key, params object[] args)
         {
+            string result = key;
             if (localised != null && localised.TryGetValue(key, out string value))
             {
-                return string.Format(value, args);
+                result = string.Format(value, args);
             }
             else if (localised_fallback != null && localised_fallback.TryGetValue(key, out string fallback_value))
             {
-                return string.Format(fallback_value, args);
+                result = string.Format(fallback_value, args);
             }
-            return key;
+            // notify listeners (used for search indexing)
+            on_speak_event?.Invoke(result);
+            return result;
         }
 
     }
@@ -1064,6 +1071,221 @@ namespace Luka.Backlace
             }
             return Definition;
         }
+    }
+
+    // fuzzy search helper for typo friendly matching ;) dw i gotcha
+    public static class FuzzySearch
+    {
+        // computes the Levenshtein distance between two strings
+        public static int LevenshteinDistance(string a, string b)
+        {
+            if (string.IsNullOrEmpty(a)) return b?.Length ?? 0;
+            if (string.IsNullOrEmpty(b)) return a.Length;
+            int[,] d = new int[a.Length + 1, b.Length + 1];
+            for (int i = 0; i <= a.Length; i++) d[i, 0] = i;
+            for (int j = 0; j <= b.Length; j++) d[0, j] = j;
+            for (int i = 1; i <= a.Length; i++)
+            {
+                for (int j = 1; j <= b.Length; j++)
+                {
+                    int cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
+                    d[i, j] = Math.Min(Math.Min(
+                        d[i - 1, j] + 1,
+                        d[i, j - 1] + 1),
+                        d[i - 1, j - 1] + cost);
+                }
+            }
+            return d[a.Length, b.Length];
+        }
+
+        // performs a fuzzy match between text and query with an optional max distance
+        public static bool FuzzyMatch(string text, string query, int maxDistance = -1)
+        {
+            if (string.IsNullOrEmpty(query)) return true;
+            if (string.IsNullOrEmpty(text)) return false;
+            text = text.ToLower();
+            query = query.ToLower();
+            if (text.Contains(query)) return true;
+            if (maxDistance < 0) maxDistance = Math.Max(1, query.Length / 4);
+            string[] words = text.Split(new[] { ' ', '_', '-' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in words)
+            {
+                if (word.Length >= query.Length - maxDistance && word.Length <= query.Length + maxDistance)
+                {
+                    if (LevenshteinDistance(word, query) <= maxDistance) return true;
+                }
+                if (word.Length > query.Length)
+                {
+                    for (int i = 0; i <= word.Length - query.Length; i++)
+                    {
+                        string sub = word.Substring(i, query.Length);
+                        if (LevenshteinDistance(sub, query) <= maxDistance) return true;
+                    }
+                }
+            }
+            // check substrings of the entire text as a last resort
+            if (text.Length >= query.Length)
+            {
+                for (int i = 0; i <= text.Length - query.Length; i++)
+                {
+                    string sub = text.Substring(i, query.Length);
+                    if (LevenshteinDistance(sub, query) <= maxDistance) return true;
+                }
+            }
+            return false;
+        }
+
+        // checks if any keyword in the collection matches the query
+        public static bool MatchesAny(IEnumerable<string> keywords, string query)
+        {
+            foreach (string keyword in keywords)
+            {
+                if (FuzzyMatch(keyword, query)) return true;
+            }
+            return false;
+        }
+    }
+
+    // a dependency that can be checked for installation
+    public class Dependency
+    {
+        public string Name { get; private set; }
+        public string FolderPath { get; private set; }
+        public string PackageName { get; private set; }
+        public DependencyType Type { get; private set; }
+        public bool IsInstalled { get; private set; }
+        public string InfoUrl { get; private set; }
+        public bool FolderDetected { get; private set; }
+        public bool PackageDetected { get; private set; }
+        public string DetectedFolderPath { get; private set; }
+
+        public Dependency(string name, DependencyType type, string folderPath = null, string packageName = null, string infoUrl = null)
+        {
+            Name = name;
+            Type = type;
+            FolderPath = folderPath;
+            PackageName = packageName;
+            InfoUrl = infoUrl;
+            IsInstalled = false;
+            FolderDetected = false;
+            PackageDetected = false;
+            DetectedFolderPath = null;
+            Check();
+        }
+
+        public bool Check()
+        {
+            FolderDetected = CheckFolder();
+            PackageDetected = CheckPackage();
+            IsInstalled = Type switch
+            {
+                DependencyType.Folder => FolderDetected,
+                DependencyType.Package => PackageDetected,
+                DependencyType.Either => FolderDetected || PackageDetected,
+                _ => false
+            };
+            return IsInstalled;
+        }
+
+        public string GetDetectionInfo()
+        {
+            if (!IsInstalled) return null;
+            List<string> detectedVia = new List<string>();
+            if (FolderDetected && !string.IsNullOrEmpty(DetectedFolderPath)) 
+            {
+                detectedVia.Add("[Folder] " + DetectedFolderPath);
+            }
+            if (PackageDetected)
+            {
+                detectedVia.Add("[Package] " + PackageName);
+            }
+            return string.Join("\n", detectedVia);
+        }
+
+        private bool CheckFolder()
+        {
+            if (string.IsNullOrEmpty(FolderPath)) return false;
+            string fullPath = Bratty.GetFullPathFromResource(FolderPath);
+            if (!string.IsNullOrEmpty(fullPath) && Directory.Exists(fullPath))
+            {
+                DetectedFolderPath = fullPath;
+                return true;
+            }
+            string assetsPath = Path.Combine(Application.dataPath, FolderPath);
+            if (Directory.Exists(assetsPath))
+            {
+                DetectedFolderPath = assetsPath;
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckPackage()
+        {
+            if (string.IsNullOrEmpty(PackageName)) return false;
+            var listRequest = UnityEditor.PackageManager.Client.List(true, true);
+            while (!listRequest.IsCompleted) { }
+            if (listRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
+            {
+                foreach (var package in listRequest.Result)
+                {
+                    if (package.name == PackageName) return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    // manage all dependencies for a project
+    public class DependencyManager
+    {
+        public List<Dependency> Dependencies { get; private set; }
+
+        public DependencyManager(List<Dependency> dependencies)
+        {
+            Dependencies = dependencies ?? new List<Dependency>();
+        }
+
+        public void CheckAll()
+        {
+            foreach (var dep in Dependencies) dep.Check();
+        }
+
+        public List<Dependency> GetMissing()
+        {
+            List<Dependency> missing = new List<Dependency>();
+            foreach (var dep in Dependencies)
+            {
+                if (!dep.IsInstalled) missing.Add(dep);
+            }
+            return missing;
+        }
+
+        public List<Dependency> GetInstalled()
+        {
+            List<Dependency> installed = new List<Dependency>();
+            foreach (var dep in Dependencies)
+            {
+                if (dep.IsInstalled) installed.Add(dep);
+            }
+            return installed;
+        }
+
+        public Dependency Get(string name)
+        {
+            foreach (var dep in Dependencies)
+            {
+                if (dep.Name == name) return dep;
+            }
+            return null;
+        }
+
+        public bool IsInstalled(string name)
+        {
+            var dep = Get(name);
+            return dep != null && dep.IsInstalled;
+        }
+
     }
 
 }

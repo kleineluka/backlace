@@ -53,6 +53,7 @@ namespace Luka.Backlace
         public bool show_announcements;
         public bool grey_unused;
         public bool show_status_badges;
+        public bool expand_searches;
     }
 
     [System.Serializable]
@@ -106,6 +107,14 @@ namespace Luka.Backlace
         public Color Color;
         public GUIStyle Style;
         public Action OnClick;
+    }
+
+    [System.Serializable]
+    public enum DependencyType
+    {
+        Folder,
+        Package,
+        Either
     }
 
 }

@@ -117,9 +117,7 @@ namespace Luka.Backlace.Premonition
                 finalShaderBuilder.Append(pass);
             }
             finalShaderBuilder.Append(shaderParts.PostPassContent);
-
             string finalShaderCode = finalShaderBuilder.ToString();
-            // And finally, we write our new masterpiece to a file.
             File.WriteAllText(lockedShaderPath, finalShaderCode);
             AssetDatabase.Refresh();
             return new CompactResultData { Result = CompactResult.Success, ShaderName = lockedShaderName, ShaderPath = lockedShaderPath };
