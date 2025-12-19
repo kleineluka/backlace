@@ -158,7 +158,9 @@ void GetBacklaceLightColor(inout BacklaceLightData lightData, float3 normal)
     #if defined(UNITY_PASS_FORWARDBASE)
         lightData.directColor = _LightColor0.rgb;
         lightData.indirectColor = GetUniversalIndirectLight(normal);
-        lightData.directColor = lerp(GetSHLength(), lightData.directColor, .75);
+        // lightData.directColor = lerp(GetSHLength(), lightData.directColor, .75);
+        float3 ambientColor = ShadeSH9(float4(normal, 1.0)); // note: upgraded from SHLength to full SH eval
+        lightData.directColor = lerp(ambientColor, lightData.directColor, 0.75);
         if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
         {
             #if defined(_BACKLACE_TOON)
@@ -361,7 +363,17 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         }
         if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
         {
-            lightData.direction = normalize(unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz);
+            float3 ambientDir = unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz;
+            float len = length(ambientDir);
+            if (len > 0.001) // safe fallback for pitch black ambient
+            {
+                lightData.direction = normalize(ambientDir);
+            }
+            else
+            {
+                lightData.direction = float3(0, 1, 0);
+
+            }
         }
         Surface.LightDir = lightData.direction;
         Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
