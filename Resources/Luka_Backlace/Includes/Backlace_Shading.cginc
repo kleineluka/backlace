@@ -193,6 +193,28 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _LitTint.rgb, litInfluence);
         }
     }
+    
+    // sdf shadow mapping
+    void ApplySDFShadow(inout BacklaceSurfaceData Surface)
+    {
+        // face forward vs light direction
+        float3 faceForward = normalize(unity_ObjectToWorld[2].xyz); // Z axis
+        float3 faceRight = normalize(unity_ObjectToWorld[0].xyz); // X axis
+        float forwardDot = dot(faceForward, Surface.LightDir);
+        float rightDot = dot(faceRight, Surface.LightDir);
+        // flip as necessary
+        float2 uv = Uvs[0];
+        if (rightDot < 0) uv.x = 1.0 - uv.x;
+        // sample sdf
+        float sdfValue = UNITY_SAMPLE_TEX2D(_SDFShadowTexture, uv).r;
+        // thresholding
+        float halfLambert = forwardDot * 0.5 + 0.5;
+        halfLambert = saturate(halfLambert - (_SDFShadowThreshold - 0.5));
+        float shadowMask = smoothstep(sdfValue - _SDFShadowSoftness, sdfValue + _SDFShadowSoftness, halfLambert);
+        // apply to NdotL
+        Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
+        Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
+    }
 
     #if defined(_ANIMEMODE_RAMP)
         // for toon lighting, we use a ramp texture
@@ -394,6 +416,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
     // wrapper function for toon diffuse
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
+        [branch] if (_ToggleSDFShadow == 1) ApplySDFShadow(Surface);
         #if defined(_ANIMEMODE_RAMP)
             // traditional toony ramp
             GetRampDiffuse(Surface);

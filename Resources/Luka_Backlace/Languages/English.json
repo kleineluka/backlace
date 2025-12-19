@@ -309,6 +309,14 @@
             "value": "Successfully restored the original shader for material(s)! ^^"
         },
         {
+            "key": "premonition_compact_all_button",
+            "value": "Compact All Materials in Folder"
+        },
+        {
+            "key": "premonition_compact_all_result",
+            "value": "Compacted {0} materials.\nFailed: {1}\nSkipped: {2}"
+        },
+        {
             "key": "tab_main",
             "value": "Main Settings"
         },
@@ -2519,6 +2527,22 @@
         {
             "key": "prop_OutlineTexScroll",
             "value": "Texture Scroll"
+        },
+        {
+            "key": "prop_ToggleSDFShadow",
+            "value": "Enable SDF Shadow"
+        },
+        {
+            "key": "prop_SDFShadowTexture",
+            "value": "SDF Shadow Texture"
+        },
+        {
+            "key": "prop_SDFShadowThreshold",
+            "value": "SDF Shadow Threshold"
+        },
+        {
+            "key": "prop_SDFShadowSoftness",
+            "value": "SDF Shadow Softness"
         }
     ]
 }

@@ -1019,12 +1019,14 @@ namespace Luka.Backlace
         public string Name { get; private set; }
         public string Token { get; private set; }
         public Color Color { get; private set; }
+        public string ShaderPath { get; set; } // optional, can kinda be autodetected
 
-        public ShaderVariant(string name, string token, Color color)
+        public ShaderVariant(string name, string token, Color color, string shaderPath = null)
         {
             Name = name;
             Token = token;
             Color = color;
+            ShaderPath = shaderPath;
         }
 
         public static List<ShaderVariant> DetectCapabilities(ref Material mat) 
@@ -1052,6 +1054,7 @@ namespace Luka.Backlace
     // shader capabilities
     public class ShaderCapability
     {
+
         public string Name { get; private set; }
         public string Definition { get; private set; } // should be a language file name, ex. "depth_popup_info"
         public Color Color { get; private set; }
@@ -1071,6 +1074,7 @@ namespace Luka.Backlace
             }
             return Definition;
         }
+
     }
 
     // fuzzy search helper for typo friendly matching ;) dw i gotcha

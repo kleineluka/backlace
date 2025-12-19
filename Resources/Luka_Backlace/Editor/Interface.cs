@@ -229,6 +229,10 @@ namespace Luka.Backlace
         private MaterialProperty prop_LitThreshold = null;
         private MaterialProperty prop_ShadowTint = null;
         private MaterialProperty prop_ShadowThreshold = null;
+        private MaterialProperty prop_ToggleSDFShadow = null;
+        private MaterialProperty prop_SDFShadowTexture = null;
+        private MaterialProperty prop_SDFShadowThreshold = null;
+        private MaterialProperty prop_SDFShadowSoftness = null;
         // specular properties
         private MaterialProperty prop_ToggleSpecular = null;
         private MaterialProperty prop_ToggleVertexSpecular = null;
@@ -1431,6 +1435,10 @@ namespace Luka.Backlace
                     prop_ShadowTint = FindProperty("_ShadowTint", properties);
                     prop_ShadowThreshold = FindProperty("_ShadowThreshold", properties);
                     prop_RampNormalIntensity = FindProperty("_RampNormalIntensity", properties);
+                    prop_ToggleSDFShadow = FindProperty("_ToggleSDFShadow", properties);
+                    prop_SDFShadowTexture = FindProperty("_SDFShadowTexture", properties);
+                    prop_SDFShadowThreshold = FindProperty("_SDFShadowThreshold", properties);
+                    prop_SDFShadowSoftness = FindProperty("_SDFShadowSoftness", properties);
                     materialEditor.ShaderProperty(prop_ToggleAnimeLighting, languages.speak("prop_ToggleAnimeLighting"));
                     Components.start_dynamic_disable(!prop_ToggleAnimeLighting.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_AnimeMode, languages.speak("prop_AnimeMode"));
@@ -1474,6 +1482,14 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowTint, languages.speak("prop_ShadowTint"));
                     materialEditor.ShaderProperty(prop_ShadowThreshold, languages.speak("prop_ShadowThreshold"));
                     Components.end_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
+                    // sdf shadowing
+                    Components.draw_divider();
+                    materialEditor.ShaderProperty(prop_ToggleSDFShadow, languages.speak("prop_ToggleSDFShadow"));
+                    Components.start_dynamic_disable(!prop_ToggleSDFShadow.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_SDFShadowTexture, languages.speak("prop_SDFShadowTexture"));
+                    materialEditor.ShaderProperty(prop_SDFShadowThreshold, languages.speak("prop_SDFShadowThreshold"));
+                    materialEditor.ShaderProperty(prop_SDFShadowSoftness, languages.speak("prop_SDFShadowSoftness"));
+                    Components.end_dynamic_disable(!prop_ToggleSDFShadow.floatValue.Equals(1), configs);
                 });
                 sub_tab_light_limiting.process(() => {
                     // lighting - light limiting

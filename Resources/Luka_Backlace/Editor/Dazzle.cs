@@ -2376,6 +2376,68 @@ namespace Luka.Backlace
                     AssetDatabase.Refresh();
                     Interface.unload_material();
                 }
+                if (GUILayout.Button(theme.language_manager.speak("premonition_compact_all_button"), GUILayout.Height(30)))
+                {
+                    // get all materials in the folder
+                    string materialPath = AssetDatabase.GetAssetPath(material);
+                    string folderPath = System.IO.Path.GetDirectoryName(materialPath).Replace("\\", "/");
+                    string[] materialGuids = AssetDatabase.FindAssets("t:Material", new[] { folderPath });
+                    int successCount = 0;
+                    int failCount = 0;
+                    int skipCount = 0;
+                    // find all shaders we can use
+                    HashSet<string> validShaderPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var variant in Project.shader_variants)
+                    {
+                        if (!string.IsNullOrEmpty(variant.ShaderPath))
+                        {
+                            validShaderPaths.Add(variant.ShaderPath);
+                        }
+                    }
+                    // go through each and lock them accordingly
+                    foreach (string guid in materialGuids)
+                    {
+                        string path = AssetDatabase.GUIDToAssetPath(guid);
+                        if (System.IO.Path.GetDirectoryName(path).Replace("\\", "/") != folderPath) continue;
+                        Material mat = AssetDatabase.LoadAssetAtPath<Material>(path);
+                        if (mat == null) continue;
+                        if (mat.shader != null && validShaderPaths.Contains(mat.shader.name))
+                        {
+                            Premonition.ProcessorSettings settings = new Premonition.ProcessorSettings();
+                            Premonition.CompactResultData resultData = Premonition.Processor.compact_material(mat, settings);
+                            if (resultData.Result == Premonition.CompactResult.Success)
+                            {
+                                string fulLShaderName = "Hidden/" + mat.shader.name + resultData.ShaderName;
+                                Shader compactShader = Shader.Find(fulLShaderName);
+                                if (compactShader != null)
+                                {
+                                    mat.shader = compactShader;
+                                    successCount++;
+                                }
+                                else
+                                {
+                                    failCount++;
+                                }
+                            }
+                            else
+                            {
+                                failCount++;
+                            }
+                        }
+                        else
+                        {
+                            skipCount++;
+                        }
+                    }
+                    // force refresh to be safe
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                    Interface.unload_material();
+                    EditorUtility.DisplayDialog(
+                        theme.language_manager.speak("premonition_title"),
+                        theme.language_manager.speak("premonition_compact_all_result", successCount.ToString(), failCount.ToString(), skipCount.ToString()),
+                        theme.language_manager.speak("dialog_okay"));
+                }
                 Components.end_dynamic_disable(is_compact);
                 Components.start_dynamic_disable(!is_compact);
                 if (GUILayout.Button(theme.language_manager.speak("premonition_restore_button"), GUILayout.Height(30)))

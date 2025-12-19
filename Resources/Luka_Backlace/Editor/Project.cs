@@ -25,9 +25,10 @@ namespace Luka.Backlace
         public static readonly string banner_image = "Images/Backlace_Logo"; // where that banner image is located
         public static readonly List<ShaderVariant> shader_variants = new List<ShaderVariant>
         {
-            new ShaderVariant("Default", "", Color.clear),
-            new ShaderVariant("Outline", "Outline", new Color(1.0f, 0.75f, 0.8f)),
-            new ShaderVariant("Grabpass", "Grabpass", new Color(0.77f, 0.93f, 0.77f))
+            new ShaderVariant("Default", "", Color.clear, "luka/backlace/default"),
+            new ShaderVariant("Outline", "Outline", new Color(1.0f, 0.75f, 0.8f), "luka/backlace/outline"),
+            new ShaderVariant("Grabpass", "Grabpass", new Color(0.77f, 0.93f, 0.77f), "luka/backlace/grabpass"),
+            new ShaderVariant("All", "All", new Color(0.9f, 0.9f, 0.5f), "luka/backlace/all"),
         };
         public static readonly List<ShaderCapability> shader_capabilities = new List<ShaderCapability>
         { 

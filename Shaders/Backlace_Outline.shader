@@ -178,6 +178,11 @@ Shader "luka/backlace/outline"
         _LitThreshold ("Lit Coverage", Range(0, 1)) = 0.6
         [HDR] _ShadowTint ("Shadow Area Tint", Color) = (1, 1, 1, 0.75)
         _ShadowThreshold ("Shadow Coverage", Range(0, 1)) = 0.4
+        // sdf shadow
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleSDFShadow ("Enable SDF Shadow", Float) = 0.0
+        _SDFShadowTexture ("SDF Shadow Texture", 2D) = "white" { }
+        _SDFShadowThreshold ("SDF Shadow Threshold", Range(0, 1)) = 0.5
+        _SDFShadowSoftness ("SDF Shadow Softness", Range(0.001, 1)) = 0.05
 
         // SPECULAR
         // [Space(35)]

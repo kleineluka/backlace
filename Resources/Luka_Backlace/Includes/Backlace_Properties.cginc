@@ -117,6 +117,10 @@ float3 _VertexManipulationScale;
     float _AmbientIntensity;
     float _AmbientSkyThreshold;
     float _AmbientGroundThreshold;
+    float _ToggleSDFShadow;
+    UNITY_DECLARE_TEX2D(_SDFShadowTexture);
+    float _SDFShadowThreshold;
+    float _SDFShadowSoftness;
     #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
         float _Ramp_UV;
