@@ -38,6 +38,15 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         Uvs[0] = parallax_uv;
     #endif // _BACKLACE_PARALLAX
     SampleAlbedo(Surface, i.vertex.xyz);
+    #if defined(_BACKLACE_PARALLAX)
+        [branch] if (_ParallaxMode == 2) // layered parallax
+        {
+            ApplyParallax_Layered(Surface, i);
+        } else if (_ParallaxMode == 3) // interior parallax
+        {
+            ApplyParallax_Interior(Surface, i);
+        }
+    #endif // _BACKLACE_PARALLAX
     #if defined(_BACKLACE_VRCHAT_MIRROR)
         ApplyMirrorDetectionPre(Surface);
     #endif // _BACKLACE_VRCHAT_MIRROR

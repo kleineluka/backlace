@@ -18,8 +18,9 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 	 - Models: Backlace (Default), PoiCustom, OpenLit, Standard, Mochie
 	 - Direction Modes: Backlace (Default), Forced, View Direction
 	 - Diffuse Modes: PBR, Ramp Toon, Anime Toon
+	 - Anime Extra Features: Ambient Gradient, Tint Mask Source, SDF Shadows
 - **Specular:** Vertex Specular, PBR Specular, Anisotropic, Toon, Hair, Cloth
-- **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping, Detail Mapping, Shadow Mapping
+- **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping (Fast UV, Fancy UV, Layered, Interior), Detail Mapping, Shadow Mapping
 - **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Shadow Textures, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion, Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
 - **Shader Variants:** Default, Grabpass, Outline, All
 - **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
@@ -53,7 +54,7 @@ Anything in the `Editor` and `Processor` folders are under their respective lice
 
 **TL;DR** —
 - You’re free to use Backlace in any project (personal or commercial) at no cost.
-- You must credit “Backlace” somewhere visible (like your README, store page, or credits) with a link to the official GitHub.
+- You must credit “Backlace” somewhere visible (like your README, store page, in-code, or credits) with a link to the official GitHub.
 - If you make a derivative shader or tool based on Backlace, please include more visible credit. This doesn't apply to avatars, worlds, or games that use such shaders.
 - Anything you sell with Backlace must be transformative (adding significant new features or creativity). You can’t just rebrand or resell Backlace as-is.
 

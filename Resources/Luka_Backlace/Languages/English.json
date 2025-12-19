@@ -2543,6 +2543,50 @@
         {
             "key": "prop_SDFShadowSoftness",
             "value": "SDF Shadow Softness"
+        },
+        {
+            "key": "prop_InteriorCubemap",
+            "value": "Interior Cubemap"
+        },
+        {
+            "key": "prop_InteriorColor",
+            "value": "Interior Color"
+        },
+        {
+            "key": "prop_InteriorTiling",
+            "value": "Interior Tiling"
+        },
+        {
+            "key": "prop_ParallaxLayerMask",
+            "value": "Parallax Layer Mask (R)"
+        },
+        {
+            "key": "prop_ParallaxLayer1",
+            "value": "Parallax Layer 1"
+        },
+        {
+            "key": "prop_ParallaxLayer2",
+            "value": "Parallax Layer 2"
+        },
+        {
+            "key": "prop_ParallaxLayer3",
+            "value": "Parallax Layer 3"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth1",
+            "value": "Parallax Layer Depth 1"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth2",
+            "value": "Parallax Layer Depth 2"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth3",
+            "value": "Parallax Layer Depth 3"
+        },
+        {
+            "key": "prop_ParallaxBlend",
+            "value": "Parallax Blend"
         }
     ]
 }

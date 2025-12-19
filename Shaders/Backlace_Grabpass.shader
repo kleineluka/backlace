@@ -334,8 +334,20 @@ Shader "luka/backlace/grabpass"
         [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
         [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
         [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
-        _ParallaxStrength ("Parallax Strength", Range(0, 0.35)) = 0.02
+        _ParallaxStrength ("Parallax Strength", Float) = 0.02 // initially (0, 0.35)
         _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
+        // interior settings
+        [NoScaleOffset] _InteriorCubemap ("Interior Cubemap", Cube) = "" { }
+        _InteriorColor ("Interior Color", Color) = (1, 1, 1, 1)
+        _InteriorTiling ("Interior Tiling", Float) = 1.0
+        // layered settings
+        [NoScaleOffset] _ParallaxLayerMask ("Parallax Layer Mask (R)", 2D) = "white" { }
+        [NoScaleOffset] _ParallaxLayer1 ("Parallax Layer 1", 2D) = "white" { }
+        [NoScaleOffset] _ParallaxLayer2 ("Parallax Layer 2", 2D) = "white" { }
+        [NoScaleOffset] _ParallaxLayer3 ("Parallax Layer 3", 2D) = "white" { }
+        _ParallaxLayerDepth1 ("Parallax Layer Depth 1", Float) = 0.05
+        _ParallaxLayerDepth2 ("Parallax Layer Depth 2", Float) = 0.1
+        _ParallaxLayerDepth3 ("Parallax Layer Depth 3", Float) = 0.2
 
         // SUBSURFACE SCATTERING
         // [Space(35)]

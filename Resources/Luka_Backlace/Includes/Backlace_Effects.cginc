@@ -142,11 +142,25 @@
 
 // parallax features
 #if defined(_BACKLACE_PARALLAX)
+    // shared across multiple modes
     UNITY_DECLARE_TEX2D(_ParallaxMap);
     float _ParallaxMap_UV;
     float _ParallaxStrength;
-    float _ParallaxMode;
+    int _ParallaxMode;
     float _ParallaxSteps;
+    int _ParallaxBlend;
+    // interior mapping
+    samplerCUBE _InteriorCubemap;
+    float4 _InteriorColor;
+    float _InteriorTiling;
+    // layered mapping
+    UNITY_DECLARE_TEX2D(_ParallaxLayerMask);
+    UNITY_DECLARE_TEX2D(_ParallaxLayer1);
+    UNITY_DECLARE_TEX2D(_ParallaxLayer2);
+    UNITY_DECLARE_TEX2D(_ParallaxLayer3);
+    float _ParallaxLayerDepth1;
+    float _ParallaxLayerDepth2;
+    float _ParallaxLayerDepth3;
 
     void ApplyParallax_Fast(inout float2 uv, in BacklaceSurfaceData Surface)
     {
@@ -182,6 +196,90 @@
                 surfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv, 0).r;
                 break;
             }
+        }
+    }
+
+    float3 GetViewTangent(in BacklaceSurfaceData Surface)
+    {
+        // helper shared between interior and layered mapping
+        float3 viewDirTS = float3(
+            dot(Surface.ViewDir, Surface.TangentDir),
+            dot(Surface.ViewDir, Surface.BitangentDir),
+            dot(Surface.ViewDir, Surface.NormalDir)
+        );
+        return normalize(viewDirTS);
+    }
+
+    void ApplyParallax_Interior(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        // calculate view direction in tangent space
+        float3 viewDirTS = GetViewTangent(Surface);
+        // get uvs
+        float2 uv = Uvs[_ParallaxMap_UV] * _InteriorTiling;
+        float2 roomUV = frac(uv);
+        // trace ray into cubemap
+        float3 rayPos = float3(roomUV * 2.0 - 1.0, 1.0);
+        float3 rayDir = -viewDirTS;
+        rayDir.z /= max(_ParallaxStrength, 0.001);
+        // find intersection with box
+        float3 id = 1.0 / rayDir;
+        float3 k = abs(id) - rayPos * id;
+        float kMin = min(min(k.x, k.y), k.z);
+        float3 hitPos = rayPos + kMin * rayDir;
+        // sample cubemap
+        float4 roomSample = texCUBE(_InteriorCubemap, hitPos);
+        float3 roomColor = roomSample.rgb * _InteriorColor.rgb;
+        // apply
+        switch(_ParallaxBlend)
+        {
+            case 0: // additive
+                Surface.FinalColor.rgb += roomColor;
+                break;
+            case 1: // multiply
+                Surface.FinalColor.rgb *= roomColor;
+                break;
+            case 2: // replace
+                Surface.FinalColor.rgb = roomColor;
+                break;
+            default: // alpha blend (3)
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, roomColor, roomSample.a);
+                break;
+        }
+    }
+
+    void ApplyParallax_Layered(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        // calculate view direction in tangent space
+        float3 viewDirTS = GetViewTangent(Surface);
+        float2 uv = Uvs[_ParallaxMap_UV];
+        // create mask and sample layers
+        float4 mask = UNITY_SAMPLE_TEX2D(_ParallaxLayerMask, uv);
+        float2 offset1 = viewDirTS.xy * _ParallaxLayerDepth1 * _ParallaxStrength;
+        float4 layer1 = UNITY_SAMPLE_TEX2D(_ParallaxLayer1, uv + offset1);
+        float2 offset2 = viewDirTS.xy * _ParallaxLayerDepth2 * _ParallaxStrength;
+        float4 layer2 = UNITY_SAMPLE_TEX2D(_ParallaxLayer2, uv + offset2);
+        float2 offset3 = viewDirTS.xy * _ParallaxLayerDepth3 * _ParallaxStrength;
+        float4 layer3 = UNITY_SAMPLE_TEX2D(_ParallaxLayer3, uv + offset3);
+        // combine layers
+        float3 finalLayerColor = 0;
+        finalLayerColor += layer1.rgb * mask.r * layer1.a;
+        finalLayerColor += layer2.rgb * mask.g * layer2.a;
+        finalLayerColor += layer3.rgb * mask.b * layer3.a;
+        // APPLY
+        switch(_ParallaxBlend)
+        {
+            case 0: // additive
+                Surface.FinalColor.rgb += finalLayerColor;
+                break;
+            case 1: // multiply
+                Surface.FinalColor.rgb *= finalLayerColor;
+                break;
+            case 2: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalLayerColor, max(max(mask.r * layer1.a, mask.g * layer2.a), mask.b * layer3.a));
+                break;
+            default: // alpha blend
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalLayerColor, (mask.r * layer1.a + mask.g * layer2.a + mask.b * layer3.a) / 3.0);
+                break;
         }
     }
 #endif // _BACKLACE_PARALLAX
