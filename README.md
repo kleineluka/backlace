@@ -22,7 +22,7 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 	 - Diffuse Modes: PBR, Ramp Toon, Anime Toon
 	 - Anime Extra Features: Ambient Gradient, Tint Mask Source, SDF Shadows
 - **Specular:** Vertex Specular, PBR Specular, Anisotropic, Toon, Hair, Cloth
-- **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping (Fast UV, Fancy UV, Layered, Interior), Detail Mapping, Shadow Mapping
+- **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping (Fast/Fancy UV, Layered, Interior), Detail Mapping, Shadow Mapping
 - **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Shadow Textures, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion, Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
 - **Shader Variants:** Default, Grabpass, Outline, All
 - **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
