@@ -2558,7 +2558,7 @@
         },
         {
             "key": "prop_ParallaxLayerMask",
-            "value": "Parallax Layer Mask (R)"
+            "value": "Parallax Layer Mask"
         },
         {
             "key": "prop_ParallaxLayer1",
@@ -2587,6 +2587,18 @@
         {
             "key": "prop_ParallaxBlend",
             "value": "Parallax Blend"
+        },
+        {
+            "key": "prop_ParallaxStack",
+            "value": "Stacking Order"
+        },
+        {
+            "key": "prop_ParallaxBlendWeight",
+            "value": "Blend Weight"
+        },
+        {
+            "key": "prop_ParallaxTile",
+            "value": "Tile Layers"
         }
     ]
 }

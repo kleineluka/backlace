@@ -336,19 +336,21 @@ Shader "luka/backlace/default"
         [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
         _ParallaxStrength ("Parallax Strength", Float) = 0.02 // initially (0, 0.35)
         _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
-        [Enum(Additive, 0, Multiply, 1, Replace, 2, Alpha Blend, 3)] _ParallaxBlend ("Parallax Blend Mode", Int) = 0
+        [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2, Replace, 3)] _ParallaxBlend ("Parallax Blend Mode", Int) = 0
         // interior settings
         [NoScaleOffset] _InteriorCubemap ("Interior Cubemap", Cube) = "" { }
         _InteriorColor ("Interior Color", Color) = (1, 1, 1, 1)
         _InteriorTiling ("Interior Tiling", Float) = 1.0
         // layered settings
-        [NoScaleOffset] _ParallaxLayerMask ("Parallax Layer Mask (R)", 2D) = "white" {}
         [NoScaleOffset] _ParallaxLayer1 ("Parallax Layer 1", 2D) = "white" {}
         [NoScaleOffset] _ParallaxLayer2 ("Parallax Layer 2", 2D) = "white" {}
         [NoScaleOffset] _ParallaxLayer3 ("Parallax Layer 3", 2D) = "white" {}
         _ParallaxLayerDepth1 ("Parallax Layer Depth 1", Float) = 0.05
         _ParallaxLayerDepth2 ("Parallax Layer Depth 2", Float) = 0.1
         _ParallaxLayerDepth3 ("Parallax Layer Depth 3", Float) = 0.2
+        [Enum(Top to Bottom, 0, Bottom to Top, 1, Additive, 2, Average, 3)] _ParallaxStack ("Layer Stack Mode", Int) = 0
+        _ParallaxBlendWeight ("Layer Blend Weight", Range(0, 2)) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _ParallaxTile ("Tile Layers", Int) = 1
 
         // SUBSURFACE SCATTERING
         // [Space(35)]

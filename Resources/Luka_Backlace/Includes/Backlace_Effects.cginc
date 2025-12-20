@@ -149,18 +149,20 @@
     int _ParallaxMode;
     float _ParallaxSteps;
     int _ParallaxBlend;
+    float _ParallaxBlendWeight;
     // interior mapping
     samplerCUBE _InteriorCubemap;
     float4 _InteriorColor;
     float _InteriorTiling;
     // layered mapping
-    UNITY_DECLARE_TEX2D(_ParallaxLayerMask);
     UNITY_DECLARE_TEX2D(_ParallaxLayer1);
     UNITY_DECLARE_TEX2D(_ParallaxLayer2);
     UNITY_DECLARE_TEX2D(_ParallaxLayer3);
     float _ParallaxLayerDepth1;
     float _ParallaxLayerDepth2;
     float _ParallaxLayerDepth3;
+    int _ParallaxStack;
+    int _ParallaxTile;
 
     void ApplyParallax_Fast(inout float2 uv, in BacklaceSurfaceData Surface)
     {
@@ -233,18 +235,19 @@
         switch(_ParallaxBlend)
         {
             case 0: // additive
-                Surface.FinalColor.rgb += roomColor;
+                roomColor += Surface.Albedo.rgb;
                 break;
             case 1: // multiply
-                Surface.FinalColor.rgb *= roomColor;
+                roomColor *= Surface.Albedo.rgb;
                 break;
-            case 2: // replace
-                Surface.FinalColor.rgb = roomColor;
+            case 2: // alpha blend
+                roomColor = lerp(Surface.Albedo.rgb, roomColor, _InteriorColor.a);
                 break;
-            default: // alpha blend (3)
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, roomColor, roomSample.a);
+            default: // replace
+                // do nothing
                 break;
         }
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, roomColor, _ParallaxBlendWeight);
     }
 
     void ApplyParallax_Layered(inout BacklaceSurfaceData Surface, FragmentData i)
@@ -252,35 +255,81 @@
         // calculate view direction in tangent space
         float3 viewDirTS = GetViewTangent(Surface);
         float2 uv = Uvs[_ParallaxMap_UV];
-        // create mask and sample layers
-        float4 mask = UNITY_SAMPLE_TEX2D(_ParallaxLayerMask, uv);
+        // create mask and calculate all the parallax offsets
+        float4 mask = UNITY_SAMPLE_TEX2D(_ParallaxMap, uv);
         float2 offset1 = viewDirTS.xy * _ParallaxLayerDepth1 * _ParallaxStrength;
-        float4 layer1 = UNITY_SAMPLE_TEX2D(_ParallaxLayer1, uv + offset1);
         float2 offset2 = viewDirTS.xy * _ParallaxLayerDepth2 * _ParallaxStrength;
-        float4 layer2 = UNITY_SAMPLE_TEX2D(_ParallaxLayer2, uv + offset2);
         float2 offset3 = viewDirTS.xy * _ParallaxLayerDepth3 * _ParallaxStrength;
-        float4 layer3 = UNITY_SAMPLE_TEX2D(_ParallaxLayer3, uv + offset3);
-        // combine layers
+        float2 uv1 = uv + offset1;
+        float2 uv2 = uv + offset2;
+        float2 uv3 = uv + offset3;
+        // sample layers based on tile mode
+        float4 layer1 = 0;
+        float4 layer2 = 0;
+        float4 layer3 = 0;
+        if (_ParallaxTile == 0) {  
+            // dont tile
+            layer1 = UNITY_SAMPLE_TEX2D(_ParallaxLayer1, uv1);
+            layer2 = UNITY_SAMPLE_TEX2D(_ParallaxLayer2, uv2);
+            layer3 = UNITY_SAMPLE_TEX2D(_ParallaxLayer3, uv3);
+            if (_ParallaxTile == 0 && (any(uv1 < 0) || any(uv1 > 1))) layer1 = 0;
+            if (_ParallaxTile == 0 && (any(uv2 < 0) || any(uv2 > 1))) layer2 = 0;
+            if (_ParallaxTile == 0 && (any(uv3 < 0) || any(uv3 > 1))) layer3 = 0;
+        } else {
+            // tile uv
+            uv1 = frac(uv1);
+            uv2 = frac(uv2);
+            uv3 = frac(uv3);
+            layer1 = UNITY_SAMPLE_TEX2D(_ParallaxLayer1, uv1);
+            layer2 = UNITY_SAMPLE_TEX2D(_ParallaxLayer2, uv2);
+            layer3 = UNITY_SAMPLE_TEX2D(_ParallaxLayer3, uv3);
+        }
+        // stacking modes
         float3 finalLayerColor = 0;
-        finalLayerColor += layer1.rgb * mask.r * layer1.a;
-        finalLayerColor += layer2.rgb * mask.g * layer2.a;
-        finalLayerColor += layer3.rgb * mask.b * layer3.a;
-        // APPLY
+        switch (_ParallaxStack) {
+            case 0:
+                // top to bottom
+                finalLayerColor = layer3.rgb * layer3.a * mask.b;
+                finalLayerColor = lerp(finalLayerColor, layer2.rgb, layer2.a * mask.g);
+                finalLayerColor = lerp(finalLayerColor, layer1.rgb, layer1.a * mask.r);
+                break;
+            case 1:
+                // bottom to top
+                finalLayerColor = layer1.rgb * layer1.a * mask.r;
+                finalLayerColor = lerp(finalLayerColor, layer2.rgb, layer2.a * mask.g);
+                finalLayerColor = lerp(finalLayerColor, layer3.rgb, layer3.a * mask.b);
+                break;
+            case 2:
+                // additive
+                finalLayerColor += layer1.rgb * mask.r * layer1.a;
+                finalLayerColor += layer2.rgb * mask.g * layer2.a;
+                finalLayerColor += layer3.rgb * mask.b * layer3.a;
+                break;
+            default:
+                // average
+                finalLayerColor += layer1.rgb * mask.r * layer1.a;
+                finalLayerColor += layer2.rgb * mask.g * layer2.a;
+                finalLayerColor += layer3.rgb * mask.b * layer3.a;
+                finalLayerColor /= 3;
+                break;
+        }
+        // apply
         switch(_ParallaxBlend)
         {
             case 0: // additive
-                Surface.FinalColor.rgb += finalLayerColor;
+                finalLayerColor += Surface.Albedo.rgb;
                 break;
             case 1: // multiply
-                Surface.FinalColor.rgb *= finalLayerColor;
+                finalLayerColor *= Surface.Albedo.rgb;
                 break;
-            case 2: // replace
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalLayerColor, max(max(mask.r * layer1.a, mask.g * layer2.a), mask.b * layer3.a));
+            case 2: // alpha blend
+                finalLayerColor = lerp(Surface.Albedo.rgb, finalLayerColor, mask.a);
                 break;
-            default: // alpha blend
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalLayerColor, (mask.r * layer1.a + mask.g * layer2.a + mask.b * layer3.a) / 3.0);
+            default: // replace
+                // do nothing
                 break;
         }
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, finalLayerColor, _ParallaxBlendWeight);
     }
 #endif // _BACKLACE_PARALLAX
 

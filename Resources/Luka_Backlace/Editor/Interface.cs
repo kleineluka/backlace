@@ -348,12 +348,14 @@ namespace Luka.Backlace
         private MaterialProperty prop_ParallaxStrength = null;
         private MaterialProperty prop_ParallaxSteps = null;
         private MaterialProperty prop_ParallaxBlend = null;
+        private MaterialProperty prop_ParallaxBlendWeight = null;
+        private MaterialProperty prop_ParallaxStack = null;
+        private MaterialProperty prop_ParallaxTile = null;
         // interior settings
         private MaterialProperty prop_InteriorCubemap = null;
         private MaterialProperty prop_InteriorColor = null;
         private MaterialProperty prop_InteriorTiling = null;
         // layered settings
-        private MaterialProperty prop_ParallaxLayerMask = null;
         private MaterialProperty prop_ParallaxLayer1 = null;
         private MaterialProperty prop_ParallaxLayer2 = null;
         private MaterialProperty prop_ParallaxLayer3 = null;
@@ -1758,35 +1760,52 @@ namespace Luka.Backlace
                     prop_ParallaxStrength = FindProperty("_ParallaxStrength", properties);
                     prop_ParallaxSteps = FindProperty("_ParallaxSteps", properties);
                     prop_ParallaxBlend = FindProperty("_ParallaxBlend", properties);
+                    prop_ParallaxBlendWeight = FindProperty("_ParallaxBlendWeight", properties);
                     prop_InteriorCubemap = FindProperty("_InteriorCubemap", properties);
                     prop_InteriorColor = FindProperty("_InteriorColor", properties);
                     prop_InteriorTiling = FindProperty("_InteriorTiling", properties);
-                    prop_ParallaxLayerMask = FindProperty("_ParallaxLayerMask", properties);
                     prop_ParallaxLayer1 = FindProperty("_ParallaxLayer1", properties);
                     prop_ParallaxLayer2 = FindProperty("_ParallaxLayer2", properties);
                     prop_ParallaxLayer3 = FindProperty("_ParallaxLayer3", properties);
                     prop_ParallaxLayerDepth1 = FindProperty("_ParallaxLayerDepth1", properties);
                     prop_ParallaxLayerDepth2 = FindProperty("_ParallaxLayerDepth2", properties);
                     prop_ParallaxLayerDepth3 = FindProperty("_ParallaxLayerDepth3", properties);
+                    prop_ParallaxStack = FindProperty("_ParallaxStack", properties);
+                    prop_ParallaxTile = FindProperty("_ParallaxTile", properties);
                     materialEditor.ShaderProperty(prop_ToggleParallax, languages.speak("prop_ToggleParallax"));
                     Components.start_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_ParallaxMode, languages.speak("prop_ParallaxMode"));
-                    materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxMap"));
-                    materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                    materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
-                    materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
-                    // interior UI
-                    materialEditor.ShaderProperty(prop_InteriorCubemap, languages.speak("prop_InteriorCubemap"));
-                    materialEditor.ShaderProperty(prop_InteriorColor, languages.speak("prop_InteriorColor"));
-                    materialEditor.ShaderProperty(prop_InteriorTiling, languages.speak("prop_InteriorTiling"));
-                    // layered UI
-                    materialEditor.ShaderProperty(prop_ParallaxLayerMask, languages.speak("prop_ParallaxLayerMask"));
-                    materialEditor.ShaderProperty(prop_ParallaxLayer1, languages.speak("prop_ParallaxLayer1"));
-                    materialEditor.ShaderProperty(prop_ParallaxLayerDepth1, languages.speak("prop_ParallaxLayerDepth1"));
-                    materialEditor.ShaderProperty(prop_ParallaxLayer2, languages.speak("prop_ParallaxLayer2"));
-                    materialEditor.ShaderProperty(prop_ParallaxLayerDepth2, languages.speak("prop_ParallaxLayerDepth2"));
-                    materialEditor.ShaderProperty(prop_ParallaxLayer3, languages.speak("prop_ParallaxLayer3"));
-                    materialEditor.ShaderProperty(prop_ParallaxLayerDepth3, languages.speak("prop_ParallaxLayerDepth3"));
+                    switch ((int)prop_ParallaxMode.floatValue)
+                    {
+                        case 0: // fast uv, fallthrough
+                        case 1: // fancy uv
+                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxMap"));
+                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
+                            if ((int)prop_ParallaxMode.floatValue == 1) materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
+                            break;
+                        case 3: // interior mapping
+                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
+                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
+                            materialEditor.ShaderProperty(prop_InteriorCubemap, languages.speak("prop_InteriorCubemap"));
+                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
+                            materialEditor.ShaderProperty(prop_InteriorColor, languages.speak("prop_InteriorColor"));
+                            materialEditor.ShaderProperty(prop_InteriorTiling, languages.speak("prop_InteriorTiling"));
+                            break;
+                        default: // parallax layers (initially, i thought this was 3..)
+                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
+                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
+                            materialEditor.ShaderProperty(prop_ParallaxStack, languages.speak("prop_ParallaxStack"));
+                            materialEditor.ShaderProperty(prop_ParallaxTile, languages.speak("prop_ParallaxTile"));
+                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
+                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxLayerMask")); // reused variable, diff language file
+                            materialEditor.ShaderProperty(prop_ParallaxLayer1, languages.speak("prop_ParallaxLayer1"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth1, languages.speak("prop_ParallaxLayerDepth1"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayer2, languages.speak("prop_ParallaxLayer2"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth2, languages.speak("prop_ParallaxLayerDepth2"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayer3, languages.speak("prop_ParallaxLayer3"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth3, languages.speak("prop_ParallaxLayerDepth3"));
+                            break;
+                    }
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
                 });
                 sub_tab_detail_map.process(() => {
