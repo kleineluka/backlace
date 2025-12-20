@@ -3,6 +3,11 @@ Shader "luka/backlace/all"
 
     Properties
     {
+        // INTERNAL
+        [HideInInspector] _BACKLACE_VERSION_MAJOR ("Backlace Version Major", Int) = 1
+        [HideInInspector] _BACKLACE_VERSION_MINOR ("Backlace Version Minor", Int) = 5
+        [HideInInspector] _BACKLACE_VERSION_PATCH ("Backlace Version Patch", Int) = 0
+
         // RENDERING SETTINGS
         // [Space(35)]
         // [Header(Rendering Settings)]
