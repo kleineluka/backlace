@@ -6,31 +6,31 @@
         },
         {
             "key": "disabled",
-            "value": "Disabwed"
+            "value": "Disyabled"
         },
         {
             "key": "config_tab_theme",
-            "value": "Tab Theme, purr~"
+            "value": "Tab Themeow"
         },
         {
             "key": "config_text_theme",
-            "value": "Texty Theme~"
+            "value": "Text Themeow"
         },
         {
             "key": "config_ui_size",
-            "value": "UI Sizey"
+            "value": "UI Size :3"
         },
         {
             "key": "config_updates",
-            "value": "Check fow Updyates"
+            "value": "Check fow Updates"
         },
         {
             "key": "config_language",
-            "value": "Wanguage"
+            "value": "Wangwuage"
         },
         {
             "key": "config_toggle_updates",
-            "value": "Show Updyates"
+            "value": "Show Updwates"
         },
         {
             "key": "config_toggle_announcements",
@@ -42,51 +42,59 @@
         },
         {
             "key": "config_toggle_disabled",
-            "value": "Disabwed"
+            "value": "Disyabled"
         },
         {
             "key": "config_save",
-            "value": "Save Configy"
+            "value": "Save Confwig"
         },
         {
             "key": "config_reset",
-            "value": "Weset Configy"
+            "value": "Weset Confwig"
         },
         {
             "key": "config_save_success",
-            "value": "Ur configyuration was saved successfuwwy! ^w^"
+            "value": "Youw configuwation was saved successfuwwy! Nya! ^~^"
         },
         {
             "key": "config_save_error",
-            "value": "Sowmething went wwong twying to save ur configyuration, twy weimpowting da Unity packyage! >w<"
+            "value": "Sumthing went wwong twying to save youw configuwation, twy weimpowting the Unity packwage! >.<"
         },
         {
             "key": "config_reset_success",
-            "value": "Ur configyuration was weset to da defauwt vawues! ^w^"
+            "value": "Youw configuwation was weset to the defauwt vawues! ^~^"
         },
         {
             "key": "config_reset_error",
-            "value": "Sowmething went wwong twying to weset ur configyuration, twy weimpowting da Unity packyage! >w<"
+            "value": "Sumthing went wwong twying to weset youw configuwation, twy weimpowting the Unity packwage! >.<"
         },
         {
             "key": "dialog_okay",
-            "value": "Oki, nya!"
+            "value": "Oki! :3"
+        },
+        {
+            "key": "dialog_cancel",
+            "value": "Cancew"
         },
         {
             "key": "update_available",
-            "value": "Updyate avaiwabull, nya!"
+            "value": "Update avaiwabwe! :O"
         },
         {
             "key": "update_description",
-            "value": "Downwoad da watest vewsion fow nyew featuwes an' bug fixes! <3"
+            "value": "Downwoad the watest vewsion fow nyew featuwes and bug fixes! <3"
         },
         {
             "key": "tab_config",
-            "value": "Settingz"
+            "value": "Settwings"
         },
         {
             "key": "open_docs",
-            "value": "Need hewp? Cwick hewe tu open da docyumentation, meow!"
+            "value": "Need hewp? Cwick hewe to open the documentwation! :3"
+        },
+        {
+            "key": "premonition_compact_notice",
+            "value": "This is a compact shadew and won't have featuwes that wewen't enyabled on the owiginaw shadew! Pwease see the Compact Shadew menyu to westowe it back to the fuww vewsion if you nyeed to make changes."
         },
         {
             "key": "tab_license",
@@ -94,19 +102,19 @@
         },
         {
             "key": "button_show_license",
-            "value": "Show Wicense in Unity, purr~"
+            "value": "Show Wicense in Unyity"
         },
         {
             "key": "config_toggle_grey_unused",
-            "value": "Gwey Unyused Settingz"
+            "value": "Gwey Unyused Settwings"
         },
         {
             "key": "config_toggle_status_badges",
-            "value": "Show Status Badgies"
+            "value": "Show Status Badges :3"
         },
         {
             "key": "status_badge_enabled",
-            "value": "Activyated"
+            "value": "Activwated"
         },
         {
             "key": "capability_popup_title",
@@ -114,67 +122,67 @@
         },
         {
             "key": "preset_title",
-            "value": "Pwesset Manyager"
+            "value": "Pweset Mwanager"
         },
         {
             "key": "preset_overwrite_prompt",
-            "value": "A pwesset with this nyame awweady exists, du u want tu ovewwite it, nya?"
+            "value": "A pweset with this nyame awweady exists, do you want to ovewwite it? o.o"
         },
         {
             "key": "preset_overwrite_prompt_yes",
-            "value": "Ovewwite it, meow!"
+            "value": "Ovewwite it! >:3"
         },
         {
             "key": "preset_overwrite_prompt_no",
-            "value": "Keep existing, purr."
+            "value": "Keep existing."
         },
         {
             "key": "preset_builtin_header",
-            "value": "Buiwt-In Pwessets"
+            "value": "Buiwt-In Pwesets"
         },
         {
             "key": "preset_custom_header",
-            "value": "Custom Pwessets"
+            "value": "Custom Pwesets"
         },
         {
             "key": "preset_save_header",
-            "value": "Save Dis Mewterial"
+            "value": "Save This Matewiaw"
         },
         {
             "key": "preset_name_label",
-            "value": "Pwesset Nyame"
+            "value": "Pweset Nyame"
         },
         {
             "key": "preset_save_button",
-            "value": "Save as Pwesset"
+            "value": "Save as Pweset"
         },
         {
             "key": "preset_save_error_noname",
-            "value": "P-pwease set a nyame fow ur pwesset befowe saving! >w<"
+            "value": "Pwease set a nyame fow youw pweset befowe saving! >.<"
         },
         {
             "key": "preset_delete_prompt",
-            "value": "Du u want tu dewete this pwesset? It can't be undunye... mrow~"
+            "value": "Do you want to dewete this pweset? It can't be undwone... ;w;"
         },
         {
             "key": "preset_delete_prompt_yes",
-            "value": "Dewete Pwesset"
+            "value": "Dewete Pweset"
         },
         {
             "key": "preset_delete_prompt_no",
-            "value": "Keep Pwesset"
+            "value": "Keep Pweset"
         },
         {
             "key": "tab_presets",
-            "value": "Pwessets"
+            "value": "Pwesets"
         },
         {
             "key": "preset_no_builtin_found",
-            "value": "Nyo buiwt-in pwessets wewe pwovided with this shadyer... mrow..."
+            "value": "Nyo buiwt-in pwesets wewe pwovided with this shadew..."
         },
         {
             "key": "preset_no_custom_found",
-            "value": "Nyo custom pwessets wewe found! Why nyot make sum? :3"
+            "value": "Nyo custom pwesets wewe found! Why nyot make some? :o"
         },
         {
             "key": "load",
@@ -182,47 +190,135 @@
         },
         {
             "key": "tab_premonition",
-            "value": "Compact Mewterial"
+            "value": "Compact Matewiaw"
         },
         {
             "key": "premonition_notice",
-            "value": "Hewe, u can genyewate a compact vewsion of ur cuwwent mewterial. This genyewates a nyew shadyer fiwe dat is smawwer, has wess compiwe time, an' is a snyapshot of ur cuwwent settingz. This smawwer shadyer is wedistwibutabwe an' doesn't wewy on anything ewse - u can just move da .shadyer as u pwease. It's suggested tu awways use this fow ur finyaw mewterials in owder tu weduce shadyer count an' impwove pewfowmance! ^w^ (but don't wowwy, u can awways go back tu da nyowmal shadyer if u need tu make chanyges)"
+            "value": "Hewe, you can genyewate a compact vewsion of youw cuwwent matewiaw. This genyewates a nyew shadew fiwe that is smawwew, has wess compiwation time, and is essentiawwy a snyapshot of youw cuwwent settings. This smawwew shadew is wedistwibutabwe and doesn't wewy on anything ewse - you can just muv the .shadew as you pwease. It's suggested to awways use this fow youw finyaw matewiaws in owdew to weduce shadew count and impwove pewfowmance! ^-^ (but don't wowwy, you can awways go back to the nyowmaw shadew if you nyeed to make changes)"
         },
         {
             "key": "premonition_generate_button",
-            "value": "Genyewate Compact Mewterial"
+            "value": "Genyewate Compact Matewiaw"
         },
         {
             "key": "premonition_restore_button",
-            "value": "Westowe Owiginyal Mewterial"
+            "value": "Westowe Owiginaw Matewiaw"
         },
         {
             "key": "variant_popup_title",
-            "value": "Shadyer Vawiant Wequiwed"
+            "value": "Shadew Vawiant Wequiwed"
         },
         {
             "key": "variant_popup_description",
-            "value": "This featuwe wequiwes (at minyimum) da '{0}' shadyer vawiant.\n\nShadyer vawiants awe made in owder tu hewp ensuwe u onwy incwude code fow da featuwes u need. Whiwe othew vewsions may have it (indicyated by gweyed out tabs ow nyot), this is da \"wowest\" vawiant tiew dat suppowts it. Pwease see da docs fow mowe info, nya! ^w^"
+            "value": "This featuwe wequiwes (at minyimum) the '{0}' shadew vawiant.\n\nShadew vawiants awe made in owdew to hewp ensuwe you onwy incwude code fow the featuwes you nyeed. Whiwe othew vewsions may have it (indicated by gweyed out tabs ow nyot), this is the \"wowest\" vawiant tiew that suppowts it. Pwease see the docs fow mowe info! ^-^"
         },
         {
             "key": "warning_external_website_title",
-            "value": "Wait, wisten, meow!"
+            "value": "Wait, wisten! :o"
         },
         {
             "key": "warning_external_website_description",
-            "value": "U are about tu open an extewnyal website dat is nyot ownyed ow opewated by me! Pwease pwoceed using caution!! It's pwobabwy safe, but I have nyo contwol ovew it ow if it wiww chanyge in da futuwe. >w< Du u want tu continyue, nya?"
+            "value": "You awe about to open an extewnaw website that is nyot owned ow opewated by me! Pwease pwoceed using caution!! It's pwobabwy safe, but I have nyo contwow ovew it ow if it wiww change in the futuwe. >.< Do you want to continyue?"
         },
         {
             "key": "warning_external_website_okay",
-            "value": "Open Website~"
+            "value": "Open Website"
         },
         {
             "key": "warning_external_website_cancel",
-            "value": "Go back, nya!"
+            "value": "Go back! >.<"
+        },
+        {
+            "key": "footer_madewith",
+            "value": "Made with wuv and my open-souwce pwoject <3"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backwace Anyime Shadew."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
+        },
+        {
+            "key": "config_toggle_expand_searches",
+            "value": "Expand Seawches"
+        },
+        {
+            "key": "search_button",
+            "value": "Seawch"
+        },
+        {
+            "key": "search_clear",
+            "value": "Cweaw"
+        },
+        {
+            "key": "config_look_and_feel",
+            "value": "Wook and Feew"
+        },
+        {
+            "key": "config_workflow",
+            "value": "Wowkfwow Options"
+        },
+        {
+            "key": "config_extra_options",
+            "value": "Extwa Options"
+        },
+        {
+            "key": "dependency_detected",
+            "value": "Dependency Found! :3"
+        },
+        {
+            "key": "dependency_not_detected",
+            "value": "Dependency Nyot Found"
+        },
+        {
+            "key": "dependency_popup_title",
+            "value": "Dependency Mwanager fow '{0}'"
+        },
+        {
+            "key": "dependency_popup_detected",
+            "value": "Dependency '{0}' detected {1}! ^w^"
+        },
+        {
+            "key": "dependency_popup_not_detected",
+            "value": "Dependency '{0}' nyot detected! >.<"
+        },
+        {
+            "key": "dependency_popup_open_link",
+            "value": "Open Dependency Wink"
+        },
+        {
+            "key": "premonition_title",
+            "value": "Compact Shadew Genyewation"
+        },
+        {
+            "key": "premonition_success",
+            "value": "Compact shadew(s) wewe successfuwwy genyewated and appwied to youw matewiaws! ^^"
+        },
+        {
+            "key": "premonition_error_generic",
+            "value": "Thewe was an ewwow genyewating the compact shadew(s). Pwease twy again, and if the issue pewsists, see the consowe fow ewwows! >.<"
+        },
+        {
+            "key": "premonition_error_noshader",
+            "value": "Thewe was an ewwow twying to westowe this shadew. Awe you suwe it is a compact shadew? >.<"
+        },
+        {
+            "key": "premonition_restore_success",
+            "value": "Successfuwwy westowed the owiginaw shadew fow matewiaw(s)! ^^"
+        },
+        {
+            "key": "premonition_compact_all_button",
+            "value": "Compact Aww Matewiaws in Fowdew"
+        },
+        {
+            "key": "premonition_compact_all_result",
+            "value": "Compactwed {0} matewiaws.\nFaiwed: {1}\nSkipped: {2}"
         },
         {
             "key": "tab_main",
-            "value": "Main Settingz"
+            "value": "Main Settwings"
         },
         {
             "key": "sub_tab_rendering",
@@ -230,11 +326,11 @@
         },
         {
             "key": "sub_tab_textures",
-            "value": "Cowe Mappies"
+            "value": "Cowe Mwaps"
         },
         {
             "key": "sub_tab_stitching",
-            "value": "Textyure Stitching"
+            "value": "Textuwe Stitching"
         },
         {
             "key": "sub_tab_uv_manipulation",
@@ -242,7 +338,7 @@
         },
         {
             "key": "sub_tab_uv_effects",
-            "value": "UV Eeffects"
+            "value": "UV Effects"
         },
         {
             "key": "sub_tab_vertex_manipulation",
@@ -250,19 +346,19 @@
         },
         {
             "key": "sub_tab_decal_one",
-            "value": "Decawl 1"
+            "value": "Stickew 1"
         },
         {
             "key": "sub_tab_decal_two",
-            "value": "Decawl 2"
+            "value": "Stickew 2"
         },
         {
             "key": "sub_tab_post_processing",
-            "value": "Textyure Post-Pwocessing"
+            "value": "Textuwe Post-Pwocessing"
         },
         {
             "key": "sub_tab_uv_sets",
-            "value": "UV Setz"
+            "value": "UV Sets"
         },
         {
             "key": "tab_lighting",
@@ -270,7 +366,7 @@
         },
         {
             "key": "sub_tab_lighting_model",
-            "value": "Wighting Modyel"
+            "value": "Wighting Modew"
         },
         {
             "key": "sub_tab_anime",
@@ -278,23 +374,23 @@
         },
         {
             "key": "tab_specular",
-            "value": "Specuwur"
+            "value": "Specuwaw"
         },
         {
             "key": "sub_tab_pbr_specular",
-            "value": "PBR Specuwur"
+            "value": "PBR Specuwaw"
         },
         {
             "key": "sub_tab_stylised_specular",
-            "value": "Stywised Specuwur"
+            "value": "Stywised Specuwaw"
         },
         {
             "key": "sub_tab_emission",
-            "value": "Emisshion"
+            "value": "Emission"
         },
         {
             "key": "sub_tab_light_limiting",
-            "value": "Wimit Wight Wevels"
+            "value": "Wimit Wight Wevews"
         },
         {
             "key": "tab_shading",
@@ -302,7 +398,7 @@
         },
         {
             "key": "sub_tab_rim_lighting",
-            "value": "Fwesnyel Wim Wighting"
+            "value": "Fwesnel Wim Wighting"
         },
         {
             "key": "sub_tab_depth_rim",
@@ -310,7 +406,7 @@
         },
         {
             "key": "sub_tab_clear_coat",
-            "value": "Cwearcoat"
+            "value": "Cweawcoat"
         },
         {
             "key": "sub_tab_matcap",
@@ -322,7 +418,7 @@
         },
         {
             "key": "sub_tab_parallax",
-            "value": "Pawawax Mapping"
+            "value": "Pawawwax Mapping"
         },
         {
             "key": "sub_tab_subsurface",
@@ -338,7 +434,7 @@
         },
         {
             "key": "tab_effects",
-            "value": "Eeffects"
+            "value": "Effects"
         },
         {
             "key": "sub_tab_dissolve",
@@ -358,15 +454,15 @@
         },
         {
             "key": "sub_tab_superplug",
-            "value": "Supew Pwug Shadyer"
+            "value": "Supew Pwug Shadew"
         },
         {
             "key": "superplug_notice",
-            "value": "Supew Pwug Shadyer (by VRCFury) is a fwee mesh defowmation system dat can be used tu defowm meshes towawds a tawget, an' is a fuww backwawds-compatibwe wepwacement fow DPS (Dynyamic Penyetwation System by Wawiv) an' TPS (Thwy Penyetwation System in Poiyomi Pwo). In addition tu being fwee, it suppowts a wide vawiety of shadyers without them nyeeding tu hawd-code suppowt, incwuding Backwace! Pwease cwick da wink bewow tu open da docyumentation fow it in owder tu set it up, nya!"
+            "value": "Supew Pwug Shadew (by VWCFuwy) is a fwee mesh defowmation system that can be used to defowm meshes towawds a tawget, and is a fuww backwawds-compatibwe wepwacement fow DPS (Dynymic Pwenetwation System by Wawiv) and TPS (Thwy Pwenetwation System in Poiyomi Pwo). In addition to being fwee, it suppowts a wide vawiety of shadews without them nyeeding to hawd-code suppowt, incwuding Backwace! Pwease cwick the wink bewow to open the documentwation fow it in owdew to set it up! :3"
         },
         {
             "key": "superplug_button",
-            "value": "Open Supew Pwug Shadyer Website"
+            "value": "Open Supew Pwug Shadew Website"
         },
         {
             "key": "sub_tab_ltcgi",
@@ -374,7 +470,7 @@
         },
         {
             "key": "ltcgi_notice",
-            "value": "LTCGI (by _pi_) is a pwug-and-pway wealtime awea wighting sowution fow VRChat. Tu enyable this, pwease make suwe u awso incwude da LTCGI packyage in ur pwoject as it wequiwes its own shadyer functions tu wowk. When enyabled, ur mewterial wiww then automaticawwy use LTCGIs wighting, purr~"
+            "value": "LTCGI (by _pi_) is a pwug-and-pway weawtime awea wighting sowution fow VWChat. To enyabwe this, pwease make suwe you awso incwude the LTCGI packwage in youw pwoject as it wequiwes its own shadew functions to wowk. When enyabwed, youw matewiaw wiww then automaticawwy use LTCGIs wighting."
         },
         {
             "key": "ltcgi_button",
@@ -382,11 +478,11 @@
         },
         {
             "key": "prop_ToggleLTCGI",
-            "value": "Enyable LTCGI Wighting"
+            "value": "Enyabwe LTCGI Wighting"
         },
         {
             "key": "sub_tab_glitter",
-            "value": "Gwittew"
+            "value": "Gwilttew"
         },
         {
             "key": "sub_tab_distance_fading",
@@ -398,19 +494,19 @@
         },
         {
             "key": "sub_tab_shadow_textures",
-            "value": "Shadow Textyures"
+            "value": "Shadow Textuwes"
         },
         {
             "key": "sub_tab_flatten_model",
-            "value": "Fwatten Modyel"
+            "value": "Fwatten Modew"
         },
         {
             "key": "sub_tab_world_aligned",
-            "value": "Wowld Awigned Textyures"
+            "value": "Wowwd Awigned Textuwes"
         },
         {
             "key": "sub_tab_vrchat_mirror",
-            "value": "VRChat Miwwow Detection"
+            "value": "VWChat Miwwow Detection"
         },
         {
             "key": "sub_tab_touch_interactions",
@@ -422,7 +518,7 @@
         },
         {
             "key": "sub_tab_dither",
-            "value": "Ditewing"
+            "value": "Dithewwing"
         },
         {
             "key": "sub_tab_ps1",
@@ -450,11 +546,11 @@
         },
         {
             "key": "prop_ZWrite",
-            "value": "ZWrite"
+            "value": "ZWwite"
         },
         {
             "key": "prop_Cull",
-            "value": "Cuww Mewd"
+            "value": "Cuww Mode"
         },
         {
             "key": "prop_StencilRef",
@@ -498,23 +594,23 @@
         },
         {
             "key": "prop_BlendMode",
-            "value": "Bwending Mewd"
+            "value": "Bwending Mode"
         },
         {
             "key": "prop_VRCFallback",
-            "value": "VRChat Fawwback"
+            "value": "VWChat Fawwback"
         },
         {
             "key": "prop_ToggleFlipNormals",
-            "value": "Fwip Backface Nyowmals"
+            "value": "Fwip Backface Nyowmaws"
         },
         {
             "key": "prop_MainTex",
-            "value": "Main Textyure"
+            "value": "Main Textuwe"
         },
         {
             "key": "prop_Color",
-            "value": "Albedo Cowor"
+            "value": "Awbedo Cowolur"
         },
         {
             "key": "prop_Cutoff",
@@ -522,11 +618,11 @@
         },
         {
             "key": "prop_BumpMap",
-            "value": "Nyowmal Map"
+            "value": "Nyormal Mwap"
         },
         {
             "key": "prop_BumpScale",
-            "value": "Nyowmal Map Scayle"
+            "value": "Nyormal Mwap Scawe"
         },
         {
             "key": "prop_Alpha",
@@ -534,7 +630,7 @@
         },
         {
             "key": "prop_DecalStage",
-            "value": "Decawl Stage (Shawed)"
+            "value": "Stickew Stage (Shawed)"
         },
         {
             "key": "prop_UV_Offset_X",
@@ -546,11 +642,11 @@
         },
         {
             "key": "prop_UV_Scale_X",
-            "value": "UV Scayle X"
+            "value": "UV Scawe X"
         },
         {
             "key": "prop_UV_Scale_Y",
-            "value": "UV Scayle Y"
+            "value": "UV Scawe Y"
         },
         {
             "key": "prop_UV_Rotation",
@@ -566,31 +662,31 @@
         },
         {
             "key": "prop_ToggleUVEffects",
-            "value": "Enyable UV Eeffects"
+            "value": "Enyabwe UV Effects"
         },
         {
             "key": "prop_UVTriplanarMapping",
-            "value": "Enyable Twipwanar Mapping"
+            "value": "Enyabwe Twipwanaw Mapping"
         },
         {
             "key": "prop_UVTriplanarPosition",
-            "value": "Wowld Position (XYZ)"
+            "value": "Wowwd Position (XYZ)"
         },
         {
             "key": "prop_UVTriplanarScale",
-            "value": "Wowld Scayle"
+            "value": "Wowwd Scawe"
         },
         {
             "key": "prop_UVTriplanarRotation",
-            "value": "Wowld Wotation (XYZ)"
+            "value": "Wowwd Wotation (XYZ)"
         },
         {
             "key": "prop_UVTriplanarSharpness",
-            "value": "Twipwanar Bwend Shawpness"
+            "value": "Twipwanaw Bwend Shawpnyess"
         },
         {
             "key": "prop_UVScreenspaceMapping",
-            "value": "Enyable Scweenspace Mapping"
+            "value": "Enyabwe Scweenspace Mapping"
         },
         {
             "key": "prop_UVScreenspaceTiling",
@@ -598,7 +694,7 @@
         },
         {
             "key": "prop_UVFlipbook",
-            "value": "Enyable Fwipbook Anyimation"
+            "value": "Enyabwe Fwipbook Anyimation"
         },
         {
             "key": "prop_UVFlipbookRows",
@@ -618,15 +714,15 @@
         },
         {
             "key": "prop_UVFlipbookScrub",
-            "value": "Manyual Scwub"
+            "value": "Manyuaw Scwub"
         },
         {
             "key": "prop_UVFlowmap",
-            "value": "Enyable Fwowmap"
+            "value": "Enyabwe Fwowmap"
         },
         {
             "key": "prop_UVFlowmapTex",
-            "value": "Fwowmap Textyure (WG)"
+            "value": "Fwowmap Textuwe (RG)"
         },
         {
             "key": "prop_UVFlowmapStrength",
@@ -642,35 +738,35 @@
         },
         {
             "key": "prop_VertexManipulationPosition",
-            "value": "Wowld Position (XYZ)"
+            "value": "Wowwd Position (XYZ)"
         },
         {
             "key": "prop_VertexManipulationScale",
-            "value": "Wowld Scayle (XYZ)"
+            "value": "Wowwd Scawe (XYZ)"
         },
         {
             "key": "prop_ToggleEmission",
-            "value": "Enyable Emisshion"
+            "value": "Enyabwe Emission"
         },
         {
             "key": "prop_EmissionColor",
-            "value": "Emisshion Cowor"
+            "value": "Emission Cowolur"
         },
         {
             "key": "prop_EmissionMap",
-            "value": "Emisshion Map (Mask)"
+            "value": "Emission Mwap (Mwask)"
         },
         {
             "key": "prop_UseAlbedoAsEmission",
-            "value": "Use Albedo fow Emisshion"
+            "value": "Use Awbedo fow Emission"
         },
         {
             "key": "prop_EmissionStrength",
-            "value": "Emisshion Stwength"
+            "value": "Emission Stwength"
         },
         {
             "key": "prop_EnableBaseLightLimit",
-            "value": "Enyable Base Pass Wimit"
+            "value": "Enyabwe Base Pass Wimit"
         },
         {
             "key": "prop_BaseLightMin",
@@ -682,7 +778,7 @@
         },
         {
             "key": "prop_EnableAddLightLimit",
-            "value": "Enyable Add Pass Wimit"
+            "value": "Enyabwe Add Pass Wimit"
         },
         {
             "key": "prop_AddLightMin",
@@ -698,19 +794,19 @@
         },
         {
             "key": "prop_ForceLightColor",
-            "value": "Fowce Wight Cowor"
+            "value": "Fowce Wight Cowolur"
         },
         {
             "key": "prop_ForcedLightColor",
-            "value": "Fowced Wight Cowor"
+            "value": "Fowced Wight Cowolur"
         },
         {
             "key": "prop_LightingColorMode",
-            "value": "Wight Cowor Mewd"
+            "value": "Wight Cowolur Mode"
         },
         {
             "key": "prop_LightingDirectionMode",
-            "value": "Wight Diwection Mewd"
+            "value": "Wight Diwection Mode"
         },
         {
             "key": "prop_ForcedLightDirection",
@@ -726,35 +822,35 @@
         },
         {
             "key": "prop_DirectIntensity",
-            "value": "WT Diwect Inten-nya-sity"
+            "value": "RT Diwect Intensity"
         },
         {
             "key": "prop_IndirectIntensity",
-            "value": "WT Indiwect Inten-nya-sity"
+            "value": "RT Indiwect Intensity"
         },
         {
             "key": "prop_VertexIntensity",
-            "value": "WT Vewtex Inten-nya-sity"
+            "value": "RT Vewtex Intensity"
         },
         {
             "key": "prop_AdditiveIntensity",
-            "value": "WT Additive Inten-nya-sity"
+            "value": "RT Additive Intensity"
         },
         {
             "key": "prop_BakedDirectIntensity",
-            "value": "Baked Diwect Inten-nya-sity"
+            "value": "Baked Diwect Intensity"
         },
         {
             "key": "prop_BakedIndirectIntensity",
-            "value": "Baked Indiwect Inten-nya-sity"
+            "value": "Baked Indiwect Intensity"
         },
         {
             "key": "prop_ToggleAnimeLighting",
-            "value": "Enyable Anyime Wighting"
+            "value": "Enyabwe Anyime Wighting"
         },
         {
             "key": "prop_AnimeMode",
-            "value": "Anyime Mewd"
+            "value": "Anyime Mode"
         },
         {
             "key": "prop_Ramp",
@@ -762,7 +858,7 @@
         },
         {
             "key": "prop_RampColor",
-            "value": "Wamp Cowor"
+            "value": "Wamp Cowolur"
         },
         {
             "key": "prop_RampOffset",
@@ -770,11 +866,11 @@
         },
         {
             "key": "prop_ShadowIntensity",
-            "value": "Shadow inten-nya-sity"
+            "value": "Shadow intensity"
         },
         {
             "key": "prop_OcclusionOffsetIntensity",
-            "value": "Occwusion Offset Inten-nya-sity"
+            "value": "Occwusion Offset Intensity"
         },
         {
             "key": "prop_RampMin",
@@ -782,11 +878,11 @@
         },
         {
             "key": "prop_RampNormalIntensity",
-            "value": "Nyowmals Affect Inten-nya-sity"
+            "value": "Nyowmaws Affect Intensity"
         },
         {
             "key": "prop_AnimeShadowColor",
-            "value": "Cowe Shadow Cowor"
+            "value": "Cowe Shadow Cowolur"
         },
         {
             "key": "prop_AnimeShadowThreshold",
@@ -794,11 +890,11 @@
         },
         {
             "key": "prop_AnimeHalftoneColor",
-            "value": "Haftonye Cowor"
+            "value": "Hawftony Cowolur"
         },
         {
             "key": "prop_AnimeHalftoneThreshold",
-            "value": "Haftonye Thweshowd"
+            "value": "Hawftony Thweshowd"
         },
         {
             "key": "prop_AnimeShadowSoftness",
@@ -806,11 +902,11 @@
         },
         {
             "key": "prop_ToggleAmbientGradient",
-            "value": "Enyable Ambient Gwadient"
+            "value": "Enyabwe Ambient Gwadient"
         },
         {
             "key": "prop_AnimeOcclusionToShadow",
-            "value": "Occwusion Tu Shadow"
+            "value": "Occwusion To Shadow"
         },
         {
             "key": "prop_AmbientUp",
@@ -830,11 +926,11 @@
         },
         {
             "key": "prop_AmbientIntensity",
-            "value": "Gwadient Inten-nya-sity"
+            "value": "Gwadient Intensity"
         },
         {
             "key": "prop_TintMaskSource",
-            "value": "Tint Mask Souwce"
+            "value": "Tint Mwask Souwce"
         },
         {
             "key": "prop_LitTint",
@@ -854,7 +950,7 @@
         },
         {
             "key": "prop_ToggleSpecular",
-            "value": "Enyable Specuwur"
+            "value": "Enyabwe Specuwaw"
         },
         {
             "key": "prop_SpecularIntensity",
@@ -862,11 +958,11 @@
         },
         {
             "key": "prop_ToggleVertexSpecular",
-            "value": "Enyable Vewtex Specuwur"
+            "value": "Enyabwe Vewtex Specuwaw"
         },
         {
             "key": "prop_SpecularMode",
-            "value": "Specuwur Mewd"
+            "value": "Specuwaw Mode"
         },
         {
             "key": "prop_MSSO",
@@ -890,23 +986,23 @@
         },
         {
             "key": "prop_SpecularTintTexture",
-            "value": "Specuwur Tint Textyure"
+            "value": "Specuwaw Tint Textuwe"
         },
         {
             "key": "prop_SpecularTint",
-            "value": "Specuwur Tint"
+            "value": "Specuwaw Tint"
         },
         {
             "key": "prop_TangentMap",
-            "value": "Tanyent Map"
+            "value": "Tangent Mwap"
         },
         {
             "key": "prop_Anisotropy",
-            "value": "Ansotwopy"
+            "value": "Anyisotwopy"
         },
         {
             "key": "prop_ReplaceSpecular",
-            "value": "Wepwace Specuwur"
+            "value": "Wepwace Specuwaw"
         },
         {
             "key": "prop_HighlightRamp",
@@ -918,11 +1014,11 @@
         },
         {
             "key": "prop_HighlightRampColor",
-            "value": "Highwight Cowor"
+            "value": "Highwight Cowolur"
         },
         {
             "key": "prop_HighlightIntensity",
-            "value": "Highwight Inten-nya-sity"
+            "value": "Highwight Intensity"
         },
         {
             "key": "prop_HighlightRampOffset",
@@ -930,31 +1026,31 @@
         },
         {
             "key": "prop_HairFlowMap",
-            "value": "Haiw Fwow/Tanyent Map (WG)"
+            "value": "Haiw Fwow/Tangent Mwap (RG)"
         },
         {
             "key": "prop_PrimarySpecularShift",
-            "value": "Pwimawy Specuwur Shift"
+            "value": "Pwimawy Specuwaw Shift"
         },
         {
             "key": "prop_SecondarySpecularShift",
-            "value": "Secondawy Specuwur Shift"
+            "value": "Secondawy Specuwaw Shift"
         },
         {
             "key": "prop_SecondarySpecularColor",
-            "value": "Secondawy Specuwur Cowor"
+            "value": "Secondawy Specuwaw Cowolur"
         },
         {
             "key": "prop_SpecularExponent",
-            "value": "Specuwur Exponyent"
+            "value": "Specuwaw Exponyet"
         },
         {
             "key": "prop_SheenColor",
-            "value": "Sheen Cowor"
+            "value": "Sheen Cowolur"
         },
         {
             "key": "prop_SheenIntensity",
-            "value": "Sheen Inten-nya-sity"
+            "value": "Sheen Intensity"
         },
         {
             "key": "prop_SheenRoughness",
@@ -962,19 +1058,19 @@
         },
         {
             "key": "prop_ToggleRimlight",
-            "value": "Enyable Wim Wighting"
+            "value": "Enyabwe Wim Wighting"
         },
         {
             "key": "prop_RimColor",
-            "value": "Wim Cowor"
+            "value": "Wim Cowolur"
         },
         {
             "key": "prop_RimWidth",
-            "value": "Wim Width"
+            "value": "Wim Wwidth"
         },
         {
             "key": "prop_RimIntensity",
-            "value": "Wim Inten-nya-sity"
+            "value": "Wim Intensity"
         },
         {
             "key": "prop_RimLightBased",
@@ -982,7 +1078,7 @@
         },
         {
             "key": "prop_ToggleClearcoat",
-            "value": "Enyable Cwear Coat"
+            "value": "Enyabwe Cweaw Coat"
         },
         {
             "key": "prop_ClearcoatStrength",
@@ -994,7 +1090,7 @@
         },
         {
             "key": "prop_ClearcoatMap",
-            "value": "Mask (W=Stwength, G=Woughnyess)"
+            "value": "Mwask (R=Stwength, G=Woughnyess)"
         },
         {
             "key": "prop_ClearcoatRoughness",
@@ -1002,15 +1098,15 @@
         },
         {
             "key": "prop_ClearcoatColor",
-            "value": "Cwearcoat Cowor"
+            "value": "Cweawcoat Cowolur"
         },
         {
             "key": "prop_ToggleMatcap",
-            "value": "Enyable Matcap"
+            "value": "Enyabwe Matcap"
         },
         {
             "key": "prop_MatcapTex",
-            "value": "Matcap Textyure"
+            "value": "Matcap Textuwe"
         },
         {
             "key": "prop_MatcapTint",
@@ -1018,19 +1114,19 @@
         },
         {
             "key": "prop_MatcapIntensity",
-            "value": "Matcap Inten-nya-sity"
+            "value": "Matcap Intensity"
         },
         {
             "key": "prop_MatcapBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_MatcapMask",
-            "value": "Matcap Mask (W)"
+            "value": "Matcap Mwask (R)"
         },
         {
             "key": "prop_MatcapSmoothnessEnabled",
-            "value": "Enyable Smoothnyess"
+            "value": "Enyabwe Smoothnyess"
         },
         {
             "key": "prop_MatcapSmoothness",
@@ -1038,11 +1134,11 @@
         },
         {
             "key": "prop_Decal1Enable",
-            "value": "Enyable Decawl 1"
+            "value": "Enyabwe Stickew 1"
         },
         {
             "key": "prop_Decal1Tex",
-            "value": "Decawl Textyure (A=Mask)"
+            "value": "Stickew Textuwe (A=Mwask)"
         },
         {
             "key": "prop_Decal1Tint",
@@ -1050,11 +1146,11 @@
         },
         {
             "key": "prop_Decal1BlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_Decal1IsTriplanar",
-            "value": "Use Twipwanar Mapping"
+            "value": "Use Twipwanaw Mapping"
         },
         {
             "key": "prop_Decal1Position",
@@ -1062,7 +1158,7 @@
         },
         {
             "key": "prop_Decal1Scale",
-            "value": "UV Scayle (XY)"
+            "value": "UV Scawe (XY)"
         },
         {
             "key": "prop_Decal1Rotation",
@@ -1070,19 +1166,19 @@
         },
         {
             "key": "prop_Decal1TriplanarPosition",
-            "value": "Wowld Position (XYZ)"
+            "value": "Wowwd Position (XYZ)"
         },
         {
             "key": "prop_Decal1TriplanarScale",
-            "value": "Wowld Scayle"
+            "value": "Wowwd Scawe"
         },
         {
             "key": "prop_Decal1TriplanarRotation",
-            "value": "Wowld Wotation (XYZ)"
+            "value": "Wowwd Wotation (XYZ)"
         },
         {
             "key": "prop_Decal1TriplanarSharpness",
-            "value": "Twipwanar Bwend Shawpness"
+            "value": "Twipwanaw Bwend Shawpnyess"
         },
         {
             "key": "prop_Decal1Repeat",
@@ -1106,11 +1202,11 @@
         },
         {
             "key": "prop_Decal2Enable",
-            "value": "Enyable Decawl 2"
+            "value": "Enyabwe Stickew 2"
         },
         {
             "key": "prop_Decal2Tex",
-            "value": "Decawl Textyure (A=Mask)"
+            "value": "Stickew Textuwe (A=Mwask)"
         },
         {
             "key": "prop_Decal2Tint",
@@ -1118,11 +1214,11 @@
         },
         {
             "key": "prop_Decal2BlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_Decal2IsTriplanar",
-            "value": "Use Twipwanar Mapping"
+            "value": "Use Twipwanaw Mapping"
         },
         {
             "key": "prop_Decal2Position",
@@ -1130,7 +1226,7 @@
         },
         {
             "key": "prop_Decal2Scale",
-            "value": "UV Scayle (XY)"
+            "value": "UV Scawe (XY)"
         },
         {
             "key": "prop_Decal2Rotation",
@@ -1138,19 +1234,19 @@
         },
         {
             "key": "prop_Decal2TriplanarPosition",
-            "value": "Wowld Position (XYZ)"
+            "value": "Wowwd Position (XYZ)"
         },
         {
             "key": "prop_Decal2TriplanarScale",
-            "value": "Wowld Scayle"
+            "value": "Wowwd Scawe"
         },
         {
             "key": "prop_Decal2TriplanarRotation",
-            "value": "Wowld Wotation (XYZ)"
+            "value": "Wowwd Wotation (XYZ)"
         },
         {
             "key": "prop_Decal2TriplanarSharpness",
-            "value": "Twipwanar Bwend Shawpness"
+            "value": "Twipwanaw Bwend Shawpnyess"
         },
         {
             "key": "prop_Decal2Repeat",
@@ -1174,19 +1270,19 @@
         },
         {
             "key": "prop_TogglePostProcessing",
-            "value": "Enyable Post Pwocessing"
+            "value": "Enyabwe Post Pwocessing"
         },
         {
             "key": "prop_RGBColor",
-            "value": "WGB Tint"
+            "value": "RGB Tint"
         },
         {
             "key": "prop_RGBBlendMode",
-            "value": "WGB Muwtipwy/Wepwace"
+            "value": "RGB Muwtipwy/Wepwace"
         },
         {
             "key": "prop_HSVMode",
-            "value": "HSV Mewd"
+            "value": "HSV Mode"
         },
         {
             "key": "prop_HSVHue",
@@ -1202,7 +1298,7 @@
         },
         {
             "key": "prop_ToggleHueShift",
-            "value": "Enyable Hue Shift"
+            "value": "Enyabwe Hue Shift"
         },
         {
             "key": "prop_HueShift",
@@ -1210,7 +1306,7 @@
         },
         {
             "key": "prop_ToggleAutoCycle",
-            "value": "Enyable Auto Cycwe Hue"
+            "value": "Enyabwe Auto Cycwe Hue"
         },
         {
             "key": "prop_AutoCycleSpeed",
@@ -1218,15 +1314,15 @@
         },
         {
             "key": "prop_ColorGradingLUT",
-            "value": "Cowor Gwading WUT"
+            "value": "Cowolur Gwading LUT"
         },
         {
             "key": "prop_ColorGradingIntensity",
-            "value": "Gwading Inten-nya-sity"
+            "value": "Gwading Intensity"
         },
         {
             "key": "prop_BlackAndWhite",
-            "value": "Bwack an' White"
+            "value": "Bwack and White"
         },
         {
             "key": "prop_Brightness",
@@ -1234,7 +1330,7 @@
         },
         {
             "key": "prop_ToggleCubemap",
-            "value": "Enyable Cubemap"
+            "value": "Enyabwe Cubemap"
         },
         {
             "key": "prop_CubemapTex",
@@ -1246,27 +1342,27 @@
         },
         {
             "key": "prop_CubemapIntensity",
-            "value": "Cubemap Inten-nya-sity"
+            "value": "Cubemap Intensity"
         },
         {
             "key": "prop_CubemapBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_ToggleParallax",
-            "value": "Enyable Pawawax Mapping"
+            "value": "Enyabwe Pawawwax Mapping"
         },
         {
             "key": "prop_ParallaxMode",
-            "value": "Pawawax Mewd"
+            "value": "Pawawwax Mode"
         },
         {
             "key": "prop_ParallaxMap",
-            "value": "Height Map (W)"
+            "value": "Height Mwap (R)"
         },
         {
             "key": "prop_ParallaxStrength",
-            "value": "Pawawax Stwength"
+            "value": "Pawawwax Stwength"
         },
         {
             "key": "prop_ParallaxSteps",
@@ -1274,11 +1370,11 @@
         },
         {
             "key": "prop_ToggleSSS",
-            "value": "Enyable Subsuwface Scattewing"
+            "value": "Enyabwe Subsuwface Scattewing"
         },
         {
             "key": "prop_SSSColor",
-            "value": "SSS Cowor"
+            "value": "SSS Cowolur"
         },
         {
             "key": "prop_SSSStrength",
@@ -1294,7 +1390,7 @@
         },
         {
             "key": "prop_SSSThicknessMap",
-            "value": "SSS Thicknyess Map (W)"
+            "value": "SSS Thicknyess Mwap (R)"
         },
         {
             "key": "prop_SSSThickness",
@@ -1302,27 +1398,27 @@
         },
         {
             "key": "prop_ToggleShadowMap",
-            "value": "Enyable Shadow Map"
+            "value": "Enyabwe Shadow Mwap"
         },
         {
             "key": "prop_ShadowMap",
-            "value": "Shadow Map (W=Mask)"
+            "value": "Shadow Mwap (R=Mwask)"
         },
         {
             "key": "prop_ShadowMapIntensity",
-            "value": "Inten-nya-sity"
+            "value": "Intensity"
         },
         {
             "key": "prop_ToggleDetail",
-            "value": "Enyable Detaiw Maps"
+            "value": "Enyabwe Detaiw Mwaps"
         },
         {
             "key": "prop_DetailAlbedoMap",
-            "value": "Detaiw Albedo (A=Stwength)"
+            "value": "Detaiw Awbedo (A=Stwength)"
         },
         {
             "key": "prop_DetailNormalMap",
-            "value": "Detaiw Nyowmal Map"
+            "value": "Detaiw Nyowmaw Mwap"
         },
         {
             "key": "prop_DetailTiling",
@@ -1330,11 +1426,11 @@
         },
         {
             "key": "prop_DetailNormalStrength",
-            "value": "Detaiw Nyowmal Stwength"
+            "value": "Detaiw Nyowmaw Stwength"
         },
         {
             "key": "prop_ToggleDissolve",
-            "value": "Enyable Dissowve"
+            "value": "Enyabwe Dissowve"
         },
         {
             "key": "prop_DissolveProgress",
@@ -1346,15 +1442,15 @@
         },
         {
             "key": "prop_DissolveEdgeColor",
-            "value": "Edge Cowor"
+            "value": "Edge Cowolur"
         },
         {
             "key": "prop_DissolveEdgeWidth",
-            "value": "Edge Width"
+            "value": "Edge Wwidth"
         },
         {
             "key": "prop_DissolveEdgeMode",
-            "value": "Edge Mewd"
+            "value": "Edge Mode"
         },
         {
             "key": "prop_DissolveEdgeSharpness",
@@ -1362,11 +1458,11 @@
         },
         {
             "key": "prop_DissolveNoiseTex",
-            "value": "Nyoise Textyure (W)"
+            "value": "Nyoise Textuwe (R)"
         },
         {
             "key": "prop_DissolveNoiseScale",
-            "value": "Nyoise Scayle"
+            "value": "Nyoise Scawe"
         },
         {
             "key": "prop_DissolveDirection",
@@ -1386,23 +1482,23 @@
         },
         {
             "key": "prop_TogglePathing",
-            "value": "Enyable Pathing"
+            "value": "Enyabwe Pathing"
         },
         {
             "key": "prop_PathingMappingMode",
-            "value": "Mapping Mewd"
+            "value": "Mapping Mode"
         },
         {
             "key": "prop_PathingMap",
-            "value": "Path Map (W)"
+            "value": "Path Mwap (R)"
         },
         {
             "key": "prop_PathingScale",
-            "value": "Path Scayle"
+            "value": "Path Scawe"
         },
         {
             "key": "prop_PathingBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_PathingStart",
@@ -1414,23 +1510,23 @@
         },
         {
             "key": "prop_PathingColor",
-            "value": "Path Cowor"
+            "value": "Path Cowolur"
         },
         {
             "key": "prop_PathingColorMode",
-            "value": "Path Cowor Mewd"
+            "value": "Path Cowolur Mode"
         },
         {
             "key": "prop_PathingTexture",
-            "value": "Path Textyure"
+            "value": "Path Textuwe"
         },
         {
             "key": "prop_PathingColor2",
-            "value": "Path Cowor 2"
+            "value": "Path Cowolur 2"
         },
         {
             "key": "prop_PathingEmission",
-            "value": "Emisshion Stwength"
+            "value": "Emission Stwength"
         },
         {
             "key": "prop_PathingType",
@@ -1442,7 +1538,7 @@
         },
         {
             "key": "prop_PathingWidth",
-            "value": "Path Width"
+            "value": "Path Wwidth"
         },
         {
             "key": "prop_PathingSoftness",
@@ -1454,15 +1550,15 @@
         },
         {
             "key": "prop_ToggleDepthRim",
-            "value": "Enyable Depth Wim Wighting"
+            "value": "Enyabwe Depth Wim Wighting"
         },
         {
             "key": "prop_DepthRimColor",
-            "value": "Wim Cowor"
+            "value": "Wim Cowolur"
         },
         {
             "key": "prop_DepthRimWidth",
-            "value": "Width"
+            "value": "Wwidth"
         },
         {
             "key": "prop_DepthRimThreshold",
@@ -1474,19 +1570,19 @@
         },
         {
             "key": "prop_DepthRimBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_ToggleAudioLink",
-            "value": "Enyable AudioWink"
+            "value": "Enyabwe AudioWink"
         },
         {
             "key": "prop_AudioLinkFallback",
-            "value": "Fawwback Wevel"
+            "value": "Fawwback Wevew"
         },
         {
             "key": "prop_AudioLinkEmissionBand",
-            "value": "Emisshion Band"
+            "value": "Emission Band"
         },
         {
             "key": "prop_AudioLinkEmissionStrength",
@@ -1522,7 +1618,7 @@
         },
         {
             "key": "prop_AudioLinkDecalHueBand",
-            "value": "Decawl Hue Band"
+            "value": "Decaw Hue Band"
         },
         {
             "key": "prop_AudioLinkDecalHueStrength",
@@ -1534,7 +1630,7 @@
         },
         {
             "key": "prop_AudioLinkDecalEmissionBand",
-            "value": "Decawl Emisshion Band"
+            "value": "Decaw Emission Band"
         },
         {
             "key": "prop_AudioLinkDecalEmissionStrength",
@@ -1546,7 +1642,7 @@
         },
         {
             "key": "prop_AudioLinkDecalOpacityBand",
-            "value": "Decawl Opacity Band"
+            "value": "Decaw Opacity Band"
         },
         {
             "key": "prop_AudioLinkDecalOpacityStrength",
@@ -1606,7 +1702,7 @@
         },
         {
             "key": "prop_AudioLinkGlitterBand",
-            "value": "Gwittew Band"
+            "value": "Gwilttew Band"
         },
         {
             "key": "prop_AudioLinkGlitterStrength",
@@ -1630,19 +1726,19 @@
         },
         {
             "key": "prop_ToggleGlitter",
-            "value": "Enyable Gwittew"
+            "value": "Enyabwe Gwilttew"
         },
         {
             "key": "prop_GlitterMode",
-            "value": "Mewd"
+            "value": "Mode"
         },
         {
             "key": "prop_GlitterNoiseTex",
-            "value": "Nyoise Textyure (W)"
+            "value": "Nyoise Textuwe (R)"
         },
         {
             "key": "prop_GlitterMask",
-            "value": "Mask (W)"
+            "value": "Mwask (R)"
         },
         {
             "key": "prop_GlitterTint",
@@ -1658,7 +1754,7 @@
         },
         {
             "key": "prop_GlitterSize",
-            "value": "Sizey"
+            "value": "Size"
         },
         {
             "key": "prop_GlitterFlickerSpeed",
@@ -1674,7 +1770,7 @@
         },
         {
             "key": "prop_ToggleGlitterRainbow",
-            "value": "Enyable Wainbow"
+            "value": "Enyabwe Wainbow"
         },
         {
             "key": "prop_GlitterRainbowSpeed",
@@ -1682,7 +1778,7 @@
         },
         {
             "key": "prop_ToggleDistanceFade",
-            "value": "Enyable Distance Fading"
+            "value": "Enyabwe Distance Fading"
         },
         {
             "key": "prop_DistanceFadeReference",
@@ -1690,27 +1786,27 @@
         },
         {
             "key": "prop_ToggleNearFade",
-            "value": "Enyable Nyear Fade"
+            "value": "Enyabwe Nyeaw Fade"
         },
         {
             "key": "prop_NearFadeMode",
-            "value": "Nyear Fade Mewd"
+            "value": "Nyeaw Fade Mode"
         },
         {
             "key": "prop_NearFadeDitherScale",
-            "value": "Nyear Fade Ditew Scayle"
+            "value": "Nyeaw Fade Dithew Scawe"
         },
         {
             "key": "prop_NearFadeStart",
-            "value": "Nyear Fade Stawt"
+            "value": "Nyeaw Fade Stawt"
         },
         {
             "key": "prop_NearFadeEnd",
-            "value": "Nyear Fade End"
+            "value": "Nyeaw Fade End"
         },
         {
             "key": "prop_ToggleFarFade",
-            "value": "Enyable Faw Fade"
+            "value": "Enyabwe Faw Fade"
         },
         {
             "key": "prop_FarFadeStart",
@@ -1722,15 +1818,15 @@
         },
         {
             "key": "prop_ToggleIridescence",
-            "value": "Enyable Iwidescence"
+            "value": "Enyabwe Iwidescence"
         },
         {
             "key": "prop_IridescenceMode",
-            "value": "Mewd"
+            "value": "Mode"
         },
         {
             "key": "prop_IridescenceMask",
-            "value": "Mask (W)"
+            "value": "Mwask (R)"
         },
         {
             "key": "prop_IridescenceTint",
@@ -1738,19 +1834,19 @@
         },
         {
             "key": "prop_IridescenceIntensity",
-            "value": "Inten-nya-sity"
+            "value": "Intensity"
         },
         {
             "key": "prop_IridescenceBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_IridescenceParallax",
-            "value": "View Pawawax"
+            "value": "View Pawawwax"
         },
         {
             "key": "prop_IridescenceRamp",
-            "value": "Cowor Wamp"
+            "value": "Cowolur Wamp"
         },
         {
             "key": "prop_IridescencePower",
@@ -1762,23 +1858,23 @@
         },
         {
             "key": "prop_ToggleShadowTexture",
-            "value": "Enyable Shadow Textyure"
+            "value": "Enyabwe Shadow Textuwe"
         },
         {
             "key": "prop_ShadowTextureMappingMode",
-            "value": "Shadow Mewd"
+            "value": "Shadow Mode"
         },
         {
             "key": "prop_ShadowTextureIntensity",
-            "value": "Shadow Inten-nya-sity"
+            "value": "Shadow Intensity"
         },
         {
             "key": "prop_ShadowTextureBlendMode",
-            "value": "Shadow Bwend Mewd"
+            "value": "Shadow Bwend Mode"
         },
         {
             "key": "prop_ShadowTex",
-            "value": "Shadow Textyure / Pattewn"
+            "value": "Shadow Textuwe / Pattewn"
         },
         {
             "key": "prop_ShadowPatternColor",
@@ -1786,11 +1882,11 @@
         },
         {
             "key": "prop_ShadowPatternScale",
-            "value": "Pattewn Scayle / Tiwing"
+            "value": "Pattewn Scawe / Tiwing"
         },
         {
             "key": "prop_ShadowPatternTriplanarSharpness",
-            "value": "Twipwanar Bwend Shawpnyess"
+            "value": "Twipwanaw Bwend Shawpnyess"
         },
         {
             "key": "prop_ShadowPatternTransparency",
@@ -1798,7 +1894,7 @@
         },
         {
             "key": "prop_ToggleFlatModel",
-            "value": "Enyable Fwat Modyel"
+            "value": "Enyabwe Fwat Modew"
         },
         {
             "key": "prop_FlatModeAutoflip",
@@ -1806,7 +1902,7 @@
         },
         {
             "key": "prop_FlatModel",
-            "value": "Fwat Modyel Stwength"
+            "value": "Fwat Modew Stwength"
         },
         {
             "key": "prop_FlatModelDepthCorrection",
@@ -1822,67 +1918,67 @@
         },
         {
             "key": "prop_ToggleWorldEffect",
-            "value": "Enyable Wowld Eeffect"
+            "value": "Enyabwe Wowwd Effect"
         },
         {
             "key": "prop_WorldEffectBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_WorldEffectTex",
-            "value": "Eeffect Textyure (A=Mask)"
+            "value": "Effect Textuwe (A=Mwask)"
         },
         {
             "key": "prop_WorldEffectMask",
-            "value": "Eeffect Mask"
+            "value": "Effect Mwask"
         },
         {
             "key": "prop_WorldEffectColor",
-            "value": "Eeffect Cowor"
+            "value": "Effect Cowolur"
         },
         {
             "key": "prop_WorldEffectDirection",
-            "value": "Eeffect Diwection (XYZ)"
+            "value": "Effect Diwection (XYZ)"
         },
         {
             "key": "prop_WorldEffectScale",
-            "value": "Eeffect Scayle"
+            "value": "Effect Scawe"
         },
         {
             "key": "prop_WorldEffectBlendSharpness",
-            "value": "Diwectionyaw Bwend Shawpnyess"
+            "value": "Diwectionaw Bwend Shawpnyess"
         },
         {
             "key": "prop_WorldEffectIntensity",
-            "value": "Eeffect Inten-nya-sity"
+            "value": "Effect Intensity"
         },
         {
             "key": "prop_WorldEffectPosition",
-            "value": "Wowld Position (XYZ)"
+            "value": "Wowwd Position (XYZ)"
         },
         {
             "key": "prop_WorldEffectRotation",
-            "value": "Wowld Wotation (XYZ)"
+            "value": "Wowwd Wotation (XYZ)"
         },
         {
             "key": "prop_ToggleMirrorDetection",
-            "value": "Enyable VRChat Miwwow Detection"
+            "value": "Enyabwe VWChat Miwwow Detection"
         },
         {
             "key": "prop_MirrorDetectionMode",
-            "value": "Miwwow Mewd"
+            "value": "Miwwow Mode"
         },
         {
             "key": "prop_MirrorDetectionTexture",
-            "value": "Miwwow Detection Textyure"
+            "value": "Miwwow Detection Textuwe"
         },
         {
             "key": "prop_ToggleTouchReactive",
-            "value": "Enyable Touch Weactive"
+            "value": "Enyabwe Touch Weactive"
         },
         {
             "key": "prop_TouchColor",
-            "value": "Touch Cowor"
+            "value": "Touch Cowolur"
         },
         {
             "key": "prop_TouchRadius",
@@ -1894,7 +1990,7 @@
         },
         {
             "key": "prop_TouchMode",
-            "value": "Touch Mewd"
+            "value": "Touch Mode"
         },
         {
             "key": "prop_TouchRainbowSpeed",
@@ -1906,11 +2002,11 @@
         },
         {
             "key": "prop_ToggleRefraction",
-            "value": "Enyable Wefwaction Eeffect"
+            "value": "Enyabwe Wefwaction Effect"
         },
         {
             "key": "prop_RefractionMask",
-            "value": "Mask (W=Stwength)"
+            "value": "Mwask (R=Stwength)"
         },
         {
             "key": "prop_RefractionTint",
@@ -1922,7 +2018,7 @@
         },
         {
             "key": "prop_RefractionFresnel",
-            "value": "Fwesnyel Powew"
+            "value": "Fwesnel Powew"
         },
         {
             "key": "prop_RefractionOpacity",
@@ -1934,7 +2030,7 @@
         },
         {
             "key": "prop_RefractionGrabpassTint",
-            "value": "Gwabbpass Tint"
+            "value": "Gwabpass Tint"
         },
         {
             "key": "prop_RefractionZoomToggle",
@@ -1942,11 +2038,11 @@
         },
         {
             "key": "prop_RefractionZoom",
-            "value": "Zoom Amownt"
+            "value": "Zoom Amount"
         },
         {
             "key": "prop_RefractionMode",
-            "value": "Wefwaction Mewd"
+            "value": "Wefwaction Mode"
         },
         {
             "key": "prop_RefractionMixStrength",
@@ -1958,11 +2054,11 @@
         },
         {
             "key": "prop_CausticsTex",
-            "value": "Intewnyal Caustics Textyure"
+            "value": "Intewnaw Caustics Textuwe"
         },
         {
             "key": "prop_CausticsColor",
-            "value": "Caustics Cowor"
+            "value": "Caustics Cowolur"
         },
         {
             "key": "prop_CausticsTiling",
@@ -1974,11 +2070,11 @@
         },
         {
             "key": "prop_CausticsIntensity",
-            "value": "Caustics Inten-nya-sity"
+            "value": "Caustics Intensity"
         },
         {
             "key": "prop_DistortionNoiseTex",
-            "value": "Distowtion Nyoise (WG)"
+            "value": "Distowtion Nyoise (RG)"
         },
         {
             "key": "prop_DistortionNoiseTiling",
@@ -1990,7 +2086,7 @@
         },
         {
             "key": "prop_RefractionDistortionMode",
-            "value": "Bwuw Mewd"
+            "value": "Bwuw Mode"
         },
         {
             "key": "prop_RefractionCAStrength",
@@ -2002,7 +2098,7 @@
         },
         {
             "key": "prop_RefractionCAUseFresnel",
-            "value": "Fwesnyel Chwomatic Abewwation"
+            "value": "Fwesnel Chwomatic Abewwation"
         },
         {
             "key": "prop_RefractionCAEdgeFade",
@@ -2010,23 +2106,23 @@
         },
         {
             "key": "prop_ToggleDither",
-            "value": "Enyable Ditewing"
+            "value": "Enyabwe Dithewwing"
         },
         {
             "key": "prop_DitherAmount",
-            "value": "Ditew Amownt"
+            "value": "Dithew Amount"
         },
         {
             "key": "prop_DitherSpace",
-            "value": "Ditew Space"
+            "value": "Dithew Space"
         },
         {
             "key": "prop_DitherScale",
-            "value": "Ditew Scayle"
+            "value": "Dithew Scawe"
         },
         {
             "key": "prop_TogglePS1",
-            "value": "Enyable Wow Pwecision (PS1)"
+            "value": "Enyabwe Wow Pwecision (PS1)"
         },
         {
             "key": "prop_PS1Rounding",
@@ -2038,23 +2134,23 @@
         },
         {
             "key": "prop_PS1Affine",
-            "value": "Enyable Affinye Textyure Mapping"
+            "value": "Enyabwe Affine Textuwe Mapping"
         },
         {
             "key": "prop_PS1Compression",
-            "value": "Enyable Cowor Compwession"
+            "value": "Enyabwe Cowolur Compwession"
         },
         {
             "key": "prop_PS1CompressionPrecision",
-            "value": "Cowor Compwession Pwecision"
+            "value": "Cowolur Compwession Pwecision"
         },
         {
             "key": "prop_UseTextureStitching",
-            "value": "Enyable Textyure Stitching"
+            "value": "Enyabwe Textuwe Stitching"
         },
         {
             "key": "prop_StitchTex",
-            "value": "Stitch Textyure"
+            "value": "Stitch Textuwe"
         },
         {
             "key": "prop_StitchAxis",
@@ -2066,19 +2162,19 @@
         },
         {
             "key": "prop_StitchTex_UV",
-            "value": "Stitch Textyure UV"
+            "value": "Stitch Textuwe UV"
         },
         {
             "key": "prop_ToggleVertexDistortion",
-            "value": "Enyable Vewtex Distowtion"
+            "value": "Enyabwe Vewtex Distowtion"
         },
         {
             "key": "prop_VertexDistortionMode",
-            "value": "Distowtion Mewd"
+            "value": "Distowtion Mode"
         },
         {
             "key": "prop_VertexDistortionColorMask",
-            "value": "Cowor Channyel Mask"
+            "value": "Cowolur Channew Mwask"
         },
         {
             "key": "prop_VertexDistortionStrength",
@@ -2102,7 +2198,7 @@
         },
         {
             "key": "prop_WindScale",
-            "value": "Wind Nyoise Scayle"
+            "value": "Wind Nyoise Scawe"
         },
         {
             "key": "prop_WindDirection",
@@ -2110,7 +2206,7 @@
         },
         {
             "key": "prop_WindNoiseTex",
-            "value": "Wind Nyoise Textyure (W)"
+            "value": "Wind Nyoise Textuwe (R)"
         },
         {
             "key": "prop_BreathingStrength",
@@ -2122,11 +2218,11 @@
         },
         {
             "key": "prop_ToggleSSR",
-            "value": "Enyable Scween Space Wefwections"
+            "value": "Enyabwe Scween Space Wefwections"
         },
         {
             "key": "prop_SSRMask",
-            "value": "Mask (W)"
+            "value": "Mwask (R)"
         },
         {
             "key": "prop_SSRTint",
@@ -2134,31 +2230,31 @@
         },
         {
             "key": "prop_SSRIntensity",
-            "value": "Inten-nya-sity"
+            "value": "Intensity"
         },
         {
             "key": "prop_SSRBlendMode",
-            "value": "Bwend Mewd"
+            "value": "Bwend Mode"
         },
         {
             "key": "prop_SSRFresnelPower",
-            "value": "Fwesnyel Powew"
+            "value": "Fwesnel Powew"
         },
         {
             "key": "prop_SSRFresnelScale",
-            "value": "Fwesnyel Scayle"
+            "value": "Fwesnel Scawe"
         },
         {
             "key": "prop_SSRFresnelBias",
-            "value": "Fwesnyel Bias"
+            "value": "Fwesnel Bias"
         },
         {
             "key": "prop_SSRParallax",
-            "value": "Pawawax Stwength"
+            "value": "Pawawwax Stwength"
         },
         {
             "key": "prop_SSRDistortionMap",
-            "value": "Distowtion Map (WG)"
+            "value": "Distowtion Mwap (RG)"
         },
         {
             "key": "prop_SSRDistortionStrength",
@@ -2166,7 +2262,7 @@
         },
         {
             "key": "prop_SSRWorldDistortion",
-            "value": "Wowld Distowtion Stwength"
+            "value": "Wowwd Distowtion Stwength"
         },
         {
             "key": "prop_SSRBlur",
@@ -2182,7 +2278,7 @@
         },
         {
             "key": "prop_SSRStepSize",
-            "value": "Step Sizey"
+            "value": "Step Size"
         },
         {
             "key": "prop_SSRCoverage",
@@ -2194,15 +2290,15 @@
         },
         {
             "key": "prop_SSRCamFade",
-            "value": "Enyable Camewa Distance Fade"
+            "value": "Enyabwe Camewa Distance Fade"
         },
         {
             "key": "prop_SSRCamFadeStart",
-            "value": "SSW Camewa Fade Stawt"
+            "value": "SSR Camewa Fade Stawt"
         },
         {
             "key": "prop_SSRCamFadeEnd",
-            "value": "SSW Camewa Fade End"
+            "value": "SSR Camewa Fade End"
         },
         {
             "key": "prop_SSRFlipUV",
@@ -2210,7 +2306,7 @@
         },
         {
             "key": "prop_SSRAdaptiveStep",
-            "value": "Enyable Adaptive Step Sizey"
+            "value": "Enyabwe Adaptive Step Size"
         },
         {
             "key": "prop_SSRThickness",
@@ -2218,23 +2314,23 @@
         },
         {
             "key": "prop_SSROutOfViewMode",
-            "value": "Out Of View Mewd"
+            "value": "Out Of View Mode"
         },
         {
             "key": "prop_OutlineColor",
-            "value": "Outwine Cowor"
+            "value": "Outwine Cowolur"
         },
         {
             "key": "prop_OutlineWidth",
-            "value": "Outwine Width"
+            "value": "Outwine Wwidth"
         },
         {
             "key": "prop_OutlineVertexColorMask",
-            "value": "Use Vewtex Cowor (W) Mask"
+            "value": "Use Vewtex Cowolur (R) Mwask"
         },
         {
             "key": "prop_OutlineDistanceFade",
-            "value": "Enyable Distance Fade"
+            "value": "Enyabwe Distance Fade"
         },
         {
             "key": "prop_OutlineFadeStart",
@@ -2246,7 +2342,7 @@
         },
         {
             "key": "prop_OutlineHueShift",
-            "value": "Enyable Hue Shift"
+            "value": "Enyabwe Hue Shift"
         },
         {
             "key": "prop_OutlineHueShiftSpeed",
@@ -2258,7 +2354,7 @@
         },
         {
             "key": "prop_IndirectFallbackMode",
-            "value": "Indiwect Fawwback Mewd"
+            "value": "Indiwect Fawwback Mode"
         },
         {
             "key": "prop_IndirectOverride",
@@ -2270,11 +2366,11 @@
         },
         {
             "key": "prop_MainTex_UV",
-            "value": "Main textyure UV set"
+            "value": "Main textuwe UV set"
         },
         {
             "key": "prop_BumpMap_UV",
-            "value": "Bump map UV set"
+            "value": "Bump mwap UV set"
         },
         {
             "key": "prop_MSSO_UV",
@@ -2282,63 +2378,63 @@
         },
         {
             "key": "prop_SpecularTintTexture_UV",
-            "value": "Specuwur Tint UV Set"
+            "value": "Specuwaw Tint UV Set"
         },
         {
             "key": "prop_TangentMap_UV",
-            "value": "Tanyent Map UV"
+            "value": "Tangent Mwap UV"
         },
         {
             "key": "prop_EmissionMap_UV",
-            "value": "Emisshion Map UV Set"
+            "value": "Emission Mwap UV Set"
         },
         {
             "key": "prop_ClearcoatMap_UV",
-            "value": "Cwear Coat Map UV Set"
+            "value": "Cweaw Coat Mwap UV Set"
         },
         {
             "key": "prop_MatcapMask_UV",
-            "value": "Matcap Mask UV Set"
+            "value": "Matcap Mwask UV Set"
         },
         {
             "key": "prop_ParallaxMap_UV",
-            "value": "Height Map UV Set"
+            "value": "Height Mwap UV Set"
         },
         {
             "key": "prop_ThicknessMap_UV",
-            "value": "Thicknyess Map UV Set"
+            "value": "Thicknyess Mwap UV Set"
         },
         {
             "key": "prop_DetailMap_UV",
-            "value": "Detaiw Map UV Set"
+            "value": "Detaiw Mwap UV Set"
         },
         {
             "key": "prop_Decal1_UV",
-            "value": "Decawl 1 UV Set"
+            "value": "Stickew 1 UV Set"
         },
         {
             "key": "prop_Decal2_UV",
-            "value": "Decawl 2 UV Set"
+            "value": "Stickew 2 UV Set"
         },
         {
             "key": "prop_Glitter_UV",
-            "value": "Gwittew UV Set"
+            "value": "Gwilttew UV Set"
         },
         {
             "key": "prop_IridescenceMask_UV",
-            "value": "Iwidescence Mask UV Set"
+            "value": "Iwidescence Mwask UV Set"
         },
         {
             "key": "prop_GlitterMask_UV",
-            "value": "Gwittew Mask UV Set"
+            "value": "Gwilttew Mwask UV Set"
         },
         {
             "key": "prop_HairFlowMap_UV",
-            "value": "Haiw Fwow Map UV Set"
+            "value": "Haiw Fwow Mwap UV Set"
         },
         {
             "key": "prop_ShadowTex_UV",
-            "value": "Shadow Textyure UV Set"
+            "value": "Shadow Textuwe UV Set"
         },
         {
             "key": "prop_Flowmap_UV",
@@ -2346,23 +2442,23 @@
         },
         {
             "key": "prop_MirrorDetectionTexture_UV",
-            "value": "Miwwow Detection Textyure UV Set"
+            "value": "Miwwow Detection Textuwe UV Set"
         },
         {
             "key": "prop_RefractionMask_UV",
-            "value": "Wefwaction Mask UV Set"
+            "value": "Wefwaction Mwask UV Set"
         },
         {
             "key": "prop_PathingTexture_UV",
-            "value": "Pathing Map UV Set"
+            "value": "Pathing Mwap UV Set"
         },
         {
             "key": "prop_ShadowMap_UV",
-            "value": "Shadow Map UV Set"
+            "value": "Shadow Mwap UV Set"
         },
         {
             "key": "prop_Dither_UV",
-            "value": "Ditew UV Set"
+            "value": "Dithew UV Set"
         },
         {
             "key": "prop_OverrideRenderQueue",
@@ -2398,27 +2494,111 @@
         },
         {
             "key": "prop_OverrideZWrite",
-            "value": "Use Custom ZWrite"
+            "value": "Use Custom ZWwite"
         },
         {
             "key": "specular_standard_stylised_info",
-            "value": "Standawd Specuwur has nyo stywised options - twy chanying da specuwur mewd tu see settingz hewe, nya!"
+            "value": "Standard Specuwaw has nyo stywised options - twy changing the specuwaw mode to see settings hewe! :3"
         },
         {
             "key": "depth_popup_info",
-            "value": "This affect nyeeds tu wead Depth fwom da scene! Ensuwe dat ur wowld eithew has a weal-time wight enyabled ow dat da Depth Wwitew pwefab is in da scene (pwovided with Backwace), mrow~"
+            "value": "This affect nyeeds to wead Depth fwom the scene! Ensuwe that youw wowwd eithew has a weaw-time wight enyabwed ow that the Depth Wwitew pwefab is in the scene (pwovided with Backwace)."
         },
         {
-            "key": "footer_madewith",
-            "value": "Made wit wub and mai open-source pwoject"
+            "key": "prop_OutlineSpace",
+            "value": "Outwine Space"
         },
         {
-            "key": "footer_backlace",
-            "value": "Backlace Anime Shader."
+            "key": "prop_OutlineMode",
+            "value": "Outwine Mode"
         },
         {
-            "key": "footer_heart",
-            "value": "❤"
+            "key": "prop_OutlineTexMap",
+            "value": "Textuwe Mode"
+        },
+        {
+            "key": "prop_OutlineTex",
+            "value": "Outwine Textuwe"
+        },
+        {
+            "key": "prop_OutlineTexTiling",
+            "value": "Textuwe Tiwing"
+        },
+        {
+            "key": "prop_OutlineTexScroll",
+            "value": "Textuwe Scwoww"
+        },
+        {
+            "key": "prop_ToggleSDFShadow",
+            "value": "Enyabwe SDF Shadow"
+        },
+        {
+            "key": "prop_SDFShadowTexture",
+            "value": "SDF Shadow Textuwe"
+        },
+        {
+            "key": "prop_SDFShadowThreshold",
+            "value": "SDF Shadow Thweshowd"
+        },
+        {
+            "key": "prop_SDFShadowSoftness",
+            "value": "SDF Shadow Softnyess"
+        },
+        {
+            "key": "prop_InteriorCubemap",
+            "value": "Intewiow Cubemap"
+        },
+        {
+            "key": "prop_InteriorColor",
+            "value": "Intewiow Cowolur"
+        },
+        {
+            "key": "prop_InteriorTiling",
+            "value": "Intewiow Tiwing"
+        },
+        {
+            "key": "prop_ParallaxLayerMask",
+            "value": "Pawawwax Wayew Mwask"
+        },
+        {
+            "key": "prop_ParallaxLayer1",
+            "value": "Pawawwax Wayew 1"
+        },
+        {
+            "key": "prop_ParallaxLayer2",
+            "value": "Pawawwax Wayew 2"
+        },
+        {
+            "key": "prop_ParallaxLayer3",
+            "value": "Pawawwax Wayew 3"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth1",
+            "value": "Pawawwax Wayew Depth 1"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth2",
+            "value": "Pawawwax Wayew Depth 2"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth3",
+            "value": "Pawawwax Wayew Depth 3"
+        },
+        {
+            "key": "prop_ParallaxBlend",
+            "value": "Pawawwax Bwend"
+        },
+        {
+            "key": "prop_ParallaxStack",
+            "value": "Stacking Owdew"
+        },
+        {
+            "key": "prop_ParallaxBlendWeight",
+            "value": "Bwend Weight"
+        },
+        {
+            "key": "prop_ParallaxTile",
+            "value": "Tiwe Wayews"
         }
     ]
 }

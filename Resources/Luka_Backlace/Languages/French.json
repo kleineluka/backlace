@@ -10,7 +10,7 @@
         },
         {
             "key": "config_tab_theme",
-            "value": "Thème de l'onglet"
+            "value": "Thème des onglets"
         },
         {
             "key": "config_text_theme",
@@ -18,7 +18,7 @@
         },
         {
             "key": "config_ui_size",
-            "value": "Taille de l'interface utilisateur"
+            "value": "Taille de l'interface"
         },
         {
             "key": "config_updates",
@@ -34,7 +34,7 @@
         },
         {
             "key": "config_toggle_announcements",
-            "value": "Afficher les actualités"
+            "value": "Afficher les nouvelles"
         },
         {
             "key": "config_toggle_enabled",
@@ -46,11 +46,11 @@
         },
         {
             "key": "config_save",
-            "value": "Enregistrer la configuration"
+            "value": "Enregistrer la config"
         },
         {
             "key": "config_reset",
-            "value": "Réinitialiser la configuration"
+            "value": "Réinitialiser la config"
         },
         {
             "key": "config_save_success",
@@ -58,7 +58,7 @@
         },
         {
             "key": "config_save_error",
-            "value": "Un problème est survenu lors de la sauvegarde de votre configuration, essayez de réimporter le package Unity ! >.<"
+            "value": "Une erreur s'est produite lors de l'enregistrement de votre configuration, essayez de réimporter le package Unity ! >.<"
         },
         {
             "key": "config_reset_success",
@@ -66,11 +66,15 @@
         },
         {
             "key": "config_reset_error",
-            "value": "Un problème est survenu lors de la réinitialisation de votre configuration, essayez de réimporter le package Unity ! >.<"
+            "value": "Une erreur s'est produite lors de la réinitialisation de votre configuration, essayez de réimporter le package Unity ! >.<"
         },
         {
             "key": "dialog_okay",
             "value": "Oki !"
+        },
+        {
+            "key": "dialog_cancel",
+            "value": "Annuler"
         },
         {
             "key": "update_available",
@@ -78,7 +82,7 @@
         },
         {
             "key": "update_description",
-            "value": "Téléchargez la dernière version pour de nouvelles fonctionnalités et des corrections de bugs ! <3"
+            "value": "Téléchargez la dernière version pour de nouvelles fonctionnalités et corrections de bugs ! <3"
         },
         {
             "key": "tab_config",
@@ -87,6 +91,10 @@
         {
             "key": "open_docs",
             "value": "Besoin d'aide ? Cliquez ici pour ouvrir la documentation !"
+        },
+        {
+            "key": "premonition_compact_notice",
+            "value": "Ceci est un shader compact et n'aura pas les fonctionnalités qui n'étaient pas activées sur le shader original ! Veuillez consulter le menu Shader Compact pour le restaurer en version complète si vous devez effectuer des modifications."
         },
         {
             "key": "tab_license",
@@ -102,7 +110,7 @@
         },
         {
             "key": "config_toggle_status_badges",
-            "value": "Afficher les badges de statut"
+            "value": "Afficher les badges d'état"
         },
         {
             "key": "status_badge_enabled",
@@ -122,7 +130,7 @@
         },
         {
             "key": "preset_overwrite_prompt_yes",
-            "value": "Écrasez-le !"
+            "value": "Écraser !"
         },
         {
             "key": "preset_overwrite_prompt_no",
@@ -150,11 +158,11 @@
         },
         {
             "key": "preset_save_error_noname",
-            "value": "Veuillez définir un nom pour votre préréglage avant de l'enregistrer ! >.<"
+            "value": "Veuillez donner un nom à votre préréglage avant de l'enregistrer ! >.<"
         },
         {
             "key": "preset_delete_prompt",
-            "value": "Voulez-vous supprimer ce préréglage ? Cette action est irréversible..."
+            "value": "Voulez-vous supprimer ce préréglage ? Cela ne peut pas être annulé..."
         },
         {
             "key": "preset_delete_prompt_yes",
@@ -162,7 +170,7 @@
         },
         {
             "key": "preset_delete_prompt_no",
-            "value": "Conserver le préréglage"
+            "value": "Garder le préréglage"
         },
         {
             "key": "tab_presets",
@@ -174,7 +182,7 @@
         },
         {
             "key": "preset_no_custom_found",
-            "value": "Aucun préréglage personnalisé n'a été trouvé ! Pourquoi ne pas en créer ? :o"
+            "value": "Aucun préréglage personnalisé trouvé ! Pourquoi ne pas en créer ? :o"
         },
         {
             "key": "load",
@@ -182,27 +190,27 @@
         },
         {
             "key": "tab_premonition",
-            "value": "Matériau compact"
+            "value": "Matériau Compact"
         },
         {
             "key": "premonition_notice",
-            "value": "Ici, vous pouvez générer une version compacte de votre matériau actuel. Cela génère un nouveau fichier de shader plus petit, avec un temps de compilation réduit, et qui est essentiellement un instantané de vos paramètres actuels. Ce shader plus petit est redistribuable et ne dépend de rien d'autre - vous pouvez simplement déplacer le fichier .shader comme vous le souhaitez. Il est suggéré de toujours l'utiliser pour vos matériaux finaux afin de réduire le nombre de shaders et d'améliorer les performances ! ^-^ (mais ne vous inquiétez pas, vous pouvez toujours revenir au shader normal si vous avez besoin de faire des modifications)"
+            "value": "Ici, vous pouvez générer une version compacte de votre matériau actuel. Cela génère un nouveau fichier shader plus petit, avec un temps de compilation réduit, et qui est essentiellement un instantané de vos paramètres actuels. Ce shader plus petit est redistribuable et ne dépend de rien d'autre - vous pouvez simplement déplacer le .shader à votre guise. Il est suggéré de toujours utiliser ceci pour vos matériaux finaux afin de réduire le nombre de shaders et d'améliorer les performances ! ^-^ (mais ne vous inquiétez pas, vous pouvez toujours revenir au shader normal si vous devez effectuer des modifications)"
         },
         {
             "key": "premonition_generate_button",
-            "value": "Générer le matériau compact"
+            "value": "Générer un Matériau Compact"
         },
         {
             "key": "premonition_restore_button",
-            "value": "Restaurer le matériau d'origine"
+            "value": "Restaurer le Matériau Original"
         },
         {
             "key": "variant_popup_title",
-            "value": "Variante de shader requise"
+            "value": "Variante de Shader Requise"
         },
         {
             "key": "variant_popup_description",
-            "value": "Cette fonctionnalité nécessite (au minimum) la variante de shader '{0}'.\n\nLes variantes de shader sont créées pour vous assurer de n'inclure que le code des fonctionnalités dont vous avez besoin. Bien que d'autres versions puissent l'avoir (indiqué par des onglets grisés ou non), c'est le niveau de variante le plus bas qui la prend en charge. Veuillez consulter la documentation pour plus d'informations ! ^-^"
+            "value": "Cette fonctionnalité nécessite (au minimum) la variante de shader '{0}'.\n\nLes variantes de shader sont faites pour vous assurer de n'inclure que le code des fonctionnalités dont vous avez besoin. Bien que d'autres versions puissent l'avoir (indiqué par des onglets grisés ou non), c'est le niveau de variante le \"plus bas\" qui le supporte. Veuillez consulter la documentation pour plus d'infos ! ^-^"
         },
         {
             "key": "warning_external_website_title",
@@ -210,7 +218,7 @@
         },
         {
             "key": "warning_external_website_description",
-            "value": "Vous êtes sur le point d'ouvrir un site web externe qui n'est pas détenu ou exploité par moi ! Veuillez procéder avec prudence !! C'est probablement sûr, mais je n'ai aucun contrôle dessus ou s'il changera à l'avenir. >.< Voulez-vous continuer ?"
+            "value": "Vous êtes sur le point d'ouvrir un site web externe qui n'est ni détenu ni exploité par moi ! Veuillez procéder avec prudence !! C'est probablement sûr, mais je n'ai aucun contrôle dessus ni s'il changera à l'avenir. >.< Voulez-vous continuer ?"
         },
         {
             "key": "warning_external_website_okay",
@@ -221,8 +229,96 @@
             "value": "Retourner !"
         },
         {
+            "key": "footer_madewith",
+            "value": "Fait avec amour et mon projet open-source"
+        },
+        {
+            "key": "footer_backlace",
+            "value": "Backlace Anime Shader."
+        },
+        {
+            "key": "footer_heart",
+            "value": "❤"
+        },
+        {
+            "key": "config_toggle_expand_searches",
+            "value": "Étendre les recherches"
+        },
+        {
+            "key": "search_button",
+            "value": "Rechercher"
+        },
+        {
+            "key": "search_clear",
+            "value": "Effacer"
+        },
+        {
+            "key": "config_look_and_feel",
+            "value": "Apparence et convivialité"
+        },
+        {
+            "key": "config_workflow",
+            "value": "Options de flux de travail"
+        },
+        {
+            "key": "config_extra_options",
+            "value": "Options supplémentaires"
+        },
+        {
+            "key": "dependency_detected",
+            "value": "Dépendance trouvée !"
+        },
+        {
+            "key": "dependency_not_detected",
+            "value": "Dépendance non trouvée"
+        },
+        {
+            "key": "dependency_popup_title",
+            "value": "Gestionnaire de dépendances pour '{0}'"
+        },
+        {
+            "key": "dependency_popup_detected",
+            "value": "Dépendance '{0}' détectée {1} !"
+        },
+        {
+            "key": "dependency_popup_not_detected",
+            "value": "Dépendance '{0}' non détectée !"
+        },
+        {
+            "key": "dependency_popup_open_link",
+            "value": "Ouvrir le lien de dépendance"
+        },
+        {
+            "key": "premonition_title",
+            "value": "Génération de Shader Compact"
+        },
+        {
+            "key": "premonition_success",
+            "value": "Le(s) shader(s) compact(s) ont été générés et appliqués avec succès à vos matériaux ! ^^"
+        },
+        {
+            "key": "premonition_error_generic",
+            "value": "Une erreur s'est produite lors de la génération du/des shader(s) compact(s). Veuillez réessayer, et si le problème persiste, consultez la console pour les erreurs ! >.<"
+        },
+        {
+            "key": "premonition_error_noshader",
+            "value": "Une erreur s'est produite en essayant de restaurer ce shader. Êtes-vous sûr qu'il s'agit d'un shader compact ? >.<"
+        },
+        {
+            "key": "premonition_restore_success",
+            "value": "Le shader original a été restauré avec succès pour le(s) matériau(x) ! ^^"
+        },
+        {
+            "key": "premonition_compact_all_button",
+            "value": "Compacter tous les matériaux du dossier"
+        },
+        {
+            "key": "premonition_compact_all_result",
+            "value": "{0} matériaux compactés.\nÉchec : {1}\nIgnoré : {2}"
+        },
+        {
             "key": "tab_main",
-            "value": "Paramètres principaux"
+            "value": "Paramètres Principaux"
         },
         {
             "key": "sub_tab_rendering",
@@ -230,15 +326,15 @@
         },
         {
             "key": "sub_tab_textures",
-            "value": "Cartes principales"
+            "value": "Cartes Principales"
         },
         {
             "key": "sub_tab_stitching",
-            "value": "Couture de textures"
+            "value": "Couture de Texture"
         },
         {
             "key": "sub_tab_uv_manipulation",
-            "value": "Manipulation des UV"
+            "value": "Manipulation UV"
         },
         {
             "key": "sub_tab_uv_effects",
@@ -246,23 +342,23 @@
         },
         {
             "key": "sub_tab_vertex_manipulation",
-            "value": "Manipulation des sommets"
+            "value": "Manipulation de Vertex"
         },
         {
             "key": "sub_tab_decal_one",
-            "value": "Décalcomanie 1"
+            "value": "Autocollant 1"
         },
         {
             "key": "sub_tab_decal_two",
-            "value": "Décalcomanie 2"
+            "value": "Autocollant 2"
         },
         {
             "key": "sub_tab_post_processing",
-            "value": "Post-traitement des textures"
+            "value": "Post-traitement de Texture"
         },
         {
             "key": "sub_tab_uv_sets",
-            "value": "Ensembles d'UV"
+            "value": "Sets UV"
         },
         {
             "key": "tab_lighting",
@@ -270,11 +366,11 @@
         },
         {
             "key": "sub_tab_lighting_model",
-            "value": "Modèle d'éclairage"
+            "value": "Modèle d'Éclairage"
         },
         {
             "key": "sub_tab_anime",
-            "value": "Ombrage de style anime"
+            "value": "Ombrage Anime"
         },
         {
             "key": "tab_specular",
@@ -286,7 +382,7 @@
         },
         {
             "key": "sub_tab_stylised_specular",
-            "value": "Spéculaire stylisé"
+            "value": "Spéculaire Stylisé"
         },
         {
             "key": "sub_tab_emission",
@@ -294,7 +390,7 @@
         },
         {
             "key": "sub_tab_light_limiting",
-            "value": "Limiter les niveaux de lumière"
+            "value": "Limiter les Niveaux de Lumière"
         },
         {
             "key": "tab_shading",
@@ -302,15 +398,15 @@
         },
         {
             "key": "sub_tab_rim_lighting",
-            "value": "Éclairage de contour Fresnel"
+            "value": "Éclairage Rim Fresnel"
         },
         {
             "key": "sub_tab_depth_rim",
-            "value": "Éclairage de contour en profondeur"
+            "value": "Éclairage Rim de Profondeur"
         },
         {
             "key": "sub_tab_clear_coat",
-            "value": "Vernis"
+            "value": "Vernis (Clearcoat)"
         },
         {
             "key": "sub_tab_matcap",
@@ -322,19 +418,19 @@
         },
         {
             "key": "sub_tab_parallax",
-            "value": "Mappage de parallaxe"
+            "value": "Mapping Parallaxe"
         },
         {
             "key": "sub_tab_subsurface",
-            "value": "Dispersion de subsurface"
+            "value": "Dispersion Subsuperficielle (SSS)"
         },
         {
             "key": "sub_tab_detail_map",
-            "value": "Mappage de détails"
+            "value": "Mapping de Détail"
         },
         {
             "key": "sub_tab_shadow_map",
-            "value": "Mappage d'ombres"
+            "value": "Mapping d'Ombre"
         },
         {
             "key": "tab_effects",
@@ -346,7 +442,7 @@
         },
         {
             "key": "sub_tab_pathing",
-            "value": "Traçage"
+            "value": "Cheminement (Pathing)"
         },
         {
             "key": "tab_third_party",
@@ -358,15 +454,15 @@
         },
         {
             "key": "sub_tab_superplug",
-            "value": "Super Plug Shader"
+            "value": "Shader Super Plug"
         },
         {
             "key": "superplug_notice",
-            "value": "Super Plug Shader (par VRCFury) est un système de déformation de maillage gratuit qui peut être utilisé pour déformer les maillages vers une cible, et est un remplacement entièrement rétrocompatible pour DPS (Dynamic Penetration System par Raliv) et TPS (Thry Penetration System dans Poiyomi Pro). En plus d'être gratuit, il prend en charge une grande variété de shaders sans qu'ils aient besoin d'un support codé en dur, y compris Backlace ! Veuillez cliquer sur le lien ci-dessous pour ouvrir la documentation afin de le configurer !"
+            "value": "Super Plug Shader (par VRCFury) est un système de déformation de maillage gratuit qui peut être utilisé pour déformer des maillages vers une cible, et est un remplacement entièrement rétrocompatible pour DPS (Dynamic Penetration System par Raliv) et TPS (Thry Penetration System dans Poiyomi Pro). En plus d'être gratuit, il prend en charge une grande variété de shaders sans qu'ils aient besoin de coder un support en dur, y compris Backlace ! Veuillez cliquer sur le lien ci-dessous pour ouvrir la documentation afin de le configurer !"
         },
         {
             "key": "superplug_button",
-            "value": "Ouvrir le site web de Super Plug Shader"
+            "value": "Ouvrir le site web Super Plug Shader"
         },
         {
             "key": "sub_tab_ltcgi",
@@ -374,11 +470,11 @@
         },
         {
             "key": "ltcgi_notice",
-            "value": "LTCGI (par _pi_) est une solution d'éclairage de zone en temps réel prête à l'emploi pour VRChat. Pour l'activer, assurez-vous d'inclure également le package LTCGI dans votre projet car il nécessite ses propres fonctions de shader pour fonctionner. Une fois activé, votre matériau utilisera automatiquement l'éclairage de LTCGI."
+            "value": "LTCGI (par _pi_) est une solution d'éclairage de zone en temps réel plug-and-play pour VRChat. Pour l'activer, assurez-vous également d'inclure le package LTCGI dans votre projet car il nécessite ses propres fonctions de shader pour fonctionner. Une fois activé, votre matériau utilisera alors automatiquement l'éclairage LTCGI."
         },
         {
             "key": "ltcgi_button",
-            "value": "Ouvrir le site web de LTCGI"
+            "value": "Ouvrir le site web LTCGI"
         },
         {
             "key": "prop_ToggleLTCGI",
@@ -390,7 +486,7 @@
         },
         {
             "key": "sub_tab_distance_fading",
-            "value": "Fondu en distance"
+            "value": "Fondu à distance"
         },
         {
             "key": "sub_tab_iridescence",
@@ -398,35 +494,35 @@
         },
         {
             "key": "sub_tab_shadow_textures",
-            "value": "Textures d'ombre"
+            "value": "Textures d'Ombre"
         },
         {
             "key": "sub_tab_flatten_model",
-            "value": "Aplatir le modèle"
+            "value": "Aplatir le Modèle"
         },
         {
             "key": "sub_tab_world_aligned",
-            "value": "Textures alignées sur le monde"
+            "value": "Textures Alignées sur le Monde"
         },
         {
             "key": "sub_tab_vrchat_mirror",
-            "value": "Détection de miroir VRChat"
+            "value": "Détection Miroir VRChat"
         },
         {
             "key": "sub_tab_touch_interactions",
-            "value": "Interactions tactiles"
+            "value": "Interactions Tactiles"
         },
         {
             "key": "sub_tab_vertex_distortion",
-            "value": "Distorsion des sommets"
+            "value": "Distorsion de Vertex"
         },
         {
             "key": "sub_tab_dither",
-            "value": "Tramage"
+            "value": "Tramage (Dithering)"
         },
         {
             "key": "sub_tab_ps1",
-            "value": "Basse précision (PS1)"
+            "value": "Basse Précision (PS1)"
         },
         {
             "key": "sub_tab_refraction",
@@ -434,7 +530,7 @@
         },
         {
             "key": "sub_tab_screenspace_reflection",
-            "value": "Réflexions dans l'espace écran"
+            "value": "Réflexions Screen Space"
         },
         {
             "key": "tab_outline",
@@ -442,11 +538,11 @@
         },
         {
             "key": "prop_SrcBlend",
-            "value": "Mélange source"
+            "value": "Src Blend"
         },
         {
             "key": "prop_DstBlend",
-            "value": "Mélange destination"
+            "value": "Dst Blend"
         },
         {
             "key": "prop_ZWrite",
@@ -454,11 +550,11 @@
         },
         {
             "key": "prop_Cull",
-            "value": "Mode d'abattage"
+            "value": "Mode de Culling"
         },
         {
             "key": "prop_StencilRef",
-            "value": "Référence de stencil"
+            "value": "Référence Stencil"
         },
         {
             "key": "prop_StencilComp",
@@ -466,67 +562,67 @@
         },
         {
             "key": "prop_StencilPass",
-            "value": "Opération de passage"
+            "value": "Opération de Passe"
         },
         {
             "key": "prop_StencilFail",
-            "value": "Opération d'échec"
+            "value": "Opération d'Échec"
         },
         {
             "key": "prop_StencilZFail",
-            "value": "Opération ZFail"
+            "value": "Opération d'Échec Z"
         },
         {
             "key": "prop_OutlineStencilRef",
-            "value": "Référence de stencil de contour"
+            "value": "Référence Stencil Contour"
         },
         {
             "key": "prop_OutlineStencilComp",
-            "value": "Comparaison de contour"
+            "value": "Comparaison Contour"
         },
         {
             "key": "prop_OutlineStencilPass",
-            "value": "Opération de passage de contour"
+            "value": "Opération de Passe Contour"
         },
         {
             "key": "prop_OutlineStencilFail",
-            "value": "Opération d'échec de contour"
+            "value": "Opération d'Échec Contour"
         },
         {
             "key": "prop_OutlineStencilZFail",
-            "value": "Opération ZFail de contour"
+            "value": "Opération d'Échec Z Contour"
         },
         {
             "key": "prop_BlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode de Fusion"
         },
         {
             "key": "prop_VRCFallback",
-            "value": "Fallback VRChat"
+            "value": "Repli VRChat (Fallback)"
         },
         {
             "key": "prop_ToggleFlipNormals",
-            "value": "Inverser les normales des faces arrière"
+            "value": "Inverser les Normales Arrière"
         },
         {
             "key": "prop_MainTex",
-            "value": "Texture principale"
+            "value": "Texture Principale"
         },
         {
             "key": "prop_Color",
-            "value": "Couleur d'albédo"
+            "value": "Couleur Albedo"
         },
         {
             "key": "prop_Cutoff",
-            "value": "Seuil alpha"
+            "value": "Seuil Alpha"
         },
         {
             "key": "prop_BumpMap",
-            "value": "Carte de normales"
+            "value": "Normal Map"
         },
         {
             "key": "prop_BumpScale",
-            "value": "Échelle de la carte de normales"
+            "value": "Échelle Normal Map"
         },
         {
             "key": "prop_Alpha",
@@ -534,7 +630,7 @@
         },
         {
             "key": "prop_DecalStage",
-            "value": "Étape de décalcomanie (partagée)"
+            "value": "Étape Autocollant (Partagé)"
         },
         {
             "key": "prop_UV_Offset_X",
@@ -558,303 +654,303 @@
         },
         {
             "key": "prop_UV_Scroll_X_Speed",
-            "value": "Vitesse de défilement UV X"
+            "value": "Vitesse Défilement UV X"
         },
         {
             "key": "prop_UV_Scroll_Y_Speed",
-            "value": "Vitesse de défilement UV Y"
+            "value": "Vitesse Défilement UV Y"
         },
         {
             "key": "prop_ToggleUVEffects",
-            "value": "Activer les effets UV"
+            "value": "Activer les Effets UV"
         },
         {
             "key": "prop_UVTriplanarMapping",
-            "value": "Activer le mappage triplanaire"
+            "value": "Activer le Mapping Triplanaire"
         },
         {
             "key": "prop_UVTriplanarPosition",
-            "value": "Position dans le monde (XYZ)"
+            "value": "Position Mondiale (XYZ)"
         },
         {
             "key": "prop_UVTriplanarScale",
-            "value": "Échelle du monde"
+            "value": "Échelle Mondiale"
         },
         {
             "key": "prop_UVTriplanarRotation",
-            "value": "Rotation du monde (XYZ)"
+            "value": "Rotation Mondiale (XYZ)"
         },
         {
             "key": "prop_UVTriplanarSharpness",
-            "value": "Netteté du mélange triplanaire"
+            "value": "Netteté du Mélange Triplanaire"
         },
         {
             "key": "prop_UVScreenspaceMapping",
-            "value": "Activer le mappage dans l'espace écran"
+            "value": "Activer le Mapping Screenspace"
         },
         {
             "key": "prop_UVScreenspaceTiling",
-            "value": "Mosaïque dans l'espace écran"
+            "value": "Tiling Screenspace"
         },
         {
             "key": "prop_UVFlipbook",
-            "value": "Activer l'animation flipbook"
+            "value": "Activer l'Animation Flipbook"
         },
         {
             "key": "prop_UVFlipbookRows",
-            "value": "Lignes du flipbook"
+            "value": "Lignes Flipbook"
         },
         {
             "key": "prop_UVFlipbookColumns",
-            "value": "Colonnes du flipbook"
+            "value": "Colonnes Flipbook"
         },
         {
             "key": "prop_UVFlipbookFrames",
-            "value": "Nombre total d'images"
+            "value": "Total Cadres"
         },
         {
             "key": "prop_UVFlipbookFPS",
-            "value": "FPS du flipbook"
+            "value": "FPS Flipbook"
         },
         {
             "key": "prop_UVFlipbookScrub",
-            "value": "Défilement manuel"
+            "value": "Défilement Manuel"
         },
         {
             "key": "prop_UVFlowmap",
-            "value": "Activer la flowmap"
+            "value": "Activer Flowmap"
         },
         {
             "key": "prop_UVFlowmapTex",
-            "value": "Texture de flowmap (RG)"
+            "value": "Texture Flowmap (RG)"
         },
         {
             "key": "prop_UVFlowmapStrength",
-            "value": "Force de la flowmap"
+            "value": "Force Flowmap"
         },
         {
             "key": "prop_UVFlowmapSpeed",
-            "value": "Vitesse de la flowmap"
+            "value": "Vitesse Flowmap"
         },
         {
             "key": "prop_UVFlowmapDistortion",
-            "value": "Distorsion de la flowmap"
+            "value": "Distorsion Flowmap"
         },
         {
             "key": "prop_VertexManipulationPosition",
-            "value": "Position dans le monde (XYZ)"
+            "value": "Position Mondiale (XYZ)"
         },
         {
             "key": "prop_VertexManipulationScale",
-            "value": "Échelle du monde (XYZ)"
+            "value": "Échelle Mondiale (XYZ)"
         },
         {
             "key": "prop_ToggleEmission",
-            "value": "Activer l'émission"
+            "value": "Activer l'Émission"
         },
         {
             "key": "prop_EmissionColor",
-            "value": "Couleur d'émission"
+            "value": "Couleur d'Émission"
         },
         {
             "key": "prop_EmissionMap",
-            "value": "Carte d'émission (masque)"
+            "value": "Carte d'Émission (Masque)"
         },
         {
             "key": "prop_UseAlbedoAsEmission",
-            "value": "Utiliser l'albédo pour l'émission"
+            "value": "Utiliser Albedo pour l'Émission"
         },
         {
             "key": "prop_EmissionStrength",
-            "value": "Force de l'émission"
+            "value": "Force d'Émission"
         },
         {
             "key": "prop_EnableBaseLightLimit",
-            "value": "Activer la limite de passe de base"
+            "value": "Activer Limite Passe Base"
         },
         {
             "key": "prop_BaseLightMin",
-            "value": "Lumière de base min"
+            "value": "Lumière Base Min"
         },
         {
             "key": "prop_BaseLightMax",
-            "value": "Lumière de base max"
+            "value": "Lumière Base Max"
         },
         {
             "key": "prop_EnableAddLightLimit",
-            "value": "Activer la limite de passe additive"
+            "value": "Activer Limite Passe Add"
         },
         {
             "key": "prop_AddLightMin",
-            "value": "Lumière additive min"
+            "value": "Lumière Add Min"
         },
         {
             "key": "prop_AddLightMax",
-            "value": "Lumière additive max"
+            "value": "Lumière Add Max"
         },
         {
             "key": "prop_GreyscaleLighting",
-            "value": "Éclairage en niveaux de gris"
+            "value": "Éclairage en Niveaux de Gris"
         },
         {
             "key": "prop_ForceLightColor",
-            "value": "Forcer la couleur de la lumière"
+            "value": "Forcer Couleur Lumière"
         },
         {
             "key": "prop_ForcedLightColor",
-            "value": "Couleur de lumière forcée"
+            "value": "Couleur Lumière Forcée"
         },
         {
             "key": "prop_LightingColorMode",
-            "value": "Mode de couleur de la lumière"
+            "value": "Mode Couleur Lumière"
         },
         {
             "key": "prop_LightingDirectionMode",
-            "value": "Mode de direction de la lumière"
+            "value": "Mode Direction Lumière"
         },
         {
             "key": "prop_ForcedLightDirection",
-            "value": "Direction de lumière forcée"
+            "value": "Direction Lumière Forcée"
         },
         {
             "key": "prop_ViewDirectionOffsetX",
-            "value": "Décalage de la direction de vue X"
+            "value": "Décalage Direction Vue X"
         },
         {
             "key": "prop_ViewDirectionOffsetY",
-            "value": "Décalage de la direction de vue Y"
+            "value": "Décalage Direction Vue Y"
         },
         {
             "key": "prop_DirectIntensity",
-            "value": "Intensité directe RT"
+            "value": "Intensité Directe RT"
         },
         {
             "key": "prop_IndirectIntensity",
-            "value": "Intensité indirecte RT"
+            "value": "Intensité Indirecte RT"
         },
         {
             "key": "prop_VertexIntensity",
-            "value": "Intensité des sommets RT"
+            "value": "Intensité Vertex RT"
         },
         {
             "key": "prop_AdditiveIntensity",
-            "value": "Intensité additive RT"
+            "value": "Intensité Additive RT"
         },
         {
             "key": "prop_BakedDirectIntensity",
-            "value": "Intensité directe précalculée"
+            "value": "Intensité Directe Baked"
         },
         {
             "key": "prop_BakedIndirectIntensity",
-            "value": "Intensité indirecte précalculée"
+            "value": "Intensité Indirecte Baked"
         },
         {
             "key": "prop_ToggleAnimeLighting",
-            "value": "Activer l'éclairage de style anime"
+            "value": "Activer l'Éclairage Anime"
         },
         {
             "key": "prop_AnimeMode",
-            "value": "Mode anime"
+            "value": "Mode Anime"
         },
         {
             "key": "prop_Ramp",
-            "value": "Rampe de style anime"
+            "value": "Rampe Anime"
         },
         {
             "key": "prop_RampColor",
-            "value": "Couleur de la rampe"
+            "value": "Couleur Rampe"
         },
         {
             "key": "prop_RampOffset",
-            "value": "Décalage de la rampe"
+            "value": "Décalage Rampe"
         },
         {
             "key": "prop_ShadowIntensity",
-            "value": "Intensité de l'ombre"
+            "value": "Intensité de l'Ombre"
         },
         {
             "key": "prop_OcclusionOffsetIntensity",
-            "value": "Intensité du décalage d'occlusion"
+            "value": "Intensité Décalage Occlusion"
         },
         {
             "key": "prop_RampMin",
-            "value": "Rampe min"
+            "value": "Rampe Min"
         },
         {
             "key": "prop_RampNormalIntensity",
-            "value": "Les normales affectent l'intensité"
+            "value": "Les Normales Affectent l'Intensité"
         },
         {
             "key": "prop_AnimeShadowColor",
-            "value": "Couleur de l'ombre principale"
+            "value": "Couleur Ombre Principale"
         },
         {
             "key": "prop_AnimeShadowThreshold",
-            "value": "Seuil de l'ombre principale"
+            "value": "Seuil Ombre Principale"
         },
         {
             "key": "prop_AnimeHalftoneColor",
-            "value": "Couleur de demi-teinte"
+            "value": "Couleur Demi-teinte"
         },
         {
             "key": "prop_AnimeHalftoneThreshold",
-            "value": "Seuil de demi-teinte"
+            "value": "Seuil Demi-teinte"
         },
         {
             "key": "prop_AnimeShadowSoftness",
-            "value": "Douceur de l'ombre"
+            "value": "Douceur de l'Ombre"
         },
         {
             "key": "prop_ToggleAmbientGradient",
-            "value": "Activer le dégradé ambiant"
+            "value": "Activer le Dégradé Ambiant"
         },
         {
             "key": "prop_AnimeOcclusionToShadow",
-            "value": "Occlusion vers l'ombre"
+            "value": "Occlusion vers Ombre"
         },
         {
             "key": "prop_AmbientUp",
-            "value": "Ambiance du ciel"
+            "value": "Ambiance Ciel"
         },
         {
             "key": "prop_AmbientSkyThreshold",
-            "value": "Seuil du ciel"
+            "value": "Seuil Ciel"
         },
         {
             "key": "prop_AmbientDown",
-            "value": "Ambiance du sol"
+            "value": "Ambiance Sol"
         },
         {
             "key": "prop_AmbientGroundThreshold",
-            "value": "Seuil du sol"
+            "value": "Seuil Sol"
         },
         {
             "key": "prop_AmbientIntensity",
-            "value": "Intensité du dégradé"
+            "value": "Intensité Dégradé"
         },
         {
             "key": "prop_TintMaskSource",
-            "value": "Source du masque de teinte"
+            "value": "Source Masque Teinte"
         },
         {
             "key": "prop_LitTint",
-            "value": "Teinte de la zone éclairée"
+            "value": "Teinte Zone Éclairée"
         },
         {
             "key": "prop_LitThreshold",
-            "value": "Couverture éclairée"
+            "value": "Couverture Éclairée"
         },
         {
             "key": "prop_ShadowTint",
-            "value": "Teinte de la zone d'ombre"
+            "value": "Teinte Zone Ombrée"
         },
         {
             "key": "prop_ShadowThreshold",
-            "value": "Couverture d'ombre"
+            "value": "Couverture Ombre"
         },
         {
             "key": "prop_ToggleSpecular",
-            "value": "Activer le spéculaire"
+            "value": "Activer Spéculaire"
         },
         {
             "key": "prop_SpecularIntensity",
@@ -862,15 +958,15 @@
         },
         {
             "key": "prop_ToggleVertexSpecular",
-            "value": "Activer le spéculaire des sommets"
+            "value": "Activer Spéculaire Vertex"
         },
         {
             "key": "prop_SpecularMode",
-            "value": "Mode spéculaire"
+            "value": "Mode Spéculaire"
         },
         {
             "key": "prop_MSSO",
-            "value": "MSSO (Métal, Lissé, Spéc, Occl)"
+            "value": "MSSO (Metal, Smooth, Spec, Occl)"
         },
         {
             "key": "prop_Metallic",
@@ -890,15 +986,15 @@
         },
         {
             "key": "prop_SpecularTintTexture",
-            "value": "Texture de teinte spéculaire"
+            "value": "Texture Teinte Spéculaire"
         },
         {
             "key": "prop_SpecularTint",
-            "value": "Teinte spéculaire"
+            "value": "Teinte Spéculaire"
         },
         {
             "key": "prop_TangentMap",
-            "value": "Carte de tangentes"
+            "value": "Tangent Map"
         },
         {
             "key": "prop_Anisotropy",
@@ -906,83 +1002,83 @@
         },
         {
             "key": "prop_ReplaceSpecular",
-            "value": "Remplacer le spéculaire"
+            "value": "Remplacer Spéculaire"
         },
         {
             "key": "prop_HighlightRamp",
-            "value": "Rampe de reflet"
+            "value": "Rampe de Reflet"
         },
         {
             "key": "prop_HighlightHardness",
-            "value": "Dureté du reflet"
+            "value": "Dureté du Reflet"
         },
         {
             "key": "prop_HighlightRampColor",
-            "value": "Couleur du reflet"
+            "value": "Couleur du Reflet"
         },
         {
             "key": "prop_HighlightIntensity",
-            "value": "Intensité du reflet"
+            "value": "Intensité du Reflet"
         },
         {
             "key": "prop_HighlightRampOffset",
-            "value": "Décalage de la rampe de reflet"
+            "value": "Décalage Rampe Reflet"
         },
         {
             "key": "prop_HairFlowMap",
-            "value": "Carte de flux/tangente des cheveux (RG)"
+            "value": "Hair Flow/Tangent Map (RG)"
         },
         {
             "key": "prop_PrimarySpecularShift",
-            "value": "Décalage spéculaire primaire"
+            "value": "Décalage Spéculaire Primaire"
         },
         {
             "key": "prop_SecondarySpecularShift",
-            "value": "Décalage spéculaire secondaire"
+            "value": "Décalage Spéculaire Secondaire"
         },
         {
             "key": "prop_SecondarySpecularColor",
-            "value": "Couleur spéculaire secondaire"
+            "value": "Couleur Spéculaire Secondaire"
         },
         {
             "key": "prop_SpecularExponent",
-            "value": "Exposant spéculaire"
+            "value": "Exposant Spéculaire"
         },
         {
             "key": "prop_SheenColor",
-            "value": "Couleur de lustre"
+            "value": "Couleur Lustre"
         },
         {
             "key": "prop_SheenIntensity",
-            "value": "Intensité du lustre"
+            "value": "Intensité Lustre"
         },
         {
             "key": "prop_SheenRoughness",
-            "value": "Rugosité du lustre"
+            "value": "Rugosité Lustre"
         },
         {
             "key": "prop_ToggleRimlight",
-            "value": "Activer l'éclairage de contour"
+            "value": "Activer Éclairage Rim"
         },
         {
             "key": "prop_RimColor",
-            "value": "Couleur de contour"
+            "value": "Couleur Rim"
         },
         {
             "key": "prop_RimWidth",
-            "value": "Largeur du contour"
+            "value": "Largeur Rim"
         },
         {
             "key": "prop_RimIntensity",
-            "value": "Intensité du contour"
+            "value": "Intensité Rim"
         },
         {
             "key": "prop_RimLightBased",
-            "value": "Contour basé sur la lumière"
+            "value": "Rim Basé sur la Lumière"
         },
         {
             "key": "prop_ToggleClearcoat",
-            "value": "Activer le vernis"
+            "value": "Activer Vernis (Clearcoat)"
         },
         {
             "key": "prop_ClearcoatStrength",
@@ -990,7 +1086,7 @@
         },
         {
             "key": "prop_ClearcoatReflectionStrength",
-            "value": "Force de la réflexion"
+            "value": "Force de Réflexion"
         },
         {
             "key": "prop_ClearcoatMap",
@@ -1002,47 +1098,47 @@
         },
         {
             "key": "prop_ClearcoatColor",
-            "value": "Couleur du vernis"
+            "value": "Couleur Vernis"
         },
         {
             "key": "prop_ToggleMatcap",
-            "value": "Activer le matcap"
+            "value": "Activer Matcap"
         },
         {
             "key": "prop_MatcapTex",
-            "value": "Texture de matcap"
+            "value": "Texture Matcap"
         },
         {
             "key": "prop_MatcapTint",
-            "value": "Teinte du matcap"
+            "value": "Teinte Matcap"
         },
         {
             "key": "prop_MatcapIntensity",
-            "value": "Intensité du matcap"
+            "value": "Intensité Matcap"
         },
         {
             "key": "prop_MatcapBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode de Fusion"
         },
         {
             "key": "prop_MatcapMask",
-            "value": "Masque de matcap (R)"
+            "value": "Masque Matcap (R)"
         },
         {
             "key": "prop_MatcapSmoothnessEnabled",
-            "value": "Activer le lissage"
+            "value": "Activer la Douceur"
         },
         {
             "key": "prop_MatcapSmoothness",
-            "value": "Lissage"
+            "value": "Douceur"
         },
         {
             "key": "prop_Decal1Enable",
-            "value": "Activer la décalcomanie 1"
+            "value": "Activer Autocollant 1"
         },
         {
             "key": "prop_Decal1Tex",
-            "value": "Texture de décalcomanie (A=Masque)"
+            "value": "Texture Autocollant (A=Masque)"
         },
         {
             "key": "prop_Decal1Tint",
@@ -1050,11 +1146,11 @@
         },
         {
             "key": "prop_Decal1BlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode de Fusion"
         },
         {
             "key": "prop_Decal1IsTriplanar",
-            "value": "Utiliser le mappage triplanaire"
+            "value": "Utiliser Mapping Triplanaire"
         },
         {
             "key": "prop_Decal1Position",
@@ -1070,47 +1166,47 @@
         },
         {
             "key": "prop_Decal1TriplanarPosition",
-            "value": "Position dans le monde (XYZ)"
+            "value": "Position Mondiale (XYZ)"
         },
         {
             "key": "prop_Decal1TriplanarScale",
-            "value": "Échelle du monde"
+            "value": "Échelle Mondiale"
         },
         {
             "key": "prop_Decal1TriplanarRotation",
-            "value": "Rotation du monde (XYZ)"
+            "value": "Rotation Mondiale (XYZ)"
         },
         {
             "key": "prop_Decal1TriplanarSharpness",
-            "value": "Netteté du mélange triplanaire"
+            "value": "Netteté Mélange Triplanaire"
         },
         {
             "key": "prop_Decal1Repeat",
-            "value": "Répéter le motif"
+            "value": "Répéter Motif"
         },
         {
             "key": "prop_Decal1Scroll",
-            "value": "Vitesse de défilement (XY)"
+            "value": "Vitesse Défilement (XY)"
         },
         {
             "key": "prop_Decal1HueShift",
-            "value": "Décalage de teinte"
+            "value": "Décalage de Teinte"
         },
         {
             "key": "prop_Decal1AutoCycleHue",
-            "value": "Cycle automatique de la teinte"
+            "value": "Cycle Auto Teinte"
         },
         {
             "key": "prop_Decal1CycleSpeed",
-            "value": "Vitesse du cycle"
+            "value": "Vitesse Cycle"
         },
         {
             "key": "prop_Decal2Enable",
-            "value": "Activer la décalcomanie 2"
+            "value": "Activer Autocollant 2"
         },
         {
             "key": "prop_Decal2Tex",
-            "value": "Texture de décalcomanie (A=Masque)"
+            "value": "Texture Autocollant (A=Masque)"
         },
         {
             "key": "prop_Decal2Tint",
@@ -1118,11 +1214,11 @@
         },
         {
             "key": "prop_Decal2BlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode de Fusion"
         },
         {
             "key": "prop_Decal2IsTriplanar",
-            "value": "Utiliser le mappage triplanaire"
+            "value": "Utiliser Mapping Triplanaire"
         },
         {
             "key": "prop_Decal2Position",
@@ -1138,55 +1234,55 @@
         },
         {
             "key": "prop_Decal2TriplanarPosition",
-            "value": "Position dans le monde (XYZ)"
+            "value": "Position Mondiale (XYZ)"
         },
         {
             "key": "prop_Decal2TriplanarScale",
-            "value": "Échelle du monde"
+            "value": "Échelle Mondiale"
         },
         {
             "key": "prop_Decal2TriplanarRotation",
-            "value": "Rotation du monde (XYZ)"
+            "value": "Rotation Mondiale (XYZ)"
         },
         {
             "key": "prop_Decal2TriplanarSharpness",
-            "value": "Netteté du mélange triplanaire"
+            "value": "Netteté Mélange Triplanaire"
         },
         {
             "key": "prop_Decal2Repeat",
-            "value": "Répéter le motif"
+            "value": "Répéter Motif"
         },
         {
             "key": "prop_Decal2Scroll",
-            "value": "Vitesse de défilement (XY)"
+            "value": "Vitesse Défilement (XY)"
         },
         {
             "key": "prop_Decal2HueShift",
-            "value": "Décalage de teinte"
+            "value": "Décalage de Teinte"
         },
         {
             "key": "prop_Decal2AutoCycleHue",
-            "value": "Cycle automatique de la teinte"
+            "value": "Cycle Auto Teinte"
         },
         {
             "key": "prop_Decal2CycleSpeed",
-            "value": "Vitesse du cycle"
+            "value": "Vitesse Cycle"
         },
         {
             "key": "prop_TogglePostProcessing",
-            "value": "Activer le post-traitement"
+            "value": "Activer Post-Traitement"
         },
         {
             "key": "prop_RGBColor",
-            "value": "Teinte RVB"
+            "value": "Teinte RGB"
         },
         {
             "key": "prop_RGBBlendMode",
-            "value": "Multiplier/Remplacer RVB"
+            "value": "RGB Multiplier/Remplacer"
         },
         {
             "key": "prop_HSVMode",
-            "value": "Mode TSV"
+            "value": "Mode HSV"
         },
         {
             "key": "prop_HSVHue",
@@ -1202,31 +1298,31 @@
         },
         {
             "key": "prop_ToggleHueShift",
-            "value": "Activer le décalage de teinte"
+            "value": "Activer Décalage de Teinte"
         },
         {
             "key": "prop_HueShift",
-            "value": "Décalage de teinte"
+            "value": "Décalage de Teinte"
         },
         {
             "key": "prop_ToggleAutoCycle",
-            "value": "Activer le cycle automatique de la teinte"
+            "value": "Activer Cycle Auto Teinte"
         },
         {
             "key": "prop_AutoCycleSpeed",
-            "value": "Vitesse du cycle automatique"
+            "value": "Vitesse Cycle Auto"
         },
         {
             "key": "prop_ColorGradingLUT",
-            "value": "LUT d'étalonnage des couleurs"
+            "value": "LUT Étallonage Couleur"
         },
         {
             "key": "prop_ColorGradingIntensity",
-            "value": "Intensité de l'étalonnage"
+            "value": "Intensité Étallonage"
         },
         {
             "key": "prop_BlackAndWhite",
-            "value": "Noir et blanc"
+            "value": "Noir et Blanc"
         },
         {
             "key": "prop_Brightness",
@@ -1234,7 +1330,7 @@
         },
         {
             "key": "prop_ToggleCubemap",
-            "value": "Activer la cubemap"
+            "value": "Activer Cubemap"
         },
         {
             "key": "prop_CubemapTex",
@@ -1242,39 +1338,39 @@
         },
         {
             "key": "prop_CubemapTint",
-            "value": "Teinte de la cubemap"
+            "value": "Teinte Cubemap"
         },
         {
             "key": "prop_CubemapIntensity",
-            "value": "Intensité de la cubemap"
+            "value": "Intensité Cubemap"
         },
         {
             "key": "prop_CubemapBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode de Fusion"
         },
         {
             "key": "prop_ToggleParallax",
-            "value": "Activer le mappage de parallaxe"
+            "value": "Activer Mapping Parallaxe"
         },
         {
             "key": "prop_ParallaxMode",
-            "value": "Mode de parallaxe"
+            "value": "Mode Parallaxe"
         },
         {
             "key": "prop_ParallaxMap",
-            "value": "Carte de hauteur (R)"
+            "value": "Carte de Hauteur (R)"
         },
         {
             "key": "prop_ParallaxStrength",
-            "value": "Force de la parallaxe"
+            "value": "Force Parallaxe"
         },
         {
             "key": "prop_ParallaxSteps",
-            "value": "Étapes de haute qualité"
+            "value": "Étapes Haute Qualité"
         },
         {
             "key": "prop_ToggleSSS",
-            "value": "Activer la dispersion de subsurface"
+            "value": "Activer Dispersion Subsuperficielle"
         },
         {
             "key": "prop_SSSColor",
@@ -1294,19 +1390,19 @@
         },
         {
             "key": "prop_SSSThicknessMap",
-            "value": "Carte d'épaisseur SSS (R)"
+            "value": "Carte Épaisseur SSS (R)"
         },
         {
             "key": "prop_SSSThickness",
-            "value": "Atténuation de l'épaisseur SSS"
+            "value": "Atténuation Épaisseur SSS"
         },
         {
             "key": "prop_ToggleShadowMap",
-            "value": "Activer la carte d'ombres"
+            "value": "Activer Shadow Map"
         },
         {
             "key": "prop_ShadowMap",
-            "value": "Carte d'ombres (R=Masque)"
+            "value": "Shadow Map (R=Masque)"
         },
         {
             "key": "prop_ShadowMapIntensity",
@@ -1314,127 +1410,127 @@
         },
         {
             "key": "prop_ToggleDetail",
-            "value": "Activer les cartes de détails"
+            "value": "Activer Cartes de Détail"
         },
         {
             "key": "prop_DetailAlbedoMap",
-            "value": "Albédo de détail (A=Force)"
+            "value": "Détail Albedo (A=Force)"
         },
         {
             "key": "prop_DetailNormalMap",
-            "value": "Carte de normales de détail"
+            "value": "Détail Normal Map"
         },
         {
             "key": "prop_DetailTiling",
-            "value": "Mosaïque de détail"
+            "value": "Tiling Détail"
         },
         {
             "key": "prop_DetailNormalStrength",
-            "value": "Force de la normale de détail"
+            "value": "Force Normal Détail"
         },
         {
             "key": "prop_ToggleDissolve",
-            "value": "Activer la dissolution"
+            "value": "Activer Dissolution"
         },
         {
             "key": "prop_DissolveProgress",
-            "value": "Progression de la dissolution"
+            "value": "Progression Dissolution"
         },
         {
             "key": "prop_DissolveType",
-            "value": "Type de dissolution"
+            "value": "Type Dissolution"
         },
         {
             "key": "prop_DissolveEdgeColor",
-            "value": "Couleur du bord"
+            "value": "Couleur Bord"
         },
         {
             "key": "prop_DissolveEdgeWidth",
-            "value": "Largeur du bord"
+            "value": "Largeur Bord"
         },
         {
             "key": "prop_DissolveEdgeMode",
-            "value": "Mode du bord"
+            "value": "Mode Bord"
         },
         {
             "key": "prop_DissolveEdgeSharpness",
-            "value": "Netteté du bord"
+            "value": "Netteté Bord"
         },
         {
             "key": "prop_DissolveNoiseTex",
-            "value": "Texture de bruit (R)"
+            "value": "Texture Bruit (R)"
         },
         {
             "key": "prop_DissolveNoiseScale",
-            "value": "Échelle du bruit"
+            "value": "Échelle Bruit"
         },
         {
             "key": "prop_DissolveDirection",
-            "value": "Direction de balayage (XYZ)"
+            "value": "Direction Balayage (XYZ)"
         },
         {
             "key": "prop_DissolveDirectionSpace",
-            "value": "Espace de balayage"
+            "value": "Espace Balayage"
         },
         {
             "key": "prop_DissolveDirectionBounds",
-            "value": "Taille des limites de balayage"
+            "value": "Taille Limites Balayage"
         },
         {
             "key": "prop_DissolveVoxelDensity",
-            "value": "Densité des voxels"
+            "value": "Densité Voxel"
         },
         {
             "key": "prop_TogglePathing",
-            "value": "Activer le traçage"
+            "value": "Activer Pathing"
         },
         {
             "key": "prop_PathingMappingMode",
-            "value": "Mode de mappage"
+            "value": "Mode Mapping"
         },
         {
             "key": "prop_PathingMap",
-            "value": "Carte de traçage (R)"
+            "value": "Carte Path (R)"
         },
         {
             "key": "prop_PathingScale",
-            "value": "Échelle du traçage"
+            "value": "Échelle Path"
         },
         {
             "key": "prop_PathingBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode Fusion"
         },
         {
             "key": "prop_PathingStart",
-            "value": "Début du traçage"
+            "value": "Début Path"
         },
         {
             "key": "prop_PathingEnd",
-            "value": "Fin du traçage"
+            "value": "Fin Path"
         },
         {
             "key": "prop_PathingColor",
-            "value": "Couleur du traçage"
+            "value": "Couleur Path"
         },
         {
             "key": "prop_PathingColorMode",
-            "value": "Mode de couleur du traçage"
+            "value": "Mode Couleur Path"
         },
         {
             "key": "prop_PathingTexture",
-            "value": "Texture de traçage"
+            "value": "Texture Path"
         },
         {
             "key": "prop_PathingColor2",
-            "value": "Couleur du traçage 2"
+            "value": "Couleur Path 2"
         },
         {
             "key": "prop_PathingEmission",
-            "value": "Force de l'émission"
+            "value": "Force Émission"
         },
         {
             "key": "prop_PathingType",
-            "value": "Type de traçage"
+            "value": "Type Path"
         },
         {
             "key": "prop_PathingSpeed",
@@ -1442,7 +1538,7 @@
         },
         {
             "key": "prop_PathingWidth",
-            "value": "Largeur du traçage"
+            "value": "Largeur Path"
         },
         {
             "key": "prop_PathingSoftness",
@@ -1450,15 +1546,15 @@
         },
         {
             "key": "prop_PathingOffset",
-            "value": "Décalage temporel"
+            "value": "Décalage Temps"
         },
         {
             "key": "prop_ToggleDepthRim",
-            "value": "Activer l'éclairage de contour en profondeur"
+            "value": "Activer Éclairage Rim Profondeur"
         },
         {
             "key": "prop_DepthRimColor",
-            "value": "Couleur de contour"
+            "value": "Couleur Rim"
         },
         {
             "key": "prop_DepthRimWidth",
@@ -1474,7 +1570,7 @@
         },
         {
             "key": "prop_DepthRimBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode Fusion"
         },
         {
             "key": "prop_ToggleAudioLink",
@@ -1482,11 +1578,11 @@
         },
         {
             "key": "prop_AudioLinkFallback",
-            "value": "Niveau de repli"
+            "value": "Niveau de Repli"
         },
         {
             "key": "prop_AudioLinkEmissionBand",
-            "value": "Bande d'émission"
+            "value": "Bande Émission"
         },
         {
             "key": "prop_AudioLinkEmissionStrength",
@@ -1498,7 +1594,7 @@
         },
         {
             "key": "prop_AudioLinkRimBand",
-            "value": "Bande de lumière de contour"
+            "value": "Bande Lumière Rim"
         },
         {
             "key": "prop_AudioLinkRimStrength",
@@ -1510,7 +1606,7 @@
         },
         {
             "key": "prop_AudioLinkHueShiftBand",
-            "value": "Bande de décalage de teinte"
+            "value": "Bande Décalage Teinte"
         },
         {
             "key": "prop_AudioLinkHueShiftStrength",
@@ -1522,7 +1618,7 @@
         },
         {
             "key": "prop_AudioLinkDecalHueBand",
-            "value": "Bande de teinte de décalcomanie"
+            "value": "Bande Teinte Autocollant"
         },
         {
             "key": "prop_AudioLinkDecalHueStrength",
@@ -1534,7 +1630,7 @@
         },
         {
             "key": "prop_AudioLinkDecalEmissionBand",
-            "value": "Bande d'émission de décalcomanie"
+            "value": "Bande Émission Autocollant"
         },
         {
             "key": "prop_AudioLinkDecalEmissionStrength",
@@ -1546,7 +1642,7 @@
         },
         {
             "key": "prop_AudioLinkDecalOpacityBand",
-            "value": "Bande d'opacité de décalcomanie"
+            "value": "Bande Opacité Autocollant"
         },
         {
             "key": "prop_AudioLinkDecalOpacityStrength",
@@ -1558,7 +1654,7 @@
         },
         {
             "key": "prop_AudioLinkVertexBand",
-            "value": "Bande de croissance/rétrécissement des sommets"
+            "value": "Bande Croissance/Rétrécissement Vertex"
         },
         {
             "key": "prop_AudioLinkVertexStrength",
@@ -1570,7 +1666,7 @@
         },
         {
             "key": "prop_AudioLinkOutlineBand",
-            "value": "Bande de contour"
+            "value": "Bande Contour"
         },
         {
             "key": "prop_AudioLinkOutlineStrength",
@@ -1582,7 +1678,7 @@
         },
         {
             "key": "prop_AudioLinkMatcapBand",
-            "value": "Bande de matcap"
+            "value": "Bande Matcap"
         },
         {
             "key": "prop_AudioLinkMatcapStrength",
@@ -1594,7 +1690,7 @@
         },
         {
             "key": "prop_AudioLinkPathingBand",
-            "value": "Bande de traçage"
+            "value": "Bande Pathing"
         },
         {
             "key": "prop_AudioLinkPathingStrength",
@@ -1606,7 +1702,7 @@
         },
         {
             "key": "prop_AudioLinkGlitterBand",
-            "value": "Bande de paillettes"
+            "value": "Bande Paillettes"
         },
         {
             "key": "prop_AudioLinkGlitterStrength",
@@ -1618,7 +1714,7 @@
         },
         {
             "key": "prop_AudioLinkIridescenceBand",
-            "value": "Bande d'iridescence"
+            "value": "Bande Iridescence"
         },
         {
             "key": "prop_AudioLinkIridescenceStrength",
@@ -1630,7 +1726,7 @@
         },
         {
             "key": "prop_ToggleGlitter",
-            "value": "Activer les paillettes"
+            "value": "Activer Paillettes"
         },
         {
             "key": "prop_GlitterMode",
@@ -1638,7 +1734,7 @@
         },
         {
             "key": "prop_GlitterNoiseTex",
-            "value": "Texture de bruit (R)"
+            "value": "Texture Bruit (R)"
         },
         {
             "key": "prop_GlitterMask",
@@ -1654,7 +1750,7 @@
         },
         {
             "key": "prop_GlitterThreshold",
-            "value": "Seuil de densité"
+            "value": "Seuil Densité"
         },
         {
             "key": "prop_GlitterSize",
@@ -1662,7 +1758,7 @@
         },
         {
             "key": "prop_GlitterFlickerSpeed",
-            "value": "Vitesse de scintillement"
+            "value": "Vitesse Scintillement"
         },
         {
             "key": "prop_GlitterBrightness",
@@ -1674,55 +1770,55 @@
         },
         {
             "key": "prop_ToggleGlitterRainbow",
-            "value": "Activer l'arc-en-ciel"
+            "value": "Activer Arc-en-ciel"
         },
         {
             "key": "prop_GlitterRainbowSpeed",
-            "value": "Vitesse de l'arc-en-ciel"
+            "value": "Vitesse Arc-en-ciel"
         },
         {
             "key": "prop_ToggleDistanceFade",
-            "value": "Activer le fondu en distance"
+            "value": "Activer Fondu à Distance"
         },
         {
             "key": "prop_DistanceFadeReference",
-            "value": "Point de référence du fondu"
+            "value": "Point Référence Fondu"
         },
         {
             "key": "prop_ToggleNearFade",
-            "value": "Activer le fondu proche"
+            "value": "Activer Fondu Proche"
         },
         {
             "key": "prop_NearFadeMode",
-            "value": "Mode de fondu proche"
+            "value": "Mode Fondu Proche"
         },
         {
             "key": "prop_NearFadeDitherScale",
-            "value": "Échelle de tramage du fondu proche"
+            "value": "Échelle Tramage Fondu Proche"
         },
         {
             "key": "prop_NearFadeStart",
-            "value": "Début du fondu proche"
+            "value": "Début Fondu Proche"
         },
         {
             "key": "prop_NearFadeEnd",
-            "value": "Fin du fondu proche"
+            "value": "Fin Fondu Proche"
         },
         {
             "key": "prop_ToggleFarFade",
-            "value": "Activer le fondu lointain"
+            "value": "Activer Fondu Lointain"
         },
         {
             "key": "prop_FarFadeStart",
-            "value": "Début du fondu lointain"
+            "value": "Début Fondu Lointain"
         },
         {
             "key": "prop_FarFadeEnd",
-            "value": "Fin du fondu lointain"
+            "value": "Fin Fondu Lointain"
         },
         {
             "key": "prop_ToggleIridescence",
-            "value": "Activer l'iridescence"
+            "value": "Activer Iridescence"
         },
         {
             "key": "prop_IridescenceMode",
@@ -1742,15 +1838,15 @@
         },
         {
             "key": "prop_IridescenceBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode de Fusion"
         },
         {
             "key": "prop_IridescenceParallax",
-            "value": "Parallaxe de la vue"
+            "value": "Parallaxe Vue"
         },
         {
             "key": "prop_IridescenceRamp",
-            "value": "Rampe de couleurs"
+            "value": "Rampe de Couleur"
         },
         {
             "key": "prop_IridescencePower",
@@ -1758,155 +1854,155 @@
         },
         {
             "key": "prop_IridescenceFrequency",
-            "value": "Fréquence de l'arc-en-ciel"
+            "value": "Fréquence Arc-en-ciel"
         },
         {
             "key": "prop_ToggleShadowTexture",
-            "value": "Activer la texture d'ombre"
+            "value": "Activer Texture Ombre"
         },
         {
             "key": "prop_ShadowTextureMappingMode",
-            "value": "Mode d'ombre"
+            "value": "Mode Ombre"
         },
         {
             "key": "prop_ShadowTextureIntensity",
-            "value": "Intensité de l'ombre"
+            "value": "Intensité Ombre"
         },
         {
             "key": "prop_ShadowTextureBlendMode",
-            "value": "Mode de fusion d'ombre"
+            "value": "Mode Fusion Ombre"
         },
         {
             "key": "prop_ShadowTex",
-            "value": "Texture / Motif d'ombre"
+            "value": "Texture / Motif Ombre"
         },
         {
             "key": "prop_ShadowPatternColor",
-            "value": "Teinte du motif"
+            "value": "Teinte Motif"
         },
         {
             "key": "prop_ShadowPatternScale",
-            "value": "Échelle / Mosaïque du motif"
+            "value": "Échelle / Tiling Motif"
         },
         {
             "key": "prop_ShadowPatternTriplanarSharpness",
-            "value": "Netteté du mélange triplanaire"
+            "value": "Netteté Mélange Triplanaire"
         },
         {
             "key": "prop_ShadowPatternTransparency",
-            "value": "Transparence du motif"
+            "value": "Transparence Motif"
         },
         {
             "key": "prop_ToggleFlatModel",
-            "value": "Activer le modèle plat"
+            "value": "Activer Modèle Plat"
         },
         {
             "key": "prop_FlatModeAutoflip",
-            "value": "Retournement automatique"
+            "value": "Auto-Flip"
         },
         {
             "key": "prop_FlatModel",
-            "value": "Force du modèle plat"
+            "value": "Force Modèle Plat"
         },
         {
             "key": "prop_FlatModelDepthCorrection",
-            "value": "Correction de la profondeur"
+            "value": "Correction Profondeur"
         },
         {
             "key": "prop_FlatModelFacing",
-            "value": "Direction de l'orientation"
+            "value": "Direction Face"
         },
         {
             "key": "prop_FlatModelLockAxis",
-            "value": "Suivre la caméra"
+            "value": "Suivre Caméra"
         },
         {
             "key": "prop_ToggleWorldEffect",
-            "value": "Activer l'effet de monde"
+            "value": "Activer Effet Monde"
         },
         {
             "key": "prop_WorldEffectBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode Fusion"
         },
         {
             "key": "prop_WorldEffectTex",
-            "value": "Texture d'effet (A=Masque)"
+            "value": "Texture Effet (A=Masque)"
         },
         {
             "key": "prop_WorldEffectMask",
-            "value": "Masque d'effet"
+            "value": "Masque Effet"
         },
         {
             "key": "prop_WorldEffectColor",
-            "value": "Couleur de l'effet"
+            "value": "Couleur Effet"
         },
         {
             "key": "prop_WorldEffectDirection",
-            "value": "Direction de l'effet (XYZ)"
+            "value": "Direction Effet (XYZ)"
         },
         {
             "key": "prop_WorldEffectScale",
-            "value": "Échelle de l'effet"
+            "value": "Échelle Effet"
         },
         {
             "key": "prop_WorldEffectBlendSharpness",
-            "value": "Netteté du mélange directionnel"
+            "value": "Netteté Mélange Directionnel"
         },
         {
             "key": "prop_WorldEffectIntensity",
-            "value": "Intensité de l'effet"
+            "value": "Intensité Effet"
         },
         {
             "key": "prop_WorldEffectPosition",
-            "value": "Position dans le monde (XYZ)"
+            "value": "Position Monde (XYZ)"
         },
         {
             "key": "prop_WorldEffectRotation",
-            "value": "Rotation du monde (XYZ)"
+            "value": "Rotation Monde (XYZ)"
         },
         {
             "key": "prop_ToggleMirrorDetection",
-            "value": "Activer la détection de miroir VRChat"
+            "value": "Activer Détection Miroir VRChat"
         },
         {
             "key": "prop_MirrorDetectionMode",
-            "value": "Mode miroir"
+            "value": "Mode Miroir"
         },
         {
             "key": "prop_MirrorDetectionTexture",
-            "value": "Texture de détection de miroir"
+            "value": "Texture Détection Miroir"
         },
         {
             "key": "prop_ToggleTouchReactive",
-            "value": "Activer la réactivité tactile"
+            "value": "Activer Réactif au Toucher"
         },
         {
             "key": "prop_TouchColor",
-            "value": "Couleur tactile"
+            "value": "Couleur Toucher"
         },
         {
             "key": "prop_TouchRadius",
-            "value": "Rayon tactile"
+            "value": "Rayon Toucher"
         },
         {
             "key": "prop_TouchHardness",
-            "value": "Dureté tactile"
+            "value": "Dureté Toucher"
         },
         {
             "key": "prop_TouchMode",
-            "value": "Mode tactile"
+            "value": "Mode Toucher"
         },
         {
             "key": "prop_TouchRainbowSpeed",
-            "value": "Vitesse de l'arc-en-ciel tactile"
+            "value": "Vitesse Arc-en-ciel Toucher"
         },
         {
             "key": "prop_TouchRainbowSpread",
-            "value": "Étalement de l'arc-en-ciel tactile"
+            "value": "Étalement Arc-en-ciel Toucher"
         },
         {
             "key": "prop_ToggleRefraction",
-            "value": "Activer l'effet de réfraction"
+            "value": "Activer Effet Réfraction"
         },
         {
             "key": "prop_RefractionMask",
@@ -1914,43 +2010,43 @@
         },
         {
             "key": "prop_RefractionTint",
-            "value": "Teinte de réfraction"
+            "value": "Teinte Réfraction"
         },
         {
             "key": "prop_RefractionIOR",
-            "value": "Force de la réfraction"
+            "value": "Force Réfraction"
         },
         {
             "key": "prop_RefractionFresnel",
-            "value": "Puissance de Fresnel"
+            "value": "Puissance Fresnel"
         },
         {
             "key": "prop_RefractionOpacity",
-            "value": "Opacité de la réfraction"
+            "value": "Opacité Réfraction"
         },
         {
             "key": "prop_RefractionSeeThrough",
-            "value": "Force de transparence"
+            "value": "Force Transparence"
         },
         {
             "key": "prop_RefractionGrabpassTint",
-            "value": "Teinte du grabpass"
+            "value": "Teinte Grabpass"
         },
         {
             "key": "prop_RefractionZoomToggle",
-            "value": "Zoom de fracture"
+            "value": "Zoom Fracture"
         },
         {
             "key": "prop_RefractionZoom",
-            "value": "Quantité de zoom"
+            "value": "Quantité Zoom"
         },
         {
             "key": "prop_RefractionMode",
-            "value": "Mode de réfraction"
+            "value": "Mode Réfraction"
         },
         {
             "key": "prop_RefractionMixStrength",
-            "value": "Force du mélange"
+            "value": "Force Mixage"
         },
         {
             "key": "prop_RefractionBlendMode",
@@ -1958,171 +2054,171 @@
         },
         {
             "key": "prop_CausticsTex",
-            "value": "Texture de caustiques internes"
+            "value": "Texture Caustiques Interne"
         },
         {
             "key": "prop_CausticsColor",
-            "value": "Couleur des caustiques"
+            "value": "Couleur Caustiques"
         },
         {
             "key": "prop_CausticsTiling",
-            "value": "Mosaïque des caustiques"
+            "value": "Tiling Caustiques"
         },
         {
             "key": "prop_CausticsSpeed",
-            "value": "Vitesse d'animation des caustiques"
+            "value": "Vitesse Animation Caustiques"
         },
         {
             "key": "prop_CausticsIntensity",
-            "value": "Intensité des caustiques"
+            "value": "Intensité Caustiques"
         },
         {
             "key": "prop_DistortionNoiseTex",
-            "value": "Bruit de distorsion (RG)"
+            "value": "Bruit Distorsion (RG)"
         },
         {
             "key": "prop_DistortionNoiseTiling",
-            "value": "Mosaïque du bruit de distorsion"
+            "value": "Tiling Bruit Distorsion"
         },
         {
             "key": "prop_DistortionNoiseStrength",
-            "value": "Force du bruit de distorsion"
+            "value": "Force Bruit Distorsion"
         },
         {
             "key": "prop_RefractionDistortionMode",
-            "value": "Mode de flou"
+            "value": "Mode Flou"
         },
         {
             "key": "prop_RefractionCAStrength",
-            "value": "Force de l'aberration chromatique"
+            "value": "Force Aberration Chromatique"
         },
         {
             "key": "prop_RefractionBlurStrength",
-            "value": "Force du flou"
+            "value": "Force Flou"
         },
         {
             "key": "prop_RefractionCAUseFresnel",
-            "value": "Aberration chromatique de Fresnel"
+            "value": "Aberration Chromatique Fresnel"
         },
         {
             "key": "prop_RefractionCAEdgeFade",
-            "value": "Fondu du bord de l'AC"
+            "value": "Fondu Bord CA"
         },
         {
             "key": "prop_ToggleDither",
-            "value": "Activer le tramage"
+            "value": "Activer Tramage (Dithering)"
         },
         {
             "key": "prop_DitherAmount",
-            "value": "Quantité de tramage"
+            "value": "Quantité Tramage"
         },
         {
             "key": "prop_DitherSpace",
-            "value": "Espace de tramage"
+            "value": "Espace Tramage"
         },
         {
             "key": "prop_DitherScale",
-            "value": "Échelle de tramage"
+            "value": "Échelle Tramage"
         },
         {
             "key": "prop_TogglePS1",
-            "value": "Activer la basse précision (PS1)"
+            "value": "Activer Basse Précision (PS1)"
         },
         {
             "key": "prop_PS1Rounding",
-            "value": "Style d'arrondi"
+            "value": "Style Arrondi"
         },
         {
             "key": "prop_PS1RoundingPrecision",
-            "value": "Précision de l'arrondi"
+            "value": "Précision Arrondi"
         },
         {
             "key": "prop_PS1Affine",
-            "value": "Activer le mappage de texture affine"
+            "value": "Activer Mapping Texture Affine"
         },
         {
             "key": "prop_PS1Compression",
-            "value": "Activer la compression des couleurs"
+            "value": "Activer Compression Couleur"
         },
         {
             "key": "prop_PS1CompressionPrecision",
-            "value": "Précision de la compression des couleurs"
+            "value": "Précision Compression Couleur"
         },
         {
             "key": "prop_UseTextureStitching",
-            "value": "Activer la couture de textures"
+            "value": "Activer Couture Texture"
         },
         {
             "key": "prop_StitchTex",
-            "value": "Texture de couture"
+            "value": "Texture Couture"
         },
         {
             "key": "prop_StitchAxis",
-            "value": "Axe de couture"
+            "value": "Axe Couture"
         },
         {
             "key": "prop_StitchOffset",
-            "value": "Décalage de la couture"
+            "value": "Décalage Joint Couture"
         },
         {
             "key": "prop_StitchTex_UV",
-            "value": "UV de la texture de couture"
+            "value": "UV Texture Couture"
         },
         {
             "key": "prop_ToggleVertexDistortion",
-            "value": "Activer la distorsion des sommets"
+            "value": "Activer Distorsion Vertex"
         },
         {
             "key": "prop_VertexDistortionMode",
-            "value": "Mode de distorsion"
+            "value": "Mode Distorsion"
         },
         {
             "key": "prop_VertexDistortionColorMask",
-            "value": "Masque de canal de couleur"
+            "value": "Masque Canal Couleur"
         },
         {
             "key": "prop_VertexDistortionStrength",
-            "value": "Force de la distorsion"
+            "value": "Force Distorsion"
         },
         {
             "key": "prop_VertexDistortionSpeed",
-            "value": "Vitesse de la distorsion"
+            "value": "Vitesse Distorsion"
         },
         {
             "key": "prop_VertexDistortionFrequency",
-            "value": "Fréquence de la distorsion"
+            "value": "Fréquence Distorsion"
         },
         {
             "key": "prop_WindStrength",
-            "value": "Force du vent"
+            "value": "Force Vent"
         },
         {
             "key": "prop_WindSpeed",
-            "value": "Vitesse du vent"
+            "value": "Vitesse Vent"
         },
         {
             "key": "prop_WindScale",
-            "value": "Échelle du bruit du vent"
+            "value": "Échelle Bruit Vent"
         },
         {
             "key": "prop_WindDirection",
-            "value": "Direction du vent (XYZ)"
+            "value": "Direction Vent (XYZ)"
         },
         {
             "key": "prop_WindNoiseTex",
-            "value": "Texture de bruit du vent (R)"
+            "value": "Texture Bruit Vent (R)"
         },
         {
             "key": "prop_BreathingStrength",
-            "value": "Force de la respiration"
+            "value": "Force Respiration"
         },
         {
             "key": "prop_BreathingSpeed",
-            "value": "Vitesse de la respiration"
+            "value": "Vitesse Respiration"
         },
         {
             "key": "prop_ToggleSSR",
-            "value": "Activer les réflexions dans l'espace écran"
+            "value": "Activer Réflexions Screen Space"
         },
         {
             "key": "prop_SSRMask",
@@ -2130,7 +2226,7 @@
         },
         {
             "key": "prop_SSRTint",
-            "value": "Teinte de la réflexion"
+            "value": "Teinte Réflexion"
         },
         {
             "key": "prop_SSRIntensity",
@@ -2138,255 +2234,255 @@
         },
         {
             "key": "prop_SSRBlendMode",
-            "value": "Mode de fusion"
+            "value": "Mode Fusion"
         },
         {
             "key": "prop_SSRFresnelPower",
-            "value": "Puissance de Fresnel"
+            "value": "Puissance Fresnel"
         },
         {
             "key": "prop_SSRFresnelScale",
-            "value": "Échelle de Fresnel"
+            "value": "Échelle Fresnel"
         },
         {
             "key": "prop_SSRFresnelBias",
-            "value": "Biais de Fresnel"
+            "value": "Biais Fresnel"
         },
         {
             "key": "prop_SSRParallax",
-            "value": "Force de la parallaxe"
+            "value": "Force Parallaxe"
         },
         {
             "key": "prop_SSRDistortionMap",
-            "value": "Carte de distorsion (RG)"
+            "value": "Carte Distorsion (RG)"
         },
         {
             "key": "prop_SSRDistortionStrength",
-            "value": "Force de la distorsion"
+            "value": "Force Distorsion"
         },
         {
             "key": "prop_SSRWorldDistortion",
-            "value": "Force de la distorsion du monde"
+            "value": "Force Distorsion Monde"
         },
         {
             "key": "prop_SSRBlur",
-            "value": "Force du flou"
+            "value": "Force Flou"
         },
         {
             "key": "prop_SSRMode",
-            "value": "Qualité de la réflexion"
+            "value": "Qualité Réflexion"
         },
         {
             "key": "prop_SSRMaxSteps",
-            "value": "Étapes max"
+            "value": "Étapes Max"
         },
         {
             "key": "prop_SSRStepSize",
-            "value": "Taille de l'étape"
+            "value": "Taille Étape"
         },
         {
             "key": "prop_SSRCoverage",
-            "value": "Augmentation de la couverture"
+            "value": "Boost Couverture"
         },
         {
             "key": "prop_SSREdgeFade",
-            "value": "Fondu du bord"
+            "value": "Fondu Bord"
         },
         {
             "key": "prop_SSRCamFade",
-            "value": "Activer le fondu en distance de la caméra"
+            "value": "Activer Fondu Distance Caméra"
         },
         {
             "key": "prop_SSRCamFadeStart",
-            "value": "Début du fondu de caméra SSR"
+            "value": "Début Fondu Caméra SSR"
         },
         {
             "key": "prop_SSRCamFadeEnd",
-            "value": "Fin du fondu de caméra SSR"
+            "value": "Fin Fondu Caméra SSR"
         },
         {
             "key": "prop_SSRFlipUV",
-            "value": "Inverser les UV de la réflexion"
+            "value": "Inverser UV Réflexion"
         },
         {
             "key": "prop_SSRAdaptiveStep",
-            "value": "Activer la taille d'étape adaptative"
+            "value": "Activer Taille Étape Adaptative"
         },
         {
             "key": "prop_SSRThickness",
-            "value": "Épaisseur d'abattage"
+            "value": "Épaisseur Culling"
         },
         {
             "key": "prop_SSROutOfViewMode",
-            "value": "Mode hors champ de vision"
+            "value": "Mode Hors Vue"
         },
         {
             "key": "prop_OutlineColor",
-            "value": "Couleur du contour"
+            "value": "Couleur Contour"
         },
         {
             "key": "prop_OutlineWidth",
-            "value": "Largeur du contour"
+            "value": "Largeur Contour"
         },
         {
             "key": "prop_OutlineVertexColorMask",
-            "value": "Utiliser le masque de couleur de sommet (R)"
+            "value": "Utiliser Masque Couleur Vertex (R)"
         },
         {
             "key": "prop_OutlineDistanceFade",
-            "value": "Activer le fondu en distance"
+            "value": "Activer Fondu Distance"
         },
         {
             "key": "prop_OutlineFadeStart",
-            "value": "Distance de début du fondu"
+            "value": "Distance Début Fondu"
         },
         {
             "key": "prop_OutlineFadeEnd",
-            "value": "Distance de fin du fondu"
+            "value": "Distance Fin Fondu"
         },
         {
             "key": "prop_OutlineHueShift",
-            "value": "Activer le décalage de teinte"
+            "value": "Activer Décalage Teinte"
         },
         {
             "key": "prop_OutlineHueShiftSpeed",
-            "value": "Vitesse du décalage de teinte"
+            "value": "Vitesse Décalage Teinte"
         },
         {
             "key": "prop_OutlineOpacity",
-            "value": "Opacité du contour"
+            "value": "Opacité Contour"
         },
         {
             "key": "prop_IndirectFallbackMode",
-            "value": "Mode de repli indirect"
+            "value": "Mode Repli Indirect"
         },
         {
             "key": "prop_IndirectOverride",
-            "value": "Surcharge indirecte"
+            "value": "Remplacer Indirect"
         },
         {
             "key": "prop_FallbackCubemap",
-            "value": "Cubemap de repli"
+            "value": "Cubemap de Repli"
         },
         {
             "key": "prop_MainTex_UV",
-            "value": "Ensemble d'UV de la texture principale"
+            "value": "Set UV texture principale"
         },
         {
             "key": "prop_BumpMap_UV",
-            "value": "Ensemble d'UV de la carte de relief"
+            "value": "Set UV Bump map"
         },
         {
             "key": "prop_MSSO_UV",
-            "value": "Ensemble d'UV MSSO"
+            "value": "Set UV MSSO"
         },
         {
             "key": "prop_SpecularTintTexture_UV",
-            "value": "Ensemble d'UV de la teinte spéculaire"
+            "value": "Set UV Teinte Spéculaire"
         },
         {
             "key": "prop_TangentMap_UV",
-            "value": "UV de la carte de tangentes"
+            "value": "Set UV Tangent Map"
         },
         {
             "key": "prop_EmissionMap_UV",
-            "value": "Ensemble d'UV de la carte d'émission"
+            "value": "Set UV Carte Émission"
         },
         {
             "key": "prop_ClearcoatMap_UV",
-            "value": "Ensemble d'UV de la carte de vernis"
+            "value": "Set UV Carte Vernis"
         },
         {
             "key": "prop_MatcapMask_UV",
-            "value": "Ensemble d'UV du masque de matcap"
+            "value": "Set UV Masque Matcap"
         },
         {
             "key": "prop_ParallaxMap_UV",
-            "value": "Ensemble d'UV de la carte de hauteur"
+            "value": "Set UV Carte Hauteur"
         },
         {
             "key": "prop_ThicknessMap_UV",
-            "value": "Ensemble d'UV de la carte d'épaisseur"
+            "value": "Set UV Carte Épaisseur"
         },
         {
             "key": "prop_DetailMap_UV",
-            "value": "Ensemble d'UV de la carte de détails"
+            "value": "Set UV Carte Détail"
         },
         {
             "key": "prop_Decal1_UV",
-            "value": "Ensemble d'UV de la décalcomanie 1"
+            "value": "Set UV Autocollant 1"
         },
         {
             "key": "prop_Decal2_UV",
-            "value": "Ensemble d'UV de la décalcomanie 2"
+            "value": "Set UV Autocollant 2"
         },
         {
             "key": "prop_Glitter_UV",
-            "value": "Ensemble d'UV des paillettes"
+            "value": "Set UV Paillettes"
         },
         {
             "key": "prop_IridescenceMask_UV",
-            "value": "Ensemble d'UV du masque d'iridescence"
+            "value": "Set UV Masque Iridescence"
         },
         {
             "key": "prop_GlitterMask_UV",
-            "value": "Ensemble d'UV du masque de paillettes"
+            "value": "Set UV Masque Paillettes"
         },
         {
             "key": "prop_HairFlowMap_UV",
-            "value": "Ensemble d'UV de la carte de flux des cheveux"
+            "value": "Set UV Hair Flow Map"
         },
         {
             "key": "prop_ShadowTex_UV",
-            "value": "Ensemble d'UV de la texture d'ombre"
+            "value": "Set UV Texture Ombre"
         },
         {
             "key": "prop_Flowmap_UV",
-            "value": "Ensemble d'UV de la flowmap"
+            "value": "Set UV Flowmap"
         },
         {
             "key": "prop_MirrorDetectionTexture_UV",
-            "value": "Ensemble d'UV de la texture de détection de miroir"
+            "value": "Set UV Texture Détection Miroir"
         },
         {
             "key": "prop_RefractionMask_UV",
-            "value": "Ensemble d'UV du masque de réfraction"
+            "value": "Set UV Masque Réfraction"
         },
         {
             "key": "prop_PathingTexture_UV",
-            "value": "Ensemble d'UV de la carte de traçage"
+            "value": "Set UV Carte Pathing"
         },
         {
             "key": "prop_ShadowMap_UV",
-            "value": "Ensemble d'UV de la carte d'ombres"
+            "value": "Set UV Shadow Map"
         },
         {
             "key": "prop_Dither_UV",
-            "value": "Ensemble d'UV du tramage"
+            "value": "Set UV Tramage"
         },
         {
             "key": "prop_OverrideRenderQueue",
-            "value": "Utiliser une file d'attente de rendu personnalisée"
+            "value": "Utiliser File Rendu Personnalisée"
         },
         {
             "key": "prop_OverrideBaseBlend",
-            "value": "Utiliser un mélange de base personnalisé"
+            "value": "Utiliser Mélange Base Personnalisé"
         },
         {
             "key": "prop_BlendOp",
-            "value": "Opération de fusion"
+            "value": "Opération Mélange"
         },
         {
             "key": "prop_AddSrcBlend",
-            "value": "Mélange source"
+            "value": "Mélange Source"
         },
         {
             "key": "prop_AddDstBlend",
-            "value": "Mélange destination"
+            "value": "Mélange Destination"
         },
         {
             "key": "prop_AddBlendOp",
-            "value": "Opération de fusion alpha"
+            "value": "Opération Mélange Alpha"
         },
         {
             "key": "prop_ZTest",
@@ -2394,31 +2490,115 @@
         },
         {
             "key": "prop_OverrideAddBlend",
-            "value": "Utiliser un mélange additif personnalisé"
+            "value": "Utiliser Mélange Additif Personnalisé"
         },
         {
             "key": "prop_OverrideZWrite",
-            "value": "Utiliser un ZWrite personnalisé"
+            "value": "Utiliser ZWrite Personnalisé"
         },
         {
             "key": "specular_standard_stylised_info",
-            "value": "Le spéculaire standard n'a pas d'options stylisées - essayez de changer le mode spéculaire pour voir les paramètres ici !"
+            "value": "Le Spéculaire Standard n'a pas d'options stylisées - essayez de changer le mode spéculaire pour voir les paramètres ici !"
         },
         {
             "key": "depth_popup_info",
-            "value": "Cet effet doit lire la profondeur de la scène ! Assurez-vous que votre monde a soit une lumière en temps réel activée, soit que le préfabriqué Depth Writer est dans la scène (fourni avec Backlace)."
+            "value": "Cet effet doit lire la Profondeur de la scène ! Assurez-vous que votre monde a une lumière en temps réel activée ou que le prefab Depth Writer est dans la scène (fourni avec Backlace)."
         },
         {
-            "key": "footer_madewith",
-            "value": "Fait avec amour et mon projet open-source"
+            "key": "prop_OutlineSpace",
+            "value": "Espace Contour"
         },
         {
-            "key": "footer_backlace",
-            "value": "Backlace Anime Shader."
+            "key": "prop_OutlineMode",
+            "value": "Mode Contour"
         },
         {
-            "key": "footer_heart",
-            "value": "❤"
+            "key": "prop_OutlineTexMap",
+            "value": "Mode Texture"
+        },
+        {
+            "key": "prop_OutlineTex",
+            "value": "Texture Contour"
+        },
+        {
+            "key": "prop_OutlineTexTiling",
+            "value": "Tiling Texture"
+        },
+        {
+            "key": "prop_OutlineTexScroll",
+            "value": "Défilement Texture"
+        },
+        {
+            "key": "prop_ToggleSDFShadow",
+            "value": "Activer Ombre SDF"
+        },
+        {
+            "key": "prop_SDFShadowTexture",
+            "value": "Texture Ombre SDF"
+        },
+        {
+            "key": "prop_SDFShadowThreshold",
+            "value": "Seuil Ombre SDF"
+        },
+        {
+            "key": "prop_SDFShadowSoftness",
+            "value": "Douceur Ombre SDF"
+        },
+        {
+            "key": "prop_InteriorCubemap",
+            "value": "Cubemap Intérieur"
+        },
+        {
+            "key": "prop_InteriorColor",
+            "value": "Couleur Intérieur"
+        },
+        {
+            "key": "prop_InteriorTiling",
+            "value": "Tiling Intérieur"
+        },
+        {
+            "key": "prop_ParallaxLayerMask",
+            "value": "Masque Couche Parallaxe"
+        },
+        {
+            "key": "prop_ParallaxLayer1",
+            "value": "Couche Parallaxe 1"
+        },
+        {
+            "key": "prop_ParallaxLayer2",
+            "value": "Couche Parallaxe 2"
+        },
+        {
+            "key": "prop_ParallaxLayer3",
+            "value": "Couche Parallaxe 3"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth1",
+            "value": "Profondeur Couche Parallaxe 1"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth2",
+            "value": "Profondeur Couche Parallaxe 2"
+        },
+        {
+            "key": "prop_ParallaxLayerDepth3",
+            "value": "Profondeur Couche Parallaxe 3"
+        },
+        {
+            "key": "prop_ParallaxBlend",
+            "value": "Mélange Parallaxe"
+        },
+        {
+            "key": "prop_ParallaxStack",
+            "value": "Ordre d'Empilement"
+        },
+        {
+            "key": "prop_ParallaxBlendWeight",
+            "value": "Poids du Mélange"
+        },
+        {
+            "key": "prop_ParallaxTile",
+            "value": "Tuiler les Couches"
         }
     ]
 }

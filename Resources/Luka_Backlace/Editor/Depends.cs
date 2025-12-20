@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-#define LUKA_DEVELOPER_MODE
 
 // imports
 using System;
