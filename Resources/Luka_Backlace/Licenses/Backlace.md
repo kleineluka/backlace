@@ -1,4 +1,4 @@
-The Backlace License (Version 1.3)
+The Backlace License (Version 1.4)
 
 Copyright (c) 2025 Zoey (KleineLuka)
 
@@ -22,5 +22,8 @@ You can’t sell the Software by itself or in nearly identical form. You can, ho
 
 ## 4. Derivative Shaders Notice
 If you create a shader or similar technical tool that directly builds on Backlace, include the phrase “Built off of Backlace” in a visible part of its user interface, ideally with a link to the original GitHub page. This requirement does not apply to works using such shaders (like avatars, worlds, or games).
+
+## 5. Connectivity and File Access
+By using this software, you agree to allow a web request (purely used for metadata / update checking) that sends no info about you other than the shader name and version. You also agree to let Backlace write files on your computer for the sole purpose of functionality, such as saving presets and generating compact shaders.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

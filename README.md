@@ -52,7 +52,7 @@ Backlace is split into various .cginclude files to make it editing, building, an
 What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change. This modular practice also makes it easy to dynamically add different versions of the shader (ex. `Outline` or `Grabpass`) - we can just add a new define (ex. `BACKLACE_GRABPASS`) and use that to conditionally compile code.
 
 ## License ✨
-Anything in the `Editor` and `Processor` folders are under their respective licenses and not under the Backlace License. That is because these are separate projects of mine that aren't made to be built off of like Backlace, the shader, is - they are just there for the users. Backlace itself is licensed under the Backlace License (Version 1.3). Please see the `LICENSE.md` file for the full terms.
+Anything in the `Editor` and `Processor` folders are under their respective licenses and not under the Backlace License. That is because these are separate projects of mine that aren't made to be built off of like Backlace, the shader, is - they are just there for the users. Backlace itself is licensed under the Backlace License (Version 1.4). Please see the `LICENSE.md` file for the full terms.
 
 **TL;DR** —
 - You’re free to use Backlace in any project (personal or commercial) at no cost.

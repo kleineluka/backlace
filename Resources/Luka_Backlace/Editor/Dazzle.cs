@@ -1775,6 +1775,7 @@ namespace Luka.Backlace
         private Rect background_rectangle;
         private bool has_update = false;
         private bool dismissed_notif = false;
+        private string changelog = "";
 
         // constructor
         public Update(ref Theme theme)
@@ -1803,6 +1804,7 @@ namespace Luka.Backlace
             {
                 Version latestVersion = new Version(versionEntry.Version);
                 has_update = !Project.version.is_newer_than(latestVersion);
+                if (has_update) changelog = versionEntry.Changelog;
             }
             catch (Exception e)
             {
@@ -1821,6 +1823,7 @@ namespace Luka.Backlace
             // temp
             string header = theme.text_manager.texter("<i>" + this.theme.language_manager.speak("update_available") + "</i>");
             string body = theme.text_manager.texter(this.theme.language_manager.speak("update_description"));
+            if (!string.IsNullOrEmpty(changelog)) body += "\n\n" + theme.text_manager.texter(changelog);
             // styles
             GUIStyle headerStyle = theme.styler_manager.load_style_announcement_header(ref theme);
             GUIStyle bodyStyle = theme.styler_manager.load_style_announcement_body(ref theme);

@@ -956,7 +956,6 @@ namespace Luka.Backlace
             Material targetMat = materialEditor.target as Material;
             EditorGUI.BeginChangeCheck();
             header.draw();
-            update.draw();
             if (is_compact) {
                 compact_notice.draw();
                 GUILayout.Space(4);
@@ -2578,6 +2577,7 @@ namespace Luka.Backlace
             presets_menu?.draw();
             premonition_menu?.draw();
             license_menu?.draw();
+            update.draw();
             announcement?.draw();
             docs?.draw();
             socials_menu?.draw();

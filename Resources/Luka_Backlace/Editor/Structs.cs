@@ -76,6 +76,7 @@ namespace Luka.Backlace
     {
         public string Name;
         public string Version;
+        public string Changelog;
     }
 
     [System.Serializable]

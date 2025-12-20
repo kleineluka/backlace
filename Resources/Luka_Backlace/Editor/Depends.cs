@@ -383,7 +383,7 @@ namespace Luka.Backlace
             };
             full_metadata.Versions = new List<VersionEntry>
             {
-                new VersionEntry { Name = Project.project_name, Version = Project.version.print() }
+                new VersionEntry { Name = Project.project_name, Version = Project.version.print(), Changelog = "" }
             };
             metadata_loaded = true;
         }
