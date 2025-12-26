@@ -14,7 +14,7 @@ namespace Luka.Backlace
         public static readonly string project_path = "Luka_Backlace";
         public static readonly string project_license = "/Licenses/Backlace";
         public static Version version = new Version("1.5.0");
-        public static readonly Version version_dazzle = new Version("4.0.0"); // just internally
+        public static readonly Version version_dazzle = new Version("4.2.0"); // just internally
         public static readonly string project_docs = "https://luka.moe/docs/backlace";
         public static readonly bool has_license = true; // if the project has a license file, or if you wanna show it
         public static readonly bool has_docs = true; // if the project has documentation, or if you wanna show it
@@ -46,6 +46,8 @@ namespace Luka.Backlace
             new Dependency("SPS", DependencyType.Package, folderPath: "", packageName: "com.vrcfury.vrcfury", infoUrl: "https://github.com/VRCFury/VRCFury"),
         };
         public static readonly DependencyManager dependency_manager = new DependencyManager(dependencies);
+        public static readonly bool enable_debug = false;
+        public static readonly string debug_tag = "Backlace_";
     }
 
 }

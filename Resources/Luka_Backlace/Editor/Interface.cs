@@ -44,6 +44,8 @@ namespace Luka.Backlace
         private static PresetsMenu presets_menu = null;
         private static Tab premonition_tab = null;
         private static PremonitionMenu premonition_menu = null;
+        private static Tab debug_tab = null;
+        private static DevMenu debug_menu = null;
         private static NoticeBox compact_notice = null;
         private static bool is_compact = false;
         
@@ -843,12 +845,14 @@ namespace Luka.Backlace
             license_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 10, languages.speak("tab_license"));
             config_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_config"));
             presets_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_presets"));
+            debug_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 999, languages.speak("tab_debug"));
             config_menu = new ConfigMenu(ref theme, ref languages, ref configs, ref config_tab);
             license_menu = new LicenseMenu(ref theme, ref languages, ref license_tab);
             cushion = new Cushion(targetMat);
             beauty_blender = new BeautyBlender(targetMat);
             bags = new Bags(ref languages);
             presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
+            debug_menu = new DevMenu(ref theme, ref languages, ref debug_tab);
             premonition_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 9, languages.speak("tab_premonition"));
             is_compact = targetMat.shader.name.ToLower().Contains("_compact_");
             compact_notice = new NoticeBox(ref theme, languages.speak("premonition_compact_notice"));
@@ -2576,6 +2580,7 @@ namespace Luka.Backlace
             config_menu?.draw();
             presets_menu?.draw();
             premonition_menu?.draw();
+            debug_menu?.draw(materialEditor, properties);
             license_menu?.draw();
             update.draw();
             announcement?.draw();

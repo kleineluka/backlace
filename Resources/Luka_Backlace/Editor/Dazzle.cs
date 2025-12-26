@@ -2654,6 +2654,47 @@ namespace Luka.Backlace
 
     }
 
+    // developer/debug menu
+    public class DevMenu
+    {
+
+        private Theme theme;
+        private Languages languages;
+        private Tab tab;
+
+        public DevMenu(ref Theme theme, ref Languages languages, ref Tab tab)
+        {
+            this.theme = theme;
+            this.languages = languages;
+            this.tab = tab;
+        }
+
+        public void draw(MaterialEditor materialEditor, MaterialProperty[] properties)
+        {
+            if (!Project.enable_debug) return; // only show in debug mode
+            tab.draw();
+            if (tab.is_expanded)
+            {
+                Components.start_foldout();
+                foreach (var prop in properties)
+                {
+                    if (prop.name.StartsWith(Project.debug_tag))
+                    {
+                        materialEditor.ShaderProperty(prop, prop.displayName);
+                    }
+                }
+                Components.draw_divider();
+                if (GUILayout.Button(languages.speak("dev_reload_interface"), GUILayout.Height(30)))
+                {
+                    Interface.unload_interface();
+                    EditorUtility.DisplayDialog(Project.project_name, languages.speak("dev_reload_success"), languages.speak("dialog_okay"));
+                }
+                Components.end_foldout();
+            }
+        }
+
+    }
+
 }
 #endif // UNITY_EDITOR
 

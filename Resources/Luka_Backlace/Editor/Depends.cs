@@ -151,9 +151,7 @@ namespace Luka.Backlace
                     break;
                 case "Debug":
                     // only print debug messages in developer mode
-#if LUKA_DEVELOPER_MODE
-                        Debug.Log(formatted_message);
-#endif // LUKA_DEVELOPER_MODE
+                    if (Project.enable_debug) Debug.Log(formatted_message);
                     break;
                 default:
                     Debug.Log(formatted_message);
@@ -320,12 +318,13 @@ namespace Luka.Backlace
         // fetch
         private void fetch()
         {
-#if LUKA_DEVELOPER_MODE
+            if (Project.enable_debug) 
+            {
                 Pretty.print("Developer mode is active, skipping metadata fetch...", Pretty.LogKind.Info);
                 full_metadata = null;
                 metadata_loaded = false;
                 return;
-#endif // LUKA_DEVELOPER_MODE
+            }
             try
             {
                 using (var wc = new System.Net.WebClient())

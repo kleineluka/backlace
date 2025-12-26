@@ -927,7 +927,6 @@
         float3 billboardRight = normalize(cross(billboardUp, billboardFwd));
         billboardUp = cross(billboardFwd, billboardRight);
         float3 flattenedWorldPos = worldObjectPivot;
-        // Here are the changes, my darling. So simple, so clean.
         flattenedWorldPos += billboardRight * vertex.x;
         flattenedWorldPos += billboardUp * vertex.y;
         flattenedWorldPos -= billboardFwd * vertex.z * _FlatModelDepthCorrection;
