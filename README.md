@@ -9,6 +9,8 @@
 Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
 
 **Current Version:** 1.5.0
+<br>
+**Supported Platforms:** Unity Built-in Render Pipeline, VRChat, Beatsaber, MateEngine, and more!
 
 ## Features 🌈
 - **Core Features:**
@@ -45,7 +47,7 @@ Backlace is split into various .cginclude files to make it editing, building, an
 - `Backlace_Forward.cginc`, `Backlace_Outline.cginc`, `Backlace_Shadow.cginc`, `Backlace_Meta.cginc`, and `Backlace_Geometry.cginc` (optional, not used by default) contain the various passes of the shader.
 - `Backlace_Vertex.cginc` and `Backlace_Fragment.cginc` contain the vertex and fragment shaders for the Forward pass.
 - `Backlace_Lighting.cginc` contains the various lighting modes, while `Backlace_Shading.cginc` contains the various surface properties and shading code.
-- `Backlace_Effects.cginc` contains the various effects exclusive to the Fun variant.
+- `Backlace_Effects.cginc` contains the various effects that are typically gatekeeped by keywords.
 - `Backlace_Keywords.cginc`, `Backlace_Properties.cginc`, and `Backlace_Universal.cginc` contain various helper code used throughout the shader.
 - Third-party code (such as AudioLink) go into their own files, such as `Backlace_AudioLink.cginc`.
 
