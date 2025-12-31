@@ -3,11 +3,6 @@ Shader "luka/backlace/default"
 
     Properties
     {
-        // INTERNAL
-        [HideInInspector] _BACKLACE_VERSION_MAJOR ("Backlace Version Major", Int) = 1
-        [HideInInspector] _BACKLACE_VERSION_MINOR ("Backlace Version Minor", Int) = 5
-        [HideInInspector] _BACKLACE_VERSION_PATCH ("Backlace Version Patch", Int) = 0
-        
         // RENDERING SETTINGS
         // [Space(35)]
         // [Header(Rendering Settings)]
@@ -780,7 +775,7 @@ Shader "luka/backlace/default"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.0.0" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.5.0" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]
