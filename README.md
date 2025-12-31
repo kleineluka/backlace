@@ -37,7 +37,7 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 ## Where Backlace Is Used 🌨️
 This section will be updated when I make things with it!
 
-- The official distribution of Backlace itself! You can find it on [Gumroad](https://kleineluka.gumroad.com/l/backlace), [Jinxxy](https://jinxxy.com/luka/backlace), [Booth.pm](https://lukasong.booth.pm/items/7551840), and [Payhip](https://payhip.com/b/71i3E). Naturally, it is also in this repository!
+- The official distribution of Backlace itself! You can find it on [Gumroad](https://kleineluka.gumroad.com/l/backlace), [Jinxxy](https://jinxxy.com/luka/backlace), [Booth.pm](https://lukasong.booth.pm/items/7551840), and [Payhip](https://payhip.com/b/71i3E) (and on this repo).
 
 ## Building Off Of Backlace 🫧
 > [!NOTE] 

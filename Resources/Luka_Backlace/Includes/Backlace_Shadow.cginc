@@ -204,19 +204,23 @@ VertexOutput  Vertex(VertexData v)
     i.normal = UnityObjectToWorldNormal(v.normal);
     i.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
     #if defined(_BACKLACE_PARALLAX)
-        float3 parallaxWorldPos = i.worldPos;
-        float3 worldNormal = UnityObjectToWorldNormal(v.normal);
-        float3 worldTangent = UnityObjectToWorldDir(v.tangentDir.xyz);
-        float3 worldBitangent = cross(worldNormal, worldTangent) * v.tangentDir.w * unity_WorldTransformParams.w;
-        float3 lightDir = UnityWorldSpaceLightDir(parallaxWorldPos);
-        float3 viewDirForParallax = -lightDir; 
-        float3x3 worldToTangent = float3x3(worldTangent, worldBitangent, worldNormal);
-        float3 viewDirTS = mul(worldToTangent, viewDirForParallax);
-        float2 parallaxUVs = v.uv;
-        float height = UNITY_SAMPLE_TEX2D_LOD(_ParallaxMap, parallaxUVs, 0).r;
-        float2 offset = viewDirTS.xy * (height * _ParallaxStrength);
-        parallaxWorldPos += offset.x * worldTangent + offset.y * worldBitangent;
-        v.vertex.xyz = mul(unity_WorldToObject, float4(parallaxWorldPos, 1)).xyz;
+        [branch] if (_ParallaxMode == 0 || _ParallaxMode == 1) 
+        {
+            // only apple parallax for uv
+            float3 parallaxWorldPos = i.worldPos;
+            float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+            float3 worldTangent = UnityObjectToWorldDir(v.tangentDir.xyz);
+            float3 worldBitangent = cross(worldNormal, worldTangent) * v.tangentDir.w * unity_WorldTransformParams.w;
+            float3 lightDir = UnityWorldSpaceLightDir(parallaxWorldPos);
+            float3 viewDirForParallax = -lightDir; 
+            float3x3 worldToTangent = float3x3(worldTangent, worldBitangent, worldNormal);
+            float3 viewDirTS = mul(worldToTangent, viewDirForParallax);
+            float2 parallaxUVs = v.uv;
+            float height = UNITY_SAMPLE_TEX2D_LOD(_ParallaxMap, parallaxUVs, 0).r;
+            float2 offset = viewDirTS.xy * (height * _ParallaxStrength);
+            parallaxWorldPos += offset.x * worldTangent + offset.y * worldBitangent;
+            v.vertex.xyz = mul(unity_WorldToObject, float4(parallaxWorldPos, 1)).xyz;
+        }
     #endif // _BACKLACE_PARALLAX
     // flat model shadow casting
     #if defined(_BACKLACE_FLAT_MODEL)
