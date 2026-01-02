@@ -2472,7 +2472,9 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_AudioLinkFallback, languages.speak("prop_AudioLinkFallback"));
                     materialEditor.ShaderProperty(prop_AudioLinkMode, languages.speak("prop_AudioLinkMode"));
                     Components.start_dynamic_disable(!prop_AudioLinkMode.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_AudioLinkSmoothLevel, languages.speak("prop_AudioLinkSmoothLevel"));
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_AudioLinkMode.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_AudioLinkEmissionBand, languages.speak("prop_AudioLinkEmissionBand"));
                     Components.start_dynamic_disable(prop_AudioLinkEmissionBand.floatValue.Equals(0), configs);
