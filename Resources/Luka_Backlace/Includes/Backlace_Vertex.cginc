@@ -13,7 +13,7 @@ FragmentData Vertex(VertexData v)
         i.alChannel1 = float4(al_data.emission, al_data.rim, al_data.hueShift, al_data.matcap);
         i.alChannel2 = float4(al_data.pathing, al_data.glitter, al_data.iridescence, al_data.decalHue);
         i.alChannel3 = float2(al_data.decalEmission, al_data.decalOpacity);
-        v.vertex.xyz *= _VertexManipulationScale * (al_data.vertexScale); // scale
+        v.vertex.xyz *= _VertexManipulationScale * al_data.vertexScale; // scale
     #else // _BACKLACE_AUDIOLINK
         v.vertex.xyz *= _VertexManipulationScale; // scale
     #endif // _BACKLACE_AUDIOLINK

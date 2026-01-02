@@ -11,10 +11,14 @@
 #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
 #pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
 #pragma shader_feature_local _ _BACKLACE_DITHER
+#pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 #pragma shader_feature_local _ _BLENDMODE_CUTOUT
 
 // includes
 #include "UnityCG.cginc"
+#if defined(_BACKLACE_AUDIOLINK)
+    #include "./Backlace_AudioLink.cginc"
+#endif // _BACKLACE_AUDIOLINK
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Effects.cginc"
 
@@ -69,7 +73,12 @@ v2f vert(appdata v)
 {
     v2f o;
     // apply vertex modifications
-    v.vertex.xyz *= _VertexManipulationScale;
+    #if defined(_BACKLACE_AUDIOLINK)
+        BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
+        v.vertex.xyz *= _VertexManipulationScale * al_data.vertexScale; // scale
+    #else // _BACKLACE_AUDIOLINK
+        v.vertex.xyz *= _VertexManipulationScale; // scale
+    #endif // _BACKLACE_AUDIOLINK
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
         DistortVertex(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);

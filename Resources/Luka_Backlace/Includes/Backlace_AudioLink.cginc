@@ -401,7 +401,7 @@ float4 AudioLinkGetAudioSourcePosition()
     return float4(AudioLinkData(ALPASS_GENERALVU_SOURCE_POS).xyz, 1);
 }
 
-// backlace changess to this cginclude start here !!
+// backlace changes to this cginclude start here !!
 #if defined(_BACKLACE_AUDIOLINK)
     struct BacklaceAudioLinkData
     {

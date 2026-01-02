@@ -14,6 +14,7 @@
 #pragma shader_feature_local _ _BACKLACE_DECAL1
 #pragma shader_feature_local _ _BACKLACE_DECAL2
 #pragma shader_feature_local _ _BACKLACE_STITCH
+#pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 
 // unity includes
 #include "UnityCG.cginc"
@@ -169,6 +170,11 @@ float3 _VertexManipulationScale;
     float _StitchOffset;
 #endif // _BACKLACE_STITCH
 
+// audiolink features (for vertex scaling)
+#if defined(_BACKLACE_AUDIOLINK)
+    #include "./Backlace_AudioLink.cginc"
+#endif // _BACKLACE_AUDIOLINK
+
 // my includes
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Effects.cginc"
@@ -195,7 +201,12 @@ VertexOutput  Vertex(VertexData v)
 {
     VertexOutput  i;
     // vertex effects from forward passes
-    v.vertex.xyz *= _VertexManipulationScale;
+    #if defined(_BACKLACE_AUDIOLINK)
+        BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
+        v.vertex.xyz *= _VertexManipulationScale * al_data.vertexScale; // scale
+    #else // _BACKLACE_AUDIOLINK
+        v.vertex.xyz *= _VertexManipulationScale; // scale
+    #endif // _BACKLACE_AUDIOLINK
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
         DistortVertex(v.vertex);
