@@ -420,6 +420,8 @@ float4 AudioLinkGetAudioSourcePosition()
     };
 
     float _AudioLinkFallback;
+    float _AudioLinkMode;
+    float _AudioLinkSmoothLevel;
     float _AudioLinkEmissionBand, _AudioLinkEmissionStrength;
     float2 _AudioLinkEmissionRange;
     float _AudioLinkRimBand, _AudioLinkRimStrength;
@@ -447,18 +449,28 @@ float4 AudioLinkGetAudioSourcePosition()
 
     float GetAudioLinkBandValue(float band)
     {
+        // set up defaults
         if (band < 1) return _AudioLinkFallback;
         if (!AudioLinkIsAvailable()) return 0;
-        float value = 0;
-        switch((int)band - 1)
+        int selection = (int)band - 1;
+        int mode = (int)_AudioLinkMode;
+        // chronotensity
+        [branch] if (mode == 2)
         {
-            case 0: value = AudioLinkData(ALPASS_AUDIOBASS).r; break; // bass
-            case 1: value = AudioLinkData(ALPASS_AUDIOLOWMIDS).r; break; // low mids
-            case 2: value = AudioLinkData(ALPASS_AUDIOHIGHMIDS).r; break; // high mids
-            case 3: value = AudioLinkData(ALPASS_AUDIOTREBLE).r; break; // treble
-            case 4: value = AudioLinkData(ALPASS_GENERALVU).z; break; // overall
+            // Map Overall (4) to Bass (0) for safety
+            int chronoBand = (selection > 3) ? 0 : selection;
+            return (AudioLinkDecodeDataAsUInt(ALPASS_CHRONOTENSITY + uint2(1, chronoBand)) % 100000) / 100000.0;
         }
-        return value;
+        // smooth
+        [branch] if (mode == 1)
+        {
+            int smoothLevel = clamp((int)_AudioLinkSmoothLevel, 0, 15);
+            if (selection == 4) return AudioLinkData(ALPASS_FILTEREDVU_INTENSITY + uint2(min(smoothLevel, 3), 0)).x;
+            return AudioLinkData(ALPASS_FILTEREDAUDIOLINK + uint2(smoothLevel, selection)).r;
+        }
+        // raw
+        if (selection == 4) return AudioLinkData(ALPASS_GENERALVU + uint2(8, 0)).x;
+        return AudioLinkData(ALPASS_AUDIOLINK + uint2(0, selection)).r;
     }
 
     float CalculateAudioLinkEffect(float band, float2 range, float strength)
@@ -467,7 +479,8 @@ float4 AudioLinkGetAudioSourcePosition()
         return lerp(range.x, range.y, raw) * strength;
     }
 
-    BacklaceAudioLinkData CalculateAudioLinkEffects() {
+    BacklaceAudioLinkData CalculateAudioLinkEffects()
+    {
         BacklaceAudioLinkData data = (BacklaceAudioLinkData)0;
         if (!AudioLinkIsAvailable())
         {

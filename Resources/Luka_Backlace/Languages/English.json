@@ -1581,6 +1581,14 @@
             "value": "Fallback Level"
         },
         {
+            "key": "prop_AudioLinkMode",
+            "value": "AudioLink Mode"
+        },
+        {
+            "key": "prop_AudioLinkSmoothLevel",
+            "value": "Smoothing Level"
+        },
+        {
             "key": "prop_AudioLinkEmissionBand",
             "value": "Emission Band"
         },

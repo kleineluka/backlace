@@ -424,6 +424,8 @@ namespace Luka.Backlace
         // audiolink properties
         private MaterialProperty prop_ToggleAudioLink = null;
         private MaterialProperty prop_AudioLinkFallback = null;
+        private MaterialProperty prop_AudioLinkMode = null;
+        private MaterialProperty prop_AudioLinkSmoothLevel = null;
         private MaterialProperty prop_AudioLinkEmissionBand = null;
         private MaterialProperty prop_AudioLinkEmissionStrength = null;
         private MaterialProperty prop_AudioLinkEmissionRange = null;
@@ -2427,6 +2429,8 @@ namespace Luka.Backlace
                     // third party - audiolink
                     prop_ToggleAudioLink = FindProperty("_ToggleAudioLink", properties);
                     prop_AudioLinkFallback = FindProperty("_AudioLinkFallback", properties);
+                    prop_AudioLinkMode = FindProperty("_AudioLinkMode", properties);
+                    prop_AudioLinkSmoothLevel = FindProperty("_AudioLinkSmoothLevel", properties);
                     prop_AudioLinkEmissionBand = FindProperty("_AudioLinkEmissionBand", properties);
                     prop_AudioLinkEmissionStrength = FindProperty("_AudioLinkEmissionStrength", properties);
                     prop_AudioLinkEmissionRange = FindProperty("_AudioLinkEmissionRange", properties);
@@ -2466,6 +2470,10 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ToggleAudioLink, languages.speak("prop_ToggleAudioLink"));
                     Components.start_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_AudioLinkFallback, languages.speak("prop_AudioLinkFallback"));
+                    materialEditor.ShaderProperty(prop_AudioLinkMode, languages.speak("prop_AudioLinkMode"));
+                    Components.start_dynamic_disable(!prop_AudioLinkMode.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_AudioLinkSmoothLevel, languages.speak("prop_AudioLinkSmoothLevel"));
+                    Components.end_dynamic_disable(!prop_AudioLinkMode.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_AudioLinkEmissionBand, languages.speak("prop_AudioLinkEmissionBand"));
                     Components.start_dynamic_disable(prop_AudioLinkEmissionBand.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;

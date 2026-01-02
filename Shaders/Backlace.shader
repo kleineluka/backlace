@@ -443,6 +443,8 @@ Shader "luka/backlace/default"
         // [Space(10)]
         [Toggle(_BACKLACE_AUDIOLINK)] _ToggleAudioLink ("Enable AudioLink", Float) = 0.0
         _AudioLinkFallback ("Fallback Level", Range(0, 1)) = 1.0
+        [Enum(Raw, 0, Smooth, 1, Chronotensity, 2)] _AudioLinkMode ("AudioLink Mode", Float) = 0
+        [IntRange] _AudioLinkSmoothLevel ("Smoothing Level", Range(0, 15)) = 8
         [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkEmissionBand ("Emission Band", Float) = 0
         _AudioLinkEmissionStrength ("  Strength", Range(0, 10)) = 1.0
         _AudioLinkEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
