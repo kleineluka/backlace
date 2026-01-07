@@ -2623,6 +2623,78 @@
         {
             "key": "prop_GlitchFrequency",
             "value": "Glitch Frequency"
+        },
+        {
+            "key": "custom_badge_backlace",
+            "value": "Backlace"
+        },
+        {
+            "key": "custom_badge_poi",
+            "value": "Poiyomi"
+        },
+        {
+            "key": "custom_badge_openlit",
+            "value": "Open Lit"
+        },
+        {
+            "key": "custom_badge_standard",
+            "value": "Standard"
+        },
+        {
+            "key": "custom_badge_mochie",
+            "value": "Mochie"
+        },
+        {
+            "key": "custom_badge_fast_uv",
+            "value": "Fast UV"
+        },
+        {
+            "key": "custom_badge_fancy_uv",
+            "value": "Fancy UV"
+        },
+        {
+            "key": "custom_badge_layered",
+            "value": "Layered"
+        },
+        {
+            "key": "custom_badge_interior",
+            "value": "Interior"
+        },
+        {
+            "key": "custom_badge_texture",
+            "value": "Texture"
+        },
+        {
+            "key": "custom_badge_procedural",
+            "value": "Procedural"
+        },
+        {
+            "key": "custom_badge_noise",
+            "value": "Noise"
+        },
+        {
+            "key": "custom_badge_directional",
+            "value": "Directional"
+        },
+        {
+            "key": "custom_badge_voxel",
+            "value": "Voxel"
+        },
+        {
+            "key": "custom_badge_distortion",
+            "value": "Distortion"
+        },
+        {
+            "key": "custom_badge_glitch",
+            "value": "Glitch"
+        },
+        {
+            "key": "prop_PathingMap_UV",
+            "value": "Path Map UV Set"
+        },
+        {
+            "key": "custom_badge_ramp",
+            "value": "Ramp"
         }
     ]
 }

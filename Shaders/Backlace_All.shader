@@ -409,7 +409,7 @@ Shader "luka/backlace/all"
         // [Header(Pathing)]
         // [Space(10)]
         [Toggle(_BACKLACE_PATHING)] _TogglePathing ("Enable Pathing", Float) = 0.0
-        [Enum(Albedo UV, 0, Triplanar, 1)] _PathingMappingMode ("Mapping Mode", Int) = 0
+        [Enum(UV, 0, Triplanar, 1)] _PathingMappingMode ("Mapping Mode", Int) = 0
         [NoScaleOffset] _PathingMap ("Path Map (R)", 2D) = "black" { }
         _PathingScale ("Path Scale", Float) = 1.0
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _PathingBlendMode ("Blend Mode", Int) = 0

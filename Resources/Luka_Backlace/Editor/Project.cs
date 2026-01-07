@@ -56,6 +56,51 @@ namespace Luka.Backlace
                 { 4f, "custom_badge_mochie" }
             }, new Color(0.8f, 0.6f, 0.7f))
         };
+        public static readonly List<CustomBadge> parallax_mode_badges = new List<CustomBadge>
+        {
+            new CustomBadge("_ParallaxMode", new Dictionary<float, string> {
+                { 0f, "custom_badge_fast_uv" },
+                { 1f, "custom_badge_fancy_uv" },
+                { 2f, "custom_badge_layered" },
+                { 3f, "custom_badge_interior" }
+            }, new Color(0.6f, 0.7f, 0.9f))
+        };
+        public static readonly List<CustomBadge> iridescence_mode_badges = new List<CustomBadge>
+        {
+            new CustomBadge("_IridescenceMode", new Dictionary<float, string> {
+                { 0f, "custom_badge_texture" },
+                { 1f, "custom_badge_procedural" }
+            }, new Color(0.8f, 0.6f, 0.9f))
+        };
+        public static readonly List<CustomBadge> glitter_mode_badges = new List<CustomBadge>
+        {
+            new CustomBadge("_GlitterMode", new Dictionary<float, string> {
+                { 0f, "custom_badge_procedural" },
+                { 1f, "custom_badge_texture" }
+            }, new Color(0.9f, 0.85f, 0.6f))
+        };
+        public static readonly List<CustomBadge> dissolve_mode_badges = new List<CustomBadge>
+        {
+            new CustomBadge("_DissolveType", new Dictionary<float, string> {
+                { 0f, "custom_badge_noise" },
+                { 1f, "custom_badge_directional" },
+                { 2f, "custom_badge_voxel" }
+            }, new Color(0.9f, 0.65f, 0.6f))
+        };
+        public static readonly List<CustomBadge> distortion_mode_badges = new List<CustomBadge>
+        {
+            new CustomBadge("_VertexEffectType", new Dictionary<float, string> {
+                { 0f, "custom_badge_distortion" },
+                { 1f, "custom_badge_glitch" },
+            }, new Color(0.6f, 0.9f, 0.8f))
+        };
+        public static readonly List<CustomBadge> anime_mode_badges = new List<CustomBadge>
+        {
+            new CustomBadge("_AnimeMode", new Dictionary<float, string> {
+                { 0f, "custom_badge_ramp" },
+                { 1f, "custom_badge_procedural" },
+            }, new Color(0.6f, 0.9f, 0.8f))
+        };
         public static readonly bool enable_debug = true;
         public static readonly string debug_tag = "Backlace_";
     }
