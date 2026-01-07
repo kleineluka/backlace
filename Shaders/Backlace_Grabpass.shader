@@ -7,8 +7,9 @@ Shader "luka/backlace/grabpass"
         // [Space(35)]
         // [Header(Rendering Settings)]
         // [Space(10)]
-        //[Enum(Opaque, 0, Cutout, 1, Fade, 2, Transparent, 3, TransClipping, 4, Additive, 6, Multiplicative, 7)] _BlendMode ("Rendering Mode", Float) = 0 // removed 5=soft additive, 8=2x multiplicative
-        [Enum(Opaque, 0, Cutout, 1, Fade, 2, OpaqueFade, 3, Transparent, 4, Premultiply, 5, Additive, 6, Soft Additive, 7, Multiplicative, 8, 2Multiplicative, 9)] _BlendMode ("Rendering Mode", Float) = 0
+        // [Enum(Opaque, 0, Cutout, 1, Fade, 2, Transparent, 3, TransClipping, 4, Additive, 6, Multiplicative, 7)] _BlendMode ("Rendering Mode", Float) = 0 // removed 5=soft additive, 8=2x multiplicative
+        // [Enum(Opaque, 0, Cutout, 1, Fade, 2, OpaqueFade, 3, Transparent, 4, Premultiply, 5, Additive, 6, Soft Additive, 7, Multiplicative, 8, 2Multiplicative, 9)]
+        _BlendMode ("Rendering Mode", Int) = 0
         // base blend
         [Toggle] _OverrideBaseBlend ("Override Base Blend", Float) = 0
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1

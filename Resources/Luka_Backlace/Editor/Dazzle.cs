@@ -2018,6 +2018,14 @@ namespace Luka.Backlace
                 {
                     config.json_data.@interface.expand_searches = newExpandIndex == 0;
                 }
+                // optimise presets (optimise_presets)
+                bool optimisePresets = config.json_data.@interface.optimise_presets;
+                int currentOptimiseIndex = optimisePresets ? 0 : 1;
+                int newOptimiseIndex = EditorGUILayout.Popup(languages.speak("config_toggle_optimise_presets"), currentOptimiseIndex, toggleOptions);
+                if (newOptimiseIndex != currentOptimiseIndex)
+                {
+                    config.json_data.@interface.optimise_presets = newOptimiseIndex == 0;
+                }
                 Components.draw_divider();
                 GUILayout.Label(theme.language_manager.speak("config_extra_options"), EditorStyles.boldLabel);
                 // toggle check for updates on startup
@@ -2262,17 +2270,18 @@ namespace Luka.Backlace
         private Bags bags;
         private Material material;
         private Tab tab;
+        private Config config;
         private string newUserPresetName = "";
         private int selectedProjectPresetIndex = 0;
         private int selectedUserPresetIndex = 0;
 
-
-        public PresetsMenu(ref Theme theme, ref Bags bags, ref Material material, ref Tab tab)
+        public PresetsMenu(ref Theme theme, ref Bags bags, ref Material material, ref Tab tab, ref Config config)
         {
             this.theme = theme;
             this.bags = bags;
             this.material = material;
             this.tab = tab;
+            this.config = config;
         }
 
         public void draw()
@@ -2368,7 +2377,7 @@ namespace Luka.Backlace
                     newUserPresetName = Regex.Replace(newUserPresetName, "[^a-zA-Z0-9_ ]", ""); // sanitize
                     if (!string.IsNullOrEmpty(newUserPresetName))
                     {
-                        bags.SavePreset(material, newUserPresetName);
+                        bags.SavePreset(material, newUserPresetName, config.json_data.@interface.optimise_presets);
                         newUserPresetName = "";
                         bags.LoadPresets();
                     }

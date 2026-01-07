@@ -856,7 +856,7 @@ namespace Luka.Backlace
             cushion = new Cushion(targetMat);
             beauty_blender = new BeautyBlender(targetMat);
             bags = new Bags(ref languages);
-            presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab);
+            presets_menu = new PresetsMenu(ref theme, ref bags, ref targetMat, ref presets_tab, ref configs);
             debug_menu = new DevMenu(ref theme, ref languages, ref debug_tab);
             premonition_tab = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 9, languages.speak("tab_premonition"));
             is_compact = targetMat.shader.name.ToLower().Contains("_compact_");
@@ -864,7 +864,7 @@ namespace Luka.Backlace
             premonition_menu = new PremonitionMenu(ref theme, ref targetMat, ref premonition_tab, is_compact);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
-            sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"));
+            sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"), null, null, null, null, Project.blend_mode_badges);
             sub_tab_textures = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_textures"));
             sub_tab_stitching = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_stitching"));
             sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_manipulation"));
@@ -2410,6 +2410,7 @@ namespace Luka.Backlace
                 prop_OutlineTexScroll = FindProperty("_OutlineTexScroll", properties);
                 materialEditor.ShaderProperty(prop_OutlineSpace, languages.speak("prop_OutlineSpace"));
                 materialEditor.ShaderProperty(prop_OutlineWidth, languages.speak("prop_OutlineWidth"));
+                materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
                 materialEditor.ShaderProperty(prop_OutlineMode, languages.speak("prop_OutlineMode"));
                 EditorGUI.indentLevel++;
                 if (prop_OutlineMode.floatValue.Equals(1)) {
@@ -2435,7 +2436,6 @@ namespace Luka.Backlace
                 Components.start_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
                 EditorGUI.indentLevel++;
                 materialEditor.ShaderProperty(prop_OutlineHueShiftSpeed, languages.speak("prop_OutlineHueShiftSpeed"));
-                materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
                 EditorGUI.indentLevel--;
                 Components.end_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
                 Components.end_foldout();

@@ -9,6 +9,7 @@
         "grey_unused": true,
         "show_status_badges": true,
         "expand_searches": true,
-        "check_updates": true
+        "check_updates": true,
+        "optimise_presets": false
     }
 }

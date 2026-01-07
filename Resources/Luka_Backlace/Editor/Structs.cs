@@ -55,6 +55,7 @@ namespace Luka.Backlace
         public bool show_status_badges;
         public bool expand_searches;
         public bool check_updates;
+        public bool optimise_presets;
     }
 
     [System.Serializable]

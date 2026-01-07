@@ -7,8 +7,9 @@ Shader "luka/backlace/outline"
         // [Space(35)]
         // [Header(Rendering Settings)]
         // [Space(10)]
-        //[Enum(Opaque, 0, Cutout, 1, Fade, 2, Transparent, 3, TransClipping, 4, Additive, 6, Multiplicative, 7)] _BlendMode ("Rendering Mode", Float) = 0 // removed 5=soft additive, 8=2x multiplicative
-        [Enum(Opaque, 0, Cutout, 1, Fade, 2, OpaqueFade, 3, Transparent, 4, Premultiply, 5, Additive, 6, Soft Additive, 7, Multiplicative, 8, 2Multiplicative, 9)] _BlendMode ("Rendering Mode", Float) = 0
+        // [Enum(Opaque, 0, Cutout, 1, Fade, 2, Transparent, 3, TransClipping, 4, Additive, 6, Multiplicative, 7)] _BlendMode ("Rendering Mode", Float) = 0 // removed 5=soft additive, 8=2x multiplicative
+        // [Enum(Opaque, 0, Cutout, 1, Fade, 2, OpaqueFade, 3, Transparent, 4, Premultiply, 5, Additive, 6, Soft Additive, 7, Multiplicative, 8, 2Multiplicative, 9)]
+        _BlendMode ("Rendering Mode", Int) = 0
         // base blend
         [Toggle] _OverrideBaseBlend ("Override Base Blend", Float) = 0
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
@@ -409,7 +410,7 @@ Shader "luka/backlace/outline"
         // [Header(Pathing)]
         // [Space(10)]
         [Toggle(_BACKLACE_PATHING)] _TogglePathing ("Enable Pathing", Float) = 0.0
-        [Enum(UV, 0, Triplanar, 1)] _PathingMappingMode ("Mapping Mode", Int) = 0
+        [Enum(Albedo UV, 0, Triplanar, 1)] _PathingMappingMode ("Mapping Mode", Int) = 0
         [NoScaleOffset] _PathingMap ("Path Map (R)", 2D) = "black" { }
         _PathingScale ("Path Scale", Float) = 1.0
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _PathingBlendMode ("Blend Mode", Int) = 0

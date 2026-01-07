@@ -786,7 +786,7 @@ namespace Luka.Backlace
 
         public Bags(ref Languages language)
         {
-            language_manager = language;
+            this.language_manager = language;
             LoadPaths();
             LoadPresets();
         }
@@ -824,7 +824,7 @@ namespace Luka.Backlace
             EditorUtility.SetDirty(targetMaterial);
         }
 
-        public bool SavePreset(Material sourceMaterial, string presetName)
+        public bool SavePreset(Material sourceMaterial, string presetName, bool optimisePreset = false)
         {
             if (sourceMaterial == null || string.IsNullOrEmpty(presetName))
             {
@@ -849,6 +849,10 @@ namespace Luka.Backlace
                 AssetDatabase.DeleteAsset(finalAssetPath);
             }
             Material newPreset = new Material(sourceMaterial);
+            if (optimisePreset)
+            {
+                OptimiseMaterial(newPreset);
+            }
             try
             {
                 string tempAssetPath = Path.Combine(asset_user_path, presetName + ".asset");
@@ -865,6 +869,97 @@ namespace Luka.Backlace
                 Pretty.print($"Failed to save preset: {e.Message}", Pretty.LogKind.Error);
                 return false;
             }
+        }
+
+        private static void OptimiseMaterial(Material mat)
+        {
+            if (mat == null || mat.shader == null) return;
+            Shader shader = mat.shader;
+            HashSet<string> validPropertyNames = new HashSet<string>();
+            int propertyCount = ShaderUtil.GetPropertyCount(shader);
+            for (int i = 0; i < propertyCount; i++)
+            {
+                validPropertyNames.Add(ShaderUtil.GetPropertyName(shader, i));
+            }
+            SerializedObject serializedMat = new SerializedObject(mat);
+            SerializedProperty texEnvs = serializedMat.FindProperty("m_SavedProperties.m_TexEnvs");
+            SerializedProperty floats = serializedMat.FindProperty("m_SavedProperties.m_Floats");
+            SerializedProperty colors = serializedMat.FindProperty("m_SavedProperties.m_Colors");
+            int removedProps = 0;
+            removedProps += RemoveDeadProperties(texEnvs, validPropertyNames);
+            removedProps += RemoveDeadProperties(floats, validPropertyNames);
+            removedProps += RemoveDeadProperties(colors, validPropertyNames);
+            HashSet<string> validKeywords = new HashSet<string>();
+            for (int i = 0; i < propertyCount; i++)
+            {
+                if (ShaderUtil.GetPropertyType(shader, i) == ShaderUtil.ShaderPropertyType.Float ||
+                    ShaderUtil.GetPropertyType(shader, i) == ShaderUtil.ShaderPropertyType.Range)
+                {
+                    string[] attrs = shader.GetPropertyAttributes(i);
+                    foreach (string attr in attrs)
+                    {
+                        if (attr.StartsWith("Toggle(") || attr.StartsWith("KeywordEnum("))
+                        {
+                            int start = attr.IndexOf('(') + 1;
+                            int end = attr.IndexOf(')');
+                            if (start > 0 && end > start)
+                            {
+                                string content = attr.Substring(start, end - start);
+                                string[] keywords = content.Split(',');
+                                foreach (string kw in keywords)
+                                {
+                                    validKeywords.Add(kw.Trim().ToUpperInvariant());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            string[] currentKeywords = mat.shaderKeywords;
+            List<string> cleanedKeywords = new List<string>();
+            int removedKeywords = 0;
+            foreach (string keyword in currentKeywords)
+            {
+                bool isBuiltIn = keyword.StartsWith("_BLENDMODE_") || 
+                                 keyword.StartsWith("_ALPHAPREMULTIPLY_") ||
+                                 keyword.StartsWith("_ALPHATEST_") ||
+                                 keyword.StartsWith("_EMISSION");
+                if (validKeywords.Contains(keyword.ToUpperInvariant()) || isBuiltIn)
+                {
+                    cleanedKeywords.Add(keyword);
+                }
+                else
+                {
+                    removedKeywords++;
+                }
+            }
+            mat.shaderKeywords = cleanedKeywords.ToArray();
+            serializedMat.ApplyModifiedPropertiesWithoutUndo();
+            if (removedProps > 0 || removedKeywords > 0)
+            {
+                Pretty.print($"Optimised preset: removed {removedProps} dead properties and {removedKeywords} unused keywords.", Pretty.LogKind.Debug);
+            }
+        }
+
+        private static int RemoveDeadProperties(SerializedProperty propArray, HashSet<string> validNames)
+        {
+            if (propArray == null || !propArray.isArray) return 0;
+            int removed = 0;
+            for (int i = propArray.arraySize - 1; i >= 0; i--)
+            {
+                SerializedProperty element = propArray.GetArrayElementAtIndex(i);
+                SerializedProperty keyProp = element.FindPropertyRelative("first");
+                if (keyProp != null)
+                {
+                    string propName = keyProp.stringValue;
+                    if (!validNames.Contains(propName))
+                    {
+                        propArray.DeleteArrayElementAtIndex(i);
+                        removed++;
+                    }
+                }
+            }
+            return removed;
         }
 
         public bool DeletePreset(string presetName)

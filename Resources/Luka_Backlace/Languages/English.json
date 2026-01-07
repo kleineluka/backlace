@@ -49,6 +49,10 @@
             "value": "Disabled"
         },
         {
+            "key": "config_toggle_optimise_presets",
+            "value": "Optimise Presets"
+        },
+        {
             "key": "config_save",
             "value": "Save Config"
         },
@@ -2695,6 +2699,46 @@
         {
             "key": "custom_badge_ramp",
             "value": "Ramp"
+        },
+        {
+            "key": "custom_badge_opaque",
+            "value": "Opaque"
+        },
+        {
+            "key": "custom_badge_cutout",
+            "value": "Cutout"
+        },
+        {
+            "key": "custom_badge_fade",
+            "value": "Fade"
+        },
+        {
+            "key": "custom_badge_opaquefade",
+            "value": "Opaque Fade"
+        },
+        {
+            "key": "custom_badge_transparent",
+            "value": "Transparent"
+        },
+        {
+            "key": "custom_badge_premultiply",
+            "value": "Premultiply"
+        },
+        {
+            "key": "custom_badge_additive",
+            "value": "Additive"
+        },
+        {
+            "key": "custom_badge_softadditive",
+            "value": "Soft Additive"
+        },
+        {
+            "key": "custom_badge_multiplicative",
+            "value": "Multiplicative"
+        },
+        {
+            "key": "custom_badge_2multiplicative",
+            "value": "2x Multiplicative"
         }
     ]
 }
