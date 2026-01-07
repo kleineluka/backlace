@@ -857,7 +857,11 @@ namespace Luka.Backlace
             {
                 string tempAssetPath = Path.Combine(asset_user_path, presetName + ".asset");
                 AssetDatabase.CreateAsset(newPreset, tempAssetPath);
-                AssetDatabase.SaveAssets(); 
+                AssetDatabase.SaveAssets();
+                if (optimisePreset)
+                {
+                    ClearInvalidKeywords(tempAssetPath);
+                }
                 AssetDatabase.MoveAsset(tempAssetPath, finalAssetPath);
                 AssetDatabase.Refresh();
                 Pretty.print($"Saved preset '{presetName}' successfully.", Pretty.LogKind.Debug);
@@ -938,6 +942,22 @@ namespace Luka.Backlace
             if (removedProps > 0 || removedKeywords > 0)
             {
                 Pretty.print($"Optimised preset: removed {removedProps} dead properties and {removedKeywords} unused keywords.", Pretty.LogKind.Debug);
+            }
+        }
+
+        private static void ClearInvalidKeywords(string assetPath)
+        {
+            Material mat = AssetDatabase.LoadAssetAtPath<Material>(assetPath);
+            if (mat == null) return;
+            SerializedObject serializedMat = new SerializedObject(mat);
+            SerializedProperty invalidKeywords = serializedMat.FindProperty("m_InvalidKeywords");
+            if (invalidKeywords != null && invalidKeywords.isArray && invalidKeywords.arraySize > 0)
+            {
+                int count = invalidKeywords.arraySize;
+                invalidKeywords.ClearArray();
+                serializedMat.ApplyModifiedPropertiesWithoutUndo();
+                AssetDatabase.SaveAssets();
+                Pretty.print($"Cleared {count} invalid keywords from saved asset.", Pretty.LogKind.Debug);
             }
         }
 
