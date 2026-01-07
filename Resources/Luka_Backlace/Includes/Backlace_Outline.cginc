@@ -39,6 +39,7 @@ UNITY_DECLARE_TEX2D(_OutlineTex);
 float2 _OutlineTexTiling;
 float2 _OutlineTexScroll;
 float4 _OutlineColor;
+float3 _OutlineOffset;
 
 UNITY_DECLARE_TEX2D(_MainTex);
 float4 _MainTex_ST;
@@ -80,6 +81,7 @@ v2f vert(appdata v)
         v.vertex.xyz *= _VertexManipulationScale; // scale
     #endif // _BACKLACE_AUDIOLINK
     v.vertex.xyz += _VertexManipulationPosition;
+    v.vertex.xyz += _OutlineOffset;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
         ApplyVertexDistortion(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
     #endif // _BACKLACE_VERTEX_DISTORTION

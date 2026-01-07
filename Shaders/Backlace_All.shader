@@ -737,6 +737,7 @@ Shader "luka/backlace/all"
         _OutlineTex ("Outline Texture", 2D) = "white" { }
         _OutlineTexTiling ("Outline Texture Tiling", Vector) = (1, 1, 0, 0)
         _OutlineTexScroll ("Outline Texture Scroll", Vector) = (0, 0, 0, 0)
+        _OutlineOffset ("Outline Offset", Vector) = (0, 0, 0, 0)
 
         // INDIRECT LIGHTING
         // [Space(35)]
@@ -782,7 +783,7 @@ Shader "luka/backlace/all"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.7.0" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.8.0" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

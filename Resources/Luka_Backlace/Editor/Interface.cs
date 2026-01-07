@@ -646,6 +646,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_OutlineTex = null;
         private MaterialProperty prop_OutlineTexTiling = null;
         private MaterialProperty prop_OutlineTexScroll = null;
+        private MaterialProperty prop_OutlineOffset = null;
         // indirect lighting
         private MaterialProperty prop_IndirectFallbackMode = null;
         private MaterialProperty prop_IndirectOverride = null;
@@ -2408,6 +2409,7 @@ namespace Luka.Backlace
                 prop_OutlineTex = FindProperty("_OutlineTex", properties);
                 prop_OutlineTexTiling = FindProperty("_OutlineTexTiling", properties);
                 prop_OutlineTexScroll = FindProperty("_OutlineTexScroll", properties);
+                prop_OutlineOffset = FindProperty("_OutlineOffset", properties);
                 materialEditor.ShaderProperty(prop_OutlineSpace, languages.speak("prop_OutlineSpace"));
                 materialEditor.ShaderProperty(prop_OutlineWidth, languages.speak("prop_OutlineWidth"));
                 materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
@@ -2438,6 +2440,7 @@ namespace Luka.Backlace
                 materialEditor.ShaderProperty(prop_OutlineHueShiftSpeed, languages.speak("prop_OutlineHueShiftSpeed"));
                 EditorGUI.indentLevel--;
                 Components.end_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
+                Components.Vector3Property(materialEditor, prop_OutlineOffset, languages.speak("prop_OutlineOffset"));
                 Components.end_foldout();
             });
             // third party tab

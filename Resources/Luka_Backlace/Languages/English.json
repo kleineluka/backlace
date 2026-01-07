@@ -2739,6 +2739,10 @@
         {
             "key": "custom_badge_2multiplicative",
             "value": "2x Multiplicative"
+        },
+        {
+            "key": "prop_OutlineOffset",
+            "value": "Outline Offset"
         }
     ]
 }
