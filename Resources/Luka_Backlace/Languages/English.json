@@ -33,6 +33,10 @@
             "value": "Show Updates"
         },
         {
+            "key": "config_toggle_check_updates",
+            "value": "Check for Updates"
+        },
+        {
             "key": "config_toggle_announcements",
             "value": "Show News"
         },

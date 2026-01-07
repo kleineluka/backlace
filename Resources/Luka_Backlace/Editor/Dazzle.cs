@@ -822,6 +822,7 @@ namespace Luka.Backlace
         private string toggle_property_name = null;
         public ShaderCapability capability = null;
         public Dependency dependency = null;
+        private List<CustomBadge> custom_badges = null;
 
         // tab state
         public bool is_expanded = false;
@@ -829,7 +830,7 @@ namespace Luka.Backlace
 
         // constructor for a tab
         public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, 
-            ShaderVariant shader_variant = null, string toggle_property_name = null, ShaderCapability capability = null, Dependency dependency = null)
+            ShaderVariant shader_variant = null, string toggle_property_name = null, ShaderCapability capability = null, Dependency dependency = null, List<CustomBadge> custom_badges = null)
         {
             this.theme = theme;
             this.material = material;
@@ -840,6 +841,7 @@ namespace Luka.Backlace
             this.toggle_property_name = toggle_property_name;
             this.capability = capability;
             this.dependency = dependency;
+            this.custom_badges = custom_badges;
         }
 
         // process method to wrap content and handle drawing logic
@@ -1079,6 +1081,28 @@ namespace Luka.Backlace
                     OnClick = dependencyBadgeClickAction
                 });
             }
+            // custom badges
+            if (custom_badges != null)
+            {
+                foreach (var customBadge in custom_badges)
+                {
+                    string badgeKey = customBadge.GetLabel(material);
+                    if (!string.IsNullOrEmpty(badgeKey))
+                    {
+                        string badgeLabel = theme.language_manager.speak(badgeKey);
+                        Color badgeColor = customBadge.GetColor(material);
+                        float currentValue = material.GetFloat(customBadge.PropertyName);
+                        Action customBadgeClickAction = customBadge.OnClick != null ? () => customBadge.OnClick(currentValue) : null;
+                        badgesToDraw.Add(new BadgeMetadata
+                        {
+                            Text = badgeLabel,
+                            Color = badgeColor,
+                            Style = theme.styler_manager.load_style_variant_badge_large(),
+                            OnClick = customBadgeClickAction
+                        });
+                    }
+                }
+            }
             draw_badges(rect, badgesToDraw, 20f, 5f);
             // handle foldout arrow
             Event currentEvent = Event.current;
@@ -1216,6 +1240,28 @@ namespace Luka.Backlace
                     Style = theme.styler_manager.load_style_variant_badge_small(),
                     OnClick = dependencyBadgeClickAction
                 });
+            }
+            // custom badges
+            if (custom_badges != null)
+            {
+                foreach (var customBadge in custom_badges)
+                {
+                    string badgeKey = customBadge.GetLabel(material);
+                    if (!string.IsNullOrEmpty(badgeKey))
+                    {
+                        string badgeLabel = theme.language_manager.speak(badgeKey);
+                        Color badgeColor = customBadge.GetColor(material);
+                        float currentValue = material.GetFloat(customBadge.PropertyName);
+                        Action customBadgeClickAction = customBadge.OnClick != null ? () => customBadge.OnClick(currentValue) : null;
+                        badgesToDraw.Add(new BadgeMetadata
+                        {
+                            Text = badgeLabel,
+                            Color = badgeColor,
+                            Style = theme.styler_manager.load_style_variant_badge_small(),
+                            OnClick = customBadgeClickAction
+                        });
+                    }
+                }
             }
             draw_badges(rect, badgesToDraw, 10f, 5f);
             // handle foldout arrow
@@ -1974,6 +2020,14 @@ namespace Luka.Backlace
                 }
                 Components.draw_divider();
                 GUILayout.Label(theme.language_manager.speak("config_extra_options"), EditorStyles.boldLabel);
+                // toggle check for updates on startup
+                bool checkUpdates = config.json_data.@interface.check_updates;
+                int currentCheckIndex = checkUpdates ? 0 : 1;
+                int newCheckIndex = EditorGUILayout.Popup(languages.speak("config_toggle_check_updates"), currentCheckIndex, toggleOptions);
+                if (newCheckIndex != currentCheckIndex)
+                {
+                    config.json_data.@interface.check_updates = newCheckIndex == 0;
+                }
                 // toggle update toasts
                 bool showUpdates = config.json_data.@interface.show_updates;
                 int currentUpdateIndex = showUpdates ? 0 : 1;
@@ -2228,18 +2282,32 @@ namespace Luka.Backlace
             {
                 Components.start_foldout();
                 GUILayout.Label(theme.language_manager.speak("preset_builtin_header"), EditorStyles.boldLabel);
-                if (bags.projectPresets.Count == 0)
+
+                // Error handling: ensure lists are clean
+                if (bags.projectPresets != null) bags.projectPresets.RemoveAll(item => item == null);
+                if (bags.userPresets != null) bags.userPresets.RemoveAll(item => item == null);
+
+                if (bags.projectPresets == null || bags.projectPresets.Count == 0)
                 {
                     EditorGUILayout.LabelField(theme.language_manager.speak("preset_no_builtin_found"));
                 }
                 else
                 {
                     EditorGUILayout.BeginHorizontal();
-                    string[] projectPresetNames = bags.projectPresets.ConvertAll(p => {
+                    string[] projectPresetNames = bags.projectPresets.Select(p => {
+                        if (p == null) return "Error";
                         string path = AssetDatabase.GetAssetPath(p);
-                        string relativePath = path.Substring(path.IndexOf("Presets/") + "Presets/".Length);
-                        return relativePath.Replace(".asset", "");
+                        if (string.IsNullOrEmpty(path)) return p.name;
+                        int tokenIndex = path.IndexOf("Presets/");
+                        if (tokenIndex != -1)
+                        {
+                            string relativePath = path.Substring(tokenIndex + "Presets/".Length);
+                            return relativePath.Replace(".asset", "");
+                        }
+                        return p.name;
                     }).ToArray();
+                    
+                    if (selectedProjectPresetIndex >= projectPresetNames.Length) selectedProjectPresetIndex = 0;
                     selectedProjectPresetIndex = EditorGUILayout.Popup(selectedProjectPresetIndex, projectPresetNames);
                     if (GUILayout.Button(theme.language_manager.speak("load"), GUILayout.Width(60)))
                     {
@@ -2248,20 +2316,24 @@ namespace Luka.Backlace
                             Bags.ApplyPreset(bags.projectPresets[selectedProjectPresetIndex], material);
                         }
                     }
+                    if (GUILayout.Button(theme.language_manager.speak("preset_reload"), GUILayout.Width(60)))
+                    {
+                        bags.LoadPresets();
+                    }
                     EditorGUILayout.EndHorizontal();
                 }
                 Components.draw_divider();
                 GUILayout.Label(theme.language_manager.speak("preset_custom_header"), EditorStyles.boldLabel);
-                if (bags.userPresets.Count == 0)
+                if (bags.userPresets == null || bags.userPresets.Count == 0)
                 {
                     EditorGUILayout.LabelField(theme.language_manager.speak("preset_no_custom_found"));
                 }
                 else
                 {
                     EditorGUILayout.BeginHorizontal();
-                    string[] userPresetNames = bags.userPresets.ConvertAll(p => p.name).ToArray();
+                    string[] userPresetNames = bags.userPresets.Select(p => p != null ? p.name : "Error").ToArray();
+                    if (selectedUserPresetIndex >= userPresetNames.Length) selectedUserPresetIndex = 0;
                     selectedUserPresetIndex = EditorGUILayout.Popup(selectedUserPresetIndex, userPresetNames);
-
                     if (GUILayout.Button(theme.language_manager.speak("load"), GUILayout.Width(60)))
                     {
                         if (selectedUserPresetIndex >= 0 && selectedUserPresetIndex < bags.userPresets.Count)
@@ -2293,6 +2365,7 @@ namespace Luka.Backlace
                 newUserPresetName = EditorGUILayout.TextField(theme.language_manager.speak("preset_name_label"), newUserPresetName);
                 if (GUILayout.Button(theme.language_manager.speak("preset_save_button")))
                 {
+                    newUserPresetName = Regex.Replace(newUserPresetName, "[^a-zA-Z0-9_ ]", ""); // sanitize
                     if (!string.IsNullOrEmpty(newUserPresetName))
                     {
                         bags.SavePreset(material, newUserPresetName);
@@ -2574,8 +2647,18 @@ namespace Luka.Backlace
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(8f);
             EditorGUILayout.EndVertical();
+            if (Project.enable_debug)
+            {
+                GUIContent devNotice = new GUIContent(theme.text_manager.texter("i had such big plans for you, you know? you were going to earn me so many heaven coins. vibe...", 7));
+                GUIStyle wrapStyle = new GUIStyle(textStyle) { wordWrap = true, alignment = TextAnchor.MiddleCenter };
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                GUILayout.Label(devNotice, wrapStyle, GUILayout.Width(maxWidth));
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+            }
         }
-
+        
     }
 
     // search bar functionality
@@ -2676,18 +2759,18 @@ namespace Luka.Backlace
             if (tab.is_expanded)
             {
                 Components.start_foldout();
+                if (GUILayout.Button(languages.speak("dev_reload_interface"), GUILayout.Height(30)))
+                {
+                    Interface.unload_interface();
+                    EditorUtility.DisplayDialog(Project.project_name, languages.speak("dev_reload_success"), languages.speak("dialog_okay"));
+                }
+                Components.draw_divider();
                 foreach (var prop in properties)
                 {
                     if (prop.name.StartsWith(Project.debug_tag))
                     {
                         materialEditor.ShaderProperty(prop, prop.displayName);
                     }
-                }
-                Components.draw_divider();
-                if (GUILayout.Button(languages.speak("dev_reload_interface"), GUILayout.Height(30)))
-                {
-                    Interface.unload_interface();
-                    EditorUtility.DisplayDialog(Project.project_name, languages.speak("dev_reload_success"), languages.speak("dialog_okay"));
                 }
                 Components.end_foldout();
             }

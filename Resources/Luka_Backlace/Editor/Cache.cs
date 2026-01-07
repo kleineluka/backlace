@@ -24,7 +24,7 @@ namespace Luka.Backlace
             Pretty.print("Initializing shared UI cache...", Pretty.LogKind.Debug);
             configs = new Config();
             languages = new Languages(configs.json_data.@interface.language);
-            meta = new Metadata();
+            meta = new Metadata(ref configs);
             theme = new Theme(ref configs, ref languages, ref meta);
             socials_menu = new SocialsMenu(ref theme);
             header = new Header(ref theme);

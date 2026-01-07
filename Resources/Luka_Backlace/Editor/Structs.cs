@@ -54,6 +54,7 @@ namespace Luka.Backlace
         public bool grey_unused;
         public bool show_status_badges;
         public bool expand_searches;
+        public bool check_updates;
     }
 
     [System.Serializable]
@@ -108,6 +109,39 @@ namespace Luka.Backlace
         public Color Color;
         public GUIStyle Style;
         public Action OnClick;
+    }
+
+    [System.Serializable]
+    public class CustomBadge
+    {
+        public string PropertyName;
+        public Dictionary<float, string> ValueToLabel;
+        public Dictionary<float, Color> ValueToColor;
+        public Color DefaultColor;
+        public Action<float> OnClick;
+
+        public CustomBadge(string propertyName, Dictionary<float, string> valueToLabel, Color? defaultColor = null, Dictionary<float, Color> valueToColor = null, Action<float> onClick = null)
+        {
+            PropertyName = propertyName;
+            ValueToLabel = valueToLabel;
+            ValueToColor = valueToColor;
+            DefaultColor = defaultColor ?? new Color(0.6f, 0.6f, 0.8f);
+            OnClick = onClick;
+        }
+
+        public string GetLabel(Material material)
+        {
+            if (material == null || !material.HasProperty(PropertyName)) return null;
+            float value = material.GetFloat(PropertyName);
+            return ValueToLabel.TryGetValue(value, out string label) ? label : null;
+        }
+
+        public Color GetColor(Material material)
+        {
+            if (material == null || !material.HasProperty(PropertyName) || ValueToColor == null) return DefaultColor;
+            float value = material.GetFloat(PropertyName);
+            return ValueToColor.TryGetValue(value, out Color color) ? color : DefaultColor;
+        }
     }
 
     [System.Serializable]

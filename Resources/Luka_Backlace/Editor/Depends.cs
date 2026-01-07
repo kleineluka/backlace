@@ -299,14 +299,16 @@ namespace Luka.Backlace
         // malleable properties
         public FullMetadata full_metadata;
         public bool metadata_loaded = false;
+        private Config config;
 
         // constant properties
         private static readonly string metadata_path = "https://luka.moe/api/unity/shared.json";
         private static readonly string metadata_agent = "Luka/UnityEditor/" + Project.project_name + "/" + Project.version.print();
 
         // constructor
-        public Metadata()
+        public Metadata(ref Config config)
         {
+            this.config = config;
             fetch();
             if (!metadata_loaded)
             {
@@ -318,6 +320,18 @@ namespace Luka.Backlace
         // fetch
         private void fetch()
         {
+            if (this.config == null) {
+                Pretty.print("Config is null, cannot fetch metadata.", Pretty.LogKind.Error);
+                full_metadata = null;
+                metadata_loaded = false;
+                return;
+            }
+            if ( config.json_data.@interface.check_updates == false ) {
+                Pretty.print("Update checks are disabled in config, skipping metadata fetch...", Pretty.LogKind.Debug);
+                full_metadata = null;
+                metadata_loaded = false;
+                return;
+            }
             if (Project.enable_debug) 
             {
                 Pretty.print("Developer mode is active, skipping metadata fetch...", Pretty.LogKind.Info);
