@@ -814,7 +814,12 @@ namespace Luka.Backlace
                 return;
             }
             Undo.RecordObject(targetMaterial, "Apply Dazzle Preset '" + preset.name + "'");
-            // copy all shader properties
+            // reset material to default shader properties first for forward compatibility
+            Shader currentShader = targetMaterial.shader;
+            Material defaultMaterial = new Material(currentShader);
+            CopyMaterialProperties(defaultMaterial, targetMaterial);
+            UnityEngine.Object.DestroyImmediate(defaultMaterial);
+            // copy all shader properties from preset
             CopyMaterialProperties(preset, targetMaterial);
             targetMaterial.shaderKeywords = preset.shaderKeywords;
             targetMaterial.renderQueue = preset.renderQueue;
