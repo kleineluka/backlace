@@ -81,7 +81,7 @@ v2f vert(appdata v)
     #endif // _BACKLACE_AUDIOLINK
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        DistortVertex(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
+        ApplyVertexDistortion(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
     #endif // _BACKLACE_VERTEX_DISTORTION
     // calculate boilerplate stuff
     o.vertex = v.vertex;

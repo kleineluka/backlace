@@ -1083,7 +1083,11 @@
     UNITY_DECLARE_TEX2D(_WindNoiseTex);
     float _BreathingStrength;
     float _BreathingSpeed;
+    int _VertexEffectType; // 0 = distortion, 1 = glitch
+    int _VertexGlitchMode; // 0 = slice, 1 = blocky, 2 = wave, 3 = jitter
+    float _GlitchFrequency;
 
+    // for distortion mode
     void DistortVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
     {
         float time = _Time.y;
@@ -1143,6 +1147,95 @@
             }
         }
         vertex.xyz += distortion;
+    }
+
+    // glitch helpers
+    float GlitchHash(float2 p)
+    {
+        float h = dot(p, float2(127.1, 311.7));
+        return frac(sin(h) * 43758.5453);
+    }
+
+    float GlitchBlockNoise(float2 p, float blockSize)
+    {
+        float2 block = floor(p / blockSize) * blockSize;
+        return GlitchHash(block);
+    }
+
+    // for glitch mode
+    void GlitchVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
+    {
+        float time = _Time.y * _VertexDistortionSpeed.x;
+        float3 glitchOffset = 0;
+        float mask = 1.0;
+        switch (_VertexDistortionColorMask)
+        {
+            case 1: mask = vertexColor.r; break;
+            case 2: mask = vertexColor.g; break;
+            case 3: mask = vertexColor.b; break;
+            case 4: mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0; break;
+            default: mask = 1.0; break;
+        }
+        float glitchTrigger = step(_GlitchFrequency, GlitchHash(float2(floor(time * 10.0), 0.0)));
+        float blockSize = 1.0 / max(_VertexDistortionFrequency.x, 0.001);
+        switch (_VertexGlitchMode)
+        {
+            case 0: // slice, horizontal slicing glitch
+            {
+                float sliceY = floor(vertex.y / blockSize) * blockSize;
+                float sliceNoise = GlitchHash(float2(sliceY, floor(time * 5.0)));
+                float sliceActive = step(0.7, sliceNoise) * glitchTrigger;
+                float offsetAmount = (sliceNoise * 2.0 - 1.0) * _VertexDistortionStrength.x * sliceActive;
+                glitchOffset.x = offsetAmount;
+                break;
+            }
+            case 1: // blocky, random block displacement
+            {
+                float2 blockPos = float2(vertex.x + vertex.z, vertex.y);
+                float blockNoise = GlitchBlockNoise(blockPos, blockSize);
+                float blockActive = step(0.8, blockNoise) * glitchTrigger;
+                float3 randomDir = normalize(float3(
+                    GlitchHash(float2(blockNoise, 1.0)) * 2.0 - 1.0,
+                    GlitchHash(float2(blockNoise, 2.0)) * 2.0 - 1.0,
+                    GlitchHash(float2(blockNoise, 3.0)) * 2.0 - 1.0
+                ));
+                glitchOffset = randomDir * _VertexDistortionStrength * blockActive;
+                break;
+            }
+            case 2: // wave, "corrupted" wave distortion
+            {
+                float wavePhase = sin(vertex.y * _VertexDistortionFrequency.y + time * 20.0) * glitchTrigger;
+                float waveNoise = GlitchHash(float2(floor(time * 8.0), floor(vertex.y * 5.0)));
+                glitchOffset.x = wavePhase * waveNoise * _VertexDistortionStrength.x;
+                glitchOffset.z = wavePhase * (1.0 - waveNoise) * _VertexDistortionStrength.z * 0.5;
+                break;
+            }
+            case 3: // jitter, rapid smol displacements
+            {
+                float jitterTime = floor(time * 30.0);
+                float3 jitter = float3(
+                    GlitchHash(float2(jitterTime, vertex.x * 100.0)),
+                    GlitchHash(float2(jitterTime, vertex.y * 100.0)),
+                    GlitchHash(float2(jitterTime, vertex.z * 100.0))
+                ) * 2.0 - 1.0;
+                glitchOffset = jitter * _VertexDistortionStrength * 0.1 * glitchTrigger;
+                break;
+            }
+        }
+        vertex.xyz += glitchOffset * mask;
+    }
+
+    // wrapper to select between distortion and glitch modes
+    void ApplyVertexDistortion(inout float4 vertex, float3 worldPos, float4 vertexColor)
+    {
+        [branch] if (_VertexEffectType == 1)
+        {
+            GlitchVertex(vertex, worldPos, vertexColor);
+        }
+        else
+        {
+            DistortVertex(vertex, worldPos, vertexColor);
+        }
     }
 #endif // _BACKLACE_VERTEX_DISTORTION
 

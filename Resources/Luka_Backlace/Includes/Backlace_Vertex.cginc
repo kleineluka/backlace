@@ -21,7 +21,7 @@ FragmentData Vertex(VertexData v)
     v.vertex.xyz += _VertexManipulationPosition; // position
     // vertex distortion
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        DistortVertex(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
+        ApplyVertexDistortion(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
     #endif // _BACKLACE_VERTEX_DISTORTION
     // boilerplate assignments
     i.vertex = v.vertex;

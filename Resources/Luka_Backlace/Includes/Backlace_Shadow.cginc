@@ -209,7 +209,7 @@ VertexOutput  Vertex(VertexData v)
     #endif // _BACKLACE_AUDIOLINK
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        DistortVertex(v.vertex);
+        ApplyVertexDistortion(v.vertex);
     #endif // _BACKLACE_VERTEX_DISTORTION
     i.vertex = v.vertex;
     i.normal = UnityObjectToWorldNormal(v.normal);

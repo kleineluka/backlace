@@ -2186,7 +2186,7 @@
         },
         {
             "key": "prop_VertexDistortionFrequency",
-            "value": "Distortion Frequency"
+            "value": "Distortion Scale"
         },
         {
             "key": "prop_WindStrength",
@@ -2607,6 +2607,18 @@
         {
             "key": "prop_AudioLinkSmoothLevel",
             "value": "Smoothing Level"
+        },
+        {
+            "key": "prop_VertexEffectType",
+            "value": "Distortion Mode"
+        },
+        {
+            "key": "prop_VertexGlitchMode",
+            "value": "Glitch Mode"        
+        },
+        {
+            "key": "prop_GlitchFrequency",
+            "value": "Glitch Frequency"
         }
     ]
 }

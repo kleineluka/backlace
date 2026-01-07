@@ -148,10 +148,10 @@ Shader "luka/backlace/all"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Float) = 0.0
+        [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
         [KeywordEnum(Ramp, Procedural)] _AnimeMode ("Anime Mode", Int) = 0
         // ramp
-        _Ramp ("Toon Ramp", 2D) = "Gradient_Skin" { }
+        _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
         _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
@@ -636,9 +636,11 @@ Shader "luka/backlace/all"
         // [Header(Vertex Distortion)]
         // [Space(10)]
         [Toggle(_BACKLACE_VERTEX_DISTORTION)] _ToggleVertexDistortion ("Enable Vertex Distortion", Float) = 0.0
+        [Enum(Distortion, 0, Glitch, 1)] _VertexEffectType ("Effect Type", Int) = 0
         [Enum(Wave, 0, Jumble, 1, Wind, 2, Breathing, 3)] _VertexDistortionMode ("Distortion Mode", Int) = 0
+        [Enum(Slice, 0, Blocky, 1, Wave, 2, Jitter, 3)] _VertexGlitchMode ("Glitch Mode", Int) = 0
         [Enum(Disabled, 0, Red, 1, Green, 2, Blue, 3, All, 4)] _VertexDistortionColorMask ("Color Channel Mask", Int) = 0
-        // wave and jumble
+        // shared (glitch, wave and jumble)
         _VertexDistortionStrength ("Distortion Strength", Vector) = (0.1, 0.1, 0.1, 0)
         _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
         _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
@@ -651,6 +653,8 @@ Shader "luka/backlace/all"
         // breathing
         _BreathingStrength ("Breathing Strength", Range(0, 0.1)) = 0.01
         _BreathingSpeed ("Breathing Speed", Range(0, 5)) = 1.0
+        // glitch settings
+        _GlitchFrequency ("Glitch Frequency", Float) = 1.0
 
         // FAKE SCREEN SPACE REFLECTIONS
         // [Space(35)]
