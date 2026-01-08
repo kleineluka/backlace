@@ -1,8 +1,18 @@
 #ifndef BACKLACE_SHADOW_CGINC
 #define BACKLACE_SHADOW_CGINC
 
+// LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
+// NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
+// #define BACKLACE_LEGACY_MODE
+
 // compiler directives
-#pragma target 5.0
+#ifdef BACKLACE_LEGACY_MODE
+    #pragma target 3.0
+    #undef _BACKLACE_AUDIOLINK
+    #undef _BACKLACE_LTCGI
+#else // BACKLACE_LEGACY_MODE
+    #pragma target 5.0
+#endif // BACKLACE_LEGACY_MODE
 #pragma multi_compile_shadowcaster
 #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
 #pragma vertex Vertex

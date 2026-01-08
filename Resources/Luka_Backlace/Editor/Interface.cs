@@ -62,6 +62,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_decal_two = null;
         private static Tab sub_tab_post_processing = null;
         private static Tab sub_tab_uv_sets = null;
+        private static Tab sub_tab_legacy_mode = null;
         // lighting
         private static Tab tab_lighting = null;
         private static Tab sub_tab_lighting_model = null;
@@ -698,6 +699,7 @@ namespace Luka.Backlace
             if (sub_tab_decal_two != null) { sub_tab_decal_two.is_expanded = false; sub_tab_decal_two.is_active = false; }
             if (sub_tab_post_processing != null) { sub_tab_post_processing.is_expanded = false; sub_tab_post_processing.is_active = false; }
             if (sub_tab_uv_sets != null) { sub_tab_uv_sets.is_expanded = false; sub_tab_uv_sets.is_active = false; }
+            if (sub_tab_legacy_mode != null) { sub_tab_legacy_mode.is_expanded = false; sub_tab_legacy_mode.is_active = false; }
             if (tab_lighting != null) { tab_lighting.is_expanded = false; tab_lighting.is_active = false; }
             if (sub_tab_lighting_model != null) { sub_tab_lighting_model.is_expanded = false; sub_tab_lighting_model.is_active = false; }
             if (sub_tab_anime != null) { sub_tab_anime.is_expanded = false; sub_tab_anime.is_active = false; }
@@ -779,6 +781,7 @@ namespace Luka.Backlace
             sub_tab_decal_two = null;
             sub_tab_post_processing = null;
             sub_tab_uv_sets = null;
+            sub_tab_legacy_mode = null;
             tab_lighting = null;
             sub_tab_lighting_model = null;
             sub_tab_anime = null;
@@ -875,6 +878,7 @@ namespace Luka.Backlace
             sub_tab_decal_two = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_decal_two"), null, "_Decal2Enable");
             sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
             sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_uv_sets"));
+            sub_tab_legacy_mode = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("tab_legacy_mode"));
             tab_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_lighting"));
             sub_tab_lighting_model = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_lighting_model"), null, null, null, null, Project.lighting_mode_badges);
             sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"), null, "_ToggleAnimeLighting", null, null, Project.anime_mode_badges);
@@ -1389,6 +1393,11 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingTexture_UV, languages.speak("prop_PathingTexture_UV"));
                     materialEditor.ShaderProperty(prop_Dither_UV, languages.speak("prop_Dither_UV"));
                     materialEditor.ShaderProperty(prop_StitchTex_UV, languages.speak("prop_StitchTex_UV"));
+                });
+                sub_tab_legacy_mode.process(() => {
+                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
+                    wrappedStyle.wordWrap = true;
+                    GUILayout.Label(theme.language_manager.speak("legacy_mode"), wrappedStyle);
                 });
                 Components.end_foldout();
             });

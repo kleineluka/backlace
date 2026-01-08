@@ -53,6 +53,10 @@
             "value": "Optimise Presets"
         },
         {
+            "key": "config_toggle_info_badges",
+            "value": "Show Info Badges"
+        },
+        {
             "key": "config_save",
             "value": "Save Config"
         },
@@ -2743,6 +2747,14 @@
         {
             "key": "prop_OutlineOffset",
             "value": "Outline Offset"
+        },
+        {
+            "key": "tab_legacy_mode",
+            "value": "Legacy Mode"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "Legacy Hardware Support\n\nIf you experience compilation errors or need to use this shader on older hardware that doesn't support Shader Model 5.0, you can enable Legacy Mode.\n\nHow to Enable:\n1. Navigate to Resources/Luka_Backlace/Includes/\n2. Open these three files in a text editor:\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. In each file, find line 6: // #define BACKLACE_LEGACY_MODE\n4. Remove the // to uncomment it (so it reads: #define BACKLACE_LEGACY_MODE)\n\nWhat This Does:\n• Compiles the shader for Shader Model 3.0 (compatible with older GPUs)\n• Automatically disables AudioLink and LTCGI integration to stay within hardware limits\n• All other features remain functional\n\nNote: You must edit all three files for the shader to compile correctly."
         }
     ]
 }

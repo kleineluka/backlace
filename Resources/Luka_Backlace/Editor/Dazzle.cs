@@ -1082,7 +1082,7 @@ namespace Luka.Backlace
                 });
             }
             // custom badges
-            if (custom_badges != null)
+            if (custom_badges != null && theme.config_manager.json_data.@interface.info_badges)
             {
                 foreach (var customBadge in custom_badges)
                 {
@@ -2009,6 +2009,14 @@ namespace Luka.Backlace
                 if (newStatusIndex != currentStatusIndex)
                 {
                     config.json_data.@interface.show_status_badges = newStatusIndex == 0;
+                }
+                // show info badges
+                bool showInfo = config.json_data.@interface.info_badges;
+                int currentInfoIndex = showInfo ? 0 : 1;
+                int newInfoIndex = EditorGUILayout.Popup(languages.speak("config_toggle_info_badges"), currentInfoIndex, toggleOptions);
+                if (newInfoIndex != currentInfoIndex)
+                {
+                    config.json_data.@interface.info_badges = newInfoIndex == 0;
                 }
                 // expand search (expand_searches)
                 bool expandSearches = config.json_data.@interface.expand_searches;

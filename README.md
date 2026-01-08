@@ -8,9 +8,9 @@
 
 Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
 
-**Current (Released) Version:** 1.5.0
+**Latest Release:** 1.8.0 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
 <br>
-**Supported Platforms:** Unity Built-in Render Pipeline, VRChat, Beatsaber, MateEngine, and more!
+**Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, and more!
 
 ## Features 🍒
 - **Core Features:**
@@ -27,10 +27,12 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 - **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping (Fast/Fancy UV, Layered, Interior), Detail Mapping, Shadow Mapping
 - **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Shadow Textures, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (Distort and Glitch), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
 - **Shader Variants:** Default, Grabpass, Outline, All
+- **Legacy Mode** can optionally be enabled to support older hardware (Shader Model 3.0)
 - **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
 - **Custom UI** built with my Dazzle library! It's quite pretty...
 - **Compact Shader Generation** with my Premonitions library!
 - **Presets** system built in, alongside custom preset saving
+- **Optimised** with local shader features rather than global keywords
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 - **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
 
