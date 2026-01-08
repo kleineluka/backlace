@@ -31,17 +31,37 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 - **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
 - **Custom UI** built with my Dazzle library! It's quite pretty...
 - **Compact Shader Generation** with my Premonitions library!
-- **Presets** system built in, alongside custom preset saving
+- **Presets** system built in, alongside custom preset saving (and tonnes of pre-made presets! from slime girls to metallic robots)
 - **Optimised** with local shader features rather than global keywords
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 - **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
 
+<br>
+
+<details>
+
+<summary><span style="font-size: 16px;"><b>Some Preview Images (ღ˘⌣˘ღ)</b></span></summary>
+
+| Caption | Preview |
+|---|---|
+| Anime Shading | <img src=".assets/preview_anime.webp" width="250"/> |
+| Advanced Features | <img src=".assets/preview_advanced.webp" width="250"/> |
+| Various Materials | <img src=".assets/preview_materials.webp" width="250"/> |
+| Outline Styles | <img src=".assets/preview_outlines.webp" width="250"/> |
+| Grabpass Features | <img src=".assets/preview_grabpass.webp" width="250"/> |
+| SFX | <img src=".assets/preview_sfx.webp" width="250"/> |
+| UI, Docs, and More | <img src=".assets/preview_extra.webp" width="250"/> |
+
+</details>
+
 ## Where Backlace Is Used 🍰
-This section will be updated when I make things with it!
+This section will be updated when I make things with it! If you make something with Backlace ~ whether a game or shader ~ please let me know so I can add it here! ♡＾▽＾♡
 
 - The official distribution of Backlace itself! You can find it on [Gumroad](https://kleineluka.gumroad.com/l/backlace), [Jinxxy](https://jinxxy.com/luka/backlace), [Booth.pm](https://lukasong.booth.pm/items/7551840), and [Payhip](https://payhip.com/b/71i3E) (and on this repo).
 
-If you wish to make your own shader with Backlace, please see [Contributing to Backlace](BUILDING.md) for more information! This is unnecessary if you just want to use Backlace as-is in your projects (ex. game developers, avatar creators, or world builders). ( *︾▽︾)
+<br>
+
+If you wish to **make your own shader** with Backlace, please see [Contributing to Backlace](BUILDING.md) for more information! This is unnecessary if you just want to use Backlace as-is in your projects (ex. game developers, avatar creators, or world builders). ( *︾▽︾)
 
 ## License 🍷
 Backlace is licensed under the Backlace License (Version 1.5). Please see the `LICENSE.md` file for the full terms.
