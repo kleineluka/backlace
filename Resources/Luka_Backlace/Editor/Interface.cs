@@ -264,6 +264,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_SheenColor = null;
         private MaterialProperty prop_SheenIntensity = null;
         private MaterialProperty prop_SheenRoughness = null;
+        private MaterialProperty prop_SpecularJitter = null;
         // rim lighting properties
         private MaterialProperty prop_ToggleRimlight = null;
         private MaterialProperty prop_RimColor = null;
@@ -1620,6 +1621,7 @@ namespace Luka.Backlace
                     prop_TangentMap = FindProperty("_TangentMap", properties);
                     prop_Anisotropy = FindProperty("_Anisotropy", properties);
                     prop_SpecularTint = FindProperty("_SpecularTint", properties); // hair uses it, so display twice
+                    prop_SpecularJitter = FindProperty("_SpecularJitter", properties);
                     int specularMode = (int)prop_SpecularMode.floatValue;
                     switch (specularMode)
                     {
@@ -1641,6 +1643,7 @@ namespace Luka.Backlace
                             materialEditor.ShaderProperty(prop_SecondarySpecularShift, languages.speak("prop_SecondarySpecularShift"));
                             materialEditor.ShaderProperty(prop_SecondarySpecularColor, languages.speak("prop_SecondarySpecularColor"));
                             materialEditor.ShaderProperty(prop_SpecularExponent, languages.speak("prop_SpecularExponent"));
+                            materialEditor.ShaderProperty(prop_SpecularJitter, languages.speak("prop_SpecularJitter"));
                             break;
                         case 4: // cloth
                             materialEditor.ShaderProperty(prop_SheenColor, languages.speak("prop_SheenColor"));

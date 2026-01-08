@@ -215,6 +215,7 @@ Shader "luka/backlace/default"
         _SecondarySpecularShift ("Secondary Specular Shift", Range(-1, 1)) = 0.1
         [HDR] _SecondarySpecularColor ("Secondary Specular Color", Color) = (1, 1, 1, 1)
         _SpecularExponent ("Specular Exponent", Range(1, 256)) = 64
+        _SpecularJitter ("Specular Jitter", Range(0, 1)) = 0.02
         // cloth specular
         _SheenColor ("Sheen Color", Color) = (1, 1, 1, 1)
         _SheenIntensity ("Sheen Intensity", Float) = 0.5
@@ -783,7 +784,7 @@ Shader "luka/backlace/default"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.8.0" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.8.5" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

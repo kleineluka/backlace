@@ -563,19 +563,33 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         // kajiya-kay hair specular
         float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
         {
-            float2 flow = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rg * 2 - 1;
+            // sample
+            float3 flowSample = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rgb;
+            float2 flow = flowSample.rg * 2 - 1;
+            float shiftMask = saturate(flowSample.b);
             float3 hairTangent = normalize(flow.x * Surface.TangentDir + flow.y * Surface.BitangentDir);
-            float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * _PrimarySpecularShift);
+            // generate jitter
+            float jitter = 0.0;
+            if (_SpecularJitter > 0.001) // don't branch? let compiler handle it
+            { 
+                float noise = frac(sin(dot(Uvs[_HairFlowMap_UV] * 25.0, float2(12.9898, 78.233))) * 43758.5453);
+                jitter = (noise * 2.0 - 1.0) * _SpecularJitter;
+            }
+            // primary shift/spec
+            float primaryShift = (_PrimarySpecularShift + jitter) * shiftMask;
+            float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * primaryShift);
             float dotT1L = dot(shiftedTangent1, lightDir);
             float dotT1V = dot(shiftedTangent1, Surface.ViewDir);
-            float sinT1L = sqrt(1.0 - dotT1L * dotT1L);
-            float sinT1V = sqrt(1.0 - dotT1V * dotT1V);
+            float sinT1L = sqrt(saturate(1.0 - dotT1L * dotT1L));
+            float sinT1V = sqrt(saturate(1.0 - dotT1V * dotT1V));
             float primarySpec = pow(saturate(dotT1L * dotT1V + sinT1L * sinT1V), _SpecularExponent);
-            float3 shiftedTangent2 = normalize(hairTangent + Surface.NormalDir * _SecondarySpecularShift);
+            // secondary shift/spec
+            float secondaryShift = (_SecondarySpecularShift + jitter) * shiftMask;
+            float3 shiftedTangent2 = normalize(hairTangent + Surface.NormalDir * secondaryShift);
             float dotT2L = dot(shiftedTangent2, lightDir);
             float dotT2V = dot(shiftedTangent2, Surface.ViewDir);
-            float sinT2L = sqrt(1.0 - dotT2L * dotT2L);
-            float sinT2V = sqrt(1.0 - dotT2V * dotT2V);
+            float sinT2L = sqrt(saturate(1.0 - dotT2L * dotT2L));
+            float sinT2V = sqrt(saturate(1.0 - dotT2V * dotT2V));
             float secondarySpec = pow(saturate(dotT2L * dotT2V + sinT2L * sinT2V), _SpecularExponent);
             float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
             return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);

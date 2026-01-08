@@ -167,6 +167,7 @@ float3 _VertexManipulationScale;
         float _SecondarySpecularShift;
         float4 _SecondarySpecularColor;
         float _SpecularExponent;
+        float _SpecularJitter;
     #elif defined(_SPECULARMODE_CLOTH) // CLOTH SPECULAR
         float4 _SheenColor;
         float _SheenIntensity;
