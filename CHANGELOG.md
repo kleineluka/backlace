@@ -1,3 +1,7 @@
+## Version 1.8.5
+- Add shift support to B channel of hair specular map
+- Add jitter support to hair specular
+
 ## Version 1.8
 - More editor improvements (primarily the badge system)
 - Much better preset handling, as well as an "optimise preset" option

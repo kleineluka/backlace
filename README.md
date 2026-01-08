@@ -8,7 +8,7 @@
 
 Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
 
-**Latest Release:** 1.8.0 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
+**Latest Release:** 1.8.5 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
 <br>
 **Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, and more!
 
