@@ -1038,7 +1038,7 @@
         },
         {
             "key": "prop_HairFlowMap",
-            "value": "髪のフロー/タンジェントマップ (RG)"
+            "value": "髪のフロー/タンジェントマップ (RGB)"
         },
         {
             "key": "prop_PrimarySpecularShift",
@@ -2755,6 +2755,10 @@
         {
             "key": "legacy_mode",
             "value": "レガシーハードウェアサポート\n\nコンパイルエラーが発生する場合、またはShader Model 5.0をサポートしていない古いハードウェアでこのシェーダーを使用する必要がある場合は、レガシーモードを有効にできます。\n\n有効にする方法:\n1. Resources/Luka_Backlace/Includes/ に移動します\n2. テキストエディタで次の3つのファイルを開きます:\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 各ファイルで6行目を見つけます: // #define BACKLACE_LEGACY_MODE\n4. // を削除してコメントアウトを解除します (#define BACKLACE_LEGACY_MODE となるように)\n\n機能:\n• Shader Model 3.0向けにコンパイル (古いGPUと互換性あり)\n• ハードウェア制限内に収めるため、AudioLinkとLTCGIの統合を自動的に無効化\n• その他のすべての機能は引き続き機能します\n\n注意: シェーダーを正しくコンパイルするには、3つのファイルすべてを編集する必要があります。"
+        },
+        {
+            "key": "prop_SpecularJitter",
+            "value": "スペキュラージッター"
         }
     ]
 }

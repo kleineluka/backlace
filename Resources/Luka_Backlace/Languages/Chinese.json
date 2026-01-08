@@ -1038,7 +1038,7 @@
         },
         {
             "key": "prop_HairFlowMap",
-            "value": "头发流向/切线贴图 (RG)"
+            "value": "头发流向/切线贴图 (RGB)"
         },
         {
             "key": "prop_PrimarySpecularShift",
@@ -2755,6 +2755,10 @@
         {
             "key": "legacy_mode",
             "value": "旧硬件支持 (传统模式)\n\n如果你遇到编译错误，或需要在不支持 Shader Model 5.0 的旧硬件上使用此着色器，可以启用传统模式。\n\n如何启用：\n1. 导航至 Resources/Luka_Backlace/Includes/\n2. 用文本编辑器打开这三个文件：\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 在每个文件中找到第 6 行：// #define BACKLACE_LEGACY_MODE\n4. 删除 // 以取消注释（使其变为：#define BACKLACE_LEGACY_MODE）\n\n功能说明：\n• 针对 Shader Model 3.0 编译着色器（兼容旧显卡）\n• 自动禁用 AudioLink 和 LTCGI 集成以保持在硬件限制范围内\n• 所有其他功能保持可用\n\n注意：你必须编辑所有三个文件才能正确编译着色器。"
+        },
+        {
+            "key": "_SpecularJitter",
+            "value": "高光抖动"
         }
     ]
 }

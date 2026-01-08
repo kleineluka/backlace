@@ -1038,7 +1038,7 @@
         },
         {
             "key": "prop_HairFlowMap",
-            "value": "Carte Flux Cheveux/Tangente (RG)"
+            "value": "Carte Flux Cheveux/Tangente (RGB)"
         },
         {
             "key": "prop_PrimarySpecularShift",
@@ -2755,6 +2755,10 @@
         {
             "key": "legacy_mode",
             "value": "Support Matériel Ancien\n\nSi vous rencontrez des erreurs de compilation ou devez utiliser ce shader sur du matériel ancien ne supportant pas Shader Model 5.0, activez le Mode Hérité.\n\nComment Activer :\n1. Allez dans Resources/Luka_Backlace/Includes/\n2. Ouvrez ces trois fichiers :\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. Trouvez la ligne 6 : // #define BACKLACE_LEGACY_MODE\n4. Enlevez les // pour décommenter (pour avoir : #define BACKLACE_LEGACY_MODE)\n\nCe que ça fait :\n• Compile le shader pour Shader Model 3.0 (compatible vieux GPU)\n• Désactive automatiquement AudioLink et LTCGI pour rester dans les limites\n• Toutes les autres fonctions restent actives\n\nNote : Vous devez éditer les trois fichiers."
+        },
+        {
+            "key": "_SpecularJitter",
+            "value": "Jitter spéculaire"
         }
     ]
 }
