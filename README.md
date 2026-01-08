@@ -36,21 +36,19 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 - **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
 
-<br>
-
 <details>
 
-<summary><span style="font-size: 16px;"><b>Some Preview Images (ღ˘⌣˘ღ)</b></span></summary>
+<summary><h3>Some Preview Images (ღ˘⌣˘ღ)</h3></summary>
 
 | Caption | Preview |
 |---|---|
-| Anime Shading | <img src=".assets/preview_anime.webp" width="250"/> |
-| Advanced Features | <img src=".assets/preview_advanced.webp" width="250"/> |
-| Various Materials | <img src=".assets/preview_materials.webp" width="250"/> |
-| Outline Styles | <img src=".assets/preview_outlines.webp" width="250"/> |
-| Grabpass Features | <img src=".assets/preview_grabpass.webp" width="250"/> |
-| SFX | <img src=".assets/preview_sfx.webp" width="250"/> |
-| UI, Docs, and More | <img src=".assets/preview_extra.webp" width="250"/> |
+| Anime Shading | <img src=".assets/preview_anime.webp" width="600"/> |
+| Advanced Features | <img src=".assets/preview_advanced.webp" width="600"/> |
+| Various Materials | <img src=".assets/preview_materials.webp" width="600"/> |
+| Outline Styles | <img src=".assets/preview_outlines.webp" width="600"/> |
+| Special Effects | <img src=".assets/preview_sfx.webp" width="600"/> |
+| Grabpass Features | <img src=".assets/preview_grabpass.webp" width="600"/> |
+| UI, Docs, and More | <img src=".assets/preview_extra.webp" width="600"/> |
 
 </details>
 

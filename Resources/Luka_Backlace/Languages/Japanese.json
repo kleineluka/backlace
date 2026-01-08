@@ -33,6 +33,10 @@
             "value": "更新を表示"
         },
         {
+            "key": "config_toggle_check_updates",
+            "value": "更新を確認"
+        },
+        {
             "key": "config_toggle_announcements",
             "value": "ニュースを表示"
         },
@@ -43,6 +47,14 @@
         {
             "key": "config_toggle_disabled",
             "value": "無効"
+        },
+        {
+            "key": "config_toggle_optimise_presets",
+            "value": "プリセットを最適化"
+        },
+        {
+            "key": "config_toggle_info_badges",
+            "value": "情報バッジを表示"
         },
         {
             "key": "config_save",
@@ -62,7 +74,7 @@
         },
         {
             "key": "config_reset_success",
-            "value": "設定が初期値にリセットされました！ ^~^"
+            "value": "設定がデフォルト値にリセットされました！ ^~^"
         },
         {
             "key": "config_reset_error",
@@ -70,7 +82,7 @@
         },
         {
             "key": "dialog_okay",
-            "value": "オッケー！"
+            "value": "OK！"
         },
         {
             "key": "dialog_cancel",
@@ -82,7 +94,7 @@
         },
         {
             "key": "update_description",
-            "value": "最新バージョンをダウンロードして、新機能とバグ修正を入手しましょう！ <3"
+            "value": "最新バージョンをダウンロードして、新機能やバグ修正をチェックしてください！ <3"
         },
         {
             "key": "tab_config",
@@ -90,11 +102,11 @@
         },
         {
             "key": "open_docs",
-            "value": "ヘルプが必要ですか？ここをクリックしてドキュメントを開く！"
+            "value": "ヘルプが必要ですか？ここをクリックしてドキュメントを開いてください！"
         },
         {
             "key": "premonition_compact_notice",
-            "value": "これは軽量版シェーダーのため、元のシェーダーで有効にされていなかった機能は含まれていません！変更を加える必要がある場合は、軽量版シェーダーメニューから通常版に戻してください。"
+            "value": "これはコンパクトシェーダーであり、元のシェーダーで有効にされていなかった機能は含まれていません！変更を加える必要がある場合は、コンパクトシェーダーメニューから通常版に復元してください。"
         },
         {
             "key": "tab_license",
@@ -106,7 +118,7 @@
         },
         {
             "key": "config_toggle_grey_unused",
-            "value": "未使用の設定をグレーアウト"
+            "value": "未使用の設定をグレー表示"
         },
         {
             "key": "config_toggle_status_badges",
@@ -134,7 +146,7 @@
         },
         {
             "key": "preset_overwrite_prompt_no",
-            "value": "既存のままにする。"
+            "value": "既存のままにする"
         },
         {
             "key": "preset_builtin_header",
@@ -162,7 +174,7 @@
         },
         {
             "key": "preset_delete_prompt",
-            "value": "このプリセットを削除しますか？元に戻すことはできません..."
+            "value": "本当にこのプリセットを削除しますか？元に戻すことはできません..."
         },
         {
             "key": "preset_delete_prompt_yes",
@@ -190,15 +202,15 @@
         },
         {
             "key": "tab_premonition",
-            "value": "軽量化マテリアル"
+            "value": "コンパクトマテリアル"
         },
         {
             "key": "premonition_notice",
-            "value": "ここでは、現在のマテリアルの軽量版（Compact Version）を生成できます。これにより、サイズが小さくコンパイル時間の短い新しいシェーダーファイルが生成されます。これは現在の設定のスナップショットのようなものです。この軽量シェーダーは再配布可能で、他のものに依存しません。.shaderファイルを自由に移動できます。シェーダー数を減らしパフォーマンスを向上させるために、最終的なマテリアルにはこれを使用することをお勧めします！ ^-^（心配しないでください、変更が必要な場合はいつでも通常のシェーダーに戻すことができます）"
+            "value": "ここでは、現在のマテリアルのコンパクトバージョンを生成できます。これにより、サイズが小さく、コンパイル時間が短い新しいシェーダーファイルが生成されます。これは現在の設定のスナップショットのようなものです。この小さなシェーダーは再配布可能で、他に依存するものはありません。.shaderファイルを自由に移動できます。シェーダー数を減らしてパフォーマンスを向上させるために、最終的なマテリアルには常にこれを使用することをお勧めします！ ^-^ （心配しないでください、変更が必要な場合はいつでも通常のシェーダーに戻すことができます）"
         },
         {
             "key": "premonition_generate_button",
-            "value": "軽量化マテリアルを生成"
+            "value": "コンパクトマテリアルを生成"
         },
         {
             "key": "premonition_restore_button",
@@ -210,7 +222,7 @@
         },
         {
             "key": "variant_popup_description",
-            "value": "この機能を使用するには、最低でも '{0}' シェーダーバリアントが必要です。\n\nシェーダーバリアントは、必要な機能のコードのみを含めるようにするために作られています。他のバージョンには機能があるかもしれませんが（タブがグレーアウトされているかどうかで示されます）、これがその機能をサポートする「最低」のバリアント階層です。詳細はドキュメントをご覧ください！ ^-^"
+            "value": "この機能を使用するには、最低でも '{0}' シェーダーバリアントが必要です。\n\nシェーダーバリアントは、必要な機能のコードのみを含めるようにするために作られています。他のバージョンにも機能があるかもしれませんが（タブがグレー表示されているかどうかで示されます）、これはその機能をサポートする「最も低い」バリアント層です。詳細についてはドキュメントをご覧ください！ ^-^"
         },
         {
             "key": "warning_external_website_title",
@@ -218,7 +230,7 @@
         },
         {
             "key": "warning_external_website_description",
-            "value": "私が所有・運営していない外部ウェブサイトを開こうとしています！注意して進んでください！！おそらく安全ですが、私には制御できず、将来変更される可能性もあります。 >.< 続けますか？"
+            "value": "私が所有・運営していない外部のウェブサイトを開こうとしています！注意して進んでください！！おそらく安全ですが、私はそれを制御できませんし、将来変更されるかどうかもわかりません。 >.< 続けますか？"
         },
         {
             "key": "warning_external_website_okay",
@@ -234,7 +246,7 @@
         },
         {
             "key": "footer_backlace",
-            "value": "Backlace Anime Shader."
+            "value": "Backlace Anime Shader。"
         },
         {
             "key": "footer_heart",
@@ -242,7 +254,7 @@
         },
         {
             "key": "config_toggle_expand_searches",
-            "value": "検索を展開"
+            "value": "検索結果を展開"
         },
         {
             "key": "search_button",
@@ -258,11 +270,11 @@
         },
         {
             "key": "config_workflow",
-            "value": "ワークフロー設定"
+            "value": "ワークフローオプション"
         },
         {
             "key": "config_extra_options",
-            "value": "追加オプション"
+            "value": "その他のオプション"
         },
         {
             "key": "dependency_detected",
@@ -278,7 +290,7 @@
         },
         {
             "key": "dependency_popup_detected",
-            "value": "依存関係 '{0}' が検出されました {1}！"
+            "value": "依存関係 '{0}' が検出されました {1}!"
         },
         {
             "key": "dependency_popup_not_detected",
@@ -290,19 +302,19 @@
         },
         {
             "key": "premonition_title",
-            "value": "軽量シェーダー生成"
+            "value": "コンパクトシェーダー生成"
         },
         {
             "key": "premonition_success",
-            "value": "軽量シェーダーが正常に生成され、マテリアルに適用されました！ ^^"
+            "value": "コンパクトシェーダーが正常に生成され、マテリアルに適用されました！ ^^"
         },
         {
             "key": "premonition_error_generic",
-            "value": "軽量シェーダーの生成中にエラーが発生しました。もう一度試してください。問題が解決しない場合は、コンソールでエラーを確認してください！ >.<"
+            "value": "コンパクトシェーダーの生成中にエラーが発生しました。もう一度試してください。問題が解決しない場合はコンソールでエラーを確認してください！ >.<"
         },
         {
             "key": "premonition_error_noshader",
-            "value": "このシェーダーを復元しようとしてエラーが発生しました。これが軽量シェーダーであることを確認してください。 >.<"
+            "value": "このシェーダーを復元しようとしてエラーが発生しました。これは本当にコンパクトシェーダーですか？ >.<"
         },
         {
             "key": "premonition_restore_success",
@@ -310,11 +322,11 @@
         },
         {
             "key": "premonition_compact_all_button",
-            "value": "フォルダ内のすべてのマテリアルを軽量化"
+            "value": "フォルダ内の全マテリアルをコンパクト化"
         },
         {
             "key": "premonition_compact_all_result",
-            "value": "{0} 個のマテリアルを軽量化しました。\n失敗: {1}\nスキップ: {2}"
+            "value": "{0} 個のマテリアルをコンパクト化しました。\n失敗: {1}\nスキップ: {2}"
         },
         {
             "key": "tab_main",
@@ -326,7 +338,7 @@
         },
         {
             "key": "sub_tab_textures",
-            "value": "コアマップ"
+            "value": "基本マップ"
         },
         {
             "key": "sub_tab_stitching",
@@ -382,11 +394,11 @@
         },
         {
             "key": "sub_tab_stylised_specular",
-            "value": "スタイライズドスペキュラー"
+            "value": "様式化スペキュラー"
         },
         {
             "key": "sub_tab_emission",
-            "value": "エミッション（発光）"
+            "value": "エミッション (発光)"
         },
         {
             "key": "sub_tab_light_limiting",
@@ -398,7 +410,7 @@
         },
         {
             "key": "sub_tab_rim_lighting",
-            "value": "フレネルリムライティング"
+            "value": "フレネル・リムライティング"
         },
         {
             "key": "sub_tab_depth_rim",
@@ -410,7 +422,7 @@
         },
         {
             "key": "sub_tab_matcap",
-            "value": "Matcap（マットキャップ）"
+            "value": "マットキャップ"
         },
         {
             "key": "sub_tab_cubemap",
@@ -418,15 +430,15 @@
         },
         {
             "key": "sub_tab_parallax",
-            "value": "視差マッピング"
+            "value": "パララックス (視差) マッピング"
         },
         {
             "key": "sub_tab_subsurface",
-            "value": "サブサーフェス・スキャタリング (SSS)"
+            "value": "サブサーフェス・スキャタリング"
         },
         {
             "key": "sub_tab_detail_map",
-            "value": "詳細マッピング"
+            "value": "ディテールマッピング"
         },
         {
             "key": "sub_tab_shadow_map",
@@ -438,11 +450,11 @@
         },
         {
             "key": "sub_tab_dissolve",
-            "value": "ディゾルブ（溶解）"
+            "value": "ディゾルブ"
         },
         {
             "key": "sub_tab_pathing",
-            "value": "パシング"
+            "value": "パッシング (経路)"
         },
         {
             "key": "tab_third_party",
@@ -458,7 +470,7 @@
         },
         {
             "key": "superplug_notice",
-            "value": "Super Plug Shader (by VRCFury) は、ターゲットに向かってメッシュを変形させるために使用できる無料のメッシュ変形システムであり、DPS (Raliv氏のDynamic Penetration System) および TPS (Poiyomi ProのThry Penetration System) の完全な後方互換性を持つ代替品です。無料であることに加え、Backlaceを含む様々なシェーダーがハードコードなしでサポートしています！セットアップのために、下のリンクをクリックしてドキュメントを開いてください！"
+            "value": "Super Plug Shader (VRCFury作) は、ターゲットに向かってメッシュを変形させる無料のメッシュ変形システムで、DPS (Dynamic Penetration System by Raliv) や TPS (Thry Penetration System in Poiyomi Pro) の完全な下位互換性を持つ代替手段です。無料であるだけでなく、Backlaceを含む多くのシェーダーでハードコードサポートなしに動作します！セットアップのために、下のリンクをクリックしてドキュメントを開いてください！"
         },
         {
             "key": "superplug_button",
@@ -470,7 +482,7 @@
         },
         {
             "key": "ltcgi_notice",
-            "value": "LTCGI (by _pi_) は、VRChat用のプラグアンドプレイなリアルタイムエリアライティングソリューションです。これを有効にするには、独自のシェーダー機能が必要なため、プロジェクトにLTCGIパッケージも含まれていることを確認してください。有効にすると、マテリアルは自動的にLTCGIのライティングを使用します。"
+            "value": "LTCGI (_pi_作) は、VRChat用のプラグアンドプレイなリアルタイムエリアライトソリューションです。これを有効にするには、動作に独自のシェーダー関数が必要なため、プロジェクトにLTCGIパッケージが含まれていることを確認してください。有効にすると、マテリアルは自動的にLTCGIライティングを使用します。"
         },
         {
             "key": "ltcgi_button",
@@ -482,7 +494,7 @@
         },
         {
             "key": "sub_tab_glitter",
-            "value": "グリッター（ラメ）"
+            "value": "グリッター (ラメ)"
         },
         {
             "key": "sub_tab_distance_fading",
@@ -490,7 +502,7 @@
         },
         {
             "key": "sub_tab_iridescence",
-            "value": "イリデッセンス（玉虫色）"
+            "value": "イリデッセンス (玉虫色)"
         },
         {
             "key": "sub_tab_shadow_textures",
@@ -498,7 +510,7 @@
         },
         {
             "key": "sub_tab_flatten_model",
-            "value": "モデルの平坦化"
+            "value": "モデル平坦化 (2D化)"
         },
         {
             "key": "sub_tab_world_aligned",
@@ -514,7 +526,7 @@
         },
         {
             "key": "sub_tab_vertex_distortion",
-            "value": "頂点歪み"
+            "value": "頂点歪み (Distortion)"
         },
         {
             "key": "sub_tab_dither",
@@ -538,11 +550,11 @@
         },
         {
             "key": "prop_SrcBlend",
-            "value": "Src Blend"
+            "value": "Srcブレンド"
         },
         {
             "key": "prop_DstBlend",
-            "value": "Dst Blend"
+            "value": "Dstブレンド"
         },
         {
             "key": "prop_ZWrite",
@@ -574,23 +586,23 @@
         },
         {
             "key": "prop_OutlineStencilRef",
-            "value": "アウトライン ステンシル参照値"
+            "value": "アウトライン: ステンシル参照値"
         },
         {
             "key": "prop_OutlineStencilComp",
-            "value": "アウトライン 比較関数"
+            "value": "アウトライン: 比較関数"
         },
         {
             "key": "prop_OutlineStencilPass",
-            "value": "アウトライン Pass時の操作"
+            "value": "アウトライン: Pass時の操作"
         },
         {
             "key": "prop_OutlineStencilFail",
-            "value": "アウトライン Fail時の操作"
+            "value": "アウトライン: Fail時の操作"
         },
         {
             "key": "prop_OutlineStencilZFail",
-            "value": "アウトライン ZFail時の操作"
+            "value": "アウトライン: ZFail時の操作"
         },
         {
             "key": "prop_BlendMode",
@@ -626,7 +638,7 @@
         },
         {
             "key": "prop_Alpha",
-            "value": "アルファ (透明度)"
+            "value": "アルファ"
         },
         {
             "key": "prop_DecalStage",
@@ -666,11 +678,11 @@
         },
         {
             "key": "prop_UVTriplanarMapping",
-            "value": "トライプラナーマッピングを有効化"
+            "value": "トライプレーナーマッピングを有効化"
         },
         {
             "key": "prop_UVTriplanarPosition",
-            "value": "ワールド位置 (XYZ)"
+            "value": "ワールド座標 (XYZ)"
         },
         {
             "key": "prop_UVTriplanarScale",
@@ -682,7 +694,7 @@
         },
         {
             "key": "prop_UVTriplanarSharpness",
-            "value": "トライプラナーブレンドの鮮明度"
+            "value": "トライプレーナーブレンドの鋭さ"
         },
         {
             "key": "prop_UVScreenspaceMapping",
@@ -698,11 +710,11 @@
         },
         {
             "key": "prop_UVFlipbookRows",
-            "value": "フリップブック 行数"
+            "value": "フリップブックの行数"
         },
         {
             "key": "prop_UVFlipbookColumns",
-            "value": "フリップブック 列数"
+            "value": "フリップブックの列数"
         },
         {
             "key": "prop_UVFlipbookFrames",
@@ -710,7 +722,7 @@
         },
         {
             "key": "prop_UVFlipbookFPS",
-            "value": "フリップブック FPS"
+            "value": "フリップブックのFPS"
         },
         {
             "key": "prop_UVFlipbookScrub",
@@ -726,19 +738,19 @@
         },
         {
             "key": "prop_UVFlowmapStrength",
-            "value": "フローマップ強度"
+            "value": "フローマップの強さ"
         },
         {
             "key": "prop_UVFlowmapSpeed",
-            "value": "フローマップ速度"
+            "value": "フローマップの速度"
         },
         {
             "key": "prop_UVFlowmapDistortion",
-            "value": "フローマップ歪み"
+            "value": "フローマップの歪み"
         },
         {
             "key": "prop_VertexManipulationPosition",
-            "value": "ワールド位置 (XYZ)"
+            "value": "ワールド座標 (XYZ)"
         },
         {
             "key": "prop_VertexManipulationScale",
@@ -762,31 +774,31 @@
         },
         {
             "key": "prop_EmissionStrength",
-            "value": "エミッション強度"
+            "value": "エミッションの強さ"
         },
         {
             "key": "prop_EnableBaseLightLimit",
-            "value": "ベースパス制限を有効化"
+            "value": "Base Passの制限を有効化"
         },
         {
             "key": "prop_BaseLightMin",
-            "value": "ベースライト最小値"
+            "value": "Base Light 最小値"
         },
         {
             "key": "prop_BaseLightMax",
-            "value": "ベースライト最大値"
+            "value": "Base Light 最大値"
         },
         {
             "key": "prop_EnableAddLightLimit",
-            "value": "Addパス制限を有効化"
+            "value": "Add Passの制限を有効化"
         },
         {
             "key": "prop_AddLightMin",
-            "value": "Addライト最小値"
+            "value": "Add Light 最小値"
         },
         {
             "key": "prop_AddLightMax",
-            "value": "Addライト最大値"
+            "value": "Add Light 最大値"
         },
         {
             "key": "prop_GreyscaleLighting",
@@ -798,7 +810,7 @@
         },
         {
             "key": "prop_ForcedLightColor",
-            "value": "強制ライトカラー"
+            "value": "強制するライトカラー"
         },
         {
             "key": "prop_LightingColorMode",
@@ -810,15 +822,15 @@
         },
         {
             "key": "prop_ForcedLightDirection",
-            "value": "強制ライト方向"
+            "value": "強制するライト方向"
         },
         {
             "key": "prop_ViewDirectionOffsetX",
-            "value": "ビュー方向オフセット X"
+            "value": "視線方向オフセット X"
         },
         {
             "key": "prop_ViewDirectionOffsetY",
-            "value": "ビュー方向オフセット Y"
+            "value": "視線方向オフセット Y"
         },
         {
             "key": "prop_DirectIntensity",
@@ -830,11 +842,11 @@
         },
         {
             "key": "prop_VertexIntensity",
-            "value": "RT 頂点光強度"
+            "value": "RT 頂点ライト強度"
         },
         {
             "key": "prop_AdditiveIntensity",
-            "value": "RT 加算光強度"
+            "value": "RT 加算ライト強度"
         },
         {
             "key": "prop_BakedDirectIntensity",
@@ -854,7 +866,7 @@
         },
         {
             "key": "prop_Ramp",
-            "value": "アニメランプ"
+            "value": "アニメランプ (Ramp)"
         },
         {
             "key": "prop_RampColor",
@@ -866,7 +878,7 @@
         },
         {
             "key": "prop_ShadowIntensity",
-            "value": "シャドウ強度"
+            "value": "影の濃さ"
         },
         {
             "key": "prop_OcclusionOffsetIntensity",
@@ -878,7 +890,7 @@
         },
         {
             "key": "prop_RampNormalIntensity",
-            "value": "法線の強度への影響"
+            "value": "法線の影響度"
         },
         {
             "key": "prop_AnimeShadowColor",
@@ -886,7 +898,7 @@
         },
         {
             "key": "prop_AnimeShadowThreshold",
-            "value": "コアシャドウ閾値"
+            "value": "コアシャドウしきい値"
         },
         {
             "key": "prop_AnimeHalftoneColor",
@@ -894,35 +906,35 @@
         },
         {
             "key": "prop_AnimeHalftoneThreshold",
-            "value": "ハーフトーン閾値"
+            "value": "ハーフトーンしきい値"
         },
         {
             "key": "prop_AnimeShadowSoftness",
-            "value": "シャドウの柔らかさ"
+            "value": "影の柔らかさ"
         },
         {
             "key": "prop_ToggleAmbientGradient",
-            "value": "アンビエントグラデーションを有効化"
+            "value": "環境光グラデーションを有効化"
         },
         {
             "key": "prop_AnimeOcclusionToShadow",
-            "value": "オクルージョンをシャドウへ"
+            "value": "オクルージョンを影に反映"
         },
         {
             "key": "prop_AmbientUp",
-            "value": "空のアンビエント"
+            "value": "空の環境光"
         },
         {
             "key": "prop_AmbientSkyThreshold",
-            "value": "空の閾値"
+            "value": "空のしきい値"
         },
         {
             "key": "prop_AmbientDown",
-            "value": "地面のアンビエント"
+            "value": "地面の環境光"
         },
         {
             "key": "prop_AmbientGroundThreshold",
-            "value": "地面の閾値"
+            "value": "地面のしきい値"
         },
         {
             "key": "prop_AmbientIntensity",
@@ -930,23 +942,23 @@
         },
         {
             "key": "prop_TintMaskSource",
-            "value": "ティントマスクソース"
+            "value": "色合いマスクのソース"
         },
         {
             "key": "prop_LitTint",
-            "value": "明部ティント"
+            "value": "明るい領域の色合い"
         },
         {
             "key": "prop_LitThreshold",
-            "value": "明部適用範囲"
+            "value": "明るい領域の範囲"
         },
         {
             "key": "prop_ShadowTint",
-            "value": "暗部ティント"
+            "value": "影領域の色合い"
         },
         {
             "key": "prop_ShadowThreshold",
-            "value": "暗部適用範囲"
+            "value": "影領域の範囲"
         },
         {
             "key": "prop_ToggleSpecular",
@@ -954,7 +966,7 @@
         },
         {
             "key": "prop_SpecularIntensity",
-            "value": "ハイライト"
+            "value": "ハイライト強度"
         },
         {
             "key": "prop_ToggleVertexSpecular",
@@ -966,7 +978,7 @@
         },
         {
             "key": "prop_MSSO",
-            "value": "MSSO (金属、滑らかさ、スペキュラー、オクルージョン)"
+            "value": "MSSO (Metal, Smooth, Spec, Occl)"
         },
         {
             "key": "prop_Metallic",
@@ -974,7 +986,7 @@
         },
         {
             "key": "prop_Glossiness",
-            "value": "光沢度 (Glossiness)"
+            "value": "光沢 (Glossiness)"
         },
         {
             "key": "prop_Occlusion",
@@ -986,11 +998,11 @@
         },
         {
             "key": "prop_SpecularTintTexture",
-            "value": "スペキュラーティントテクスチャ"
+            "value": "スペキュラー色合いテクスチャ"
         },
         {
             "key": "prop_SpecularTint",
-            "value": "スペキュラーティント"
+            "value": "スペキ���ラーの色合い"
         },
         {
             "key": "prop_TangentMap",
@@ -1026,27 +1038,27 @@
         },
         {
             "key": "prop_HairFlowMap",
-            "value": "ヘアーフロー/タンジェントマップ (RG)"
+            "value": "髪のフロー/タンジェントマップ (RG)"
         },
         {
             "key": "prop_PrimarySpecularShift",
-            "value": "プライマリス ペキュラーシフト"
+            "value": "プライマリスぺキュラーシフト"
         },
         {
             "key": "prop_SecondarySpecularShift",
-            "value": "セカンダリ スペキュラーシフト"
+            "value": "セカンダリスぺキュラーシフト"
         },
         {
             "key": "prop_SecondarySpecularColor",
-            "value": "セカンダリ スペキュラーカラー"
+            "value": "セカンダリスぺキュラーカラー"
         },
         {
             "key": "prop_SpecularExponent",
-            "value": "スペキュラー指数"
+            "value": "スペキュラー指数 (Exponent)"
         },
         {
             "key": "prop_SheenColor",
-            "value": "シーン (Sheen) カラー"
+            "value": "シーンカラー"
         },
         {
             "key": "prop_SheenIntensity",
@@ -1054,7 +1066,7 @@
         },
         {
             "key": "prop_SheenRoughness",
-            "value": "シーン粗さ"
+            "value": "シーンの粗さ"
         },
         {
             "key": "prop_ToggleRimlight",
@@ -1070,11 +1082,11 @@
         },
         {
             "key": "prop_RimIntensity",
-            "value": "リム強度"
+            "value": "リムの強さ"
         },
         {
             "key": "prop_RimLightBased",
-            "value": "ライトベースのリム"
+            "value": "ライト依存のリム"
         },
         {
             "key": "prop_ToggleClearcoat",
@@ -1082,7 +1094,7 @@
         },
         {
             "key": "prop_ClearcoatStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_ClearcoatReflectionStrength",
@@ -1090,11 +1102,11 @@
         },
         {
             "key": "prop_ClearcoatMap",
-            "value": "マスク (R=強度, G=粗さ)"
+            "value": "マスク (R=強さ, G=粗さ)"
         },
         {
             "key": "prop_ClearcoatRoughness",
-            "value": "粗さ"
+            "value": "粗さ (Roughness)"
         },
         {
             "key": "prop_ClearcoatColor",
@@ -1102,35 +1114,35 @@
         },
         {
             "key": "prop_ToggleMatcap",
-            "value": "Matcapを有効化"
+            "value": "マットキャップを有効化"
         },
         {
             "key": "prop_MatcapTex",
-            "value": "Matcapテクスチャ"
+            "value": "マットキャップテクスチャ"
         },
         {
             "key": "prop_MatcapTint",
-            "value": "Matcapティント"
+            "value": "マットキャップの色合い"
         },
         {
             "key": "prop_MatcapIntensity",
-            "value": "Matcap強度"
+            "value": "マットキャップの強さ"
         },
         {
             "key": "prop_MatcapBlendMode",
-            "value": "ブレンドモード"
+            "value": "ブ��ンドモード"
         },
         {
             "key": "prop_MatcapMask",
-            "value": "Matcapマスク (R)"
+            "value": "マットキャップマスク (R)"
         },
         {
             "key": "prop_MatcapSmoothnessEnabled",
-            "value": "滑らかさを有効化"
+            "value": "スムースネスを有効化"
         },
         {
             "key": "prop_MatcapSmoothness",
-            "value": "滑らかさ (Smoothness)"
+            "value": "スムースネス"
         },
         {
             "key": "prop_Decal1Enable",
@@ -1142,7 +1154,7 @@
         },
         {
             "key": "prop_Decal1Tint",
-            "value": "ティント"
+            "value": "色合い"
         },
         {
             "key": "prop_Decal1BlendMode",
@@ -1150,7 +1162,7 @@
         },
         {
             "key": "prop_Decal1IsTriplanar",
-            "value": "トライプラナーマッピングを使用"
+            "value": "トライプレーナーマッピングを使用"
         },
         {
             "key": "prop_Decal1Position",
@@ -1166,7 +1178,7 @@
         },
         {
             "key": "prop_Decal1TriplanarPosition",
-            "value": "ワールド位置 (XYZ)"
+            "value": "ワールド座標 (XYZ)"
         },
         {
             "key": "prop_Decal1TriplanarScale",
@@ -1178,7 +1190,7 @@
         },
         {
             "key": "prop_Decal1TriplanarSharpness",
-            "value": "トライプラナーブレンドの鮮明度"
+            "value": "トライプレーナーブレンドの鋭さ"
         },
         {
             "key": "prop_Decal1Repeat",
@@ -1194,7 +1206,7 @@
         },
         {
             "key": "prop_Decal1AutoCycleHue",
-            "value": "色相自動サイクル"
+            "value": "色相を自動サイクル"
         },
         {
             "key": "prop_Decal1CycleSpeed",
@@ -1210,7 +1222,7 @@
         },
         {
             "key": "prop_Decal2Tint",
-            "value": "ティント"
+            "value": "色合い"
         },
         {
             "key": "prop_Decal2BlendMode",
@@ -1218,7 +1230,7 @@
         },
         {
             "key": "prop_Decal2IsTriplanar",
-            "value": "トライプラナーマッピングを使用"
+            "value": "トライプレーナーマ��ピングを使用"
         },
         {
             "key": "prop_Decal2Position",
@@ -1234,7 +1246,7 @@
         },
         {
             "key": "prop_Decal2TriplanarPosition",
-            "value": "ワールド位置 (XYZ)"
+            "value": "ワールド座標 (XYZ)"
         },
         {
             "key": "prop_Decal2TriplanarScale",
@@ -1246,7 +1258,7 @@
         },
         {
             "key": "prop_Decal2TriplanarSharpness",
-            "value": "トライプラナーブレンドの鮮明度"
+            "value": "トライプレーナーブレンドの鋭さ"
         },
         {
             "key": "prop_Decal2Repeat",
@@ -1262,7 +1274,7 @@
         },
         {
             "key": "prop_Decal2AutoCycleHue",
-            "value": "色相自動サイクル"
+            "value": "色相を自動サイクル"
         },
         {
             "key": "prop_Decal2CycleSpeed",
@@ -1274,7 +1286,7 @@
         },
         {
             "key": "prop_RGBColor",
-            "value": "RGBティント"
+            "value": "RGB色合い"
         },
         {
             "key": "prop_RGBBlendMode",
@@ -1306,7 +1318,7 @@
         },
         {
             "key": "prop_ToggleAutoCycle",
-            "value": "自動色相サイクルを有効化"
+            "value": "色相自動サイクルを有効化"
         },
         {
             "key": "prop_AutoCycleSpeed",
@@ -1338,11 +1350,11 @@
         },
         {
             "key": "prop_CubemapTint",
-            "value": "キューブマップティント"
+            "value": "キューブマップの色合い"
         },
         {
             "key": "prop_CubemapIntensity",
-            "value": "キューブマップ強度"
+            "value": "キューブマップの強さ"
         },
         {
             "key": "prop_CubemapBlendMode",
@@ -1350,11 +1362,11 @@
         },
         {
             "key": "prop_ToggleParallax",
-            "value": "視差マッピングを有効化"
+            "value": "パララックスマッピングを有効化"
         },
         {
             "key": "prop_ParallaxMode",
-            "value": "視差モード"
+            "value": "パララックスモード"
         },
         {
             "key": "prop_ParallaxMap",
@@ -1362,7 +1374,7 @@
         },
         {
             "key": "prop_ParallaxStrength",
-            "value": "視差強度"
+            "value": "パララックスの強さ"
         },
         {
             "key": "prop_ParallaxSteps",
@@ -1378,7 +1390,7 @@
         },
         {
             "key": "prop_SSSStrength",
-            "value": "SSS強度"
+            "value": "SSSの強さ"
         },
         {
             "key": "prop_SSSPower",
@@ -1386,7 +1398,7 @@
         },
         {
             "key": "prop_SSSDistortion",
-            "value": "SSS歪み"
+            "value": "SSSの歪み"
         },
         {
             "key": "prop_SSSThicknessMap",
@@ -1394,7 +1406,7 @@
         },
         {
             "key": "prop_SSSThickness",
-            "value": "SSS厚み減衰"
+            "value": "SSS厚みの減衰"
         },
         {
             "key": "prop_ToggleShadowMap",
@@ -1410,23 +1422,23 @@
         },
         {
             "key": "prop_ToggleDetail",
-            "value": "詳細マップを有効化"
+            "value": "ディテールマップを有効化"
         },
         {
             "key": "prop_DetailAlbedoMap",
-            "value": "詳細アルベド (A=強度)"
+            "value": "ディテールアルベド (A=強さ)"
         },
         {
             "key": "prop_DetailNormalMap",
-            "value": "詳細ノーマルマップ"
+            "value": "ディテールノーマルマップ"
         },
         {
             "key": "prop_DetailTiling",
-            "value": "詳細タイリング"
+            "value": "ディテールタイリング"
         },
         {
             "key": "prop_DetailNormalStrength",
-            "value": "詳細ノーマル強度"
+            "value": "ディテールノーマルの強さ"
         },
         {
             "key": "prop_ToggleDissolve",
@@ -1446,7 +1458,7 @@
         },
         {
             "key": "prop_DissolveEdgeWidth",
-            "value": "エッジ幅"
+            "value": "エッジの幅"
         },
         {
             "key": "prop_DissolveEdgeMode",
@@ -1454,7 +1466,7 @@
         },
         {
             "key": "prop_DissolveEdgeSharpness",
-            "value": "エッジ鮮明度"
+            "value": "エッジの鋭さ"
         },
         {
             "key": "prop_DissolveNoiseTex",
@@ -1482,7 +1494,7 @@
         },
         {
             "key": "prop_TogglePathing",
-            "value": "パシングを有効化"
+            "value": "パッシングを有効化"
         },
         {
             "key": "prop_PathingMappingMode",
@@ -1526,7 +1538,7 @@
         },
         {
             "key": "prop_PathingEmission",
-            "value": "エミッション強度"
+            "value": "エミッションの強さ"
         },
         {
             "key": "prop_PathingType",
@@ -1538,7 +1550,7 @@
         },
         {
             "key": "prop_PathingWidth",
-            "value": "パス幅"
+            "value": "パスの幅"
         },
         {
             "key": "prop_PathingSoftness",
@@ -1562,11 +1574,11 @@
         },
         {
             "key": "prop_DepthRimThreshold",
-            "value": "閾値"
+            "value": "しきい値"
         },
         {
             "key": "prop_DepthRimSharpness",
-            "value": "鮮明度"
+            "value": "鋭さ"
         },
         {
             "key": "prop_DepthRimBlendMode",
@@ -1574,7 +1586,7 @@
         },
         {
             "key": "prop_ToggleAudioLink",
-            "value": "AudioLinkを有効化"
+            "value": "AudioLink��有効化"
         },
         {
             "key": "prop_AudioLinkFallback",
@@ -1582,11 +1594,11 @@
         },
         {
             "key": "prop_AudioLinkEmissionBand",
-            "value": "エミッションバンド"
+            "value": "エミッション帯域"
         },
         {
             "key": "prop_AudioLinkEmissionStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkEmissionRange",
@@ -1594,11 +1606,11 @@
         },
         {
             "key": "prop_AudioLinkRimBand",
-            "value": "リムライトバンド"
+            "value": "リムライト帯域"
         },
         {
             "key": "prop_AudioLinkRimStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkRimRange",
@@ -1606,11 +1618,11 @@
         },
         {
             "key": "prop_AudioLinkHueShiftBand",
-            "value": "色相シフトバンド"
+            "value": "色相シフト帯域"
         },
         {
             "key": "prop_AudioLinkHueShiftStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkHueShiftRange",
@@ -1618,11 +1630,11 @@
         },
         {
             "key": "prop_AudioLinkDecalHueBand",
-            "value": "ステッカー色相バンド"
+            "value": "ステッカー色相帯域"
         },
         {
             "key": "prop_AudioLinkDecalHueStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkDecalHueRange",
@@ -1630,11 +1642,11 @@
         },
         {
             "key": "prop_AudioLinkDecalEmissionBand",
-            "value": "ステッカーエミッションバンド"
+            "value": "ステッカーエミッション帯域"
         },
         {
             "key": "prop_AudioLinkDecalEmissionStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkDecalEmissionRange",
@@ -1642,11 +1654,11 @@
         },
         {
             "key": "prop_AudioLinkDecalOpacityBand",
-            "value": "ステッカー不透明度バンド"
+            "value": "ステッカー不透明度帯域"
         },
         {
             "key": "prop_AudioLinkDecalOpacityStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkDecalOpacityRange",
@@ -1654,11 +1666,11 @@
         },
         {
             "key": "prop_AudioLinkVertexBand",
-            "value": "頂点拡大/縮小バンド"
+            "value": "頂点膨張/収縮帯域"
         },
         {
             "key": "prop_AudioLinkVertexStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkVertexRange",
@@ -1666,11 +1678,11 @@
         },
         {
             "key": "prop_AudioLinkOutlineBand",
-            "value": "アウトラインバンド"
+            "value": "アウトライン帯域"
         },
         {
             "key": "prop_AudioLinkOutlineStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkOutlineRange",
@@ -1678,11 +1690,11 @@
         },
         {
             "key": "prop_AudioLinkMatcapBand",
-            "value": "Matcapバンド"
+            "value": "マットキャップ帯域"
         },
         {
             "key": "prop_AudioLinkMatcapStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkMatcapRange",
@@ -1690,11 +1702,11 @@
         },
         {
             "key": "prop_AudioLinkPathingBand",
-            "value": "パシングバンド"
+            "value": "パッシング帯域"
         },
         {
             "key": "prop_AudioLinkPathingStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkPathingRange",
@@ -1702,11 +1714,11 @@
         },
         {
             "key": "prop_AudioLinkGlitterBand",
-            "value": "グリッターバンド"
+            "value": "グリッター帯域"
         },
         {
             "key": "prop_AudioLinkGlitterStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkGlitterRange",
@@ -1714,11 +1726,11 @@
         },
         {
             "key": "prop_AudioLinkIridescenceBand",
-            "value": "イリデッセンスバンド"
+            "value": "イリデッセンス帯域"
         },
         {
             "key": "prop_AudioLinkIridescenceStrength",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_AudioLinkIridescenceRange",
@@ -1742,7 +1754,7 @@
         },
         {
             "key": "prop_GlitterTint",
-            "value": "ティント"
+            "value": "色合い"
         },
         {
             "key": "prop_GlitterFrequency",
@@ -1750,7 +1762,7 @@
         },
         {
             "key": "prop_GlitterThreshold",
-            "value": "密度閾値"
+            "value": "密度しきい値"
         },
         {
             "key": "prop_GlitterSize",
@@ -1770,11 +1782,11 @@
         },
         {
             "key": "prop_ToggleGlitterRainbow",
-            "value": "レインボーを有効化"
+            "value": "虹色を有効化"
         },
         {
             "key": "prop_GlitterRainbowSpeed",
-            "value": "レインボー速度"
+            "value": "虹色変化速度"
         },
         {
             "key": "prop_ToggleDistanceFade",
@@ -1782,7 +1794,7 @@
         },
         {
             "key": "prop_DistanceFadeReference",
-            "value": "フェード基準点"
+            "value": "フェード参照点"
         },
         {
             "key": "prop_ToggleNearFade",
@@ -1810,7 +1822,7 @@
         },
         {
             "key": "prop_FarFadeStart",
-            "value": "遠距離フェード開始"
+            "value": "��距離フェード開始"
         },
         {
             "key": "prop_FarFadeEnd",
@@ -1830,11 +1842,11 @@
         },
         {
             "key": "prop_IridescenceTint",
-            "value": "ティント"
+            "value": "色合い"
         },
         {
             "key": "prop_IridescenceIntensity",
-            "value": "強度"
+            "value": "強さ"
         },
         {
             "key": "prop_IridescenceBlendMode",
@@ -1854,7 +1866,7 @@
         },
         {
             "key": "prop_IridescenceFrequency",
-            "value": "レインボー周波数"
+            "value": "虹色周波数"
         },
         {
             "key": "prop_ToggleShadowTexture",
@@ -1878,7 +1890,7 @@
         },
         {
             "key": "prop_ShadowPatternColor",
-            "value": "パターンティント"
+            "value": "パターン色合い"
         },
         {
             "key": "prop_ShadowPatternScale",
@@ -1886,7 +1898,7 @@
         },
         {
             "key": "prop_ShadowPatternTriplanarSharpness",
-            "value": "トライプラナーブレンドの鮮明度"
+            "value": "トライプレーナーブレンドの鋭さ"
         },
         {
             "key": "prop_ShadowPatternTransparency",
@@ -1902,7 +1914,7 @@
         },
         {
             "key": "prop_FlatModel",
-            "value": "フラットモデル強度"
+            "value": "フラットモデルの強さ"
         },
         {
             "key": "prop_FlatModelDepthCorrection",
@@ -1910,7 +1922,7 @@
         },
         {
             "key": "prop_FlatModelFacing",
-            "value": "向く方向"
+            "value": "向き"
         },
         {
             "key": "prop_FlatModelLockAxis",
@@ -1946,7 +1958,7 @@
         },
         {
             "key": "prop_WorldEffectBlendSharpness",
-            "value": "方向ブレンドの鮮明度"
+            "value": "方向ブレンドの鋭さ"
         },
         {
             "key": "prop_WorldEffectIntensity",
@@ -1954,7 +1966,7 @@
         },
         {
             "key": "prop_WorldEffectPosition",
-            "value": "ワールド位置 (XYZ)"
+            "value": "ワールド座標 (XYZ)"
         },
         {
             "key": "prop_WorldEffectRotation",
@@ -1994,11 +2006,11 @@
         },
         {
             "key": "prop_TouchRainbowSpeed",
-            "value": "タッチレインボー速度"
+            "value": "タッチ虹色速度"
         },
         {
             "key": "prop_TouchRainbowSpread",
-            "value": "タッチレインボー拡散"
+            "value": "タッチ虹色の広がり"
         },
         {
             "key": "prop_ToggleRefraction",
@@ -2006,15 +2018,15 @@
         },
         {
             "key": "prop_RefractionMask",
-            "value": "マスク (R=強度)"
+            "value": "マスク (R=強さ)"
         },
         {
             "key": "prop_RefractionTint",
-            "value": "屈折ティント"
+            "value": "屈折の色合い"
         },
         {
             "key": "prop_RefractionIOR",
-            "value": "屈折強度 (IOR)"
+            "value": "屈折強度"
         },
         {
             "key": "prop_RefractionFresnel",
@@ -2026,19 +2038,19 @@
         },
         {
             "key": "prop_RefractionSeeThrough",
-            "value": "透視強度"
+            "value": "シースルー強度"
         },
         {
             "key": "prop_RefractionGrabpassTint",
-            "value": "グラブパスティント"
+            "value": "Grabpass色合い"
         },
         {
             "key": "prop_RefractionZoomToggle",
-            "value": "拡大を有効化"
+            "value": "フラクチャズーム"
         },
         {
             "key": "prop_RefractionZoom",
-            "value": "拡大率"
+            "value": "ズーム量"
         },
         {
             "key": "prop_RefractionMode",
@@ -2066,7 +2078,7 @@
         },
         {
             "key": "prop_CausticsSpeed",
-            "value": "コースティクスアニメーション速度"
+            "value": "コースティクスアニメ速度"
         },
         {
             "key": "prop_CausticsIntensity",
@@ -2134,15 +2146,15 @@
         },
         {
             "key": "prop_PS1Affine",
-            "value": "アフィンマッピングを有効化"
+            "value": "アフィン・テクスチャマッピングを有効化"
         },
         {
             "key": "prop_PS1Compression",
-            "value": "色圧縮を有効化"
+            "value": "カラー圧縮を有効化"
         },
         {
             "key": "prop_PS1CompressionPrecision",
-            "value": "色圧縮精度"
+            "value": "カラー圧縮精度"
         },
         {
             "key": "prop_UseTextureStitching",
@@ -2158,11 +2170,11 @@
         },
         {
             "key": "prop_StitchOffset",
-            "value": "継ぎ目オフセット"
+            "value": "スティッチシームオフセット"
         },
         {
             "key": "prop_StitchTex_UV",
-            "value": "スティッチテクスチャUV"
+            "value": "スティッチテクスチャ UV"
         },
         {
             "key": "prop_ToggleVertexDistortion",
@@ -2186,11 +2198,11 @@
         },
         {
             "key": "prop_VertexDistortionFrequency",
-            "value": "歪み周波数"
+            "value": "歪みスケール"
         },
         {
             "key": "prop_WindStrength",
-            "value": "風強度"
+            "value": "風の強さ"
         },
         {
             "key": "prop_WindSpeed",
@@ -2202,7 +2214,7 @@
         },
         {
             "key": "prop_WindDirection",
-            "value": "風向き (XYZ)"
+            "value": "風向 (XYZ)"
         },
         {
             "key": "prop_WindNoiseTex",
@@ -2210,7 +2222,7 @@
         },
         {
             "key": "prop_BreathingStrength",
-            "value": "呼吸強度"
+            "value": "呼吸の強さ"
         },
         {
             "key": "prop_BreathingSpeed",
@@ -2226,7 +2238,7 @@
         },
         {
             "key": "prop_SSRTint",
-            "value": "反射ティント"
+            "value": "反射の色合い"
         },
         {
             "key": "prop_SSRIntensity",
@@ -2294,11 +2306,11 @@
         },
         {
             "key": "prop_SSRCamFadeStart",
-            "value": "SSR カメラフェード開始"
+            "value": "SSRカメラフェード開始"
         },
         {
             "key": "prop_SSRCamFadeEnd",
-            "value": "SSR カメラフェード終了"
+            "value": "SSRカメラフェード終了"
         },
         {
             "key": "prop_SSRFlipUV",
@@ -2314,7 +2326,7 @@
         },
         {
             "key": "prop_SSROutOfViewMode",
-            "value": "画面外モード"
+            "value": "視野外モード"
         },
         {
             "key": "prop_OutlineColor",
@@ -2326,7 +2338,7 @@
         },
         {
             "key": "prop_OutlineVertexColorMask",
-            "value": "頂点カラー (R) マスクを使用"
+            "value": "頂点カラー(R)マスクを使用"
         },
         {
             "key": "prop_OutlineDistanceFade",
@@ -2370,7 +2382,7 @@
         },
         {
             "key": "prop_BumpMap_UV",
-            "value": "ノーマルマップ UVセット"
+            "value": "バンプマップ UVセット"
         },
         {
             "key": "prop_MSSO_UV",
@@ -2378,11 +2390,11 @@
         },
         {
             "key": "prop_SpecularTintTexture_UV",
-            "value": "スペキュラーティント UVセット"
+            "value": "スペキュラー色合い UVセット"
         },
         {
             "key": "prop_TangentMap_UV",
-            "value": "タンジェントマップ UVセット"
+            "value": "タンジェントマップ UV"
         },
         {
             "key": "prop_EmissionMap_UV",
@@ -2394,7 +2406,7 @@
         },
         {
             "key": "prop_MatcapMask_UV",
-            "value": "Matcapマスク UVセット"
+            "value": "マットキャップマスク UVセット"
         },
         {
             "key": "prop_ParallaxMap_UV",
@@ -2406,15 +2418,15 @@
         },
         {
             "key": "prop_DetailMap_UV",
-            "value": "詳細マップ UVセット"
+            "value": "ディテールマップ UVセット"
         },
         {
             "key": "prop_Decal1_UV",
-            "value": "ステッカー1 UVセット"
+            "value": "ステッカー 1 UVセット"
         },
         {
             "key": "prop_Decal2_UV",
-            "value": "ステッカー2 UVセット"
+            "value": "ステッカー 2 UVセット"
         },
         {
             "key": "prop_Glitter_UV",
@@ -2430,7 +2442,7 @@
         },
         {
             "key": "prop_HairFlowMap_UV",
-            "value": "ヘアーフローマップ UVセット"
+            "value": "ヘアフローマップ UVセット"
         },
         {
             "key": "prop_ShadowTex_UV",
@@ -2450,7 +2462,7 @@
         },
         {
             "key": "prop_PathingTexture_UV",
-            "value": "パシングマップ UVセット"
+            "value": "パッシングマップ UVセット"
         },
         {
             "key": "prop_ShadowMap_UV",
@@ -2466,11 +2478,11 @@
         },
         {
             "key": "prop_OverrideBaseBlend",
-            "value": "カスタムベースブレンディングを使用"
+            "value": "カスタムBaseブレンドを使用"
         },
         {
             "key": "prop_BlendOp",
-            "value": "ブレンド演算"
+            "value": "ブレンド演算 (Op)"
         },
         {
             "key": "prop_AddSrcBlend",
@@ -2486,11 +2498,11 @@
         },
         {
             "key": "prop_ZTest",
-            "value": "ZTest (深度テスト)"
+            "value": "ZTest"
         },
         {
             "key": "prop_OverrideAddBlend",
-            "value": "カスタム加算ブレンディングを使用"
+            "value": "カスタム加算ブレンドを使用"
         },
         {
             "key": "prop_OverrideZWrite",
@@ -2498,11 +2510,11 @@
         },
         {
             "key": "specular_standard_stylised_info",
-            "value": "標準スペキュラーにはスタイライズドオプションがありません。ここの設定を表示するには、スペキュラーモードを変更してみてください！"
+            "value": "標準スペキュラーには様式化されたオプションがありません。ここの設定を表示するには、スペキュラーモードを変更してみてください！"
         },
         {
             "key": "depth_popup_info",
-            "value": "このエフェクトはシーンから深度情報を読み取る必要があります！ワールドにリアルタイムライトが有効になっているか、Depth Writerプレハブ（Backlaceに付属）がシーンにあることを確認してください。"
+            "value": "このエフェクトはシーンから深度 (Depth) を読み取る必要があります！ワールドでリアルタイムライトが有効になっているか、Depth Writerプレハブ（Backlaceに付属）がシーンにあることを確認してください。"
         },
         {
             "key": "prop_OutlineSpace",
@@ -2538,7 +2550,7 @@
         },
         {
             "key": "prop_SDFShadowThreshold",
-            "value": "SDFシャドウ閾値"
+            "value": "SDFシャドウしきい値"
         },
         {
             "key": "prop_SDFShadowSoftness",
@@ -2558,35 +2570,35 @@
         },
         {
             "key": "prop_ParallaxLayerMask",
-            "value": "視差レイヤーマスク"
+            "value": "パララックスレイヤーマスク"
         },
         {
             "key": "prop_ParallaxLayer1",
-            "value": "視差レイヤー 1"
+            "value": "パララックスレイヤー 1"
         },
         {
             "key": "prop_ParallaxLayer2",
-            "value": "視差レイヤー 2"
+            "value": "パララックスレイヤー 2"
         },
         {
             "key": "prop_ParallaxLayer3",
-            "value": "視差レイヤー 3"
+            "value": "パララックスレイヤー 3"
         },
         {
             "key": "prop_ParallaxLayerDepth1",
-            "value": "視差レイヤー深度 1"
+            "value": "パララックスレイヤー深度 1"
         },
         {
             "key": "prop_ParallaxLayerDepth2",
-            "value": "視差レイヤー深度 2"
+            "value": "パララックスレイヤー深度 2"
         },
         {
             "key": "prop_ParallaxLayerDepth3",
-            "value": "視差レイヤー深度 3"
+            "value": "パララックスレイヤー深度 3"
         },
         {
             "key": "prop_ParallaxBlend",
-            "value": "視差ブレンド"
+            "value": "パララックスブレンド"
         },
         {
             "key": "prop_ParallaxStack",
@@ -2598,7 +2610,151 @@
         },
         {
             "key": "prop_ParallaxTile",
-            "value": "レイヤーをタイル表示"
+            "value": "レイヤーをタイル化"
+        },
+        {
+            "key": "prop_AudioLinkMode",
+            "value": "AudioLinkモード"
+        },
+        {
+            "key": "prop_AudioLinkSmoothLevel",
+            "value": "スムージングレベル"
+        },
+        {
+            "key": "prop_VertexEffectType",
+            "value": "歪みモード"
+        },
+        {
+            "key": "prop_VertexGlitchMode",
+            "value": "グリッチモード"
+        },
+        {
+            "key": "prop_GlitchFrequency",
+            "value": "グリッチ頻度"
+        },
+        {
+            "key": "custom_badge_backlace",
+            "value": "Backlace"
+        },
+        {
+            "key": "custom_badge_poi",
+            "value": "Poiyomi"
+        },
+        {
+            "key": "custom_badge_openlit",
+            "value": "Open Lit"
+        },
+        {
+            "key": "custom_badge_standard",
+            "value": "Standard"
+        },
+        {
+            "key": "custom_badge_mochie",
+            "value": "Mochie"
+        },
+        {
+            "key": "custom_badge_fast_uv",
+            "value": "Fast UV"
+        },
+        {
+            "key": "custom_badge_fancy_uv",
+            "value": "Fancy UV"
+        },
+        {
+            "key": "custom_badge_layered",
+            "value": "Layered"
+        },
+        {
+            "key": "custom_badge_interior",
+            "value": "Interior"
+        },
+        {
+            "key": "custom_badge_texture",
+            "value": "Texture"
+        },
+        {
+            "key": "custom_badge_procedural",
+            "value": "Procedural"
+        },
+        {
+            "key": "custom_badge_noise",
+            "value": "Noise"
+        },
+        {
+            "key": "custom_badge_directional",
+            "value": "Directional"
+        },
+        {
+            "key": "custom_badge_voxel",
+            "value": "Voxel"
+        },
+        {
+            "key": "custom_badge_distortion",
+            "value": "Distortion"
+        },
+        {
+            "key": "custom_badge_glitch",
+            "value": "Glitch"
+        },
+        {
+            "key": "prop_PathingMap_UV",
+            "value": "パスマップ UVセット"
+        },
+        {
+            "key": "custom_badge_ramp",
+            "value": "Ramp"
+        },
+        {
+            "key": "custom_badge_opaque",
+            "value": "Opaque"
+        },
+        {
+            "key": "custom_badge_cutout",
+            "value": "Cutout"
+        },
+        {
+            "key": "custom_badge_fade",
+            "value": "Fade"
+        },
+        {
+            "key": "custom_badge_opaquefade",
+            "value": "Opaque Fade"
+        },
+        {
+            "key": "custom_badge_transparent",
+            "value": "Transparent"
+        },
+        {
+            "key": "custom_badge_premultiply",
+            "value": "Premultiply"
+        },
+        {
+            "key": "custom_badge_additive",
+            "value": "Additive"
+        },
+        {
+            "key": "custom_badge_softadditive",
+            "value": "Soft Additive"
+        },
+        {
+            "key": "custom_badge_multiplicative",
+            "value": "Multiplicative"
+        },
+        {
+            "key": "custom_badge_2multiplicative",
+            "value": "2x Multiplicative"
+        },
+        {
+            "key": "prop_OutlineOffset",
+            "value": "アウトラインオフセット"
+        },
+        {
+            "key": "tab_legacy_mode",
+            "value": "レガシーモード"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "レガシーハードウェアサポート\n\nコンパイルエラーが発生する場合、またはShader Model 5.0をサポートしていない古いハードウェアでこのシェーダーを使用する必要がある場合は、レガシーモードを有効にできます。\n\n有効にする方法:\n1. Resources/Luka_Backlace/Includes/ に移動します\n2. テキストエディタで次の3つのファイルを開きます:\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 各ファイルで6行目を見つけます: // #define BACKLACE_LEGACY_MODE\n4. // を削除してコメントアウトを解除します (#define BACKLACE_LEGACY_MODE となるように)\n\n機能:\n• Shader Model 3.0向けにコンパイル (古いGPUと互換性あり)\n• ハードウェア制限内に収めるため、AudioLinkとLTCGIの統合を自動的に無効化\n• その他のすべての機能は引き続き機能します\n\n注意: シェーダーを正しくコンパイルするには、3つのファイルすべてを編集する必要があります。"
         }
     ]
 }
