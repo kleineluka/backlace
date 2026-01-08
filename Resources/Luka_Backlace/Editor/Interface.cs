@@ -2622,7 +2622,7 @@ namespace Luka.Backlace
             premonition_menu?.draw();
             debug_menu?.draw(materialEditor, properties);
             license_menu?.draw();
-            update.draw();
+            update?.draw();
             announcement?.draw();
             docs?.draw();
             socials_menu?.draw();
