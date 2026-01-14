@@ -47,6 +47,14 @@ struct BacklaceSurfaceData
     float3 EnergyCompensation;
     float3 Dfg;
     float3 CustomIndirect;
+    // specular samples
+    #if defined(_BACKLACE_SPECULAR)
+        float Anisotropy;
+        float3 ModifiedTangent;
+        float3 HairFlow;
+        float HairShiftMask;
+        float SpecularJitter;
+    #endif // _BACKLACE_SPECULAR
     // extra data cos we ball >.<
     float2 ScreenCoords;
     bool IsFrontFace;

@@ -108,8 +108,10 @@ float _UV_Scroll_Y_Speed;
     float _Glossiness;
     float _Specular;
     float _ReplaceSpecular;
-    int _SpecularStanardKind;
+    int _SpecularStandardKind;
     int _SpecularSpecialKind;
+    int _SpecularEnergyMode;
+    float _SpecularEnergy;
 #endif // _BACKLACE_SPECULAR
 
 //decal1/2-only features

@@ -60,8 +60,8 @@ void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bi
 {
     float3x3 tbn = float3x3(tangent, bitangent, normal);
     normal = normalize(mul(normalmap, tbn));
-    tangent = normalize(cross(bitangent, normal));
-    bitangent = normalize(cross(normal, tangent));
+    tangent = normalize(tangent - normal * dot(normal, tangent));
+    bitangent = cross(normal, tangent) * unity_WorldTransformParams.w;
 }
 
 // get geometry vectors
@@ -506,7 +506,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
     {
         half perceptualRoughness = glossIn.roughness;
-        perceptualRoughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);
+        perceptualRoughness = perceptualRoughness * (1.5 - 0.5 * perceptualRoughness);
         half mip = perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
         half3 R = glossIn.reflUVW;
         half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
@@ -548,6 +548,65 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     void SetupDFG(inout BacklaceSurfaceData Surface)
     {
         Surface.EnergyCompensation = 1.0;
+        switch(_SpecularEnergyMode)
+        {
+            case 1: // TURQUIN
+                // Turquin approximation for multi-scattering
+                float A = Surface.Roughness;
+                float3 F0 = Surface.SpecularColor;
+                // Using the max component of Albedo to keep it scalar, 
+                // or just use Albedo.r if monochrome.
+                float luminance = GetLuma(Surface.Albedo.rgb); 
+                Surface.EnergyCompensation = 1.0 + A * (1.0 / (luminance + 0.001) - 1.0);
+                break;
+            case 2: // safe and cheap
+                Surface.EnergyCompensation = 1.0 + Surface.Roughness * 0.5;
+                break;
+            case 3: // manual control
+                Surface.EnergyCompensation = _SpecularEnergy;
+                break;
+            default: // (0) none, just 1.0
+                // no energy compensation
+                break;
+        }
+    }
+
+    // avoid redundant texture sampling by pre-calculating specular data
+    void SetupSpecularData(inout BacklaceSurfaceData Surface)
+    {   
+        // empty defaults
+        Surface.Anisotropy = 0;
+        Surface.ModifiedTangent = float3(0, 0, 0);
+        Surface.HairFlow = float3(0, 0, 0);
+        Surface.HairShiftMask = 0;
+        Surface.SpecularJitter = 0;
+        // only need to pre-calc some values for certain specular modes
+        #if defined(_SPECULARMODE_STANDARD)
+            if (_SpecularStandardKind == 1) // ANISOTROPIC
+            {
+                float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
+                Surface.Anisotropy = tangentTS.a * _Anisotropy;
+                Surface.ModifiedTangent = GetModifiedTangent(tangentTS.rgb, Surface.TangentDir);
+                float3 anisotropyDirection = Surface.Anisotropy >= 0.0 ? Surface.BitangentDir : Surface.TangentDir;
+                float3 anisotropicTangent = cross(anisotropyDirection, Surface.ViewDir);
+                float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
+                float bendFactor = abs(Surface.Anisotropy) * saturate(1 - (Pow5(1 - Surface.SquareRoughness)));
+                float3 bentNormal = normalize(lerp(Surface.NormalDir, anisotropicNormal, bendFactor));
+                Surface.ReflectDir = reflect(-Surface.ViewDir, bentNormal);
+            }
+        #elif defined(_SPECULARMODE_SPECIAL) // _SPECULARMODE_*
+            if (_SpecularSpecialKind == 0) // HAIR
+            {
+                float3 flowSample = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rgb;
+                Surface.HairFlow.xy = flowSample.rg * 2 - 1;
+                Surface.HairShiftMask = saturate(flowSample.b);
+                if (_SpecularJitter > 0.001)
+                {
+                    float noise = frac(sin(dot(Uvs[_HairFlowMap_UV] * 25.0, float2(12.9898, 78.233))) * 43758.5453);
+                    Surface.SpecularJitter = (noise * 2.0 - 1.0) * _SpecularJitter;
+                }
+            }
+        #endif // _SPECULARMODE_*
     }
 
     // standard direct specular calculation (used in a few modes)
@@ -559,34 +618,25 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
     }
 
-    #if defined(_SPECULARMODE_ANISOTROPIC) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+    #if defined(_SPECULARMODE_STANDARD)
         // calculates anisotropic direct specular reflection using tangent space and view/light directions
         void AnisotropicDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
         {
             outNDF = 0;
             outGFS = 0;
-            float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
-            float anisotropy = tangentTS.a * _Anisotropy;
-            float3 tangent = GetModifiedTangent(tangentTS.rgb, tangentDir);
-            float3 anisotropyDirection = anisotropy >= 0.0 ? bitangentDir : tangentDir;
-            float3 anisotropicTangent = cross(anisotropyDirection, Surface.ViewDir);
-            float3 anisotropicNormal = cross(anisotropicTangent, anisotropyDirection);
-            float bendFactor = abs(anisotropy) * saturate(1 - (Pow5(1 - Surface.SquareRoughness)));
-            float3 bentNormal = normalize(lerp(Surface.NormalDir, anisotropicNormal, bendFactor));
-            Surface.ReflectDir = reflect(-Surface.ViewDir, bentNormal);
-            float TdotH = dot(tangent, halfDir);
-            float TdotL = dot(tangent, lightDir);
+            float TdotH = dot(Surface.ModifiedTangent, halfDir);
+            float TdotL = dot(Surface.ModifiedTangent, lightDir);
             float BdotH = dot(bitangentDir, halfDir);
             float BdotL = dot(bitangentDir, lightDir);
-            float TdotV = dot(Surface.ViewDir, tangent);
+            float TdotV = dot(Surface.ViewDir, Surface.ModifiedTangent);
             float BdotV = dot(bitangentDir, Surface.ViewDir);
-            float ax = max(Surface.SquareRoughness * (1.0 + anisotropy), 0.005);
-            float ay = max(Surface.SquareRoughness * (1.0 - anisotropy), 0.005);
+            float ax = max(Surface.SquareRoughness * (1.0 + Surface.Anisotropy), 0.005);
+            float ay = max(Surface.SquareRoughness * (1.0 - Surface.Anisotropy), 0.005);
             outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
             outGFS = smithG_GGX_aniso(ndotL, TdotL, BdotL, ax, ay);
             outGFS *= smithG_GGX_aniso(ndotV, TdotV, BdotV, ax, ay);
         }
-    #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+    #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD
         // toon highlights specular
         float3 ApplyToonHighlights(float3 F_Term, float ndotH, inout BacklaceSurfaceData Surface)
         {
@@ -596,22 +646,15 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             float3 rampColor = UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(rampUV, rampUV)).rgb;
             return rampColor * _HighlightRampColor.rgb * _HighlightIntensity * F_Term;
         }
-    #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR
+    #elif defined(_SPECULARMODE_SPECIAL) // _SPECULARMODE_TOON
         // kajiya-kay hair specular
         float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
         {
-            // sample
-            float3 flowSample = UNITY_SAMPLE_TEX2D(_HairFlowMap, Uvs[_HairFlowMap_UV]).rgb;
-            float2 flow = flowSample.rg * 2 - 1;
-            float shiftMask = saturate(flowSample.b);
+            // pull from pre-calculations
+            float2 flow = Surface.HairFlow.xy;
+            float shiftMask = Surface.HairShiftMask;
+            float jitter = Surface.SpecularJitter;
             float3 hairTangent = normalize(flow.x * Surface.TangentDir + flow.y * Surface.BitangentDir);
-            // generate jitter
-            float jitter = 0.0;
-            if (_SpecularJitter > 0.001) // don't branch? let compiler handle it
-            { 
-                float noise = frac(sin(dot(Uvs[_HairFlowMap_UV] * 25.0, float2(12.9898, 78.233))) * 43758.5453);
-                jitter = (noise * 2.0 - 1.0) * _SpecularJitter;
-            }
             // primary shift/spec
             float primaryShift = (_PrimarySpecularShift + jitter) * shiftMask;
             float3 shiftedTangent1 = normalize(hairTangent + Surface.NormalDir * primaryShift);
@@ -631,7 +674,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
             return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);
         }
-    #elif defined(_SPECULARMODE_CLOTH)
+
         // charlie sheen ndf as Estevez and Kulla of Sony Imageworks describe
         float CharlieSheenNDF(float roughness, float NdotH)
         {
@@ -641,7 +684,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             // pow(sin^2(h), invA * 0.5) is the same as pow(sin(h), invA) but faster.
             return (2.0 + invAlpha) * pow(sin2h, invAlpha * 0.5) / (2.0 * UNITY_PI);
         }
-    #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
+    #endif // _SPECULARMODE_*
 
     // indirect specular using box-projected cubemaps with a fallback option
     void GetIndirectSpecular(inout BacklaceSurfaceData Surface)
@@ -662,12 +705,12 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         Surface.IndirectSpecular = indirectSpecularRGBA.rgb;
         if ((_IndirectFallbackMode > 0 && indirectSpecularRGBA.a == 0) || (_IndirectOverride == 1))
         {
-            //using the fake specular probe toned down based on the average light, it's not phisically accurate
-            //but having a probe that reflects arbitrary stuff isn't accurate to begin with
+            // using the fake specular probe toned down based on the average light, it's not phisically accurate
+            // but having a probe that reflects arbitrary stuff isn't accurate to begin with
             half lightColGrey = max((Surface.LightColor.r + Surface.LightColor.g + Surface.LightColor.b) / 3, (Surface.IndirectDiffuse.r + Surface.IndirectDiffuse.g + Surface.IndirectDiffuse.b) / 3);
             Surface.IndirectSpecular = Surface.CustomIndirect * min(lightColGrey, 1);
         }
-        float horizon = min(1 + Surface.NdotH, 1.0);
+        float horizon = min(1.0 + dot(Surface.ReflectDir, Surface.NormalDir), 1.0);
         Surface.IndirectSpecular *= Surface.EnergyCompensation * horizon * horizon * Surface.SpecularColor;
         #if defined(_BACKLACE_CLEARCOAT)
             Surface.IndirectSpecular *= _ClearcoatReflectionStrength;
@@ -683,46 +726,55 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     // direct specular calculations
     float3 CalculateDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, float ldotH, float attenuation, inout BacklaceSurfaceData Surface)
     {
-        if (ndotL <= 0)
+        if (ndotL <= 0 || !any(Surface.SpecularColor))
         {
-            return 0.0;
+            return 0.0; // safety checks
         }
         float NDF_Term, GFS_Term;
         float3 F_Term = FresnelTerm(Surface.SpecularColor, ldotH);
         float3 specTerm = 0; // using local variable for the result
         #if defined(_SPECULARMODE_STANDARD)
-            StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
-            float3 numerator = NDF_Term * GFS_Term * F_Term;
-            float denominator = 4.0 * ndotV * ndotL;
-            specTerm = numerator / max(denominator, 0.001);
-        #elif defined(_SPECULARMODE_ANISOTROPIC)
-            AnisotropicDirectSpecular(tangentDir, bitangentDir, lightDir, halfDir, ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
-            F_Term = FresnelTerm(Surface.SpecularColor, ldotH);
-            float3 numerator = NDF_Term * GFS_Term * F_Term;
-            float denominator = 4.0 * ndotV * ndotL;
-            specTerm = numerator / max(denominator, 0.001);
-        #elif defined(_SPECULARMODE_TOON)
-            StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
+            [branch] if (_SpecularStandardKind == 0) // STANDARD
+            {
+                StandardDirectSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
+                float3 numerator = NDF_Term * GFS_Term * F_Term;
+                float denominator = 4.0 * ndotV * ndotL;
+                specTerm = numerator / max(denominator, 0.001);
+            } 
+            else if (_SpecularStandardKind == 1) // ANISOTROPIC
+            {
+                AnisotropicDirectSpecular(tangentDir, bitangentDir, lightDir, halfDir, ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
+                F_Term = FresnelTerm(Surface.SpecularColor, ldotH);
+                float3 numerator = NDF_Term * GFS_Term * F_Term;
+                float denominator = 4.0 * ndotV * ndotL;
+                specTerm = numerator / max(denominator, 0.001);
+            }
+        #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
             float3 ToonHighlight_Term = ApplyToonHighlights(F_Term, ndotH, Surface);
-            float3 numerator = GFS_Term * F_Term * ToonHighlight_Term;
-            float denominator = 4.0 * ndotV * ndotL;
-            specTerm = numerator / max(denominator, 0.001);
-        #elif defined(_SPECULARMODE_HAIR)
-            specTerm = HairDirectSpecular(tangentDir, lightDir, Surface);
-        #elif defined(_SPECULARMODE_CLOTH)
-            NDF_Term = CharlieSheenNDF(Surface.Roughness * _SheenRoughness, ndotH);
-            specTerm = NDF_Term * _SheenColor.rgb * _SheenColor.a * _SheenIntensity;
-            specTerm *= ndotL;
-            return max(0, specTerm * attenuation); // simpler exit path
-        #endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
+            specTerm = F_Term * ToonHighlight_Term;
+        #elif defined(_SPECULARMODE_SPECIAL) // _SPECULARMODE_*
+            [branch] if (_SpecularSpecialKind == 0) // hair
+            {
+                specTerm = HairDirectSpecular(tangentDir, lightDir, Surface);
+                float softNdotL = saturate(ndotL * 0.5 + 0.5);
+                specTerm *= softNdotL * Surface.EnergyCompensation * _SpecularIntensity;
+                #ifdef UNITY_COLORSPACE_GAMMA
+                    specTerm = sqrt(max(1e-4h, specTerm));
+                #endif // UNITY_COLORSPACE_GAMMA
+                return max(0, specTerm * attenuation); // return early because we use a softer falloff
+            }
+            else if (_SpecularSpecialKind == 1) // cloth
+            {
+                NDF_Term = CharlieSheenNDF(Surface.Roughness * _SheenRoughness, ndotH);
+                specTerm = NDF_Term * _SheenColor.rgb * _SheenColor.a * _SheenIntensity;
+            }
+        #endif // _SPECULARMODE_*
         // finalise the term
         specTerm *= _SpecularIntensity * ndotL * Surface.EnergyCompensation;
         #ifdef UNITY_COLORSPACE_GAMMA
             specTerm = sqrt(max(1e-4h, specTerm));
-        #endif
-        specTerm = max(0, specTerm * attenuation);
-        specTerm *= any(Surface.SpecularColor) ? 1.0 : 0.0;
-        return specTerm;
+        #endif // UNITY_COLORSPACE_GAMMA
+        return max(0, specTerm * attenuation);
     }
 
     // add direct specular to final color
@@ -735,8 +787,8 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     #if defined(_BACKLACE_VERTEX_SPECULAR)
         void AddVertexSpecular(inout BacklaceSurfaceData Surface)
         {
+            if (dot(VertexLightDir, VertexLightDir) < 0.0001) return;
             float3 VLightDir = normalize(VertexLightDir);
-            if (dot(VLightDir, VLightDir) < 0.01) return;
             float3 V_HalfDir = normalize(VLightDir + Surface.ViewDir);
             float V_NdotL = saturate(dot(Surface.NormalDir, VLightDir));
             float V_NdotH = saturate(dot(Surface.NormalDir, V_HalfDir));

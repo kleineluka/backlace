@@ -50,8 +50,10 @@ float4 _MSSO_ST;
 float4 _SpecularTintTexture_ST;
 float4 _SpecularTint;
 float4 _TangentMap_ST;
-int _SpecularStanardKind;
+int _SpecularStandardKind;
 int _SpecularSpecialKind;
+int _SpecularEnergyMode;
+float _SpecularEnergy;
 
 // lighting settings
 float _LightingColorMode;
@@ -160,13 +162,14 @@ float3 _VertexManipulationScale;
 // specular feature
 #if defined(_BACKLACE_SPECULAR)
     // specific specular modes
-    #if defined(_SPECULARMODE_TOON) // TOON SPECULAR
+    #if defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
         UNITY_DECLARE_TEX2D(_HighlightRamp);
         float4 _HighlightRampColor;
         float _HighlightIntensity;
         float _HighlightRampOffset;
         float _HighlightHardness;
-    #elif defined(_SPECULARMODE_HAIR) // HAIR SPECULAR
+    #elif defined(_SPECULARMODE_SPECIAL) // _SPECULARMODE_*
+        // hair
         UNITY_DECLARE_TEX2D(_HairFlowMap);
         float _HairFlowMap_UV;
         float _PrimarySpecularShift;
@@ -174,11 +177,11 @@ float3 _VertexManipulationScale;
         float4 _SecondarySpecularColor;
         float _SpecularExponent;
         float _SpecularJitter;
-    #elif defined(_SPECULARMODE_CLOTH) // CLOTH SPECULAR
+        // cloth
         float4 _SheenColor;
         float _SheenIntensity;
         float _SheenRoughness;
-    #endif // _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
+    #endif // _SPECULARMODE_*
     // vertex specular feature
     #if defined(_BACKLACE_VERTEX_SPECULAR) // VERTEX SPECULAR
         float3 VertexLightDir;

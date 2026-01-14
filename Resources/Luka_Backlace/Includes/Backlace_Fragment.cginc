@@ -92,6 +92,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         ApplySubsurfaceScattering(Surface);
     #endif // _BACKLACE_SSS
     #if defined(_BACKLACE_SPECULAR)
+        SetupSpecularData(Surface);
         Surface.DirectSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, Surface.LightDir, Surface.HalfDir, Surface.NdotH, Surface.NdotL, Surface.NdotV, Surface.LdotH, Surface.Attenuation, Surface);
         [branch] if (_IndirectFallbackMode == 1)
         {

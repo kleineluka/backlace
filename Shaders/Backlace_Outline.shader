@@ -195,8 +195,10 @@ Shader "luka/backlace/outline"
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
         [KeywordEnum(Standard, Toon, Special)] _SpecularMode ("Specular Mode", Float) = 0  // toon is one kind of specular
-        [Enum(Standard, 0, Anisotropic, 1)] _SpecularStanardKind ("Standard Specular Kind", Int) = 0
+        [Enum(Standard, 0, Anisotropic, 1)] _SpecularStandardKind ("Standard Specular Kind", Int) = 0
         [Enum(Hair, 0, Cloth, 1)] _SpecularSpecialKind ("Special Specular Kind", Int) = 0
+        [Enum(Disabled, 0, Turquin, 1, Safe, 2, Manual, 3)] _SpecularEnergyMode ("Specular Energy Mode", Int) = 0
+        _SpecularEnergy ("Specular Energy", Range(0, 2)) = 1.0
         _MSSO ("MSSO", 2D) = "white" { }
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0
