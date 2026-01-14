@@ -75,6 +75,8 @@ namespace Luka.Backlace
         private static Tab sub_tab_stylised_specular = null;
         // shading
         private static Tab tab_shading = null;
+        // stylise
+        private static Tab tab_stylise = null;
         private static Tab sub_tab_rim_lighting = null;
         private static Tab sub_tab_depth_rim = null;
         private static Tab sub_tab_clear_coat = null;
@@ -144,6 +146,9 @@ namespace Luka.Backlace
         private MaterialProperty prop_Cutoff = null;
         private MaterialProperty prop_BumpMap = null;
         private MaterialProperty prop_BumpScale = null;
+        private MaterialProperty prop_UseBump = null;
+        private MaterialProperty prop_BumpFromAlbedo = null;
+        private MaterialProperty prop_BumpFromAlbedoOffset = null;
         private MaterialProperty prop_Alpha = null;
         private MaterialProperty prop_DecalStage = null;
         // uv manipulation properties
@@ -710,6 +715,7 @@ namespace Luka.Backlace
             if (sub_tab_pbr_specular != null) { sub_tab_pbr_specular.is_expanded = false; sub_tab_pbr_specular.is_active = false; }
             if (sub_tab_stylised_specular != null) { sub_tab_stylised_specular.is_expanded = false; sub_tab_stylised_specular.is_active = false; }
             if (tab_shading != null) { tab_shading.is_expanded = false; tab_shading.is_active = false; }
+            if (tab_stylise != null) { tab_stylise.is_expanded = false; tab_stylise.is_active = false; }
             if (sub_tab_rim_lighting != null) { sub_tab_rim_lighting.is_expanded = false; sub_tab_rim_lighting.is_active = false; }
             if (sub_tab_depth_rim != null) { sub_tab_depth_rim.is_expanded = false; sub_tab_depth_rim.is_active = false; }
             if (sub_tab_clear_coat != null) { sub_tab_clear_coat.is_expanded = false; sub_tab_clear_coat.is_active = false; }
@@ -792,6 +798,7 @@ namespace Luka.Backlace
             sub_tab_emission = null;
             sub_tab_light_limiting = null;
             tab_shading = null;
+            tab_stylise = null;
             sub_tab_rim_lighting = null;
             sub_tab_depth_rim = null;
             sub_tab_clear_coat = null;
@@ -889,6 +896,8 @@ namespace Luka.Backlace
             sub_tab_emission = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_emission"), null, "_ToggleEmission");
             sub_tab_light_limiting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_light_limiting"));
             tab_shading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_shading"));
+            // anime will go here
+            tab_stylise = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_stylise"));
             sub_tab_rim_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rim_lighting"), null, "_ToggleRimlight");
             sub_tab_depth_rim = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_depth_rim"), null, "_ToggleDepthRim", Project.shader_capabilities[0]);
             sub_tab_clear_coat = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_clear_coat"), null, "_ToggleClearcoat");
@@ -898,7 +907,7 @@ namespace Luka.Backlace
             sub_tab_subsurface = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_subsurface"), null, "_ToggleSSS");
             sub_tab_detail_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_detail_map"), null, "_ToggleDetail");
             sub_tab_shadow_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_shadow_map"), null, "_ToggleShadowMap");
-            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_effects"));
+            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_effects"));
             sub_tab_dissolve = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_dissolve"), null, "_ToggleDissolve", null, null, Project.dissolve_mode_badges);
             sub_tab_pathing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_pathing"), null, "_TogglePathing");
             sub_tab_glitter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_glitter"), null, "_ToggleGlitter", null, null, Project.glitter_mode_badges);
@@ -914,8 +923,8 @@ namespace Luka.Backlace
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion", null, null, Project.distortion_mode_badges);
             sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
-            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_outline"), Project.shader_variants[1]);
-            tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_third_party"));
+            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_outline"), Project.shader_variants[1]);
+            tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_third_party"));
             sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink", null);
             sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_superplug"), null, null, null, Project.dependencies[1]);
             sub_tab_ltcgi = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ltcgi"), null, "_ToggleLTCGI", null, Project.dependencies[0]);
@@ -1077,9 +1086,21 @@ namespace Luka.Backlace
                     prop_BumpMap = FindProperty("_BumpMap", properties);
                     prop_BumpScale = FindProperty("_BumpScale", properties);
                     prop_Alpha = FindProperty("_Alpha", properties);
+                    prop_UseBump = FindProperty("_UseBump", properties);
+                    prop_BumpFromAlbedo = FindProperty("_BumpFromAlbedo", properties);
+                    prop_BumpFromAlbedoOffset = FindProperty("_BumpFromAlbedoOffset", properties);
                     materialEditor.ShaderProperty(prop_MainTex, languages.speak("prop_MainTex"));
                     materialEditor.ShaderProperty(prop_Color, languages.speak("prop_Color"));
+                    materialEditor.ShaderProperty(prop_UseBump, languages.speak("prop_UseBump"));
+                    Components.start_dynamic_disable(!prop_UseBump.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_BumpMap, languages.speak("prop_BumpMap"));
+                    materialEditor.ShaderProperty(prop_BumpFromAlbedo, languages.speak("prop_BumpFromAlbedo"));
+                    Components.start_dynamic_disable(!prop_BumpFromAlbedo.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_BumpFromAlbedoOffset, languages.speak("prop_BumpFromAlbedoOffset"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(!prop_BumpFromAlbedo.floatValue.Equals(1), configs);
+                    Components.end_dynamic_disable(!prop_UseBump.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_BumpScale, languages.speak("prop_BumpScale"));
                     materialEditor.ShaderProperty(prop_Alpha, languages.speak("prop_Alpha"));
                     materialEditor.ShaderProperty(prop_Cutoff, languages.speak("prop_Cutoff"));
@@ -1663,8 +1684,13 @@ namespace Luka.Backlace
             // shading tab
             tab_shading.process(() => {
                 Components.start_foldout();
+                Components.end_foldout();
+            });
+            // stylise tab
+            tab_stylise.process(() => {
+                Components.start_foldout();
                 sub_tab_rim_lighting.process(() => {
-                    // shading - rim lighting
+                    // stylise - rim lighting
                     prop_ToggleRimlight = FindProperty("_ToggleRimlight", properties);
                     prop_RimColor = FindProperty("_RimColor", properties);
                     prop_RimWidth = FindProperty("_RimWidth", properties);
@@ -1679,7 +1705,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
                 });
                 sub_tab_depth_rim.process(() => {
-                    // shading - depth rim
+                    // stylise - depth rim
                     prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
                     prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
                     prop_DepthRimWidth = FindProperty("_DepthRimWidth", properties);
@@ -1696,7 +1722,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
                 });
                 sub_tab_matcap.process(() => {
-                    // shading - matcap
+                    // stylise - matcap
                     prop_ToggleMatcap = FindProperty("_ToggleMatcap", properties);
                     prop_MatcapTex = FindProperty("_MatcapTex", properties);
                     prop_MatcapTint = FindProperty("_MatcapTint", properties);
@@ -1719,7 +1745,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
                 });
                 sub_tab_cubemap.process(() => {
-                    // shading - cubemap
+                    // stylise - cubemap
                     prop_ToggleCubemap = FindProperty("_ToggleCubemap", properties);
                     prop_CubemapTex = FindProperty("_CubemapTex", properties);
                     prop_CubemapTint = FindProperty("_CubemapTint", properties);
@@ -1734,7 +1760,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
                 });
                 sub_tab_clear_coat.process(() => {
-                    // shading - clear coat
+                    // stylise - clear coat
                     prop_ToggleClearcoat = FindProperty("_ToggleClearcoat", properties);
                     prop_ClearcoatStrength = FindProperty("_ClearcoatStrength", properties);
                     prop_ClearcoatReflectionStrength = FindProperty("_ClearcoatReflectionStrength", properties);
@@ -1751,7 +1777,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
                 });
                 sub_tab_subsurface.process(() => {
-                    // shading - subsurface
+                    // stylise - subsurface
                     prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
                     prop_SSSColor = FindProperty("_SSSColor", properties);
                     prop_SSSStrength = FindProperty("_SSSStrength", properties);
@@ -1774,7 +1800,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
                 });
                 sub_tab_parallax.process(() => {
-                    // shading - parallax
+                    // stylise - parallax
                     prop_ToggleParallax = FindProperty("_ToggleParallax", properties);
                     prop_ParallaxMode = FindProperty("_ParallaxMode", properties);
                     prop_ParallaxMap = FindProperty("_ParallaxMap", properties);
@@ -1830,7 +1856,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
                 });
                 sub_tab_detail_map.process(() => {
-                    // shading - detail map
+                    // stylise - detail map
                     prop_ToggleDetail = FindProperty("_ToggleDetail", properties);
                     prop_DetailAlbedoMap = FindProperty("_DetailAlbedoMap", properties);
                     prop_DetailNormalMap = FindProperty("_DetailNormalMap", properties);
@@ -1845,7 +1871,7 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_ToggleDetail.floatValue.Equals(1), configs);
                 });
                 sub_tab_shadow_map.process(() => {
-                    // shading - shadow map
+                    // stylise - shadow map
                     prop_ToggleShadowMap = FindProperty("_ToggleShadowMap", properties);
                     prop_ShadowMap = FindProperty("_ShadowMap", properties);
                     prop_ShadowMapIntensity = FindProperty("_ShadowMapIntensity", properties);

@@ -53,8 +53,11 @@ Shader "luka/backlace/grabpass"
         _MainTex ("Main texture", 2D) = "white" { }
         _Color ("Albedo color", Color) = (1, 1, 1, 1)
         _Cutoff ("Alpha Cutoff", Range(0, 1)) = 0.5
+        [Enum(Disabled, 0, Enabled, 1)] _UseBump ("Enable Normal Map", Int) = 0
         _BumpMap ("Normal map", 2D) = "bump" { }
         _BumpScale ("Normal map scale", Float) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _BumpFromAlbedo ("Derive Normals", Int) = 0
+        _BumpFromAlbedoOffset ("Derived Offset", Float) = 1
         _Alpha ("Alpha", Range(0, 1)) = 1.0
         [Enum(Early, 0, Late, 1)] _DecalStage ("Decal Stage", Int) = 1
 

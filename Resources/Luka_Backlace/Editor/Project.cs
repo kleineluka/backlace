@@ -13,7 +13,7 @@ namespace Luka.Backlace
         public static readonly string project_name = "Backlace";
         public static readonly string project_path = "Luka_Backlace";
         public static readonly string project_license = "/Licenses/Backlace";
-        public static Version version = new Version("1.8.5");
+        public static Version version = new Version("1.9.0");
         public static readonly Version version_dazzle = new Version("4.6.0"); // just internally
         public static readonly string project_docs = "https://luka.moe/docs/backlace";
         public static readonly bool has_license = true; // if the project has a license file, or if you wanna show it
@@ -116,7 +116,7 @@ namespace Luka.Backlace
                 { 9f, "custom_badge_2multiplicative" }
             }, new Color(0.2f, 0.1f, 0.8f))
         };
-        public static readonly bool enable_debug = false;
+        public static readonly bool enable_debug = true;
         public static readonly string debug_tag = "Backlace_";
     }
 

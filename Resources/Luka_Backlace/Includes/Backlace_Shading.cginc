@@ -12,10 +12,47 @@ void ClipAlpha(inout BacklaceSurfaceData Surface)
     #endif // _BLENDMODE_CUTOUT
 }
 
+// derive normals from albedo
+// Use Unity's built-in macros for cross-platform compatibility
+float3 AlbedoToNormal(float2 uv, Texture2D tex, SamplerState sampler_tex, float4 texelSize, float strength, float offset)
+{
+    float2 totalOffset = texelSize.xy * offset;
+    float h = GetLuma(tex.Sample(sampler_tex, uv).rgb);
+    float hX = GetLuma(tex.Sample(sampler_tex, uv + float2(totalOffset.x, 0)).rgb);
+    float hY = GetLuma(tex.Sample(sampler_tex, uv + float2(0, totalOffset.y)).rgb);
+    float dHdx = (h - hX) * strength;
+    float dHdy = (h - hY) * strength;
+    return normalize(float3(dHdx, dHdy, 1.0));
+}
+
 // sample normal map
 void SampleNormal()
 {
-    NormalMap = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_BumpMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _BumpMap)), _BumpScale);
+    if (_UseBump == 1) 
+    {
+        if (_BumpFromAlbedo == 1) 
+        {
+            // derive normals from albedo
+            NormalMap = AlbedoToNormal(
+                BACKLACE_TRANSFORM_TEX(Uvs, _MainTex),
+                _MainTex,
+                sampler_MainTex,
+                _MainTex_TexelSize,
+                _BumpScale,
+                _BumpFromAlbedoOffset
+            );
+        } 
+        else 
+        {
+            // standard normal map sampling
+            NormalMap = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_BumpMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _BumpMap)), _BumpScale);
+        }
+    } 
+    else
+    {
+        // fall back to default normal
+        NormalMap = float3(0.0, 0.0, 1.0);
+    }
 }
 
 // calculate normals from normal map
