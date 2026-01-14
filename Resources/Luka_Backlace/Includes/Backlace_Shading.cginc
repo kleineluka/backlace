@@ -380,7 +380,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
-    #elif defined(_ANIMEMODE_PROCEDURAL) // _ANIMEMODE_RAMP
+    #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
         // specific anime-style vertex light function
         void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
         {
@@ -391,7 +391,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         }
 
         // diffuse function for anime-style lighting
-        void GetProceduralDiffuse(inout BacklaceSurfaceData Surface)
+        void GetHalftoneDiffuse(inout BacklaceSurfaceData Surface)
         {
             float lightTerm = saturate(Surface.UnmaxedNdotL * 0.5 + 0.5);
             lightTerm = saturate(lightTerm - (1.0 - Surface.Occlusion) * _AnimeOcclusionToShadow);
@@ -435,7 +435,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         }
 
         // get the vertex diffuse contribution using anime-style lighting
-        void GetProceduralVertexDiffuse(inout BacklaceSurfaceData Surface)
+        void GetHalftoneVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
@@ -448,7 +448,165 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
-    #endif // _ANIMEMODE_PROCEDURAL
+    #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
+        void GetHifiDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            float NdotL = Surface.UnmaxedNdotL;
+            NdotL -= (1.0 - Surface.Occlusion) * _OcclusionOffsetIntensity;
+            // light to first shadow
+            float band1Edge = smoothstep(_Hifi1Threshold - _Hifi1Feather, _Hifi1Threshold + _Hifi1Feather, NdotL);
+            // first shadow to second shadow
+            float band2Edge = smoothstep(_Hifi2Threshold - _Hifi2Feather, _Hifi2Threshold + _Hifi2Feather, NdotL);
+            // terminator line calculation
+            float borderMask = 1.0 - abs(step(_Hifi1Threshold, NdotL) - band1Edge) * 2.0;
+            // blurred border if desired
+            float borderDist = abs(NdotL - _Hifi1Threshold);
+            float border = 1.0 - smoothstep(0, _HifiBorderWidth + 0.001, borderDist);
+            border *= (1.0 - band1Edge); // only appear on the shadow side
+            // composite colours
+            float3 shadow1 = Surface.Albedo * _Hifi1Color.rgb;
+            float3 shadow2 = Surface.Albedo * _Hifi2Color.rgb;
+            float3 lit = Surface.Albedo * Surface.LightColor.rgb;
+            // second shadow -> first shadow
+            float3 finalDiffuse = lerp(shadow2, shadow1, band2Edge);
+            // mix result -> lit
+            finalDiffuse = lerp(finalDiffuse, lit, band1Edge);
+            // apply border colour
+            finalDiffuse = lerp(finalDiffuse, _HifiBorderColor.rgb * Surface.LightColor.rgb, border * _HifiBorderColor.a);
+            // 6. Apply Lighting Environment (LTCGI / Indirect)
+            #if defined(_BACKLACE_LTCGI)
+                float2 ltcgi_lmUV = 0;
+                #if defined(LIGHTMAP_ON)
+                    ltcgi_lmUV = FragData.lightmapUV;
+                #endif
+                LTCGI_Contribution(
+                    FragData.worldPos,
+                    Surface.NormalDir,
+                    Surface.ViewDir,
+                    Surface.Roughness,
+                    ltcgi_lmUV,
+                    Surface.IndirectDiffuse,
+                    Surface.IndirectSpecular
+                );
+                finalDiffuse += Surface.IndirectDiffuse * Surface.Albedo * band1Edge; // mask indirect by light
+            #else
+                // simple ambient add
+                finalDiffuse += Surface.IndirectDiffuse * Surface.Albedo;
+            #endif
+            Surface.Diffuse = finalDiffuse;
+            Surface.Attenuation = band1Edge; // for specular masking
+            ApplyAmbientGradient(Surface);
+            ApplyAreaTint(Surface);
+        }
+
+        void HifiVertLight(float3 normal, float3 worldPos, out float3 color)
+        {
+            float4 toLightX = unity_4LightPosX0 - worldPos.x;
+            float4 toLightY = unity_4LightPosY0 - worldPos.y;
+            float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
+            float4 lengthSq = 0;
+            lengthSq += toLightX * toLightX;
+            lengthSq += toLightY * toLightY;
+            lengthSq += toLightZ * toLightZ;
+            float4 ndl = 0;
+            ndl += toLightX * normal.x;
+            ndl += toLightY * normal.y;
+            ndl += toLightZ * normal.z;
+            float4 corr = rsqrt(lengthSq); // correct ndotl
+            ndl = ndl * corr; // range is -1 to 1
+            float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+            // for hifi of max(0, ndl), apply the threshold step
+            float4 bandMask = smoothstep(_Hifi1Threshold - _Hifi1Feather, _Hifi1Threshold + _Hifi1Feather, ndl);
+            // combine
+            float4 diff = bandMask * atten;
+            // sum lights
+            color = 0;
+            color += unity_LightColor[0].rgb * diff.x;
+            color += unity_LightColor[1].rgb * diff.y;
+            color += unity_LightColor[2].rgb * diff.z;
+            color += unity_LightColor[3].rgb * diff.w;
+        }
+
+        void GetHifiVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                MultibandVertLight(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse);
+                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+            #endif // VERTEXLIGHT_ON
+
+        }
+    #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
+        void GetSkinDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            // use y axis for curvature
+            float ndotl = Surface.UnmaxedNdotL * 0.5 + 0.5;
+            float2 lutUV = float2(ndotl, _SkinScattering);
+            float3 skinRamp = UNITY_SAMPLE_TEX2D(_SkinLUT, lutUV).rgb;
+            float rampLuma = GetLuma(skinRamp);
+            float3 tint = lerp(_SkinShadowColor.rgb, float3(1, 1, 1), rampLuma);
+            Surface.Diffuse = Surface.Albedo * Surface.LightColor.rgb * skinRamp * tint;
+            Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * smoothstep(0, 0.5, rampLuma);
+            Surface.Attenuation = rampLuma;
+            ApplyAmbientGradient(Surface);
+            ApplyAreaTint(Surface);
+        }
+
+        void GetSkinVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                float3 ignoredDir;
+                Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
+                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+                Surface.VertexDirectDiffuse = lerp(Surface.VertexDirectDiffuse * _SkinShadowColor.rgb, Surface.VertexDirectDiffuse, 0.8);
+            #endif // VERTEXLIGHT_ON
+        }
+    #elif defined(_ANIMEMODE_WRAPPED) // _ANIMEMODE_*
+        void GetWrappedDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            float wrappedTerm = (Surface.UnmaxedNdotL + _WrapFactor) / (1.0 + _WrapFactor); // (N*L + w) / (1 + w)
+            float wrappedNdotL = saturate(wrappedTerm);
+            float normalizationFactor = lerp(1.0, 1.0 / (1.0 + _WrapFactor), _WrapNormalization);
+            float3 ramp = lerp(_WrapColorLow.rgb, _WrapColorHigh.rgb, wrappedNdotL);
+            ramp *= normalizationFactor;
+            Surface.Diffuse = Surface.Albedo * ramp * Surface.LightColor.rgb;
+            Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo;
+            Surface.Attenuation = wrappedNdotL;
+            ApplyAmbientGradient(Surface);
+            ApplyAreaTint(Surface);
+        }
+
+        void WrappedVertLight(float3 normal, float3 worldPos, out float3 color)
+        {
+            float4 toLightX = unity_4LightPosX0 - worldPos.x;
+            float4 toLightY = unity_4LightPosY0 - worldPos.y;
+            float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
+            float4 lengthSq = toLightX * toLightX + toLightY * toLightY + toLightZ * toLightZ;
+            float4 ndl = toLightX * normal.x + toLightY * normal.y + toLightZ * normal.z;
+            float4 corr = rsqrt(lengthSq);
+            ndl = ndl * corr;
+            float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+            float4 wrappedNdl = (ndl + _WrapFactor) / (1.0 + _WrapFactor);
+            wrappedNdl = max(0, wrappedNdl);
+            float norm = lerp(1.0, 1.0 / (1.0 + _WrapFactor), _WrapNormalization);
+            float4 diff = wrappedNdl * norm * atten;
+            color = 0;
+            color += unity_LightColor[0].rgb * diff.x;
+            color += unity_LightColor[1].rgb * diff.y;
+            color += unity_LightColor[2].rgb * diff.z;
+            color += unity_LightColor[3].rgb * diff.w;
+        }
+
+        void GetWrappedVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                WrappedVertLight(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse);
+                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+            #endif // VERTEXLIGHT_ON
+        }
+    #endif // _ANIMEMODE_*
 
     // wrapper function for toon diffuse
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
@@ -458,11 +616,23 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             // traditional toony ramp
             GetRampDiffuse(Surface);
             GetRampVertexDiffuse(Surface);
-        #elif defined(_ANIMEMODE_PROCEDURAL) // _ANIMEMODE_RAMP
-            // procedural anime style
-            GetProceduralDiffuse(Surface);
-            GetProceduralVertexDiffuse(Surface);
-        #endif // _ANIMEMODE_RAMP
+        #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
+            // halftone anime style
+            GetHalftoneDiffuse(Surface);
+            GetHalftoneVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
+            // hi-fi anime style
+            GetHifiDiffuse(Surface);
+            GetHifiVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
+            // skin-focused anime style
+            GetSkinDiffuse(Surface);
+            GetSkinVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_WRAPPED) // _ANIMEMODE_*
+            // wrapped lighting anime style
+            GetWrappedDiffuse(Surface);
+            GetWrappedVertexDiffuse(Surface);
+        #endif // _ANIMEMODE_*
     }
 #endif // _BACKLACE_TOON
 

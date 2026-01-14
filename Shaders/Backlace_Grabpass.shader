@@ -153,7 +153,7 @@ Shader "luka/backlace/grabpass"
         // [Header(Toon Lighting)]
         // [Space(10)]
         [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
-        [KeywordEnum(Ramp, Procedural)] _AnimeMode ("Anime Mode", Int) = 0
+        [KeywordEnum(Ramp, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 0
         // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
@@ -162,19 +162,39 @@ Shader "luka/backlace/grabpass"
         _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
         [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Apply Normals to Intensity", Float) = 0
-        // anime
+        _RampIndex ("Ramp Index", Int) = 0
+        _RampTotal ("Ramp Total", Int) = 1
+        // halftone
         [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1)
         _AnimeShadowThreshold ("Core Shadow Threshold", Range(0, 1)) = 0.3
         [HDR] _AnimeHalftoneColor ("Halftone Color", Color) = (0.8, 0.8, 1, 1)
         _AnimeHalftoneThreshold ("Halftone Threshold", Range(0, 1)) = 0.6
         _AnimeShadowSoftness ("Shadow Softness", Range(0.001, 1)) = 0.02
+        // hifi
+        _Hifi1Threshold ("Shadow 1 Threshold", Range(-1, 1)) = 0.0
+        _Hifi1Feather ("Shadow 1 Feather", Range(0, 1)) = 0.05
+        _Hifi1Color ("Shadow 1 Color", Color) = (0.7, 0.7, 0.8, 1)
+        _Hifi2Threshold ("Shadow 2 Threshold", Range(-1, 1)) = -0.5
+        _Hifi2Feather ("Shadow 2 Feather", Range(0, 1)) = 0.05
+        _Hifi2Color ("Shadow 2 Color", Color) = (0.4, 0.4, 0.5, 1)
+        _HifiBorderColor ("Border Color", Color) = (1, 0.6, 0.4, 1)
+        _HifiBorderWidth ("Border Width", Range(0, 0.2)) = 0.0
+        // skin
+        [NoScaleOffset] _SkinLUT ("Skin LUT (RGB)", 2D) = "white" { }
+        _SkinShadowColor ("Skin Shadow Color", Color) = (0.75, 0.65, 0.65, 1)
+        _SkinScattering ("Subsurface Scattering", Range(0, 1)) = 0.5
+        // wrapped
+        _WrapFactor ("Wrap Factor", Range(0, 2)) = 0.5
+        _WrapNormalization ("Wrap Normalization", Range(0, 2)) = 0.5
+        _WrapColorHigh ("Wrap High Color", Color) = (1, 1, 1, 1)
+        _WrapColorLow ("Wrap Low Color", Color) = (0, 0, 0, 1)
         // ambient gradient
         [Enum(Disabled, 0, Enabled, 1)] _ToggleAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
         _AnimeOcclusionToShadow ("Occlusion To Shadow", Range(0, 1)) = 0.5
         _AmbientUp ("Sky Ambient", Color) = (0.8, 0.8, 1, 1)
         _AmbientSkyThreshold ("Sky Threshold", Range(0, 1)) = 0.5
         _AmbientDown ("Ground Ambient", Color) = (1, 0.9, 0.8, 1)
-        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5 
+        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5
         _AmbientIntensity ("Gradient Intensity", Range(0, 1)) = 0.25
         // tinting
         [Enum(Disabled, 0, Raw Light, 1, Tuned Light, 2, Ramp Based, 3)] _TintMaskSource ("Tint Mask Source", Int) = 0

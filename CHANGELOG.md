@@ -11,6 +11,8 @@
 - Greatly reduce shader variants, keywords, and compilation time
 - Change normal calculations to use gram-schmidt orthogonalization
 - Avoid potential resampling in specular modes by pre-calculating terms, and fixed other Specular bugs
+- Renamed Procedural Anime to Halftone Anime mode
+- Added HiFi Anime mode, Skin Anime mode, and Wrapped Anime mode
 
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map
