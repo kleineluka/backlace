@@ -14,3 +14,5 @@ Backlace is split into various `.cginclude` files to make it editing, building, 
 
 ---
 What you edit depends on what you want to do. A good place to start is with `Backlace_Fragment.cginc` and working backwards from there to see what you need to change. This modular practice also makes it easy to dynamically add different versions of the shader (ex. `Outline` or `Grabpass`) - we can just add a new define (ex. `BACKLACE_GRABPASS`) and use that to conditionally compile code.
+
+You should also keep in mind that, in general, the `Shadow` pass should be updated to reflect things that may change how your object interacts with shadows. Similarly, you may want to keep the `Meta` pass updated for proper lightmapping support. Both should be functional starting points as-is if you wish to leave them alone. ╰( ◕ ᗜ ◕ )╯

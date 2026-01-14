@@ -4,6 +4,7 @@
 // compiler directives
 #pragma vertex Vertex
 #pragma fragment Fragment
+#pragma multi_compile_instancing
 
 // unity includes
 #include "UnityCG.cginc"
@@ -107,6 +108,8 @@ float _UV_Scroll_Y_Speed;
     float _Glossiness;
     float _Specular;
     float _ReplaceSpecular;
+    int _SpecularStanardKind;
+    int _SpecularSpecialKind;
 #endif // _BACKLACE_SPECULAR
 
 //decal1/2-only features
@@ -155,13 +158,12 @@ float _DecalStage;
 #endif // _BACKLACE_DECAL2
 
 // texture stitching feature
-#if defined(_BACKLACE_STITCH)
-    UNITY_DECLARE_TEX2D(_StitchTex);
-    float4 _StitchTex_ST;
-    int _StitchTex_UV;
-    int _StitchAxis;
-    float _StitchOffset;
-#endif // _BACKLACE_STITCH
+int _UseTextureStitching;
+UNITY_DECLARE_TEX2D(_StitchTex);
+float4 _StitchTex_ST;
+int _StitchTex_UV;
+int _StitchAxis;
+float _StitchOffset;
 
 // my includes
 #include "./Backlace_Universal.cginc"

@@ -1010,11 +1010,6 @@ namespace Luka.Backlace
                     prop_StencilPass = FindProperty("_StencilPass", properties);
                     prop_StencilFail = FindProperty("_StencilFail", properties);
                     prop_StencilZFail = FindProperty("_StencilZFail", properties);
-                    prop_OutlineStencilRef = FindProperty("_OutlineStencilRef", properties);
-                    prop_OutlineStencilComp = FindProperty("_OutlineStencilComp", properties);
-                    prop_OutlineStencilPass = FindProperty("_OutlineStencilPass", properties);
-                    prop_OutlineStencilFail = FindProperty("_OutlineStencilFail", properties);
-                    prop_OutlineStencilZFail = FindProperty("_OutlineStencilZFail", properties);
                     prop_VRCFallback = FindProperty("_VRCFallback", properties);
                     prop_ToggleFlipNormals = FindProperty("_ToggleFlipNormals", properties);
                     var blendModeNames = new string[] {
@@ -1068,15 +1063,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_StencilZFail, languages.speak("prop_StencilZFail"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_StencilRef.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_OutlineStencilRef, languages.speak("prop_OutlineStencilRef"));
-                    Components.start_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_OutlineStencilComp, languages.speak("prop_OutlineStencilComp"));
-                    materialEditor.ShaderProperty(prop_OutlineStencilPass, languages.speak("prop_OutlineStencilPass"));
-                    materialEditor.ShaderProperty(prop_OutlineStencilFail, languages.speak("prop_OutlineStencilFail"));
-                    materialEditor.ShaderProperty(prop_OutlineStencilZFail, languages.speak("prop_OutlineStencilZFail"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
+                    materialEditor.LightmapEmissionProperty();
                 });
                 sub_tab_textures.process(() => {
                     // main - textures
@@ -1799,62 +1786,6 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(prop_SSSThicknessMap.textureValue == null, configs);
                     Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
                 });
-                sub_tab_parallax.process(() => {
-                    // stylise - parallax
-                    prop_ToggleParallax = FindProperty("_ToggleParallax", properties);
-                    prop_ParallaxMode = FindProperty("_ParallaxMode", properties);
-                    prop_ParallaxMap = FindProperty("_ParallaxMap", properties);
-                    prop_ParallaxStrength = FindProperty("_ParallaxStrength", properties);
-                    prop_ParallaxSteps = FindProperty("_ParallaxSteps", properties);
-                    prop_ParallaxBlend = FindProperty("_ParallaxBlend", properties);
-                    prop_ParallaxBlendWeight = FindProperty("_ParallaxBlendWeight", properties);
-                    prop_InteriorCubemap = FindProperty("_InteriorCubemap", properties);
-                    prop_InteriorColor = FindProperty("_InteriorColor", properties);
-                    prop_InteriorTiling = FindProperty("_InteriorTiling", properties);
-                    prop_ParallaxLayer1 = FindProperty("_ParallaxLayer1", properties);
-                    prop_ParallaxLayer2 = FindProperty("_ParallaxLayer2", properties);
-                    prop_ParallaxLayer3 = FindProperty("_ParallaxLayer3", properties);
-                    prop_ParallaxLayerDepth1 = FindProperty("_ParallaxLayerDepth1", properties);
-                    prop_ParallaxLayerDepth2 = FindProperty("_ParallaxLayerDepth2", properties);
-                    prop_ParallaxLayerDepth3 = FindProperty("_ParallaxLayerDepth3", properties);
-                    prop_ParallaxStack = FindProperty("_ParallaxStack", properties);
-                    prop_ParallaxTile = FindProperty("_ParallaxTile", properties);
-                    materialEditor.ShaderProperty(prop_ToggleParallax, languages.speak("prop_ToggleParallax"));
-                    Components.start_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ParallaxMode, languages.speak("prop_ParallaxMode"));
-                    switch ((int)prop_ParallaxMode.floatValue)
-                    {
-                        case 0: // fast uv, fallthrough
-                        case 1: // fancy uv
-                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxMap"));
-                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                            if ((int)prop_ParallaxMode.floatValue == 1) materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
-                            break;
-                        case 3: // interior mapping
-                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
-                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
-                            materialEditor.ShaderProperty(prop_InteriorCubemap, languages.speak("prop_InteriorCubemap"));
-                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                            materialEditor.ShaderProperty(prop_InteriorColor, languages.speak("prop_InteriorColor"));
-                            materialEditor.ShaderProperty(prop_InteriorTiling, languages.speak("prop_InteriorTiling"));
-                            break;
-                        default: // parallax layers (initially, i thought this was 3..)
-                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
-                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
-                            materialEditor.ShaderProperty(prop_ParallaxStack, languages.speak("prop_ParallaxStack"));
-                            materialEditor.ShaderProperty(prop_ParallaxTile, languages.speak("prop_ParallaxTile"));
-                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxLayerMask")); // reused variable, diff language file
-                            materialEditor.ShaderProperty(prop_ParallaxLayer1, languages.speak("prop_ParallaxLayer1"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth1, languages.speak("prop_ParallaxLayerDepth1"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayer2, languages.speak("prop_ParallaxLayer2"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth2, languages.speak("prop_ParallaxLayerDepth2"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayer3, languages.speak("prop_ParallaxLayer3"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth3, languages.speak("prop_ParallaxLayerDepth3"));
-                            break;
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
-                });
                 sub_tab_detail_map.process(() => {
                     // stylise - detail map
                     prop_ToggleDetail = FindProperty("_ToggleDetail", properties);
@@ -1880,6 +1811,33 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_ShadowMap, languages.speak("prop_ShadowMap"));
                     materialEditor.ShaderProperty(prop_ShadowMapIntensity, languages.speak("prop_ShadowMapIntensity"));
                     Components.end_dynamic_disable(!prop_ToggleShadowMap.floatValue.Equals(1), configs);
+                });
+                sub_tab_shadow_textures.process(() => {
+                    // effects - shadow textures
+                    prop_ToggleShadowTexture = FindProperty("_ToggleShadowTexture", properties);
+                    prop_ShadowTextureMappingMode = FindProperty("_ShadowTextureMappingMode", properties);
+                    prop_ShadowTextureIntensity = FindProperty("_ShadowTextureIntensity", properties);
+                    prop_ShadowTex = FindProperty("_ShadowTex", properties);
+                    prop_ShadowPatternColor = FindProperty("_ShadowPatternColor", properties);
+                    prop_ShadowPatternScale = FindProperty("_ShadowPatternScale", properties);
+                    prop_ShadowPatternTriplanarSharpness = FindProperty("_ShadowPatternTriplanarSharpness", properties);
+                    prop_ShadowPatternTransparency = FindProperty("_ShadowPatternTransparency", properties);
+                    prop_ShadowTextureBlendMode = FindProperty("_ShadowTextureBlendMode", properties);
+                    materialEditor.ShaderProperty(prop_ToggleShadowTexture, languages.speak("prop_ToggleShadowTexture"));
+                    Components.start_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ShadowTextureMappingMode, languages.speak("prop_ShadowTextureMappingMode"));
+                    materialEditor.ShaderProperty(prop_ShadowTextureBlendMode, languages.speak("prop_ShadowTextureBlendMode"));
+                    materialEditor.ShaderProperty(prop_ShadowTextureIntensity, languages.speak("prop_ShadowTextureIntensity"));
+                    materialEditor.ShaderProperty(prop_ShadowPatternTransparency, languages.speak("prop_ShadowPatternTransparency"));
+                    materialEditor.ShaderProperty(prop_ShadowTex, languages.speak("prop_ShadowTex"));
+                    materialEditor.ShaderProperty(prop_ShadowPatternColor, languages.speak("prop_ShadowPatternColor"));
+                    if (prop_ShadowTextureMappingMode.floatValue.Equals(2)) {
+                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
+                        materialEditor.ShaderProperty(prop_ShadowPatternTriplanarSharpness, languages.speak("prop_ShadowPatternTriplanarSharpness"));
+                    } else if (prop_ShadowTextureMappingMode.floatValue.Equals(1)) {
+                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
+                    }
+                    Components.end_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
                 });
                 Components.end_foldout();
             });
@@ -2089,33 +2047,6 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_IridescenceFrequency, languages.speak("prop_IridescenceFrequency"));
                     Components.end_dynamic_disable(!prop_ToggleIridescence.floatValue.Equals(1), configs);
                 });
-                sub_tab_shadow_textures.process(() => {
-                    // effects - shadow textures
-                    prop_ToggleShadowTexture = FindProperty("_ToggleShadowTexture", properties);
-                    prop_ShadowTextureMappingMode = FindProperty("_ShadowTextureMappingMode", properties);
-                    prop_ShadowTextureIntensity = FindProperty("_ShadowTextureIntensity", properties);
-                    prop_ShadowTex = FindProperty("_ShadowTex", properties);
-                    prop_ShadowPatternColor = FindProperty("_ShadowPatternColor", properties);
-                    prop_ShadowPatternScale = FindProperty("_ShadowPatternScale", properties);
-                    prop_ShadowPatternTriplanarSharpness = FindProperty("_ShadowPatternTriplanarSharpness", properties);
-                    prop_ShadowPatternTransparency = FindProperty("_ShadowPatternTransparency", properties);
-                    prop_ShadowTextureBlendMode = FindProperty("_ShadowTextureBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleShadowTexture, languages.speak("prop_ToggleShadowTexture"));
-                    Components.start_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ShadowTextureMappingMode, languages.speak("prop_ShadowTextureMappingMode"));
-                    materialEditor.ShaderProperty(prop_ShadowTextureBlendMode, languages.speak("prop_ShadowTextureBlendMode"));
-                    materialEditor.ShaderProperty(prop_ShadowTextureIntensity, languages.speak("prop_ShadowTextureIntensity"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternTransparency, languages.speak("prop_ShadowPatternTransparency"));
-                    materialEditor.ShaderProperty(prop_ShadowTex, languages.speak("prop_ShadowTex"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternColor, languages.speak("prop_ShadowPatternColor"));
-                    if (prop_ShadowTextureMappingMode.floatValue.Equals(2)) {
-                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
-                        materialEditor.ShaderProperty(prop_ShadowPatternTriplanarSharpness, languages.speak("prop_ShadowPatternTriplanarSharpness"));
-                    } else if (prop_ShadowTextureMappingMode.floatValue.Equals(1)) {
-                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
-                });
                 sub_tab_world_aligned.process(() => {
                     // effects - world aligned
                     prop_ToggleWorldEffect = FindProperty("_ToggleWorldEffect", properties);
@@ -2250,6 +2181,62 @@ namespace Luka.Backlace
                         Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
                         materialEditor.ShaderProperty(prop_GlitchFrequency, languages.speak("prop_GlitchFrequency"));
                     }
+                sub_tab_parallax.process(() => {
+                    // stylise - parallax
+                    prop_ToggleParallax = FindProperty("_ToggleParallax", properties);
+                    prop_ParallaxMode = FindProperty("_ParallaxMode", properties);
+                    prop_ParallaxMap = FindProperty("_ParallaxMap", properties);
+                    prop_ParallaxStrength = FindProperty("_ParallaxStrength", properties);
+                    prop_ParallaxSteps = FindProperty("_ParallaxSteps", properties);
+                    prop_ParallaxBlend = FindProperty("_ParallaxBlend", properties);
+                    prop_ParallaxBlendWeight = FindProperty("_ParallaxBlendWeight", properties);
+                    prop_InteriorCubemap = FindProperty("_InteriorCubemap", properties);
+                    prop_InteriorColor = FindProperty("_InteriorColor", properties);
+                    prop_InteriorTiling = FindProperty("_InteriorTiling", properties);
+                    prop_ParallaxLayer1 = FindProperty("_ParallaxLayer1", properties);
+                    prop_ParallaxLayer2 = FindProperty("_ParallaxLayer2", properties);
+                    prop_ParallaxLayer3 = FindProperty("_ParallaxLayer3", properties);
+                    prop_ParallaxLayerDepth1 = FindProperty("_ParallaxLayerDepth1", properties);
+                    prop_ParallaxLayerDepth2 = FindProperty("_ParallaxLayerDepth2", properties);
+                    prop_ParallaxLayerDepth3 = FindProperty("_ParallaxLayerDepth3", properties);
+                    prop_ParallaxStack = FindProperty("_ParallaxStack", properties);
+                    prop_ParallaxTile = FindProperty("_ParallaxTile", properties);
+                    materialEditor.ShaderProperty(prop_ToggleParallax, languages.speak("prop_ToggleParallax"));
+                    Components.start_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_ParallaxMode, languages.speak("prop_ParallaxMode"));
+                    switch ((int)prop_ParallaxMode.floatValue)
+                    {
+                        case 0: // fast uv, fallthrough
+                        case 1: // fancy uv
+                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxMap"));
+                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
+                            if ((int)prop_ParallaxMode.floatValue == 1) materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
+                            break;
+                        case 3: // interior mapping
+                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
+                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
+                            materialEditor.ShaderProperty(prop_InteriorCubemap, languages.speak("prop_InteriorCubemap"));
+                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
+                            materialEditor.ShaderProperty(prop_InteriorColor, languages.speak("prop_InteriorColor"));
+                            materialEditor.ShaderProperty(prop_InteriorTiling, languages.speak("prop_InteriorTiling"));
+                            break;
+                        default: // parallax layers (initially, i thought this was 3..)
+                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
+                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
+                            materialEditor.ShaderProperty(prop_ParallaxStack, languages.speak("prop_ParallaxStack"));
+                            materialEditor.ShaderProperty(prop_ParallaxTile, languages.speak("prop_ParallaxTile"));
+                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
+                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxLayerMask")); // reused variable, diff language file
+                            materialEditor.ShaderProperty(prop_ParallaxLayer1, languages.speak("prop_ParallaxLayer1"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth1, languages.speak("prop_ParallaxLayerDepth1"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayer2, languages.speak("prop_ParallaxLayer2"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth2, languages.speak("prop_ParallaxLayerDepth2"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayer3, languages.speak("prop_ParallaxLayer3"));
+                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth3, languages.speak("prop_ParallaxLayerDepth3"));
+                            break;
+                    }
+                    Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
+                });
                     Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
                 });
                 sub_tab_ps1.process(() => {
@@ -2448,6 +2435,11 @@ namespace Luka.Backlace
                 prop_OutlineTexTiling = FindProperty("_OutlineTexTiling", properties);
                 prop_OutlineTexScroll = FindProperty("_OutlineTexScroll", properties);
                 prop_OutlineOffset = FindProperty("_OutlineOffset", properties);
+                prop_OutlineStencilRef = FindProperty("_OutlineStencilRef", properties);
+                prop_OutlineStencilComp = FindProperty("_OutlineStencilComp", properties);
+                prop_OutlineStencilPass = FindProperty("_OutlineStencilPass", properties);
+                prop_OutlineStencilFail = FindProperty("_OutlineStencilFail", properties);
+                prop_OutlineStencilZFail = FindProperty("_OutlineStencilZFail", properties);
                 materialEditor.ShaderProperty(prop_OutlineSpace, languages.speak("prop_OutlineSpace"));
                 materialEditor.ShaderProperty(prop_OutlineWidth, languages.speak("prop_OutlineWidth"));
                 materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
@@ -2479,6 +2471,15 @@ namespace Luka.Backlace
                 EditorGUI.indentLevel--;
                 Components.end_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
                 Components.Vector3Property(materialEditor, prop_OutlineOffset, languages.speak("prop_OutlineOffset"));
+                materialEditor.ShaderProperty(prop_OutlineStencilRef, languages.speak("prop_OutlineStencilRef"));
+                Components.start_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
+                EditorGUI.indentLevel++;
+                materialEditor.ShaderProperty(prop_OutlineStencilComp, languages.speak("prop_OutlineStencilComp"));
+                materialEditor.ShaderProperty(prop_OutlineStencilPass, languages.speak("prop_OutlineStencilPass"));
+                materialEditor.ShaderProperty(prop_OutlineStencilFail, languages.speak("prop_OutlineStencilFail"));
+                materialEditor.ShaderProperty(prop_OutlineStencilZFail, languages.speak("prop_OutlineStencilZFail"));
+                EditorGUI.indentLevel--;
+                Components.end_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
                 Components.end_foldout();
             });
             // third party tab

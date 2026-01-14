@@ -19,9 +19,6 @@
 #pragma vertex Vertex
 //#pragma geometry Geometry
 #pragma fragment Fragment
-#pragma multi_compile_fog
-#pragma multi_compile_instancing
-
 // branch between forward base and forward add passes
 #if defined(UNITY_PASS_FORWARDBASE)
     #pragma multi_compile_fwdbase
@@ -29,6 +26,8 @@
 #elif defined(UNITY_PASS_FORWARDADD)
     #pragma multi_compile_fwdadd_fullshadows
 #endif // UNITY_PASS_FORWARDBASE
+#pragma multi_compile_fog
+#pragma multi_compile_instancing
 
 // unity includes
 #include "UnityCG.cginc"

@@ -77,13 +77,14 @@ struct BacklaceSurfaceData
         void SampleAlbedo(inout BacklaceSurfaceData Surface, float3 objectPos)
         {
             Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
-            #if defined(_BACKLACE_STITCH)
+            [branch] if (_UseTextureStitching == 1)
+            {
                 float stitch_check = objectPos[_StitchAxis];
                 if (stitch_check > _StitchOffset)
                 {
                     Surface.Albedo = UNITY_SAMPLE_TEX2D(_StitchTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
                 }
-            #endif // _BACKLACE_STITCH
+            }
         }
     #endif // !UNITY_PASS_OUTLINE
 #endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
@@ -547,6 +548,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
 #endif // _BACKLACE_DISSOLVE
 
 // here is where we leave out shadow pass
+// meta needs SOME features from specular, so we share here instead of shading or lighting
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
     // sample MSSO texture

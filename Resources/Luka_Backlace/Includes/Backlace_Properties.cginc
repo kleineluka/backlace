@@ -50,6 +50,8 @@ float4 _MSSO_ST;
 float4 _SpecularTintTexture_ST;
 float4 _SpecularTint;
 float4 _TangentMap_ST;
+int _SpecularStanardKind;
+int _SpecularSpecialKind;
 
 // lighting settings
 float _LightingColorMode;
@@ -260,13 +262,12 @@ float3 _VertexManipulationScale;
 #endif // _BACKLACE_SHADOW_MAP
 
 // texture stitching feature
-#if defined(_BACKLACE_STITCH)
-    UNITY_DECLARE_TEX2D(_StitchTex);
-    float4 _StitchTex_ST;
-    int _StitchTex_UV;
-    int _StitchAxis;
-    float _StitchOffset;
-#endif // _BACKLACE_STITCH
+int _UseTextureStitching;
+UNITY_DECLARE_TEX2D(_StitchTex);
+float4 _StitchTex_ST;
+int _StitchTex_UV;
+int _StitchAxis;
+float _StitchOffset;
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

@@ -14,7 +14,7 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 
 ## Features 🍒
 - **Core Features:**
-	- Render Settings/Presets, Alebdo, Normal, Emission
+	- Render Settings/Presets, Alebdo, Normal (Texture/Derived), Emission
 	- Texture Stitching, Texture Post-Processing, Decals
 	- Vertex and UV Manipulation, UV Sets
 	- Easy VRC Fallback Control
@@ -24,8 +24,8 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 	 - Diffuse Modes: PBR, Ramp Toon, Anime Toon
 	 - Anime Extra Features: Ambient Gradient, Tint Mask Source, SDF Shadows
 - **Specular:** Vertex Specular, PBR Specular, Anisotropic, Toon, Hair, Cloth
-- **Shading:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Parallax Mapping (Fast/Fancy UV, Layered, Interior), Detail Mapping, Shadow Mapping
-- **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Shadow Textures, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (Distort and Glitch), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
+- **Stylise:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Shadow Textures, Detail Mapping, Shadow Mapping
+- **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Parallax Mapping (Fast/Fancy UV, Layered, Interior), World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (Distort and Glitch), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
 - **Shader Variants:** Default, Grabpass, Outline, All
 - **Legacy Mode** can optionally be enabled to support older hardware (Shader Model 3.0)
 - **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting

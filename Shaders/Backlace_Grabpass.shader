@@ -194,7 +194,9 @@ Shader "luka/backlace/grabpass"
         // [Space(10)]
         [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
-        [KeywordEnum(Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
+        [KeywordEnum(Standard, Toon, Special)] _SpecularMode ("Specular Mode", Float) = 0  // toon is one kind of specular
+        [Enum(Standard, 0, Anisotropic, 1)] _SpecularStanardKind ("Standard Specular Kind", Int) = 0
+        [Enum(Hair, 0, Cloth, 1)] _SpecularSpecialKind ("Special Specular Kind", Int) = 0
         _MSSO ("MSSO", 2D) = "white" { }
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0
@@ -717,7 +719,7 @@ Shader "luka/backlace/grabpass"
         // [Space(35)]
         // [Header(Texture Stitching)]
         // [Space(10)]
-        [Toggle(_BACKLACE_STITCH)] _UseTextureStitching ("Enable Texture Stitching", Float) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _UseTextureStitching ("Enable Texture Stitching", Int) = 0
         [NoScaleOffset] _StitchTex ("Stitch Texture (RGB)", 2D) = "white" { }
         [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
         _StitchOffset ("Stitch Seam Offset", Float) = 0
@@ -787,7 +789,7 @@ Shader "luka/backlace/grabpass"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="1.8.5" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="2.0.0" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]

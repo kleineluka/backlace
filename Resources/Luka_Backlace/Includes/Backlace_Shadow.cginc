@@ -15,6 +15,9 @@
 #endif // BACKLACE_LEGACY_MODE
 #pragma multi_compile_shadowcaster
 #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
+#pragma skip_variants LIGHTMAP_ON DYNAMICLIGHTMAP_ON DIRLIGHTMAP_COMBINED SHADOWS_SHADOWMASK
+#pragma multi_compile_instancing
+#pragma multi_compile_shadowcaster
 #pragma vertex Vertex
 #pragma fragment Fragment
 
@@ -23,7 +26,6 @@
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
 #pragma shader_feature_local _ _BACKLACE_DECAL1
 #pragma shader_feature_local _ _BACKLACE_DECAL2
-#pragma shader_feature_local _ _BACKLACE_STITCH
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 
 // unity includes
@@ -172,13 +174,12 @@ float3 _VertexManipulationScale;
 #endif // _BACKLACE_DECAL2
 
 // texture stitching feature
-#if defined(_BACKLACE_STITCH)
-    UNITY_DECLARE_TEX2D(_StitchTex);
-    float4 _StitchTex_ST;
-    int _StitchTex_UV;
-    int _StitchAxis;
-    float _StitchOffset;
-#endif // _BACKLACE_STITCH
+int _UseTextureStitching;
+UNITY_DECLARE_TEX2D(_StitchTex);
+float4 _StitchTex_ST;
+int _StitchTex_UV;
+int _StitchAxis;
+float _StitchOffset;
 
 // audiolink features (for vertex scaling)
 #if defined(_BACKLACE_AUDIOLINK)

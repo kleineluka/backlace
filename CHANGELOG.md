@@ -1,3 +1,16 @@
+## Version 2.0.0
+- Normal map toggle for better performance, allow deriving normal from albedo as well
+- New UI tab "Shading" (and old "Shading" was renamed to "Stylise")
+- Parallax was moved to "Effects"
+- Shadow Textures was moved to "Stylise"
+- Move "Outline Stencil" options to the "Outline" tab
+- Global Illumination toggle in Rendering tab
+- Optimise shadow caster pass to skip unnecessary compilation
+- Support multi-instancing better now (hopefully?)
+- Switch all multi_compile to shader_feature_local for better performance
+- Greatly reduce shader variants, keywords, and compilation time
+- Specular now has two selections: Mode and Type. For instance, Special Mode can be Hair or Cloth type.
+
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map
 - Add jitter support to hair specular
