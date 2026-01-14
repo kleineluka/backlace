@@ -138,6 +138,8 @@ float3 _VertexManipulationScale;
         float _ShadowIntensity;
         float3 _RampMin;
         int _RampNormalIntensity;
+        float _RampIndex;
+        float _RampTotal;
     #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
         float4 _AnimeShadowColor;
         float _AnimeShadowThreshold;

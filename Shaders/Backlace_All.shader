@@ -163,7 +163,7 @@ Shader "luka/backlace/all"
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
         [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Apply Normals to Intensity", Float) = 0
         _RampIndex ("Ramp Index", Int) = 0
-        _RampTotal ("Ramp Total", Int) = 1
+        [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
         // halftone
         [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1)
         _AnimeShadowThreshold ("Core Shadow Threshold", Range(0, 1)) = 0.3
