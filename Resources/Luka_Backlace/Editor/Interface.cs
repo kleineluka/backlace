@@ -243,8 +243,6 @@ namespace Luka.Backlace
         private MaterialProperty prop_SDFShadowSoftness = null;
         // specular properties
         private MaterialProperty prop_ToggleSpecular = null;
-        private MaterialProperty prop_SpecularStandardKind = null;
-        private MaterialProperty prop_SpecularSpecialKind = null;
         private MaterialProperty prop_ToggleVertexSpecular = null;
         private MaterialProperty prop_SpecularMode = null;
         private MaterialProperty prop_MSSO = null;
@@ -1588,8 +1586,6 @@ namespace Luka.Backlace
             tab_specular.process(() => {
                 Components.start_foldout();
                 prop_ToggleSpecular = FindProperty("_ToggleSpecular", properties);
-                prop_SpecularStandardKind = FindProperty("_SpecularStandardKind", properties);
-                prop_SpecularSpecialKind = FindProperty("_SpecularSpecialKind", properties);
                 prop_ToggleVertexSpecular = FindProperty("_ToggleVertexSpecular", properties);
                 prop_SpecularMode = FindProperty("_SpecularMode", properties);
                 prop_SpecularEnergyMode = FindProperty("_SpecularEnergyMode", properties);
@@ -1599,17 +1595,6 @@ namespace Luka.Backlace
                 materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
                 materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
                 int specularMode = (int)prop_SpecularMode.floatValue;
-                int standardMode = (int)prop_SpecularStandardKind.floatValue;
-                int specialMode = (int)prop_SpecularSpecialKind.floatValue;
-                if (specularMode == 0) // standard specular options
-                {
-                    materialEditor.ShaderProperty(prop_SpecularStandardKind, languages.speak("prop_SpecularStandardKind"));
-                }
-                // not used: specularMode == 1 (toon), no different kinds for it 
-                else if (specularMode == 2) // specual specular options
-                {
-                    materialEditor.ShaderProperty(prop_SpecularSpecialKind, languages.speak("prop_SpecularSpecialKind"));
-                }
                 materialEditor.ShaderProperty(prop_SpecularEnergyMode, languages.speak("prop_SpecularEnergyMode"));
                 if ((int)prop_SpecularEnergyMode.floatValue == 3) // manual
                 {
@@ -1657,26 +1642,8 @@ namespace Luka.Backlace
                     prop_Anisotropy = FindProperty("_Anisotropy", properties);
                     prop_SpecularTint = FindProperty("_SpecularTint", properties); // hair uses it, so display twice
                     prop_SpecularJitter = FindProperty("_SpecularJitter", properties);
-                    // is this hacky and lazy? maybe. but it works~~~
-                    int subMode = 0; // none
-                    if (specularMode == 0 && standardMode == 1)
-                    {
-                        subMode = 1; // anisotropic
-                    }
-                    else if (specularMode == 1)
-                    {
-                        subMode = 2; // toon
-                    }
-                    else if (specularMode == 2 && specialMode == 0)
-                    {
-                        subMode = 3; // hair
-                    }
-                    else if (specularMode == 2 && specialMode == 1)
-                    {
-                        subMode = 4; // cloth
-                    }
                     // show the right properties for this specular..
-                    switch (subMode)
+                    switch (specularMode)
                     {
                         case 1: // anisotropic
                             materialEditor.ShaderProperty(prop_TangentMap, languages.speak("prop_TangentMap"));

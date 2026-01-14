@@ -9,7 +9,6 @@
 - Support multi-instancing better now (hopefully?)
 - Switch all multi_compile to shader_feature_local for better performance
 - Greatly reduce shader variants, keywords, and compilation time
-- Specular now has two selections: Mode and Type. For instance, "Special" Mode can be "Hair" or "Cloth" Type
 - Change normal calculations to use gram-schmidt orthogonalization
 - Avoid potential resampling in specular modes by pre-calculating terms, and fixed other Specular bugs
 
