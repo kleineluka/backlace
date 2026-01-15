@@ -162,7 +162,7 @@ Shader "luka/backlace/outline"
         _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
         [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Apply Normals to Intensity", Float) = 0
-        _RampIndex ("Ramp Index", Int) = 0
+        [IntRange] _RampIndex ("Ramp Index", Range(0, 9)) = 0
         [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
         // halftone
         [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1)
@@ -184,7 +184,7 @@ Shader "luka/backlace/outline"
         _SkinShadowColor ("Skin Shadow Color", Color) = (0.75, 0.65, 0.65, 1)
         _SkinScattering ("Subsurface Scattering", Range(0, 1)) = 0.5
         // wrapped
-        _WrapFactor ("Wrap Factor", Range(0, 2)) = 0.5
+        _WrapFactor ("Wrap Factor", Range(0, 3)) = 0.5
         _WrapNormalization ("Wrap Normalization", Range(0, 2)) = 0.5
         _WrapColorHigh ("Wrap High Color", Color) = (1, 1, 1, 1)
         _WrapColorLow ("Wrap Low Color", Color) = (0, 0, 0, 1)
@@ -629,6 +629,8 @@ Shader "luka/backlace/outline"
         // [Header(Refraction)]
         // [Space(10)]
         [Toggle(_BACKLACE_REFRACTION)] _ToggleRefraction ("Enable Refraction Effect", Float) = 0.0
+        [Enum(Grabpass, 0, Texture, 1)] _RefractionSourceMode ("Refraction Source", Int) = 0
+        _RefractionTexture ("Refraction Texture", 2D) = "white" { }
         [NoScaleOffset] _RefractionMask ("Mask (R=Strength)", 2D) = "white" { }
         _RefractionTint ("Refraction Tint", Color) = (0.8, 0.9, 1.0, 0.5)
         _RefractionIOR ("Refraction Strength", Range(0.0, 1.0)) = 0.1
@@ -688,6 +690,8 @@ Shader "luka/backlace/outline"
         // [Header(Fake Screen Space Reflections)]
         // [Space(10)]
         [Toggle(_BACKLACE_SSR)] _ToggleSSR ("Enable Screen Space Reflections", Float) = 0.0
+        [Enum(Grabpass, 0, Texture, 1)] _SSRSourceMode ("Reflection Source", Int) = 0
+        _SSRTexture ("Reflection Texture", 2D) = "white" { }
         [Enum(Planar, 0, Raymarched, 1)] _SSRMode ("Reflection Mode", Int) = 0
         [NoScaleOffset] _SSRMask ("Mask (R)", 2D) = "white" { }
         [HDR] _SSRTint ("Reflection Tint", Color) = (1, 1, 1, 1)
@@ -704,7 +708,7 @@ Shader "luka/backlace/outline"
         _SSRWorldDistortion ("World Distortion Strength", Range(0, 1)) = 0.0
         _SSRBlur ("Blur Strength", Range(0, 10)) = 1.0
         // raymarched settings
-        [IntRange] _SSRMaxSteps ("Max Steps", Range(1, 50)) = 25
+        [IntRange] _SSRMaxSteps ("Max Steps", Range(1, 35)) = 20
         _SSRStepSize ("Step Size", Float) = 0.05
         _SSREdgeFade ("Edge Fade", Range(0.01, 1)) = 0.1
         [Enum(Disabled, 0, Enabled, 1)] _SSRCamFade ("Enable Camera Distance Fade", Int) = 0.0

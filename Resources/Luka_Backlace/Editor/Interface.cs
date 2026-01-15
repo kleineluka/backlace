@@ -597,6 +597,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_RefractionBlurStrength = null;
         private MaterialProperty prop_RefractionCAUseFresnel = null;
         private MaterialProperty prop_RefractionCAEdgeFade = null;
+        private MaterialProperty prop_RefractionSourceMode = null;
+        private MaterialProperty prop_RefractionTexture = null;
         // dither properties
         private MaterialProperty prop_ToggleDither = null;
         private MaterialProperty prop_DitherAmount = null;
@@ -659,6 +661,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_SSRThickness = null;
         private MaterialProperty prop_SSROutOfViewMode = null;
         private MaterialProperty prop_SSRMode = null;
+        private MaterialProperty prop_SSRSourceMode = null;
+        private MaterialProperty prop_SSRTexture = null;
         // outline properties
         private MaterialProperty prop_OutlineSpace = null;
         private MaterialProperty prop_OutlineColor = null;
@@ -1573,11 +1577,11 @@ namespace Luka.Backlace
                             materialEditor.ShaderProperty(prop_RampColor, languages.speak("prop_RampColor"));
                             materialEditor.ShaderProperty(prop_RampOffset, languages.speak("prop_RampOffset"));
                             materialEditor.ShaderProperty(prop_ShadowIntensity, languages.speak("prop_ShadowIntensity"));
+                            materialEditor.ShaderProperty(prop_RampIndex, languages.speak("prop_RampIndex"));
+                            materialEditor.ShaderProperty(prop_RampTotal, languages.speak("prop_RampTotal"));
                             materialEditor.ShaderProperty(prop_OcclusionOffsetIntensity, languages.speak("prop_OcclusionOffsetIntensity"));
                             materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
                             materialEditor.ShaderProperty(prop_RampNormalIntensity, languages.speak("prop_RampNormalIntensity"));
-                            materialEditor.ShaderProperty(prop_RampIndex, languages.speak("prop_RampIndex"));
-                            materialEditor.ShaderProperty(prop_RampTotal, languages.speak("prop_RampTotal"));
                             break;
                         case 1: // Halftone
                             materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
@@ -2350,6 +2354,8 @@ namespace Luka.Backlace
                 sub_tab_refraction.process(() => {
                     // effects - refraction
                     prop_ToggleRefraction = FindProperty("_ToggleRefraction", properties);
+                    prop_RefractionSourceMode = FindProperty("_RefractionSourceMode", properties);
+                    prop_RefractionTexture = FindProperty("_RefractionTexture", properties);
                     prop_RefractionMask = FindProperty("_RefractionMask", properties);
                     prop_RefractionTint = FindProperty("_RefractionTint", properties);
                     prop_RefractionIOR = FindProperty("_RefractionIOR", properties);
@@ -2377,6 +2383,12 @@ namespace Luka.Backlace
                     prop_RefractionZoom = FindProperty("_RefractionZoom", properties);
                     materialEditor.ShaderProperty(prop_ToggleRefraction, languages.speak("prop_ToggleRefraction"));
                     Components.start_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_RefractionSourceMode, languages.speak("prop_RefractionSourceMode"));
+                    if (prop_RefractionSourceMode.floatValue.Equals(1)) {
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_RefractionTexture, languages.speak("prop_RefractionTexture"));
+                        EditorGUI.indentLevel--;
+                    }
                     materialEditor.ShaderProperty(prop_RefractionMask, languages.speak("prop_RefractionMask"));
                     materialEditor.ShaderProperty(prop_RefractionIOR, languages.speak("prop_RefractionIOR"));
                     materialEditor.ShaderProperty(prop_RefractionOpacity, languages.speak("prop_RefractionOpacity"));
@@ -2449,8 +2461,16 @@ namespace Luka.Backlace
                     prop_SSRThickness = FindProperty("_SSRThickness", properties);
                     prop_SSROutOfViewMode = FindProperty("_SSROutOfViewMode", properties);
                     prop_SSRMode = FindProperty("_SSRMode", properties);
+                    prop_SSRSourceMode = FindProperty("_SSRSourceMode", properties);
+                    prop_SSRTexture = FindProperty("_SSRTexture", properties);
                     materialEditor.ShaderProperty(prop_ToggleSSR, languages.speak("prop_ToggleSSR"));
                     Components.start_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_SSRSourceMode, languages.speak("prop_SSRSourceMode"));
+                    if (prop_SSRSourceMode.floatValue.Equals(1)) {
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_SSRTexture, languages.speak("prop_SSRTexture"));
+                        EditorGUI.indentLevel--;
+                    }
                     materialEditor.ShaderProperty(prop_SSRMode, languages.speak("prop_SSRMode"));
                     materialEditor.ShaderProperty(prop_SSRMask, languages.speak("prop_SSRMask"));
                     materialEditor.ShaderProperty(prop_SSRTint, languages.speak("prop_SSRTint"));

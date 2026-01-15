@@ -1345,6 +1345,20 @@
         float3 _RefractionGrabpassTint;
         int _RefractionZoomToggle;
         float _RefractionZoom;
+        int _RefractionSourceMode;
+        UNITY_DECLARE_TEX2D(_RefractionTexture);
+
+        float3 SampleRefractionSource(float2 uv)
+        {
+            [branch] if (_RefractionSourceMode == 1)
+            {
+                return UNITY_SAMPLE_TEX2D(_RefractionTexture, uv).rgb;
+            }
+            else
+            {
+                return UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, uv).rgb;
+            }
+        }
 
         void ApplyRefraction(inout BacklaceSurfaceData Surface, FragmentData i)
         {
@@ -1356,7 +1370,7 @@
             float4 screenPos = i.scrPos;
             float2 baseUV = screenPos.xy / screenPos.w;
             float2 distortedUV = baseUV + refractionVector.xy;
-            if (_RefractionZoomToggle == 1)
+            [branch] if (_RefractionZoomToggle == 1)
             {
                 float normalFactor = frac(dot(Surface.NormalDir, float3(12.9898, 78.233, 37.719))) * 2.0 - 1.0;
                 float zoomFactor = 1.0 - (normalFactor * _RefractionZoom);
@@ -1374,18 +1388,17 @@
                         float caFresnel = fastpow(fresnel, _RefractionCAEdgeFade);
                         caOffset *= caFresnel;
                     }
-                    refractedColor.r = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV + float2(caOffset, 0)).r * _RefractionCAStrength;
-                    refractedColor.g = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).g;
-                    refractedColor.b = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV - float2(caOffset, 0)).b * _RefractionCAStrength;
+                    refractedColor.r = SampleRefractionSource(distortedUV + float2(caOffset, 0)).r * _RefractionCAStrength;
+                    refractedColor.g = SampleRefractionSource(distortedUV).g;
+                    refractedColor.b = SampleRefractionSource(distortedUV - float2(caOffset, 0)).b * _RefractionCAStrength;
                     break;
                 }
                 case 2: // blur
                 {
                     const int BLUR_SAMPLES = 8;
                     float2 blurOffset = _BacklaceGP_TexelSize.xy * _RefractionBlurStrength;
-                    refractedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).rgb;
-                    [unroll]
-                    for (int i = 0; i < BLUR_SAMPLES; i++)
+                    refractedColor = SampleRefractionSource(distortedUV).rgb;
+                    [unroll] for (int i = 0; i < BLUR_SAMPLES; i++)
                     {
                         float angle = (float)i / BLUR_SAMPLES * 2.0 * UNITY_PI;
                         float s, c;
@@ -1398,7 +1411,7 @@
                 }
                 default: // no extra distortion
                 {
-                    refractedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, distortedUV).rgb;
+                    refractedColor = SampleRefractionSource(distortedUV).rgb;
                     break;
                 }
             }
@@ -1460,12 +1473,26 @@
         int _SSRCamFade;
         float _SSRCamFadeStart;
         float _SSRCamFadeEnd;
+        int _SSRSourceMode;
+        UNITY_DECLARE_TEX2D(_SSRTexture);
 
         #ifndef BACKLACE_DEPTH
             UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
             float4 _CameraDepthTexture_TexelSize;
             #define BACKLACE_DEPTH
-        #endif
+        #endif // BACKLACE_DEPTH
+
+        float3 SampleSSRSource(float2 uv)
+        {
+            [branch] if (_SSRSourceMode == 1)
+            {
+                return UNITY_SAMPLE_TEX2D(_SSRTexture, uv).rgb;
+            }
+            else
+            {
+                return UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, uv).rgb;
+            }
+        }
 
         // somewhat based on the orels1/mochie method, but completely butchered by me for my purposes
         float3 GetSSRMarched(inout BacklaceSurfaceData Surface, FragmentData i)
@@ -1487,7 +1514,7 @@
                 float2 screenUV = (screenPos.xy / screenPos.w) * 0.5 + 0.5;
                 if (screenUV.x > x_max || screenUV.x < x_min || screenUV.y > 1.0 || screenUV.y < 0.0)
                 {
-                    return 0;
+                    return 0; // out of view
                 }
                 // get and compare depths
                 float sceneDepth = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)).r);
@@ -1507,7 +1534,7 @@
                         case 2: // cutoff
                             if (finalUV.x < x_min || finalUV.x > x_max || finalUV.y < 0.0 || finalUV.y > 1.0) fadeFactor = 0;
                             break;
-                        case 3: // mirror
+                        default: // (3) mirror
                             if (finalUV.x < x_min) finalUV.x = x_min + (x_min - finalUV.x);
                             if (finalUV.x > x_max) finalUV.x = x_max - (finalUV.x - x_max);
                             if (finalUV.y < 0.0) finalUV.y = -finalUV.y;
@@ -1516,10 +1543,11 @@
                     }
                     if (_SSRDistortionStrength > 0)
                     {
+                        // note to self: sampling multiple times, yes, BUT only per-hit rather than all pixels
                         float2 distortion = (UNITY_SAMPLE_TEX2D(_SSRDistortionMap, screenUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
                         finalUV += distortion;
                     }
-                    float3 reflection = tex2D(_BacklaceGP, finalUV).rgb;
+                    float3 reflection = SampleSSRSource(finalUV);
                     finalUV = finalUV * 0.5 + 0.5;
                     float2 fade = smoothstep(0.0, _SSREdgeFade, finalUV) * (1.0 - smoothstep(1.0 - _SSREdgeFade, 1.0, finalUV));
                     reflection *= fade.x * fade.y * fadeFactor;
@@ -1545,16 +1573,15 @@
             float2 reflectionOffset = viewSpaceReflection.xy * parallax;
             float2 reflectionUV = screenUV + reflectionOffset +distortionOffset;
             const int SSR_BLUR_SAMPLES = 8;
-            float3 reflectedColor = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV).rgb;
+            float3 reflectedColor = SampleSSRSource(reflectionUV);
             float2 blurOffset = _BacklaceGP_TexelSize.xy * _SSRBlur;
-            [unroll]
-            for (int k = 0; k < SSR_BLUR_SAMPLES; k++)
+            [unroll] for (int k = 0; k < SSR_BLUR_SAMPLES; k++)
             {
                 float angle = (float)k / SSR_BLUR_SAMPLES * 2.0 * UNITY_PI;
                 float s, c;
                 sincos(angle, s, c);
                 float2 offset = float2(c, s) * blurOffset;
-                reflectedColor += UNITY_SAMPLE_SCREENSPACE_TEXTURE(_BacklaceGP, reflectionUV + offset).rgb;
+                reflectedColor += SampleSSRSource(reflectionUV + offset);
             }
             reflectedColor /= (SSR_BLUR_SAMPLES + 1);
             return reflectedColor;
@@ -1587,7 +1614,7 @@
             float mask = UNITY_SAMPLE_TEX2D(_SSRMask, Uvs[0]).r;
             float finalStrength = fresnel * mask * _SSRIntensity * fadeFactor;
             float3 finalReflection = reflectedColor * _SSRTint.rgb;
-            [branch] switch((int)_SSRBlendMode)
+            switch((int)_SSRBlendMode)
             {
                 case 0: // additive
                     Surface.FinalColor.rgb += finalReflection * finalStrength;

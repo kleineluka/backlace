@@ -7,12 +7,14 @@
 - Global Illumination toggle in Rendering tab
 - Optimise shadow caster pass to skip unnecessary compilation
 - Support multi-instancing better now (hopefully?)
-- Switch all multi_compile to shader_feature_local for better performance
 - Greatly reduce shader variants, keywords, and compilation time
 - Change normal calculations to use gram-schmidt orthogonalization
 - Avoid potential resampling in specular modes by pre-calculating terms, and fixed other Specular bugs
 - Renamed Procedural Anime to Halftone Anime mode
 - Added HiFi Anime mode, Skin Anime mode, and Wrapped Anime mode
+- Allow multiple ramp maps to be used and cycled through (up to 10)
+- Grabpass features (Refraction, SSR) now optionally allow the use of a custom texture in place of the grabpass
+- Reduced max raymarch steps in SSR to 35 (from 50) for more reasonable limits
 
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map
