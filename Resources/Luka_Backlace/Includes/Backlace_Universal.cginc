@@ -490,12 +490,12 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
             uv = uvX * weights.x + uvY * weights.y + uvZ * weights.z;
         }
         // screen space uv
-        [branch] if (_UVScreenspaceMapping == 1) 
+        if (_UVScreenspaceMapping == 1) 
         {
             uv = frac(Surface.ScreenCoords * _UVScreenspaceTiling);
         }
         // flipbook
-        [branch] if (_UVFlipbook == 1) {
+        if (_UVFlipbook == 1) {
             uv = ApplyFlipbook(uv, _UVFlipbookColumns, _UVFlipbookRows, _UVFlipbookFrames, _UVFlipbookFPS, _UVFlipbookScrub);
         }
         // flow map

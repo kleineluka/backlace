@@ -152,7 +152,7 @@ Shader "luka/backlace/all"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
         [KeywordEnum(Ramp, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 0
         // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }

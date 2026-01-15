@@ -1547,6 +1547,7 @@ namespace Luka.Backlace
                     prop_AnimeShadowColor = FindProperty("_AnimeShadowColor", properties);
                     prop_AnimeShadowThreshold = FindProperty("_AnimeShadowThreshold", properties);
                     prop_AnimeHalftoneColor = FindProperty("_AnimeHalftoneColor", properties);
+                    prop_AnimeOcclusionToShadow = FindProperty("_AnimeOcclusionToShadow", properties);
                     prop_AnimeHalftoneThreshold = FindProperty("_AnimeHalftoneThreshold", properties);
                     prop_AnimeShadowSoftness = FindProperty("_AnimeShadowSoftness", properties);
                     prop_RampIndex = FindProperty("_RampIndex", properties);
@@ -1618,7 +1619,6 @@ namespace Luka.Backlace
                 sub_tab_ambient_gradient.process(() => {
                     // shading - ambient gradient
                     prop_ToggleAmbientGradient = FindProperty("_ToggleAmbientGradient", properties);
-                    prop_AnimeOcclusionToShadow = FindProperty("_AnimeOcclusionToShadow", properties);
                     prop_AmbientUp = FindProperty("_AmbientUp", properties);
                     prop_AmbientSkyThreshold = FindProperty("_AmbientSkyThreshold", properties);
                     prop_AmbientDown = FindProperty("_AmbientDown", properties);

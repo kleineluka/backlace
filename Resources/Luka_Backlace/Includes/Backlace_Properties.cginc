@@ -112,61 +112,60 @@ float3 _VertexManipulationScale;
     float _AddLightMax;
 #endif // UNITY_PASS_FORWARDADD
 
-// toon feature
-#if defined(_BACKLACE_TOON)
-    float _TintMaskSource;
-    float4 _LitTint;
-    float4 _ShadowTint;
-    float _ShadowThreshold;
-    float _LitThreshold;
-    float _ToggleAmbientGradient;
-    float4 _AmbientUp;
-    float4 _AmbientDown;
-    float _AmbientIntensity;
-    float _AmbientSkyThreshold;
-    float _AmbientGroundThreshold;
-    float _ToggleSDFShadow;
-    UNITY_DECLARE_TEX2D(_SDFShadowTexture);
-    float _SDFShadowThreshold;
-    float _SDFShadowSoftness;
-    float _OcclusionOffsetIntensity;
-    #if defined(_ANIMEMODE_RAMP)
-        UNITY_DECLARE_TEX2D(_Ramp);
-        float _Ramp_UV;
-        float4 _RampColor;
-        float _RampOffset;
-        float _ShadowIntensity;
-        float3 _RampMin;
-        int _RampNormalIntensity;
-        float _RampIndex;
-        float _RampTotal;
-    #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
-        float4 _AnimeShadowColor;
-        float _AnimeShadowThreshold;
-        float4 _AnimeHalftoneColor;
-        float _AnimeHalftoneThreshold;
-        float _AnimeShadowSoftness;
-        float _AnimeOcclusionToShadow;
-    #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
-        float _Hifi1Threshold;
-        float _Hifi1Feather;
-        float4 _Hifi1Color;
-        float _Hifi2Threshold;
-        float _Hifi2Feather;
-        float4 _Hifi2Color;
-        float4 _HifiBorderColor;
-        float _HifiBorderWidth;
-    #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
-        UNITY_DECLARE_TEX2D(_SkinLUT);
-        float4 _SkinShadowColor;
-        float _SkinScattering;
-    #elif defined(_ANIMEMODE_WRAPPED) // _ANIMEMODE_*
-        float _WrapFactor;
-        float _WrapNormalization;
-        float4 _WrapColorHigh;
-        float4 _WrapColorLow;
-    #endif // _ANIMEMODE_*
-#endif // _BACKLACE_TOON
+// anime shading
+int _ToggleAnimeLighting;
+float _TintMaskSource;
+float4 _LitTint;
+float4 _ShadowTint;
+float _ShadowThreshold;
+float _LitThreshold;
+float _ToggleAmbientGradient;
+float4 _AmbientUp;
+float4 _AmbientDown;
+float _AmbientIntensity;
+float _AmbientSkyThreshold;
+float _AmbientGroundThreshold;
+float _ToggleSDFShadow;
+UNITY_DECLARE_TEX2D(_SDFShadowTexture);
+float _SDFShadowThreshold;
+float _SDFShadowSoftness;
+float _OcclusionOffsetIntensity;
+#if defined(_ANIMEMODE_RAMP)
+    UNITY_DECLARE_TEX2D(_Ramp);
+    float _Ramp_UV;
+    float4 _RampColor;
+    float _RampOffset;
+    float _ShadowIntensity;
+    float3 _RampMin;
+    int _RampNormalIntensity;
+    float _RampIndex;
+    float _RampTotal;
+#elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
+    float4 _AnimeShadowColor;
+    float _AnimeShadowThreshold;
+    float4 _AnimeHalftoneColor;
+    float _AnimeHalftoneThreshold;
+    float _AnimeShadowSoftness;
+    float _AnimeOcclusionToShadow;
+#elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
+    float _Hifi1Threshold;
+    float _Hifi1Feather;
+    float4 _Hifi1Color;
+    float _Hifi2Threshold;
+    float _Hifi2Feather;
+    float4 _Hifi2Color;
+    float4 _HifiBorderColor;
+    float _HifiBorderWidth;
+#elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
+    UNITY_DECLARE_TEX2D(_SkinLUT);
+    float4 _SkinShadowColor;
+    float _SkinScattering;
+#elif defined(_ANIMEMODE_WRAPPED) // _ANIMEMODE_*
+    float _WrapFactor;
+    float _WrapNormalization;
+    float4 _WrapColorHigh;
+    float4 _WrapColorLow;
+#endif // _ANIMEMODE_*
 
 // emission feature
 #if defined(_BACKLACE_EMISSION)

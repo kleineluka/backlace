@@ -7,7 +7,6 @@
 #pragma shader_feature_local _ANIMEMODE_RAMP _ANIMEMODE_HALFTONE _ANIMEMODE_HIFI _ANIMEMODE_SKIN _ANIMEMODE_WRAPPED
 
 // CORE FEATURES
-#pragma shader_feature_local _ _BACKLACE_TOON
 #pragma shader_feature_local _ _BACKLACE_EMISSION
 #pragma shader_feature_local _ _BACKLACE_SPECULAR
 #pragma shader_feature_local _ _BACKLACE_VERTEX_SPECULAR
@@ -18,8 +17,6 @@
 #pragma shader_feature_local _ _BACKLACE_DECAL2
 #pragma shader_feature_local _ _BACKLACE_POST_PROCESSING
 #pragma shader_feature_local _ _BACKLACE_UV_EFFECTS
-
-// ADVANCED KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_CUBEMAP
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
 #pragma shader_feature_local _ _BACKLACE_SSS
@@ -30,8 +27,6 @@
 #pragma shader_feature_local _ _BACKLACE_SHADOW_MAP
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 #pragma shader_feature_local _ _BACKLACE_LTCGI
-
-// FUN KEYWORDS
 #pragma shader_feature_local _ _BACKLACE_GLITTER
 #pragma shader_feature_local _ _BACKLACE_DISTANCE_FADE
 #pragma shader_feature_local _ _BACKLACE_IRIDESCENCE
