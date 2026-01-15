@@ -2753,10 +2753,6 @@
             "value": "Modo Legado"
         },
         {
-            "key": "legacy_mode",
-            "value": "Soporte de Hardware Legado\n\nSi experimentas errores de compilación o necesitas usar este shader en hardware más antiguo que no soporta Shader Model 5.0, puedes habilitar el Modo Legado.\n\nCómo Habilitar:\n1. Navega a Resources/Luka_Backlace/Includes/\n2. Abre estos tres archivos en un editor de texto:\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. En cada archivo, encuentra la línea 6: // #define BACKLACE_LEGACY_MODE\n4. Elimina las // para descomentarlo (para que se lea: #define BACKLACE_LEGACY_MODE)\n\nQué Hace Esto:\n• Compila el shader para Shader Model 3.0 (compatible con GPUs más antiguas)\n• Deshabilita automáticamente AudioLink e integración LTCGI para mantenerse dentro de los límites de hardware\n• Todas las demás características permanecen funcionales\n\nNota: Debes editar los tres archivos para que el shader compile correctamente."
-        },
-        {
             "key": "_SpecularJitter",
             "value": "Jitter especular"
         }

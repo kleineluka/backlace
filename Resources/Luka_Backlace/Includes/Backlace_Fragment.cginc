@@ -50,18 +50,13 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_VRCHAT_MIRROR)
         ApplyMirrorDetectionPre(Surface);
     #endif // _BACKLACE_VRCHAT_MIRROR
-    #if defined(_BACKLACE_DECAL1)
+    #if defined(_BACKLACE_DECALS)
         [branch] if (_DecalStage == 0) // early
         {
-            ApplyDecal1(Surface, FragData, Uvs);
+            if (_Decal1Enable == 1) ApplyDecal1(Surface, FragData, Uvs);
+            if (_Decal2Enable == 1) ApplyDecal2(Surface, FragData, Uvs);
         }
-    #endif // _BACKLACE_DECAL1
-    #if defined(_BACKLACE_DECAL2)
-        [branch] if (_DecalStage == 0) // early
-        {
-            ApplyDecal2(Surface, FragData, Uvs);
-        }
-    #endif // _BACKLACE_DECAL2
+    #endif // _BACKLACE_DECALS
     ClipAlpha(Surface);
     SampleNormal();
     #if defined(_BACKLACE_DETAIL)
@@ -82,15 +77,12 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         SetupDFG(Surface);
     #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
-    [branch] if (_ToggleAnimeLighting == 1) // TOON
-    {
-        GetAnimeDiffuse(Surface); // (vertex incl. in wrapper)
-    }
-    else // PBR
-    {
+    #if defined(_BACKLACE_TOON) // TOON LIGHTING
+        GetAnimeDiffuse(Surface); // (includes vertex diffuse inside wrapper)
+    #else // REAL LIGHTING
         GetPBRDiffuse(Surface);
         GetPBRVertexDiffuse(Surface);
-    }
+    #endif // _BACKLACE_TOON
     #if defined(_BACKLACE_SSS)
         ApplySubsurfaceScattering(Surface);
     #endif // _BACKLACE_SSS
@@ -173,16 +165,11 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_PS1)
         ApplyPS1ColorCompression(Surface.FinalColor);
     #endif // _BACKLACE_PS1
-    #if defined(_BACKLACE_DECAL1)
+    #if defined(_BACKLACE_DECALS)
         [branch] if (_DecalStage == 1) // late
         {
-            ApplyDecal1(Surface, FragData, Uvs);
-        }
-    #endif // _BACKLACE_DECAL1
-    #if defined(_BACKLACE_DECAL2)
-        [branch] if (_DecalStage == 1) // late
-        {
-            ApplyDecal2(Surface, FragData, Uvs);
+            if (_Decal1Enable == 1) ApplyDecal1(Surface, FragData, Uvs);
+            if (_Decal1Enable == 2) ApplyDecal2(Surface, FragData, Uvs);
         }
     #endif // _BACKLACE_DECAL2
     AddAlpha(Surface);

@@ -58,7 +58,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_uv_manipulation = null;
         private static Tab sub_tab_uv_effects = null;
         private static Tab sub_tab_vertex_manipulation = null;
-        private static Tab sub_tab_decal_one = null;
+        private static Tab sub_tab_stickers = null;
         private static Tab sub_tab_decal_two = null;
         private static Tab sub_tab_post_processing = null;
         private static Tab sub_tab_uv_sets = null;
@@ -153,7 +153,6 @@ namespace Luka.Backlace
         private MaterialProperty prop_BumpFromAlbedo = null;
         private MaterialProperty prop_BumpFromAlbedoOffset = null;
         private MaterialProperty prop_Alpha = null;
-        private MaterialProperty prop_DecalStage = null;
         // uv manipulation properties
         private MaterialProperty prop_UV_Offset_X = null;
         private MaterialProperty prop_UV_Offset_Y = null;
@@ -314,6 +313,9 @@ namespace Luka.Backlace
         private MaterialProperty prop_MatcapMask = null;
         private MaterialProperty prop_MatcapSmoothnessEnabled = null;
         private MaterialProperty prop_MatcapSmoothness = null;
+        // decal shared properties
+        private MaterialProperty prop_ToggleDecals = null;
+        private MaterialProperty prop_DecalStage = null;
         // decal one properties
         private MaterialProperty prop_Decal1Enable = null;
         private MaterialProperty prop_Decal1Tex = null;
@@ -728,7 +730,7 @@ namespace Luka.Backlace
             if (sub_tab_uv_manipulation != null) { sub_tab_uv_manipulation.is_expanded = false; sub_tab_uv_manipulation.is_active = false; }
             if (sub_tab_uv_effects != null) { sub_tab_uv_effects.is_expanded = false; sub_tab_uv_effects.is_active = false; }
             if (sub_tab_vertex_manipulation != null) { sub_tab_vertex_manipulation.is_expanded = false; sub_tab_vertex_manipulation.is_active = false; }
-            if (sub_tab_decal_one != null) { sub_tab_decal_one.is_expanded = false; sub_tab_decal_one.is_active = false; }
+            if (sub_tab_stickers != null) { sub_tab_stickers.is_expanded = false; sub_tab_stickers.is_active = false; }
             if (sub_tab_decal_two != null) { sub_tab_decal_two.is_expanded = false; sub_tab_decal_two.is_active = false; }
             if (sub_tab_post_processing != null) { sub_tab_post_processing.is_expanded = false; sub_tab_post_processing.is_active = false; }
             if (sub_tab_uv_sets != null) { sub_tab_uv_sets.is_expanded = false; sub_tab_uv_sets.is_active = false; }
@@ -814,7 +816,7 @@ namespace Luka.Backlace
             sub_tab_uv_manipulation = null;
             sub_tab_uv_effects = null;
             sub_tab_vertex_manipulation = null;
-            sub_tab_decal_one = null;
+            sub_tab_stickers = null;
             sub_tab_decal_two = null;
             sub_tab_post_processing = null;
             sub_tab_uv_sets = null;
@@ -915,7 +917,7 @@ namespace Luka.Backlace
             sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_manipulation"));
             sub_tab_uv_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_uv_effects"), null, "_ToggleUVEffects");
             sub_tab_vertex_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_vertex_manipulation"));
-            sub_tab_decal_one = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_decal_one"), null, "_Decal1Enable");
+            sub_tab_stickers = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_stickers"), null, "_Decal1Enable");
             sub_tab_decal_two = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_decal_two"), null, "_Decal2Enable");
             sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
             sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_uv_sets"));
@@ -1189,7 +1191,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_Brightness, languages.speak("prop_Brightness"));
                     Components.end_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
                 });
-                sub_tab_decal_one.process(() => {
+                sub_tab_stickers.process(() => {
                     // main - decal one
                     prop_Decal1Enable = FindProperty("_Decal1Enable", properties);
                     prop_Decal1Tex = FindProperty("_Decal1Tex", properties);
@@ -1208,9 +1210,13 @@ namespace Luka.Backlace
                     prop_Decal1HueShift = FindProperty("_Decal1HueShift", properties);
                     prop_Decal1AutoCycleHue = FindProperty("_Decal1AutoCycleHue", properties);
                     prop_Decal1CycleSpeed = FindProperty("_Decal1CycleSpeed", properties);
+                    prop_ToggleDecals = FindProperty("_ToggleDecals", properties);
                     prop_DecalStage = FindProperty("_DecalStage", properties);
-                    materialEditor.ShaderProperty(prop_Decal1Enable, languages.speak("prop_Decal1Enable"));
+                    materialEditor.ShaderProperty(prop_ToggleDecals, languages.speak("prop_ToggleDecals"));
                     materialEditor.ShaderProperty(prop_DecalStage, languages.speak("prop_DecalStage"));
+                    Components.draw_divider();
+                    Components.start_dynamic_disable(!prop_ToggleDecals.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_Decal1Enable, languages.speak("prop_Decal1Enable"));
                     Components.start_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Decal1Tex, languages.speak("prop_Decal1Tex"));
                     materialEditor.ShaderProperty(prop_Decal1Tint, languages.speak("prop_Decal1Tint"));
@@ -1242,8 +1248,7 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_Decal1HueShift.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
-                });
-                sub_tab_decal_two.process(() => {
+                    Components.draw_divider();
                     // main - decal two
                     prop_Decal2Enable = FindProperty("_Decal2Enable", properties);
                     prop_Decal2Tex = FindProperty("_Decal2Tex", properties);
@@ -1262,9 +1267,7 @@ namespace Luka.Backlace
                     prop_Decal2HueShift = FindProperty("_Decal2HueShift", properties);
                     prop_Decal2AutoCycleHue = FindProperty("_Decal2AutoCycleHue", properties);
                     prop_Decal2CycleSpeed = FindProperty("_Decal2CycleSpeed", properties);
-                    prop_DecalStage = FindProperty("_DecalStage", properties);
                     materialEditor.ShaderProperty(prop_Decal2Enable, languages.speak("prop_Decal2Enable"));
-                    materialEditor.ShaderProperty(prop_DecalStage, languages.speak("prop_DecalStage"));
                     Components.start_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_Decal2Tex, languages.speak("prop_Decal2Tex"));
                     materialEditor.ShaderProperty(prop_Decal2Tint, languages.speak("prop_Decal2Tint"));
@@ -1296,7 +1299,11 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_Decal2HueShift.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
+                    Components.end_dynamic_disable(!prop_ToggleDecals.floatValue.Equals(1), configs);
                 });
+                // sub_tab_decal_two.process(() => {
+                    //
+                // });
                 sub_tab_vertex_manipulation.process(() => {
                     // main - vertex manipulation
                     prop_VertexManipulationPosition = FindProperty("_VertexManipulationPosition", properties);

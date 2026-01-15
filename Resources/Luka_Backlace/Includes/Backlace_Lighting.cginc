@@ -163,11 +163,10 @@ void GetBacklaceLightColor(inout BacklaceLightData lightData, float3 normal)
         lightData.directColor = lerp(ambientColor, lightData.directColor, 0.75);
         if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
         {
-            [branch] if (_ToggleAnimeLighting == 1)
-            {
+            #if defined(_BACKLACE_TOON)
                 lightData.directColor = lightData.indirectColor;
                 lightData.indirectColor = 0;
-            }
+            #endif // _BACKLACE_TOON
         }
     #else // UNITY_PASS_FORWARDADD
         lightData.directColor = _LightColor0.rgb;
@@ -199,14 +198,13 @@ void GetPoiyomiLightColor(inout BacklaceLightData lightData, float3 normal)
         }
         lightData.indirectColor = GetUniversalIndirectLight(normal);
         bool lightExists = any(_WorldSpaceLightPos0.xyz) && _LightColor0.a > 0.01;
-        [branch] if (_ToggleAnimeLighting == 1)
-        {
+        #if defined(_BACKLACE_TOON)
             if (!lightExists > 0)
             {
                 lightData.directColor = lightData.indirectColor;
                 lightData.indirectColor = 0;
             }
-        }
+        #endif // _BACKLACE_TOON
     #else // UNITY_PASS_FORWARDADD
         lightData.directColor = _LightColor0.rgb;
         lightData.indirectColor = 0;
@@ -222,14 +220,13 @@ void GetOpenLitLightColor(inout BacklaceLightData lightData, float3 normal)
         lightData.directColor = directSH + _LightColor0.rgb;
         lightData.indirectColor = GetUniversalIndirectLight(normal);
         bool lightExists = any(_WorldSpaceLightPos0.xyz) && _LightColor0.a > 0.01;
-        [branch] if (_ToggleAnimeLighting == 1)
-        {
+        #if defined(_BACKLACE_TOON)
             if (!lightExists)
             {
                 lightData.directColor = lightData.indirectColor;
                 lightData.indirectColor = 0;
             }
-        }
+        #endif // _BACKLACE_TOON
     #else // UNITY_PASS_FORWARDADD
         lightData.directColor = _LightColor0.rgb;
         lightData.indirectColor = 0;
@@ -250,14 +247,13 @@ void GetStandardLightColor(inout BacklaceLightData lightData, float3 normal)
         {
             lightData.directColor = float3(0, 0, 0);
         }
-        [branch] if (_ToggleAnimeLighting == 1)
-        {
+        #if defined(_BACKLACE_TOON)
             if (!lightExists)
             {
                 lightData.directColor = lightData.indirectColor;
                 lightData.indirectColor = 0;
             }
-        }
+        #endif // _BACKLACE_TOON
     #else // UNITY_PASS_FORWARDADD
         lightData.directColor = _LightColor0.rgb;
         lightData.indirectColor = 0;
@@ -280,11 +276,10 @@ void GetMochieLightColor(inout BacklaceLightData lightData, float3 normal)
         }
         if (!lightExists || _LightColor0.a < 0.01)
         {
-            [branch] if (_ToggleAnimeLighting == 1)
-            {
+            #if defined(_BACKLACE_TOON)
                 lightData.directColor = lightData.indirectColor;
                 lightData.indirectColor = 0;
-            }
+            #endif // _BACKLACE_TOON
         }
     #else // UNITY_PASS_FORWARDADD
         lightData.directColor = _LightColor0.rgb;

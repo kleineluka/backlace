@@ -2753,10 +2753,6 @@
             "value": "레거시 모드"
         },
         {
-            "key": "legacy_mode",
-            "value": "구형 하드웨어 지원\n\n컴파일 오류가 발생하거나 쉐이더 모델 5.0을 지원하지 않는 구형 하드웨어에서 이 쉐이더를 사용해야 하는 경우 레거시 모드를 활성화할 수 있습니다.\n\n활성화 방법:\n1. Resources/Luka_Backlace/Includes/ 로 이동\n2. 텍스트 편집기로 다음 세 파일을 엽니다:\n   • Backlace_Forward.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 각 파일에서 6번째 줄을 찾습니다: // #define BACKLACE_LEGACY_MODE\n4. //를 제거하여 주석을 해제합니다 (다음과 같이: #define BACKLACE_LEGACY_MODE)\n\n기능:\n• 쉐이더 모델 3.0용으로 컴파일 (구형 GPU 호환)\n• 하드웨어 제한을 준수하기 위해 AudioLink 및 LTCGI 통합을 자동으로 비활성화\n• 그 외 모든 기능은 정상 작동\n\n참고: 쉐이더가 올바르게 컴파일되려면 세 파일을 모두 수정해야 합니다."
-        },
-        {
             "key": "_SpecularJitter",
             "value": "스페큘러 지터"
         }

@@ -1,10 +1,6 @@
 #ifndef BACKLACE_FORWARD_CGINC
 #define BACKLACE_FORWARD_CGINC
 
-// LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
-// NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
-// #define BACKLACE_LEGACY_MODE
-
 // keywords
 #include "./Backlace_Keywords.cginc"
 

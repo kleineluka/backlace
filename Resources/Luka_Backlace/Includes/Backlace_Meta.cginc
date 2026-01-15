@@ -118,7 +118,9 @@ float _UV_Scroll_Y_Speed;
 float _DecalStage;
 
 // decal1-only feature
-#if defined(_BACKLACE_DECAL1)
+#if defined(_BACKLACE_DECALS)
+    // decal1
+    int _Decal1Enable;
     UNITY_DECLARE_TEX2D(_Decal1Tex);
     float4 _Decal1Tint;
     float2 _Decal1Position;
@@ -136,10 +138,8 @@ float _DecalStage;
     float _Decal1HueShift;
     float _Decal1AutoCycleHue;
     float _Decal1CycleSpeed;
-#endif // _BACKLACE_DECAL1
-
-// decal2-only feature
-#if defined(_BACKLACE_DECAL2)
+    // decal 2
+    int _Decal2Enable;
     UNITY_DECLARE_TEX2D(_Decal2Tex);
     float4 _Decal2Tint;
     float2 _Decal2Position;
@@ -157,7 +157,7 @@ float _DecalStage;
     float _Decal2HueShift;
     float _Decal2AutoCycleHue;
     float _Decal2CycleSpeed;
-#endif // _BACKLACE_DECAL2
+#endif // _BACKLACE_DECALS
 
 // texture stitching feature
 int _UseTextureStitching;
@@ -221,12 +221,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #if defined(_BACKLACE_DETAIL)
         ApplyDetailMaps(Surface);
     #endif // _BACKLACE_DETAIL
-    #if defined(_BACKLACE_DECAL1)
-        ApplyDecal1(Surface, FragData, Uvs);
-    #endif // _BACKLACE_DECAL1
-    #if defined(_BACKLACE_DECAL2)
-        ApplyDecal2(Surface, FragData, Uvs);
-    #endif // _BACKLACE_DECAL2
+    #if defined(_BACKLACE_DECALS)
+        if (_Decal1Enable == 1) ApplyDecal1(Surface, FragData, Uvs);
+        if (_Decal2Enable == 1) ApplyDecal2(Surface, FragData, Uvs);
+    #endif // _BACKLACE_DECALS
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission(Surface);
         surfaceData.Emission = Emission;

@@ -59,7 +59,6 @@ Shader "luka/backlace/all"
         [Enum(Disabled, 0, Enabled, 1)] _BumpFromAlbedo ("Derive Normals", Int) = 0
         _BumpFromAlbedoOffset ("Derived Offset", Float) = 1
         _Alpha ("Alpha", Range(0, 1)) = 1.0
-        [Enum(Early, 0, Late, 1)] _DecalStage ("Decal Stage", Int) = 1
 
         // UV MANIPULATION
         // [Space(35)]
@@ -152,7 +151,7 @@ Shader "luka/backlace/all"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
+        [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
         [KeywordEnum(Ramp, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 0
         // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }
@@ -280,11 +279,18 @@ Shader "luka/backlace/all"
         [Enum(Disabled, 0, Enabled, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
+        // DECAL SHARED
+        // [Space(35)]
+        // [Header(Decal Shared Settings)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_DECALS)] _ToggleDecals ("Enable Decals", Int) = 0
+        [Enum(Early, 0, Late, 1)] _DecalStage ("Decal Stage", Int) = 1
+
         // DECAL 1
         // [Space(35)]
         // [Header(Decal 1)]
         // [Space(10)]
-        [Toggle(_BACKLACE_DECAL1)] _Decal1Enable ("Enable Decal 1", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal1Enable ("Enable Decal 1", Float) = 0.0
         [NoScaleOffset] _Decal1Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal1Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal1BlendMode ("Blend Mode", Int) = 2
@@ -306,7 +312,7 @@ Shader "luka/backlace/all"
         // [Space(35)]
         // [Header(Decal 2)]
         // [Space(10)]
-        [Toggle(_BACKLACE_DECAL2)] _Decal2Enable ("Enable Decal 2", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal2Enable ("Enable Decal 2", Int) = 0
         [NoScaleOffset] _Decal2Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal2Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal2BlendMode ("Blend Mode", Int) = 2

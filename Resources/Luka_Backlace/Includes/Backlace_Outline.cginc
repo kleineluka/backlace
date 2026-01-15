@@ -23,7 +23,6 @@
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
 #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
 #pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
-#pragma shader_feature_local _ _BACKLACE_DITHER
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 #pragma shader_feature_local _ _BLENDMODE_CUTOUT
 

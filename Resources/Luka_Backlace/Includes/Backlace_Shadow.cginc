@@ -24,8 +24,7 @@
 // keywords
 #pragma multi_compile _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
-#pragma shader_feature_local _ _BACKLACE_DECAL1
-#pragma shader_feature_local _ _BACKLACE_DECAL2
+#pragma shader_feature_local _ _BACKLACE_DECALS
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 
 // unity includes
@@ -132,7 +131,9 @@ float3 _VertexManipulationScale;
 #endif // _BACKLACE_UV_EFFECTS
 
 // decal1-only feature
-#if defined(_BACKLACE_DECAL1)
+#if defined(_BACKLACE_DECALS)
+    // decal 1
+    int _Decal1Enable;
     UNITY_DECLARE_TEX2D(_Decal1Tex);
     float4 _Decal1Tint;
     float2 _Decal1Position;
@@ -150,10 +151,8 @@ float3 _VertexManipulationScale;
     float _Decal1HueShift;
     float _Decal1AutoCycleHue;
     float _Decal1CycleSpeed;
-#endif // _BACKLACE_DECAL1
-
-// decal2-only feature
-#if defined(_BACKLACE_DECAL2)
+    // decal 2
+    int _Decal2Enable;
     UNITY_DECLARE_TEX2D(_Decal2Tex);
     float4 _Decal2Tint;
     float2 _Decal2Position;
@@ -171,7 +170,7 @@ float3 _VertexManipulationScale;
     float _Decal2HueShift;
     float _Decal2AutoCycleHue;
     float _Decal2CycleSpeed;
-#endif // _BACKLACE_DECAL2
+#endif // _BACKLACE_DECALS
 
 // texture stitching feature
 int _UseTextureStitching;
@@ -282,12 +281,10 @@ float4 Fragment(FragmentData i) : SV_TARGET
             ApplyUVEffects(Uvs[0], Surface);
         #endif // _BACKLACE_UV_EFFECTS
         SampleAlbedo(Surface, i.vertex.xyz);
-        #if defined(_BACKLACE_DECAL1)
-            ApplyDecal1(Surface, FragData, Uvs);
-        #endif // _BACKLACE_DECAL1
-        #if defined(_BACKLACE_DECAL2)
-            ApplyDecal2(Surface, FragData, Uvs);
-        #endif // _BACKLACE_DECAL2
+        #if defined(_BACKLACE_DECALS)
+            if (_Decal1Enable == 1) ApplyDecal1(Surface, FragData, Uvs);
+            if (_Decal2Enable == 1) ApplyDecal2(Surface, FragData, Uvs);
+        #endif // _BACKLACE_DECALS
         ClipShadowAlpha(Surface);
     #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #if defined(_BACKLACE_DISSOLVE)
