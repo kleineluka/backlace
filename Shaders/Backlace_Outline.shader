@@ -768,6 +768,7 @@ Shader "luka/backlace/outline"
         _OutlineTexTiling ("Outline Texture Tiling", Vector) = (1, 1, 0, 0)
         _OutlineTexScroll ("Outline Texture Scroll", Vector) = (0, 0, 0, 0)
         _OutlineOffset ("Outline Offset", Vector) = (0, 0, 0, 0)
+        [Enum(Outline, 0, Silhouette, 1)] _OutlineStyle ("Outline Style", Int) = 0
 
         // INDIRECT LIGHTING
         // [Space(35)]

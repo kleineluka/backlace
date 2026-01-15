@@ -680,6 +680,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_OutlineTexTiling = null;
         private MaterialProperty prop_OutlineTexScroll = null;
         private MaterialProperty prop_OutlineOffset = null;
+        private MaterialProperty prop_OutlineStyle = null;
         // indirect lighting
         private MaterialProperty prop_IndirectFallbackMode = null;
         private MaterialProperty prop_IndirectOverride = null;
@@ -2543,7 +2544,9 @@ namespace Luka.Backlace
                 prop_OutlineStencilPass = FindProperty("_OutlineStencilPass", properties);
                 prop_OutlineStencilFail = FindProperty("_OutlineStencilFail", properties);
                 prop_OutlineStencilZFail = FindProperty("_OutlineStencilZFail", properties);
+                prop_OutlineStyle = FindProperty("_OutlineStyle", properties);
                 materialEditor.ShaderProperty(prop_OutlineSpace, languages.speak("prop_OutlineSpace"));
+                materialEditor.ShaderProperty(prop_OutlineStyle, languages.speak("prop_OutlineStyle"));
                 materialEditor.ShaderProperty(prop_OutlineWidth, languages.speak("prop_OutlineWidth"));
                 materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
                 materialEditor.ShaderProperty(prop_OutlineMode, languages.speak("prop_OutlineMode"));

@@ -53,6 +53,7 @@ float2 _OutlineTexTiling;
 float2 _OutlineTexScroll;
 float4 _OutlineColor;
 float3 _OutlineOffset;
+int _OutlineStyle;
 
 UNITY_DECLARE_TEX2D(_MainTex);
 float4 _MainTex_ST;
@@ -104,6 +105,10 @@ v2f vert(appdata v)
     o.uv = v.uv;
     float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
     float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+    if (_OutlineStyle == 1) // silhouette
+    {
+        worldNormal.rgb = (v.color.rgb - 0.5) * 2.0;
+    }
     // optionally, flatten the model
     #if defined(_BACKLACE_FLAT_MODEL)
         float4 finalClipPos;
