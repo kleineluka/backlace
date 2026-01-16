@@ -151,7 +151,7 @@ float fastpow(float x, float p)
     return exp2(p * log2(x));
 }
 
-// fast hash function
+// psuedo-random functions
 float Hash12(float2 p)
 {
     float3 p3 = frac(float3(p.xyx) * .1031);
@@ -159,10 +159,34 @@ float Hash12(float2 p)
     return frac((p3.x + p3.y) * p3.z);
 }
 
-// create a random-looking 2D vector
+float hash11(float p)
+{
+    p = frac(p * 0.1031);
+    p *= p + 33.33;
+    p *= p + p;
+    return frac(p);
+}
+
+float Hash11(float p)
+{
+    p = frac(p * 0.1031);
+    p *= p + 33.33;
+    p *= p + p;
+    return frac(p);
+}
+
 float2 Hash22(float2 p)
 {
-    return float2(Hash12(p), Hash12(p + 0.123));
+    float3 p3 = frac(float3(p.xyx) * float3(0.1031, 0.1030, 0.0973));
+    p3 += dot(p3, p3.yzx + 33.33);
+    return frac((p3.xx + p3.yz) * p3.zy);
+}
+
+float3 Hash33(float3 p)
+{
+    p = frac(p * float3(0.1031, 0.1030, 0.0973));
+    p += dot(p, p.yxz + 33.33);
+    return frac((p.xxy + p.yxx) * p.zyx);
 }
 
 // convert HSV to RGB
@@ -237,6 +261,14 @@ float3 GetCameraPos()
     #else // UNITY_SINGLE_PASS_STEREO
         return _WorldSpaceCameraPos;
     #endif // UNITY_SINGLE_PASS_STEREO
+}
+
+// rotate a 2D vector around the origin
+float2 RotateUV(float2 uv, float angle)
+{
+    float s = sin(angle);
+    float c = cos(angle);
+    return float2(c * uv.x - s * uv.y, s * uv.x + c * uv.y);
 }
 
 // rotates a 3D vector using euler angles (in degrees)

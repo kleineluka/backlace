@@ -38,6 +38,12 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         Uvs[0] = parallax_uv;
     #endif // _BACKLACE_PARALLAX
     SampleAlbedo(Surface, i.vertex.xyz);
+    #if defined(BACKLACE_WORLD)
+        #if defined(_BACKLACE_STOCHASTIC)
+            StochasticData stoch = SampleStochasticAlbedo(Uvs[0], i.scrPos.xy / i.scrPos.w, Surface);
+            Surface.Albedo = stoch.albedoSample;
+        #endif // _BACKLACE_STOCHASTIC
+    #endif // BACKLACE_WORLD
     #if defined(_BACKLACE_PARALLAX)
         [branch] if (_ParallaxMode == 2) // layered parallax
         {
@@ -59,6 +65,11 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #endif // _BACKLACE_DECALS
     ClipAlpha(Surface);
     SampleNormal();
+    #if defined(BACKLACE_WORLD)
+        #if defined(_BACKLACE_STOCHASTIC)
+            SampleStochasticNormal(Uvs[0], stoch); // re use data from albedo sampling
+        #endif // _BACKLACE_STOCHASTIC
+    #endif // BACKLACE_WORLD
     #if defined(_BACKLACE_DETAIL)
         ApplyDetailMaps(Surface);
     #endif // _BACKLACE_DETAIL

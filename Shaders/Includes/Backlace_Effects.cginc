@@ -1638,22 +1638,287 @@
 
     // stochastic sampling feature
     #if defined(_BACKLACE_STOCHASTIC)
+        UNITY_DECLARE_TEX2D(_StochasticTexture);
         UNITY_DECLARE_TEX2D(_StochasticHeightMap);
         float _StochasticScale;
         float _StochasticBlend;
         float _StochasticRotationRange;
-        float _StochasticContrastScale;
         float _StochasticContrastStrength;
         float _StochasticContrastThreshold;
         float _StochasticHeightStrength;
-        float _StochasticAntiTileStrength;
         float _StochasticMipBias;
         int _StochasticSamplingMode;
         int _StochasticHeightBlend;
-        int _StochasticPreserveContrast;
-        int _StochasticDither;
+        float _StochasticOpacity;
+        int _StochasticBlendMode;
+        int _StochasticAlpha;
+        int _StochasticPriority;
+        float _StochasticOffsetX;
+        float _StochasticOffsetY;
+        float4 _StochasticTint;
+        int _StochasticNormals;
 
+        float3 HeightBlend3(float3 weights, float3 heights, float strength, float bias)
+        {
+            heights = saturate(heights);
+            float3 h = heights + weights * bias;
+            h = pow(h, strength);
+            float sum = h.x + h.y + h.z;
+            return h / max(sum, 1e-5);
+        }
 
+        float4 HeightBlend4(float4 weights, float4 heights, float strength, float bias)
+        {
+            heights = saturate(heights);
+            float4 h = heights + weights * bias;
+            h = pow(h, strength);
+            float sum = h.x + h.y + h.z + h.w;
+            return h / max(sum, 1e-5);
+        }
+
+        struct StochasticData
+        {
+            // heitz mode data
+            float2 uv1;
+            float2 uv2;
+            float2 uv3;
+            float3 weights;
+            float2 dUVdx;
+            float2 dUVdy;
+            // contrast mode data
+            float2 gridUV;
+            float2 gridId;
+            float2 scaledUV;
+            float2 offsets[4];
+            float4 bilinearWeights;
+            // pass the albedo sample back
+            float4 albedoSample;
+        };
+
+        StochasticData PrepareHeitzData(float2 uv)
+        {
+            StochasticData result;
+            float2 scaledUV = uv * _StochasticScale + float2(_StochasticOffsetX, _StochasticOffsetY);
+            // skew to triangular grid
+            float2 skewUV = mul(float2x2(1.0, 0.0, -0.57735027, 1.15470054), scaledUV);
+            int2 baseId = int2(floor(skewUV));
+            float3 temp = float3(frac(skewUV), 0);
+            temp.z = 1.0 - temp.x - temp.y;
+            // determine triangle and vertices
+            float s = step(0.0, -temp.z);
+            float s2 = 2.0 * s - 1.0;
+            int2 vertex1 = baseId + int2(s, s);
+            int2 vertex2 = baseId + int2(s, 1.0 - s);
+            int2 vertex3 = baseId + int2(1.0 - s, s);
+            // barycentric weights with random offsets
+            float3 weights = float3(-temp.z * s2, s - temp.y * s2, s - temp.x * s2);
+            weights = pow(saturate(weights), _StochasticBlend);
+            result.weights = weights / (weights.x + weights.y + weights.z + 1e-5);
+            float2 offset1 = Hash22(float2(vertex1));
+            float2 offset2 = Hash22(float2(vertex2));
+            float2 offset3 = Hash22(float2(vertex3));
+            // optional rotation
+            if (_StochasticRotationRange > 0.0001)
+            {
+                float angle1 = (Hash11(vertex1.x + vertex1.y * 100.0) - 0.5) * radians(_StochasticRotationRange);
+                float angle2 = (Hash11(vertex2.x + vertex2.y * 100.0) - 0.5) * radians(_StochasticRotationRange);
+                float angle3 = (Hash11(vertex3.x + vertex3.y * 100.0) - 0.5) * radians(_StochasticRotationRange);
+                float2 centered1 = scaledUV - float2(vertex1);
+                float2 centered2 = scaledUV - float2(vertex2);
+                float2 centered3 = scaledUV - float2(vertex3);
+                result.uv1 = RotateUV(centered1, angle1) + float2(vertex1) + offset1;
+                result.uv2 = RotateUV(centered2, angle2) + float2(vertex2) + offset2;
+                result.uv3 = RotateUV(centered3, angle3) + float2(vertex3) + offset3;
+            }
+            else
+            {
+                result.uv1 = scaledUV + offset1;
+                result.uv2 = scaledUV + offset2;
+                result.uv3 = scaledUV + offset3;
+            }
+            result.dUVdx = ddx(scaledUV);
+            result.dUVdy = ddy(scaledUV);
+            return result;
+        }
+
+        StochasticData PrepareContrastData(float2 uv)
+        {
+            StochasticData result;
+            result.scaledUV = uv * _StochasticScale + float2(_StochasticOffsetX, _StochasticOffsetY);
+            result.gridUV = frac(result.scaledUV);
+            result.gridId = floor(result.scaledUV);
+            result.dUVdx = ddx(result.scaledUV);
+            result.dUVdy = ddy(result.scaledUV);
+            
+            // precalculate offsets
+            result.offsets[0] = Hash22(result.gridId);
+            result.offsets[1] = Hash22(result.gridId + float2(1, 0));
+            result.offsets[2] = Hash22(result.gridId + float2(0, 1));
+            result.offsets[3] = Hash22(result.gridId + float2(1, 1));
+            
+            // precalculate bilinear weights
+            float2 blend = smoothstep(0.0, 1.0, result.gridUV);
+            result.bilinearWeights = float4(
+                (1.0 - blend.x) * (1.0 - blend.y),
+                blend.x * (1.0 - blend.y),
+                (1.0 - blend.x) * blend.y,
+                blend.x * blend.y
+            );
+            
+            return result;
+        }
+
+        float4 SampleHeitzAlbedo(StochasticData data, float2 originalUV, float2 screenPos)
+        {
+            // apply mip bias to derivatives then sample
+            float2 dx = data.dUVdx * exp2(_StochasticMipBias);
+            float2 dy = data.dUVdy * exp2(_StochasticMipBias);
+            float4 sample1 = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.uv1, dx, dy);
+            float4 sample2 = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.uv2, dx, dy);
+            float4 sample3 = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.uv3, dx, dy);
+            float3 weights = data.weights;
+            // optional height-based blending
+            if (_StochasticHeightBlend == 1)
+            {
+                float h1 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv1, dx, dy).r;
+                float h2 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv2, dx, dy).r;
+                float h3 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv3, dx, dy).r;
+                weights = HeightBlend3(weights, float3(h1, h2, h3), _StochasticHeightStrength, 0.001);
+            }
+            float4 result = sample1 * weights.x + sample2 * weights.y + sample3 * weights.z;
+            return result * _StochasticTint;
+        }
+
+        float3 SampleHeitzNormal(StochasticData data)
+        {
+            float2 dx = data.dUVdx * exp2(_StochasticMipBias);
+            float2 dy = data.dUVdy * exp2(_StochasticMipBias);
+            float3 normal1 = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.uv1, dx, dy));
+            float3 normal2 = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.uv2, dx, dy));
+            float3 normal3 = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.uv3, dx, dy));
+            float3 weights = data.weights;
+            if (_StochasticHeightBlend == 1)
+            {
+                float h1 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv1, dx, dy).r;
+                float h2 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv2, dx, dy).r;
+                float h3 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv3, dx, dy).r;
+                weights = HeightBlend3(weights, float3(h1, h2, h3), _StochasticHeightStrength, 0.001);
+            }
+            
+            return normalize(normal1 * weights.x + normal2 * weights.y + normal3 * weights.z);
+        }
+
+        float4 SampleContrastAlbedo(StochasticData data)
+        {
+            // sample at 4 random positions using precomputed data
+            float4 samples[4];
+            samples[0] = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[0], data.dUVdx, data.dUVdy);
+            samples[1] = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[1], data.dUVdx, data.dUVdy);
+            samples[2] = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[2], data.dUVdx, data.dUVdy);
+            samples[3] = _StochasticTexture.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[3], data.dUVdx, data.dUVdy);
+            // calculate contrast scores
+            float4 contrasts;
+            [unroll] for (int i = 0; i < 4; i++)
+            {
+                float lum = dot(samples[i].rgb, float3(0.299, 0.587, 0.114));
+                contrasts[i] = pow(abs(lum - _StochasticContrastThreshold), _StochasticContrastStrength);
+            }
+            float4 weights = data.bilinearWeights;
+            [branch] if (_StochasticPriority == 0) // naive
+            {
+                weights *= contrasts;
+                weights /= (weights.x + weights.y + weights.z + weights.w + 1e-5);
+                return (samples[0] * weights.x + samples[1] * weights.y + samples[2] * weights.z + samples[3] * weights.w) * _StochasticTint;
+            } 
+            else // competitive
+            {
+                float4 finalWeights = HeightBlend4(
+                    weights,
+                    contrasts,
+                    _StochasticContrastStrength,
+                    1e-3
+                );
+                return (samples[0] * finalWeights.x +
+                    samples[1] * finalWeights.y +
+                    samples[2] * finalWeights.z +
+                    samples[3] * finalWeights.w) * _StochasticTint;
+            }
+        }
+
+        float3 SampleContrastNormal(StochasticData data)
+        {
+            // sample normals at 4 random positions
+            float3 normals[4];
+            normals[0] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[0], data.dUVdx, data.dUVdy));
+            normals[1] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[1], data.dUVdx, data.dUVdy));
+            normals[2] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[2], data.dUVdx, data.dUVdy));
+            normals[3] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[3], data.dUVdx, data.dUVdy));
+            // calculate contrast scores using luminance approximation
+            float4 contrasts;
+            [unroll] for (int i = 0; i < 4; i++)
+            {
+                float lum = (normals[i].r + normals[i].g + normals[i].b) / 3.0;
+                contrasts[i] = pow(abs(lum - _StochasticContrastThreshold), _StochasticContrastStrength);
+            }
+            float4 weights = data.bilinearWeights;
+            [branch] if (_StochasticPriority == 0) // naive
+            {
+                weights *= contrasts;
+                weights /= (weights.x + weights.y + weights.z + weights.w + 1e-5);
+            }
+            else // competitive
+            {
+                weights = HeightBlend4(weights, contrasts, _StochasticContrastStrength, 1e-3);
+            }
+            return normalize(normals[0] * weights.x + normals[1] * weights.y + normals[2] * weights.z + normals[3] * weights.w);
+        }
+
+        StochasticData SampleStochasticAlbedo(float2 uv, float2 screenPos, BacklaceSurfaceData Surface)
+        {
+            float4 stochasticSample = 0;
+            StochasticData data;
+            [branch] if (_StochasticSamplingMode == 1) // contrast
+            {
+                data = PrepareContrastData(uv);
+                stochasticSample = SampleContrastAlbedo(data);
+            }
+            else // heitz
+            {
+                data = PrepareHeitzData(uv);
+                stochasticSample = SampleHeitzAlbedo(data, uv, screenPos);
+            }
+            stochasticSample.a = (_StochasticAlpha == 1) ? stochasticSample.a : 1.0;
+            // blend
+            switch (_StochasticBlendMode)
+            {
+                case 1: // additive
+                    data.albedoSample = Surface.Albedo + stochasticSample * _StochasticOpacity;
+                    break;
+                case 2: // multiply
+                    data.albedoSample =  lerp(Surface.Albedo, Surface.Albedo * stochasticSample, _StochasticOpacity);
+                    break;
+                case 3: // screen
+                    data.albedoSample =  lerp(Surface.Albedo, 1.0 - (1.0 - Surface.Albedo) * (1.0 - stochasticSample), _StochasticOpacity);
+                    break;
+                default: // replace
+                    data.albedoSample =  lerp(Surface.Albedo, stochasticSample, _StochasticOpacity);
+                    break;
+            }
+            return data;
+        }
+
+        void SampleStochasticNormal(float2 uv, StochasticData data)
+        {
+            if (_StochasticNormals == 0) return;
+            [branch] if (_StochasticSamplingMode == 1) // contrast
+            {
+                NormalMap.rgb = SampleContrastNormal(data); // use global scope NormalMap
+            }
+            else // heitz
+            {
+                NormalMap.rgb = SampleHeitzNormal(data);
+            }
+        }
     #endif // _BACKLACE_STOCHASTIC
 
 #endif // BACKLACE_WORLD

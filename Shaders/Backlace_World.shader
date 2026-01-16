@@ -760,12 +760,18 @@ Shader "luka/backlace/world"
         // [Space(10)]
         [Toggle(_BACKLACE_STOCHASTIC)] _StochasticSampling ("Enable Stochastic Sampling", Int) = 0
         [Enum(Triangle Grid, 0, Contrast Aware, 1)] _StochasticSamplingMode ("Stochastic Sampling Mode", Int) = 0
+        _StochasticTexture ("Stochastic Texture", 2D) = "white" { }
+        _StochasticOpacity ("Overall Opacity", Range(0, 1)) = 1.0
+        [Enum(Replace, 0, Additive, 1, Multiply, 2, Screen, 3)] _StochasticBlendMode ("Blend Mode", Int) = 0
+        _StochasticScale ("Scale", Range(0.1, 50)) = 1.0
+        _StochasticOffsetX ("Offset X", Float) = 0.0
+        _StochasticOffsetY ("Offset Y", Float) = 0.0
+        [HDR] _StochasticTint ("Tint", Color) = (1, 1, 1, 1)
         // triangle grid settings
-        _StochasticScale ("Scale", Range(0.1, 20)) = 1.0
         _StochasticBlend ("Blend", Range(0, 2)) = 1.0
         _StochasticRotationRange ("Rotation", Range(0, 180)) = 45
         // contrast settings
-        _StochasticContrastScale ("Contrast Scale", Range(0.1, 20)) = 1.0
+        [Enum(Competitive, 1, Naive)] _StochasticPriority ("Sampling Priority", Int) = 1
         _StochasticContrastStrength ("Contrast Strength", Range(0.1, 5)) = 2.0
         _StochasticContrastThreshold ("Contrast Threshold", Range(0, 1)) = 0.5
         // height blend
@@ -773,10 +779,9 @@ Shader "luka/backlace/world"
         _StochasticHeightMap ("Height Map", 2D) = "black" { }
         _StochasticHeightStrength ("Height Strength", Range(0, 10)) = 3.0
         // misc settings
-        [Enum(Disabled, 0, Enabled, 1)] _StochasticPreserveContrast ("Preserve Contrast", Int) = 0
-        [Enum(Disabled, 0, Enabled, 1)] _StochasticDither ("Use Dithering", Int) = 0
-        _StochasticAntiTileStrength ("Anti-Tile Strength", Range(0, 1)) = 1.0
         _StochasticMipBias ("Mip Bias", Range(-2, 2)) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticAlpha ("Affect Alpha Channel", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticNormals ("Affect Normals", Int) = 0
 
         // SPLATTER MAPPING
         // [Space(35)]

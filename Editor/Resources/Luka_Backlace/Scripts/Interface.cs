@@ -2110,7 +2110,9 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_GlitterContrast, languages.speak("prop_GlitterContrast"));
                     materialEditor.ShaderProperty(prop_ToggleGlitterRainbow, languages.speak("prop_ToggleGlitterRainbow"));
                     Components.start_dynamic_disable(!prop_ToggleGlitterRainbow.floatValue.Equals(1), configs);
+                    EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_GlitterRainbowSpeed, languages.speak("prop_GlitterRainbowSpeed"));
+                    EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_ToggleGlitterRainbow.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleGlitter.floatValue.Equals(1), configs);
                 });
