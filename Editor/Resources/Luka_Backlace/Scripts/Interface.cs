@@ -260,7 +260,6 @@ namespace Luka.Backlace
         private MaterialProperty prop_SDFShadowThreshold = null;
         private MaterialProperty prop_SDFShadowSoftness = null;
         // specular properties
-        private MaterialProperty prop_ToggleSpecular = null;
         private MaterialProperty prop_ToggleVertexSpecular = null;
         private MaterialProperty prop_SpecularMode = null;
         private MaterialProperty prop_MSSO = null;
@@ -1673,17 +1672,15 @@ namespace Luka.Backlace
             // specular tab
             tab_specular.process(() => {
                 Components.start_foldout();
-                prop_ToggleSpecular = FindProperty("_ToggleSpecular", properties);
                 prop_ToggleVertexSpecular = FindProperty("_ToggleVertexSpecular", properties);
                 prop_SpecularMode = FindProperty("_SpecularMode", properties);
                 prop_SpecularEnergyMode = FindProperty("_SpecularEnergyMode", properties);
                 prop_SpecularEnergy = FindProperty("_SpecularEnergy", properties);
-                materialEditor.ShaderProperty(prop_ToggleSpecular, languages.speak("prop_ToggleSpecular"));
-                Components.start_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
-                materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
                 materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
                 int specularMode = (int)prop_SpecularMode.floatValue;
+                Components.start_dynamic_disable(specularMode == 0, configs);
                 materialEditor.ShaderProperty(prop_SpecularEnergyMode, languages.speak("prop_SpecularEnergyMode"));
+                materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
                 if ((int)prop_SpecularEnergyMode.floatValue == 3) // manual
                 {
                     EditorGUI.indentLevel++;
@@ -1765,7 +1762,7 @@ namespace Luka.Backlace
                             break;
                     }
                 });
-                Components.end_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
+                Components.end_dynamic_disable(specularMode == 0, configs);
                 Components.end_foldout();
             });
             // stylise tab

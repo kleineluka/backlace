@@ -1633,9 +1633,9 @@
     #endif // _BACKLACE_SSR
 #endif // BACKLACE_GRABPASS
 
-#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD)
+// world variant only effects
+#if defined(BACKLACE_WORLD) 
 
-
-#endif /// UNITY_PASS_FORWARDBASE || defined(UNITY_PASS_FORWARDADD)
+#endif // BACKLACE_WORLD
 
 #endif // BACKLACE_EFFECTS_CGINC

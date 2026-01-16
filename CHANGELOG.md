@@ -19,7 +19,8 @@
 - Add a "Silhouette/Backdrop" mode for Outline
 - Improved Shadowcaster pass to sample less and do less work
 - Added internal debugging functions
-= Restructure folder hierarchy to prevent editor-only assets being included in builds (very small difference, but eh, it's something!)
+- Restructure folder hierarchy to prevent editor-only assets being included in builds (very small difference, but eh, it's something!)
+- Introduce "World" and "World Outline" variants of the shader
 
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map

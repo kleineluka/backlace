@@ -48,13 +48,13 @@ struct BacklaceSurfaceData
     float3 Dfg;
     float3 CustomIndirect;
     // specular samples
-    #if defined(_BACKLACE_SPECULAR)
+    #if defined(BACKLACE_SPECULAR)
         float Anisotropy;
         float3 ModifiedTangent;
         float3 HairFlow;
         float HairShiftMask;
         float SpecularJitter;
-    #endif // _BACKLACE_SPECULAR
+    #endif // BACKLACE_SPECULAR
     // extra data cos we ball >.<
     float2 ScreenCoords;
     bool IsFrontFace;
@@ -626,7 +626,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
     }
 
     // specular feature
-    #if defined(_BACKLACE_SPECULAR)
+    #if defined(BACKLACE_SPECULAR)
         // get sample data from MSSO texture
         void GetSampleData(inout BacklaceSurfaceData Surface)
         {
@@ -654,7 +654,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
             Surface.OneMinusReflectivity = (1 - sp) - (Surface.Metallic * (1 - sp));
             Surface.Albedo.rgb *= Surface.OneMinusReflectivity;
         }
-    #endif // defined(_BACKLACE_SPECULAR)
+    #endif // defined(BACKLACE_SPECULAR)
 
     // emission feature
     #if defined(_BACKLACE_EMISSION)

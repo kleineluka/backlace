@@ -179,7 +179,7 @@ float3 _VertexManipulationScale;
 #endif // _BACKLACE_EMISSION
 
 // specular feature
-#if defined(_BACKLACE_SPECULAR)
+#if defined(BACKLACE_SPECULAR)
     // specific specular modes
     #if defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
         UNITY_DECLARE_TEX2D(_HighlightRamp);
@@ -187,7 +187,7 @@ float3 _VertexManipulationScale;
         float _HighlightIntensity;
         float _HighlightRampOffset;
         float _HighlightHardness;
-    #elif defined(_SPECULARMODE_SPECIAL) // _SPECULARMODE_*
+    #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_*
         // hair
         UNITY_DECLARE_TEX2D(_HairFlowMap);
         float _HairFlowMap_UV;
@@ -196,6 +196,7 @@ float3 _VertexManipulationScale;
         float4 _SecondarySpecularColor;
         float _SpecularExponent;
         float _SpecularJitter;
+    #elif defined(_SPECULARMODE_CLOTH) // _SPECULARMODE_*
         // cloth
         float4 _SheenColor;
         float _SheenIntensity;
@@ -205,7 +206,7 @@ float3 _VertexManipulationScale;
     #if defined(_BACKLACE_VERTEX_SPECULAR) // VERTEX SPECULAR
         float3 VertexLightDir;
     #endif // _BACKLACE_VERTEX_SPECULAR
-#endif // _BACKLACE_SPECULAR
+#endif // BACKLACE_SPECULAR
 
 // decal1 feature
 #if defined(_BACKLACE_DECALS)
@@ -294,8 +295,6 @@ float4 _StitchTex_ST;
 int _StitchTex_UV;
 int _StitchAxis;
 float _StitchOffset;
-
-// stochastic sampling feature
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

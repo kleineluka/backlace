@@ -175,12 +175,12 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
     color += unity_LightColor[2].rgb * diff.z;
     color += unity_LightColor[3].rgb * diff.w;
     direction = 0;
-    #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
+    #if defined(BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
         direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(unity_LightColor[0].rgb, 1) * diff.x;
         direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(unity_LightColor[1].rgb, 1) * diff.y;
         direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(unity_LightColor[2].rgb, 1) * diff.z;
         direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(unity_LightColor[3].rgb, 1) * diff.w;
-    #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
+    #endif // BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
 }
 
 // toon shading
@@ -318,12 +318,12 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             color = ramp0 + ramp1 + ramp2 + ramp3;
             // direction calculation
             direction = 0;
-            #if defined(_BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
+            #if defined(BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
                 direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(ramp0, 1);
                 direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(ramp1, 1);
                 direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(ramp2, 1);
                 direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(ramp3, 1);
-            #endif // _BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
+            #endif // BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
         }
 
         // get the direct diffuse contribution using a toon ramp
@@ -672,7 +672,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
 }
 
 // specular-only features
-#if defined(_BACKLACE_SPECULAR)
+#if defined(BACKLACE_SPECULAR)
 
     // unity's glossy environment function with remapped roughness
     half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
@@ -954,6 +954,6 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             Surface.FinalColor.rgb += VertexSpecular * Surface.VertexDirectDiffuse;
         }
     #endif // _BACKLACE_VERTEX_SPECULAR
-#endif // _BACKLACE_SPECULAR
+#endif // BACKLACE_SPECULAR
 
 #endif // BACKLACE_SHADING_CGINC

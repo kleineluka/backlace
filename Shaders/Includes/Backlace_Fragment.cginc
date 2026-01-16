@@ -66,16 +66,16 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission(Surface);
     #endif
-    #if defined(_BACKLACE_SPECULAR)
+    #if defined(BACKLACE_SPECULAR)
         GetSampleData(Surface);
-    #endif // _BACKLACE_SPECULAR
+    #endif // BACKLACE_SPECULAR
     GetDirectionVectors(Surface);
     GetLightData(Surface);
     GetDotProducts(Surface);
-    #if defined(_BACKLACE_SPECULAR)
+    #if defined(BACKLACE_SPECULAR)
         SetupAlbedoAndSpecColor(Surface);
         SetupDFG(Surface);
-    #endif // _BACKLACE_SPECULAR
+    #endif // BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
     #if defined(BACKLACE_TOON) // TOON LIGHTING
         GetAnimeDiffuse(Surface); // (includes vertex diffuse inside wrapper)
@@ -86,7 +86,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_SSS)
         ApplySubsurfaceScattering(Surface);
     #endif // _BACKLACE_SSS
-    #if defined(_BACKLACE_SPECULAR)
+    #if defined(BACKLACE_SPECULAR)
         SetupSpecularData(Surface);
         Surface.DirectSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, Surface.LightDir, Surface.HalfDir, Surface.NdotH, Surface.NdotL, Surface.NdotV, Surface.LdotH, Surface.Attenuation, Surface);
         [branch] if (_IndirectFallbackMode == 1)
@@ -94,7 +94,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
             GetFallbackCubemap(Surface);
         }
         GetIndirectSpecular(Surface);
-    #endif // _BACKLACE_SPECULAR
+    #endif // BACKLACE_SPECULAR
     AddDiffuse(Surface);
     #if defined(_BACKLACE_TOUCH_REACTIVE)
         ApplyTouchReactive(Surface, i);
@@ -108,13 +108,13 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_CUBEMAP)
         ApplyCubemap(Surface);
     #endif // _BACKLACE_CUBEMAP
-    #if defined(_BACKLACE_SPECULAR)
+    #if defined(BACKLACE_SPECULAR)
         AddDirectSpecular(Surface);
         AddIndirectSpecular(Surface);
         #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
             AddVertexSpecular(Surface);
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
-    #endif // _BACKLACE_SPECULAR
+    #endif // BACKLACE_SPECULAR
     #if defined(_BACKLACE_RIMLIGHT)
         CalculateRimlight(Surface);
         #if defined(_BACKLACE_AUDIOLINK)

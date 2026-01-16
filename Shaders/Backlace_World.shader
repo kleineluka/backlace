@@ -1,4 +1,4 @@
-Shader "luka/backlace/all"
+Shader "luka/backlace/world"
 {
 
     Properties
@@ -151,7 +151,7 @@ Shader "luka/backlace/all"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [KeywordEnum(Disabled, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
+        [KeywordEnum(Disabled, Ramp, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
         // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
@@ -180,7 +180,7 @@ Shader "luka/backlace/all"
         // skin
         [NoScaleOffset] _SkinLUT ("Skin LUT (RGB)", 2D) = "white" { }
         _SkinShadowColor ("Skin Shadow Color", Color) = (0.75, 0.65, 0.65, 1)
-        _SkinScattering ("Subsurface Scattering", Range(0, 1)) = 0.5
+        _SkinScattering ("Skin Scattering", Range(0, 1)) = 0.5
         // wrapped
         _WrapFactor ("Wrap Factor", Range(0, 3)) = 0.5
         _WrapNormalization ("Wrap Normalization", Range(0, 2)) = 0.5
@@ -192,7 +192,7 @@ Shader "luka/backlace/all"
         _AmbientUp ("Sky Ambient", Color) = (0.8, 0.8, 1, 1)
         _AmbientSkyThreshold ("Sky Threshold", Range(0, 1)) = 0.5
         _AmbientDown ("Ground Ambient", Color) = (1, 0.9, 0.8, 1)
-        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5
+        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5 
         _AmbientIntensity ("Gradient Intensity", Range(0, 1)) = 0.25
         // tinting
         [Enum(Disabled, 0, Raw Light, 1, Tuned Light, 2, Ramp Based, 3)] _TintMaskSource ("Tint Mask Source", Int) = 0
@@ -237,7 +237,7 @@ Shader "luka/backlace/all"
         _SecondarySpecularShift ("Secondary Specular Shift", Range(-1, 1)) = 0.1
         [HDR] _SecondarySpecularColor ("Secondary Specular Color", Color) = (1, 1, 1, 1)
         _SpecularExponent ("Specular Exponent", Range(1, 256)) = 64
-        _SpecularJitter ("Specular Jitter", Range(0, 1.0)) = 0.02
+        _SpecularJitter ("Specular Jitter", Range(0, 1)) = 0.02
         // cloth specular
         _SheenColor ("Sheen Color", Color) = (1, 1, 1, 1)
         _SheenIntensity ("Sheen Intensity", Float) = 0.5
@@ -365,7 +365,7 @@ Shader "luka/backlace/all"
         // [Header(Parallax Mapping)]
         // [Space(10)]
         [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
-        [Enum(Fast, 0, Fancy, 1)] _ParallaxMode ("Parallax Mode", Int) = 0
+        [Enum(Fast UV, 0, Fancy UV, 1, Layered, 2, Interior, 3)] _ParallaxMode ("Parallax Mode", Int) = 0
         [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
         _ParallaxStrength ("Parallax Strength", Float) = 0.02 // initially (0, 0.35)
         _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
@@ -375,9 +375,9 @@ Shader "luka/backlace/all"
         _InteriorColor ("Interior Color", Color) = (1, 1, 1, 1)
         _InteriorTiling ("Interior Tiling", Float) = 1.0
         // layered settings
-        [NoScaleOffset] _ParallaxLayer1 ("Parallax Layer 1", 2D) = "white" { }
-        [NoScaleOffset] _ParallaxLayer2 ("Parallax Layer 2", 2D) = "white" { }
-        [NoScaleOffset] _ParallaxLayer3 ("Parallax Layer 3", 2D) = "white" { }
+        [NoScaleOffset] _ParallaxLayer1 ("Parallax Layer 1", 2D) = "white" {}
+        [NoScaleOffset] _ParallaxLayer2 ("Parallax Layer 2", 2D) = "white" {}
+        [NoScaleOffset] _ParallaxLayer3 ("Parallax Layer 3", 2D) = "white" {}
         _ParallaxLayerDepth1 ("Parallax Layer Depth 1", Float) = 0.05
         _ParallaxLayerDepth2 ("Parallax Layer Depth 2", Float) = 0.1
         _ParallaxLayerDepth3 ("Parallax Layer Depth 3", Float) = 0.2
@@ -754,6 +754,98 @@ Shader "luka/backlace/all"
         [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
         _StitchOffset ("Stitch Seam Offset", Float) = 0
 
+        // STOCHASTIC SAMPLING
+        // [Space(35)]
+        // [Header(Stochastic Sampling)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_STOCHASTIC)] _StochasticSampling ("Enable Stochastic Sampling", Int) = 0
+        [Enum(Triangle Grid, 0, Contrast Aware, 1)] _StochasticSamplingMode ("Stochastic Sampling Mode", Int) = 0
+        // triangle grid settings
+        _StochasticScale ("Scale", Range(0.1, 20)) = 1.0
+        _StochasticBlend ("Blend", Range(0, 2)) = 1.0
+        _StochasticRotationRange ("Rotation", Range(0, 180)) = 45
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticHeightBlend ("Height Blending", Float) = 0
+        _StochasticHeightMap ("Height Map", 2D) = "black" { }
+        _StochasticHeightStrength ("Height Strength", Range(0, 10)) = 3.0
+
+        // SPLATTER MAPPING
+        // [Space(35)]
+        // [Header(Splatter Mapping)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_SPLATTER)] _SplatterMapping ("Enable Splatter Mapping", Int) = 0
+        [Enum(Standard, 0, Triplanar, 1)] _SplatterMappingMode ("Mapping Mode", Int) = 0
+        _SplatterControl ("Control Map (RGBA = Layer Weights)", 2D) = "white" { }
+        // layer 0 (red channel)
+        _SplatterAlbedo0 ("Albedo", 2D) = "white" { }
+        _SplatterNormal0 ("Normal", 2D) = "bump" { }
+        _SplatterMasks0 ("Masks (R=Metal G=AO B=Height A=Smooth)", 2D) = "white" { }
+        _SplatterColor0 ("Tint", Color) = (1, 1, 1, 1)
+        _SplatterTiling0 ("Tiling & Offset", Vector) = (1, 1, 0, 0)
+        _SplatterNormalStrength0 ("Normal Strength", Range(0, 2)) = 1
+        // layer 1 (green channel)
+        _SplatterAlbedo1 ("Albedo", 2D) = "white" { }
+        _SplatterNormal1 ("Normal", 2D) = "bump" { }
+        _SplatterMasks1 ("Masks", 2D) = "white" { }
+        _SplatterColor1 ("Tint", Color) = (1, 1, 1, 1)
+        _SplatterTiling1 ("Tiling & Offset", Vector) = (1, 1, 0, 0)
+        _SplatterNormalStrength1 ("Normal Strength", Range(0, 2)) = 1
+        // layer 2 (blue channel)
+        _SplatterAlbedo2 ("Albedo", 2D) = "white" { }
+        _SplatterNormal2 ("Normal", 2D) = "bump" { }
+        _SplatterMasks2 ("Masks", 2D) = "white" { }
+        _SplatterColor2 ("Tint", Color) = (1, 1, 1, 1)
+        _SplatterTiling2 ("Tiling & Offset", Vector) = (1, 1, 0, 0)
+        _SplatterNormalStrength2 ("Normal Strength", Range(0, 2)) = 1
+        // layer 3 (alpha channel)
+        _SplatterAlbedo3 ("Albedo", 2D) = "white" { }
+        _SplatterNormal3 ("Normal", 2D) = "bump" { }
+        _SplatterMasks3 ("Masks", 2D) = "white" { }
+        _SplatterColor3 ("Tint", Color) = (1, 1, 1, 1)
+        _SplatterTiling3 ("Tiling & Offset", Vector) = (1, 1, 0, 0)
+        _SplatterNormalStrength3 ("Normal Strength", Range(0, 2)) = 1
+        // height based blending
+        [Enum(Disabled, 0, Enabled, 1)] _SplatterHeightBlend ("Enable Height Blending", Int) = 1
+        _SplatterHeightContrast ("Height Contrast", Range(0.1, 10)) = 3
+        _SplatterHeightOffset ("Height Offset", Range(0, 1)) = 0.5
+        // slope based blending
+        [Enum(Disabled, 0, Enabled, 1)] _SplatterSlopeBlend ("Enable Slope Blending", Int) = 0
+        _SplatterSlopeThreshold ("Slope Threshold", Range(0, 1)) = 0.5
+        _SplatterSlopeFalloff ("Slope Falloff", Range(0, 1)) = 0.2
+        _SplatterSlopeLayer ("Slope Layer Index", Range(0, 3)) = 2
+        // misc splatter settings
+        _SplatterBlendSharpness ("Blend Sharpness", Range(0.1, 5)) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _SplatterAlphaChannel ("Use Alpha Channel", Int) = 1
+        _SplatterTriplanarSharpness ("Triplanar Sharpness", Range(1, 10)) = 4
+        [Enum(Disabled, 0, Enabled, 1)] _SplatterRNMBlending ("RNM Normal Blending", Int) = 1
+        _SplatterMipBias ("Mip Bias", Range(-2, 2)) = 0
+
+        // TEXTURE BOMBING
+        // [Space(35)]
+        // [Header(Texture Bombing)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_BOMBING)] _TextureBomb ("Enable Texture Bombing", Int) = 0
+        [Enum(Jittered, 0, Poisson, 1)] _TextureBombMode ("Bombing Mode", Int) = 0
+        _TextureBombAlbedo ("Bomb Albedo", 2D) = "white" { }
+        [Enum(Disabled, 0, Enabled, 1)] _TextureBombNormals ("Use Bomb Normals", Int) = 0
+        _TextureBombNormalMap ("Bomb Normal", 2D) = "bump" { }
+        [Enum(Disabled, 0, Enabled, 1)] _TextureBombMasks ("Use Bomb Masks", Int) = 0
+        _TextureBombMasksMap ("Bomb Masks (R=Metal G=AO B=Height A=Smooth)", 2D) = "white" { }
+        _TextureBombDensity ("Density (bombs per unit)", Range(0.5, 20)) = 5
+        _TextureBombSize ("Size", Range(0.01, 1)) = 0.15
+        _TextureBombSizeVariation ("Size Variation", Range(0, 1)) = 0.3
+        _TextureBombBlendRange ("Blend Range", Range(0.001, 0.5)) = 0.05
+        _TextureBombSearchRadius ("Search Radius", Range(1, 3)) = 1.5
+        _TextureBombRotationAmount ("Rotation Amount", Range(0, 1)) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _TextureBombColorVariation ("Enable Color Variation", Int) = 0
+        _TextureBombHueShift ("Hue Shift", Range(0, 1)) = 0.1
+        _TextureBombSaturationVar ("Saturation Variation", Range(0, 1)) = 0.2
+        _TextureBombValueVar ("Value Variation", Range(0, 1)) = 0.1
+        [Enum(Disabled, 0, Enabled, 1)] _TextureBombDistanceFade ("Enable Distance Fade", Int) = 0
+        _TextureBombFadeStart ("Fade Start Distance", Range(0, 100)) = 20
+        _TextureBombFadeEnd ("Fade End Distance", Range(0, 100)) = 50
+        _TextureBombHeightContrast ("Height Contrast", Range(0.1, 5)) = 2
+        _TextureBombMipBias ("Mip Bias", Range(-2, 2)) = 0
+
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]
@@ -767,7 +859,7 @@ Shader "luka/backlace/all"
         [Enum(Disabled, 0, Enabled, 1)] _OutlineHueShift ("Enable Hue Shift", Float) = 0.0 
         _OutlineHueShiftSpeed ("Hue Shift Speed", Float) = 0.2
         _OutlineOpacity ("Outline Opacity", Range(0, 1)) = 1.0
-        [Enum(View, 0, World, 1)] _OutlineSpace ("Outline Scaled Width", Int) = 0
+        [Enum(View, 0, World, 1)] _OutlineSpace ("Outline Space", Int) = 0
         [Enum(Colour, 0, Texture, 1)] _OutlineMode ("Outline Mode", Int) = 0
         [Enum(Screen Space, 0, World Space, 1, UV Space, 2)] _OutlineTexMap ("Outline Texture Mapping Mode", Int) = 0
         _OutlineTex ("Outline Texture", 2D) = "white" { }
@@ -825,24 +917,6 @@ Shader "luka/backlace/all"
         ZWrite [_ZWrite]
         Cull [_Cull]
         Stencil { Ref [_StencilRef] Comp [_StencilComp] Pass [_StencilPass] Fail [_StencilFail] ZFail [_StencilZFail] }
-        GrabPass { Tags { "LightMode" = "ForwardBase" } "_BacklaceGP" } // todo: make this work with forwardadd as well..
-
-        // Outline Pass
-        Pass
-        {
-            Name "Outline"
-            Tags { "LightMode" = "Always" }
-            Cull Front
-            ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha
-            Stencil { Ref [_OutlineStencilRef] Comp [_OutlineStencilComp] Pass [_OutlineStencilPass] Fail [_OutlineStencilFail] ZFail [_OutlineStencilZFail] }
-            CGPROGRAM
-            #ifndef UNITY_PASS_OUTLINE
-                #define UNITY_PASS_OUTLINE
-            #endif // UNITY_PASS_OUTLINE
-            #include "./Includes/Backlace_Outline.cginc"
-            ENDCG
-        }
 
         // Forward Base Pass
         Pass
@@ -854,9 +928,9 @@ Shader "luka/backlace/all"
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
             #endif // UNITY_PASS_FORWARDBASE
-            #ifndef BACKLACE_GRABPASS
-                #define BACKLACE_GRABPASS
-            #endif // BACKLACE_GRABPASS
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -873,9 +947,9 @@ Shader "luka/backlace/all"
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
             #endif // UNITY_PASS_FORWARDADD
-            #ifndef BACKLACE_GRABPASS
-                #define BACKLACE_GRABPASS
-            #endif // BACKLACE_GRABPASS
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -891,6 +965,9 @@ Shader "luka/backlace/all"
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER
             #endif // UNITY_PASS_SHADOWCASTER
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Shadow.cginc"
             ENDCG
         }
@@ -905,6 +982,9 @@ Shader "luka/backlace/all"
             #ifndef UNITY_PASS_META
                 #define UNITY_PASS_META
             #endif // UNITY_PASS_META
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Meta.cginc"
             ENDCG
         }

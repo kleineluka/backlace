@@ -210,9 +210,8 @@ Shader "luka/backlace/grabpass"
         // [Space(35)]
         // [Header(Specular)]
         // [Space(10)]
-        [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Float) = 0.0
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
-        [KeywordEnum(Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
+        [KeywordEnum(Disabled, Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
         [Enum(Disabled, 0, Turquin, 1, Safe, 2, Manual, 3)] _SpecularEnergyMode ("Specular Energy Mode", Int) = 0
         _SpecularEnergy ("Specular Energy", Range(0, 2)) = 1.0
         _MSSO ("MSSO", 2D) = "white" { }
