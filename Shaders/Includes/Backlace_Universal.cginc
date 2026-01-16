@@ -152,7 +152,7 @@ float fastpow(float x, float p)
 }
 
 // fast hash function
-float Hash(float2 p)
+float Hash12(float2 p)
 {
     float3 p3 = frac(float3(p.xyx) * .1031);
     p3 += dot(p3, p3.yzx + 33.33);
@@ -160,9 +160,9 @@ float Hash(float2 p)
 }
 
 // create a random-looking 2D vector
-float2 Hash2(float2 p)
+float2 Hash22(float2 p)
 {
-    return float2(Hash(p), Hash(p + 0.123));
+    return float2(Hash12(p), Hash12(p + 0.123));
 }
 
 // convert HSV to RGB
@@ -606,7 +606,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
             case 2: // voxel
             {
                 float3 voxelID = floor(worldPos * _DissolveVoxelDensity);
-                dissolveMapValue = Hash(voxelID.xy + voxelID.z);
+                dissolveMapValue = Hash12(voxelID.xy + voxelID.z);
                 break;
             }
         }

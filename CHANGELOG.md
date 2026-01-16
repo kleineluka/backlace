@@ -21,6 +21,7 @@
 - Added internal debugging functions
 - Restructure folder hierarchy to prevent editor-only assets being included in builds (very small difference, but eh, it's something!)
 - Introduce "World" and "World Outline" variants of the shader
+- Introduce "Stochastic Sampling", "Splatter Mapping" and "Texture Bombing" features for the "World" variants
 
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map

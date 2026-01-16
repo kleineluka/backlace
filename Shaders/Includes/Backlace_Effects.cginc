@@ -674,7 +674,7 @@
                 for (int x = -1; x <= 1; x++)
                 {
                     float2 neighbor_offset = float2(x, y);
-                    float2 point_pos = Hash2(i_uv + neighbor_offset);
+                    float2 point_pos = Hash22(i_uv + neighbor_offset);
                     float dist = length(neighbor_offset +point_pos - f_uv);
                     if (dist < min_dist)
                     {
@@ -683,7 +683,7 @@
                     }
                 }
             }
-            unique_flake_id = Hash(closest_point_id);
+            unique_flake_id = Hash12(closest_point_id);
             if (unique_flake_id < _GlitterThreshold) return;
             glitter_mask = saturate((_GlitterSize - min_dist) / max(fwidth(min_dist), 0.001));
         }
@@ -694,7 +694,7 @@
             if (noise_val < _GlitterThreshold) return;
             float dist_from_center = length(f_uv - 0.5);
             glitter_mask = saturate((_GlitterSize - dist_from_center) / max(fwidth(dist_from_center), 0.001));
-            unique_flake_id = Hash(i_uv);
+            unique_flake_id = Hash12(i_uv);
         }
         if (glitter_mask <= 0) return;
         float time = _Time.y * _GlitterFlickerSpeed + unique_flake_id * 100;
@@ -1635,6 +1635,26 @@
 
 // world variant only effects
 #if defined(BACKLACE_WORLD) 
+
+    // stochastic sampling feature
+    #if defined(_BACKLACE_STOCHASTIC)
+        UNITY_DECLARE_TEX2D(_StochasticHeightMap);
+        float _StochasticScale;
+        float _StochasticBlend;
+        float _StochasticRotationRange;
+        float _StochasticContrastScale;
+        float _StochasticContrastStrength;
+        float _StochasticContrastThreshold;
+        float _StochasticHeightStrength;
+        float _StochasticAntiTileStrength;
+        float _StochasticMipBias;
+        int _StochasticSamplingMode;
+        int _StochasticHeightBlend;
+        int _StochasticPreserveContrast;
+        int _StochasticDither;
+
+
+    #endif // _BACKLACE_STOCHASTIC
 
 #endif // BACKLACE_WORLD
 

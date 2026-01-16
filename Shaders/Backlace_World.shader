@@ -745,7 +745,7 @@ Shader "luka/backlace/world"
         [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
         _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 
-        // TEXTURE STITCHING
+        // TE_BACKLACE_STOCHASTICXTURE STITCHING
         // [Space(35)]
         // [Header(Texture Stitching)]
         // [Space(10)]
@@ -764,9 +764,19 @@ Shader "luka/backlace/world"
         _StochasticScale ("Scale", Range(0.1, 20)) = 1.0
         _StochasticBlend ("Blend", Range(0, 2)) = 1.0
         _StochasticRotationRange ("Rotation", Range(0, 180)) = 45
-        [Enum(Disabled, 0, Enabled, 1)] _StochasticHeightBlend ("Height Blending", Float) = 0
+        // contrast settings
+        _StochasticContrastScale ("Contrast Scale", Range(0.1, 20)) = 1.0
+        _StochasticContrastStrength ("Contrast Strength", Range(0.1, 5)) = 2.0
+        _StochasticContrastThreshold ("Contrast Threshold", Range(0, 1)) = 0.5
+        // height blend
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticHeightBlend ("Height Blending", Int) = 0
         _StochasticHeightMap ("Height Map", 2D) = "black" { }
         _StochasticHeightStrength ("Height Strength", Range(0, 10)) = 3.0
+        // misc settings
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticPreserveContrast ("Preserve Contrast", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticDither ("Use Dithering", Int) = 0
+        _StochasticAntiTileStrength ("Anti-Tile Strength", Range(0, 1)) = 1.0
+        _StochasticMipBias ("Mip Bias", Range(-2, 2)) = 0
 
         // SPLATTER MAPPING
         // [Space(35)]
@@ -825,21 +835,25 @@ Shader "luka/backlace/world"
         // [Space(10)]
         [Toggle(_BACKLACE_BOMBING)] _TextureBomb ("Enable Texture Bombing", Int) = 0
         [Enum(Jittered, 0, Poisson, 1)] _TextureBombMode ("Bombing Mode", Int) = 0
+        // shared settings
         _TextureBombAlbedo ("Bomb Albedo", 2D) = "white" { }
         [Enum(Disabled, 0, Enabled, 1)] _TextureBombNormals ("Use Bomb Normals", Int) = 0
         _TextureBombNormalMap ("Bomb Normal", 2D) = "bump" { }
         [Enum(Disabled, 0, Enabled, 1)] _TextureBombMasks ("Use Bomb Masks", Int) = 0
         _TextureBombMasksMap ("Bomb Masks (R=Metal G=AO B=Height A=Smooth)", 2D) = "white" { }
+        // control settings
         _TextureBombDensity ("Density (bombs per unit)", Range(0.5, 20)) = 5
         _TextureBombSize ("Size", Range(0.01, 1)) = 0.15
         _TextureBombSizeVariation ("Size Variation", Range(0, 1)) = 0.3
         _TextureBombBlendRange ("Blend Range", Range(0.001, 0.5)) = 0.05
         _TextureBombSearchRadius ("Search Radius", Range(1, 3)) = 1.5
         _TextureBombRotationAmount ("Rotation Amount", Range(0, 1)) = 0
+        // colour variation
         [Enum(Disabled, 0, Enabled, 1)] _TextureBombColorVariation ("Enable Color Variation", Int) = 0
         _TextureBombHueShift ("Hue Shift", Range(0, 1)) = 0.1
         _TextureBombSaturationVar ("Saturation Variation", Range(0, 1)) = 0.2
         _TextureBombValueVar ("Value Variation", Range(0, 1)) = 0.1
+        // misc settings
         [Enum(Disabled, 0, Enabled, 1)] _TextureBombDistanceFade ("Enable Distance Fade", Int) = 0
         _TextureBombFadeStart ("Fade Start Distance", Range(0, 100)) = 20
         _TextureBombFadeEnd ("Fade End Distance", Range(0, 100)) = 50
