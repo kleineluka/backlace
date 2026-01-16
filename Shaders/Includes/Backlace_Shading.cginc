@@ -184,7 +184,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
 }
 
 // toon shading
-#if defined(_BACKLACE_TOON)
+#if defined(BACKLACE_TOON)
     // apply a gradient based on the world normal y
     void ApplyAmbientGradient(inout BacklaceSurfaceData Surface)
     {
@@ -636,7 +636,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             GetWrappedVertexDiffuse(Surface);
         #endif // _ANIMEMODE_*
     }
-#endif // _BACKLACE_TOON
+#endif // BACKLACE_TOON
 
 // get vertex diffuse for vertex lighting
 void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)

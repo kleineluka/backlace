@@ -10,7 +10,9 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 
 **Latest Release:** 1.8.5 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
 <br>
-**Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, and more!
+**Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, BepinEx Targetting BiRP, and more!
+<br>
+**Built With:** Unity 2022 LTS (but compatible with 2019.4+)
 
 ## Features 🍒
 - **Core Features:**
@@ -56,8 +58,6 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 This section will be updated when I make things with it! If you make something with Backlace ~ whether a game or shader ~ please let me know so I can add it here! ♡＾▽＾♡
 
 - The official distribution of Backlace itself! You can find it on [Gumroad](https://kleineluka.gumroad.com/l/backlace), [Jinxxy](https://jinxxy.com/luka/backlace), [Booth.pm](https://lukasong.booth.pm/items/7551840), and [Payhip](https://payhip.com/b/71i3E) (and on this repo).
-
-<br>
 
 If you wish to **make your own shader** with Backlace, please see [Contributing to Backlace](BUILDING.md) for more information! This is unnecessary if you just want to use Backlace as-is in your projects (ex. game developers, avatar creators, or world builders). ( *︾▽︾)
 

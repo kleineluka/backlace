@@ -24,7 +24,6 @@
 // keywords
 #pragma multi_compile _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
 #pragma shader_feature_local _ _BACKLACE_PARALLAX
-#pragma shader_feature_local _ _BACKLACE_DECALS
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 
 // unity includes
@@ -88,7 +87,6 @@ float4 _MainTex_ST;
 float4 _Color;
 float _Cutoff;
 float _MainTex_UV;
-int _DecalStage;
 
 // uv manipulation
 float _UV_Offset_X;
@@ -129,48 +127,6 @@ float3 _VertexManipulationScale;
     float _UVFlowmapDistortion;
     float _UVFlowmap_UV;
 #endif // _BACKLACE_UV_EFFECTS
-
-// decal1-only feature
-#if defined(_BACKLACE_DECALS)
-    // decal 1
-    int _Decal1Enable;
-    UNITY_DECLARE_TEX2D(_Decal1Tex);
-    float4 _Decal1Tint;
-    float2 _Decal1Position;
-    float2 _Decal1Scale;
-    float _Decal1Rotation;
-    float _Decal1_UV;
-    float _Decal1TriplanarSharpness;
-    int _Decal1BlendMode;
-    float  _Decal1IsTriplanar;
-    float3 _Decal1TriplanarPosition;
-    float _Decal1TriplanarScale;
-    float3 _Decal1TriplanarRotation;
-    float _Decal1Repeat;
-    float2 _Decal1Scroll;
-    float _Decal1HueShift;
-    float _Decal1AutoCycleHue;
-    float _Decal1CycleSpeed;
-    // decal 2
-    int _Decal2Enable;
-    UNITY_DECLARE_TEX2D(_Decal2Tex);
-    float4 _Decal2Tint;
-    float2 _Decal2Position;
-    float2 _Decal2Scale;
-    float _Decal2Rotation;
-    float _Decal2_UV;
-    float _Decal2TriplanarSharpness;
-    int _Decal2BlendMode;
-    float _Decal2IsTriplanar;
-    float3 _Decal2TriplanarPosition;
-    float _Decal2TriplanarScale;
-    float3 _Decal2TriplanarRotation;
-    float _Decal2Repeat;
-    float2 _Decal2Scroll;
-    float _Decal2HueShift;
-    float _Decal2AutoCycleHue;
-    float _Decal2CycleSpeed;
-#endif // _BACKLACE_DECALS
 
 // texture stitching feature
 int _UseTextureStitching;
@@ -281,10 +237,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
             ApplyUVEffects(Uvs[0], Surface);
         #endif // _BACKLACE_UV_EFFECTS
         SampleAlbedo(Surface, i.vertex.xyz);
-        #if defined(_BACKLACE_DECALS)
-            if (_Decal1Enable == 1) ApplyDecal1(Surface, FragData, Uvs);
-            if (_Decal2Enable == 1) ApplyDecal2(Surface, FragData, Uvs);
-        #endif // _BACKLACE_DECALS
+        // note: removed decal sampling here
         ClipShadowAlpha(Surface);
     #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #if defined(_BACKLACE_DISSOLVE)

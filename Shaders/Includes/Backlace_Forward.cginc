@@ -80,7 +80,7 @@ struct FragmentData
         float2 matcapUV : TEXCOORD10;
     #endif // _BACKLACE_MATCAP
     float3 worldObjectCenter : TEXCOORD11;
-    float4 scrPos : TEXCOORD12; // for grab pass
+    float4 scrPos : TEXCOORD12;
     #if defined(_BACKLACE_AUDIOLINK)
         float4 alChannel1 : TEXCOORD13; // x=emission, y=rim, z=hueShift, w=matcap
         float4 alChannel2 : TEXCOORD14; // x=pathing, y=glitter, z=iridescence, w=decalHue

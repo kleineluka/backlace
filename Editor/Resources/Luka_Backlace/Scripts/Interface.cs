@@ -59,7 +59,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_uv_effects = null;
         private static Tab sub_tab_vertex_manipulation = null;
         private static Tab sub_tab_stickers = null;
-        private static Tab sub_tab_decal_two = null;
+        private static Tab sub_tab_world_environment = null;
         private static Tab sub_tab_post_processing = null;
         private static Tab sub_tab_uv_sets = null;
         private static Tab sub_tab_legacy_mode = null;
@@ -213,7 +213,6 @@ namespace Luka.Backlace
         private MaterialProperty prop_BakedDirectIntensity = null;
         private MaterialProperty prop_BakedIndirectIntensity = null;
         // toon lighting properties
-        private MaterialProperty prop_ToggleAnimeLighting = null;
         private MaterialProperty prop_AnimeMode = null;
         private MaterialProperty prop_Ramp = null;
         private MaterialProperty prop_RampColor = null;
@@ -321,7 +320,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_Decal1Tex = null;
         private MaterialProperty prop_Decal1Tint = null;
         private MaterialProperty prop_Decal1BlendMode = null;
-        private MaterialProperty prop_Decal1IsTriplanar = null;
+        private MaterialProperty prop_Decal1Space = null;
+        private MaterialProperty prop_Decal1Behavior = null;
         private MaterialProperty prop_Decal1Position = null;
         private MaterialProperty prop_Decal1Scale = null;
         private MaterialProperty prop_Decal1Rotation = null;
@@ -339,7 +339,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_Decal2Tex = null;
         private MaterialProperty prop_Decal2Tint = null;
         private MaterialProperty prop_Decal2BlendMode = null;
-        private MaterialProperty prop_Decal2IsTriplanar = null;
+        private MaterialProperty prop_Decal2Space = null;
+        private MaterialProperty prop_Decal2Behavior = null;
         private MaterialProperty prop_Decal2Position = null;
         private MaterialProperty prop_Decal2Scale = null;
         private MaterialProperty prop_Decal2Rotation = null;
@@ -731,7 +732,7 @@ namespace Luka.Backlace
             if (sub_tab_uv_effects != null) { sub_tab_uv_effects.is_expanded = false; sub_tab_uv_effects.is_active = false; }
             if (sub_tab_vertex_manipulation != null) { sub_tab_vertex_manipulation.is_expanded = false; sub_tab_vertex_manipulation.is_active = false; }
             if (sub_tab_stickers != null) { sub_tab_stickers.is_expanded = false; sub_tab_stickers.is_active = false; }
-            if (sub_tab_decal_two != null) { sub_tab_decal_two.is_expanded = false; sub_tab_decal_two.is_active = false; }
+            if (sub_tab_world_environment != null) { sub_tab_world_environment.is_expanded = false; sub_tab_world_environment.is_active = false; }
             if (sub_tab_post_processing != null) { sub_tab_post_processing.is_expanded = false; sub_tab_post_processing.is_active = false; }
             if (sub_tab_uv_sets != null) { sub_tab_uv_sets.is_expanded = false; sub_tab_uv_sets.is_active = false; }
             if (sub_tab_legacy_mode != null) { sub_tab_legacy_mode.is_expanded = false; sub_tab_legacy_mode.is_active = false; }
@@ -817,7 +818,7 @@ namespace Luka.Backlace
             sub_tab_uv_effects = null;
             sub_tab_vertex_manipulation = null;
             sub_tab_stickers = null;
-            sub_tab_decal_two = null;
+            sub_tab_world_environment = null;
             sub_tab_post_processing = null;
             sub_tab_uv_sets = null;
             sub_tab_legacy_mode = null;
@@ -917,15 +918,15 @@ namespace Luka.Backlace
             sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_manipulation"));
             sub_tab_uv_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_uv_effects"), null, "_ToggleUVEffects");
             sub_tab_vertex_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_vertex_manipulation"));
-            sub_tab_stickers = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_stickers"), null, "_Decal1Enable");
-            sub_tab_decal_two = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_decal_two"), null, "_Decal2Enable");
+            sub_tab_stickers = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_stickers"), null, "_ToggleDecals");
+            sub_tab_world_environment = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_world_environment"), null, "_Decal2Enable");
             sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
             sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_uv_sets"));
             sub_tab_legacy_mode = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("tab_legacy_mode"));
             tab_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_lighting"));
             sub_tab_lighting_model = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_lighting_model"), null, null, null, null, Project.lighting_mode_badges);
             tab_shading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_shading"));
-            sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"), null, "_ToggleAnimeLighting", null, null, Project.anime_mode_badges);
+            sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"), null, "_AnimeMode", null, null, Project.anime_mode_badges);
             sub_tab_ambient_gradient = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ambient_gradient"), null, "_ToggleAmbientGradient");
             sub_tab_light_tinting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_light_tinting"), null, "_ToggleLightTinting");
             sub_tab_sdf_shadow = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_sdf_shadow"), null, "_ToggleSDFShadow", Project.shader_capabilities[0]);
@@ -1197,7 +1198,8 @@ namespace Luka.Backlace
                     prop_Decal1Tex = FindProperty("_Decal1Tex", properties);
                     prop_Decal1Tint = FindProperty("_Decal1Tint", properties);
                     prop_Decal1BlendMode = FindProperty("_Decal1BlendMode", properties);
-                    prop_Decal1IsTriplanar = FindProperty("_Decal1IsTriplanar", properties);
+                    prop_Decal1Space = FindProperty("_Decal1Space", properties);
+                    prop_Decal1Behavior = FindProperty("_Decal1Behavior", properties);
                     prop_Decal1Position = FindProperty("_Decal1Position", properties);
                     prop_Decal1Scale = FindProperty("_Decal1Scale", properties);
                     prop_Decal1Rotation = FindProperty("_Decal1Rotation", properties);
@@ -1221,9 +1223,11 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_Decal1Tex, languages.speak("prop_Decal1Tex"));
                     materialEditor.ShaderProperty(prop_Decal1Tint, languages.speak("prop_Decal1Tint"));
                     materialEditor.ShaderProperty(prop_Decal1BlendMode, languages.speak("prop_Decal1BlendMode"));
-                    materialEditor.ShaderProperty(prop_Decal1IsTriplanar, languages.speak("prop_Decal1IsTriplanar"));
-                    if (prop_Decal1IsTriplanar.floatValue.Equals(0)) {
-                        // flat decal settings
+                    materialEditor.ShaderProperty(prop_Decal1Space, languages.speak("prop_Decal1Space"));
+                    EditorGUI.indentLevel++;
+                    if (prop_Decal1Space.floatValue.Equals(0) || prop_Decal1Space.floatValue.Equals(2)) {
+                        // uv or screen decal settings
+                        materialEditor.ShaderProperty(prop_Decal1Behavior, languages.speak("prop_Decal1Behavior"));
                         Components.Vector2Property(materialEditor, prop_Decal1Position, languages.speak("prop_Decal1Position"));
                         Components.Vector2Property(materialEditor, prop_Decal1Scale, languages.speak("prop_Decal1Scale"));
                         materialEditor.ShaderProperty(prop_Decal1Rotation, languages.speak("prop_Decal1Rotation"));
@@ -1234,12 +1238,9 @@ namespace Luka.Backlace
                         materialEditor.ShaderProperty(prop_Decal1TriplanarRotation, languages.speak("prop_Decal1TriplanarRotation"));
                         materialEditor.ShaderProperty(prop_Decal1TriplanarSharpness, languages.speak("prop_Decal1TriplanarSharpness"));
                     }
-                    materialEditor.ShaderProperty(prop_Decal1Repeat, languages.speak("prop_Decal1Repeat"));
-                    Components.start_dynamic_disable(prop_Decal1Repeat.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    Components.Vector2Property(materialEditor, prop_Decal1Scroll, languages.speak("prop_Decal1Scroll"));
+                    Components.Vector2Property(materialEditor, prop_Decal1Scroll, languages.speak("prop_Decal1Scroll")); // shared on both
                     EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_Decal1Repeat.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_Decal1Repeat, languages.speak("prop_Decal1Repeat"));
                     materialEditor.ShaderProperty(prop_Decal1HueShift, languages.speak("prop_Decal1HueShift"));
                     Components.start_dynamic_disable(prop_Decal1HueShift.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;
@@ -1254,7 +1255,8 @@ namespace Luka.Backlace
                     prop_Decal2Tex = FindProperty("_Decal2Tex", properties);
                     prop_Decal2Tint = FindProperty("_Decal2Tint", properties);
                     prop_Decal2BlendMode = FindProperty("_Decal2BlendMode", properties);
-                    prop_Decal2IsTriplanar = FindProperty("_Decal2IsTriplanar", properties);
+                    prop_Decal2Space = FindProperty("_Decal2Space", properties);
+                    prop_Decal2Behavior = FindProperty("_Decal2Behavior", properties);
                     prop_Decal2Position = FindProperty("_Decal2Position", properties);
                     prop_Decal2Scale = FindProperty("_Decal2Scale", properties);
                     prop_Decal2Rotation = FindProperty("_Decal2Rotation", properties);
@@ -1272,9 +1274,11 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_Decal2Tex, languages.speak("prop_Decal2Tex"));
                     materialEditor.ShaderProperty(prop_Decal2Tint, languages.speak("prop_Decal2Tint"));
                     materialEditor.ShaderProperty(prop_Decal2BlendMode, languages.speak("prop_Decal2BlendMode"));
-                    materialEditor.ShaderProperty(prop_Decal2IsTriplanar, languages.speak("prop_Decal2IsTriplanar"));
-                    if (prop_Decal2IsTriplanar.floatValue.Equals(0)) {
-                        // flat decal settings
+                    materialEditor.ShaderProperty(prop_Decal2Space, languages.speak("prop_Decal2Space"));
+                    EditorGUI.indentLevel++;
+                    if (prop_Decal2Space.floatValue.Equals(0) || prop_Decal2Space.floatValue.Equals(2)) {
+                        // uv or screen decal settings
+                        materialEditor.ShaderProperty(prop_Decal2Behavior, languages.speak("prop_Decal2Behavior"));
                         Components.Vector2Property(materialEditor, prop_Decal2Position, languages.speak("prop_Decal2Position"));
                         Components.Vector2Property(materialEditor, prop_Decal2Scale, languages.speak("prop_Decal2Scale"));
                         materialEditor.ShaderProperty(prop_Decal2Rotation, languages.speak("prop_Decal2Rotation"));
@@ -1285,12 +1289,9 @@ namespace Luka.Backlace
                         materialEditor.ShaderProperty(prop_Decal2TriplanarRotation, languages.speak("prop_Decal2TriplanarRotation"));
                         materialEditor.ShaderProperty(prop_Decal2TriplanarSharpness, languages.speak("prop_Decal2TriplanarSharpness"));
                     }
-                    materialEditor.ShaderProperty(prop_Decal2Repeat, languages.speak("prop_Decal2Repeat"));
-                    Components.start_dynamic_disable(prop_Decal2Repeat.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    Components.Vector2Property(materialEditor, prop_Decal2Scroll, languages.speak("prop_Decal2Scroll"));
+                    Components.Vector2Property(materialEditor, prop_Decal2Scroll, languages.speak("prop_Decal2Scroll")); // shared on both
                     EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_Decal2Repeat.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_Decal2Repeat, languages.speak("prop_Decal2Repeat"));
                     materialEditor.ShaderProperty(prop_Decal2HueShift, languages.speak("prop_Decal2HueShift"));
                     Components.start_dynamic_disable(prop_Decal2HueShift.floatValue.Equals(0), configs);
                     EditorGUI.indentLevel++;
@@ -1301,9 +1302,9 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleDecals.floatValue.Equals(1), configs);
                 });
-                // sub_tab_decal_two.process(() => {
-                    //
-                // });
+                sub_tab_world_environment.process(() => {
+                    // main - world and environment
+                });
                 sub_tab_vertex_manipulation.process(() => {
                     // main - vertex manipulation
                     prop_VertexManipulationPosition = FindProperty("_VertexManipulationPosition", properties);
@@ -1543,7 +1544,6 @@ namespace Luka.Backlace
                 Components.start_foldout();
                 sub_tab_anime.process(() => {
                     // lighting - diffuse
-                    prop_ToggleAnimeLighting = FindProperty("_ToggleAnimeLighting", properties);
                     prop_AnimeMode = FindProperty("_AnimeMode", properties);
                     prop_Ramp = FindProperty("_Ramp", properties);
                     prop_RampColor = FindProperty("_RampColor", properties);
@@ -1575,13 +1575,41 @@ namespace Luka.Backlace
                     prop_WrapColorHigh = FindProperty("_WrapColorHigh", properties);
                     prop_WrapColorLow = FindProperty("_WrapColorLow", properties);
                     prop_RampNormalIntensity = FindProperty("_RampNormalIntensity", properties);
-                    materialEditor.ShaderProperty(prop_ToggleAnimeLighting, languages.speak("prop_ToggleAnimeLighting"));
-                    Components.start_dynamic_disable(!prop_ToggleAnimeLighting.floatValue.Equals(1), configs);
                     materialEditor.ShaderProperty(prop_AnimeMode, languages.speak("prop_AnimeMode"));
                     int animeMode = (int)prop_AnimeMode.floatValue;
+                    Components.start_dynamic_disable(animeMode == 0, configs);
                     switch (animeMode)
                     {
-                        case 0: // Ramp
+                        case 2: // Halftone
+                            materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
+                            materialEditor.ShaderProperty(prop_AnimeShadowThreshold, languages.speak("prop_AnimeShadowThreshold"));
+                            materialEditor.ShaderProperty(prop_AnimeHalftoneColor, languages.speak("prop_AnimeHalftoneColor"));
+                            materialEditor.ShaderProperty(prop_AnimeHalftoneThreshold, languages.speak("prop_AnimeHalftoneThreshold"));
+                            materialEditor.ShaderProperty(prop_AnimeShadowSoftness, languages.speak("prop_AnimeShadowSoftness"));
+                            materialEditor.ShaderProperty(prop_AnimeOcclusionToShadow, languages.speak("prop_AnimeOcclusionToShadow"));
+                            break;
+                        case 3: // Hifi
+                            materialEditor.ShaderProperty(prop_Hifi1Threshold, languages.speak("prop_Hifi1Threshold"));
+                            materialEditor.ShaderProperty(prop_Hifi1Feather, languages.speak("prop_Hifi1Feather"));
+                            materialEditor.ShaderProperty(prop_Hifi1Color, languages.speak("prop_Hifi1Color"));
+                            materialEditor.ShaderProperty(prop_Hifi2Threshold, languages.speak("prop_Hifi2Threshold"));
+                            materialEditor.ShaderProperty(prop_Hifi2Feather, languages.speak("prop_Hifi2Feather"));
+                            materialEditor.ShaderProperty(prop_Hifi2Color, languages.speak("prop_Hifi2Color"));
+                            materialEditor.ShaderProperty(prop_HifiBorderColor, languages.speak("prop_HifiBorderColor"));
+                            materialEditor.ShaderProperty(prop_HifiBorderWidth, languages.speak("prop_HifiBorderWidth"));
+                            break;
+                        case 4: // Skin
+                            materialEditor.ShaderProperty(prop_SkinLUT, languages.speak("prop_SkinLUT"));
+                            materialEditor.ShaderProperty(prop_SkinShadowColor, languages.speak("prop_SkinShadowColor"));
+                            materialEditor.ShaderProperty(prop_SkinScattering, languages.speak("prop_SkinScattering"));
+                            break;
+                        case 5: // Wrapped
+                            materialEditor.ShaderProperty(prop_WrapFactor, languages.speak("prop_WrapFactor"));
+                            materialEditor.ShaderProperty(prop_WrapNormalization, languages.speak("prop_WrapNormalization"));
+                            materialEditor.ShaderProperty(prop_WrapColorHigh, languages.speak("prop_WrapColorHigh"));
+                            materialEditor.ShaderProperty(prop_WrapColorLow, languages.speak("prop_WrapColorLow"));
+                            break;
+                        default: // (0, 1) Ramp
                             materialEditor.ShaderProperty(prop_Ramp, languages.speak("prop_Ramp"));
                             materialEditor.ShaderProperty(prop_RampColor, languages.speak("prop_RampColor"));
                             materialEditor.ShaderProperty(prop_RampOffset, languages.speak("prop_RampOffset"));
@@ -1592,36 +1620,8 @@ namespace Luka.Backlace
                             materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
                             materialEditor.ShaderProperty(prop_RampNormalIntensity, languages.speak("prop_RampNormalIntensity"));
                             break;
-                        case 1: // Halftone
-                            materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
-                            materialEditor.ShaderProperty(prop_AnimeShadowThreshold, languages.speak("prop_AnimeShadowThreshold"));
-                            materialEditor.ShaderProperty(prop_AnimeHalftoneColor, languages.speak("prop_AnimeHalftoneColor"));
-                            materialEditor.ShaderProperty(prop_AnimeHalftoneThreshold, languages.speak("prop_AnimeHalftoneThreshold"));
-                            materialEditor.ShaderProperty(prop_AnimeShadowSoftness, languages.speak("prop_AnimeShadowSoftness"));
-                            materialEditor.ShaderProperty(prop_AnimeOcclusionToShadow, languages.speak("prop_AnimeOcclusionToShadow"));
-                            break;
-                        case 2: // Hifi
-                            materialEditor.ShaderProperty(prop_Hifi1Threshold, languages.speak("prop_Hifi1Threshold"));
-                            materialEditor.ShaderProperty(prop_Hifi1Feather, languages.speak("prop_Hifi1Feather"));
-                            materialEditor.ShaderProperty(prop_Hifi1Color, languages.speak("prop_Hifi1Color"));
-                            materialEditor.ShaderProperty(prop_Hifi2Threshold, languages.speak("prop_Hifi2Threshold"));
-                            materialEditor.ShaderProperty(prop_Hifi2Feather, languages.speak("prop_Hifi2Feather"));
-                            materialEditor.ShaderProperty(prop_Hifi2Color, languages.speak("prop_Hifi2Color"));
-                            materialEditor.ShaderProperty(prop_HifiBorderColor, languages.speak("prop_HifiBorderColor"));
-                            materialEditor.ShaderProperty(prop_HifiBorderWidth, languages.speak("prop_HifiBorderWidth"));
-                            break;
-                        case 3: // Skin
-                            materialEditor.ShaderProperty(prop_SkinLUT, languages.speak("prop_SkinLUT"));
-                            materialEditor.ShaderProperty(prop_SkinShadowColor, languages.speak("prop_SkinShadowColor"));
-                            materialEditor.ShaderProperty(prop_SkinScattering, languages.speak("prop_SkinScattering"));
-                            break;
-                        case 4: // Wrapped
-                            materialEditor.ShaderProperty(prop_WrapFactor, languages.speak("prop_WrapFactor"));
-                            materialEditor.ShaderProperty(prop_WrapNormalization, languages.speak("prop_WrapNormalization"));
-                            materialEditor.ShaderProperty(prop_WrapColorHigh, languages.speak("prop_WrapColorHigh"));
-                            materialEditor.ShaderProperty(prop_WrapColorLow, languages.speak("prop_WrapColorLow"));
-                            break;
                     }
+                    Components.end_dynamic_disable(animeMode == 0, configs);
                 });
                 sub_tab_ambient_gradient.process(() => {
                     // shading - ambient gradient

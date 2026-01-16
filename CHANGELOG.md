@@ -15,6 +15,11 @@
 - Allow multiple ramp maps to be used and cycled through (up to 10)
 - Grabpass features (Refraction, SSR) now optionally allow the use of a custom texture in place of the grabpass
 - Reduced max raymarch steps in SSR to 35 (from 50) for more reasonable limits
+- Stickers are merged into one, and support new settings! (screen space mapping, overlay mode, more pattern control)
+- Add a "Silhouette/Backdrop" mode for Outline
+- Improved Shadowcaster pass to sample less and do less work
+- Added internal debugging functions
+= Restructure folder hierarchy to prevent editor-only assets being included in builds (very small difference, but eh, it's something!)
 
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map

@@ -112,7 +112,7 @@ float3 _VertexManipulationScale;
 #endif // UNITY_PASS_FORWARDADD
 
 // anime feature
-#if defined(_BACKLACE_TOON)
+#if defined(BACKLACE_TOON)
     float _TintMaskSource;
     float4 _LitTint;
     float4 _ShadowTint;
@@ -165,7 +165,7 @@ float3 _VertexManipulationScale;
         float4 _WrapColorHigh;
         float4 _WrapColorLow;
     #endif // _ANIMEMODE_*
-#endif // _BACKLACE_TOON
+#endif // BACKLACE_TOON
 
 // emission feature
 #if defined(_BACKLACE_EMISSION)
@@ -221,7 +221,8 @@ float3 _VertexManipulationScale;
     float _Decal1_UV;
     float _Decal1TriplanarSharpness;
     int _Decal1BlendMode;
-    float  _Decal1IsTriplanar;
+    int _Decal1Space;
+    float _Decal1Behavior;
     float3 _Decal1TriplanarPosition;
     float _Decal1TriplanarScale;
     float3 _Decal1TriplanarRotation;
@@ -240,7 +241,8 @@ float3 _VertexManipulationScale;
     float _Decal2_UV;
     float _Decal2TriplanarSharpness;
     int _Decal2BlendMode;
-    float _Decal2IsTriplanar;
+    int _Decal2Space;
+    float _Decal2Behavior;
     float3 _Decal2TriplanarPosition;
     float _Decal2TriplanarScale;
     float3 _Decal2TriplanarRotation;
@@ -292,6 +294,8 @@ float4 _StitchTex_ST;
 int _StitchTex_UV;
 int _StitchAxis;
 float _StitchOffset;
+
+// stochastic sampling feature
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

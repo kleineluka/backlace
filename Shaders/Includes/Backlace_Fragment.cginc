@@ -77,12 +77,12 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         SetupDFG(Surface);
     #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
-    #if defined(_BACKLACE_TOON) // TOON LIGHTING
+    #if defined(BACKLACE_TOON) // TOON LIGHTING
         GetAnimeDiffuse(Surface); // (includes vertex diffuse inside wrapper)
     #else // REAL LIGHTING
         GetPBRDiffuse(Surface);
         GetPBRVertexDiffuse(Surface);
-    #endif // _BACKLACE_TOON
+    #endif // BACKLACE_TOON
     #if defined(_BACKLACE_SSS)
         ApplySubsurfaceScattering(Surface);
     #endif // _BACKLACE_SSS

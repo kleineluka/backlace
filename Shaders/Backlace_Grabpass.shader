@@ -151,8 +151,7 @@ Shader "luka/backlace/grabpass"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [Toggle(_BACKLACE_TOON)] _ToggleAnimeLighting ("Enable Anime Lighting", Int) = 1
-        [KeywordEnum(Ramp, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 0
+        [KeywordEnum(Disabled, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
         // ramp
         _Ramp ("Toon Ramp", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
@@ -290,11 +289,12 @@ Shader "luka/backlace/grabpass"
         // [Space(35)]
         // [Header(Decal 1)]
         // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _Decal1Enable ("Enable Decal 1", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _Decal1Enable ("Enable Decal 1", Int) = 0
         [NoScaleOffset] _Decal1Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal1Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal1BlendMode ("Blend Mode", Int) = 2
-        [Enum(Disabled, 0, Enabled, 1)]  _Decal1IsTriplanar ("Use Triplanar Mapping", Float) = 0.0
+        [Enum(UV, 0, Triplanar, 1, Screen, 2)] _Decal1Space ("Mapping Space", Int) = 0
+        [Enum(Decal, 1, Overlay, 0)] _Decal1Behavior ("Decal Behavior", Int) = 1
         _Decal1Position ("UV Position (XY)", Vector) = (0.5, 0.5, 0, 0)
         _Decal1Scale ("UV Scale (XY)", Vector) = (0.25, 0.25, 0, 0)
         _Decal1Rotation ("UV Rotation", Range(0, 360)) = 0
@@ -302,7 +302,7 @@ Shader "luka/backlace/grabpass"
         _Decal1TriplanarScale ("World Scale", Float) = 1.0
         _Decal1TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal1TriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
-        [Enum(Disabled, 0, Enabled, 1)] _Decal1Repeat ("Repeat Pattern", Float) = 0.0
+        [Enum(Cull Outside, 0, Tile, 1, Default Behaviour, 2)] _Decal1Repeat ("Repeat Pattern", Float) = 0.0
         _Decal1Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
         _Decal1HueShift ("Hue Shift", Range(0, 2)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal1AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
@@ -316,7 +316,8 @@ Shader "luka/backlace/grabpass"
         [NoScaleOffset] _Decal2Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
         _Decal2Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal2BlendMode ("Blend Mode", Int) = 2
-        [Enum(Disabled, 0, Enabled, 1)] _Decal2IsTriplanar ("Use Triplanar Mapping", Float) = 0.0
+        [Enum(UV, 0, Triplanar, 1, Screen, 2)] _Decal2Space ("Mapping Space", Int) = 0
+        [Enum(Decal, 1, Overlay, 0)] _Decal2Behavior ("Decal Behavior", Int) = 1
         _Decal2Position ("UV Position (XY)", Vector) = (0.5, 0.5, 0, 0)
         _Decal2Scale ("UV Scale (XY)", Vector) = (0.25, 0.25, 0, 0)
         _Decal2Rotation ("UV Rotation", Range(0, 360)) = 0
@@ -324,7 +325,7 @@ Shader "luka/backlace/grabpass"
         _Decal2TriplanarScale ("World Scale", Float) = 1.0
         _Decal2TriplanarRotation ("World Rotation (XYZ)", Vector) = (0, 0, 0, 0)
         _Decal2TriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
-        [Enum(Disabled, 0, Enabled, 1)] _Decal2Repeat ("Repeat Pattern", Float) = 0.0
+        [Enum(Cull Outside, 0, Tile, 1, Default Behaviour, 2)] _Decal2Repeat ("Repeat Pattern", Float) = 0.0
         _Decal2Scroll ("Scroll Speed (XY)", Vector) = (0, 0, 0, 0)
         _Decal2HueShift ("Hue Shift", Range(0, 2)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal2AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
@@ -840,7 +841,7 @@ Shader "luka/backlace/grabpass"
             #ifndef BACKLACE_GRABPASS
                 #define BACKLACE_GRABPASS
             #endif // BACKLACE_GRABPASS
-            #include "../Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
+            #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
           
@@ -859,7 +860,7 @@ Shader "luka/backlace/grabpass"
             #ifndef BACKLACE_GRABPASS
                 #define BACKLACE_GRABPASS
             #endif // BACKLACE_GRABPASS
-            #include "../Resources/Luka_Backlace/Includes/Backlace_Forward.cginc"
+            #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
 
@@ -874,7 +875,7 @@ Shader "luka/backlace/grabpass"
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER
             #endif // UNITY_PASS_SHADOWCASTER
-            #include "../Resources/Luka_Backlace/Includes/Backlace_Shadow.cginc"
+            #include "./Includes/Backlace_Shadow.cginc"
             ENDCG
         }
         
@@ -888,7 +889,7 @@ Shader "luka/backlace/grabpass"
             #ifndef UNITY_PASS_META
                 #define UNITY_PASS_META
             #endif // UNITY_PASS_META
-            #include "../Resources/Luka_Backlace/Includes/Backlace_Meta.cginc"
+            #include "./Includes/Backlace_Meta.cginc"
             ENDCG
         }
 

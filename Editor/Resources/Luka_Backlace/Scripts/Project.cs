@@ -97,11 +97,11 @@ namespace Luka.Backlace
         public static readonly List<CustomBadge> anime_mode_badges = new List<CustomBadge>
         {
             new CustomBadge("_AnimeMode", new Dictionary<float, string> {
-                { 0f, "custom_badge_ramp" },
-                { 1f, "custom_badge_halftone" },
-                { 2f, "custom_badge_hifi" },
-                { 3f, "custom_badge_skin" },
-                { 4f, "custom_badge_wrapped" },
+                { 1f, "custom_badge_ramp" },
+                { 2f, "custom_badge_halftone" },
+                { 3f, "custom_badge_hifi" },
+                { 4f, "custom_badge_skin" },
+                { 5f, "custom_badge_wrapped" },
             }, new Color(0.8f, 0.2f, 0.3f))
         };
         public static readonly List<CustomBadge> blend_mode_badges = new List<CustomBadge>
@@ -120,7 +120,7 @@ namespace Luka.Backlace
             }, new Color(0.2f, 0.1f, 0.8f))
         };
         public static readonly bool enable_debug = true;
-        public static readonly string debug_tag = "Backlace_";
+        public static readonly string debug_tag = "_Stochastic";
     }
 
 }

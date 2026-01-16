@@ -60,6 +60,11 @@ struct BacklaceSurfaceData
     bool IsFrontFace;
 };
 
+// debug function
+float4 panty() {
+    return float4(1.00, 0.98, 0.25, 1.00);
+}
+
 // loading uv function
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #ifndef UNITY_PASS_OUTLINE
@@ -355,116 +360,174 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
 
 // decals-only features
 #if defined(_BACKLACE_DECALS)
-    void ApplyDecal_UVSpace(inout float4 baseAlbedo, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, float4 tint, float2 position, float2 scale, float rotation, int blendMode, float repeat, float2 scroll, float hueShift, float autoCycle, float cycleSpeed, float alHue, float alEmission, float alOpacity)
+    struct SuperCuteSticker
     {
-        baseUV += scroll * _Time.y;
-        float angle = -rotation * (UNITY_PI / 180.0);
+        float4 albedo;
+        float4 tint;
+        float3 position;   // float3 to support triplanar (use .xy for UV)
+        float3 scale;      // float3 to support triplanar (use .xy for UV)
+        float3 rotation;   // float3 to support triplanar (use .x for UV)
+        float sharpness;   // triplanar only
+        int blendMode;
+        float behavior;
+        float repeat;
+        float2 scroll;
+        float hueShift;
+        float autoCycle;
+        float cycleSpeed;
+        float alHue;       // audiolink only
+        float alEmission;  // audiolink only
+        float alOpacity;   // audiolink only
+    };
+
+    void ApplyDecal_UVSpace(inout SuperCuteSticker decal, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, int uvChannel)
+    {
+        baseUV += decal.scroll * _Time.y;
+        float angle = -decal.rotation.x * (UNITY_PI / 180.0);
         float s = sin(angle);
         float c = cos(angle);
         float2x2 rotationMatrix = float2x2(c, -s, s, c);
-        float2 localUV = baseUV - position;
+        float2 localUV = baseUV - decal.position.xy;
         localUV = mul(rotationMatrix, localUV);
-        localUV /= max(scale, 0.0001);
-        localUV += 0.5;
-        if (repeat == 1) // repeating
+        localUV /= max(decal.scale.xy, 0.0001);
+        localUV += saturate(decal.behavior - 0.5); // decal = 1, overlay = 0 - why can't enums pass float values :(
+        if (decal.repeat == 1) // repeating
         {
             localUV = frac(localUV); 
-
         }
-        else // single instance
+        else if (decal.repeat == 0) // cull outside
         {
             if (any(saturate(localUV) != localUV))
             {
                 return;
             }
-        }
-        float4 decalColor = decalTex.Sample(decalSampler, localUV) * tint;
-        decalColor.rgb = ApplyHueShift(decalColor.rgb, hueShift + alHue, autoCycle, cycleSpeed);
-        decalColor.a *= alOpacity;
-        decalColor.rgb *= alEmission;
-        switch(blendMode)
+        } // else default behaviour
+        float4 decalColor = decalTex.Sample(decalSampler, localUV) * decal.tint;
+        decalColor.rgb = ApplyHueShift(decalColor.rgb, decal.hueShift + decal.alHue, decal.autoCycle, decal.cycleSpeed);
+        decalColor.a *= decal.alOpacity;
+        decalColor.rgb *= decal.alEmission;
+        switch(decal.blendMode)
         {
-            case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break; // additive
-            case 1: baseAlbedo.rgb = lerp(baseAlbedo.rgb, baseAlbedo.rgb * decalColor.rgb, decalColor.a); break; // multiply
-            case 2: baseAlbedo.rgb = lerp(baseAlbedo.rgb, decalColor.rgb, decalColor.a); break; //alpha blend
-
+            case 0: decal.albedo.rgb += decalColor.rgb * decalColor.a; break; // additive
+            case 1: decal.albedo.rgb = lerp(decal.albedo.rgb, decal.albedo.rgb * decalColor.rgb, decalColor.a); break; // multiply
+            default: decal.albedo.rgb = lerp(decal.albedo.rgb, decalColor.rgb, decalColor.a); break; // (2) alpha blend
         }
     }
 
-    void ApplyDecal_Triplanar(inout float4 baseAlbedo, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler, float4 tint, float3 position, float scale, float3 rotation, float sharpness, int blendMode, float repeat, float2 scroll, float hueShift, float autoCycle, float cycleSpeed, float alHue, float alEmission, float alOpacity)
+    void ApplyDecal_Triplanar(inout SuperCuteSticker decal, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler)
     {
-        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, position, scale, rotation, sharpness, repeat > 0.5, scroll);
-        decalColor *= tint;
-        if (hueShift != 0) {
-            decalColor.rgb = ApplyHueShift(decalColor.rgb, hueShift + alHue, autoCycle, cycleSpeed);
-        }
-        decalColor.a *= alOpacity;
-        decalColor.rgb *= alEmission;
-        switch(blendMode)
+        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, decal.position, decal.scale.x, decal.rotation, decal.sharpness, decal.repeat > 0.5, (decal.scroll == 1));
+        decalColor *= decal.tint;
+        if (decal.hueShift != 0) 
         {
-            case 0: baseAlbedo.rgb += decalColor.rgb * decalColor.a; break;
-            case 1: baseAlbedo.rgb = lerp(baseAlbedo.rgb, baseAlbedo.rgb * decalColor.rgb, decalColor.a); break;
-            case 2: baseAlbedo.rgb = lerp(baseAlbedo.rgb, decalColor.rgb, decalColor.a); break;
+            decalColor.rgb = ApplyHueShift(decalColor.rgb, decal.hueShift + decal.alHue, decal.autoCycle, decal.cycleSpeed);
+        }
+        decalColor.a *= decal.alOpacity;
+        decalColor.rgb *= decal.alEmission;
+        switch(decal.blendMode)
+        {
+            case 0: decal.albedo.rgb += decalColor.rgb * decalColor.a; break; // additive
+            case 1: decal.albedo.rgb = lerp(decal.albedo.rgb, decal.albedo.rgb * decalColor.rgb, decalColor.a); break; // multiply
+            default: decal.albedo.rgb = lerp(decal.albedo.rgb, decalColor.rgb, decalColor.a); break; // (2) alpha blend
         }
     }
 
     // decal one application
     void ApplyDecal1(inout BacklaceSurfaceData Surface, FragmentData i, float2 Uvs[4])
     {
-        float alHue = 0;
-        float alEmission = 1;
-        float alOpacity = 1;
+        // create the decal object
+        SuperCuteSticker decal1;
+        decal1.albedo = (_DecalStage == 0) ? Surface.Albedo : float4(Surface.FinalColor.rgb, 1.0);
+        decal1.tint = _Decal1Tint;
+        decal1.blendMode = _Decal1BlendMode;
+        decal1.behavior = _Decal1Behavior;
+        decal1.repeat = _Decal1Repeat;
+        decal1.scroll = _Decal1Scroll;
+        decal1.hueShift = _Decal1HueShift;
+        decal1.autoCycle = _Decal1AutoCycleHue;
+        decal1.cycleSpeed = _Decal1CycleSpeed;
+        decal1.alHue = 0;
+        decal1.alEmission = 1;
+        decal1.alOpacity = 1;
         #if defined(_BACKLACE_AUDIOLINK)
-            alHue = i.alChannel2.w;
-            alEmission = i.alChannel3.x;
-            alOpacity = i.alChannel3.y;
+            decal1.alHue = i.alChannel2.w;
+            decal1.alEmission = i.alChannel3.x;
+            decal1.alOpacity = i.alChannel3.y;
         #endif // _BACKLACE_AUDIOLINK
-        float4 decalApplied = (_DecalStage == 0) ? Surface.Albedo : float4(Surface.FinalColor.rgb, 1.0);
-        [branch] if (_Decal1IsTriplanar == 1)
+        // assign position, scale, rotation, and sharpness based on space
+        [branch] if (_Decal1Space == 1) // Triplanar
         {
-            ApplyDecal_Triplanar(decalApplied, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1TriplanarPosition.xyz, _Decal1TriplanarScale, _Decal1TriplanarRotation.xyz, _Decal1TriplanarSharpness, _Decal1BlendMode, _Decal1Repeat, _Decal1Scroll.xy, _Decal1HueShift, _Decal1AutoCycleHue, _Decal1CycleSpeed, alHue, alEmission, alOpacity);
+            decal1.position = _Decal1TriplanarPosition.xyz;
+            decal1.scale = float3(_Decal1TriplanarScale, _Decal1TriplanarScale, _Decal1TriplanarScale);
+            decal1.rotation = _Decal1TriplanarRotation.xyz;
+            decal1.sharpness = _Decal1TriplanarSharpness;
+            ApplyDecal_Triplanar(decal1, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex);
         }
-        else
+        else // UV Space
         {
-            ApplyDecal_UVSpace(decalApplied, Uvs[_Decal1_UV], _Decal1Tex, sampler_Decal1Tex, _Decal1Tint, _Decal1Position.xy, _Decal1Scale.xy, _Decal1Rotation, _Decal1BlendMode, _Decal1Repeat, _Decal1Scroll, _Decal1HueShift, _Decal1AutoCycleHue, _Decal1CycleSpeed, alHue, alEmission, alOpacity);
+            decal1.position = float3(_Decal1Position.xy, 0);
+            decal1.scale = float3(_Decal1Scale.xy, 1);
+            decal1.rotation = float3(_Decal1Rotation, 0, 0);
+            decal1.sharpness = 0;
+            float2 decal1Uv = (_Decal1Space == 0) ? Uvs[_Decal1_UV] : i.scrPos.xy / i.scrPos.w;
+            ApplyDecal_UVSpace(decal1, decal1Uv, _Decal1Tex, sampler_Decal1Tex, _Decal1_UV);
         }
         [branch] if (_DecalStage == 0) // early
         {
-            Surface.Albedo = decalApplied;
+            Surface.Albedo = decal1.albedo;
         }
         else // late
         {
-            Surface.FinalColor.rgb = decalApplied.rgb;
+            Surface.FinalColor.rgb = decal1.albedo.rgb;
         }
     }
 
     // decal two application
     void ApplyDecal2(inout BacklaceSurfaceData Surface, FragmentData i, float2 Uvs[4])
     {
-        float alHue = 0;
-        float alEmission = 1;
-        float alOpacity = 1;
+        SuperCuteSticker decal2;
+        decal2.albedo = (_DecalStage == 0) ? Surface.Albedo : float4(Surface.FinalColor.rgb, 1.0);
+        decal2.tint = _Decal2Tint;
+        decal2.blendMode = _Decal2BlendMode;
+        decal2.behavior = _Decal2Behavior;
+        decal2.repeat = _Decal2Repeat;
+        decal2.scroll = _Decal2Scroll;
+        decal2.hueShift = _Decal2HueShift;
+        decal2.autoCycle = _Decal2AutoCycleHue;
+        decal2.cycleSpeed = _Decal2CycleSpeed;
+        decal2.alHue = 0;
+        decal2.alEmission = 1;
+        decal2.alOpacity = 1;
         #if defined(_BACKLACE_AUDIOLINK)
-            alHue = i.alChannel2.w;
-            alEmission = i.alChannel3.x;
-            alOpacity = i.alChannel3.y;
+            decal2.alHue = i.alChannel2.w;
+            decal2.alEmission = i.alChannel3.x;
+            decal2.alOpacity = i.alChannel3.y;
         #endif // _BACKLACE_AUDIOLINK
-        float4 decalApplied = (_DecalStage == 0) ? Surface.Albedo : float4(Surface.FinalColor.rgb, 1.0);
-        [branch] if (_Decal2IsTriplanar == 1)
+        // assign position, scale, rotation, and sharpness based on space
+        [branch] if (_Decal2Space == 1) // Triplanar
         {
-            ApplyDecal_Triplanar(decalApplied, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2TriplanarPosition.xyz, _Decal2TriplanarScale, _Decal2TriplanarRotation.xyz, _Decal2TriplanarSharpness, _Decal2BlendMode, _Decal2Repeat, _Decal2Scroll, _Decal2HueShift, _Decal2AutoCycleHue, _Decal2CycleSpeed, alHue, alEmission, alOpacity);
+            decal2.position = _Decal2TriplanarPosition.xyz;
+            decal2.scale = float3(_Decal2TriplanarScale, _Decal2TriplanarScale, _Decal2TriplanarScale);
+            decal2.rotation = _Decal2TriplanarRotation.xyz;
+            decal2.sharpness = _Decal2TriplanarSharpness;
+            ApplyDecal_Triplanar(decal2, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex);
         }
-        else
+        else // UV Space
         {
-            ApplyDecal_UVSpace(decalApplied, Uvs[_Decal2_UV], _Decal2Tex, sampler_Decal2Tex, _Decal2Tint, _Decal2Position.xy, _Decal2Scale.xy, _Decal2Rotation, _Decal2BlendMode, _Decal2Repeat, _Decal2Scroll, _Decal2HueShift, _Decal2AutoCycleHue, _Decal2CycleSpeed, alHue, alEmission, alOpacity);
+            decal2.position = float3(_Decal2Position.xy, 0);
+            decal2.scale = float3(_Decal2Scale.xy, 1);
+            decal2.rotation = float3(_Decal2Rotation, 0, 0);
+            decal2.sharpness = 0;
+            float2 decal2Uv = (_Decal2Space == 0) ? Uvs[_Decal2_UV] : i.scrPos.xy / i.scrPos.w;
+            ApplyDecal_UVSpace(decal2, decal2Uv, _Decal2Tex, sampler_Decal2Tex, _Decal2_UV);
         }
         [branch] if (_DecalStage == 0) // early
         {
-            Surface.Albedo = decalApplied;
+            Surface.Albedo = decal2.albedo;
         }
         else // late
         {
-            Surface.FinalColor.rgb = decalApplied.rgb;
+            Surface.FinalColor.rgb = decal2.albedo.rgb;
         }
     }
 #endif // _BACKLACE_DECALS
