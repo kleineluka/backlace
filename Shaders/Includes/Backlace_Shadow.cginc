@@ -121,7 +121,7 @@ float3 _VertexManipulationScale;
     float _UVFlipbookScrub;
     // flowmap
     float _UVFlowmap;
-    UNITY_DECLARE_TEX2D(_UVFlowmapTex);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_UVFlowmapTex);
     float _UVFlowmapStrength;
     float _UVFlowmapSpeed;
     float _UVFlowmapDistortion;

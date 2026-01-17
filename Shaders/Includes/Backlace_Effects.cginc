@@ -529,7 +529,7 @@
 
 // pathing feature
 #if defined(_BACKLACE_PATHING)
-    UNITY_DECLARE_TEX2D(_PathingMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingMap);
     float2 _PathingMap_ST;
     float4 _PathingColor;
     float _PathingEmission;
@@ -544,7 +544,7 @@
     int _PathingMappingMode;
     int _PathingColorMode;
     float4 _PathingColor2;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture); // note to self: will this break?
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture); 
     int _PathingTexture_UV;
     float _PathingStart;
     float _PathingEnd;
@@ -555,7 +555,7 @@
         if (_PathingMappingMode == 0) // albedo uv
 
         {
-            pathValue = UNITY_SAMPLE_TEX2D(_PathingMap, frac(Uvs[_PathingMap_UV] * _PathingScale)).r;
+            pathValue = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingMap, _MainTex, frac(Uvs[_PathingMap_UV] * _PathingScale)).r;
         }
         else // triplanar
 
@@ -641,8 +641,8 @@
 // glitter-specific features
 #if defined(_BACKLACE_GLITTER)
     // glitter properties
-    UNITY_DECLARE_TEX2D(_GlitterMask);
-    UNITY_DECLARE_TEX2D(_GlitterNoiseTex);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_GlitterMask);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_GlitterNoiseTex);
     float _Glitter_UV;
     float _GlitterMask_UV;
     float _ToggleGlitterRainbow;
@@ -690,7 +690,7 @@
         else if (_GlitterMode == 1) // TEXTURE
         {
             // todo: is noise tex needed if we just use another hash before?
-            float noise_val = UNITY_SAMPLE_TEX2D_LOD(_GlitterNoiseTex, i_uv / _GlitterFrequency, 0).r;
+            float noise_val = UNITY_SAMPLE_TEX2D_SAMPLER_LOD(_GlitterNoiseTex, _MainTex, i_uv / _GlitterFrequency, 0).r;
             if (noise_val < _GlitterThreshold) return;
             float dist_from_center = length(f_uv - 0.5);
             glitter_mask = saturate((_GlitterSize - dist_from_center) / max(fwidth(dist_from_center), 0.001));
@@ -711,7 +711,7 @@
             finalGlitterBrightness *= i.alChannel2.y;
         #endif // _BACKLACE_AUDIOLINK
         final_glitter = glitter_mask * glitter_color * finalGlitterBrightness;
-        float mask_val = UNITY_SAMPLE_TEX2D(_GlitterMask, Uvs[_GlitterMask_UV]).r;
+        float mask_val = UNITY_SAMPLE_TEX2D_SAMPLER(_GlitterMask, _MainTex, Uvs[_GlitterMask_UV]).r;
         sparkle *= mask_val;
         Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, final_glitter, sparkle);
     }
@@ -1324,11 +1324,11 @@
         float4 _RefractionTint;
         float _RefractionIOR;
         float _RefractionFresnel;
-        UNITY_DECLARE_TEX2D(_CausticsTex);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_CausticsTex);
         float _CausticsTiling;
         float _CausticsSpeed;
         float _CausticsIntensity;
-        UNITY_DECLARE_TEX2D(_DistortionNoiseTex);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_DistortionNoiseTex);
         float _DistortionNoiseTiling;
         float _DistortionNoiseStrength;
         int _RefractionDistortionMode;
@@ -1364,7 +1364,7 @@
         {
             float fresnel = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
             fresnel = pow(fresnel, _RefractionFresnel);
-            float2 noise = (SampleTextureTriplanar(_DistortionNoiseTex, sampler_DistortionNoiseTex, i.worldPos, Surface.NormalDir, float3(0, 0, 0), _DistortionNoiseTiling, float3(0, 0, 0), 2.0, true, float2(0, 0)).rg * 2.0 - 1.0) * _DistortionNoiseStrength;
+            float2 noise = (SampleTextureTriplanar(_DistortionNoiseTex, sampler_MainTex, i.worldPos, Surface.NormalDir, float3(0, 0, 0), _DistortionNoiseTiling, float3(0, 0, 0), 2.0, true, float2(0, 0)).rg * 2.0 - 1.0) * _DistortionNoiseStrength;
             float3 distortionNormal = Surface.NormalDir + float3(noise.x, noise.y, 0);
             float3 refractionVector = distortionNormal * _RefractionIOR;
             float4 screenPos = i.scrPos;
@@ -1418,7 +1418,7 @@
             refractedColor *= _RefractionGrabpassTint;
             float3 reflectionVector = reflect(-Surface.ViewDir, Surface.NormalDir);
             float2 causticsUV = reflectionVector.xy * _CausticsTiling + (_Time.y * _CausticsSpeed);
-            float3 caustics = UNITY_SAMPLE_TEX2D(_CausticsTex, causticsUV).rgb * _CausticsIntensity;
+            float3 caustics = UNITY_SAMPLE_TEX2D_SAMPLER(_CausticsTex, _MainTex, causticsUV).rgb * _CausticsIntensity;
             float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_RefractionMask, _MainTex, Uvs[_RefractionMask_UV]).r;
             float3 crystalColor = lerp(_RefractionTint.rgb + caustics, lerp(_RefractionTint.rgb, _CausticsColor.rgb, caustics), _RefractionBlendMode);
             float3 finalColor;
@@ -1458,7 +1458,7 @@
         float _SSRCoverage;
         // planar
         float _SSRParallax;
-        UNITY_DECLARE_TEX2D(_SSRDistortionMap);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SSRDistortionMap);
         float _SSRDistortionStrength;
         float _SSRBlur;
         float _SSRWorldDistortion;
@@ -1544,7 +1544,7 @@
                     if (_SSRDistortionStrength > 0)
                     {
                         // note to self: sampling multiple times, yes, BUT only per-hit rather than all pixels
-                        float2 distortion = (UNITY_SAMPLE_TEX2D(_SSRDistortionMap, screenUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
+                        float2 distortion = (UNITY_SAMPLE_TEX2D_SAMPLER(_SSRDistortionMap, _MainTex, screenUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
                         finalUV += distortion;
                     }
                     float3 reflection = SampleSSRSource(finalUV);
@@ -1933,7 +1933,7 @@
 
     // splatter mapping feature
     #if defined(_BACKLACE_SPLATTER)
-        UNITY_DECLARE_TEX2D(_SplatterControl);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SplatterControl);
         float4 _SplatterControl_ST;
         // layer one: weird
         UNITY_DECLARE_TEX2D(_SplatterAlbedo0); // sampler that is used in all tex's
@@ -2060,7 +2060,7 @@
         {
             // control weights
             float2 ctrlUV = i.uv * _SplatterControl_ST.xy + _SplatterControl_ST.zw;
-            float4 ctrl = UNITY_SAMPLE_TEX2D(_SplatterControl, ctrlUV);
+            float4 ctrl = UNITY_SAMPLE_TEX2D_SAMPLER(_SplatterControl, _MainTex, ctrlUV);
             if (_SplatterBlendSharpness > 1.0)
             {
                 ctrl = pow(max(ctrl, 0.0001), _SplatterBlendSharpness);

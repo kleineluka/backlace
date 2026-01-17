@@ -591,7 +591,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
         }
         // flow map
         [branch] if (_UVFlowmap == 1) {
-            float2 flow = UNITY_SAMPLE_TEX2D(_UVFlowmapTex, uv).rg * 2.0 - 1.0;
+            float2 flow = UNITY_SAMPLE_TEX2D_SAMPLER(_UVFlowmapTex, _MainTex, uv).rg * 2.0 - 1.0;
             uv += flow * _UVFlowmapStrength * frac(_Time.y * _UVFlowmapSpeed);
         }
     }

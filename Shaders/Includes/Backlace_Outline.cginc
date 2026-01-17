@@ -35,6 +35,10 @@
 #include "./Backlace_Effects.cginc"
 
 // properties
+UNITY_DECLARE_TEX2D(_MainTex);
+float4 _MainTex_ST;
+float _Cutoff;
+float _MainTex_UV;
 float _Alpha;
 int _OutlineSpace;
 float _OutlineWidth;
@@ -47,17 +51,12 @@ int _OutlineHueShift;
 float _OutlineOpacity;
 int _OutlineMode;
 int _OutlineTexMap;
-UNITY_DECLARE_TEX2D(_OutlineTex);
+UNITY_DECLARE_TEX2D_NOSAMPLER(_OutlineTex);
 float2 _OutlineTexTiling;
 float2 _OutlineTexScroll;
 float4 _OutlineColor;
 float3 _OutlineOffset;
 int _OutlineStyle;
-
-UNITY_DECLARE_TEX2D(_MainTex);
-float4 _MainTex_ST;
-float _Cutoff;
-float _MainTex_UV;
 
 // Vertex manipulation
 float3 _VertexManipulationPosition;
@@ -195,7 +194,7 @@ fixed4 frag(v2f i) : SV_Target
                 break;
         }
         outlineTexUV = frac(frac(outlineTexUV * _OutlineTexTiling) + (_OutlineTexScroll * _Time.y));
-        fixed4 outlineTexColor = UNITY_SAMPLE_TEX2D(_OutlineTex, outlineTexUV);
+        fixed4 outlineTexColor = UNITY_SAMPLE_TEX2D_SAMPLER(_OutlineTex, _MainTex, outlineTexUV);
         finalColor.rgb = outlineTexColor;
     }
     if (_OutlineHueShift == 1)

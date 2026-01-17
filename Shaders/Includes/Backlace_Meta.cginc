@@ -80,7 +80,7 @@ float _UV_Scroll_Y_Speed;
     float _UVFlipbookScrub;
     // flowmap
     float _UVFlowmap;
-    UNITY_DECLARE_TEX2D(_UVFlowmapTex);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_UVFlowmapTex);
     float _UVFlowmapStrength;
     float _UVFlowmapSpeed;
     float _UVFlowmapDistortion;
@@ -174,8 +174,8 @@ float _StitchOffset;
 
 // detail-map features
 #if defined(_BACKLACE_DETAIL)
-UNITY_DECLARE_TEX2D(_DetailAlbedoMap);
-UNITY_DECLARE_TEX2D(_DetailNormalMap);
+UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailAlbedoMap);
+UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailNormalMap);
 float _DetailMap_UV;
 float _DetailTiling;
 float _DetailNormalStrength;
@@ -183,9 +183,9 @@ float3 NormalMap; // NOTE: dummy variable, detail function needs it but we don't
 void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
 {
     float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
-    float4 detailAlbedo = UNITY_SAMPLE_TEX2D(_DetailAlbedoMap, detailUV);
+    float4 detailAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_DetailAlbedoMap, _MainTex, detailUV);
     Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
-    float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D(_DetailNormalMap, detailUV), _DetailNormalStrength);
+    float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_DetailNormalMap, _MainTex, detailUV), _DetailNormalStrength);
     float3 baseNormalTS = NormalMap;
     NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
 }
