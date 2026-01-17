@@ -120,7 +120,7 @@ namespace Luka.Backlace
             }, new Color(0.2f, 0.1f, 0.8f))
         };
         public static readonly bool enable_debug = true;
-        public static readonly string debug_tag = "_Stochastic";
+        public static readonly string debug_tag = "_Splatter";
     }
 
 }

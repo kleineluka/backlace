@@ -101,8 +101,8 @@
 
 // detail maps features
 #if defined(_BACKLACE_DETAIL)
-    UNITY_DECLARE_TEX2D(_DetailAlbedoMap);
-    UNITY_DECLARE_TEX2D(_DetailNormalMap);
+    UNITY_DECLARE_TEX2D(_DetailAlbedoMap); // shares sampler w/ normal
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailNormalMap);
     float _DetailMap_UV;
     float _DetailTiling;
     float _DetailNormalStrength;
@@ -112,7 +112,7 @@
         float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
         float4 detailAlbedo = UNITY_SAMPLE_TEX2D(_DetailAlbedoMap, detailUV);
         Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
-        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D(_DetailNormalMap, detailUV), _DetailNormalStrength);
+        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_DetailNormalMap, _DetailAlbedoMap, detailUV), _DetailNormalStrength);
         float3 baseNormalTS = NormalMap;
         NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
     }
@@ -155,9 +155,9 @@
     float4 _InteriorColor;
     float _InteriorTiling;
     // layered mapping
-    UNITY_DECLARE_TEX2D(_ParallaxLayer1);
-    UNITY_DECLARE_TEX2D(_ParallaxLayer2);
-    UNITY_DECLARE_TEX2D(_ParallaxLayer3);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ParallaxLayer1);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ParallaxLayer2);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ParallaxLayer3);
     float _ParallaxLayerDepth1;
     float _ParallaxLayerDepth2;
     float _ParallaxLayerDepth3;
@@ -269,9 +269,9 @@
         float4 layer3 = 0;
         if (_ParallaxTile == 0) {  
             // dont tile
-            layer1 = UNITY_SAMPLE_TEX2D(_ParallaxLayer1, uv1);
-            layer2 = UNITY_SAMPLE_TEX2D(_ParallaxLayer2, uv2);
-            layer3 = UNITY_SAMPLE_TEX2D(_ParallaxLayer3, uv3);
+            layer1 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer1, _MainTex, uv1);
+            layer2 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer2, _MainTex, uv2);
+            layer3 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer3, _MainTex, uv3);
             if (_ParallaxTile == 0 && (any(uv1 < 0) || any(uv1 > 1))) layer1 = 0;
             if (_ParallaxTile == 0 && (any(uv2 < 0) || any(uv2 > 1))) layer2 = 0;
             if (_ParallaxTile == 0 && (any(uv3 < 0) || any(uv3 > 1))) layer3 = 0;
@@ -280,9 +280,9 @@
             uv1 = frac(uv1);
             uv2 = frac(uv2);
             uv3 = frac(uv3);
-            layer1 = UNITY_SAMPLE_TEX2D(_ParallaxLayer1, uv1);
-            layer2 = UNITY_SAMPLE_TEX2D(_ParallaxLayer2, uv2);
-            layer3 = UNITY_SAMPLE_TEX2D(_ParallaxLayer3, uv3);
+            layer1 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer1, _MainTex, uv1);
+            layer2 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer2, _MainTex, uv2);
+            layer3 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer3, _MainTex, uv3);
         }
         // stacking modes
         float3 finalLayerColor = 0;
@@ -361,8 +361,8 @@
 
 // matcap features
 #if defined(_BACKLACE_MATCAP)
-    UNITY_DECLARE_TEX2D(_MatcapTex);
-    UNITY_DECLARE_TEX2D(_MatcapMask);
+    UNITY_DECLARE_TEX2D(_MatcapTex); // share sampler with below
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_MatcapMask);
     float4 _MatcapTex_ST;
     float _MatcapIntensity;
     float3 _MatcapTint;
@@ -385,7 +385,7 @@
             matcapColor = UNITY_SAMPLE_TEX2D(_MatcapTex, i.matcapUV).rgb;
         }
         matcapColor *= _MatcapTint.rgb;
-        float mask = UNITY_SAMPLE_TEX2D(_MatcapMask, Uvs[_MatcapMask_UV]).r;
+        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MatcapMask, _MatcapTex, Uvs[_MatcapMask_UV]).r;
         float finalMatcapIntensity = _MatcapIntensity;
         #if defined(_BACKLACE_AUDIOLINK)
             finalMatcapIntensity *= i.alChannel1.w;
@@ -948,7 +948,7 @@
     int _WorldEffectBlendMode;
     float3 _WorldEffectPosition;
     float3 _WorldEffectRotation;
-    UNITY_DECLARE_TEX2D(_WorldEffectMask);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_WorldEffectMask);
 
     void ApplyWorldAlignedEffect(inout BacklaceSurfaceData Surface, FragmentData i)
     {
@@ -968,7 +968,7 @@
             float2(0, 0)
         );
         float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
-        float mask = UNITY_SAMPLE_TEX2D(_WorldEffectMask, Uvs[0]).r;
+        float mask = UNITY_SAMPLE_TEX2D(_WorldEffectMask, _WorldEffectTex, Uvs[0]).r;
         float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
         switch(_WorldEffectBlendMode)
         {
@@ -987,7 +987,7 @@
 
 // vrchat mirror detection feature
 #if defined(_BACKLACE_VRCHAT_MIRROR)
-    UNITY_DECLARE_TEX2D(_MirrorDetectionTexture);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_MirrorDetectionTexture); // use main sampler
     float _MirrorDetectionTexture_UV;
     float _MirrorDetectionMode; // 0 = texture, 1 = hide, 2 = only show
     float _VRChatMirrorMode; // assigned by vrchat, 0 = none, 1 = mirror in vr, 2 = mirror in desktop
@@ -1006,7 +1006,7 @@
         {
             if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
             {
-                float mask = UNITY_SAMPLE_TEX2D(_MirrorDetectionTexture, Uvs[_MirrorDetectionTexture_UV]).r;
+                float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MirrorDetectionTexture, _MainTex, Uvs[_MirrorDetectionTexture_UV]).r;
                 Surface.FinalColor.a *= mask;
             }
         }
@@ -1346,13 +1346,13 @@
         int _RefractionZoomToggle;
         float _RefractionZoom;
         int _RefractionSourceMode;
-        UNITY_DECLARE_TEX2D(_RefractionTexture);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_RefractionTexture);
 
         float3 SampleRefractionSource(float2 uv)
         {
             [branch] if (_RefractionSourceMode == 1)
             {
-                return UNITY_SAMPLE_TEX2D(_RefractionTexture, uv).rgb;
+                return UNITY_SAMPLE_TEX2D_SAMPLER(_RefractionTexture, _MainTex, uv).rgb;
             }
             else
             {
@@ -1448,7 +1448,7 @@
     // screen space reflection feature
     #if defined(_BACKLACE_SSR)
         float _SSRMode;
-        UNITY_DECLARE_TEX2D(_SSRMask);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SSRMask);
         float4 _SSRTint;
         float _SSRIntensity;
         int _SSRBlendMode;
@@ -1474,7 +1474,7 @@
         float _SSRCamFadeStart;
         float _SSRCamFadeEnd;
         int _SSRSourceMode;
-        UNITY_DECLARE_TEX2D(_SSRTexture);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SSRTexture);
 
         #ifndef BACKLACE_DEPTH
             UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
@@ -1486,7 +1486,7 @@
         {
             [branch] if (_SSRSourceMode == 1)
             {
-                return UNITY_SAMPLE_TEX2D(_SSRTexture, uv).rgb;
+                return UNITY_SAMPLE_TEX2D_SAMPLER(_SSRTexture, _MainTex, uv).rgb;
             }
             else
             {
@@ -1567,7 +1567,7 @@
         {
             float2 screenUV = i.scrPos.xy / i.scrPos.w;
             float2 distortionUV = lerp(screenUV, i.worldPos.xy, _SSRWorldDistortion);
-            float2 distortionOffset = (UNITY_SAMPLE_TEX2D(_SSRDistortionMap, distortionUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
+            float2 distortionOffset = (UNITY_SAMPLE_TEX2D_SAMPLER(_SSRDistortionMap, _MainTex, distortionUV).rg * 2.0 - 1.0) * _SSRDistortionStrength;
             float3 viewSpaceReflection = mul((float3x3)UNITY_MATRIX_V, Surface.ReflectDir);
             float parallax = _SSRParallax * saturate(1.0 - viewSpaceReflection.z);
             float2 reflectionOffset = viewSpaceReflection.xy * parallax;
@@ -1611,7 +1611,7 @@
             float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
             float fresnel_powered = pow(fresnel_base, _SSRFresnelPower);
             float fresnel = saturate(_SSRFresnelBias + fresnel_powered * _SSRFresnelScale + _SSRCoverage);
-            float mask = UNITY_SAMPLE_TEX2D(_SSRMask, Uvs[0]).r;
+            float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_SSRMask, _MainTex, Uvs[0]).r;
             float finalStrength = fresnel * mask * _SSRIntensity * fadeFactor;
             float3 finalReflection = reflectedColor * _SSRTint.rgb;
             switch((int)_SSRBlendMode)
@@ -1636,10 +1636,29 @@
 // world variant only effects
 #if defined(BACKLACE_WORLD) 
 
+    // these are useful across multiple features here
+    float3 HeightBlend3(float3 weights, float3 heights, float strength, float bias)
+    {
+        heights = saturate(heights);
+        float3 h = heights + weights * bias;
+        h = saturate(pow(h, strength));
+        float sum = h.x + h.y + h.z;
+        return h / max(sum, 1e-5);
+    }
+
+    float4 HeightBlend4(float4 weights, float4 heights, float strength, float bias)
+    {
+        heights = saturate(heights);
+        float4 h = heights + weights * bias;
+        h = saturate(pow(h, strength));
+        float sum = h.x + h.y + h.z + h.w;
+        return h / max(sum, 1e-5);
+    }
+
     // stochastic sampling feature
     #if defined(_BACKLACE_STOCHASTIC)
-        UNITY_DECLARE_TEX2D(_StochasticTexture);
-        UNITY_DECLARE_TEX2D(_StochasticHeightMap);
+        UNITY_DECLARE_TEX2D(_StochasticTexture); // share sampler with below
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_StochasticHeightMap);
         float _StochasticScale;
         float _StochasticBlend;
         float _StochasticRotationRange;
@@ -1658,24 +1677,7 @@
         float4 _StochasticTint;
         int _StochasticNormals;
 
-        float3 HeightBlend3(float3 weights, float3 heights, float strength, float bias)
-        {
-            heights = saturate(heights);
-            float3 h = heights + weights * bias;
-            h = pow(h, strength);
-            float sum = h.x + h.y + h.z;
-            return h / max(sum, 1e-5);
-        }
-
-        float4 HeightBlend4(float4 weights, float4 heights, float strength, float bias)
-        {
-            heights = saturate(heights);
-            float4 h = heights + weights * bias;
-            h = pow(h, strength);
-            float sum = h.x + h.y + h.z + h.w;
-            return h / max(sum, 1e-5);
-        }
-
+        // make i/o not hell
         struct StochasticData
         {
             // heitz mode data
@@ -1695,6 +1697,7 @@
             float4 albedoSample;
         };
 
+        // pre-calc data for heitz
         StochasticData PrepareHeitzData(float2 uv)
         {
             StochasticData result;
@@ -1741,6 +1744,7 @@
             return result;
         }
 
+        // pre-calc data for contrast
         StochasticData PrepareContrastData(float2 uv)
         {
             StochasticData result;
@@ -1768,6 +1772,7 @@
             return result;
         }
 
+        // sample heitz albedo
         float4 SampleHeitzAlbedo(StochasticData data, float2 originalUV, float2 screenPos)
         {
             // apply mip bias to derivatives then sample
@@ -1780,34 +1785,16 @@
             // optional height-based blending
             if (_StochasticHeightBlend == 1)
             {
-                float h1 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv1, dx, dy).r;
-                float h2 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv2, dx, dy).r;
-                float h3 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv3, dx, dy).r;
+                float h1 = _StochasticHeightMap.SampleGrad(sampler_StochasticTexture, data.uv1, dx, dy).r;
+                float h2 = _StochasticHeightMap.SampleGrad(sampler_StochasticTexture, data.uv2, dx, dy).r;
+                float h3 = _StochasticHeightMap.SampleGrad(sampler_StochasticTexture, data.uv3, dx, dy).r;
                 weights = HeightBlend3(weights, float3(h1, h2, h3), _StochasticHeightStrength, 0.001);
             }
             float4 result = sample1 * weights.x + sample2 * weights.y + sample3 * weights.z;
             return result * _StochasticTint;
         }
 
-        float3 SampleHeitzNormal(StochasticData data)
-        {
-            float2 dx = data.dUVdx * exp2(_StochasticMipBias);
-            float2 dy = data.dUVdy * exp2(_StochasticMipBias);
-            float3 normal1 = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.uv1, dx, dy));
-            float3 normal2 = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.uv2, dx, dy));
-            float3 normal3 = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.uv3, dx, dy));
-            float3 weights = data.weights;
-            if (_StochasticHeightBlend == 1)
-            {
-                float h1 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv1, dx, dy).r;
-                float h2 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv2, dx, dy).r;
-                float h3 = _StochasticHeightMap.SampleGrad(sampler_StochasticHeightMap, data.uv3, dx, dy).r;
-                weights = HeightBlend3(weights, float3(h1, h2, h3), _StochasticHeightStrength, 0.001);
-            }
-            
-            return normalize(normal1 * weights.x + normal2 * weights.y + normal3 * weights.z);
-        }
-
+        // sample contrast albedo
         float4 SampleContrastAlbedo(StochasticData data)
         {
             // sample at 4 random positions using precomputed data
@@ -1845,14 +1832,35 @@
             }
         }
 
+        // sample heitz normal
+        float3 SampleHeitzNormal(StochasticData data)
+        {
+            float2 dx = data.dUVdx * exp2(_StochasticMipBias);
+            float2 dy = data.dUVdy * exp2(_StochasticMipBias);
+            float3 normal1 = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.uv1, dx, dy));
+            float3 normal2 = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.uv2, dx, dy));
+            float3 normal3 = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.uv3, dx, dy));
+            float3 weights = data.weights;
+            if (_StochasticHeightBlend == 1)
+            {
+                float h1 = _StochasticHeightMap.SampleGrad(sampler_StochasticTexture, data.uv1, dx, dy).r;
+                float h2 = _StochasticHeightMap.SampleGrad(sampler_StochasticTexture, data.uv2, dx, dy).r;
+                float h3 = _StochasticHeightMap.SampleGrad(sampler_StochasticTexture, data.uv3, dx, dy).r;
+                weights = HeightBlend3(weights, float3(h1, h2, h3), _StochasticHeightStrength, 0.001);
+            }
+            
+            return normalize(normal1 * weights.x + normal2 * weights.y + normal3 * weights.z);
+        }
+
+        // sample contrast normal
         float3 SampleContrastNormal(StochasticData data)
         {
             // sample normals at 4 random positions
             float3 normals[4];
-            normals[0] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[0], data.dUVdx, data.dUVdy));
-            normals[1] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[1], data.dUVdx, data.dUVdy));
-            normals[2] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[2], data.dUVdx, data.dUVdy));
-            normals[3] = UnpackNormal(_BumpMap.SampleGrad(sampler_MainTex, data.scaledUV + data.offsets[3], data.dUVdx, data.dUVdy));
+            normals[0] = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[0], data.dUVdx, data.dUVdy));
+            normals[1] = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[1], data.dUVdx, data.dUVdy));
+            normals[2] = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[2], data.dUVdx, data.dUVdy));
+            normals[3] = UnpackNormal(_BumpMap.SampleGrad(sampler_StochasticTexture, data.scaledUV + data.offsets[3], data.dUVdx, data.dUVdy));
             // calculate contrast scores using luminance approximation
             float4 contrasts;
             [unroll] for (int i = 0; i < 4; i++)
@@ -1873,6 +1881,7 @@
             return normalize(normals[0] * weights.x + normals[1] * weights.y + normals[2] * weights.z + normals[3] * weights.w);
         }
 
+        // albedo wrapper
         StochasticData SampleStochasticAlbedo(float2 uv, float2 screenPos, BacklaceSurfaceData Surface)
         {
             float4 stochasticSample = 0;
@@ -1887,7 +1896,6 @@
                 data = PrepareHeitzData(uv);
                 stochasticSample = SampleHeitzAlbedo(data, uv, screenPos);
             }
-            stochasticSample.a = (_StochasticAlpha == 1) ? stochasticSample.a : 1.0;
             // blend
             switch (_StochasticBlendMode)
             {
@@ -1904,9 +1912,11 @@
                     data.albedoSample =  lerp(Surface.Albedo, stochasticSample, _StochasticOpacity);
                     break;
             }
+            data.albedoSample.a = (_StochasticAlpha == 1) ? (Surface.Albedo.a * stochasticSample.a) : Surface.Albedo.a;
             return data;
         }
 
+        // normal wrapper
         void SampleStochasticNormal(float2 uv, StochasticData data)
         {
             if (_StochasticNormals == 0) return;
@@ -1920,6 +1930,181 @@
             }
         }
     #endif // _BACKLACE_STOCHASTIC
+
+    // splatter mapping feature
+    #if defined(_BACKLACE_SPLATTER)
+        UNITY_DECLARE_TEX2D(_SplatterControl);
+        float4 _SplatterControl_ST;
+        // layer one: weird
+        UNITY_DECLARE_TEX2D(_SplatterAlbedo0); // sampler that is used in all tex's
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SplatterNormal0);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SplatterMasks0);
+        float4 _SplatterColor0; float4 _SplatterTiling0; float _SplatterNormalStrength0;
+        int _SplatterBlendMode0;
+        // layer two: girls
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SplatterAlbedo1);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SplatterNormal1);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_SplatterMasks1);
+        float4 _SplatterColor1; float4 _SplatterTiling1; float _SplatterNormalStrength1;
+        int _SplatterBlendMode1;
+        // settings
+        int _SplatterMappingMode;
+        float _SplatterBlendSharpness;
+        float _SplatterMipBias;
+        float _SplatterCullThreshold;
+        int _SplatterAlphaChannel;
+        int _SplatterUseNormals;
+
+        struct SplatterLayerResult
+        {
+            float3 albedo;
+            float3 normal;
+            float4 masks;
+            float alpha;
+        };
+
+        SplatterLayerResult SampleSplatterLayerTriplanar(
+            Texture2D albedoMap, Texture2D normalMap, Texture2D maskMap, SamplerState sharedSampler,
+            float3 worldPos, float3 weights, float4 tiling, float normalStrength, float mipBias)
+        {
+            SplatterLayerResult res = (SplatterLayerResult)0;
+            float3 finalAlbedo = 0; float3 finalNormal = 0; float4 finalMasks = 0;
+            float2 uvX = worldPos.zy * tiling.xy + tiling.zw;
+            float2 uvY = worldPos.xz * tiling.xy + tiling.zw;
+            float2 uvZ = worldPos.xy * tiling.xy + tiling.zw;
+            // x axis
+            if (weights.x > 0.0001)
+            {
+                float4 alb = albedoMap.SampleBias(sharedSampler, uvX, mipBias);
+                float3 nrm = UnpackScaleNormal(normalMap.SampleBias(sharedSampler, uvX, mipBias), normalStrength);
+                float4 msk = maskMap.SampleBias(sharedSampler, uvX, mipBias);
+                finalAlbedo += alb.rgb * weights.x;
+                finalNormal += float3(0, nrm.y, nrm.x) * weights.x;
+                finalMasks += msk * weights.x;
+            }
+            // y axis
+            if (weights.y > 0.0001)
+            {
+                float4 alb = albedoMap.SampleBias(sharedSampler, uvY, mipBias);
+                float3 nrm = UnpackScaleNormal(normalMap.SampleBias(sharedSampler, uvY, mipBias), normalStrength);
+                float4 msk = maskMap.SampleBias(sharedSampler, uvY, mipBias);
+                finalAlbedo += alb.rgb * weights.y;
+                finalNormal += float3(nrm.x, 0, nrm.y) * weights.y;
+                finalMasks += msk * weights.y;
+            }
+            // z axis
+            if (weights.z > 0.0001)
+            {
+                float4 alb = albedoMap.SampleBias(sharedSampler, uvZ, mipBias);
+                float3 nrm = UnpackScaleNormal(normalMap.SampleBias(sharedSampler, uvZ, mipBias), normalStrength);
+                float4 msk = maskMap.SampleBias(sharedSampler, uvZ, mipBias);
+                finalAlbedo += alb.rgb * weights.z;
+                finalNormal += float3(nrm.x, nrm.y, 0) * weights.z;
+                finalMasks += msk * weights.z;
+            }
+            res.albedo = finalAlbedo;
+            res.normal = finalNormal;
+            res.masks = finalMasks;
+            res.alpha = 1.0;
+            return res;
+        }
+
+        SplatterLayerResult SampleSplatterLayerUV(
+            Texture2D albedoMap, Texture2D normalMap, Texture2D maskMap, SamplerState sharedSampler,
+            float2 uv, float4 tiling, float normalStrength, float mipBias)
+        {
+            SplatterLayerResult res;
+            float2 finalUV = uv * tiling.xy + tiling.zw;
+            float4 albSample = albedoMap.SampleBias(sharedSampler, finalUV, mipBias);
+            res.albedo = albSample.rgb;
+            res.alpha = albSample.a;
+            if (_SplatterUseNormals == 1) res.normal = UnpackScaleNormal(normalMap.SampleBias(sharedSampler, finalUV, mipBias), normalStrength);
+            else res.normal = float3(0, 0, 1);
+            res.masks = maskMap.SampleBias(sharedSampler, finalUV, mipBias);
+            return res;
+        }
+
+        // reused between both layers
+        void BlendLayer(inout BacklaceSurfaceData Surface, inout float3 finalNormal, inout float finalAlpha,
+            SplatterLayerResult layer, float opacity, int blendMode)
+        {
+            if (opacity <= 0.001) return;
+            // blend albedo
+            float3 targetColor = layer.albedo;
+            switch (blendMode)
+            {
+                case 1: // additive
+                    Surface.Albedo.rgb += targetColor * opacity;
+                    break;
+                case 2: // multiply
+                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * targetColor, opacity);
+                    break;
+                default: // (0) alpha blend
+                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, targetColor, opacity);
+                    break;
+            }
+            // blend normals
+            float3 targetNormal;
+            if (_SplatterMappingMode == 1) targetNormal = normalize(layer.normal + float3(0, 0, 1));
+            else targetNormal = layer.normal;
+            finalNormal = normalize(lerp(finalNormal, targetNormal, opacity));
+            // pbr stuffs
+            Surface.Metallic = lerp(Surface.Metallic, layer.masks.r, opacity);
+            Surface.Occlusion = lerp(Surface.Occlusion, layer.masks.g, opacity);
+            Surface.Glossiness = lerp(Surface.Glossiness, layer.masks.a, opacity);
+            Surface.Roughness = 1.0 - Surface.Glossiness;
+            if (_SplatterAlphaChannel == 1) finalAlpha = lerp(finalAlpha, layer.alpha, opacity);
+        }
+
+        void ApplySplatter(inout BacklaceSurfaceData Surface, inout float3 finalNormal, inout float finalAlpha, FragmentData i)
+        {
+            // control weights
+            float2 ctrlUV = i.uv * _SplatterControl_ST.xy + _SplatterControl_ST.zw;
+            float4 ctrl = UNITY_SAMPLE_TEX2D(_SplatterControl, ctrlUV);
+            if (_SplatterBlendSharpness > 1.0)
+            {
+                ctrl = pow(max(ctrl, 0.0001), _SplatterBlendSharpness);
+            }
+            // prepare geometry
+            float3 triplanarWeights = 0;
+            float mipBias = _SplatterMipBias;
+            if (_SplatterMappingMode == 1)
+            {
+                float3 n = abs(Surface.NormalDir);
+                n = pow(max(n, 0.001), 4.0);
+                triplanarWeights = n / max(dot(n, 1.0), 0.001);
+                float threshold = _SplatterCullThreshold;
+                if (triplanarWeights.x < threshold) triplanarWeights.x = 0;
+                if (triplanarWeights.y < threshold) triplanarWeights.y = 0;
+                if (triplanarWeights.z < threshold) triplanarWeights.z = 0;
+                triplanarWeights /= max(dot(triplanarWeights, 1.0), 0.001);
+            }
+            // sample layers
+            SplatterLayerResult layer0, layer1;
+            if (_SplatterMappingMode == 1) // triplanar
+            {
+                #define SAMPLE_TRIPLANAR(idx, alb, nrm, msk, col, til, str) \
+                    layer##idx = SampleSplatterLayerTriplanar(alb, _SplatterNormal##idx, _SplatterMasks##idx, sampler_SplatterAlbedo0, i.worldPos, triplanarWeights, til, str, mipBias); \
+                    layer##idx.albedo *= col.rgb; \
+                    layer##idx.masks.a *= col.a; /* USE TINT ALPHA TO CONTROL SMOOTHNESS */
+                SAMPLE_TRIPLANAR(0, _SplatterAlbedo0, _SplatterNormal0, _SplatterMasks0, _SplatterColor0, _SplatterTiling0, _SplatterNormalStrength0)
+                SAMPLE_TRIPLANAR(1, _SplatterAlbedo1, _SplatterNormal1, _SplatterMasks1, _SplatterColor1, _SplatterTiling1, _SplatterNormalStrength1)
+            }
+            else // standard uv
+            {
+                #define SAMPLE_UV(idx, alb, nrm, msk, col, til, str) \
+                    layer##idx = SampleSplatterLayerUV(alb, _SplatterNormal##idx, _SplatterMasks##idx, sampler_SplatterAlbedo0, i.uv, til, str, mipBias); \
+                    layer##idx.albedo *= col.rgb; \
+                    layer##idx.masks.a *= col.a; /* USE TINT ALPHA TO CONTROL SMOOTHNESS */
+                SAMPLE_UV(0, _SplatterAlbedo0, _SplatterNormal0, _SplatterMasks0, _SplatterColor0, _SplatterTiling0, _SplatterNormalStrength0)
+                SAMPLE_UV(1, _SplatterAlbedo1, _SplatterNormal1, _SplatterMasks1, _SplatterColor1, _SplatterTiling1, _SplatterNormalStrength1)
+            }
+            // compose
+            BlendLayer(Surface, finalNormal, finalAlpha, layer0, ctrl.r, _SplatterBlendMode0);
+            BlendLayer(Surface, finalNormal, finalAlpha, layer1, ctrl.g, _SplatterBlendMode1);
+            Surface.Albedo = saturate(Surface.Albedo);
+        }
+    #endif // _BACKLACE_SPLATTER
 
 #endif // BACKLACE_WORLD
 

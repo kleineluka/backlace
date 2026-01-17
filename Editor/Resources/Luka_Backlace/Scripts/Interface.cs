@@ -2275,7 +2275,9 @@ namespace Luka.Backlace
                         Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
                         materialEditor.ShaderProperty(prop_GlitchFrequency, languages.speak("prop_GlitchFrequency"));
                     }
-                sub_tab_parallax.process(() => {
+                    Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
+                });
+                                sub_tab_parallax.process(() => {
                     // stylise - parallax
                     prop_ToggleParallax = FindProperty("_ToggleParallax", properties);
                     prop_ParallaxMode = FindProperty("_ParallaxMode", properties);
@@ -2330,8 +2332,6 @@ namespace Luka.Backlace
                             break;
                     }
                     Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
-                });
-                    Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
                 });
                 sub_tab_ps1.process(() => {
                     // effects - ps1

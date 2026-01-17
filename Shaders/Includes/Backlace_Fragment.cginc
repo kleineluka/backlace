@@ -39,6 +39,11 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #endif // _BACKLACE_PARALLAX
     SampleAlbedo(Surface, i.vertex.xyz);
     #if defined(BACKLACE_WORLD)
+        #if defined(_BACKLACE_SPLATTER)
+            float3 splatterNormals = 0;
+            float splatterAlpha = 1;
+            ApplySplatter(Surface, splatterNormals, splatterAlpha, i);
+        #endif // _BACKLACE_SPLATTER
         #if defined(_BACKLACE_STOCHASTIC)
             StochasticData stoch = SampleStochasticAlbedo(Uvs[0], i.scrPos.xy / i.scrPos.w, Surface);
             Surface.Albedo = stoch.albedoSample;
@@ -66,6 +71,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     ClipAlpha(Surface);
     SampleNormal();
     #if defined(BACKLACE_WORLD)
+        #if defined(_BACKLACE_SPLATTER)
+            NormalMap = splatterNormals;
+        #endif // _BACKLACE_SPLATTER
         #if defined(_BACKLACE_STOCHASTIC)
             SampleStochasticNormal(Uvs[0], stoch); // re use data from albedo sampling
         #endif // _BACKLACE_STOCHASTIC
@@ -196,6 +204,11 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_DISSOLVE) // todo: move before lighting but store edge glow value if not culling
         ApplyDissolve(Surface, i);
     #endif // _BACKLACE_DISSOLVE
+    #if defined(BACKLACE_WORLD)
+        #if defined(_BACKLACE_SPLATTER)
+            Surface.FinalColor.a *= splatterAlpha;
+        #endif // _BACKLACE_SPLATTER
+    #endif // BACKLACE_WORLD
     Surface.FinalColor.a *= _Alpha;
     return Surface.FinalColor;
 }
