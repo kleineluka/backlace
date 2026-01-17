@@ -95,7 +95,7 @@ float4 panty() {
                 float stitch_check = objectPos[_StitchAxis];
                 if (stitch_check > _StitchOffset)
                 {
-                    Surface.Albedo = UNITY_SAMPLE_TEX2D(_StitchTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
+                    Surface.Albedo = UNITY_SAMPLE_TEX2D_SAMPLER(_StitchTex, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
                 }
             }
         }
@@ -542,7 +542,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
             decal2.scale = float3(_Decal2TriplanarScale, _Decal2TriplanarScale, _Decal2TriplanarScale);
             decal2.rotation = _Decal2TriplanarRotation.xyz;
             decal2.sharpness = _Decal2TriplanarSharpness;
-            ApplyDecal_Triplanar(decal2, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal2Tex);
+            ApplyDecal_Triplanar(decal2, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal1Tex);
         }
         else // UV Space
         {
@@ -551,7 +551,7 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
             decal2.rotation = float3(_Decal2Rotation, 0, 0);
             decal2.sharpness = 0;
             float2 decal2Uv = (_Decal2Space == 0) ? Uvs[_Decal2_UV] : i.scrPos.xy / i.scrPos.w;
-            ApplyDecal_UVSpace(decal2, decal2Uv, _Decal2Tex, sampler_Decal2Tex, _Decal2_UV);
+            ApplyDecal_UVSpace(decal2, decal2Uv, _Decal2Tex, sampler_Decal1Tex, _Decal2_UV);
         }
         [branch] if (_DecalStage == 0) // early
         {

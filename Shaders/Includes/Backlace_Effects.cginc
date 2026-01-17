@@ -36,7 +36,7 @@
 
 // post-processing features
 #if defined(_BACKLACE_POST_PROCESSING)
-    UNITY_DECLARE_TEX2D(_ColorGradingLUT);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ColorGradingLUT);
     float4 _RGBColor;
     float _RGBBlendMode;
     float _HSVMode;
@@ -84,7 +84,7 @@
         // colour grading
         [branch] if (_ColorGradingIntensity > 0)
         {
-            float3 gradedColor = UNITY_SAMPLE_TEX2D(_ColorGradingLUT, finalColor.rg).rgb;
+            float3 gradedColor = UNITY_SAMPLE_TEX2D_SAMPLER(_ColorGradingLUT, _MainTex, finalColor.rg).rgb;
             finalColor = lerp(finalColor, gradedColor, _ColorGradingIntensity);
         }
         // black and white
@@ -101,7 +101,7 @@
 
 // detail maps features
 #if defined(_BACKLACE_DETAIL)
-    UNITY_DECLARE_TEX2D(_DetailAlbedoMap); // shares sampler w/ normal
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailAlbedoMap);
     UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailNormalMap);
     float _DetailMap_UV;
     float _DetailTiling;
@@ -110,9 +110,9 @@
     void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
     {
         float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
-        float4 detailAlbedo = UNITY_SAMPLE_TEX2D(_DetailAlbedoMap, detailUV);
+        float4 detailAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_DetailAlbedoMap, _MainTex, detailUV);
         Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
-        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_DetailNormalMap, _DetailAlbedoMap, detailUV), _DetailNormalStrength);
+        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_DetailNormalMap, _MainTex, detailUV), _DetailNormalStrength);
         float3 baseNormalTS = NormalMap;
         NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
     }
@@ -125,12 +125,12 @@
     float _SSSStrength;
     float _SSSPower;
     float _SSSDistortion;
-    UNITY_DECLARE_TEX2D(_SSSThicknessMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_SSSThicknessMap);
     float _SSSThickness;
 
     void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
     {
-        float thickness = UNITY_SAMPLE_TEX2D(_SSSThicknessMap, Uvs[_ThicknessMap_UV]).r * _SSSThickness;
+        float thickness = UNITY_SAMPLE_TEX2D_SAMPLER(_SSSThicknessMap, _MainTex, Uvs[_ThicknessMap_UV]).r * _SSSThickness;
         float3 scatterDir = normalize(Surface.LightDir + Surface.NormalDir * _SSSDistortion);
         float scatterDot = dot(Surface.ViewDir, -scatterDir);
         scatterDot = saturate(scatterDot);
@@ -143,7 +143,7 @@
 // parallax features
 #if defined(_BACKLACE_PARALLAX)
     // shared across multiple modes
-    UNITY_DECLARE_TEX2D(_ParallaxMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ParallaxMap);
     float _ParallaxMap_UV;
     float _ParallaxStrength;
     int _ParallaxMode;
@@ -166,7 +166,7 @@
 
     void ApplyParallax_Fast(inout float2 uv, in BacklaceSurfaceData Surface)
     {
-        float height = UNITY_SAMPLE_TEX2D(_ParallaxMap, uv).r;
+        float height = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxMap, _MainTex, uv).r;
         float3 viewDirTS = float3(dot(Surface.ViewDir, Surface.TangentDir), dot(Surface.ViewDir, Surface.BitangentDir), 0);
         float2 offset = viewDirTS.xy * (height * _ParallaxStrength);
         uv -= offset;
@@ -185,17 +185,17 @@
         {
             currentHeight -= stepSize;
             currentUVOffset += step;
-            surfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv + currentUVOffset, 0).r;
+            surfaceHeight = _ParallaxMap.SampleLevel(sampler_MainTex, uv + currentUVOffset, 0).r;
             if (surfaceHeight > currentHeight)
             {
                 currentUVOffset -= step;
                 currentHeight += stepSize;
-                float prevSurfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv + currentUVOffset, 0).r;
+                float prevSurfaceHeight = _ParallaxMap.SampleLevel(sampler_MainTex, uv + currentUVOffset, 0).r;
                 float distanceToSurface = currentHeight - surfaceHeight;
                 float distanceBetweenSamples = surfaceHeight - prevSurfaceHeight;
                 currentUVOffset += step * (distanceToSurface / max(distanceBetweenSamples, 0.001));
                 uv += currentUVOffset;
-                surfaceHeight = _ParallaxMap.SampleLevel(sampler_ParallaxMap, uv, 0).r;
+                surfaceHeight = _ParallaxMap.SampleLevel(sampler_MainTex, uv, 0).r;
                 break;
             }
         }
@@ -256,7 +256,7 @@
         float3 viewDirTS = GetViewTangent(Surface);
         float2 uv = Uvs[_ParallaxMap_UV];
         // create mask and calculate all the parallax offsets
-        float4 mask = UNITY_SAMPLE_TEX2D(_ParallaxMap, uv);
+        float4 mask = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxMap, _MainTex, uv);
         float2 offset1 = viewDirTS.xy * _ParallaxLayerDepth1 * _ParallaxStrength;
         float2 offset2 = viewDirTS.xy * _ParallaxLayerDepth2 * _ParallaxStrength;
         float2 offset3 = viewDirTS.xy * _ParallaxLayerDepth3 * _ParallaxStrength;
@@ -428,7 +428,7 @@
 
 // clearcoat features
 #if defined(_BACKLACE_CLEARCOAT)
-    UNITY_DECLARE_TEX2D(_ClearcoatMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ClearcoatMap);
     float4 _ClearcoatMap_ST;
     float _ClearcoatStrength;
     float _ClearcoatRoughness;
@@ -438,7 +438,7 @@
 
     void CalculateClearcoat(inout BacklaceSurfaceData Surface, out float3 highlight, out float3 occlusion)
     {
-        float4 clearcoatMap = UNITY_SAMPLE_TEX2D(_ClearcoatMap, Uvs[_ClearcoatMap_UV]);
+        float4 clearcoatMap = UNITY_SAMPLE_TEX2D_SAMPLER(_ClearcoatMap, _MainTex, Uvs[_ClearcoatMap_UV]);
         float mask = _ClearcoatStrength * clearcoatMap.r;
         float roughness = _ClearcoatRoughness * clearcoatMap.g;
         float3 F0 = lerp(0.04, 1.0, _ClearcoatReflectionStrength);
@@ -544,8 +544,8 @@
     int _PathingMappingMode;
     int _PathingColorMode;
     float4 _PathingColor2;
-    UNITY_DECLARE_TEX2D(_PathingTexture);
-    float _PathingTexture_UV;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture); // note to self: will this break?
+    int _PathingTexture_UV;
     float _PathingStart;
     float _PathingEnd;
 
@@ -609,7 +609,7 @@
         switch(_PathingColorMode)
         {
             case 1: // texture
-                float4 pathSample = UNITY_SAMPLE_TEX2D(_PathingTexture, Uvs[_PathingTexture_UV]);
+                float4 pathSample = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingTexture, _MainTex, Uvs[_PathingTexture_UV]);
                 pathEmission *= pathSample.rgb;
                 pathBlend = pathSample.a;
                 break;
@@ -776,7 +776,7 @@
 
 // iridescence features
 #if defined(_BACKLACE_IRIDESCENCE)
-    UNITY_DECLARE_TEX2D(_IridescenceMask);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_IridescenceMask);
     float _IridescenceMask_UV;
     float4 _IridescenceTint;
     float _IridescenceIntensity;
@@ -804,7 +804,7 @@
             float hue = finalFresnel * _IridescenceFrequency;
             iridescenceColor = Sinebow(hue);
         }
-        float mask = UNITY_SAMPLE_TEX2D(_IridescenceMask, Uvs[_IridescenceMask_UV]).r;
+        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_IridescenceMask, _MainTex, Uvs[_IridescenceMask_UV]).r;
         float finalIridescenceIntensity = _IridescenceIntensity;
         #if defined(_BACKLACE_AUDIOLINK)
             finalIridescenceIntensity *= i.alChannel2.z;
@@ -968,7 +968,7 @@
             float2(0, 0)
         );
         float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
-        float mask = UNITY_SAMPLE_TEX2D(_WorldEffectMask, _WorldEffectTex, Uvs[0]).r;
+        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_WorldEffectMask, _MainTex, Uvs[0]).r;
         float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
         switch(_WorldEffectBlendMode)
         {
@@ -1080,7 +1080,7 @@
     float _WindSpeed;
     float _WindScale;
     float4 _WindDirection;
-    UNITY_DECLARE_TEX2D(_WindNoiseTex);
+    UNITY_DECLARE_TEX2D(_WindNoiseTex); // custom sampler not working in vertex..
     float _BreathingStrength;
     float _BreathingSpeed;
     int _VertexEffectType; // 0 = distortion, 1 = glitch
@@ -1319,7 +1319,7 @@
 
     // refraction feature
     #if defined(_BACKLACE_REFRACTION)
-        UNITY_DECLARE_TEX2D(_RefractionMask);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_RefractionMask);
         float _RefractionMask_UV;
         float4 _RefractionTint;
         float _RefractionIOR;
@@ -1419,7 +1419,7 @@
             float3 reflectionVector = reflect(-Surface.ViewDir, Surface.NormalDir);
             float2 causticsUV = reflectionVector.xy * _CausticsTiling + (_Time.y * _CausticsSpeed);
             float3 caustics = UNITY_SAMPLE_TEX2D(_CausticsTex, causticsUV).rgb * _CausticsIntensity;
-            float mask = UNITY_SAMPLE_TEX2D(_RefractionMask, Uvs[_RefractionMask_UV]).r;
+            float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_RefractionMask, _MainTex, Uvs[_RefractionMask_UV]).r;
             float3 crystalColor = lerp(_RefractionTint.rgb + caustics, lerp(_RefractionTint.rgb, _CausticsColor.rgb, caustics), _RefractionBlendMode);
             float3 finalColor;
             switch(int(_RefractionMode))

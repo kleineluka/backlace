@@ -234,7 +234,7 @@ float3 _VertexManipulationScale;
     float _Decal1CycleSpeed;
     // decal 2
     int _Decal2Enable;
-    UNITY_DECLARE_TEX2D(_Decal2Tex);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_Decal2Tex); // share sampler with decal1
     float4 _Decal2Tint;
     float2 _Decal2Position;
     float2 _Decal2Scale;
@@ -283,14 +283,14 @@ float3 _VertexManipulationScale;
 
 // shadow map feature
 #if defined(_BACKLACE_SHADOW_MAP)
-    UNITY_DECLARE_TEX2D(_ShadowMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ShadowMap);
     float _ShadowMap_UV;
     float _ShadowMapIntensity;
 #endif // _BACKLACE_SHADOW_MAP
 
 // texture stitching feature
 int _UseTextureStitching;
-UNITY_DECLARE_TEX2D(_StitchTex);
+UNITY_DECLARE_TEX2D_NOSAMPLER(_StitchTex);
 float4 _StitchTex_ST;
 int _StitchTex_UV;
 int _StitchAxis;
