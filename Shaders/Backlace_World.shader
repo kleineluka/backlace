@@ -820,14 +820,19 @@ Shader "luka/backlace/world"
         // [Space(35)]
         // [Header(Texture Bombing)]
         // [Space(10)]
-        [Toggle(_BACKLACE_BOMBING)] _TextureBombing ("Enable Texture Bombing", Int) = 0
-        [Enum(Jittered, 0, Bombing, 1)] _BombingMode ("Bombing Mode", Int) = 1
+        [Toggle(_BACKLACE_BOMBING)] _BombingTextures ("Enable Texture Bombing", Int) = 0
+        [Enum(Jittered, 0, Layered, 1)] _BombingMode ("Bombing Mode", Int) = 1
         [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2, Overlay, 3)] _BombingBlendMode ("Blend Mode", Int) = 0
+        [Enum(UV, 0, Triplanar, 1)] _BombingMappingMode ("Mapping Mode", Float) = 0
+        _BombingTriplanarSharpness ("Triplanar Sharpness", Range(1, 64)) = 8
+        _BombingThreshold ("Density Threshold", Range(0, 1)) = 1
         _BombingOpacity ("Overall Opacity", Range(0, 1)) = 1.0
         _BombingTex ("Albedo (RGBA)", 2D) = "white" { }
         _BombingColor ("Tint", Color) = (1, 1, 1, 1)
         _BombingTiling ("Tiling", Float) = 1
         _BombingDensity ("Density", Range(0.1, 5)) = 1.0
+        _BombingGlobalScale ("Global Scale", Range(0.1, 5)) = 1
+        _BombingJitterAmount ("Position Jitter", Range(0, 1)) = 1
         // variation
         _BombingScaleVar ("Scale Variation", Range(0, 1)) = 0.2
         _BombingRotVar ("Rotation Variation", Range(0, 1)) = 1.0
@@ -842,7 +847,6 @@ Shader "luka/backlace/world"
         [Enum(Disabled, 0, Enabled, 1)] _BombingUseSheet ("Use Spritesheet", Int) = 0
         _BombingSheetData ("Sheet Data (X=Cols, Y=Rows)", Vector) = (1, 1, 0, 0)
         // optimisation
-        [Enum(Disabled, 0, Enabled, 1)] _BombingUseAlpha ("Use Alpha Channel", Int) = 0
         _BombingCullDist ("Cull Distance", Float) = 20
         _BombingCullFalloff ("Cull Falloff", Float) = 5
 

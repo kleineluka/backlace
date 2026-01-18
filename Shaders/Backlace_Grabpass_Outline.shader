@@ -1,4 +1,4 @@
-Shader "luka/backlace/all"
+Shader "luka/backlace/grabpass_outline"
 {
 
     Properties

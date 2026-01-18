@@ -10,6 +10,7 @@
             float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, Surface.NormalDir);
             float halfWidth = max(_DissolveEdgeWidth, 0.0001) * 0.5;
             if (_DissolveEdgeMode == 0) // glow
+
             {
                 float fadeIn = smoothstep(0.0, halfWidth, _DissolveProgress);
                 float fadeOut = 1.0 - smoothstep(1.0 - halfWidth, 1.0, _DissolveProgress);
@@ -24,6 +25,7 @@
                 Surface.FinalColor.a = max(surfaceAlpha, edgeGlow * _DissolveEdgeColor.a);
             }
             else // smooth fade
+
             {
                 float startEdge = _DissolveProgress - halfWidth;
                 float endEdge = _DissolveProgress + halfWidth;
@@ -60,12 +62,14 @@
         // hsv manipulation
         float3 hsv = RGBtoHSV(finalColor);
         [branch] if (_HSVMode == 1) // additive
+
         {
             hsv.x = frac(hsv.x + _HSVHue);
             hsv.y += _HSVSaturation - 1.0;
             hsv.z += _HSVValue - 1.0;
         }
         else if (_HSVMode == 2) // multiplicative
+
         {
             hsv.x = frac(hsv.x + _HSVHue);
             hsv.y *= _HSVSaturation;
@@ -80,6 +84,7 @@
             #else // _BACKLACE_AUDIOLINK
                 finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
             #endif // _BACKLACE_AUDIOLINK
+
         }
         // colour grading
         [branch] if (_ColorGradingIntensity > 0)
@@ -235,17 +240,17 @@
         switch(_ParallaxBlend)
         {
             case 0: // additive
-                roomColor += Surface.Albedo.rgb;
-                break;
+            roomColor += Surface.Albedo.rgb;
+            break;
             case 1: // multiply
-                roomColor *= Surface.Albedo.rgb;
-                break;
+            roomColor *= Surface.Albedo.rgb;
+            break;
             case 2: // alpha blend
-                roomColor = lerp(Surface.Albedo.rgb, roomColor, _InteriorColor.a);
-                break;
+            roomColor = lerp(Surface.Albedo.rgb, roomColor, _InteriorColor.a);
+            break;
             default: // replace
-                // do nothing
-                break;
+            // do nothing
+            break;
         }
         Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, roomColor, _ParallaxBlendWeight);
     }
@@ -267,7 +272,8 @@
         float4 layer1 = 0;
         float4 layer2 = 0;
         float4 layer3 = 0;
-        if (_ParallaxTile == 0) {  
+        if (_ParallaxTile == 0)
+        {
             // dont tile
             layer1 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer1, _MainTex, uv1);
             layer2 = UNITY_SAMPLE_TEX2D_SAMPLER(_ParallaxLayer2, _MainTex, uv2);
@@ -275,7 +281,9 @@
             if (_ParallaxTile == 0 && (any(uv1 < 0) || any(uv1 > 1))) layer1 = 0;
             if (_ParallaxTile == 0 && (any(uv2 < 0) || any(uv2 > 1))) layer2 = 0;
             if (_ParallaxTile == 0 && (any(uv3 < 0) || any(uv3 > 1))) layer3 = 0;
-        } else {
+        }
+        else
+        {
             // tile uv
             uv1 = frac(uv1);
             uv2 = frac(uv2);
@@ -286,7 +294,8 @@
         }
         // stacking modes
         float3 finalLayerColor = 0;
-        switch (_ParallaxStack) {
+        switch(_ParallaxStack)
+        {
             case 0:
                 // top to bottom
                 finalLayerColor = layer3.rgb * layer3.a * mask.b;
@@ -317,17 +326,17 @@
         switch(_ParallaxBlend)
         {
             case 0: // additive
-                finalLayerColor += Surface.Albedo.rgb;
-                break;
+            finalLayerColor += Surface.Albedo.rgb;
+            break;
             case 1: // multiply
-                finalLayerColor *= Surface.Albedo.rgb;
-                break;
+            finalLayerColor *= Surface.Albedo.rgb;
+            break;
             case 2: // alpha blend
-                finalLayerColor = lerp(Surface.Albedo.rgb, finalLayerColor, mask.a);
-                break;
+            finalLayerColor = lerp(Surface.Albedo.rgb, finalLayerColor, mask.a);
+            break;
             default: // replace
-                // do nothing
-                break;
+            // do nothing
+            break;
         }
         Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, finalLayerColor, _ParallaxBlendWeight);
     }
@@ -347,14 +356,14 @@
         switch(_CubemapBlendMode)
         {
             case 0: // additive
-                Surface.FinalColor.rgb += cubemapColor * intensity;
-                break;
+            Surface.FinalColor.rgb += cubemapColor * intensity;
+            break;
             case 1: // multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
+            break;
             case 2: // replace
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
+            break;
         }
     }
 #endif // _BACKLACE_CUBEMAP
@@ -374,7 +383,7 @@
     void ApplyMatcap(inout BacklaceSurfaceData Surface, FragmentData i)
     {
         float3 matcapColor;
-        [branch] if (_MatcapSmoothnessEnabled == 1) 
+        [branch] if (_MatcapSmoothnessEnabled == 1)
         {
             // use smoothness to sample a mip level
             float mipLevel = _MatcapSmoothness * 10.0;
@@ -394,14 +403,14 @@
         switch(_MatcapBlendMode)
         {
             case 0: // additive
-                Surface.FinalColor.rgb += finalMatcap;
-                break;
+            Surface.FinalColor.rgb += finalMatcap;
+            break;
             case 1: // multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
+            break;
             case 2: // replace
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
+            break;
         }
     }
 #endif // _BACKLACE_MATCAP
@@ -470,7 +479,7 @@
 #endif // _BACKLACE_CLEARCOAT
 
 // screen space rim feature
-#if defined(_BACKLACE_DEPTH_RIMLIGHT) 
+#if defined(_BACKLACE_DEPTH_RIMLIGHT)
     #ifndef BACKLACE_DEPTH
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
         float4 _CameraDepthTexture_TexelSize;
@@ -485,12 +494,13 @@
     // sobel point array
     static const int2 sobelPoints[9] = {
         int2(-1, -1), int2(0, -1), int2(1, -1),
-        int2(-1,  0), int2(0,  0), int2(1,  0),
-        int2(-1,  1), int2(0,  1), int2(1,  1)
+        int2(-1, 0), int2(0, 0), int2(1, 0),
+        int2(-1, 1), int2(0, 1), int2(1, 1)
     };
 
     // logic to keep rim consistent regardless of camera distance / depth
-    float ScaleRimWidth(float z) {
+    float ScaleRimWidth(float z)
+    {
         float scale = 1.0 / z;
         return _DepthRimWidth * 50.0 / _ScreenParams.y * scale;
     }
@@ -515,14 +525,14 @@
         switch(_DepthRimBlendMode)
         {
             case 0: // additive
-                Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
-                break;
+            Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
+            break;
             case 1: // replace
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
+            break;
             default: // multiply (case 2)
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
+            break;
         }
     }
 #endif // _BACKLACE_DEPTH_RIMLIGHT
@@ -544,7 +554,7 @@
     int _PathingMappingMode;
     int _PathingColorMode;
     float4 _PathingColor2;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture); 
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture);
     int _PathingTexture_UV;
     float _PathingStart;
     float _PathingEnd;
@@ -573,30 +583,30 @@
         switch(_PathingType)
         {
             case 1: // path
-                pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
-                break;
+            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+            break;
             case 2: // loop
-                float loop_dist = abs(pathTime - pathValue);
-                loop_dist = min(loop_dist, 1.0 - loop_dist);
-                pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
-                break;
+            float loop_dist = abs(pathTime - pathValue);
+            loop_dist = min(loop_dist, 1.0 - loop_dist);
+            pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
+            break;
             case 3: // ping-pong
-                pathTime = 1.0 - abs(1.0 - 2.0 *  frac(_Time.y * _PathingSpeed + _PathingOffset)); // goes from 0 -> 1 -> 0
-                pathTime = lerp(_PathingStart, _PathingEnd, pathTime);  
-                pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
-                break;
+            pathTime = 1.0 - abs(1.0 - 2.0 * frac(_Time.y * _PathingSpeed + _PathingOffset)); // goes from 0 -> 1 -> 0
+            pathTime = lerp(_PathingStart, _PathingEnd, pathTime);
+            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+            break;
             case 4: // trail
-                float trail_dist = pathTime - pathValue;
-                pathAlpha = smoothstep(0, _PathingWidth, trail_dist) - smoothstep(_PathingWidth, _PathingWidth + 0.001, trail_dist);
-                break;
+            float trail_dist = pathTime - pathValue;
+            pathAlpha = smoothstep(0, _PathingWidth, trail_dist) - smoothstep(_PathingWidth, _PathingWidth + 0.001, trail_dist);
+            break;
             case 5: // converge
-                float convergeTime = abs(1.0 - 2.0 * pathTime); // 1 -> 0 -> 1
-                float convergeDist = abs(convergeTime - (abs(1.0 - 2.0 * pathValue)));
-                pathAlpha = 1.0 - saturate(convergeDist / _PathingWidth);
-                break;
+            float convergeTime = abs(1.0 - 2.0 * pathTime); // 1 -> 0 -> 1
+            float convergeDist = abs(convergeTime - (abs(1.0 - 2.0 * pathValue)));
+            pathAlpha = 1.0 - saturate(convergeDist / _PathingWidth);
+            break;
             default: // fill (0)
-                pathAlpha = pathTime > pathValue;
-                break;
+            pathAlpha = pathTime > pathValue;
+            break;
         }
         pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
         #if defined(_BACKLACE_AUDIOLINK)
@@ -609,30 +619,30 @@
         switch(_PathingColorMode)
         {
             case 1: // texture
-                float4 pathSample = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingTexture, _MainTex, Uvs[_PathingTexture_UV]);
-                pathEmission *= pathSample.rgb;
-                pathBlend = pathSample.a;
-                break;
+            float4 pathSample = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingTexture, _MainTex, Uvs[_PathingTexture_UV]);
+            pathEmission *= pathSample.rgb;
+            pathBlend = pathSample.a;
+            break;
             case 2: // gradient (two colours)
-                float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
-                pathEmission *= pathGradinet.rgb;
-                pathBlend = pathGradinet.a;
-                break;
+            float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
+            pathEmission *= pathGradinet.rgb;
+            pathBlend = pathGradinet.a;
+            break;
             default: // single colour
-                pathEmission *= _PathingColor.rgb;
-                break;
+            pathEmission *= _PathingColor.rgb;
+            break;
         }
         switch(_PathingBlendMode)
         {
             case 0: // additive
-                Surface.FinalColor.rgb += pathEmission;
-                break;
+            Surface.FinalColor.rgb += pathEmission;
+            break;
             case 1: // multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
+            break;
             case 2: // alpha blend
-                float blendIntensity = pathAlpha * pathBlend;
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
+            float blendIntensity = pathAlpha * pathBlend;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
             break;
         }
     }
@@ -666,6 +676,7 @@
         float2 i_uv = floor(uv);
         float2 f_uv = frac(uv);
         [branch] if (_GlitterMode == 0) // PROCEDURAL - is this really needed?
+
         {
             float min_dist = 1.0;
             float2 closest_point_id = 0;
@@ -688,6 +699,7 @@
             glitter_mask = saturate((_GlitterSize - min_dist) / max(fwidth(min_dist), 0.001));
         }
         else if (_GlitterMode == 1) // TEXTURE
+
         {
             // todo: is noise tex needed if we just use another hash before?
             float noise_val = UNITY_SAMPLE_TEX2D_SAMPLER_LOD(_GlitterNoiseTex, _MainTex, i_uv / _GlitterFrequency, 0).r;
@@ -753,21 +765,29 @@
     // before we do any math, maybe we can optimise and not do anything at all!
     float ApplyDistanceFadePre(bool isNearFading, float fade_factor)
     {
-        if (_NearFadeMode == 0) { // don't need to worry about dither
-            if (fade_factor == 0) {
+        if (_NearFadeMode == 0)
+        {
+            // don't need to worry about dither
+            if (fade_factor == 0)
+            {
                 return -1; // fully faded out, skip all processing
+
             }
         }
         return fade_factor; // we'll handle this in the fade post function
+
     }
 
     // this is just the normal fade at the end if we need to partially show the object
     void ApplyDistanceFadePost(FragmentData i, float fade_factor, bool isNearFading, inout BacklaceSurfaceData Surface)
     {
-        [branch] if (_NearFadeMode == 1 && isNearFading) {
+        [branch] if (_NearFadeMode == 1 && isNearFading)
+        {
             float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy, _NearFadeDitherScale);
             Surface.FinalColor.a *= step(fade_factor, pattern);
-        } else {
+        }
+        else
+        {
             // just a normal fade
             Surface.FinalColor.a *= fade_factor;
         }
@@ -796,10 +816,12 @@
         float3 iridescenceColor = 0;
         float finalFresnel = pow(interference, _IridescencePower);
         if (_IridescenceMode == 0) // RAMP-BASED
+
         {
             iridescenceColor = UNITY_SAMPLE_TEX2D(_IridescenceRamp, float2(finalFresnel, 0.5)).rgb;
         }
         else if (_IridescenceMode == 1) // SINEBOW
+
         {
             float hue = finalFresnel * _IridescenceFrequency;
             iridescenceColor = Sinebow(hue);
@@ -814,14 +836,14 @@
         [branch] switch(_IridescenceBlendMode)
         {
             case 0: // Additive
-                Surface.FinalColor.rgb += iridescenceColor;
-                break;
+            Surface.FinalColor.rgb += iridescenceColor;
+            break;
             case 1: // Screen
-                Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
-                break;
+            Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
+            break;
             case 2: // Alpha Blend
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
+            break;
         }
     }
 #endif // _BACKLACE_IRIDESCENCE
@@ -847,6 +869,7 @@
         switch(_ShadowTextureMappingMode)
         {
             case 0: // uv albedo
+
             {
                 float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
                 texturedShadow = shadowAlbedoSample.rgb;
@@ -854,6 +877,7 @@
                 break;
             }
             case 1: // screen pattern
+
             {
                 float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
                 float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
@@ -862,6 +886,7 @@
                 break;
             }
             case 2: // triplanar
+
             {
                 float4 patternSample = SampleTextureTriplanar(
                     _ShadowTex, sampler_MainTex,
@@ -879,14 +904,14 @@
         switch(_ShadowTextureBlendMode)
         {
             case 0: // additive
-                finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
-                break;
+            finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
+            break;
             case 1: // multiply
-                finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
-                break;
+            finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
+            break;
             default: // alpha blend (2)
-                finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
-                break;
+            finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
+            break;
         }
         float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
         return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);
@@ -964,7 +989,7 @@
             i.worldPos, Surface.NormalDir,
             _WorldEffectPosition, _WorldEffectScale, _WorldEffectRotation,
             1.0,
-            true, 
+            true,
             float2(0, 0)
         );
         float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
@@ -973,14 +998,14 @@
         switch(_WorldEffectBlendMode)
         {
             case 1: // Additive
-                Surface.FinalColor.rgb += finalEffectColor * blendStrength;
-                break;
+            Surface.FinalColor.rgb += finalEffectColor * blendStrength;
+            break;
             case 2: // Multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
+            break;
             default: // Alpha Blend
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
+            break;
         }
     }
 #endif // _BACKLACE_WORLD_EFFECT
@@ -1005,6 +1030,7 @@
         void ApplyMirrorDetectionPre(inout BacklaceSurfaceData Surface)
         {
             if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
+
             {
                 float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MirrorDetectionTexture, _MainTex, Uvs[_MirrorDetectionTexture_UV]).r;
                 Surface.FinalColor.a *= mask;
@@ -1015,10 +1041,12 @@
         void ApplyMirrorDetectionPost(inout BacklaceSurfaceData Surface)
         {
             if (_MirrorDetectionMode == 1 && IsInMirrorView()) // hide
+
             {
                 Surface.FinalColor.a = 0;
             }
             else if (_MirrorDetectionMode == 2 && !IsInMirrorView()) // only show
+
             {
                 Surface.FinalColor.a = 0;
             }
@@ -1049,26 +1077,27 @@
         if (intersect <= 0) return;
         intersect = fastpow(intersect, _TouchHardness);
         float3 touchEffect = _TouchColor.rgb * intersect * _TouchColor.a;
-        switch (_TouchMode) {
+        switch(_TouchMode)
+        {
             case 1: // replace
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+            break;
             case 2: // multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
-                break;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
+            break;
             case 3: // rainbow
-                float time = _Time.y * _TouchRainbowSpeed;
-                float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
-                touchEffect = rainbowColor * intersect * _TouchColor.a;
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
-                break;
+            float time = _Time.y * _TouchRainbowSpeed;
+            float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
+            touchEffect = rainbowColor * intersect * _TouchColor.a;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+            break;
             default: // additive
-                Surface.FinalColor.rgb += touchEffect;
-                break;
+            Surface.FinalColor.rgb += touchEffect;
+            break;
         }
     }
 #endif // _BACKLACE_TOUCH_REACTIVE
-  
+
 // vertex distortion feature
 #if defined(_BACKLACE_VERTEX_DISTORTION)
     int _VertexDistortionMode;
@@ -1094,28 +1123,29 @@
         float3 distortion = 0;
         // calculate vertex colour mask
         float mask = 1.0;
-        switch (_VertexDistortionColorMask)
+        switch(_VertexDistortionColorMask)
         {
             case 1: // red
-                mask = vertexColor.r;
-                break;
+            mask = vertexColor.r;
+            break;
             case 2: // green
-                mask = vertexColor.g;
-                break;
+            mask = vertexColor.g;
+            break;
             case 3: // blue
-                mask = vertexColor.b;
-                break;
+            mask = vertexColor.b;
+            break;
             case 4: // all
-                mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
-                break;
+            mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
+            break;
             default: // disabled
-                mask = 1.0;
-                break;
+            mask = 1.0;
+            break;
         }
         // apply mask to strength
         switch(_VertexDistortionMode)
         {
             case 0: // wave
+
             {
                 distortion.x = sin(vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
                 distortion.y = sin(vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
@@ -1123,6 +1153,7 @@
                 break;
             }
             case 1: // jumble
+
             {
                 float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
                 float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
@@ -1131,6 +1162,7 @@
                 break;
             }
             case 2: // wind
+
             {
                 float2 windUV = worldPos.xz * _WindScale + (_Time.y * _WindSpeed * _WindDirection.xz);
                 float noise = UNITY_SAMPLE_TEX2D_LOD(_WindNoiseTex, windUV, 0).r * 2.0 - 1.0;
@@ -1139,8 +1171,9 @@
                 break;
             }
             case 3: // breathing
+
             {
-                float breath = (sin(_Time.y * _BreathingSpeed) + 1.0) * 0.5; 
+                float breath = (sin(_Time.y * _BreathingSpeed) + 1.0) * 0.5;
                 float3 localNormal = normalize(vertex.xyz);
                 distortion = localNormal * breath * _BreathingStrength * mask;
                 break;
@@ -1168,7 +1201,7 @@
         float time = _Time.y * _VertexDistortionSpeed.x;
         float3 glitchOffset = 0;
         float mask = 1.0;
-        switch (_VertexDistortionColorMask)
+        switch(_VertexDistortionColorMask)
         {
             case 1: mask = vertexColor.r; break;
             case 2: mask = vertexColor.g; break;
@@ -1178,9 +1211,10 @@
         }
         float glitchTrigger = step(_GlitchFrequency, GlitchHash(float2(floor(time * 10.0), 0.0)));
         float blockSize = 1.0 / max(_VertexDistortionFrequency.x, 0.001);
-        switch (_VertexGlitchMode)
+        switch(_VertexGlitchMode)
         {
             case 0: // slice, horizontal slicing glitch
+
             {
                 float sliceY = floor(vertex.y / blockSize) * blockSize;
                 float sliceNoise = GlitchHash(float2(sliceY, floor(time * 5.0)));
@@ -1190,6 +1224,7 @@
                 break;
             }
             case 1: // blocky, random block displacement
+
             {
                 float2 blockPos = float2(vertex.x + vertex.z, vertex.y);
                 float blockNoise = GlitchBlockNoise(blockPos, blockSize);
@@ -1203,6 +1238,7 @@
                 break;
             }
             case 2: // wave, "corrupted" wave distortion
+
             {
                 float wavePhase = sin(vertex.y * _VertexDistortionFrequency.y + time * 20.0) * glitchTrigger;
                 float waveNoise = GlitchHash(float2(floor(time * 8.0), floor(vertex.y * 5.0)));
@@ -1211,6 +1247,7 @@
                 break;
             }
             case 3: // jitter, rapid smol displacements
+
             {
                 float jitterTime = floor(time * 30.0);
                 float3 jitter = float3(
@@ -1249,16 +1286,17 @@
     void ApplyDither(inout BacklaceSurfaceData Surface, float2 worldPos, float2 uvs)
     {
         float2 ditherUV = 0;
-        switch (_DitherSpace) {
+        switch(_DitherSpace)
+        {
             case 1: // world
-                ditherUV = frac(worldPos) * _ScreenParams.xy;
-                break;
+            ditherUV = frac(worldPos) * _ScreenParams.xy;
+            break;
             case 2: // uv
-                ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
-                break;
+            ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
+            break;
             default: // screen
-                ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
-                break;
+            ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
+            break;
         }
         float pattern = GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
         Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
@@ -1381,6 +1419,7 @@
             switch(_RefractionDistortionMode)
             {
                 case 1: // chromatic aberration
+
                 {
                     float caOffset = _RefractionBlurStrength;
                     if (_RefractionCAUseFresnel == 1)
@@ -1394,6 +1433,7 @@
                     break;
                 }
                 case 2: // blur
+
                 {
                     const int BLUR_SAMPLES = 8;
                     float2 blurOffset = _BacklaceGP_TexelSize.xy * _RefractionBlurStrength;
@@ -1410,6 +1450,7 @@
                     break;
                 }
                 default: // no extra distortion
+
                 {
                     refractedColor = SampleRefractionSource(distortedUV).rgb;
                     break;
@@ -1425,17 +1466,17 @@
             switch(int(_RefractionMode))
             {
                 case 1: // fresnel
-                    finalColor = lerp(refractedColor, crystalColor, fresnel * _RefractionMixStrength);
-                    break;
+                finalColor = lerp(refractedColor, crystalColor, fresnel * _RefractionMixStrength);
+                break;
                 case 2: // soft fresnel (Gummy...)
-                    finalColor = lerp(refractedColor, crystalColor, fastpow(fresnel, _RefractionMixStrength));
-                    break;
+                finalColor = lerp(refractedColor, crystalColor, fastpow(fresnel, _RefractionMixStrength));
+                break;
                 case 3: // manual
-                    finalColor = lerp(refractedColor, crystalColor, _RefractionMixStrength);
-                    break;
+                finalColor = lerp(refractedColor, crystalColor, _RefractionMixStrength);
+                break;
                 default: // reverse fresnel
-                    finalColor = lerp(refractedColor, crystalColor, (1.0 - fresnel) * _RefractionMixStrength);
-                    break;
+                finalColor = lerp(refractedColor, crystalColor, (1.0 - fresnel) * _RefractionMixStrength);
+                break;
             }
             finalColor = lerp(finalColor, _RefractionTint.rgb, _RefractionTint.a * (1.0 - fresnel));
             float finalAlpha = lerp(_RefractionTint.a, 1.0, fresnel) * mask;
@@ -1506,7 +1547,7 @@
             #endif // UNITY_SINGLE_PASS_STEREO
             float3 viewPos = mul(UNITY_MATRIX_V, float4(i.worldPos, 1.0)).xyz;
             float3 viewRefl = mul((float3x3)UNITY_MATRIX_V, Surface.ReflectDir);
-            float3 currentRayPos = viewPos + viewRefl * (UNITY_MATRIX_P._33 * 0.1); 
+            float3 currentRayPos = viewPos + viewRefl * (UNITY_MATRIX_P._33 * 0.1);
             float3 prevRayPos = viewPos;
             [loop] for (int j = 0; j < _SSRMaxSteps; j++)
             {
@@ -1515,6 +1556,7 @@
                 if (screenUV.x > x_max || screenUV.x < x_min || screenUV.y > 1.0 || screenUV.y < 0.0)
                 {
                     return 0; // out of view
+
                 }
                 // get and compare depths
                 float sceneDepth = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(screenPos)).r);
@@ -1525,21 +1567,21 @@
                     finalClipPos.y = lerp(finalClipPos.y, -finalClipPos.y + finalClipPos.w, _SSRFlipUV);
                     float fadeFactor = 1.0;
                     float2 finalUV = finalClipPos.xy / finalClipPos.w;
-                    switch (_SSROutOfViewMode)
+                    switch(_SSROutOfViewMode)
                     {
                         case 1: // fade
-                            fadeFactor = smoothstep(x_min, x_min + 0.05, finalUV.x) * smoothstep(1.0 - x_max, 1.0 - x_max + 0.05, finalUV.x);
-                            fadeFactor *= smoothstep(0.0, 0.05, finalUV.y) * smoothstep(1.0, 1.0 - 0.05, finalUV.y);
-                            break;
+                        fadeFactor = smoothstep(x_min, x_min + 0.05, finalUV.x) * smoothstep(1.0 - x_max, 1.0 - x_max + 0.05, finalUV.x);
+                        fadeFactor *= smoothstep(0.0, 0.05, finalUV.y) * smoothstep(1.0, 1.0 - 0.05, finalUV.y);
+                        break;
                         case 2: // cutoff
-                            if (finalUV.x < x_min || finalUV.x > x_max || finalUV.y < 0.0 || finalUV.y > 1.0) fadeFactor = 0;
-                            break;
+                        if (finalUV.x < x_min || finalUV.x > x_max || finalUV.y < 0.0 || finalUV.y > 1.0) fadeFactor = 0;
+                        break;
                         default: // (3) mirror
-                            if (finalUV.x < x_min) finalUV.x = x_min + (x_min - finalUV.x);
-                            if (finalUV.x > x_max) finalUV.x = x_max - (finalUV.x - x_max);
-                            if (finalUV.y < 0.0) finalUV.y = -finalUV.y;
-                            if (finalUV.y > 1.0) finalUV.y = 1.0 - (finalUV.y - 1.0);
-                            break;
+                        if (finalUV.x < x_min) finalUV.x = x_min + (x_min - finalUV.x);
+                        if (finalUV.x > x_max) finalUV.x = x_max - (finalUV.x - x_max);
+                        if (finalUV.y < 0.0) finalUV.y = -finalUV.y;
+                        if (finalUV.y > 1.0) finalUV.y = 1.0 - (finalUV.y - 1.0);
+                        break;
                     }
                     if (_SSRDistortionStrength > 0)
                     {
@@ -1560,6 +1602,7 @@
                 currentRayPos += viewRefl * step;
             }
             return 0; // no hit
+
         }
 
         // simple grabpass with parallax distortion
@@ -1602,7 +1645,7 @@
             }
             // additional fading
             float fadeFactor = 1.0;
-            if (_SSRCamFade == 1) 
+            if (_SSRCamFade == 1)
             {
                 float camDistance = distance(i.worldPos, GetCameraPos());
                 fadeFactor *= 1.0 - saturate((camDistance - _SSRCamFadeStart) / (_SSRCamFadeEnd - _SSRCamFadeStart));
@@ -1617,24 +1660,24 @@
             switch((int)_SSRBlendMode)
             {
                 case 0: // additive
-                    Surface.FinalColor.rgb += finalReflection * finalStrength;
-                    break;
+                Surface.FinalColor.rgb += finalReflection * finalStrength;
+                break;
                 case 1: // alpha blend
-                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalReflection, finalStrength);
-                    break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalReflection, finalStrength);
+                break;
                 case 2: // multiply
-                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalReflection, finalStrength);
-                    break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalReflection, finalStrength);
+                break;
                 default: // screen
-                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - finalReflection), finalStrength);
-                    break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - finalReflection), finalStrength);
+                break;
             }
         }
     #endif // _BACKLACE_SSR
 #endif // BACKLACE_GRABPASS
 
 // world variant only effects
-#if defined(BACKLACE_WORLD) 
+#if defined(BACKLACE_WORLD)
 
     // these are useful across multiple features here
     float3 HeightBlend3(float3 weights, float3 heights, float strength, float bias)
@@ -1812,12 +1855,14 @@
             }
             float4 weights = data.bilinearWeights;
             [branch] if (_StochasticPriority == 0) // naive
+
             {
                 weights *= contrasts;
                 weights /= (weights.x + weights.y + weights.z + weights.w + 1e-5);
                 return (samples[0] * weights.x + samples[1] * weights.y + samples[2] * weights.z + samples[3] * weights.w) * _StochasticTint;
-            } 
+            }
             else // competitive
+
             {
                 float4 finalWeights = HeightBlend4(
                     weights,
@@ -1826,9 +1871,9 @@
                     1e-3
                 );
                 return (samples[0] * finalWeights.x +
-                    samples[1] * finalWeights.y +
-                    samples[2] * finalWeights.z +
-                    samples[3] * finalWeights.w) * _StochasticTint;
+                samples[1] * finalWeights.y +
+                samples[2] * finalWeights.z +
+                samples[3] * finalWeights.w) * _StochasticTint;
             }
         }
 
@@ -1870,11 +1915,13 @@
             }
             float4 weights = data.bilinearWeights;
             [branch] if (_StochasticPriority == 0) // naive
+
             {
                 weights *= contrasts;
                 weights /= (weights.x + weights.y + weights.z + weights.w + 1e-5);
             }
             else // competitive
+
             {
                 weights = HeightBlend4(weights, contrasts, _StochasticContrastStrength, 1e-3);
             }
@@ -1887,30 +1934,32 @@
             float4 stochasticSample = 0;
             StochasticData data;
             [branch] if (_StochasticSamplingMode == 1) // contrast
+
             {
                 data = PrepareContrastData(uv);
                 stochasticSample = SampleContrastAlbedo(data);
             }
             else // heitz
+
             {
                 data = PrepareHeitzData(uv);
                 stochasticSample = SampleHeitzAlbedo(data, uv, screenPos);
             }
             // blend
-            switch (_StochasticBlendMode)
+            switch(_StochasticBlendMode)
             {
                 case 1: // additive
-                    data.albedoSample = Surface.Albedo + stochasticSample * _StochasticOpacity;
-                    break;
+                data.albedoSample = Surface.Albedo + stochasticSample * _StochasticOpacity;
+                break;
                 case 2: // multiply
-                    data.albedoSample =  lerp(Surface.Albedo, Surface.Albedo * stochasticSample, _StochasticOpacity);
-                    break;
+                data.albedoSample = lerp(Surface.Albedo, Surface.Albedo * stochasticSample, _StochasticOpacity);
+                break;
                 case 3: // screen
-                    data.albedoSample =  lerp(Surface.Albedo, 1.0 - (1.0 - Surface.Albedo) * (1.0 - stochasticSample), _StochasticOpacity);
-                    break;
+                data.albedoSample = lerp(Surface.Albedo, 1.0 - (1.0 - Surface.Albedo) * (1.0 - stochasticSample), _StochasticOpacity);
+                break;
                 default: // replace
-                    data.albedoSample =  lerp(Surface.Albedo, stochasticSample, _StochasticOpacity);
-                    break;
+                data.albedoSample = lerp(Surface.Albedo, stochasticSample, _StochasticOpacity);
+                break;
             }
             data.albedoSample.a = (_StochasticAlpha == 1) ? (Surface.Albedo.a * stochasticSample.a) : Surface.Albedo.a;
             return data;
@@ -1921,10 +1970,13 @@
         {
             if (_StochasticNormals == 0) return;
             [branch] if (_StochasticSamplingMode == 1) // contrast
+
             {
                 NormalMap.rgb = SampleContrastNormal(data); // use global scope NormalMap
+
             }
             else // heitz
+
             {
                 NormalMap.rgb = SampleHeitzNormal(data);
             }
@@ -2020,34 +2072,34 @@
             res.alpha = albSample.a;
             if (_SplatterUseNormals == 1) res.normal = UnpackScaleNormal(normalMap.SampleBias(sharedSampler, finalUV, mipBias), normalStrength);
             else res.normal = float3(0, 0, 1);
-            res.masks = maskMap.SampleBias(sharedSampler, finalUV, mipBias);
+                res.masks = maskMap.SampleBias(sharedSampler, finalUV, mipBias);
             return res;
         }
 
         // reused between both layers
         void BlendLayer(inout BacklaceSurfaceData Surface, inout float3 finalNormal, inout float finalAlpha,
-            SplatterLayerResult layer, float opacity, int blendMode)
+        SplatterLayerResult layer, float opacity, int blendMode)
         {
             if (opacity <= 0.001) return;
             // blend albedo
             float3 targetColor = layer.albedo;
-            switch (blendMode)
+            switch(blendMode)
             {
                 case 1: // additive
-                    Surface.Albedo.rgb += targetColor * opacity;
-                    break;
+                Surface.Albedo.rgb += targetColor * opacity;
+                break;
                 case 2: // multiply
-                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * targetColor, opacity);
-                    break;
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * targetColor, opacity);
+                break;
                 default: // (0) alpha blend
-                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, targetColor, opacity);
-                    break;
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, targetColor, opacity);
+                break;
             }
             // blend normals
             float3 targetNormal;
             if (_SplatterMappingMode == 1) targetNormal = normalize(layer.normal + float3(0, 0, 1));
             else targetNormal = layer.normal;
-            finalNormal = normalize(lerp(finalNormal, targetNormal, opacity));
+                finalNormal = normalize(lerp(finalNormal, targetNormal, opacity));
             // pbr stuffs
             Surface.Metallic = lerp(Surface.Metallic, layer.masks.r, opacity);
             Surface.Occlusion = lerp(Surface.Occlusion, layer.masks.g, opacity);
@@ -2082,6 +2134,7 @@
             // sample layers
             SplatterLayerResult layer0, layer1;
             if (_SplatterMappingMode == 1) // triplanar
+
             {
                 #define SAMPLE_TRIPLANAR(idx, alb, nrm, msk, col, til, str) \
                     layer##idx = SampleSplatterLayerTriplanar(alb, _SplatterNormal##idx, _SplatterMasks##idx, sampler_SplatterAlbedo0, i.worldPos, triplanarWeights, til, str, mipBias); \
@@ -2091,6 +2144,7 @@
                 SAMPLE_TRIPLANAR(1, _SplatterAlbedo1, _SplatterNormal1, _SplatterMasks1, _SplatterColor1, _SplatterTiling1, _SplatterNormalStrength1)
             }
             else // standard uv
+
             {
                 #define SAMPLE_UV(idx, alb, nrm, msk, col, til, str) \
                     layer##idx = SampleSplatterLayerUV(alb, _SplatterNormal##idx, _SplatterMasks##idx, sampler_SplatterAlbedo0, i.uv, til, str, mipBias); \
@@ -2105,6 +2159,217 @@
             Surface.Albedo = saturate(Surface.Albedo);
         }
     #endif // _BACKLACE_SPLATTER
+
+    // texture bombing feature
+    #if defined(_BACKLACE_BOMBING)
+        UNITY_DECLARE_TEX2D(_BombingTex);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_BombingNormal);
+        float4 _BombingColor;
+        float _BombingTiling;
+        float _BombingScaleVar;
+        float _BombingRotVar;
+        float _BombingDensity;
+        int _BombingMode;
+        int _BombingBlendMode;
+        float _BombingHueVar;
+        float _BombingSatVar;
+        float _BombingValVar;
+        // normals
+        int _BombingUseNormal;
+        float _BombingNormalStrength;
+        // spritesheet
+        float _BombingUseSheet;
+        float2 _BombingSheetData;
+        // other options
+        float _BombingCullDist;
+        float _BombingCullFalloff;
+        // new
+        int _BombingMappingMode;
+        float _BombingTriplanarSharpness;
+        float _BombingThreshold;
+        float _BombingGlobalScale;
+        float _BombingJitterAmount;
+
+        struct BombingResult
+        {
+            float3 albedo;
+            float3 normal;
+            float alpha;
+            float totalWeight;
+        };
+
+        float3 ApplyBombingVariation(float3 color, float3 rnd)
+        {
+            if (_BombingHueVar + _BombingSatVar + _BombingValVar <= 0.001) return color;
+            float3 hsv = RGBtoHSV(color);
+            hsv.x += (rnd.x * 2.0 - 1.0) * _BombingHueVar;
+            hsv.y += (rnd.y * 2.0 - 1.0) * _BombingSatVar;
+            hsv.z += (rnd.z * 2.0 - 1.0) * _BombingValVar;
+            return HSVtoRGB(saturate(hsv));
+        }
+
+        float2 GetSpriteUV(float2 uv, float randomVal)
+        {
+            [branch] if (_BombingUseSheet == 0) return uv;
+            float cols = _BombingSheetData.x;
+            float rows = _BombingSheetData.y;
+            float frameIndex = floor(randomVal * (cols * rows));
+            float col = fmod(frameIndex, cols);
+            float row = floor(frameIndex / cols);
+            uv /= float2(cols, rows);
+            uv += float2(col / cols, (rows - 1 - row) / rows);
+            return uv;
+        }
+
+        void AccumulateBombingCell(float2 uv, float2 cellID, inout BombingResult res)
+        {
+            // seed for this cell
+            float3 cellSeed = Hash32(cellID);
+            if (cellSeed.x > _BombingThreshold) return;
+            // random offsets
+            float2 randomOffset = (cellSeed.xy * 2.0 - 1.0) * 0.5 * _BombingJitterAmount;
+            float2 cellCenter = cellID + 0.5 + randomOffset;
+            float2 distFromCenter = uv - cellCenter;
+            float rotAngle = (cellSeed.z * 2.0 - 1.0) * 3.14159 * _BombingRotVar;
+            float2 rotatedDist = RotateUV(distFromCenter, rotAngle);
+            float randomScale = 1.0 + (cellSeed.y * 2.0 - 1.0) * _BombingScaleVar;
+            float combinedScale = randomScale * max(_BombingGlobalScale, 0.001);
+            float2 sampleUV = rotatedDist / combinedScale + 0.5;
+            // prevent clipping
+            if (sampleUV.x < 0.0 || sampleUV.x > 1.0 || sampleUV.y < 0.0 || sampleUV.y > 1.0) return;
+            float d = length(sampleUV - 0.5);
+            float mask = smoothstep(0.5, 0.45, d); // circular fading
+            if (mask <= 0.001) return;
+            // 8. Sample Textures
+            float2 finalUV = GetSpriteUV(sampleUV, cellSeed.x);
+            float4 albedo = _BombingTex.SampleGrad(sampler_BombingTex, finalUV, ddx(uv), ddy(uv));
+            albedo.rgb = ApplyBombingVariation(albedo.rgb, cellSeed);
+            float3 normal = float3(0, 0, 1);
+            // avoid sampling normal if not needed
+            if (_BombingUseNormal == 1)
+            {
+                normal = UnpackScaleNormal(_BombingNormal.SampleGrad(sampler_BombingTex, finalUV, ddx(uv), ddy(uv)), _BombingNormalStrength);
+                normal.xy = RotateUV(normal.xy, rotAngle);
+            }
+            // accumulate
+            res.albedo += albedo.rgb * mask;
+            res.normal += normal * mask;
+            res.alpha += albedo.a * mask;
+            res.totalWeight += mask;
+        }
+
+        BombingResult CalculateBombingSample(float2 uv)
+        {
+            BombingResult res = (BombingResult)0;
+
+            if (_BombingMode == 0) // Jittered (Fast)
+            {
+                AccumulateBombingCell(uv, floor(uv), res);
+            }
+            else // Layered (Fancy)
+            {
+                // checks 4 neighbors to allow full overlap
+                float2 uv_centered = uv - 0.5;
+                float2 base_id = floor(uv_centered);
+                AccumulateBombingCell(uv, base_id + float2(0, 0), res);
+                AccumulateBombingCell(uv, base_id + float2(1, 0), res);
+                AccumulateBombingCell(uv, base_id + float2(0, 1), res);
+                AccumulateBombingCell(uv, base_id + float2(1, 1), res);
+            }
+            if (res.totalWeight > 0.001)
+            {
+                if (_BombingMode == 1)
+                {
+                    res.albedo /= res.totalWeight;
+                    res.normal /= res.totalWeight;
+                    res.alpha /= res.totalWeight;
+                }
+            }
+            return res;
+        }
+
+        void ApplyTextureBombing(inout BacklaceSurfaceData Surface, inout float3 finalNormal, FragmentData i)
+        {
+            // distance culling
+            float viewDist = distance(i.worldPos, GetCameraPos());
+            float cullFactor = 1.0 - smoothstep(_BombingCullDist - _BombingCullFalloff, _BombingCullDist, viewDist);
+            if (cullFactor <= 0.001) return;
+            // sample
+            BombingResult res = (BombingResult)0;
+            float3 calculatedNormal = float3(0, 0, 1);
+            [branch] if (_BombingMappingMode == 1) // triplanar
+            {
+                float3 weights = abs(Surface.NormalDir);
+                weights = pow(max(weights, 0.001), _BombingTriplanarSharpness);
+                weights /= max(dot(weights, 1.0), 0.001);
+                float3 signN = sign(Surface.NormalDir);
+                if (weights.x > 0.001) // x axis
+                {
+                    float2 uvX = i.worldPos.zy * _BombingTiling * _BombingDensity;
+                    BombingResult resX = CalculateBombingSample(uvX);
+                    res.albedo += resX.albedo * weights.x;
+                    res.alpha += resX.alpha * weights.x;
+                    res.totalWeight += resX.totalWeight * weights.x;         
+                    float3 nX = float3(0, resX.normal.y, resX.normal.x);
+                    calculatedNormal += nX * weights.x * signN.x;
+                }
+                if (weights.y > 0.001) // y axis
+                {
+                    float2 uvY = i.worldPos.xz * _BombingTiling * _BombingDensity;
+                    BombingResult resY = CalculateBombingSample(uvY);
+                    res.albedo += resY.albedo * weights.y;
+                    res.alpha += resY.alpha * weights.y;
+                    res.totalWeight += resY.totalWeight * weights.y;
+                    float3 nY = float3(resY.normal.x, 0, resY.normal.y);
+                    calculatedNormal += nY * weights.y * signN.y;
+                }
+                if (weights.z > 0.001) // x axis
+                {
+                    float2 uvZ = i.worldPos.xy * _BombingTiling * _BombingDensity;
+                    BombingResult resZ = CalculateBombingSample(uvZ);
+                    res.albedo += resZ.albedo * weights.z;
+                    res.alpha += resZ.alpha * weights.z;
+                    res.totalWeight += resZ.totalWeight * weights.z;
+                    float3 nZ = float3(resZ.normal.x, resZ.normal.y, 0);
+                    calculatedNormal += nZ * weights.z * signN.z;
+                }
+            }
+            else // uv
+            {
+                float2 uv = i.uv * _BombingTiling * _BombingDensity;
+                res = CalculateBombingSample(uv);
+                calculatedNormal = res.normal;
+            }
+            // blend, if necessary
+            if (res.totalWeight > 0.001)
+            {
+                float3 bombColor = res.albedo * _BombingColor.rgb;
+                float drawOpacity = res.alpha * _BombingColor.a * cullFactor;
+                switch(_BombingBlendMode)
+                {
+                    case 1: // additive
+                        Surface.Albedo.rgb += bombColor * drawOpacity;
+                        break;
+                    case 2: // multiply
+                        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * bombColor, drawOpacity);
+                        break;
+                    case 3: // overlay
+                        float3 blendOverlay = (Surface.Albedo.rgb < 0.5) ? (2.0 * Surface.Albedo.rgb * bombColor) : (1.0 - 2.0 * (1.0 - Surface.Albedo.rgb) * (1.0 - bombColor));
+                        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, blendOverlay, drawOpacity);
+                        break;
+                    default: // alpha blend
+                        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, bombColor, drawOpacity);
+                        break;
+                }
+                // blend normals if being used
+                if (_BombingUseNormal == 1)
+                {
+                    // should be fine to lerp the same way for both modes by this point
+                    finalNormal = normalize(lerp(NormalMap, NormalMap + calculatedNormal, drawOpacity));
+                }
+            }
+        }
+    #endif // _BACKLACE_BOMBING
 
 #endif // BACKLACE_WORLD
 

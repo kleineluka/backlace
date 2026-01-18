@@ -189,6 +189,20 @@ float3 Hash33(float3 p)
     return frac((p.xxy + p.yxx) * p.zyx);
 }
 
+float2 Hash23(float3 p)
+{
+    p = frac(p * float3(0.1031, 0.1030, 0.0973));
+    p += dot(p, p.yxz + 33.33);
+    return frac((p.xxy + p.yxx) * p.zyx).xy;
+}
+
+float3 Hash32(float2 p)
+{
+    float3 p3 = frac(float3(p.xyx) * float3(0.1031, 0.1030, 0.0973));
+    p3 += dot(p3, p3.yzx + 33.33);
+    return frac((p3.xxy + p3.yxx) * p3.zyx);
+}
+
 // convert HSV to RGB
 float3 HSVtoRGB(float3 c)
 {

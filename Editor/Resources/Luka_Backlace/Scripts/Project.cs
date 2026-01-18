@@ -28,7 +28,9 @@ namespace Luka.Backlace
             new ShaderVariant("Default", "", Color.clear, "luka/backlace/default"),
             new ShaderVariant("Outline", "Outline", new Color(1.0f, 0.75f, 0.8f), "luka/backlace/outline"),
             new ShaderVariant("Grabpass", "Grabpass", new Color(0.77f, 0.93f, 0.77f), "luka/backlace/grabpass"),
-            new ShaderVariant("All", "All", new Color(0.9f, 0.9f, 0.5f), "luka/backlace/all"),
+            new ShaderVariant("World", "Grabpass", new Color(0.77f, 0.93f, 0.77f), "luka/backlace/world"),
+            new ShaderVariant("Grabpass_Outline", "All", new Color(0.9f, 0.9f, 0.5f), "luka/backlace/grabpass_outline"),
+            new ShaderVariant("World_Outline", "All", new Color(0.9f, 0.2f, 0.1f), "luka/backlace/world_outline"),
         };
         public static readonly List<ShaderCapability> shader_capabilities = new List<ShaderCapability>
         { 
@@ -120,7 +122,7 @@ namespace Luka.Backlace
             }, new Color(0.2f, 0.1f, 0.8f))
         };
         public static readonly bool enable_debug = true;
-        public static readonly string debug_tag = "_Splatter";
+        public static readonly string debug_tag = "_Bombing";
     }
 
 }

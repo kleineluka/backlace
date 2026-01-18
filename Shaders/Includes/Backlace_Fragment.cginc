@@ -48,6 +48,10 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
             StochasticData stoch = SampleStochasticAlbedo(Uvs[0], i.scrPos.xy / i.scrPos.w, Surface);
             Surface.Albedo = stoch.albedoSample;
         #endif // _BACKLACE_STOCHASTIC
+        #if defined(_BACKLACE_BOMBING)
+            float3 bombingNormal = 0;
+            ApplyTextureBombing(Surface, bombingNormal,  i);
+        #endif // _BACKLACE_BOMBING
     #endif // BACKLACE_WORLD
     #if defined(_BACKLACE_PARALLAX)
         [branch] if (_ParallaxMode == 2) // layered parallax
@@ -77,6 +81,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         #if defined(_BACKLACE_STOCHASTIC)
             SampleStochasticNormal(Uvs[0], stoch); // re use data from albedo sampling
         #endif // _BACKLACE_STOCHASTIC
+        #if defined(_BACKLACE_BOMBING)
+            if (_BombingUseNormal) NormalMap = bombingNormal;
+        #endif // _BACKLACE_BOMBING
     #endif // BACKLACE_WORLD
     #if defined(_BACKLACE_DETAIL)
         ApplyDetailMaps(Surface);

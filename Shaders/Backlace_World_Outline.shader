@@ -1,4 +1,4 @@
-Shader "luka/backlace/default"
+Shader "luka/backlace/world_outline"
 {
 
     Properties
@@ -745,7 +745,7 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
         _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 
-        // TEXTURE STITCHING
+        // TE_BACKLACE_STOCHASTICXTURE STITCHING
         // [Space(35)]
         // [Header(Texture Stitching)]
         // [Space(10)]
@@ -849,7 +849,7 @@ Shader "luka/backlace/default"
         // optimisation
         _BombingCullDist ("Cull Distance", Float) = 20
         _BombingCullFalloff ("Cull Falloff", Float) = 5
-        
+
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]
@@ -922,6 +922,23 @@ Shader "luka/backlace/default"
         Cull [_Cull]
         Stencil { Ref [_StencilRef] Comp [_StencilComp] Pass [_StencilPass] Fail [_StencilFail] ZFail [_StencilZFail] }
 
+        // Outline Pass
+        Pass
+        {
+            Name "Outline"
+            Tags { "LightMode" = "Always" }
+            Cull Front
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+            Stencil { Ref [_OutlineStencilRef] Comp [_OutlineStencilComp] Pass [_OutlineStencilPass] Fail [_OutlineStencilFail] ZFail [_OutlineStencilZFail] }
+            CGPROGRAM
+            #ifndef UNITY_PASS_OUTLINE
+                #define UNITY_PASS_OUTLINE
+            #endif // UNITY_PASS_OUTLINE
+            #include "./Includes/Backlace_Outline.cginc"
+            ENDCG
+        }
+
         // Forward Base Pass
         Pass
         {  
@@ -932,6 +949,9 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
             #endif // UNITY_PASS_FORWARDBASE
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -948,6 +968,9 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
             #endif // UNITY_PASS_FORWARDADD
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -963,6 +986,9 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER
             #endif // UNITY_PASS_SHADOWCASTER
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Shadow.cginc"
             ENDCG
         }
@@ -977,6 +1003,9 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_META
                 #define UNITY_PASS_META
             #endif // UNITY_PASS_META
+            #ifndef BACKLACE_WORLD
+                #define BACKLACE_WORLD
+            #endif // BACKLACE_WORLD
             #include "./Includes/Backlace_Meta.cginc"
             ENDCG
         }

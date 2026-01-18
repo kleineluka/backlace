@@ -754,6 +754,102 @@ Shader "luka/backlace/grabpass"
         [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
         _StitchOffset ("Stitch Seam Offset", Float) = 0
 
+        // STOCHASTIC SAMPLING
+        // [Space(35)]
+        // [Header(Stochastic Sampling)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_STOCHASTIC)] _StochasticSampling ("Enable Stochastic Sampling", Int) = 0
+        [Enum(Triangle Grid, 0, Contrast Aware, 1)] _StochasticSamplingMode ("Stochastic Sampling Mode", Int) = 0
+        _StochasticTexture ("Stochastic Texture", 2D) = "white" { }
+        _StochasticOpacity ("Overall Opacity", Range(0, 1)) = 1.0
+        [Enum(Replace, 0, Additive, 1, Multiply, 2, Screen, 3)] _StochasticBlendMode ("Blend Mode", Int) = 0
+        _StochasticScale ("Scale", Range(0.1, 50)) = 1.0
+        _StochasticOffsetX ("Offset X", Float) = 0.0
+        _StochasticOffsetY ("Offset Y", Float) = 0.0
+        [HDR] _StochasticTint ("Tint", Color) = (1, 1, 1, 1)
+        // triangle grid settings
+        _StochasticBlend ("Blend", Range(0, 2)) = 1.0
+        _StochasticRotationRange ("Rotation", Range(0, 180)) = 45
+        // contrast settings
+        [Enum(Competitive, 1, Naive, 0)] _StochasticPriority ("Sampling Priority", Int) = 1
+        _StochasticContrastStrength ("Contrast Strength", Range(0.1, 5)) = 2.0
+        _StochasticContrastThreshold ("Contrast Threshold", Range(0, 1)) = 0.5
+        // height blend
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticHeightBlend ("Height Blending", Int) = 0
+        _StochasticHeightMap ("Height Map", 2D) = "black" { }
+        _StochasticHeightStrength ("Height Strength", Range(0, 10)) = 3.0
+        // misc settings
+        _StochasticMipBias ("Mip Bias", Range(-2, 2)) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticAlpha ("Affect Alpha Channel", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _StochasticNormals ("Affect Normals", Int) = 0
+
+        // SPLATTER MAPPING
+        // [Space(35)]
+        // [Header(Splatter Mapping)]
+        // [Space(10)]
+        // [Space(35)]
+        // [Header(Splatter Overlay)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_SPLATTER)] _SplatterMapping ("Enable Splatter Overlay", Int) = 0
+        [Enum(Standard, 0, Projection, 1)] _SplatterMappingMode ("Mapping Mode", Int) = 0
+        _SplatterControl ("Control Map (R=Layer1, G=Layer2)", 2D) = "black" { }
+        [Enum(Disabled, 0, Enabled, 1)] _SplatterUseNormals ("Use Normal Maps", Int) = 0
+        // layer 1
+        _SplatterAlbedo0 ("Albedo", 2D) = "white" { }
+        _SplatterNormal0 ("Normal", 2D) = "bump" { }
+        _SplatterMasks0 ("Masks (R=Met G=AO B=H A=Sm)", 2D) = "white" { }
+        _SplatterColor0 ("Tint", Color) = (1, 1, 1, 1)
+        _SplatterTiling0 ("Tiling & Offset", Vector) = (1, 1, 0, 0)
+        _SplatterNormalStrength0 ("Normal Strength", Range(0, 2)) = 1
+        [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2)] _SplatterBlendMode0 ("Blend Mode", Int) = 0
+        // layer 2
+        _SplatterAlbedo1 ("Albedo", 2D) = "white" { }
+        _SplatterNormal1 ("Normal", 2D) = "bump" { }
+        _SplatterMasks1 ("Masks", 2D) = "white" { }
+        _SplatterColor1 ("Tint", Color) = (1, 1, 1, 1)
+        _SplatterTiling1 ("Tiling & Offset", Vector) = (1, 1, 0, 0)
+        _SplatterNormalStrength1 ("Normal Strength", Range(0, 2)) = 1
+        [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2)] _SplatterBlendMode1 ("Blend Mode", Int) = 0
+        // settings
+        _SplatterCullThreshold ("Cull Threshold", Range(0, 0.5)) = 0.3
+        _SplatterBlendSharpness ("Control Sharpness", Range(1, 10)) = 1
+        _SplatterMipBias ("Mip Bias", Range(-2, 2)) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _SplatterAlphaChannel ("Use Splatter Alpha", Int) = 0
+
+        // TEXTURE BOMBING
+        // [Space(35)]
+        // [Header(Texture Bombing)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_BOMBING)] _BombingTextures ("Enable Texture Bombing", Int) = 0
+        [Enum(Jittered, 0, Layered, 1)] _BombingMode ("Bombing Mode", Int) = 1
+        [Enum(Alpha Blend, 0, Additive, 1, Multiply, 2, Overlay, 3)] _BombingBlendMode ("Blend Mode", Int) = 0
+        [Enum(UV, 0, Triplanar, 1)] _BombingMappingMode ("Mapping Mode", Float) = 0
+        _BombingTriplanarSharpness ("Triplanar Sharpness", Range(1, 64)) = 8
+        _BombingThreshold ("Density Threshold", Range(0, 1)) = 1
+        _BombingOpacity ("Overall Opacity", Range(0, 1)) = 1.0
+        _BombingTex ("Albedo (RGBA)", 2D) = "white" { }
+        _BombingColor ("Tint", Color) = (1, 1, 1, 1)
+        _BombingTiling ("Tiling", Float) = 1
+        _BombingDensity ("Density", Range(0.1, 5)) = 1.0
+        _BombingGlobalScale ("Global Scale", Range(0.1, 5)) = 1
+        _BombingJitterAmount ("Position Jitter", Range(0, 1)) = 1
+        // variation
+        _BombingScaleVar ("Scale Variation", Range(0, 1)) = 0.2
+        _BombingRotVar ("Rotation Variation", Range(0, 1)) = 1.0
+        _BombingHueVar ("Hue Variation", Range(0, 1)) = 0
+        _BombingSatVar ("Saturation Variation", Range(0, 1)) = 0
+        _BombingValVar ("Value Variation", Range(0, 1)) = 0
+        // normals
+        [Enum(Disabled, 0, Enabled, 1)] _BombingUseNormal ("Use Normal Map", Int) = 0
+        _BombingNormal ("Normal", 2D) = "bump" { }
+        _BombingNormalStrength ("Normal Strength", Range(0, 2)) = 1
+        // spritesheet
+        [Enum(Disabled, 0, Enabled, 1)] _BombingUseSheet ("Use Spritesheet", Int) = 0
+        _BombingSheetData ("Sheet Data (X=Cols, Y=Rows)", Vector) = (1, 1, 0, 0)
+        // optimisation
+        _BombingCullDist ("Cull Distance", Float) = 20
+        _BombingCullFalloff ("Cull Falloff", Float) = 5
+
         // OUTLINE
         // [Space(70)]
         // [Header(Outline)]
