@@ -53,6 +53,8 @@ int _SpecularStandardKind;
 int _SpecularSpecialKind;
 int _SpecularEnergyMode;
 float _SpecularEnergy;
+float _SpecularEnergyMin;
+float _SpecularEnergyMax;
 
 // lighting settings
 float _LightingColorMode;

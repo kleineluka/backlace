@@ -213,7 +213,9 @@ Shader "luka/backlace/grabpass_outline"
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
         [KeywordEnum(Disabled, Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
         [Enum(Disabled, 0, Turquin, 1, Safe, 2, Manual, 3)] _SpecularEnergyMode ("Specular Energy Mode", Int) = 0
-        _SpecularEnergy ("Specular Energy", Range(0, 2)) = 1.0
+        _SpecularEnergyMin ("Specular Energy Min", Float) = 0.0
+        _SpecularEnergyMax ("Specular Energy Max", Float) = 3.0
+        _SpecularEnergy ("Specular Energy", Float) = 1.0
         _MSSO ("MSSO", 2D) = "white" { }
         _Metallic ("Metallic", Range(0, 1)) = 0
         _Glossiness ("Glossiness", Range(0, 1)) = 0

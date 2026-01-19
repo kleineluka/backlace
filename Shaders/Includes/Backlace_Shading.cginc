@@ -722,12 +722,9 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         Surface.EnergyCompensation = 1.0;
         switch(_SpecularEnergyMode)
         {
-            case 1: // TURQUIN
-                // Turquin approximation for multi-scattering
+            case 1: // turquin approximation for multi-scaattering
                 float A = Surface.Roughness;
                 float3 F0 = Surface.SpecularColor;
-                // Using the max component of Albedo to keep it scalar, 
-                // or just use Albedo.r if monochrome.
                 float luminance = GetLuma(Surface.Albedo.rgb); 
                 Surface.EnergyCompensation = 1.0 + A * (1.0 / (luminance + 0.001) - 1.0);
                 break;
@@ -741,6 +738,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
                 // no energy compensation
                 break;
         }
+        Surface.EnergyCompensation = clamp(Surface.EnergyCompensation, _SpecularEnergyMin, _SpecularEnergyMax);
     }
 
     // avoid redundant texture sampling by pre-calculating specular data

@@ -2763,6 +2763,466 @@
         {
             "key": "sub_tab_stickers",
             "value": "Stickers"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "Use Normal Map"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "Auto Normal from Albedo"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "Albedo Normal Offset"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "Enable Stickers"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "Behaviour"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "Behaviour"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "UV Space"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "UV Space"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "Ambient Grading"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "Area Tints"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "SDF Shadows"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "Ramp Index"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "Total Ramps"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "HiFi 1 Threshold"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "HiFi 1 Feather"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "HiFi 1 Colour"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "HiFi 2 Threshold"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "HiFi 2 Feather"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "HiFi 2 Colour"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "HiFi Border Colour"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "HiFi Border Width"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "Skin LUT"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "Skin Shadow Colour"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "Skin Scattering"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "Wrap Factor"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "Wrap Normalisation"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "Wrap Colour High"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "Wrap Colour Low"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "Energy Mode"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "Energy Value"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "Energy Minimum"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "Energy Maximum"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "Stylise"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "Texture Source"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "Refraction Texture"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "Texture Source"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "SSR Texture"
+        },
+        {
+            "key": "tab_world",
+            "value": "World Building"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "Stochastic Tiling"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "Splatter Mapping"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "Texture Bombing"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "Enable Stochastic Tiling"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "Sampling Mode"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "Stochastic Texture"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "Tint"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "Opacity"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "Blend Mode"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "Scale"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "Offset X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "Offset Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "Blend Strength"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "Rotation Range"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "Priority"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "Contrast Strength"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "Contrast Threshold"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "Enable Height Blend"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "Height Map"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "Height Strength"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "Mip Bias"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "Alpha"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "Normals"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "Enable Splatter Mapping"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "Splatter Mapping Mode"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "Splatter Control"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "Use Normals for Splatter"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "Splatter Albedo 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "Splatter Normal 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "Splatter Normal Strength 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "Splatter Masks 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "Splatter Colour 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "Splatter Tiling 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "Splatter Blend Mode 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "Splatter Albedo 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "Splatter Normal 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "Splatter Normal Strength 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "Splatter Masks 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "Splatter Colour 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "Splatter Tiling 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "Splatter Blend Mode 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "Splatter Cull Threshold"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "Splatter Blend Sharpness"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "Splatter Mip Bias"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "Splatter Alpha Channel"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "Enable Bombing Textures"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "Bombing Mode"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "Blend Mode"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "Mapping Mode"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "Triplanar Blend Sharpness"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "Bombing Texture"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "Bombing Colour"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "Tiling"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "Threshold"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "Opacity"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "Density"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "Global Scale"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "Jitter Amount"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "Scale Variation"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "Rotation Variation"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "Hue Variation"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "Saturation Variation"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "Value Variation"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "Use Normal Map"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "Normal Map"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "Normal Strength"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "Use Texture Sheet"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "Sheet Data (X=Columns, Y=Rows)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "Culling Distance"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "Culling Falloff"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "Outline Style"
+        },
+        {
+            "key": "tab_debug",
+            "value": "Debug Menu!"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "Reload Interface"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "Halftone"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "Skin"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "Wrapped"
         }
     ]
 }
