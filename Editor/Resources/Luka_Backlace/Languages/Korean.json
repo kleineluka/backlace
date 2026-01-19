@@ -2755,6 +2755,474 @@
         {
             "key": "_SpecularJitter",
             "value": "스페큘러 지터"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "레거시 하드웨어 지원\n\n컴파일 오류가 발생하거나 셰이더 모델 5.0을 지원하지 않는 구형 하드웨어에서 이 셰이더를 사용해야 하는 경우 레거시 모드를 활성화할 수 있습니다.\n\n활성화 방법:\n1. Resources/Luka_Backlace/Includes/ 경로로 이동합니다.\n2. 텍스트 편집기에서 다음 세 파일을 엽니다:\n   • Backlace_Keywords.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 각 파일의 6번째 줄을 찾습니다: // #define BACKLACE_LEGACY_MODE\n4. //를 제거하여 주석을 해제합니다 (결과: #define BACKLACE_LEGACY_MODE)\n\n이 작업의 효과:\n• 셰이더를 셰이더 모델 3.0으로 컴파일합니다 (구형 GPU와 호환)\n• 하드웨어 제한에 맞추기 위해 AudioLink 및 LTCGI 통합을 자동으로 비활성화합니다.\n• 다른 모든 기능은 정상적으로 작동합니다.\n\n참고: 셰이더가 올바르게 컴파일되려면 세 파일 모두 수정해야 합니다."
+        },
+        {
+            "key": "sub_tab_stickers",
+            "value": "스티커"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "노멀 맵 사용"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "알베도에서 자동 노멀 생성"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "알베도 노멀 오프셋"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "스티커 활성화"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "동작 방식"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "동작 방식"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "UV 공간"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "UV 공간"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "앰비언트 그레이딩"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "영역별 틴트"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "SDF 그림자"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "램프 인덱스"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "총 램프 수"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "HiFi 1 경계값"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "HiFi 1 페더"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "HiFi 1 색상"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "HiFi 2 경계값"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "HiFi 2 페더"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "HiFi 2 색상"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "HiFi 테두리 색상"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "HiFi 테두리 너비"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "피부 LUT"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "피부 그림자 색상"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "피부 산란"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "랩 계수"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "랩 정규화"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "랩 색상 (밝음)"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "랩 색상 (어두움)"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "에너지 모드"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "에너지 값"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "에너지 최소값"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "에너지 최대값"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "스타일"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "텍스처 소스"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "굴절 텍스처"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "텍스처 소스"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "SSR 텍스처"
+        },
+        {
+            "key": "tab_world",
+            "value": "월드 빌딩"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "스토캐스틱 타일링"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "스플래터 매핑"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "텍스처 바밍"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "스토캐스틱 타일링 활성화"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "샘플링 모드"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "스토캐스틱 텍스처"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "틴트"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "불투명도"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "스케일"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "오프셋 X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "오프셋 Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "블렌드 강도"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "회전 범위"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "우선순위"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "대비 강도"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "대비 경계값"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "높이 블렌드 활성화"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "높이 맵"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "높이 강도"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "밉 바이어스"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "알파"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "노멀"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "스플래터 매핑 활성화"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "스플래터 매핑 모드"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "스플래터 컨트롤"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "스플래터에 노멀 사용"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "스플래터 알베도 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "스플래터 노멀 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "스플래터 노멀 강도 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "스플래터 마스크 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "스플래터 색상 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "스플래터 타일링 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "스플래터 블렌드 모드 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "스플래터 알베도 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "스플래터 노멀 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "스플래터 노멀 강도 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "스플래터 마스크 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "스플래터 색상 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "스플래터 타일링 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "스플래터 블렌드 모드 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "스플래터 컬링 경계값"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "스플래터 블렌드 선명도"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "스플래터 밉 바이어스"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "스플래터 알파 채널"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "바밍 텍스처 활성화"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "바밍 모드"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "블렌드 모드"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "매핑 모드"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "트라이플래너 블렌드 선명도"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "바밍 텍스처"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "바밍 색상"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "타일링"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "경계값"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "불투명도"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "밀도"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "전역 스케일"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "지터 양"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "스케일 변동"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "회전 변동"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "색조 변동"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "채도 변동"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "명도 변동"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "노멀 맵 사용"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "노멀 맵"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "노멀 강도"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "텍스처 시트 사용"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "시트 데이터 (X=열, Y=행)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "컬링 거리"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "컬링 폴오프"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "외곽선 스타일"
+        },
+        {
+            "key": "tab_debug",
+            "value": "디버그 메뉴!"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "인터페이스 새로고침"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "하프톤"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "피부"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "랩"
         }
     ]
 }

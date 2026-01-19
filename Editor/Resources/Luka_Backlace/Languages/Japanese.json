@@ -2759,6 +2759,474 @@
         {
             "key": "prop_SpecularJitter",
             "value": "スペキュラージッター"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "レガシーハードウェアサポート\n\nコンパイルエラーが発生した場合や、シェーダーモデル5.0をサポートしていない古いハードウェアでこのシェーダーを使用する必要がある場合は、レガシーモードを有効にできます。\n\n有効にする方法:\n1. Resources/Luka_Backlace/Includes/ に移動します。\n2. テキストエディタで以下の3つのファイルを開きます:\n   • Backlace_Keywords.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 各ファイルの6行目にある // #define BACKLACE_LEGACY_MODE を見つけます。\n4. // を削除してコメントを解除します (結果: #define BACKLACE_LEGACY_MODE)\n\nこれにより何が起こるか:\n• シェーダーをシェーダーモデル3.0用にコンパイルします (古いGPUと互換性あり)\n• ハードウェアの制限内に収めるため、AudioLinkとLTCGIの統合を自動的に無効にします\n• その他の機能はすべて利用可能です\n\n注意: シェーダーを正しくコンパイルするには、3つのファイルをすべて編集する必要があります。"
+        },
+        {
+            "key": "sub_tab_stickers",
+            "value": "ステッカー"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "ノーマルマップを使用"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "アルベドから法線を自動生成"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "アルベド法線オフセット"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "ステッカーを有効化"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "動作"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "動作"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "UV空間"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "UV空間"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "環境光グレーディング"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "エリアティント"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "SDFシャドウ"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "ランプインデックス"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "合計ランプ数"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "HiFi 1 しきい値"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "HiFi 1 ぼかし"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "HiFi 1 カラー"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "HiFi 2 しきい値"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "HiFi 2 ぼかし"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "HiFi 2 カラー"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "HiFi 境界線カラー"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "HiFi 境界線の幅"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "スキンLUT"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "肌の影色"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "スキン・スキャタリング"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "ラップ係数"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "ラップ正規化"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "ラップカラー (明)"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "ラップカラー (暗)"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "エネルギーモード"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "エネルギー値"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "エネルギー最小値"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "エネルギー最大値"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "スタイル"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "テクスチャソース"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "屈折テクスチャ"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "テクスチャソース"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "SSRテクスチャ"
+        },
+        {
+            "key": "tab_world",
+            "value": "ワールドビルディング"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "確率的タイリング"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "スプラッターマッピング"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "テクスチャボミング"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "確率的タイリングを有効化"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "サンプリングモード"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "確率的テクスチャ"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "ティント"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "不透明度"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "スケール"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "オフセット X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "オフセット Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "ブレンド強度"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "回転範囲"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "優先度"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "コントラスト強度"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "コントラストしきい値"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "ハイトブレンドを有効化"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "ハイトマップ"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "ハイト強度"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "ミップバイアス"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "アルファ"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "ノーマル"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "スプラッターマッピングを有効化"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "スプラッターマッピングモード"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "スプラッターコントロール"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "スプラッターにノーマルを使用"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "スプラッターアルベド 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "スプラッターノーマル 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "スプラッターノーマル強度 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "スプラッターマスク 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "スプラッターカラー 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "スプラッタータイリング 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "スプラッターブレンドモード 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "スプラッターアルベド 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "スプラッターノーマル 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "スプラッターノーマル強度 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "スプラッターマスク 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "スプラッターカラー 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "スプラッタータイリング 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "スプラッターブレンドモード 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "スプラッターカリングしきい値"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "スプラッターブレンドのシャープネス"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "スプラッターミップバイアス"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "スプラッターアルファチャンネル"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "ボミングテクスチャを有効化"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "ボミングモード"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "ブレンドモード"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "マッピングモード"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "トライプレーナーブレンドのシャープネス"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "ボミングテクスチャ"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "ボミングカラー"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "タイリング"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "しきい値"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "不透明度"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "密度"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "グローバルスケール"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "ジッター量"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "スケールのばらつき"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "回転のばらつき"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "色相のばらつき"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "彩度のばらつき"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "明度のばらつき"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "ノーマルマップを使用"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "ノーマルマップ"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "ノーマル強度"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "テクスチャシートを使用"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "シートデータ (X=列, Y=行)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "カリング距離"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "カリング減衰"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "アウトラインスタイル"
+        },
+        {
+            "key": "tab_debug",
+            "value": "デバッグメニュー！"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "インターフェースをリロード"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "ハーフトーン"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "スキン"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "ラップ"
         }
     ]
 }

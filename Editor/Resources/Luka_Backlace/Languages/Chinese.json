@@ -2755,6 +2755,474 @@
         {
             "key": "_SpecularJitter",
             "value": "高光抖动"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "旧版硬件支持 (Legacy Mode)\n\n如果您遇到编译错误，或需要在不支持着色器模型5.0的旧硬件上使用此着色器，您可以启用旧版模式。\n\n如何启用:\n1. 导航至 Resources/Luka_Backlace/Includes/ 目录。\n2. 使用文本编辑器打开以下三个文件:\n   • Backlace_Keywords.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. 在每个文件中，找到第6行: // #define BACKLACE_LEGACY_MODE\n4. 移除行首的 // 来取消注释 (使其变为: #define BACKLACE_LEGACY_MODE)\n\n此操作的效果:\n• 将着色器编译为着色器模型3.0 (兼容旧款GPU)\n• 自动禁用 AudioLink 和 LTCGI 集成，以符合硬件限制\n• 所有其他功能保持可用\n\n注意: 您必须编辑所有三个文件，着色器才能正确编译。"
+        },
+        {
+            "key": "sub_tab_stickers",
+            "value": "贴纸"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "使用法线贴图"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "从反照率图自动生成法线"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "反照率法线偏移"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "启用贴纸"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "行为"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "行为"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "UV空间"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "UV空间"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "环境光渐变"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "区域色染"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "SDF阴影"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "渐变索引"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "总渐变数"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "HiFi 1 阈值"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "HiFi 1 羽化"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "HiFi 1 颜色"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "HiFi 2 阈值"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "HiFi 2 羽化"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "HiFi 2 颜色"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "HiFi 边框颜色"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "HiFi 边框宽度"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "皮肤LUT"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "皮肤阴影颜色"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "皮肤散射"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "包裹因子"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "包裹标准化"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "包裹颜色(亮)"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "包裹颜色(暗)"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "能量模式"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "能量值"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "能量最小值"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "能量最大值"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "风格化"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "纹理源"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "折射纹理"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "纹理源"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "SSR纹理"
+        },
+        {
+            "key": "tab_world",
+            "value": "世界构建"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "随机平铺"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "泼溅映射"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "纹理轰炸"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "启用随机平铺"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "采样模式"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "随机纹理"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "色染"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "不透明度"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "缩放"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "偏移 X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "偏移 Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "混合强度"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "旋转范围"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "优先级"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "对比度强度"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "对比度阈值"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "启用高度混合"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "高度图"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "高度强度"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "Mip偏移"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "透明度"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "法线"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "启用泼溅映射"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "泼溅映射模式"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "泼溅控制"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "为泼溅使用法线"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "泼溅反照率 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "泼溅法线 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "泼溅法线强度 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "泼溅遮罩 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "泼溅颜色 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "泼溅平铺 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "泼溅混合模式 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "泼溅反照率 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "泼溅法线 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "泼濺法线强度 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "泼溅遮罩 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "泼溅颜色 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "泼溅平铺 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "泼溅混合模式 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "泼溅剔除阈值"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "泼溅混合锐度"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "泼溅Mip偏移"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "泼溅Alpha通道"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "启用轰炸纹理"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "轰炸模式"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "混合模式"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "映射模式"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "三向混合锐度"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "轰炸纹理"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "轰炸颜色"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "平铺"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "阈值"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "不透明度"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "密度"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "全局缩放"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "抖动量"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "缩放变化"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "旋转变化"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "色相变化"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "饱和度变化"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "明度变化"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "使用法线贴图"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "法线贴图"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "法线强度"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "使用纹理图集"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "图集数据 (X=列, Y=行)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "剔除距离"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "剔除衰减"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "描边样式"
+        },
+        {
+            "key": "tab_debug",
+            "value": "调试菜单！"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "重新加载界面"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "半色调"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "皮肤"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "包裹"
         }
     ]
 }

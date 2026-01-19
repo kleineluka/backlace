@@ -14,6 +14,22 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 <br>
 **Built With:** Unity 2022 LTS (but compatible with 2019.4+)
 
+<details>
+
+<summary><h3>Some Preview Images (◕‿◕)♡</h3></summary>
+
+| Caption | Preview |
+|---|---|
+| Anime Shading | <img src=".assets/preview_anime.webp" width="600"/> |
+| Advanced Features | <img src=".assets/preview_advanced.webp" width="600"/> |
+| Various Materials | <img src=".assets/preview_materials.webp" width="600"/> |
+| Outline Styles | <img src=".assets/preview_outlines.webp" width="600"/> |
+| Special Effects | <img src=".assets/preview_sfx.webp" width="600"/> |
+| Grabpass Features | <img src=".assets/preview_grabpass.webp" width="600"/> |
+| UI, Docs, and More | <img src=".assets/preview_extra.webp" width="600"/> |
+
+</details>
+
 ## Features 🍒
 - **Main Settings:**
 	- Extensive Control, 10 Rendering Presets, VRCFallback Control, and Global Illumination
@@ -21,20 +37,13 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 	- Texture Stitching, Texture Post-Processing, Stickers (2 Overlays/Decals)
 	- UV Manipulation, Vertex Manipulation, 4 Assignable UV Sets
 	- UV Effects: Triplanar, Screen Space, Flipbook/Spritesheet, Flow Map
-	- Optional Legacy Mode for older hardware (Shader Model 3.0)
 - **Lighting:**
 	- Models: Backlace (Default), PoiCustom, OpenLit, Standard, Mochie
 	- Direction Modes: Backlace (Default), Forced, View Direction
 	- Per-Pass Light Limits, Colour Controls, and (Optional) Greyscale Lighting
 	- Emission (Masked Texture/Colour)
-- **Anime Shading:**
-	- Anime Modes: Disabled (Standard PBR), Ramp, Halftone, HiFi, Skin, Wrapped
-	- Ambient Gradient, Area Tinting, SDF Shadows
-- **Specular:**
-	- Modes: Disabled, Standard, Anisotropic, Toon, Hair, Cloth
-	- Energy Conservation: Disabled, Turquin, Safe, Manual
-	- Vertex Specular
-	- MSSO, Glossiness, Reflectivity, Highlights
+- **Anime Shading:** 6 Modes (Disabled (Standard PBR), Ramp, Halftone, HiFi, Skin, Wrapped), Ambient Gradient, Area Tinting, SDF Shadows
+- **Specular:** 5 Modes (Standard, Anisotropic, Toon, Hair, Cloth), Energy Conservation Control (Disabled, Turquin, Safe, Manual), Vertex Specular and MSSO, Glossiness, Reflectivity, Highlights
 - **Stylise:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Detail Mapping, Shadow Mapping, Shadow Textures
 - **Effects:** Dissolve, Distance Fading, VRChat Mirror Detection, Pathing (6 Modes), Glitter, Iridesence, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (4 Distortion Modes, 4 Glitch Modes), Parallax Mapping (Fast/Fancy UV, Layered, Interior), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
 - **World Building:** Stochastic Tiling (Triangle Grid, Contrast Aware), Splatter Mapping (2 Splatters, UV Mode, Triplanar Mode), Texture Bombing (Jittered, Layered)
@@ -48,22 +57,6 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 - **Optimised** with local shader features, shared sampler states, split shader files, and strict culling, branching, and math
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 - **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
-
-<details>
-
-<summary><h3>Some Preview Images (ღ˘⌣˘ღ)</h3></summary>
-
-| Caption | Preview |
-|---|---|
-| Anime Shading | <img src=".assets/preview_anime.webp" width="600"/> |
-| Advanced Features | <img src=".assets/preview_advanced.webp" width="600"/> |
-| Various Materials | <img src=".assets/preview_materials.webp" width="600"/> |
-| Outline Styles | <img src=".assets/preview_outlines.webp" width="600"/> |
-| Special Effects | <img src=".assets/preview_sfx.webp" width="600"/> |
-| Grabpass Features | <img src=".assets/preview_grabpass.webp" width="600"/> |
-| UI, Docs, and More | <img src=".assets/preview_extra.webp" width="600"/> |
-
-</details>
 
 ## Where Backlace Is Used 🍰
 This section will be updated when I make things with it! If you make something with Backlace ~ whether a game or shader ~ please let me know so I can add it here! ♡＾▽＾♡

@@ -2755,6 +2755,474 @@
         {
             "key": "_SpecularJitter",
             "value": "Jitter spéculaire"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "Support Matériel Ancien\n\nSi vous rencontrez des erreurs de compilation ou si vous devez utiliser ce shader sur du matériel plus ancien ne supportant pas le Shader Model 5.0, vous pouvez activer le mode Hérité.\n\nComment l'activer :\n1. Naviguez vers Resources/Luka_Backlace/Includes/\n2. Ouvrez ces trois fichiers dans un éditeur de texte :\n   • Backlace_Keywords.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. Dans chaque fichier, trouvez la ligne 6 : // #define BACKLACE_LEGACY_MODE\n4. Supprimez les // pour décommenter (afin de lire : #define BACKLACE_LEGACY_MODE)\n\nCe que cela fait :\n• Compile le shader pour Shader Model 3.0 (compatible avec les GPU plus anciens)\n• Désactive automatiquement l'intégration AudioLink et LTCGI pour rester dans les limites matérielles\n• Toutes les autres fonctionnalités restent opérationnelles\n\nNote : Vous devez modifier les trois fichiers pour que le shader compile correctement."
+        },
+        {
+            "key": "sub_tab_stickers",
+            "value": "Autocollants"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "Utiliser Normal Map"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "Normal Auto depuis Albedo"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "Décalage Normal Albedo"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "Activer Autocollants"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "Comportement"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "Comportement"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "Espace UV"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "Espace UV"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "Étalonnage Ambiant"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "Teintes de Zone"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "Ombres SDF"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "Index de Dégradé"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "Total Dégradés"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "Seuil HiFi 1"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "Adoucissement HiFi 1"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "Couleur HiFi 1"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "Seuil HiFi 2"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "Adoucissement HiFi 2"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "Couleur HiFi 2"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "Couleur Bordure HiFi"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "Largeur Bordure HiFi"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "LUT Peau"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "Couleur Ombre Peau"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "Diffusion Peau"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "Facteur d'Enveloppement"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "Normalisation d'Enveloppement"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "Couleur Env. Haute"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "Couleur Env. Basse"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "Mode Énergie"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "Valeur Énergie"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "Énergie Minimum"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "Énergie Maximum"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "Stylisation"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "Source Texture"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "Texture de Réfraction"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "Source Texture"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "Texture SSR"
+        },
+        {
+            "key": "tab_world",
+            "value": "Création de Monde"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "Pavage Stochastique"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "Splatter Mapping"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "Texture Bombing"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "Activer Pavage Stochastique"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "Mode d'Échantillonnage"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "Texture Stochastique"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "Teinte"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "Opacité"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "Mode de Fusion"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "Échelle"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "Décalage X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "Décalage Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "Force de Mélange"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "Plage de Rotation"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "Priorité"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "Force de Contraste"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "Seuil de Contraste"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "Activer Mélange Hauteur"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "Height Map"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "Force de Hauteur"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "Biais Mip"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "Alpha"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "Normales"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "Activer Splatter Mapping"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "Mode Splatter Mapping"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "Contrôle Splatter"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "Utiliser Normales pour Splatter"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "Splatter Albedo 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "Splatter Normal 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "Force Normale Splatter 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "Masques Splatter 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "Couleur Splatter 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "Tuilage Splatter 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "Mode Fusion Splatter 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "Splatter Albedo 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "Splatter Normal 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "Force Normale Splatter 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "Masques Splatter 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "Couleur Splatter 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "Tuilage Splatter 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "Mode Fusion Splatter 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "Seuil Culling Splatter"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "Netteté Mélange Splatter"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "Biais Mip Splatter"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "Canal Alpha Splatter"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "Activer Texture Bombing"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "Mode Bombing"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "Mode de Fusion"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "Mode Mapping"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "Netteté Mélange Triplanar"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "Texture Bombing"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "Couleur Bombing"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "Tuilage"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "Seuil"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "Opacité"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "Densité"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "Échelle Globale"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "Quantité de Jitter"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "Variation Échelle"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "Variation Rotation"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "Variation Teinte"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "Variation Saturation"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "Variation Valeur"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "Utiliser Normal Map"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "Normal Map"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "Force Normale"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "Utiliser Feuille de Texture"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "Données Feuille (X=Col, Y=Lignes)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "Distance de Culling"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "Atténuation Culling"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "Style de Contour"
+        },
+        {
+            "key": "tab_debug",
+            "value": "Menu Debug !"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "Recharger l'Interface"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "Demi-teinte"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "Peau"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "Enveloppé"
         }
     ]
 }

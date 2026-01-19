@@ -2755,6 +2755,474 @@
         {
             "key": "_SpecularJitter",
             "value": "Джиттер блика"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "Поддержка устаревшего оборудования\n\nЕсли возникают ошибки компиляции или вам нужно использовать этот шейдер на старом оборудовании, не поддерживающем Shader Model 5.0, вы можете включить Legacy Mode (Устаревший режим).\n\nКак включить:\n1. Перейдите в Resources/Luka_Backlace/Includes/\n2. Откройте эти три файла в текстовом редакторе:\n   • Backlace_Keywords.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. В каждом файле найдите строку 6: // #define BACKLACE_LEGACY_MODE\n4. Удалите //, чтобы раскомментировать строку (должно получиться: #define BACKLACE_LEGACY_MODE)\n\nЧто это делает:\n• Компилирует шейдер для Shader Model 3.0 (совместимо со старыми видеокартами)\n• Автоматически отключает интеграцию AudioLink и LTCGI, чтобы оставаться в пределах ограничений оборудования\n• Все остальные функции остаются рабочими\n\nПримечание: Вы должны отредактировать все три файла для корректной компиляции шейдера."
+        },
+        {
+            "key": "sub_tab_stickers",
+            "value": "Стикеры"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "Использовать Normal Map"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "Авто-нормали из Albedo"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "Смещение нормалей Albedo"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "Включить стикеры"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "Поведение"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "Поведение"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "UV-пространство"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "UV-пространство"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "Градация окружения"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "Оттенок зон"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "SDF тени"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "Индекс рампы"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "Всего рамп"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "Порог HiFi 1"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "Сглаживание HiFi 1"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "Цвет HiFi 1"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "Порог HiFi 2"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "Сглаживание HiFi 2"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "Цвет HiFi 2"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "Цвет границы HiFi"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "Ширина границы HiFi"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "LUT кожи"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "Цвет тени кожи"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "Рассеивание кожи"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "Фактор обертывания (Wrap)"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "Нормализация обертывания"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "Цвет Wrap (Свет)"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "Цвет Wrap (Тень)"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "Режим энергии"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "Значение энергии"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "Минимум энергии"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "Максимум энергии"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "Стилизация"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "Источник текстуры"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "Текстура преломления"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "Источник текстуры"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "Текстура SSR"
+        },
+        {
+            "key": "tab_world",
+            "value": "Создание мира"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "Стохастический тайлинг"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "Сплэттер-маппинг"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "Текстурный бомбинг"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "Вкл. стохастический тайлинг"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "Режим сэмплирования"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "Стохастическая текстура"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "Оттенок"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "Непрозрачность"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "Режим наложения"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "Масштаб"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "Смещение X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "Смещение Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "Сила смешивания"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "Диапазон вращения"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "Приоритет"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "Сила контраста"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "Порог контраста"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "Вкл. смешивание высот"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "Карта высот (Height Map)"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "Сила высоты"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "Смещение MIP"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "Альфа"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "Нормали"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "Вкл. сплэттер-маппинг"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "Режим сплэттер-маппинга"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "Управление сплэттером"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "Нормали для сплэттера"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "Сплэттер Albedo 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "Сплэттер Normal 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "Сила нормали 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "Маски сплэттера 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "Цвет сплэттера 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "Тайлинг сплэттера 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "Режим наложения 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "Сплэттер Albedo 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "Сплэттер Normal 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "Сила нормали 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "Маски сплэттера 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "Цвет сплэттера 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "Тайлинг сплэттера 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "Режим наложения 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "Порог отсечения (Cull)"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "Резкость смешивания"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "Смещение MIP сплэттера"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "Альфа-канал сплэттера"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "Вкл. текстурный бомбинг"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "Режим бомбинга"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "Режим наложения"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "Режим маппинга"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "Резкость трипланара"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "Текстура бомбинга"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "Цвет бомбинга"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "Тайлинг"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "Порог"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "Непрозрачность"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "Плотность"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "Глобальный масштаб"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "Джиттер (дрожание)"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "Вариация масштаба"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "Вариация вращения"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "Вариация оттенка"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "Вариация насыщенности"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "Вариация яркости"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "Использовать Normal Map"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "Normal Map"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "Сила нормали"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "Исп. текстурный атлас"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "Данные атласа (X=Кол, Y=Ряды)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "Дистанция отсечения"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "Спад отсечения"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "Стиль контура"
+        },
+        {
+            "key": "tab_debug",
+            "value": "Меню отладки!"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "Перезагрузить интерфейс"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "Halftone"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "Кожа"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "Wrapped"
         }
     ]
 }

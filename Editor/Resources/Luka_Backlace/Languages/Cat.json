@@ -2755,6 +2755,474 @@
         {
             "key": "prop_SpecularJitter",
             "value": "Specuwular Jitter"
+        },
+        {
+            "key": "legacy_mode",
+            "value": "Suppowt fow Owd Computews, Meow!\n\nIf youw computew is having a wittle sweepy time (compilation ewwows) or is an owd cat that doesn't wike Shadew Meowdel 5.0, you can enyabwe Wegacy Meowde.\n\nHow to Tuwn it On, Nya~:\n1. Pounce youw way to dis fowdew: Resources/Luka_Backlace/Includes/\n2. Open these thwee fiwes with youw paws in a text editow:\n   • Backlace_Keywords.cginc\n   • Backlace_Shadow.cginc\n   • Backlace_Outline.cginc\n3. In each fiwe, find wine 6: // #define BACKLACE_LEGACY_MODE\n4. Scwatch out da // so it's fwee! (so it weads: #define BACKLACE_LEGACY_MODE)\n\nWhat Dis Does, Mrow:\n• Makes the shadew wowk on owdew, sweepy computews (Shadew Meowdel 3.0)\n• Automaticawwy tuwns off the AudioLink and LTCGI toys to stay within the wimits of the computew's catnap\n• Aww othew featuwes stay purrfectwy functionyaw\n\nNote: Yu must edit aww thwee fiwes ow da shadew will get grumpy and not compiwe cowwectly! Hiss!"
+        },
+        {
+            "key": "sub_tab_stickers",
+            "value": "Stwicky Paws"
+        },
+        {
+            "key": "prop_UseBump",
+            "value": "Use Bumpy Map, Meow!"
+        },
+        {
+            "key": "prop_BumpFromAlbedo",
+            "value": "Auto Bumps fwom Cowow"
+        },
+        {
+            "key": "prop_BumpFromAlbedoOffset",
+            "value": "Awbedo Bumpy Offset"
+        },
+        {
+            "key": "prop_ToggleDecals",
+            "value": "Enyabwe Stwickers"
+        },
+        {
+            "key": "prop_Decal1Behavior",
+            "value": "Behaviouwr >:3"
+        },
+        {
+            "key": "prop_Decal2Behavior",
+            "value": "Behaviouwr >:3"
+        },
+        {
+            "key": "prop_Decal1Space",
+            "value": "UV Spacey Wacey"
+        },
+        {
+            "key": "prop_Decal2Space",
+            "value": "UV Spacey Wacey"
+        },
+        {
+            "key": "sub_tab_ambient_gradient",
+            "value": "Cozy Cownew Cowows"
+        },
+        {
+            "key": "sub_tab_light_tinting",
+            "value": "Awea Tintsies"
+        },
+        {
+            "key": "sub_tab_sdf_shadow",
+            "value": "Soft Kitty Shadows"
+        },
+        {
+            "key": "prop_RampIndex",
+            "value": "Wamp Index, Nya"
+        },
+        {
+            "key": "prop_RampTotal",
+            "value": "Totaw Wamps"
+        },
+        {
+            "key": "prop_Hifi1Threshold",
+            "value": "HiFi 1 Thweshowd"
+        },
+        {
+            "key": "prop_Hifi1Feather",
+            "value": "HiFi 1 Fluffy Feathew"
+        },
+        {
+            "key": "prop_Hifi1Color",
+            "value": "HiFi 1 Cowouw"
+        },
+        {
+            "key": "prop_Hifi2Threshold",
+            "value": "HiFi 2 Thweshowd"
+        },
+        {
+            "key": "prop_Hifi2Feather",
+            "value": "HiFi 2 Fluffy Feathew"
+        },
+        {
+            "key": "prop_Hifi2Color",
+            "value": "HiFi 2 Cowouw"
+        },
+        {
+            "key": "prop_HifiBorderColor",
+            "value": "HiFi Bowdew Cowouw"
+        },
+        {
+            "key": "prop_HifiBorderWidth",
+            "value": "HiFi Bowdew Width"
+        },
+        {
+            "key": "prop_SkinLUT",
+            "value": "Skin WUT"
+        },
+        {
+            "key": "prop_SkinShadowColor",
+            "value": "Skin Shadow Cowouw"
+        },
+        {
+            "key": "prop_SkinScattering",
+            "value": "Skin Scattewing"
+        },
+        {
+            "key": "prop_WrapFactor",
+            "value": "Wwap Factow"
+        },
+        {
+            "key": "prop_WrapNormalization",
+            "value": "Wwap Nowmawisatiown"
+        },
+        {
+            "key": "prop_WrapColorHigh",
+            "value": "Wwap Cowouw High"
+        },
+        {
+            "key": "prop_WrapColorLow",
+            "value": "Wwap Cowouw Wow"
+        },
+        {
+            "key": "prop_SpecularEnergyMode",
+            "value": "Enewgy Meowde"
+        },
+        {
+            "key": "prop_SpecularEnergy",
+            "value": "Enewgy Vawue"
+        },
+        {
+            "key": "prop_SpecularEnergyMin",
+            "value": "Enewgy Minyimum"
+        },
+        {
+            "key": "prop_SpecularEnergyMax",
+            "value": "Enewgy Maxyimum"
+        },
+        {
+            "key": "tab_stylise",
+            "value": "Make it Cute"
+        },
+        {
+            "key": "prop_RefractionSourceMode",
+            "value": "Textuwe Souwce"
+        },
+        {
+            "key": "prop_RefractionSourceTexture",
+            "value": "Wefwaction Textuwe"
+        },
+        {
+            "key": "prop_SSRSourceMode",
+            "value": "Textuwe Souwce"
+        },
+        {
+            "key": "prop_SSRTexture",
+            "value": "SSW Textuwe"
+        },
+        {
+            "key": "tab_world",
+            "value": "Wowwd Buiwding"
+        },
+        {
+            "key": "sub_tab_stochastic",
+            "value": "Stochastic Tiwing"
+        },
+        {
+            "key": "sub_tab_splatter",
+            "value": "Spwatter Meowpping"
+        },
+        {
+            "key": "sub_tab_bombing",
+            "value": "Textuwe Bombing :3"
+        },
+        {
+            "key": "prop_StochasticSampling",
+            "value": "Enyabwe Stochastic Tiwing"
+        },
+        {
+            "key": "prop_StochasticSamplingMode",
+            "value": "Sampwing Meowde"
+        },
+        {
+            "key": "prop_StochasticTexture",
+            "value": "Stochastic Textuwe"
+        },
+        {
+            "key": "prop_StochasticTint",
+            "value": "Tint"
+        },
+        {
+            "key": "prop_StochasticOpacity",
+            "value": "Opawcity"
+        },
+        {
+            "key": "prop_StochasticBlendMode",
+            "value": "Bwend Meowde"
+        },
+        {
+            "key": "prop_StochasticScale",
+            "value": "Scawe"
+        },
+        {
+            "key": "prop_StochasticOffsetX",
+            "value": "Offset X"
+        },
+        {
+            "key": "prop_StochasticOffsetY",
+            "value": "Offset Y"
+        },
+        {
+            "key": "prop_StochasticBlend",
+            "value": "Bwend Stwength"
+        },
+        {
+            "key": "prop_StochasticRotationRange",
+            "value": "Wotation Wange"
+        },
+        {
+            "key": "prop_StochasticPriority",
+            "value": "Pwiowity"
+        },
+        {
+            "key": "prop_StochasticContrastStrength",
+            "value": "Contwast Stwength"
+        },
+        {
+            "key": "prop_StochasticContrastThreshold",
+            "value": "Contwast Thweshowd"
+        },
+        {
+            "key": "prop_StochasticHeightBlend",
+            "value": "Enyabwe Height Bwend"
+        },
+        {
+            "key": "prop_StochasticHeightMap",
+            "value": "Height Meowp"
+        },
+        {
+            "key": "prop_StochasticHeightStrength",
+            "value": "Height Stwength"
+        },
+        {
+            "key": "prop_StochasticMipBias",
+            "value": "Mip Bias"
+        },
+        {
+            "key": "prop_StochasticAlpha",
+            "value": "Awpha"
+        },
+        {
+            "key": "prop_StochasticNormals",
+            "value": "Nowmaws"
+        },
+        {
+            "key": "prop_SplatterMapping",
+            "value": "Enyabwe Spwatter Meowpping"
+        },
+        {
+            "key": "prop_SplatterMappingMode",
+            "value": "Spwatter Meowpping Meowde"
+        },
+        {
+            "key": "prop_SplatterControl",
+            "value": "Spwatter Contwow"
+        },
+        {
+            "key": "prop_SplatterUseNormals",
+            "value": "Use Nowmaws fow Spwatter"
+        },
+        {
+            "key": "prop_SplatterAlbedo0",
+            "value": "Spwatter Awbedo 0"
+        },
+        {
+            "key": "prop_SplatterNormal0",
+            "value": "Spwatter Nowmal 0"
+        },
+        {
+            "key": "prop_SplatterNormalStrength0",
+            "value": "Spwatter Nowmal Stwength 0"
+        },
+        {
+            "key": "prop_SplatterMasks0",
+            "value": "Spwatter Meowsks 0"
+        },
+        {
+            "key": "prop_SplatterColor0",
+            "value": "Spwatter Cowouw 0"
+        },
+        {
+            "key": "prop_SplatterTiling0",
+            "value": "Spwatter Tiwing 0"
+        },
+        {
+            "key": "prop_SplatterBlendMode0",
+            "value": "Spwatter Bwend Meowde 0"
+        },
+        {
+            "key": "prop_SplatterAlbedo1",
+            "value": "Spwatter Awbedo 1"
+        },
+        {
+            "key": "prop_SplatterNormal1",
+            "value": "Spwatter Nowmal 1"
+        },
+        {
+            "key": "prop_SplatterNormalStrength1",
+            "value": "Spwatter Nowmal Stwength 1"
+        },
+        {
+            "key": "prop_SplatterMasks1",
+            "value": "Spwatter Meowsks 1"
+        },
+        {
+            "key": "prop_SplatterColor1",
+            "value": "Spwatter Cowouw 1"
+        },
+        {
+            "key": "prop_SplatterTiling1",
+            "value": "Spwatter Tiwing 1"
+        },
+        {
+            "key": "prop_SplatterBlendMode1",
+            "value": "Spwatter Bwend Meowde 1"
+        },
+        {
+            "key": "prop_SplatterCullThreshold",
+            "value": "Spwatter Cuww Thweshowd"
+        },
+        {
+            "key": "prop_SplatterBlendSharpness",
+            "value": "Spwatter Bwend Shawpness"
+        },
+        {
+            "key": "prop_SplatterMipBias",
+            "value": "Spwatter Mip Bias"
+        },
+        {
+            "key": "prop_SplatterAlphaChannel",
+            "value": "Spwatter Awpha Channyew"
+        },
+        {
+            "key": "prop_BombingTextures",
+            "value": "Enyabwe Bombing Textuwes"
+        },
+        {
+            "key": "prop_BombingMode",
+            "value": "Bombing Meowde"
+        },
+        {
+            "key": "prop_BombingBlendMode",
+            "value": "Bwend Meowde"
+        },
+        {
+            "key": "prop_BombingMappingMode",
+            "value": "Meowpping Meowde"
+        },
+        {
+            "key": "prop_BombingTriplanarSharpness",
+            "value": "Twipwanaw Bwend Shawpness"
+        },
+        {
+            "key": "prop_BombingTex",
+            "value": "Bombing Textuwe"
+        },
+        {
+            "key": "prop_BombingColor",
+            "value": "Bombing Cowouw"
+        },
+        {
+            "key": "prop_BombingTiling",
+            "value": "Tiwing"
+        },
+        {
+            "key": "prop_BombingThreshold",
+            "value": "Thweshowd"
+        },
+        {
+            "key": "prop_BombingOpacity",
+            "value": "Opawcity"
+        },
+        {
+            "key": "prop_BombingDensity",
+            "value": "Density"
+        },
+        {
+            "key": "prop_BombingGlobalScale",
+            "value": "Gwobaw Scawe"
+        },
+        {
+            "key": "prop_BombingJitterAmount",
+            "value": "Jittew Amount"
+        },
+        {
+            "key": "prop_BombingScaleVar",
+            "value": "Scawe Vawiation"
+        },
+        {
+            "key": "prop_BombingRotVar",
+            "value": "Wotation Vawiation"
+        },
+        {
+            "key": "prop_BombingHueVar",
+            "value": "Hue Vawiation"
+        },
+        {
+            "key": "prop_BombingSatVar",
+            "value": "Satuwation Vawiation"
+        },
+        {
+            "key": "prop_BombingValVar",
+            "value": "Vawue Vawiation"
+        },
+        {
+            "key": "prop_BombingUseNormal",
+            "value": "Use Bumpy Map"
+        },
+        {
+            "key": "prop_BombingNormal",
+            "value": "Bumpy Map"
+        },
+        {
+            "key": "prop_BombingNormalStrength",
+            "value": "Bumpy Stwength"
+        },
+        {
+            "key": "prop_BombingUseSheet",
+            "value": "Use Textuwe Sheet"
+        },
+        {
+            "key": "prop_BombingSheetData",
+            "value": "Sheet Data (X=Cowumns, Y=Wows)"
+        },
+        {
+            "key": "prop_BombingCullDist",
+            "value": "Cuwwing Distance"
+        },
+        {
+            "key": "prop_BombingCullFalloff",
+            "value": "Cuwwing Fawwoff"
+        },
+        {
+            "key": "prop_OutlineStyle",
+            "value": "Outwine Stywe"
+        },
+        {
+            "key": "tab_debug",
+            "value": "Secwet Catnip Menyu! *wiggles*"
+        },
+        {
+            "key": "dev_reload_interface",
+            "value": "Wewoad Intewface"
+        },
+        {
+            "key": "custom_badge_halftone",
+            "value": "Haftone"
+        },
+        {
+            "key": "custom_badge_hifi",
+            "value": "HiFi"
+        },
+        {
+            "key": "custom_badge_skin",
+            "value": "Skin"
+        },
+        {
+            "key": "custom_badge_wrapped",
+            "value": "Wwapped"
         }
     ]
 }
