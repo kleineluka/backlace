@@ -24,6 +24,8 @@
 - New "Stochastic Sampling" effect in the World variants of the shader, with heitz/contrast sampling and naïve/competitive blending
 - New "Splatter Mapping" effect in the World variants of the shader, with triplanar and standard UV mapping modes
 - Reduce sampler count by keeping secondary textures using shared samplers (ex. a distortion map will use the same sampler as the albedo of that effect). Will prevent edge cases of exceeding sampler limits on certain platforms.
+- New "Texture Bombing" effect in the World variants of the shader, allowing for large-scale repeating decal textures with variation and spritesheet support
+- Specular energy can now, optionally, be functional with various modes and limits
 
 ## Version 1.8.5
 - Add shift support to B channel of hair specular map

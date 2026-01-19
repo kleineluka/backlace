@@ -571,7 +571,7 @@
 
         {
             pathValue = SampleTextureTriplanar(
-                _PathingMap, sampler_PathingMap,
+                _PathingMap, sampler_MainTex,
                 FragData.worldPos, Surface.NormalDir,
                 float3(0, 0, 0), _PathingScale, float3(0, 0, 0),
                 2.0, true, float2(0, 0)

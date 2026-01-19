@@ -8,33 +8,44 @@
 
 Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
 
-**Latest Release:** 1.8.5 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
+**Latest Release:** 2.0.0 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
 <br>
 **Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, BepinEx Targetting BiRP, and more!
 <br>
 **Built With:** Unity 2022 LTS (but compatible with 2019.4+)
 
 ## Features 🍒
-- **Core Features:**
-	- Render Settings/Presets, Alebdo, Normal (Texture/Derived), Emission
-	- Texture Stitching, Texture Post-Processing, Decals
-	- Vertex and UV Manipulation, UV Sets
-	- Easy VRC Fallback Control
- - **Lighting:**
-	 - Models: Backlace (Default), PoiCustom, OpenLit, Standard, Mochie
-	 - Direction Modes: Backlace (Default), Forced, View Direction
-	 - Diffuse Modes: PBR, Ramp Toon, Anime Toon
-	 - Anime Extra Features: Ambient Gradient, Tint Mask Source, SDF Shadows
-- **Specular:** Vertex Specular, PBR Specular, Anisotropic, Toon, Hair, Cloth
-- **Stylise:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Shadow Textures, Detail Mapping, Shadow Mapping
-- **Effects:** Dissolve, Distance Fading, Mirror Detection, Pathing, Glitter, Iridescence, Parallax Mapping (Fast/Fancy UV, Layered, Interior), World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (Distort and Glitch), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
-- **Shader Variants:** Default, Grabpass, Outline, All
+- **Main Settings:**
+	- Extensive Control, 10 Rendering Presets, VRCFallback Control, and Global Illumination
+	- Albedo, Normal (Supplied Map/Albedo Derived), Alpha Controls
+	- Texture Stitching, Texture Post-Processing, Stickers (2 Overlays/Decals)
+	- UV Manipulation, Vertex Manipulation, 4 Assignable UV Sets
+	- UV Effects: Triplanar, Screen Space, Flipbook/Spritesheet, Flow Map
+	- Optional Legacy Mode for older hardware (Shader Model 3.0)
+- **Lighting:**
+	- Models: Backlace (Default), PoiCustom, OpenLit, Standard, Mochie
+	- Direction Modes: Backlace (Default), Forced, View Direction
+	- Per-Pass Light Limits, Colour Controls, and (Optional) Greyscale Lighting
+	- Emission (Masked Texture/Colour)
+- **Anime Shading:**
+	- Anime Modes: Disabled (Standard PBR), Ramp, Halftone, HiFi, Skin, Wrapped
+	- Ambient Gradient, Area Tinting, SDF Shadows
+- **Specular:**
+	- Modes: Disabled, Standard, Anisotropic, Toon, Hair, Cloth
+	- Energy Conservation: Disabled, Turquin, Safe, Manual
+	- Vertex Specular
+	- MSSO, Glossiness, Reflectivity, Highlights
+- **Stylise:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Detail Mapping, Shadow Mapping, Shadow Textures
+- **Effects:** Dissolve, Distance Fading, VRChat Mirror Detection, Pathing (6 Modes), Glitter, Iridesence, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (4 Distortion Modes, 4 Glitch Modes), Parallax Mapping (Fast/Fancy UV, Layered, Interior), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
+- **World Building:** Stochastic Tiling (Triangle Grid, Contrast Aware), Splatter Mapping (2 Splatters, UV Mode, Triplanar Mode), Texture Bombing (Jittered, Layered)
+- **Outline:** View/World Space, Outline/Silhouette Mode, Colour/Texture Outline, Vertex Colour Mask, Offset, Distance Fade, and More
 - **Legacy Mode** can optionally be enabled to support older hardware (Shader Model 3.0)
-- **Third Party Support:** AudioLink, Super Plug Shader, LTCGI Lighting
+- **Third Party Support:** Extensive AudioLink Controls, Super Plug Shader, LTCGI Lighting
+- **Shader Variants:** Default, Grabpass, Outline, World, Grabpass Outline, World Outline
 - **Custom UI** built with my Dazzle library! It's quite pretty...
 - **Compact Shader Generation** with my Premonitions library!
 - **Presets** system built in, alongside custom preset saving (and tonnes of pre-made presets! from slime girls to metallic robots)
-- **Optimised** with local shader features rather than global keywords
+- **Optimised** with local shader features, shared sampler states, split shader files, and strict culling, branching, and math
 - **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
 - **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
 
