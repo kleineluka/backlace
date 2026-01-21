@@ -4,12 +4,8 @@
 // global variables
 FragmentData FragData;
 float3 NormalMap;
-float3 Lightmap;
 float GFS;
 float3 NDF;
-float3 DynamicLightmap;
-float4 LightmapDirection;
-float4 DynamicLightmapDirection;
 float4 Msso;
 float RoughnessSquared;
 float RampAttenuation;

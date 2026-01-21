@@ -1,3 +1,7 @@
+## Version 2.0.1
+- Improve light checks
+- Fix lightmaps not being assigned properly
+
 ## Version 2.0.0
 - Normal map toggle for better performance, allow deriving normal from albedo as well
 - New UI tab "Shading" (and old "Shading" was renamed to "Stylise")

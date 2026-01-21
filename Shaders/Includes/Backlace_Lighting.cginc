@@ -126,40 +126,40 @@ void OpenLitShadeSH9ToonDouble(float3 lightDirection, out float3 shMax, out floa
 }
 
 // solution to get indirect lighting to apply to all light modes
-float3 GetUniversalIndirectLight(float3 normal)
+float3 GetUniversalIndirectLight(BacklaceSurfaceData Surface)
 {
     float3 indirectColor = float3(0, 0, 0);
     #if defined(UNITY_PASS_FORWARDBASE)
         indirectColor = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
         #if defined(LIGHTMAP_ON)
-            float3 indirectBaked = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
+            float3 indirectBaked = Surface.Lightmap;
             #if defined(DIRLIGHTMAP_COMBINED)
-                float3 combinedBaked = DecodeDirectionalLightmap(indirectBaked, LightmapDirection, normal);
+                float3 combinedBaked = DecodeDirectionalLightmap(indirectBaked, Surface.LightmapDirection, Surface.NormalDir);
                 float3 directBaked = combinedBaked - indirectBaked;
                 indirectColor = (indirectBaked * _BakedIndirectIntensity) + (directBaked * _BakedDirectIntensity);
-            #else
+            #else // DIRLIGHTMAP_COMBINED
                 indirectColor = indirectBaked * _BakedIndirectIntensity;
-            #endif
-        #endif
+            #endif // DIRLIGHTMAP_COMBINED
+        #endif // LIGHTMAP_ON
         #if defined(DYNAMICLIGHTMAP_ON)
             #if defined(DIRLIGHTMAP_COMBINED)
-                indirectColor += DecodeDirectionalLightmap(DynamicLightmap, DynamicLightmapDirection, normal);
-            #else
-                indirectColor += DynamicLightmap;
-            #endif
-        #endif
-    #endif
+                indirectColor += DecodeDirectionalLightmap(Surface.DynamicLightmap, Surface.DynamicLightmapDirection, Surface.NormalDir);
+            #else // DIRLIGHTMAP_COMBINED
+                indirectColor += Surface.DynamicLightmap;
+            #endif // DIRLIGHTMAP_COMBINED
+        #endif // DYNAMICLIGHTMAP_ON
+    #endif // UNITY_PASS_FORWARDBASE
     return indirectColor;
 }
 
 // the original backlace light color function
-void GetBacklaceLightColor(inout BacklaceLightData lightData, float3 normal)
+void GetBacklaceLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
         lightData.directColor = _LightColor0.rgb;
-        lightData.indirectColor = GetUniversalIndirectLight(normal);
+        lightData.indirectColor = GetUniversalIndirectLight(Surface);
         // lightData.directColor = lerp(GetSHLength(), lightData.directColor, .75);
-        float3 ambientColor = ShadeSH9(float4(normal, 1.0)); // note: upgraded from SHLength to full SH eval
+        float3 ambientColor = ShadeSH9(float4(Surface.NormalDir, 1.0)); // note: upgraded from SHLength to full SH eval
         lightData.directColor = lerp(ambientColor, lightData.directColor, 0.75);
         if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
         {
@@ -175,7 +175,7 @@ void GetBacklaceLightColor(inout BacklaceLightData lightData, float3 normal)
 }
 
 // From Poiyomi For Poiyomi Lighting Mode
-void GetPoiyomiLightColor(inout BacklaceLightData lightData, float3 normal)
+void GetPoiyomiLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
         float3 ambientMagic = max(BetterSH9(normalize(unity_SHAr + unity_SHAg + unity_SHAb)), 0);
@@ -196,8 +196,8 @@ void GetPoiyomiLightColor(inout BacklaceLightData lightData, float3 normal)
         {
             lightData.directColor = float3(0, 0, 0);
         }
-        lightData.indirectColor = GetUniversalIndirectLight(normal);
-        bool lightExists = any(_WorldSpaceLightPos0.xyz) && _LightColor0.a > 0.01;
+        lightData.indirectColor = GetUniversalIndirectLight(Surface);
+        bool lightExists = dot(_WorldSpaceLightPos0.xyz, _WorldSpaceLightPos0.xyz) > 0.000001 && _LightColor0.a > 0.01;
         #if defined(BACKLACE_TOON)
             if (!lightExists > 0)
             {
@@ -212,13 +212,13 @@ void GetPoiyomiLightColor(inout BacklaceLightData lightData, float3 normal)
 }
 
 // From OpenLit For OpenLit Lighting Mode
-void GetOpenLitLightColor(inout BacklaceLightData lightData, float3 normal)
+void GetOpenLitLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
         float3 directSH, indirectSH_OpenLit; 
-        OpenLitShadeSH9ToonDouble(normal, directSH, indirectSH_OpenLit);
+        OpenLitShadeSH9ToonDouble(Surface.NormalDir, directSH, indirectSH_OpenLit);
         lightData.directColor = directSH + _LightColor0.rgb;
-        lightData.indirectColor = GetUniversalIndirectLight(normal);
+        lightData.indirectColor = GetUniversalIndirectLight(Surface);
         bool lightExists = any(_WorldSpaceLightPos0.xyz) && _LightColor0.a > 0.01;
         #if defined(BACKLACE_TOON)
             if (!lightExists)
@@ -234,11 +234,11 @@ void GetOpenLitLightColor(inout BacklaceLightData lightData, float3 normal)
 }
  
 // naive unity light colour functions
-void GetStandardLightColor(inout BacklaceLightData lightData, float3 normal)
+void GetStandardLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
         bool lightExists = any(_WorldSpaceLightPos0.xyz) && _LightColor0.a > 0.01;
-        lightData.indirectColor = GetUniversalIndirectLight(normal);
+        lightData.indirectColor = GetUniversalIndirectLight(Surface);
         if (lightExists)
         {
             lightData.directColor = _LightColor0.rgb;
@@ -261,18 +261,18 @@ void GetStandardLightColor(inout BacklaceLightData lightData, float3 normal)
 }
 
 // From Mochie For Mochie Lighting Mode
-void GetMochieLightColor(inout BacklaceLightData lightData, float3 normal)
+void GetMochieLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
         bool lightExists = any(_WorldSpaceLightPos0.xyz);
-        lightData.indirectColor = GetUniversalIndirectLight(normal);
+        lightData.indirectColor = GetUniversalIndirectLight(Surface);
         if (lightExists)
         {
             lightData.directColor = _LightColor0.rgb;
         }
         else
         {
-            lightData.directColor = ShadeSHNL(normal);
+            lightData.directColor = ShadeSHNL(Surface.NormalDir);
         }
         if (!lightExists || _LightColor0.a < 0.01)
         {
@@ -353,6 +353,32 @@ void GetLightData(inout BacklaceSurfaceData Surface)
 {
     BacklaceLightData lightData;
     #if defined(UNITY_PASS_FORWARDBASE)
+        // static lightmap
+        #if defined(LIGHTMAP_ON)
+            Surface.Lightmap = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
+            Surface.Lightmap = max(Surface.Lightmap, 0);
+            #if defined(DIRLIGHTMAP_COMBINED)
+                Surface.LightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd, unity_Lightmap, FragData.lightmapUV);
+            #else // DIRLIGHTMAP_COMBINED
+                Surface.LightmapDirection = float4(0, 0, 0, 0);
+            #endif // DIRLIGHTMAP_COMBINED
+        #else // LIGHTMAP_ON
+            Surface.Lightmap = float3(0, 0, 0);
+            Surface.LightmapDirection = float4(0, 0, 0, 0);
+        #endif // LIGHTMAP_ON
+        // dynamic lightmap
+        #if defined(DYNAMICLIGHTMAP_ON)
+            Surface.DynamicLightmap = DecodeRealtimeLightmap(UNITY_SAMPLE_TEX2D(unity_DynamicLightmap, FragData.dynamicLightmapUV));
+            Surface.DynamicLightmap = max(Surface.DynamicLightmap, 0);
+            #if defined(DIRLIGHTMAP_COMBINED)
+                Surface.DynamicLightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_DynamicDirectionality, unity_DynamicLightmap, FragData.dynamicLightmapUV);
+            #else // DIRLIGHTMAP_COMBINED
+                Surface.DynamicLightmapDirection = float4(0, 0, 0, 0);
+            #endif // DIRLIGHTMAP_COMBINED
+        #else
+            Surface.DynamicLightmap = float3(0, 0, 0);
+            Surface.DynamicLightmapDirection = float4(0, 0, 0, 0);
+        #endif // DYNAMICLIGHTMAP_ON
         UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
         lightData.attenuation = FadeShadows(FragData, attenuation);
         switch(_LightingDirectionMode)
@@ -379,11 +405,11 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
         switch(_LightingColorMode)
         {
-            case 1: GetPoiyomiLightColor(lightData, Surface.NormalDir); break;
-            case 2: GetOpenLitLightColor(lightData, Surface.NormalDir); break;
-            case 3: GetStandardLightColor(lightData, Surface.NormalDir); break;
-            case 4: GetMochieLightColor(lightData, Surface.NormalDir); break;
-            case 0: default: GetBacklaceLightColor(lightData, Surface.NormalDir); break;
+            case 1: GetPoiyomiLightColor(lightData, Surface); break;
+            case 2: GetOpenLitLightColor(lightData, Surface); break;
+            case 3: GetStandardLightColor(lightData, Surface); break;
+            case 4: GetMochieLightColor(lightData, Surface); break;
+            case 0: default: GetBacklaceLightColor(lightData, Surface); break;
         }
     #else // UNITY_PASS_FORWARDADD
         GetForwardAddLightData(lightData);
@@ -391,11 +417,11 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
         switch(_LightingColorMode)
         {
-            case 1: GetPoiyomiLightColor(lightData, Surface.NormalDir); break;
-            case 2: GetOpenLitLightColor(lightData, Surface.NormalDir); break;
-            case 3: GetStandardLightColor(lightData, Surface.NormalDir); break;
-            case 4: GetMochieLightColor(lightData, Surface.NormalDir); break;
-            case 0: default: GetBacklaceLightColor(lightData, Surface.NormalDir); break;
+            case 1: GetPoiyomiLightColor(lightData, Surface); break;
+            case 2: GetOpenLitLightColor(lightData, Surface); break;
+            case 3: GetStandardLightColor(lightData, Surface); break;
+            case 4: GetMochieLightColor(lightData, Surface); break;
+            case 0: default: GetBacklaceLightColor(lightData, Surface); break;
         }
     #endif
     //global modifiers for both passes

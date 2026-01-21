@@ -42,6 +42,10 @@ struct BacklaceSurfaceData
     float3 IndirectSpecular;
     float3 VertexDirectDiffuse;
     float Attenuation;
+    float3 Lightmap;
+    float4 LightmapDirection;
+    float3 DynamicLightmap;
+    float4 DynamicLightmapDirection;
     // specular intermediates
     float3 SpecularColor;
     float3 EnergyCompensation;
