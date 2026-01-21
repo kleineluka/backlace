@@ -430,7 +430,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             float3 directLight = Surface.LightColor.rgb * Surface.Albedo.rgb;
             float lightMask = 1.0 - halftoneShadow;
             finalColor = lerp(finalColor, directLight, lightMask);
-            Surface.Diffuse = finalColor;
+            Surface.Diffuse = finalColor * Surface.LightColor.a;
             ApplyAmbientGradient(Surface);
             Surface.Attenuation = lightMask;
             ApplyAreaTint(Surface);
@@ -495,7 +495,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 // simple ambient add
                 finalDiffuse += Surface.IndirectDiffuse * Surface.Albedo;
             #endif
-            Surface.Diffuse = finalDiffuse;
+            Surface.Diffuse = finalDiffuse * Surface.LightColor.a;
             Surface.Attenuation = band1Edge; // for specular masking
             ApplyAmbientGradient(Surface);
             ApplyAreaTint(Surface);
@@ -547,7 +547,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             float3 skinRamp = UNITY_SAMPLE_TEX2D(_SkinLUT, lutUV).rgb;
             float rampLuma = GetLuma(skinRamp);
             float3 tint = lerp(_SkinShadowColor.rgb, float3(1, 1, 1), rampLuma);
-            Surface.Diffuse = Surface.Albedo * Surface.LightColor.rgb * skinRamp * tint;
+            Surface.Diffuse = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a * skinRamp * tint;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * smoothstep(0, 0.5, rampLuma);
             Surface.Attenuation = rampLuma;
             ApplyAmbientGradient(Surface);
@@ -572,7 +572,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             float normalizationFactor = lerp(1.0, 1.0 / (1.0 + _WrapFactor), _WrapNormalization);
             float3 ramp = lerp(_WrapColorLow.rgb, _WrapColorHigh.rgb, wrappedNdotL);
             ramp *= normalizationFactor;
-            Surface.Diffuse = Surface.Albedo * ramp * Surface.LightColor.rgb;
+            Surface.Diffuse = Surface.Albedo * ramp * Surface.LightColor.rgb * Surface.LightColor.a;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo;
             Surface.Attenuation = wrappedNdotL;
             ApplyAmbientGradient(Surface);

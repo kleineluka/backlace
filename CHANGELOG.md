@@ -1,3 +1,6 @@
+## Version 2.0.3
+- All anime shading modes now have proper attenuation, sorry about that (╥﹏╥)
+
 ## Version 2.0.2
 - Fixed old function call in HiFi Vertex Lighting
 

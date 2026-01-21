@@ -13,7 +13,7 @@ namespace Luka.Backlace
         public static readonly string project_name = "Backlace";
         public static readonly string project_path = "Luka_Backlace";
         public static readonly string project_license = "/Licenses/Backlace";
-        public static Version version = new Version("2.0.2");
+        public static Version version = new Version("2.0.3");
         public static readonly Version version_dazzle = new Version("4.6.0"); // just internally
         public static readonly string project_docs = "https://luka.moe/docs/backlace";
         public static readonly bool has_license = true; // if the project has a license file, or if you wanna show it
