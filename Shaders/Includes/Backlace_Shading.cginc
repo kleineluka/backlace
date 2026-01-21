@@ -533,7 +533,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         {
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
-                MultibandVertLight(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse);
+                HifiVertLight(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse);
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif // VERTEXLIGHT_ON
 

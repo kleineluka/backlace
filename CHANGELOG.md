@@ -1,3 +1,6 @@
+## Version 2.0.2
+- Fixed old function call in HiFi Vertex Lighting
+
 ## Version 2.0.1
 - Improve light checks
 - Fix lightmaps not being assigned properly
