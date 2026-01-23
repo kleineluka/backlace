@@ -4,6 +4,82 @@
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
+//           Main Effects
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// post-processing features
+#if defined(_BACKLACE_POST_PROCESSING)
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ColorGradingLUT);
+    float4 _RGBColor;
+    float _RGBBlendMode;
+    float _HSVMode;
+    float _HSVHue;
+    float _HSVSaturation;
+    float _HSVValue;
+    float _ToggleHueShift;
+    float _HueShift;
+    float _ToggleAutoCycle;
+    float _AutoCycleSpeed;
+    float _ColorGradingIntensity;
+    float _BlackAndWhite;
+    float _Brightness;
+
+    void ApplyPostProcessing(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float3 finalColor = Surface.FinalColor.rgb;
+        // rgb tint/replace
+        float3 tintedColor = lerp(finalColor * _RGBColor.rgb, _RGBColor.rgb, _RGBBlendMode);
+        finalColor = tintedColor;
+        // hsv manipulation
+        float3 hsv = RGBtoHSV(finalColor);
+        [branch] if (_HSVMode == 1) // additive
+
+        {
+            hsv.x = frac(hsv.x + _HSVHue);
+            hsv.y += _HSVSaturation - 1.0;
+            hsv.z += _HSVValue - 1.0;
+        }
+        else if (_HSVMode == 2) // multiplicative
+
+        {
+            hsv.x = frac(hsv.x + _HSVHue);
+            hsv.y *= _HSVSaturation;
+            hsv.z *= _HSVValue;
+        }
+        finalColor = HSVtoRGB(saturate(hsv));
+        // hue shift/cycle
+        [branch] if (_ToggleHueShift > 0)
+        {
+            #if defined(_BACKLACE_AUDIOLINK)
+                finalColor = ApplyHueShift(finalColor, _HueShift + i.alChannel1.z, _ToggleAutoCycle, _AutoCycleSpeed);
+            #else // _BACKLACE_AUDIOLINK
+                finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
+            #endif // _BACKLACE_AUDIOLINK
+
+        }
+        // colour grading
+        [branch] if (_ColorGradingIntensity > 0)
+        {
+            float3 gradedColor = UNITY_SAMPLE_TEX2D_SAMPLER(_ColorGradingLUT, _MainTex, finalColor.rg).rgb;
+            finalColor = lerp(finalColor, gradedColor, _ColorGradingIntensity);
+        }
+        // black and white
+        [branch] if (_BlackAndWhite > 0)
+        {
+            float luma = GetLuma(finalColor);
+            finalColor = lerp(finalColor, float3(luma, luma, luma), _BlackAndWhite);
+        }
+        // brightness
+        finalColor *= _Brightness;
+        Surface.FinalColor.rgb = finalColor;
+    }
+#endif // _BACKLACE_POST_PROCESSING
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
 //          Stylise Effects
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -161,16 +237,174 @@
     }
 #endif // _BACKLACE_CUBEMAP
 
+// clearcoat features
+#if defined(_BACKLACE_CLEARCOAT)
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ClearcoatMap);
+    float4 _ClearcoatMap_ST;
+    float _ClearcoatStrength;
+    float _ClearcoatRoughness;
+    float _ClearcoatReflectionStrength;
+    float _ClearcoatMap_UV;
+    float4 _ClearcoatColor;
+
+    void CalculateClearcoat(inout BacklaceSurfaceData Surface, out float3 highlight, out float3 occlusion)
+    {
+        float4 clearcoatMap = UNITY_SAMPLE_TEX2D_SAMPLER(_ClearcoatMap, _MainTex, Uvs[_ClearcoatMap_UV]);
+        float mask = _ClearcoatStrength * clearcoatMap.r;
+        float roughness = _ClearcoatRoughness * clearcoatMap.g;
+        float3 F0 = lerp(0.04, 1.0, _ClearcoatReflectionStrength);
+        float3 fresnel = FresnelTerm(F0, Surface.LdotH);
+        float squareRoughness = max(roughness * roughness, 0.002);
+        float distribution = GTR2(Surface.NdotH, squareRoughness);
+        float geometry = SmithGGGX(Surface.NdotL, squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
+        float3 clearcoatSpec = fresnel * distribution * geometry * Surface.LightColor.a;
+        highlight = clearcoatSpec * lerp(Surface.LightColor.rgb, Surface.LightColor.rgb * _ClearcoatColor.rgb, _ClearcoatColor.a) * mask;
+        float3 occlusionTint = lerp(1.0, _ClearcoatColor.rgb, fresnel);
+        occlusion = lerp(1.0, occlusionTint, mask);
+    }
+
+    #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
+        void AddClearcoatVertex(inout BacklaceSurfaceData Surface)
+        {
+            float3 VLightDir = normalize(VertexLightDir);
+            if (dot(VLightDir, VLightDir) < 0.01) return;
+            float3 F0 = lerp(0.04, 1.0, _ClearcoatReflectionStrength);
+            float3 fresnel = FresnelTerm(F0, saturate(dot(normalize(VLightDir + Surface.ViewDir), VLightDir)));
+            float roughness = _ClearcoatRoughness; // no map for this to keep it simple
+            float squareRoughness = max(roughness * roughness, 0.002);
+            float distribution = GTR2(saturate(dot(Surface.NormalDir, normalize(VLightDir + Surface.ViewDir))), squareRoughness);
+            float geometry = SmithGGGX(saturate(dot(Surface.NormalDir, VLightDir)), squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
+            float3 clearcoatV_Spec = fresnel * distribution * geometry * Surface.LightColor.a;
+            Surface.FinalColor.rgb += clearcoatV_Spec * Surface.VertexDirectDiffuse * _ClearcoatColor.rgb * _ClearcoatStrength;
+        }
+    #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
+#endif // _BACKLACE_CLEARCOAT
+
+// subsurface scattering features
+#if defined(_BACKLACE_SSS)
+    float _ThicknessMap_UV;
+    float4 _SSSColor;
+    float _SSSStrength;
+    float _SSSPower;
+    float _SSSDistortion;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_SSSThicknessMap);
+    float _SSSThickness;
+
+    void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
+    {
+        float rawThickness = UNITY_SAMPLE_TEX2D_SAMPLER(_SSSThicknessMap, _MainTex, Uvs[_ThicknessMap_UV]).r;
+        float transmission = exp(-rawThickness * _SSSThickness);
+        float3 scatterDir = normalize(Surface.LightDir + (Surface.NormalDir * _SSSDistortion));
+        float scatterDot = dot(Surface.ViewDir, -scatterDir);
+        float scatterFalloff = pow(saturate(scatterDot), _SSSPower);
+        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * _SSSStrength * transmission * Surface.LightColor.a * scatterFalloff;
+        Surface.Diffuse += sss;
+    }
+#endif // _BACKLACE_SSS
+
+// detail maps features
+#if defined(_BACKLACE_DETAIL)
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailAlbedoMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailNormalMap);
+    float _DetailMap_UV;
+    float _DetailTiling;
+    float _DetailNormalStrength;
+
+    void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
+    {
+        float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
+        float4 detailAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_DetailAlbedoMap, _MainTex, detailUV);
+        Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
+        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_DetailNormalMap, _MainTex, detailUV), _DetailNormalStrength);
+        float3 baseNormalTS = NormalMap;
+        NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
+    }
+#endif // _BACKLACE_DETAIL
+
+// shadow texture features
+#if defined(_BACKLACE_SHADOW_TEXTURE)
+    UNITY_DECLARE_TEX2D(_ShadowTex);
+    float _ShadowTex_UV;
+    float4 _ShadowPatternColor;
+    float _ShadowPatternScale;
+    float _ShadowTextureIntensity;
+    int _ShadowTextureMappingMode;
+    float _ShadowPatternTriplanarSharpness;
+    float _ShadowPatternTransparency;
+    int _ShadowTextureBlendMode;
+
+    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface, float3 shadowTint)
+    {
+        float3 texturedShadow;
+        float blendFactor;
+        float3 albedoTintedShadow = shadowTint * Surface.Albedo.rgb;
+        float shadowMask = 1.0 - Surface.NdotL;
+        switch(_ShadowTextureMappingMode)
+        {
+            case 0: // uv albedo
+
+            {
+                float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
+                texturedShadow = shadowAlbedoSample.rgb;
+                blendFactor = shadowAlbedoSample.a * shadowMask;
+                break;
+            }
+            case 1: // screen pattern
+
+            {
+                float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
+                float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
+                texturedShadow = albedoTintedShadow;
+                blendFactor = patternSample.r * patternSample.a * shadowMask;
+                break;
+            }
+            case 2: // triplanar
+
+            {
+                float4 patternSample = SampleTextureTriplanar(
+                    _ShadowTex, sampler_MainTex,
+                    FragData.worldPos, Surface.NormalDir,
+                    float3(0, 0, 0), _ShadowPatternScale, float3(0, 0, 0),
+                    _ShadowPatternTriplanarSharpness, true, float2(0, 0)
+                );
+                texturedShadow = albedoTintedShadow;
+                blendFactor = patternSample.r * patternSample.a * shadowMask;
+                break;
+            }
+        }
+        float3 baseShadowColour = Surface.Albedo.rgb * lerp(Surface.IndirectDiffuse, 1.0, _ShadowPatternTransparency);
+        float3 finalShadowColor;
+        switch(_ShadowTextureBlendMode)
+        {
+            case 0: // additive
+            finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
+            break;
+            case 1: // multiply
+            finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
+            break;
+            default: // alpha blend (2)
+            finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
+            break;
+        }
+        float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
+        return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);
+    }
+
+    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface)
+    {
+        return GetTexturedShadowColor(Surface, _ShadowPatternColor.rgb);
+    }
+#endif // _BACKLACE_SHADOW_TEXTURE
 
 
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Effects... Effects!?
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
 
 
-
-
-
-
-
-
+// dissolve feature
 #if defined(_BACKLACE_DISSOLVE)
     // properties for dissolve are in Backlace_Properties.cginc (for alpha in other passes)
     void ApplyDissolve(inout BacklaceSurfaceData Surface, FragmentData i)
@@ -201,114 +435,696 @@
     }
 #endif // _BACKLACE_DISSOLVE
 
-// post-processing features
-#if defined(_BACKLACE_POST_PROCESSING)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_ColorGradingLUT);
-    float4 _RGBColor;
-    float _RGBBlendMode;
-    float _HSVMode;
-    float _HSVHue;
-    float _HSVSaturation;
-    float _HSVValue;
-    float _ToggleHueShift;
-    float _HueShift;
-    float _ToggleAutoCycle;
-    float _AutoCycleSpeed;
-    float _ColorGradingIntensity;
-    float _BlackAndWhite;
-    float _Brightness;
+// distance fading-specific features
+#if defined(_BACKLACE_DISTANCE_FADE)
+    // distance fade properties
+    float _DistanceFadeReference;
+    float _ToggleNearFade;
+    float _NearFadeMode;
+    float _NearFadeDitherScale;
+    float _NearFadeStart;
+    float _NearFadeEnd;
+    float _ToggleFarFade;
+    float _FarFadeStart;
+    float _FarFadeEnd;
 
-    void ApplyPostProcessing(inout BacklaceSurfaceData Surface, FragmentData i)
+    // fade based on how far or close the object is to the camera
+    void CalculateDistanceFade(FragmentData i, inout bool isNearFading, out float fade_factor)
     {
-        float3 finalColor = Surface.FinalColor.rgb;
-        // rgb tint/replace
-        float3 tintedColor = lerp(finalColor * _RGBColor.rgb, _RGBColor.rgb, _RGBBlendMode);
-        finalColor = tintedColor;
-        // hsv manipulation
-        float3 hsv = RGBtoHSV(finalColor);
-        [branch] if (_HSVMode == 1) // additive
-
+        fade_factor = 1.0;
+        float3 referencePos = _DistanceFadeReference == 1 ? i.worldObjectCenter : i.worldPos;
+        float view_dist = distance(referencePos, GetCameraPos());
+        isNearFading = false;
+        if (_ToggleNearFade == 1 && _NearFadeStart > _NearFadeEnd)
         {
-            hsv.x = frac(hsv.x + _HSVHue);
-            hsv.y += _HSVSaturation - 1.0;
-            hsv.z += _HSVValue - 1.0;
+            float nearFade = smoothstep(_NearFadeEnd, _NearFadeStart, view_dist);
+            fade_factor *= nearFade;
+            isNearFading = nearFade < 1.0;
         }
-        else if (_HSVMode == 2) // multiplicative
-
+        if (_ToggleFarFade == 1 && _FarFadeEnd > _FarFadeStart)
         {
-            hsv.x = frac(hsv.x + _HSVHue);
-            hsv.y *= _HSVSaturation;
-            hsv.z *= _HSVValue;
+            float farFade = 1.0 - smoothstep(_FarFadeStart, _FarFadeEnd, view_dist);
+            fade_factor *= farFade;
         }
-        finalColor = HSVtoRGB(saturate(hsv));
-        // hue shift/cycle
-        [branch] if (_ToggleHueShift > 0)
-        {
-            #if defined(_BACKLACE_AUDIOLINK)
-                finalColor = ApplyHueShift(finalColor, _HueShift + i.alChannel1.z, _ToggleAutoCycle, _AutoCycleSpeed);
-            #else // _BACKLACE_AUDIOLINK
-                finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
-            #endif // _BACKLACE_AUDIOLINK
-
-        }
-        // colour grading
-        [branch] if (_ColorGradingIntensity > 0)
-        {
-            float3 gradedColor = UNITY_SAMPLE_TEX2D_SAMPLER(_ColorGradingLUT, _MainTex, finalColor.rg).rgb;
-            finalColor = lerp(finalColor, gradedColor, _ColorGradingIntensity);
-        }
-        // black and white
-        [branch] if (_BlackAndWhite > 0)
-        {
-            float luma = GetLuma(finalColor);
-            finalColor = lerp(finalColor, float3(luma, luma, luma), _BlackAndWhite);
-        }
-        // brightness
-        finalColor *= _Brightness;
-        Surface.FinalColor.rgb = finalColor;
     }
-#endif // _BACKLACE_POST_PROCESSING
 
-// detail maps features
-#if defined(_BACKLACE_DETAIL)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailAlbedoMap);
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_DetailNormalMap);
-    float _DetailMap_UV;
-    float _DetailTiling;
-    float _DetailNormalStrength;
-
-    void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
+    // before we do any math, maybe we can optimise and not do anything at all!
+    float ApplyDistanceFadePre(bool isNearFading, float fade_factor)
     {
-        float2 detailUV = Uvs[_DetailMap_UV] * _DetailTiling;
-        float4 detailAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_DetailAlbedoMap, _MainTex, detailUV);
-        Surface.Albedo.rgb *= detailAlbedo.rgb * 2 * detailAlbedo.a;
-        float3 detailNormalTS = UnpackScaleNormal(UNITY_SAMPLE_TEX2D_SAMPLER(_DetailNormalMap, _MainTex, detailUV), _DetailNormalStrength);
-        float3 baseNormalTS = NormalMap;
-        NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
+        if (_NearFadeMode == 0)
+        {
+            // don't need to worry about dither
+            if (fade_factor == 0)
+            {
+                return -1; // fully faded out, skip all processing
+
+            }
+        }
+        return fade_factor; // we'll handle this in the fade post function
+
     }
-#endif // _BACKLACE_DETAIL
 
-// subsurface scattering features
-#if defined(_BACKLACE_SSS)
-    float _ThicknessMap_UV;
-    float4 _SSSColor;
-    float _SSSStrength;
-    float _SSSPower;
-    float _SSSDistortion;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_SSSThicknessMap);
-    float _SSSThickness;
-
-    void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
+    // this is just the normal fade at the end if we need to partially show the object
+    void ApplyDistanceFadePost(FragmentData i, float fade_factor, bool isNearFading, inout BacklaceSurfaceData Surface)
     {
-        float rawThickness = UNITY_SAMPLE_TEX2D_SAMPLER(_SSSThicknessMap, _MainTex, Uvs[_ThicknessMap_UV]).r;
-        float transmission = exp(-rawThickness * _SSSThickness);
-        float3 scatterDir = normalize(Surface.LightDir + (Surface.NormalDir * _SSSDistortion));
-        float scatterDot = dot(Surface.ViewDir, -scatterDir);
-        float scatterFalloff = pow(saturate(scatterDot), _SSSPower);
-        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * _SSSStrength * transmission * Surface.LightColor.a * scatterFalloff;
-        Surface.Diffuse += sss;
+        [branch] if (_NearFadeMode == 1 && isNearFading)
+        {
+            float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy, _NearFadeDitherScale);
+            Surface.FinalColor.a *= step(fade_factor, pattern);
+        }
+        else
+        {
+            // just a normal fade
+            Surface.FinalColor.a *= fade_factor;
+        }
     }
-#endif // _BACKLACE_SSS
+#endif // _BACKLACE_DISTANCE_FADE
+
+// vrchat mirror detection feature
+#if defined(_BACKLACE_VRCHAT_MIRROR)
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_MirrorDetectionTexture); // use main sampler
+    float _MirrorDetectionTexture_UV;
+    float _MirrorDetectionMode; // 0 = texture, 1 = hide, 2 = only show
+    float _VRChatMirrorMode; // assigned by vrchat, 0 = none, 1 = mirror in vr, 2 = mirror in desktop
+    
+    bool IsInMirrorView()
+    {
+        if (_VRChatMirrorMode > 0.5) return true;
+        // otherwise, try and check for a generic mirror
+        return unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f;
+    }
+
+    // dont run things that need to sample uvs in the outline pass
+    #ifndef UNITY_PASS_OUTLINE
+        // run after sampling albedo but before lighting
+        void ApplyMirrorDetectionPre(inout BacklaceSurfaceData Surface)
+        {
+            if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
+
+            {
+                float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MirrorDetectionTexture, _MainTex, Uvs[_MirrorDetectionTexture_UV]).r;
+                Surface.FinalColor.a *= mask;
+            }
+        }
+
+        // run at the end of the shader
+        void ApplyMirrorDetectionPost(inout BacklaceSurfaceData Surface)
+        {
+            if (_MirrorDetectionMode == 1 && IsInMirrorView()) // hide
+
+            {
+                Surface.FinalColor.a = 0;
+            }
+            else if (_MirrorDetectionMode == 2 && !IsInMirrorView()) // only show
+
+            {
+                Surface.FinalColor.a = 0;
+            }
+        }
+    #endif // UNITY_PASS_OUTLINE
+#endif // _BACKLACE_VRCHAT_MIRROR
+
+// pathing feature
+#if defined(_BACKLACE_PATHING)
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingMap);
+    float2 _PathingMap_ST;
+    float4 _PathingColor;
+    float _PathingEmission;
+    int _PathingType;
+    float _PathingSpeed;
+    float _PathingWidth;
+    float _PathingSoftness;
+    float _PathingOffset;
+    float _PathingMap_UV;
+    float _PathingScale;
+    int _PathingBlendMode;
+    int _PathingMappingMode;
+    int _PathingColorMode;
+    float4 _PathingColor2;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture);
+    int _PathingTexture_UV;
+    float _PathingStart;
+    float _PathingEnd;
+
+    void ApplyPathing(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float pathValue;
+        if (_PathingMappingMode == 0) // albedo uv
+
+        {
+            pathValue = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingMap, _MainTex, frac(Uvs[_PathingMap_UV] * _PathingScale)).r;
+        }
+        else // triplanar
+
+        {
+            pathValue = SampleTextureTriplanar(
+                _PathingMap, sampler_MainTex,
+                FragData.worldPos, Surface.NormalDir,
+                float3(0, 0, 0), _PathingScale, float3(0, 0, 0),
+                2.0, true, float2(0, 0)
+            ).r;
+        }
+        float pathTime = frac(_Time.y * _PathingSpeed + _PathingOffset);
+        pathTime = lerp(_PathingStart, _PathingEnd, pathTime);
+        float pathAlpha = 0;
+        switch(_PathingType)
+        {
+            case 1: // path
+            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+            break;
+            case 2: // loop
+            float loop_dist = abs(pathTime - pathValue);
+            loop_dist = min(loop_dist, 1.0 - loop_dist);
+            pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
+            break;
+            case 3: // ping-pong
+            pathTime = 1.0 - abs(1.0 - 2.0 * frac(_Time.y * _PathingSpeed + _PathingOffset)); // goes from 0 -> 1 -> 0
+            pathTime = lerp(_PathingStart, _PathingEnd, pathTime);
+            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
+            break;
+            case 4: // trail
+            float trail_dist = pathTime - pathValue;
+            pathAlpha = smoothstep(0, _PathingWidth, trail_dist) - smoothstep(_PathingWidth, _PathingWidth + 0.001, trail_dist);
+            break;
+            case 5: // converge
+            float convergeTime = abs(1.0 - 2.0 * pathTime); // 1 -> 0 -> 1
+            float convergeDist = abs(convergeTime - (abs(1.0 - 2.0 * pathValue)));
+            pathAlpha = 1.0 - saturate(convergeDist / _PathingWidth);
+            break;
+            default: // fill (0)
+            pathAlpha = pathTime > pathValue;
+            break;
+        }
+        pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
+        #if defined(_BACKLACE_AUDIOLINK)
+            pathAlpha *= i.alChannel2.x;
+        #endif // _BACKLACE_AUDIOLINK
+        if (pathAlpha <= 0.001) return;
+        //float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
+        float3 pathEmission = pathAlpha * _PathingEmission;
+        float pathBlend = _PathingColor.a;
+        switch(_PathingColorMode)
+        {
+            case 1: // texture
+            float4 pathSample = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingTexture, _MainTex, Uvs[_PathingTexture_UV]);
+            pathEmission *= pathSample.rgb;
+            pathBlend = pathSample.a;
+            break;
+            case 2: // gradient (two colours)
+            float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
+            pathEmission *= pathGradinet.rgb;
+            pathBlend = pathGradinet.a;
+            break;
+            default: // single colour
+            pathEmission *= _PathingColor.rgb;
+            break;
+        }
+        switch(_PathingBlendMode)
+        {
+            case 0: // additive
+            Surface.FinalColor.rgb += pathEmission;
+            break;
+            case 1: // multiply
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
+            break;
+            case 2: // alpha blend
+            float blendIntensity = pathAlpha * pathBlend;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
+            break;
+        }
+    }
+#endif // _BACKLACE_PATHING
+
+// glitter-specific features
+#if defined(_BACKLACE_GLITTER)
+    // glitter properties
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_GlitterMask);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_GlitterNoiseTex);
+    float _Glitter_UV;
+    float _GlitterMask_UV;
+    float _ToggleGlitterRainbow;
+    float _GlitterMode;
+    float4 _GlitterTint;
+    float _GlitterFrequency;
+    float _GlitterThreshold;
+    float _GlitterSize;
+    float _GlitterFlickerSpeed;
+    float _GlitterBrightness;
+    float _GlitterContrast;
+    float _GlitterRainbowSpeed;
+    
+    // glitter with either a voronoi pattern or a noise texture
+    void ApplyGlitter(inout BacklaceSurfaceData Surface)
+    {
+        float3 final_glitter = 0;
+        float unique_flake_id = 0;
+        float glitter_mask = 0;
+        float2 uv = Uvs[_Glitter_UV] * _GlitterFrequency;
+        float2 i_uv = floor(uv);
+        float2 f_uv = frac(uv);
+        [branch] if (_GlitterMode == 0) // PROCEDURAL - is this really needed?
+
+        {
+            float min_dist = 1.0;
+            float2 closest_point_id = 0;
+            for (int y = -1; y <= 1; y++)
+            {
+                for (int x = -1; x <= 1; x++)
+                {
+                    float2 neighbor_offset = float2(x, y);
+                    float2 point_pos = Hash22(i_uv + neighbor_offset);
+                    float dist = length(neighbor_offset +point_pos - f_uv);
+                    if (dist < min_dist)
+                    {
+                        min_dist = dist;
+                        closest_point_id = i_uv + neighbor_offset;
+                    }
+                }
+            }
+            unique_flake_id = Hash12(closest_point_id);
+            if (unique_flake_id < _GlitterThreshold) return;
+            glitter_mask = saturate((_GlitterSize - min_dist) / max(fwidth(min_dist), 0.001));
+        }
+        else if (_GlitterMode == 1) // TEXTURE
+
+        {
+            // todo: is noise tex needed if we just use another hash before?
+            float noise_val = UNITY_SAMPLE_TEX2D_SAMPLER_LOD(_GlitterNoiseTex, _MainTex, i_uv / _GlitterFrequency, 0).r;
+            if (noise_val < _GlitterThreshold) return;
+            float dist_from_center = length(f_uv - 0.5);
+            glitter_mask = saturate((_GlitterSize - dist_from_center) / max(fwidth(dist_from_center), 0.001));
+            unique_flake_id = Hash12(i_uv);
+        }
+        if (glitter_mask <= 0) return;
+        float time = _Time.y * _GlitterFlickerSpeed + unique_flake_id * 100;
+        float3 glitter_normal = normalize(float3(sin(time * 1.2), cos(time * 1.7), sin(time * 1.5)));
+        float sparkle = fastpow(saturate(dot(Surface.ViewDir, glitter_normal)), _GlitterContrast);
+        float3 glitter_color = _GlitterTint.rgb;
+        if (_ToggleGlitterRainbow > 0)
+        {
+            float rainbow_time = _Time.y * _GlitterRainbowSpeed;
+            glitter_color = lerp(glitter_color, Sinebow(unique_flake_id + rainbow_time), _ToggleGlitterRainbow);
+        }
+        float finalGlitterBrightness = _GlitterBrightness;
+        #if defined(_BACKLACE_AUDIOLINK)
+            finalGlitterBrightness *= i.alChannel2.y;
+        #endif // _BACKLACE_AUDIOLINK
+        final_glitter = glitter_mask * glitter_color * finalGlitterBrightness;
+        float mask_val = UNITY_SAMPLE_TEX2D_SAMPLER(_GlitterMask, _MainTex, Uvs[_GlitterMask_UV]).r;
+        sparkle *= mask_val;
+        Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, final_glitter, sparkle);
+    }
+#endif // _BACKLACE_GLITTER
+
+// iridescence features
+#if defined(_BACKLACE_IRIDESCENCE)
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_IridescenceMask);
+    float _IridescenceMask_UV;
+    float4 _IridescenceTint;
+    float _IridescenceIntensity;
+    int _IridescenceBlendMode;
+    UNITY_DECLARE_TEX2D(_IridescenceRamp);
+    float _IridescencePower;
+    float _IridescenceFrequency;
+    float _IridescenceMode;
+    float _IridescenceParallax;;
+
+    void ApplyIridescence(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float3 shiftedNormal = normalize(Surface.NormalDir + Surface.ViewDir * _IridescenceParallax);
+        float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
+        float fresnel_shifted = 1.0 - saturate(dot(shiftedNormal, Surface.ViewDir));
+        float interference = abs(fresnel_shifted - fresnel_base);
+        float3 iridescenceColor = 0;
+        float finalFresnel = pow(interference, _IridescencePower);
+        if (_IridescenceMode == 0) // RAMP-BASED
+
+        {
+            iridescenceColor = UNITY_SAMPLE_TEX2D(_IridescenceRamp, float2(finalFresnel, 0.5)).rgb;
+        }
+        else if (_IridescenceMode == 1) // SINEBOW
+
+        {
+            float hue = finalFresnel * _IridescenceFrequency;
+            iridescenceColor = Sinebow(hue);
+        }
+        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_IridescenceMask, _MainTex, Uvs[_IridescenceMask_UV]).r;
+        float finalIridescenceIntensity = _IridescenceIntensity;
+        #if defined(_BACKLACE_AUDIOLINK)
+            finalIridescenceIntensity *= i.alChannel2.z;
+        #endif // _BACKLACE_AUDIOLINK
+        float finalIntensity = finalIridescenceIntensity * pow(fresnel_base, 2.0) * mask;
+        iridescenceColor *= _IridescenceTint.rgb * finalIntensity * Surface.LightColor.a;
+        [branch] switch(_IridescenceBlendMode)
+        {
+            case 0: // Additive
+                Surface.FinalColor.rgb += iridescenceColor;
+                break;
+            case 1: // Screen
+                Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
+                break;
+            default: // (2) Alpha Blend
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
+                break;
+        }
+    }
+#endif // _BACKLACE_IRIDESCENCE
+
+// world aligned texture feature
+#if defined(_BACKLACE_WORLD_EFFECT)
+    UNITY_DECLARE_TEX2D(_WorldEffectTex);
+    float4 _WorldEffectColor;
+    float4 _WorldEffectDirection;
+    float _WorldEffectScale;
+    float _WorldEffectBlendSharpness;
+    float _WorldEffectIntensity;
+    int _WorldEffectBlendMode;
+    float3 _WorldEffectPosition;
+    float3 _WorldEffectRotation;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_WorldEffectMask);
+
+    void ApplyWorldAlignedEffect(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float3 effectDir = normalize(_WorldEffectDirection.xyz);
+        float directionMask = saturate(dot(Surface.NormalDir, effectDir));
+        directionMask = pow(directionMask, _WorldEffectBlendSharpness);
+        if (directionMask <= 0.001)
+        {
+            return;
+        }
+        float4 effectSample = SampleTextureTriplanar(
+            _WorldEffectTex, sampler_WorldEffectTex,
+            i.worldPos, Surface.NormalDir,
+            _WorldEffectPosition, _WorldEffectScale, _WorldEffectRotation,
+            1.0,
+            true,
+            float2(0, 0)
+        );
+        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb * Surface.LightColor.a;
+        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_WorldEffectMask, _MainTex, Uvs[0]).r;
+        float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
+        switch(_WorldEffectBlendMode)
+        {
+            case 1: // Additive
+                Surface.FinalColor.rgb += finalEffectColor * blendStrength;
+                break;
+            case 2: // Multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
+                break;
+            default: // Alpha Blend
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
+                break;
+        }
+    }
+#endif // _BACKLACE_WORLD_EFFECT
+
+// dither feature
+#if defined(_BACKLACE_DITHER)
+    float _DitherAmount;
+    float _DitherScale;
+    float _DitherSpace;
+    int _Dither_UV;
+
+    void ApplyDither(inout BacklaceSurfaceData Surface, float2 worldPos, float2 uvs)
+    {
+        float2 ditherUV = 0;
+        switch(_DitherSpace)
+        {
+            case 1: // world
+            ditherUV = frac(worldPos) * _ScreenParams.xy;
+            break;
+            case 2: // uv
+            ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
+            break;
+            default: // screen
+            ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
+            break;
+        }
+        float pattern = GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
+        Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
+    }
+#endif // _BACKLACE_DITHER
+
+// touch reactive effect
+#if defined(_BACKLACE_TOUCH_REACTIVE)
+    #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
+        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+        float4 _CameraDepthTexture_TexelSize;
+        #define BACKLACE_DEPTH
+    #endif // BACKLACE_DEPTH
+    float4 _TouchColor;
+    float _TouchRadius;
+    float _TouchHardness;
+    int _TouchMode; // 0 = additive, 1 = replace, 2 = multiply, 3 = rainbow
+    float _TouchRainbowSpeed;
+    float _TouchRainbowSpread;
+
+    void ApplyTouchReactive(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float sceneDepthRaw = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)).r;
+        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
+        float depthDifference = sceneDepthLinear - i.scrPos.w;
+        float intersect = 1.0 - smoothstep(0, _TouchRadius, depthDifference);
+        if (intersect <= 0) return;
+        intersect = fastpow(intersect, _TouchHardness);
+        float3 touchEffect = _TouchColor.rgb * intersect * _TouchColor.a;
+        switch(_TouchMode)
+        {
+            case 1: // replace
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+            break;
+            case 2: // multiply
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
+            break;
+            case 3: // rainbow
+            float time = _Time.y * _TouchRainbowSpeed;
+            float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
+            touchEffect = rainbowColor * intersect * _TouchColor.a;
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+            break;
+            default: // additive
+            Surface.FinalColor.rgb += touchEffect;
+            break;
+        }
+    }
+#endif // _BACKLACE_TOUCH_REACTIVE
+
+// flat model feature
+#if defined(_BACKLACE_FLAT_MODEL)
+    float _FlatModel;
+    float _FlatModelDepthCorrection;
+    float _FlatModelFacing;
+    float _FlatModelLockAxis;
+    float _FlatModelEnable;
+    float _FlatModeAutoflip;
+
+    // inspired by lyuma's waifu2d shader, but a much worse (and a bit simpler) implementation
+    void FlattenModel(inout float4 vertex, float3 normal, out float4 finalClipPos, out float3 finalWorldPos, out float3 finalWorldNormal)
+    {
+        float facingAngle = _FlatModelFacing * - UNITY_PI / 2.0;
+        float s, c;
+        sincos(facingAngle, s, c);
+        float3 targetFwd_object = float3(s, 0, c);
+        float3 camPos_object = mul(unity_WorldToObject, float4(GetCameraPos(), 1.0)).xyz;
+        float flipSign = sign(dot(camPos_object, targetFwd_object));
+        if (flipSign == 0.0) flipSign = 1.0;
+        if (_FlatModeAutoflip == 0) flipSign = 1.0;
+        float3 virtualCamDir_object = targetFwd_object * flipSign * length(camPos_object);
+        float3 virtualCamPos_world = mul(unity_ObjectToWorld, float4(virtualCamDir_object, 1.0)).xyz;
+        float3 finalCamPos_world = lerp(GetCameraPos(), virtualCamPos_world, _FlatModelLockAxis);
+        float3 worldObjectPivot = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
+        float3 billboardFwd = normalize(finalCamPos_world - worldObjectPivot);
+        float3 billboardUp = float3(0, 1, 0);
+        float3 billboardRight = normalize(cross(billboardUp, billboardFwd));
+        billboardUp = cross(billboardFwd, billboardRight);
+        float3 flattenedWorldPos = worldObjectPivot;
+        flattenedWorldPos += billboardRight * vertex.x;
+        flattenedWorldPos += billboardUp * vertex.y;
+        flattenedWorldPos -= billboardFwd * vertex.z * _FlatModelDepthCorrection;
+        float3 originalWorldPos = mul(unity_ObjectToWorld, vertex).xyz;
+        finalWorldPos = lerp(originalWorldPos, flattenedWorldPos, _FlatModel);
+        finalClipPos = UnityWorldToClipPos(float4(finalWorldPos, 1.0));
+        finalWorldNormal = UnityObjectToWorldNormal(normal);
+    }
+#endif // _BACKLACE_FLAT_MODEL
+
+// vertex distortion feature
+#if defined(_BACKLACE_VERTEX_DISTORTION)
+    int _VertexDistortionMode;
+    int _VertexDistortionColorMask; // 0 = disabled, 1 = red, 2 = green, 3 = blue, 4 = all
+    float3 _VertexDistortionStrength;
+    float3 _VertexDistortionSpeed;
+    float3 _VertexDistortionFrequency;
+    float _WindStrength;
+    float _WindSpeed;
+    float _WindScale;
+    float4 _WindDirection;
+    UNITY_DECLARE_TEX2D(_WindNoiseTex); // custom sampler not working in vertex..
+    float _BreathingStrength;
+    float _BreathingSpeed;
+    int _VertexEffectType; // 0 = distortion, 1 = glitch
+    int _VertexGlitchMode; // 0 = slice, 1 = blocky, 2 = wave, 3 = jitter
+    float _GlitchFrequency;
+
+    // for distortion mode
+    void DistortVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
+    {
+        float time = _Time.y;
+        float3 distortion = 0;
+        // calculate vertex colour mask
+        float mask = 1.0;
+        switch(_VertexDistortionColorMask)
+        {
+            case 1: // red
+            mask = vertexColor.r;
+            break;
+            case 2: // green
+            mask = vertexColor.g;
+            break;
+            case 3: // blue
+            mask = vertexColor.b;
+            break;
+            case 4: // all
+            mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
+            break;
+            default: // disabled
+            mask = 1.0;
+            break;
+        }
+        // apply mask to strength
+        switch(_VertexDistortionMode)
+        {
+            case 0: // wave
+
+            {
+                distortion.x = sin(vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
+                distortion.y = sin(vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
+                distortion.z = sin(vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
+                break;
+            }
+            case 1: // jumble
+
+            {
+                float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
+                float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
+                float offsetZ = sin(vertex.z * _VertexDistortionFrequency.z) * cos(vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
+                distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed.x); // Use one speed channel for sync
+                break;
+            }
+            case 2: // wind
+
+            {
+                float2 windUV = worldPos.xz * _WindScale + (_Time.y * _WindSpeed * _WindDirection.xz);
+                float noise = UNITY_SAMPLE_TEX2D_LOD(_WindNoiseTex, windUV, 0).r * 2.0 - 1.0;
+                float sineWave = sin(_Time.y * _WindSpeed + worldPos.x + worldPos.z);
+                distortion = normalize(_WindDirection.xyz) * (noise + sineWave) * _WindStrength * mask;
+                break;
+            }
+            case 3: // breathing
+
+            {
+                float breath = (sin(_Time.y * _BreathingSpeed) + 1.0) * 0.5;
+                float3 localNormal = normalize(vertex.xyz);
+                distortion = localNormal * breath * _BreathingStrength * mask;
+                break;
+            }
+        }
+        vertex.xyz += distortion;
+    }
+
+    // glitch helpers
+    float GlitchHash(float2 p)
+    {
+        float h = dot(p, float2(127.1, 311.7));
+        return frac(sin(h) * 43758.5453);
+    }
+
+    float GlitchBlockNoise(float2 p, float blockSize)
+    {
+        float2 block = floor(p / blockSize) * blockSize;
+        return GlitchHash(block);
+    }
+
+    // for glitch mode
+    void GlitchVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
+    {
+        float time = _Time.y * _VertexDistortionSpeed.x;
+        float3 glitchOffset = 0;
+        float mask = 1.0;
+        switch(_VertexDistortionColorMask)
+        {
+            case 1: mask = vertexColor.r; break;
+            case 2: mask = vertexColor.g; break;
+            case 3: mask = vertexColor.b; break;
+            case 4: mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0; break;
+            default: mask = 1.0; break;
+        }
+        float glitchTrigger = step(_GlitchFrequency, GlitchHash(float2(floor(time * 10.0), 0.0)));
+        float blockSize = 1.0 / max(_VertexDistortionFrequency.x, 0.001);
+        switch(_VertexGlitchMode)
+        {
+            case 0: // slice, horizontal slicing glitch
+
+            {
+                float sliceY = floor(vertex.y / blockSize) * blockSize;
+                float sliceNoise = GlitchHash(float2(sliceY, floor(time * 5.0)));
+                float sliceActive = step(0.7, sliceNoise) * glitchTrigger;
+                float offsetAmount = (sliceNoise * 2.0 - 1.0) * _VertexDistortionStrength.x * sliceActive;
+                glitchOffset.x = offsetAmount;
+                break;
+            }
+            case 1: // blocky, random block displacement
+
+            {
+                float2 blockPos = float2(vertex.x + vertex.z, vertex.y);
+                float blockNoise = GlitchBlockNoise(blockPos, blockSize);
+                float blockActive = step(0.8, blockNoise) * glitchTrigger;
+                float3 randomDir = normalize(float3(
+                    GlitchHash(float2(blockNoise, 1.0)) * 2.0 - 1.0,
+                    GlitchHash(float2(blockNoise, 2.0)) * 2.0 - 1.0,
+                    GlitchHash(float2(blockNoise, 3.0)) * 2.0 - 1.0
+                ));
+                glitchOffset = randomDir * _VertexDistortionStrength * blockActive;
+                break;
+            }
+            case 2: // wave, "corrupted" wave distortion
+
+            {
+                float wavePhase = sin(vertex.y * _VertexDistortionFrequency.y + time * 20.0) * glitchTrigger;
+                float waveNoise = GlitchHash(float2(floor(time * 8.0), floor(vertex.y * 5.0)));
+                glitchOffset.x = wavePhase * waveNoise * _VertexDistortionStrength.x;
+                glitchOffset.z = wavePhase * (1.0 - waveNoise) * _VertexDistortionStrength.z * 0.5;
+                break;
+            }
+            case 3: // jitter, rapid smol displacements
+
+            {
+                float jitterTime = floor(time * 30.0);
+                float3 jitter = float3(
+                    GlitchHash(float2(jitterTime, vertex.x * 100.0)),
+                    GlitchHash(float2(jitterTime, vertex.y * 100.0)),
+                    GlitchHash(float2(jitterTime, vertex.z * 100.0))
+                ) * 2.0 - 1.0;
+                glitchOffset = jitter * _VertexDistortionStrength * 0.1 * glitchTrigger;
+                break;
+            }
+        }
+        vertex.xyz += glitchOffset * mask;
+    }
+
+    // wrapper to select between distortion and glitch modes
+    void ApplyVertexDistortion(inout float4 vertex, float3 worldPos, float4 vertexColor)
+    {
+        [branch] if (_VertexEffectType == 1)
+        {
+            GlitchVertex(vertex, worldPos, vertexColor);
+        }
+        else
+        {
+            DistortVertex(vertex, worldPos, vertexColor);
+        }
+    }
+#endif // _BACKLACE_VERTEX_DISTORTION
 
 // parallax features
 #if defined(_BACKLACE_PARALLAX)
@@ -507,815 +1323,6 @@
     }
 #endif // _BACKLACE_PARALLAX
 
-// clearcoat features
-#if defined(_BACKLACE_CLEARCOAT)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_ClearcoatMap);
-    float4 _ClearcoatMap_ST;
-    float _ClearcoatStrength;
-    float _ClearcoatRoughness;
-    float _ClearcoatReflectionStrength;
-    float _ClearcoatMap_UV;
-    float4 _ClearcoatColor;
-
-    void CalculateClearcoat(inout BacklaceSurfaceData Surface, out float3 highlight, out float3 occlusion)
-    {
-        float4 clearcoatMap = UNITY_SAMPLE_TEX2D_SAMPLER(_ClearcoatMap, _MainTex, Uvs[_ClearcoatMap_UV]);
-        float mask = _ClearcoatStrength * clearcoatMap.r;
-        float roughness = _ClearcoatRoughness * clearcoatMap.g;
-        float3 F0 = lerp(0.04, 1.0, _ClearcoatReflectionStrength);
-        float3 fresnel = FresnelTerm(F0, Surface.LdotH);
-        float squareRoughness = max(roughness * roughness, 0.002);
-        float distribution = GTR2(Surface.NdotH, squareRoughness);
-        float geometry = SmithGGGX(Surface.NdotL, squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
-        float3 clearcoatSpec = fresnel * distribution * geometry * Surface.LightColor.a;
-        highlight = clearcoatSpec * lerp(Surface.LightColor.rgb, Surface.LightColor.rgb * _ClearcoatColor.rgb, _ClearcoatColor.a) * mask;
-        float3 occlusionTint = lerp(1.0, _ClearcoatColor.rgb, fresnel);
-        occlusion = lerp(1.0, occlusionTint, mask);
-    }
-
-    #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
-        void AddClearcoatVertex(inout BacklaceSurfaceData Surface)
-        {
-            float3 VLightDir = normalize(VertexLightDir);
-            if (dot(VLightDir, VLightDir) < 0.01) return;
-            float3 F0 = lerp(0.04, 1.0, _ClearcoatReflectionStrength);
-            float3 fresnel = FresnelTerm(F0, saturate(dot(normalize(VLightDir + Surface.ViewDir), VLightDir)));
-            float roughness = _ClearcoatRoughness; // no map for this to keep it simple
-            float squareRoughness = max(roughness * roughness, 0.002);
-            float distribution = GTR2(saturate(dot(Surface.NormalDir, normalize(VLightDir + Surface.ViewDir))), squareRoughness);
-            float geometry = SmithGGGX(saturate(dot(Surface.NormalDir, VLightDir)), squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
-            float3 clearcoatV_Spec = fresnel * distribution * geometry * Surface.LightColor.a;
-            Surface.FinalColor.rgb += clearcoatV_Spec * Surface.VertexDirectDiffuse * _ClearcoatColor.rgb * _ClearcoatStrength;
-        }
-    #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
-#endif // _BACKLACE_CLEARCOAT
-
-// pathing feature
-#if defined(_BACKLACE_PATHING)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingMap);
-    float2 _PathingMap_ST;
-    float4 _PathingColor;
-    float _PathingEmission;
-    int _PathingType;
-    float _PathingSpeed;
-    float _PathingWidth;
-    float _PathingSoftness;
-    float _PathingOffset;
-    float _PathingMap_UV;
-    float _PathingScale;
-    int _PathingBlendMode;
-    int _PathingMappingMode;
-    int _PathingColorMode;
-    float4 _PathingColor2;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_PathingTexture);
-    int _PathingTexture_UV;
-    float _PathingStart;
-    float _PathingEnd;
-
-    void ApplyPathing(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float pathValue;
-        if (_PathingMappingMode == 0) // albedo uv
-
-        {
-            pathValue = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingMap, _MainTex, frac(Uvs[_PathingMap_UV] * _PathingScale)).r;
-        }
-        else // triplanar
-
-        {
-            pathValue = SampleTextureTriplanar(
-                _PathingMap, sampler_MainTex,
-                FragData.worldPos, Surface.NormalDir,
-                float3(0, 0, 0), _PathingScale, float3(0, 0, 0),
-                2.0, true, float2(0, 0)
-            ).r;
-        }
-        float pathTime = frac(_Time.y * _PathingSpeed + _PathingOffset);
-        pathTime = lerp(_PathingStart, _PathingEnd, pathTime);
-        float pathAlpha = 0;
-        switch(_PathingType)
-        {
-            case 1: // path
-            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
-            break;
-            case 2: // loop
-            float loop_dist = abs(pathTime - pathValue);
-            loop_dist = min(loop_dist, 1.0 - loop_dist);
-            pathAlpha = 1.0 - saturate(loop_dist / _PathingWidth);
-            break;
-            case 3: // ping-pong
-            pathTime = 1.0 - abs(1.0 - 2.0 * frac(_Time.y * _PathingSpeed + _PathingOffset)); // goes from 0 -> 1 -> 0
-            pathTime = lerp(_PathingStart, _PathingEnd, pathTime);
-            pathAlpha = 1.0 - saturate(abs(pathTime - pathValue) / _PathingWidth);
-            break;
-            case 4: // trail
-            float trail_dist = pathTime - pathValue;
-            pathAlpha = smoothstep(0, _PathingWidth, trail_dist) - smoothstep(_PathingWidth, _PathingWidth + 0.001, trail_dist);
-            break;
-            case 5: // converge
-            float convergeTime = abs(1.0 - 2.0 * pathTime); // 1 -> 0 -> 1
-            float convergeDist = abs(convergeTime - (abs(1.0 - 2.0 * pathValue)));
-            pathAlpha = 1.0 - saturate(convergeDist / _PathingWidth);
-            break;
-            default: // fill (0)
-            pathAlpha = pathTime > pathValue;
-            break;
-        }
-        pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
-        #if defined(_BACKLACE_AUDIOLINK)
-            pathAlpha *= i.alChannel2.x;
-        #endif // _BACKLACE_AUDIOLINK
-        if (pathAlpha <= 0.001) return;
-        //float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
-        float3 pathEmission = pathAlpha * _PathingEmission;
-        float pathBlend = _PathingColor.a;
-        switch(_PathingColorMode)
-        {
-            case 1: // texture
-            float4 pathSample = UNITY_SAMPLE_TEX2D_SAMPLER(_PathingTexture, _MainTex, Uvs[_PathingTexture_UV]);
-            pathEmission *= pathSample.rgb;
-            pathBlend = pathSample.a;
-            break;
-            case 2: // gradient (two colours)
-            float4 pathGradinet = lerp(_PathingColor, _PathingColor2, pathValue);
-            pathEmission *= pathGradinet.rgb;
-            pathBlend = pathGradinet.a;
-            break;
-            default: // single colour
-            pathEmission *= _PathingColor.rgb;
-            break;
-        }
-        switch(_PathingBlendMode)
-        {
-            case 0: // additive
-            Surface.FinalColor.rgb += pathEmission;
-            break;
-            case 1: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * pathEmission.rgb, pathAlpha);
-            break;
-            case 2: // alpha blend
-            float blendIntensity = pathAlpha * pathBlend;
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, pathEmission.rgb, blendIntensity);
-            break;
-        }
-    }
-#endif // _BACKLACE_PATHING
-
-// glitter-specific features
-#if defined(_BACKLACE_GLITTER)
-    // glitter properties
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_GlitterMask);
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_GlitterNoiseTex);
-    float _Glitter_UV;
-    float _GlitterMask_UV;
-    float _ToggleGlitterRainbow;
-    float _GlitterMode;
-    float4 _GlitterTint;
-    float _GlitterFrequency;
-    float _GlitterThreshold;
-    float _GlitterSize;
-    float _GlitterFlickerSpeed;
-    float _GlitterBrightness;
-    float _GlitterContrast;
-    float _GlitterRainbowSpeed;
-    
-    // glitter with either a voronoi pattern or a noise texture
-    void ApplyGlitter(inout BacklaceSurfaceData Surface)
-    {
-        float3 final_glitter = 0;
-        float unique_flake_id = 0;
-        float glitter_mask = 0;
-        float2 uv = Uvs[_Glitter_UV] * _GlitterFrequency;
-        float2 i_uv = floor(uv);
-        float2 f_uv = frac(uv);
-        [branch] if (_GlitterMode == 0) // PROCEDURAL - is this really needed?
-
-        {
-            float min_dist = 1.0;
-            float2 closest_point_id = 0;
-            for (int y = -1; y <= 1; y++)
-            {
-                for (int x = -1; x <= 1; x++)
-                {
-                    float2 neighbor_offset = float2(x, y);
-                    float2 point_pos = Hash22(i_uv + neighbor_offset);
-                    float dist = length(neighbor_offset +point_pos - f_uv);
-                    if (dist < min_dist)
-                    {
-                        min_dist = dist;
-                        closest_point_id = i_uv + neighbor_offset;
-                    }
-                }
-            }
-            unique_flake_id = Hash12(closest_point_id);
-            if (unique_flake_id < _GlitterThreshold) return;
-            glitter_mask = saturate((_GlitterSize - min_dist) / max(fwidth(min_dist), 0.001));
-        }
-        else if (_GlitterMode == 1) // TEXTURE
-
-        {
-            // todo: is noise tex needed if we just use another hash before?
-            float noise_val = UNITY_SAMPLE_TEX2D_SAMPLER_LOD(_GlitterNoiseTex, _MainTex, i_uv / _GlitterFrequency, 0).r;
-            if (noise_val < _GlitterThreshold) return;
-            float dist_from_center = length(f_uv - 0.5);
-            glitter_mask = saturate((_GlitterSize - dist_from_center) / max(fwidth(dist_from_center), 0.001));
-            unique_flake_id = Hash12(i_uv);
-        }
-        if (glitter_mask <= 0) return;
-        float time = _Time.y * _GlitterFlickerSpeed + unique_flake_id * 100;
-        float3 glitter_normal = normalize(float3(sin(time * 1.2), cos(time * 1.7), sin(time * 1.5)));
-        float sparkle = fastpow(saturate(dot(Surface.ViewDir, glitter_normal)), _GlitterContrast);
-        float3 glitter_color = _GlitterTint.rgb;
-        if (_ToggleGlitterRainbow > 0)
-        {
-            float rainbow_time = _Time.y * _GlitterRainbowSpeed;
-            glitter_color = lerp(glitter_color, Sinebow(unique_flake_id + rainbow_time), _ToggleGlitterRainbow);
-        }
-        float finalGlitterBrightness = _GlitterBrightness;
-        #if defined(_BACKLACE_AUDIOLINK)
-            finalGlitterBrightness *= i.alChannel2.y;
-        #endif // _BACKLACE_AUDIOLINK
-        final_glitter = glitter_mask * glitter_color * finalGlitterBrightness;
-        float mask_val = UNITY_SAMPLE_TEX2D_SAMPLER(_GlitterMask, _MainTex, Uvs[_GlitterMask_UV]).r;
-        sparkle *= mask_val;
-        Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, final_glitter, sparkle);
-    }
-#endif // _BACKLACE_GLITTER
-
-// distance fading-specific features
-#if defined(_BACKLACE_DISTANCE_FADE)
-    // distance fade properties
-    float _DistanceFadeReference;
-    float _ToggleNearFade;
-    float _NearFadeMode;
-    float _NearFadeDitherScale;
-    float _NearFadeStart;
-    float _NearFadeEnd;
-    float _ToggleFarFade;
-    float _FarFadeStart;
-    float _FarFadeEnd;
-
-    // fade based on how far or close the object is to the camera
-    void CalculateDistanceFade(FragmentData i, inout bool isNearFading, out float fade_factor)
-    {
-        fade_factor = 1.0;
-        float3 referencePos = _DistanceFadeReference == 1 ? i.worldObjectCenter : i.worldPos;
-        float view_dist = distance(referencePos, GetCameraPos());
-        isNearFading = false;
-        if (_ToggleNearFade == 1 && _NearFadeStart > _NearFadeEnd)
-        {
-            float nearFade = smoothstep(_NearFadeEnd, _NearFadeStart, view_dist);
-            fade_factor *= nearFade;
-            isNearFading = nearFade < 1.0;
-        }
-        if (_ToggleFarFade == 1 && _FarFadeEnd > _FarFadeStart)
-        {
-            float farFade = 1.0 - smoothstep(_FarFadeStart, _FarFadeEnd, view_dist);
-            fade_factor *= farFade;
-        }
-    }
-
-    // before we do any math, maybe we can optimise and not do anything at all!
-    float ApplyDistanceFadePre(bool isNearFading, float fade_factor)
-    {
-        if (_NearFadeMode == 0)
-        {
-            // don't need to worry about dither
-            if (fade_factor == 0)
-            {
-                return -1; // fully faded out, skip all processing
-
-            }
-        }
-        return fade_factor; // we'll handle this in the fade post function
-
-    }
-
-    // this is just the normal fade at the end if we need to partially show the object
-    void ApplyDistanceFadePost(FragmentData i, float fade_factor, bool isNearFading, inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_NearFadeMode == 1 && isNearFading)
-        {
-            float pattern = GetTiltedCheckerboardPattern(Surface.ScreenCoords * _ScreenParams.xy, _NearFadeDitherScale);
-            Surface.FinalColor.a *= step(fade_factor, pattern);
-        }
-        else
-        {
-            // just a normal fade
-            Surface.FinalColor.a *= fade_factor;
-        }
-    }
-#endif // _BACKLACE_DISTANCE_FADE
-
-// iridescence features
-#if defined(_BACKLACE_IRIDESCENCE)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_IridescenceMask);
-    float _IridescenceMask_UV;
-    float4 _IridescenceTint;
-    float _IridescenceIntensity;
-    int _IridescenceBlendMode;
-    UNITY_DECLARE_TEX2D(_IridescenceRamp);
-    float _IridescencePower;
-    float _IridescenceFrequency;
-    float _IridescenceMode;
-    float _IridescenceParallax;;
-
-    void ApplyIridescence(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float3 shiftedNormal = normalize(Surface.NormalDir + Surface.ViewDir * _IridescenceParallax);
-        float fresnel_base = 1.0 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
-        float fresnel_shifted = 1.0 - saturate(dot(shiftedNormal, Surface.ViewDir));
-        float interference = abs(fresnel_shifted - fresnel_base);
-        float3 iridescenceColor = 0;
-        float finalFresnel = pow(interference, _IridescencePower);
-        if (_IridescenceMode == 0) // RAMP-BASED
-
-        {
-            iridescenceColor = UNITY_SAMPLE_TEX2D(_IridescenceRamp, float2(finalFresnel, 0.5)).rgb;
-        }
-        else if (_IridescenceMode == 1) // SINEBOW
-
-        {
-            float hue = finalFresnel * _IridescenceFrequency;
-            iridescenceColor = Sinebow(hue);
-        }
-        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_IridescenceMask, _MainTex, Uvs[_IridescenceMask_UV]).r;
-        float finalIridescenceIntensity = _IridescenceIntensity;
-        #if defined(_BACKLACE_AUDIOLINK)
-            finalIridescenceIntensity *= i.alChannel2.z;
-        #endif // _BACKLACE_AUDIOLINK
-        float finalIntensity = finalIridescenceIntensity * pow(fresnel_base, 2.0) * mask;
-        iridescenceColor *= _IridescenceTint.rgb * finalIntensity * Surface.LightColor.a;
-        [branch] switch(_IridescenceBlendMode)
-        {
-            case 0: // Additive
-                Surface.FinalColor.rgb += iridescenceColor;
-                break;
-            case 1: // Screen
-                Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
-                break;
-            default: // (2) Alpha Blend
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
-                break;
-        }
-    }
-#endif // _BACKLACE_IRIDESCENCE
-
-// shadow texture features
-#if defined(_BACKLACE_SHADOW_TEXTURE)
-    UNITY_DECLARE_TEX2D(_ShadowTex);
-    float _ShadowTex_UV;
-    float4 _ShadowPatternColor;
-    float _ShadowPatternScale;
-    float _ShadowTextureIntensity;
-    int _ShadowTextureMappingMode;
-    float _ShadowPatternTriplanarSharpness;
-    float _ShadowPatternTransparency;
-    int _ShadowTextureBlendMode;
-
-    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface, float3 shadowTint)
-    {
-        float3 texturedShadow;
-        float blendFactor;
-        float3 albedoTintedShadow = shadowTint * Surface.Albedo.rgb;
-        float shadowMask = 1.0 - Surface.NdotL;
-        switch(_ShadowTextureMappingMode)
-        {
-            case 0: // uv albedo
-
-            {
-                float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
-                texturedShadow = shadowAlbedoSample.rgb;
-                blendFactor = shadowAlbedoSample.a * shadowMask;
-                break;
-            }
-            case 1: // screen pattern
-
-            {
-                float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
-                float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
-                texturedShadow = albedoTintedShadow;
-                blendFactor = patternSample.r * patternSample.a * shadowMask;
-                break;
-            }
-            case 2: // triplanar
-
-            {
-                float4 patternSample = SampleTextureTriplanar(
-                    _ShadowTex, sampler_MainTex,
-                    FragData.worldPos, Surface.NormalDir,
-                    float3(0, 0, 0), _ShadowPatternScale, float3(0, 0, 0),
-                    _ShadowPatternTriplanarSharpness, true, float2(0, 0)
-                );
-                texturedShadow = albedoTintedShadow;
-                blendFactor = patternSample.r * patternSample.a * shadowMask;
-                break;
-            }
-        }
-        float3 baseShadowColour = Surface.Albedo.rgb * lerp(Surface.IndirectDiffuse, 1.0, _ShadowPatternTransparency);
-        float3 finalShadowColor;
-        switch(_ShadowTextureBlendMode)
-        {
-            case 0: // additive
-            finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
-            break;
-            case 1: // multiply
-            finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
-            break;
-            default: // alpha blend (2)
-            finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
-            break;
-        }
-        float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
-        return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);
-    }
-
-    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface)
-    {
-        return GetTexturedShadowColor(Surface, _ShadowPatternColor.rgb);
-    }
-#endif // _BACKLACE_SHADOW_TEXTURE
-
-// flat model feature
-#if defined(_BACKLACE_FLAT_MODEL)
-    float _FlatModel;
-    float _FlatModelDepthCorrection;
-    float _FlatModelFacing;
-    float _FlatModelLockAxis;
-    float _FlatModelEnable;
-    float _FlatModeAutoflip;
-
-    // inspired by lyuma's waifu2d shader, but a much worse (and a bit simpler) implementation
-    void FlattenModel(inout float4 vertex, float3 normal, out float4 finalClipPos, out float3 finalWorldPos, out float3 finalWorldNormal)
-    {
-        float facingAngle = _FlatModelFacing * - UNITY_PI / 2.0;
-        float s, c;
-        sincos(facingAngle, s, c);
-        float3 targetFwd_object = float3(s, 0, c);
-        float3 camPos_object = mul(unity_WorldToObject, float4(GetCameraPos(), 1.0)).xyz;
-        float flipSign = sign(dot(camPos_object, targetFwd_object));
-        if (flipSign == 0.0) flipSign = 1.0;
-        if (_FlatModeAutoflip == 0) flipSign = 1.0;
-        float3 virtualCamDir_object = targetFwd_object * flipSign * length(camPos_object);
-        float3 virtualCamPos_world = mul(unity_ObjectToWorld, float4(virtualCamDir_object, 1.0)).xyz;
-        float3 finalCamPos_world = lerp(GetCameraPos(), virtualCamPos_world, _FlatModelLockAxis);
-        float3 worldObjectPivot = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
-        float3 billboardFwd = normalize(finalCamPos_world - worldObjectPivot);
-        float3 billboardUp = float3(0, 1, 0);
-        float3 billboardRight = normalize(cross(billboardUp, billboardFwd));
-        billboardUp = cross(billboardFwd, billboardRight);
-        float3 flattenedWorldPos = worldObjectPivot;
-        flattenedWorldPos += billboardRight * vertex.x;
-        flattenedWorldPos += billboardUp * vertex.y;
-        flattenedWorldPos -= billboardFwd * vertex.z * _FlatModelDepthCorrection;
-        float3 originalWorldPos = mul(unity_ObjectToWorld, vertex).xyz;
-        finalWorldPos = lerp(originalWorldPos, flattenedWorldPos, _FlatModel);
-        finalClipPos = UnityWorldToClipPos(float4(finalWorldPos, 1.0));
-        finalWorldNormal = UnityObjectToWorldNormal(normal);
-    }
-#endif // _BACKLACE_FLAT_MODEL
-
-// world aligned texture feature
-#if defined(_BACKLACE_WORLD_EFFECT)
-    UNITY_DECLARE_TEX2D(_WorldEffectTex);
-    float4 _WorldEffectColor;
-    float4 _WorldEffectDirection;
-    float _WorldEffectScale;
-    float _WorldEffectBlendSharpness;
-    float _WorldEffectIntensity;
-    int _WorldEffectBlendMode;
-    float3 _WorldEffectPosition;
-    float3 _WorldEffectRotation;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_WorldEffectMask);
-
-    void ApplyWorldAlignedEffect(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float3 effectDir = normalize(_WorldEffectDirection.xyz);
-        float directionMask = saturate(dot(Surface.NormalDir, effectDir));
-        directionMask = pow(directionMask, _WorldEffectBlendSharpness);
-        if (directionMask <= 0.001)
-        {
-            return;
-        }
-        float4 effectSample = SampleTextureTriplanar(
-            _WorldEffectTex, sampler_WorldEffectTex,
-            i.worldPos, Surface.NormalDir,
-            _WorldEffectPosition, _WorldEffectScale, _WorldEffectRotation,
-            1.0,
-            true,
-            float2(0, 0)
-        );
-        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb * Surface.LightColor.a;
-        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_WorldEffectMask, _MainTex, Uvs[0]).r;
-        float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
-        switch(_WorldEffectBlendMode)
-        {
-            case 1: // Additive
-                Surface.FinalColor.rgb += finalEffectColor * blendStrength;
-                break;
-            case 2: // Multiply
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
-                break;
-            default: // Alpha Blend
-                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
-                break;
-        }
-    }
-#endif // _BACKLACE_WORLD_EFFECT
-
-// vrchat mirror detection feature
-#if defined(_BACKLACE_VRCHAT_MIRROR)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_MirrorDetectionTexture); // use main sampler
-    float _MirrorDetectionTexture_UV;
-    float _MirrorDetectionMode; // 0 = texture, 1 = hide, 2 = only show
-    float _VRChatMirrorMode; // assigned by vrchat, 0 = none, 1 = mirror in vr, 2 = mirror in desktop
-    
-    bool IsInMirrorView()
-    {
-        if (_VRChatMirrorMode > 0.5) return true;
-        // otherwise, try and check for a generic mirror
-        return unity_CameraProjection[2][0] != 0.f || unity_CameraProjection[2][1] != 0.f;
-    }
-
-    // dont run things that need to sample uvs in the outline pass
-    #ifndef UNITY_PASS_OUTLINE
-        // run after sampling albedo but before lighting
-        void ApplyMirrorDetectionPre(inout BacklaceSurfaceData Surface)
-        {
-            if (_MirrorDetectionMode == 0 && IsInMirrorView()) // texture
-
-            {
-                float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MirrorDetectionTexture, _MainTex, Uvs[_MirrorDetectionTexture_UV]).r;
-                Surface.FinalColor.a *= mask;
-            }
-        }
-
-        // run at the end of the shader
-        void ApplyMirrorDetectionPost(inout BacklaceSurfaceData Surface)
-        {
-            if (_MirrorDetectionMode == 1 && IsInMirrorView()) // hide
-
-            {
-                Surface.FinalColor.a = 0;
-            }
-            else if (_MirrorDetectionMode == 2 && !IsInMirrorView()) // only show
-
-            {
-                Surface.FinalColor.a = 0;
-            }
-        }
-    #endif // UNITY_PASS_OUTLINE
-#endif // _BACKLACE_VRCHAT_MIRROR
-
-// touch reactive effect
-#if defined(_BACKLACE_TOUCH_REACTIVE)
-    #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
-        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-        float4 _CameraDepthTexture_TexelSize;
-        #define BACKLACE_DEPTH
-    #endif // BACKLACE_DEPTH
-    float4 _TouchColor;
-    float _TouchRadius;
-    float _TouchHardness;
-    int _TouchMode; // 0 = additive, 1 = replace, 2 = multiply, 3 = rainbow
-    float _TouchRainbowSpeed;
-    float _TouchRainbowSpread;
-
-    void ApplyTouchReactive(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float sceneDepthRaw = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)).r;
-        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
-        float depthDifference = sceneDepthLinear - i.scrPos.w;
-        float intersect = 1.0 - smoothstep(0, _TouchRadius, depthDifference);
-        if (intersect <= 0) return;
-        intersect = fastpow(intersect, _TouchHardness);
-        float3 touchEffect = _TouchColor.rgb * intersect * _TouchColor.a;
-        switch(_TouchMode)
-        {
-            case 1: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
-            break;
-            case 2: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
-            break;
-            case 3: // rainbow
-            float time = _Time.y * _TouchRainbowSpeed;
-            float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
-            touchEffect = rainbowColor * intersect * _TouchColor.a;
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
-            break;
-            default: // additive
-            Surface.FinalColor.rgb += touchEffect;
-            break;
-        }
-    }
-#endif // _BACKLACE_TOUCH_REACTIVE
-
-// vertex distortion feature
-#if defined(_BACKLACE_VERTEX_DISTORTION)
-    int _VertexDistortionMode;
-    int _VertexDistortionColorMask; // 0 = disabled, 1 = red, 2 = green, 3 = blue, 4 = all
-    float3 _VertexDistortionStrength;
-    float3 _VertexDistortionSpeed;
-    float3 _VertexDistortionFrequency;
-    float _WindStrength;
-    float _WindSpeed;
-    float _WindScale;
-    float4 _WindDirection;
-    UNITY_DECLARE_TEX2D(_WindNoiseTex); // custom sampler not working in vertex..
-    float _BreathingStrength;
-    float _BreathingSpeed;
-    int _VertexEffectType; // 0 = distortion, 1 = glitch
-    int _VertexGlitchMode; // 0 = slice, 1 = blocky, 2 = wave, 3 = jitter
-    float _GlitchFrequency;
-
-    // for distortion mode
-    void DistortVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
-    {
-        float time = _Time.y;
-        float3 distortion = 0;
-        // calculate vertex colour mask
-        float mask = 1.0;
-        switch(_VertexDistortionColorMask)
-        {
-            case 1: // red
-            mask = vertexColor.r;
-            break;
-            case 2: // green
-            mask = vertexColor.g;
-            break;
-            case 3: // blue
-            mask = vertexColor.b;
-            break;
-            case 4: // all
-            mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
-            break;
-            default: // disabled
-            mask = 1.0;
-            break;
-        }
-        // apply mask to strength
-        switch(_VertexDistortionMode)
-        {
-            case 0: // wave
-
-            {
-                distortion.x = sin(vertex.y * _VertexDistortionFrequency.x + time * _VertexDistortionSpeed.x) * _VertexDistortionStrength.x;
-                distortion.y = sin(vertex.x * _VertexDistortionFrequency.y + time * _VertexDistortionSpeed.y) * _VertexDistortionStrength.y;
-                distortion.z = sin(vertex.x * _VertexDistortionFrequency.z + time * _VertexDistortionSpeed.z) * _VertexDistortionStrength.z;
-                break;
-            }
-            case 1: // jumble
-
-            {
-                float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
-                float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
-                float offsetZ = sin(vertex.z * _VertexDistortionFrequency.z) * cos(vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
-                distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed.x); // Use one speed channel for sync
-                break;
-            }
-            case 2: // wind
-
-            {
-                float2 windUV = worldPos.xz * _WindScale + (_Time.y * _WindSpeed * _WindDirection.xz);
-                float noise = UNITY_SAMPLE_TEX2D_LOD(_WindNoiseTex, windUV, 0).r * 2.0 - 1.0;
-                float sineWave = sin(_Time.y * _WindSpeed + worldPos.x + worldPos.z);
-                distortion = normalize(_WindDirection.xyz) * (noise + sineWave) * _WindStrength * mask;
-                break;
-            }
-            case 3: // breathing
-
-            {
-                float breath = (sin(_Time.y * _BreathingSpeed) + 1.0) * 0.5;
-                float3 localNormal = normalize(vertex.xyz);
-                distortion = localNormal * breath * _BreathingStrength * mask;
-                break;
-            }
-        }
-        vertex.xyz += distortion;
-    }
-
-    // glitch helpers
-    float GlitchHash(float2 p)
-    {
-        float h = dot(p, float2(127.1, 311.7));
-        return frac(sin(h) * 43758.5453);
-    }
-
-    float GlitchBlockNoise(float2 p, float blockSize)
-    {
-        float2 block = floor(p / blockSize) * blockSize;
-        return GlitchHash(block);
-    }
-
-    // for glitch mode
-    void GlitchVertex(inout float4 vertex, float3 worldPos, float4 vertexColor)
-    {
-        float time = _Time.y * _VertexDistortionSpeed.x;
-        float3 glitchOffset = 0;
-        float mask = 1.0;
-        switch(_VertexDistortionColorMask)
-        {
-            case 1: mask = vertexColor.r; break;
-            case 2: mask = vertexColor.g; break;
-            case 3: mask = vertexColor.b; break;
-            case 4: mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0; break;
-            default: mask = 1.0; break;
-        }
-        float glitchTrigger = step(_GlitchFrequency, GlitchHash(float2(floor(time * 10.0), 0.0)));
-        float blockSize = 1.0 / max(_VertexDistortionFrequency.x, 0.001);
-        switch(_VertexGlitchMode)
-        {
-            case 0: // slice, horizontal slicing glitch
-
-            {
-                float sliceY = floor(vertex.y / blockSize) * blockSize;
-                float sliceNoise = GlitchHash(float2(sliceY, floor(time * 5.0)));
-                float sliceActive = step(0.7, sliceNoise) * glitchTrigger;
-                float offsetAmount = (sliceNoise * 2.0 - 1.0) * _VertexDistortionStrength.x * sliceActive;
-                glitchOffset.x = offsetAmount;
-                break;
-            }
-            case 1: // blocky, random block displacement
-
-            {
-                float2 blockPos = float2(vertex.x + vertex.z, vertex.y);
-                float blockNoise = GlitchBlockNoise(blockPos, blockSize);
-                float blockActive = step(0.8, blockNoise) * glitchTrigger;
-                float3 randomDir = normalize(float3(
-                    GlitchHash(float2(blockNoise, 1.0)) * 2.0 - 1.0,
-                    GlitchHash(float2(blockNoise, 2.0)) * 2.0 - 1.0,
-                    GlitchHash(float2(blockNoise, 3.0)) * 2.0 - 1.0
-                ));
-                glitchOffset = randomDir * _VertexDistortionStrength * blockActive;
-                break;
-            }
-            case 2: // wave, "corrupted" wave distortion
-
-            {
-                float wavePhase = sin(vertex.y * _VertexDistortionFrequency.y + time * 20.0) * glitchTrigger;
-                float waveNoise = GlitchHash(float2(floor(time * 8.0), floor(vertex.y * 5.0)));
-                glitchOffset.x = wavePhase * waveNoise * _VertexDistortionStrength.x;
-                glitchOffset.z = wavePhase * (1.0 - waveNoise) * _VertexDistortionStrength.z * 0.5;
-                break;
-            }
-            case 3: // jitter, rapid smol displacements
-
-            {
-                float jitterTime = floor(time * 30.0);
-                float3 jitter = float3(
-                    GlitchHash(float2(jitterTime, vertex.x * 100.0)),
-                    GlitchHash(float2(jitterTime, vertex.y * 100.0)),
-                    GlitchHash(float2(jitterTime, vertex.z * 100.0))
-                ) * 2.0 - 1.0;
-                glitchOffset = jitter * _VertexDistortionStrength * 0.1 * glitchTrigger;
-                break;
-            }
-        }
-        vertex.xyz += glitchOffset * mask;
-    }
-
-    // wrapper to select between distortion and glitch modes
-    void ApplyVertexDistortion(inout float4 vertex, float3 worldPos, float4 vertexColor)
-    {
-        [branch] if (_VertexEffectType == 1)
-        {
-            GlitchVertex(vertex, worldPos, vertexColor);
-        }
-        else
-        {
-            DistortVertex(vertex, worldPos, vertexColor);
-        }
-    }
-#endif // _BACKLACE_VERTEX_DISTORTION
-
-// dither feature
-#if defined(_BACKLACE_DITHER)
-    float _DitherAmount;
-    float _DitherScale;
-    float _DitherSpace;
-    int _Dither_UV;
-
-    void ApplyDither(inout BacklaceSurfaceData Surface, float2 worldPos, float2 uvs)
-    {
-        float2 ditherUV = 0;
-        switch(_DitherSpace)
-        {
-            case 1: // world
-            ditherUV = frac(worldPos) * _ScreenParams.xy;
-            break;
-            case 2: // uv
-            ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
-            break;
-            default: // screen
-            ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
-            break;
-        }
-        float pattern = GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
-        Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
-    }
-#endif // _BACKLACE_DITHER
-
 // ps1 feature
 #if defined(_BACKLACE_PS1)
     int _PS1Rounding;
@@ -1362,6 +1369,14 @@
         }
     }
 #endif // _BACKLACE_PS1
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//      Grabpass (ouch..) Effects
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // grabpass variant only features
 #if defined(BACKLACE_GRABPASS)
@@ -1688,6 +1703,14 @@
         }
     #endif // _BACKLACE_SSR
 #endif // BACKLACE_GRABPASS
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           World Effects
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // world variant only effects
 #if defined(BACKLACE_WORLD)
@@ -2385,5 +2408,4 @@
     #endif // _BACKLACE_BOMBING
 
 #endif // BACKLACE_WORLD
-
 #endif // BACKLACE_EFFECTS_CGINC
