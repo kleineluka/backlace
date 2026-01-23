@@ -534,4 +534,6 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     Surface.NdotH = max(dot(Surface.NormalDir, Surface.HalfDir), 0);
     Surface.LdotH = max(dot(Surface.LightDir, Surface.HalfDir), 0);
 }
+
+
 #endif // BACKLACE_LIGHTING_CGINC

@@ -1,17 +1,29 @@
 #ifndef BACKLACE_PROPERTIES_CGINC
 #define BACKLACE_PROPERTIES_CGINC
 
-// global variables
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Global Variables
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 FragmentData FragData;
 float3 NormalMap;
 float GFS;
 float3 NDF;
 float4 Msso;
-float RoughnessSquared;
-float RampAttenuation;
-float LightAttenuation;
 
-// main settings
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Main Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// core settings
 float _Alpha;
 UNITY_DECLARE_TEX2D(_MainTex);
 float4 _MainTex_ST;
@@ -28,7 +40,38 @@ int _IndirectFallbackMode;
 int _IndirectOverride;
 int _FlipBackfaceNormals;
 
-// specular settings
+// texture stitching feature
+int _UseTextureStitching;
+UNITY_DECLARE_TEX2D_NOSAMPLER(_StitchTex);
+float4 _StitchTex_ST;
+int _StitchTex_UV;
+int _StitchAxis;
+float _StitchOffset;
+
+// emission feature
+#if defined(_BACKLACE_EMISSION)
+    float3 Emission;
+    float4 _EmissionColor;
+    float4 _EmissionMap_ST;
+    float _UseAlbedoAsEmission;
+    float _EmissionStrength;
+    float _EmissionMap_UV;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
+#endif // _BACKLACE_EMISSION
+
+// dither mask
+#if defined(_BLENDMODE_FADE) || defined(_BACKLACE_DISTANCE_FADE)
+    sampler3D _DitherMaskLOD;
+#endif // _BLENDMODE_FADE || _BACKLACE_DISTANCE_FADE
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Specular Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 float _Occlusion;
 float _Metallic;
 float _Glossiness;
@@ -52,7 +95,15 @@ float _SpecularEnergy;
 float _SpecularEnergyMin;
 float _SpecularEnergyMax;
 
-// lighting settings
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Lighting Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// lighting modes
 float _LightingColorMode;
 float _LightingDirectionMode;
 float4 _ForcedLightDirection;
@@ -62,13 +113,6 @@ float _GreyscaleLighting;
 float _ForceLightColor;
 float4 _ForcedLightColor;
 
-// uv settings
-float _MainTex_UV;
-float _MSSO_UV;
-float _BumpMap_UV;
-float _TangentMap_UV;
-float _SpecularTintTexture_UV;
-
 // lighting contributions
 float _DirectIntensity;
 float _IndirectIntensity;
@@ -76,24 +120,6 @@ float _VertexIntensity;
 float _AdditiveIntensity;
 float _BakedDirectIntensity;
 float _BakedIndirectIntensity;
-
-// uv manipulation
-float _UV_Offset_X;
-float _UV_Offset_Y;
-float _UV_Scale_X;
-float _UV_Scale_Y;
-float _UV_Rotation;
-float _UV_Scroll_X_Speed;
-float _UV_Scroll_Y_Speed;
-
-// vertex manipulation
-float3 _VertexManipulationPosition;
-float3 _VertexManipulationScale;
-
-// dither feature
-#if defined(_BLENDMODE_FADE) || defined(_BACKLACE_DISTANCE_FADE)
-    sampler3D _DitherMaskLOD;
-#endif // _BLENDMODE_FADE || _BACKLACE_DISTANCE_FADE
 
 // min/max light (base)
 #if defined(UNITY_PASS_FORWARDBASE)
@@ -109,7 +135,77 @@ float3 _VertexManipulationScale;
     float _AddLightMax;
 #endif // UNITY_PASS_FORWARDADD
 
-// anime feature
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          UV Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// uv settings
+float _MainTex_UV;
+float _MSSO_UV;
+float _BumpMap_UV;
+float _TangentMap_UV;
+float _SpecularTintTexture_UV;
+
+// uv manipulation
+float _UV_Offset_X;
+float _UV_Offset_Y;
+float _UV_Scale_X;
+float _UV_Scale_Y;
+float _UV_Rotation;
+float _UV_Scroll_X_Speed;
+float _UV_Scroll_Y_Speed;
+
+// uv effects
+#if defined(_BACKLACE_UV_EFFECTS)
+    // triplanar
+    float _UVTriplanarMapping;
+    float3 _UVTriplanarPosition;
+    float _UVTriplanarScale;
+    float3 _UVTriplanarRotation;
+    float _UVTriplanarSharpness;
+    // screenspace
+    float _UVScreenspaceMapping;
+    float _UVScreenspaceTiling;
+    // flipbook
+    float _UVFlipbook;
+    float _UVFlipbookRows;
+    float _UVFlipbookColumns;
+    float _UVFlipbookFrames;
+    float _UVFlipbookFPS;
+    float _UVFlipbookScrub;
+    // flowmap
+    float _UVFlowmap;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_UVFlowmapTex);
+    float _UVFlowmapStrength;
+    float _UVFlowmapSpeed;
+    float _UVFlowmapDistortion;
+    float _UVFlowmap_UV;
+#endif // _BACKLACE_UV_EFFECTS
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Vertex Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// vertex manipulation
+float3 _VertexManipulationPosition;
+float3 _VertexManipulationScale;
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Anime Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #if defined(BACKLACE_TOON)
     float _TintMaskSource;
     float4 _LitTint;
@@ -165,18 +261,14 @@ float3 _VertexManipulationScale;
     #endif // _ANIMEMODE_*
 #endif // BACKLACE_TOON
 
-// emission feature
-#if defined(_BACKLACE_EMISSION)
-    float3 Emission;
-    float4 _EmissionColor;
-    float4 _EmissionMap_ST;
-    float _UseAlbedoAsEmission;
-    float _EmissionStrength;
-    float _EmissionMap_UV;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
-#endif // _BACKLACE_EMISSION
 
-// specular feature
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Specular Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #if defined(BACKLACE_SPECULAR)
     // specific specular modes
     #if defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
@@ -206,7 +298,15 @@ float3 _VertexManipulationScale;
     #endif // _BACKLACE_VERTEX_SPECULAR
 #endif // BACKLACE_SPECULAR
 
-// decal1 feature
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Misc Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// sticker properties
 #if defined(_BACKLACE_DECALS)
     // shared
     int _DecalStage;
@@ -252,47 +352,13 @@ float3 _VertexManipulationScale;
     float _Decal2CycleSpeed;
 #endif // _BACKLACE_DECALS
 
-// uv effects
-#if defined(_BACKLACE_UV_EFFECTS)
-    // triplanar
-    float _UVTriplanarMapping;
-    float3 _UVTriplanarPosition;
-    float _UVTriplanarScale;
-    float3 _UVTriplanarRotation;
-    float _UVTriplanarSharpness;
-    // screenspace
-    float _UVScreenspaceMapping;
-    float _UVScreenspaceTiling;
-    // flipbook
-    float _UVFlipbook;
-    float _UVFlipbookRows;
-    float _UVFlipbookColumns;
-    float _UVFlipbookFrames;
-    float _UVFlipbookFPS;
-    float _UVFlipbookScrub;
-    // flowmap
-    float _UVFlowmap;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_UVFlowmapTex);
-    float _UVFlowmapStrength;
-    float _UVFlowmapSpeed;
-    float _UVFlowmapDistortion;
-    float _UVFlowmap_UV;
-#endif // _BACKLACE_UV_EFFECTS
-
-// shadow map feature
+// shadow map properties
 #if defined(_BACKLACE_SHADOW_MAP)
     UNITY_DECLARE_TEX2D_NOSAMPLER(_ShadowMap);
     float _ShadowMap_UV;
     float _ShadowMapIntensity;
 #endif // _BACKLACE_SHADOW_MAP
 
-// texture stitching feature
-int _UseTextureStitching;
-UNITY_DECLARE_TEX2D_NOSAMPLER(_StitchTex);
-float4 _StitchTex_ST;
-int _StitchTex_UV;
-int _StitchAxis;
-float _StitchOffset;
 
 #endif // BACKLACE_PROPERTIES_CGINC
 

@@ -1,6 +1,14 @@
 #ifndef BACKLACE_SHADING_CGINC
 #define BACKLACE_SHADING_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Alpha Helpers
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // clip alpha based on the _Cutoff value or dither mask
 void ClipAlpha(inout BacklaceSurfaceData Surface)
 {
@@ -11,6 +19,34 @@ void ClipAlpha(inout BacklaceSurfaceData Surface)
         clip(dither - 0.01);
     #endif // _BLENDMODE_CUTOUT
 }
+
+// premultiply alpha
+void PremultiplyAlpha(inout BacklaceSurfaceData Surface)
+{
+    #if defined(_BLENDMODE_PREMULTIPLY)
+        Surface.Albedo.rgb *= Surface.Albedo.a;
+    #endif
+}
+
+// add alpha
+void AddAlpha(inout BacklaceSurfaceData Surface)
+{
+    // stored as -1 if not set
+    // note: if ever weird transparency blending, THIS is likely the cause
+    if (Surface.FinalColor.a == -1) {
+        Surface.FinalColor.a = Surface.Albedo.a;
+    } else {
+        Surface.FinalColor.a *= Surface.Albedo.a;
+    }
+}
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Normal Helpers
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // derive normals from albedo
 float3 AlbedoToNormal(float2 uv, Texture2D tex, SamplerState sampler_tex, float4 texelSize, float strength, float offset)
@@ -77,13 +113,13 @@ void GetDirectionVectors(inout BacklaceSurfaceData Surface)
     Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
 }
 
-// premultiply alpha
-void PremultiplyAlpha(inout BacklaceSurfaceData Surface)
-{
-    #if defined(_BLENDMODE_PREMULTIPLY)
-        Surface.Albedo.rgb *= Surface.Albedo.a;
-    #endif
-}
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//      PBR (Standard) Shading
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // unity's base diffuse based on disney implementation
 float DisneyDiffuse(half perceptualRoughness, inout BacklaceSurfaceData Surface)
@@ -156,8 +192,40 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
     #endif // BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
 }
 
-// toon shading
+// get vertex diffuse for vertex lighting
+void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
+{
+    Surface.VertexDirectDiffuse = 0;
+    #if defined(VERTEXLIGHT_ON)
+        #if defined(_BACKLACE_VERTEX_SPECULAR)
+            Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, VertexLightDir);
+        #else // _BACKLACE_VERTEX_SPECULAR
+            float3 ignoredDir;
+            Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
+        #endif // _BACKLACE_VERTEX_SPECULAR
+        Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+    #endif // VERTEXLIGHT_ON
+}
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Anime Shading
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #if defined(BACKLACE_TOON)
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Anime Mix-Ins
+    //  These can be mixed into any mode.
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     // apply a gradient based on the world normal y
     void ApplyAmbientGradient(inout BacklaceSurfaceData Surface)
     {
@@ -225,6 +293,14 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
         Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
     }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Ramp Shading
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
 
     #if defined(_ANIMEMODE_RAMP)
         // for toon lighting, we use a ramp texture
@@ -355,6 +431,15 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //         Halftone Shading
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
         // specific anime-style vertex light function
         void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
@@ -423,6 +508,15 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Hi-Fi Shading
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
         void GetHifiDiffuse(inout BacklaceSurfaceData Surface)
         {
@@ -511,6 +605,15 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #endif // VERTEXLIGHT_ON
 
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Skin Shading
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
         void GetSkinDiffuse(inout BacklaceSurfaceData Surface)
         {
@@ -537,6 +640,15 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 Surface.VertexDirectDiffuse = lerp(Surface.VertexDirectDiffuse * _SkinShadowColor.rgb, Surface.VertexDirectDiffuse, 0.8);
             #endif // VERTEXLIGHT_ON
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Wrapped Shading
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #elif defined(_ANIMEMODE_WRAPPED) // _ANIMEMODE_*
         void GetWrappedDiffuse(inout BacklaceSurfaceData Surface)
         {
@@ -583,6 +695,14 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
         }
     #endif // _ANIMEMODE_*
 
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Anime Wrapper
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     // wrapper function for toon diffuse
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
@@ -611,20 +731,13 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
     }
 #endif // BACKLACE_TOON
 
-// get vertex diffuse for vertex lighting
-void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
-{
-    Surface.VertexDirectDiffuse = 0;
-    #if defined(VERTEXLIGHT_ON)
-        #if defined(_BACKLACE_VERTEX_SPECULAR)
-            Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, VertexLightDir);
-        #else
-            float3 ignoredDir;
-            Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
-        #endif
-        Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
-    #endif
-}
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Diffuse Wrapper
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // add diffuse
 void AddDiffuse(inout BacklaceSurfaceData Surface)
@@ -632,20 +745,23 @@ void AddDiffuse(inout BacklaceSurfaceData Surface)
     Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse;
 }
 
-// add alpha
-void AddAlpha(inout BacklaceSurfaceData Surface)
-{
-    // stored as -1 if not set
-    // note: if ever weird transparency blending, THIS is likely the cause
-    if (Surface.FinalColor.a == -1) {
-        Surface.FinalColor.a = Surface.Albedo.a;
-    } else {
-        Surface.FinalColor.a *= Surface.Albedo.a;
-    }
-}
 
-// specular-only features
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Specular Features
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #if defined(BACKLACE_SPECULAR)
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //         Specular Helpers
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
 
     // unity's glossy environment function with remapped roughness
     half4 Unity_GlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn)
@@ -689,31 +805,6 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         return normalize(T + shift * N);
     }
 
-    // massively simplified for now 
-    void SetupDFG(inout BacklaceSurfaceData Surface)
-    {
-        Surface.EnergyCompensation = 1.0;
-        switch(_SpecularEnergyMode)
-        {
-            case 1: // turquin approximation for multi-scaattering
-                float A = Surface.Roughness;
-                float3 F0 = Surface.SpecularColor;
-                float luminance = GetLuma(Surface.Albedo.rgb); 
-                Surface.EnergyCompensation = 1.0 + A * (1.0 / (luminance + 0.001) - 1.0);
-                break;
-            case 2: // safe and cheap
-                Surface.EnergyCompensation = 1.0 + Surface.Roughness * 0.5;
-                break;
-            case 3: // manual control
-                Surface.EnergyCompensation = _SpecularEnergy;
-                break;
-            default: // (0) none, just 1.0
-                // no energy compensation
-                break;
-        }
-        Surface.EnergyCompensation = clamp(Surface.EnergyCompensation, _SpecularEnergyMin, _SpecularEnergyMax);
-    }
-
     // avoid redundant texture sampling by pre-calculating specular data
     void SetupSpecularData(inout BacklaceSurfaceData Surface)
     {   
@@ -755,6 +846,46 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         outGFS = SmithGGGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * SmithGGGX(ndotV, Surface.Roughness);
     }
 
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Specular ENergy
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+    
+    void SetupDFG(inout BacklaceSurfaceData Surface)
+    {
+        Surface.EnergyCompensation = 1.0;
+        switch(_SpecularEnergyMode)
+        {
+            case 1: // turquin approximation for multi-scaattering
+                float A = Surface.Roughness;
+                float3 F0 = Surface.SpecularColor;
+                float luminance = GetLuma(Surface.Albedo.rgb); 
+                Surface.EnergyCompensation = 1.0 + A * (1.0 / (luminance + 0.001) - 1.0);
+                break;
+            case 2: // safe and cheap
+                Surface.EnergyCompensation = 1.0 + Surface.Roughness * 0.5;
+                break;
+            case 3: // manual control
+                Surface.EnergyCompensation = _SpecularEnergy;
+                break;
+            default: // (0) none, just 1.0
+                // no energy compensation
+                break;
+        }
+        Surface.EnergyCompensation = clamp(Surface.EnergyCompensation, _SpecularEnergyMin, _SpecularEnergyMax);
+    }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //       Anisotropic Specular
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #if defined(_SPECULARMODE_ANISOTROPIC)
         // calculates anisotropic direct specular reflection using tangent space and view/light directions
         void AnisotropicDirectSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
@@ -773,6 +904,14 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             outGFS = SmithGGGX_aniso(ndotL, TdotL, BdotL, ax, ay);
             outGFS *= SmithGGGX_aniso(ndotV, TdotV, BdotV, ax, ay);
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Toon Specular
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
     #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD
         // toon highlights specular
         float3 ApplyToonHighlights(float3 F_Term, float ndotH, inout BacklaceSurfaceData Surface)
@@ -783,6 +922,15 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             float3 rampColor = UNITY_SAMPLE_TEX2D(_HighlightRamp, float2(rampUV, rampUV)).rgb;
             return rampColor * _HighlightRampColor.rgb * _HighlightIntensity * F_Term;
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //          Hair Specular
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_*
         // kajiya-kay hair specular
         float3 HairDirectSpecular(float3 tangentDir, float3 lightDir, inout BacklaceSurfaceData Surface)
@@ -811,6 +959,15 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             float3 secondaryColor = Surface.Albedo.rgb * _SecondarySpecularColor.rgb;
             return (primarySpec * Surface.SpecularColor) + (secondarySpec * secondaryColor);
         }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //         Cloth Specular
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
     #elif defined(_SPECULARMODE_CLOTH) // _SPECULARMODE_*
         // charlie sheen ndf as Estevez and Kulla of Sony Imageworks describe
         float CharlieSheenNDF(float roughness, float NdotH)
@@ -822,6 +979,14 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             return (2.0 + invAlpha) * pow(sin2h, invAlpha * 0.5) / (2.0 * UNITY_PI);
         }
     #endif // _SPECULARMODE_*
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //         Specular Wrappers
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
 
     // indirect specular using box-projected cubemaps with a fallback option
     void GetIndirectSpecular(inout BacklaceSurfaceData Surface)
@@ -927,5 +1092,6 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         }
     #endif // _BACKLACE_VERTEX_SPECULAR
 #endif // BACKLACE_SPECULAR
+
 
 #endif // BACKLACE_SHADING_CGINC

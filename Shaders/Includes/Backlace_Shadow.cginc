@@ -1,9 +1,25 @@
 #ifndef BACKLACE_SHADOW_CGINC
 #define BACKLACE_SHADOW_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Legacy Mode
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
 // NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
 // #define BACKLACE_LEGACY_MODE
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Compiler Directives
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // compiler directives
 #ifdef BACKLACE_LEGACY_MODE
@@ -29,7 +45,14 @@
 // unity includes
 #include "UnityCG.cginc"
 
-// data structures
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Data Structures
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 struct VertexData
 {
     float4 vertex : POSITION;
@@ -78,6 +101,14 @@ struct FragmentData
     float3 worldPos : TEXCOORD6;
     float3 normal : NORMAL;
 };
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // main properties
 sampler3D _DitherMaskLOD;
@@ -141,9 +172,24 @@ float _StitchOffset;
     #include "./Backlace_AudioLink.cginc"
 #endif // _BACKLACE_AUDIOLINK
 
-// my includes
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Backlace Includes
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Effects.cginc"
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Blending Modes
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     float _DirectLightMode;
@@ -162,7 +208,14 @@ float _StitchOffset;
     }
 #endif // defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
 
-// shadow vertex function
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//       Vertex & Pixel Shader
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 VertexOutput  Vertex(VertexData v)
 {
     VertexOutput  i;
@@ -206,7 +259,6 @@ VertexOutput  Vertex(VertexData v)
     return i;
 }
 
-// shadow fragment function
 float4 Fragment(FragmentData i) : SV_TARGET
 {
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
@@ -235,5 +287,6 @@ float4 Fragment(FragmentData i) : SV_TARGET
         return 0;
     #endif // SHADOWS_CUBE
 }
+
 
 #endif // BACKLACE_SHADOW_CGINC

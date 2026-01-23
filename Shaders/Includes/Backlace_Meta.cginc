@@ -1,7 +1,15 @@
 #ifndef BACKLACE_META_CGINC
 #define BACKLACE_META_CGINC
 
-// compiler directives
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Compiler Directives
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// shader passes
 #pragma vertex Vertex
 #pragma fragment Fragment
 #pragma multi_compile_instancing
@@ -13,6 +21,14 @@
 
 // keywords
 #include "./Backlace_Keywords.cginc"
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Data Structures
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // data structures
 struct VertexData
@@ -36,6 +52,14 @@ struct FragmentData
     float3 worldPos : TEXCOORD5;
     float3 normal : NORMAL;
 };
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//      Meta-Specific Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // meta properties
 FragmentData FragData;
@@ -171,8 +195,23 @@ int _StitchTex_UV;
 int _StitchAxis;
 float _StitchOffset;
 
-// my includes
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//       Additional Includes
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #include "./Backlace_Universal.cginc"
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Detail Map Stub
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // detail-map features
 #if defined(_BACKLACE_DETAIL)
@@ -192,6 +231,14 @@ void ApplyDetailMaps(inout BacklaceSurfaceData Surface)
     NormalMap = normalize(float3(baseNormalTS.xy + detailNormalTS.xy, baseNormalTS.z * detailNormalTS.z));
 }
 #endif // _BACKLACE_DETAIL
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//       Vertex & Pixel Shaders
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // meta vertex function
 FragmentData Vertex(VertexData v)
@@ -246,5 +293,6 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #endif // BACKLACE_SPECULAR
     return UnityMetaFragment(surfaceData);
 }
+
 
 #endif // BACKLACE_META_CGINC

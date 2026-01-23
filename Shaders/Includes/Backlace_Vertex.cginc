@@ -1,6 +1,14 @@
 #ifndef BACKLACE_VERTEX_CGINC
 #define BACKLACE_VERTEX_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//       Forward Vertex Shader
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 FragmentData Vertex(VertexData v)
 {
     FragmentData i;
@@ -59,5 +67,6 @@ FragmentData Vertex(VertexData v)
     #endif // _BACKLACE_MATCAP
     return i;
 }
+
 
 #endif // BACKLACE_VERTEX_CGINC

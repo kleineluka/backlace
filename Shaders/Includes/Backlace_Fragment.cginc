@@ -226,4 +226,5 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     return Surface.FinalColor;
 }
 
+
 #endif // BACKLACE_FRAGMENT_CGINC

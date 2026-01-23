@@ -35,4 +35,5 @@ void Geometry(triangle FragmentData i[3], inout TriangleStream<FragmentData> tri
     triStream.RestartStrip();
 }
 
+
 #endif // BACKLACE_GEOMETRY_CGINC

@@ -775,4 +775,6 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         }
     #endif // _BACKLACE_EMISSION
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
+
+
 #endif // BACKLACE_UNIVERSAL_CGINC

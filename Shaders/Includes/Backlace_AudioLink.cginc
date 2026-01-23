@@ -1,6 +1,14 @@
 #ifndef BACKLACE_AUDIOLINK_CGINC
 #define BACKLACE_AUDIOLINK_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        AudioLink Include
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // Map of where features in AudioLink are.
 #define ALPASS_DFT                      uint2(0, 4)  //Size: 128, 2
 #define ALPASS_WAVEFORM                 uint2(0, 6)  //Size: 128, 16
@@ -401,8 +409,17 @@ float4 AudioLinkGetAudioSourcePosition()
     return float4(AudioLinkData(ALPASS_GENERALVU_SOURCE_POS).xyz, 1);
 }
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//     Backlace-AudioLink Mixins
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // backlace changes to this cginclude start here !!
 #if defined(_BACKLACE_AUDIOLINK)
+    // data structures
     struct BacklaceAudioLinkData
     {
         float emission;
@@ -419,6 +436,7 @@ float4 AudioLinkGetAudioSourcePosition()
         float outlineWidth;
     };
 
+    // parameters
     float _AudioLinkFallback;
     float _AudioLinkMode;
     float _AudioLinkSmoothLevel;
@@ -447,6 +465,7 @@ float4 AudioLinkGetAudioSourcePosition()
     float _AudioLinkIridescenceBand, _AudioLinkIridescenceStrength;
     float2 _AudioLinkIridescenceRange;
 
+    // easily get band value
     float GetAudioLinkBandValue(float band)
     {
         // set up defaults
@@ -473,12 +492,14 @@ float4 AudioLinkGetAudioSourcePosition()
         return AudioLinkData(ALPASS_AUDIOLINK + uint2(0, selection)).r;
     }
 
+    // calculate effect value
     float CalculateAudioLinkEffect(float band, float2 range, float strength)
     {
         float raw = GetAudioLinkBandValue(band);
         return lerp(range.x, range.y, raw) * strength;
     }
 
+    // initialise all effects and their values
     BacklaceAudioLinkData CalculateAudioLinkEffects()
     {
         BacklaceAudioLinkData data = (BacklaceAudioLinkData)0;
@@ -513,5 +534,6 @@ float4 AudioLinkGetAudioSourcePosition()
         return data;
     }
 #endif // _BACKLACE_AUDIOLINK
+
 
 #endif // BACKLACE_AUDIOLINK_CGINC

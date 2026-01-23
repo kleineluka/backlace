@@ -1,9 +1,25 @@
 #ifndef BACKLACE_OUTLINE_CGINC
 #define BACKLACE_OUTLINE_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Legacy Mode
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
 // NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
 // #define BACKLACE_LEGACY_MODE
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Compiler Directives
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // compiler directives
 #ifdef BACKLACE_LEGACY_MODE
@@ -34,6 +50,14 @@
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Effects.cginc"
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//            Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // properties
 UNITY_DECLARE_TEX2D(_MainTex);
 float4 _MainTex_ST;
@@ -62,6 +86,14 @@ int _OutlineStyle;
 float3 _VertexManipulationPosition;
 float3 _VertexManipulationScale;
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Data Structures
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // data structures
 struct appdata
 {
@@ -81,7 +113,14 @@ struct v2f
     float3 normal : TEXCOORD4;
 };
 
-// outline vertex shader
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Vertex Shader
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 v2f vert(appdata v)
 {
     v2f o;
@@ -137,7 +176,14 @@ v2f vert(appdata v)
     return o;
 }
 
-// outline fragment shader
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Pixel Shader
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 fixed4 frag(v2f i) : SV_Target
 {
     float baseAlpha = UNITY_SAMPLE_TEX2D(_MainTex, i.uv).a;
@@ -214,5 +260,6 @@ fixed4 frag(v2f i) : SV_Target
     clip(finalColor.a - 0.001);
     return finalColor;
 }
+
 
 #endif // BACKLACE_OUTLINE_CGINC
