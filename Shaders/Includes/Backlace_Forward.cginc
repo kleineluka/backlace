@@ -1,10 +1,17 @@
 #ifndef BACKLACE_FORWARD_CGINC
 #define BACKLACE_FORWARD_CGINC
 
-// keywords
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Compiler Directives
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// shared keywords
 #include "./Backlace_Keywords.cginc"
 
-// compiler directives
+// manually defined pragmas
 #ifdef BACKLACE_LEGACY_MODE
     #pragma target 3.0
     #undef _BACKLACE_AUDIOLINK
@@ -12,9 +19,12 @@
 #else // BACKLACE_LEGACY_MODE
     #pragma target 5.0
 #endif // BACKLACE_LEGACY_MODE
+
+// shader passes
 #pragma vertex Vertex
 //#pragma geometry Geometry
 #pragma fragment Fragment
+
 // branch between forward base and forward add passes
 #if defined(UNITY_PASS_FORWARDBASE)
     #pragma multi_compile_fwdbase
@@ -24,6 +34,14 @@
 #endif // UNITY_PASS_FORWARDBASE
 #pragma multi_compile_fog
 #pragma multi_compile_instancing
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//      Includes & Integrations
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // unity includes
 #include "UnityCG.cginc"
@@ -41,7 +59,14 @@
     #include "./Backlace_LTCGI.cginc"
 #endif // _BACKLACE_LTCGI
 
-// data structures
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Data Structs
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 struct VertexData
 {
     float4 vertex : POSITION;
@@ -89,7 +114,6 @@ struct FragmentData
     #if defined(_BACKLACE_PS1)
         float4 affineUV : TEXCOORD16;
     #endif // _BACKLACE_PS1
-    
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
@@ -99,7 +123,14 @@ struct Unity_GlossyEnvironmentData
     half3 reflUVW;
 };
 
-// backlace includes
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Backlace Magic~
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #include "./Backlace_Properties.cginc"
 #include "./Backlace_Universal.cginc"
 #include "./Backlace_Lighting.cginc"

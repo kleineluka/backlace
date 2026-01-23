@@ -1,16 +1,38 @@
 #ifndef BACKLACE_KEYWORDS_CGINC
 #define BACKLACE_KEYWORDS_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Legacy Mode
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
 // NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
 // #define BACKLACE_LEGACY_MODE
 
-// BRANCHING KEYWORDS
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        Branching Keywords
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #pragma shader_feature_local _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
 #pragma shader_feature_local _ _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON _SPECULARMODE_HAIR _SPECULARMODE_CLOTH
 #pragma shader_feature_local _ _ANIMEMODE_RAMP _ANIMEMODE_HALFTONE _ANIMEMODE_HIFI _ANIMEMODE_SKIN _ANIMEMODE_WRAPPED
 
-// TOGGLE KEYWORDS
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Toggle Keywords
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #pragma shader_feature_local _ _BACKLACE_EMISSION
 #pragma shader_feature_local _ _BACKLACE_VERTEX_SPECULAR
 #pragma shader_feature_local _ _BACKLACE_RIMLIGHT
@@ -38,6 +60,14 @@
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
 #pragma shader_feature_local _ _BACKLACE_DITHER
 #pragma shader_feature_local _ _BACKLACE_PS1
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//      Circumstantial Keywords
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // NON-LEGACY ONLY KEYWORDS
 #if !defined(BACKLACE_LEGACY_MODE)

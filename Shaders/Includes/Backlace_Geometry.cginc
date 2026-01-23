@@ -1,17 +1,26 @@
 #ifndef BACKLACE_GEOMETRY_CGINC
 #define BACKLACE_GEOMETRY_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Geometry Shader
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // geometry data
 struct GeometryPrimitive
 {
     FragmentData v[3];
 };
 
-// stackable geometry modification stagges
+// stackable geometry modification stages
 
 [maxvertexcount(3)]
 void Geometry(triangle FragmentData i[3], inout TriangleStream<FragmentData> triStream)
 {
+    // set up input triangle
     GeometryPrimitive prim;
     prim.v[0] = i[0];
     prim.v[1] = i[1];

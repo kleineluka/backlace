@@ -1,6 +1,14 @@
 #ifndef BACKLACE_FRAGMENT_CGINC
 #define BACKLACE_FRAGMENT_CGINC
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//           Pixel Shader
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // shared fragment between both base and add passes
 float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
 {
