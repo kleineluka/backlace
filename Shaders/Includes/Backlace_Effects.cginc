@@ -1,40 +1,205 @@
 #ifndef BACKLACE_EFFECTS_CGINC
 #define BACKLACE_EFFECTS_CGINC
 
-// forward passes only features
-#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD)
-    #if defined(_BACKLACE_DISSOLVE)
-        // properties for dissolve are in Backlace_Properties.cginc (for alpha in other passes)
-        void ApplyDissolve(inout BacklaceSurfaceData Surface, FragmentData i)
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Stylise Effects
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// fresnel rim features
+#if defined(_BACKLACE_RIMLIGHT)
+    float3 Rimlight;
+    float4 _RimColor;
+    float _RimWidth;
+    float _RimIntensity;
+    float _RimLightBased;
+    
+    void CalculateRimlight(inout BacklaceSurfaceData Surface)
+    {
+        float fresnel = 1 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
+        fresnel = pow(fresnel, _RimWidth);
+        [branch] if (_RimLightBased > 0)
         {
-            float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, Surface.NormalDir);
-            float halfWidth = max(_DissolveEdgeWidth, 0.0001) * 0.5;
-            if (_DissolveEdgeMode == 0) // glow
-
-            {
-                float fadeIn = smoothstep(0.0, halfWidth, _DissolveProgress);
-                float fadeOut = 1.0 - smoothstep(1.0 - halfWidth, 1.0, _DissolveProgress);
-                float masterIntensity = fadeIn * fadeOut;
-                float distanceFromLine = abs(dissolveMapValue - _DissolveProgress);
-                float baseGradient = 1.0 - smoothstep(0, halfWidth, distanceFromLine);
-                float hardnessPower = lerp(1.0, 16.0, _DissolveEdgeSharpness);
-                float edgeGlow = pow(baseGradient, hardnessPower);
-                edgeGlow *= masterIntensity;
-                float surfaceAlpha = step(_DissolveProgress, dissolveMapValue);
-                Surface.FinalColor.rgb += _DissolveEdgeColor.rgb * edgeGlow * _DissolveEdgeColor.a;
-                Surface.FinalColor.a = max(surfaceAlpha, edgeGlow * _DissolveEdgeColor.a);
-            }
-            else // smooth fade
-
-            {
-                float startEdge = _DissolveProgress - halfWidth;
-                float endEdge = _DissolveProgress + halfWidth;
-                float alpha = saturate(smoothstep(startEdge, endEdge, dissolveMapValue));
-                Surface.FinalColor.a = alpha;
-            }
+            fresnel *= Surface.NdotL;
         }
-    #endif // _BACKLACE_DISSOLVE
-#endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD
+        Rimlight = fresnel * _RimColor.rgb * _RimIntensity * Surface.LightColor.a;
+    }
+#endif // _BACKLACE_RIMLIGHT
+
+// depth rim features
+#if defined(_BACKLACE_DEPTH_RIMLIGHT)
+    #ifndef BACKLACE_DEPTH
+        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+        float4 _CameraDepthTexture_TexelSize;
+        #define BACKLACE_DEPTH
+    #endif // BACKLACE_DEPTH
+    float4 _DepthRimColor;
+    float _DepthRimWidth;
+    float _DepthRimThreshold;
+    float _DepthRimSharpness;
+    int _DepthRimBlendMode;
+
+    // sobel point array
+    static const int2 sobelPoints[9] = {
+        int2(-1, -1), int2(0, -1), int2(1, -1),
+        int2(-1, 0), int2(0, 0), int2(1, 0),
+        int2(-1, 1), int2(0, 1), int2(1, 1)
+    };
+
+    // logic to keep rim consistent regardless of camera distance / depth
+    float ScaleRimWidth(float z)
+    {
+        float scale = 1.0 / z;
+        return _DepthRimWidth * 50.0 / _ScreenParams.y * scale;
+    }
+
+    void ApplyDepthRim(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float sceneDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w)).r;
+        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
+        float modelDepthLinear = i.scrPos.w;;
+        float depthStatus = 0;
+        [unroll(9)]
+        for (int idx = 0; idx < 9; idx++)
+        {
+            float2 offset = sobelPoints[idx] * ScaleRimWidth(modelDepthLinear);
+            float sampleDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w) + offset).r;
+            float sampleDepthLinear = LinearEyeDepth(sampleDepthRaw);
+            depthStatus += step(modelDepthLinear + _DepthRimThreshold, sampleDepthLinear);
+        }
+        float edgeFactor = depthStatus / 9.0;
+        edgeFactor = pow(edgeFactor, _DepthRimSharpness);
+        float rimIntensity = edgeFactor * _DepthRimColor.a;
+        switch(_DepthRimBlendMode)
+        {
+            case 0: // additive
+            Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
+            break;
+            case 1: // replace
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
+            break;
+            default: // multiply (case 2)
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
+            break;
+        }
+    }
+#endif // _BACKLACE_DEPTH_RIMLIGHT
+
+// matcap features
+#if defined(_BACKLACE_MATCAP)
+    UNITY_DECLARE_TEX2D(_MatcapTex); // share sampler with below
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_MatcapMask);
+    float4 _MatcapTex_ST;
+    float _MatcapIntensity;
+    float3 _MatcapTint;
+    float _MatcapSmoothnessEnabled;
+    float _MatcapSmoothness;
+    float _MatcapMask_UV;
+    int _MatcapBlendMode;
+
+    void ApplyMatcap(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float3 matcapColor;
+        [branch] if (_MatcapSmoothnessEnabled == 1)
+        {
+            // use smoothness to sample a mip level
+            float mipLevel = _MatcapSmoothness * 10.0;
+            matcapColor = UNITY_SAMPLE_TEX2D_LOD(_MatcapTex, i.matcapUV, mipLevel).rgb * Surface.LightColor.a;
+        }
+        else
+        {
+            matcapColor = UNITY_SAMPLE_TEX2D(_MatcapTex, i.matcapUV).rgb * Surface.LightColor.a;
+        }
+        matcapColor *= _MatcapTint.rgb;
+        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MatcapMask, _MatcapTex, Uvs[_MatcapMask_UV]).r;
+        float finalMatcapIntensity = _MatcapIntensity;
+        #if defined(_BACKLACE_AUDIOLINK)
+            finalMatcapIntensity *= i.alChannel1.w;
+        #endif // _BACKLACE_AUDIOLINK
+        float3 finalMatcap = matcapColor * finalMatcapIntensity * mask;
+        switch(_MatcapBlendMode)
+        {
+            case 0: // additive
+            Surface.FinalColor.rgb += finalMatcap;
+            break;
+            case 1: // multiply
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
+            break;
+            case 2: // replace
+            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
+            break;
+        }
+    }
+#endif // _BACKLACE_MATCAP
+
+// cubemap features
+#if defined(_BACKLACE_CUBEMAP)
+    samplerCUBE _CubemapTex;
+    float4 _CubemapTint;
+    float _CubemapIntensity;
+    int _CubemapBlendMode;
+
+    void ApplyCubemap(inout BacklaceSurfaceData Surface)
+    {
+        float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb * Surface.LightColor.a;
+        float intensity = _CubemapIntensity;
+        switch(_CubemapBlendMode)
+        {
+            case 0: // additive
+                Surface.FinalColor.rgb += cubemapColor * intensity;
+                break;
+            case 1: // multiply
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
+                break;
+            default: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
+                break;
+        }
+    }
+#endif // _BACKLACE_CUBEMAP
+
+
+
+
+
+
+
+
+
+
+
+#if defined(_BACKLACE_DISSOLVE)
+    // properties for dissolve are in Backlace_Properties.cginc (for alpha in other passes)
+    void ApplyDissolve(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, Surface.NormalDir);
+        float halfWidth = max(_DissolveEdgeWidth, 0.0001) * 0.5;
+        if (_DissolveEdgeMode == 0) // glow
+        {
+            float fadeIn = smoothstep(0.0, halfWidth, _DissolveProgress);
+            float fadeOut = 1.0 - smoothstep(1.0 - halfWidth, 1.0, _DissolveProgress);
+            float masterIntensity = fadeIn * fadeOut;
+            float distanceFromLine = abs(dissolveMapValue - _DissolveProgress);
+            float baseGradient = 1.0 - smoothstep(0, halfWidth, distanceFromLine);
+            float hardnessPower = lerp(1.0, 16.0, _DissolveEdgeSharpness);
+            float edgeGlow = pow(baseGradient, hardnessPower);
+            edgeGlow *= masterIntensity;
+            float surfaceAlpha = step(_DissolveProgress, dissolveMapValue);
+            Surface.FinalColor.rgb += _DissolveEdgeColor.rgb * edgeGlow * _DissolveEdgeColor.a * Surface.LightColor.a;
+            Surface.FinalColor.a = max(surfaceAlpha, edgeGlow * _DissolveEdgeColor.a);
+        }
+        else // smooth fade
+        {
+            float startEdge = _DissolveProgress - halfWidth;
+            float endEdge = _DissolveProgress + halfWidth;
+            float alpha = saturate(smoothstep(startEdge, endEdge, dissolveMapValue));
+            Surface.FinalColor.a = alpha;
+        }
+    }
+#endif // _BACKLACE_DISSOLVE
 
 // post-processing features
 #if defined(_BACKLACE_POST_PROCESSING)
@@ -135,12 +300,12 @@
 
     void ApplySubsurfaceScattering(inout BacklaceSurfaceData Surface)
     {
-        float thickness = UNITY_SAMPLE_TEX2D_SAMPLER(_SSSThicknessMap, _MainTex, Uvs[_ThicknessMap_UV]).r * _SSSThickness;
-        float3 scatterDir = normalize(Surface.LightDir + Surface.NormalDir * _SSSDistortion);
+        float rawThickness = UNITY_SAMPLE_TEX2D_SAMPLER(_SSSThicknessMap, _MainTex, Uvs[_ThicknessMap_UV]).r;
+        float transmission = exp(-rawThickness * _SSSThickness);
+        float3 scatterDir = normalize(Surface.LightDir + (Surface.NormalDir * _SSSDistortion));
         float scatterDot = dot(Surface.ViewDir, -scatterDir);
-        scatterDot = saturate(scatterDot);
-        float scatterFalloff = pow(scatterDot, _SSSPower);
-        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * scatterFalloff * _SSSStrength * thickness;
+        float scatterFalloff = pow(saturate(scatterDot), _SSSPower);
+        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * _SSSStrength * transmission * Surface.LightColor.a * scatterFalloff;
         Surface.Diffuse += sss;
     }
 #endif // _BACKLACE_SSS
@@ -342,99 +507,6 @@
     }
 #endif // _BACKLACE_PARALLAX
 
-// cubemap features
-#if defined(_BACKLACE_CUBEMAP)
-    samplerCUBE _CubemapTex;
-    float4 _CubemapTint;
-    float _CubemapIntensity;
-    int _CubemapBlendMode;
-
-    void ApplyCubemap(inout BacklaceSurfaceData Surface)
-    {
-        float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb;
-        float intensity = _CubemapIntensity;
-        switch(_CubemapBlendMode)
-        {
-            case 0: // additive
-            Surface.FinalColor.rgb += cubemapColor * intensity;
-            break;
-            case 1: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * cubemapColor, intensity);
-            break;
-            case 2: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, cubemapColor, intensity);
-            break;
-        }
-    }
-#endif // _BACKLACE_CUBEMAP
-
-// matcap features
-#if defined(_BACKLACE_MATCAP)
-    UNITY_DECLARE_TEX2D(_MatcapTex); // share sampler with below
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_MatcapMask);
-    float4 _MatcapTex_ST;
-    float _MatcapIntensity;
-    float3 _MatcapTint;
-    float _MatcapSmoothnessEnabled;
-    float _MatcapSmoothness;
-    float _MatcapMask_UV;
-    int _MatcapBlendMode;
-
-    void ApplyMatcap(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float3 matcapColor;
-        [branch] if (_MatcapSmoothnessEnabled == 1)
-        {
-            // use smoothness to sample a mip level
-            float mipLevel = _MatcapSmoothness * 10.0;
-            matcapColor = UNITY_SAMPLE_TEX2D_LOD(_MatcapTex, i.matcapUV, mipLevel).rgb;
-        }
-        else
-        {
-            matcapColor = UNITY_SAMPLE_TEX2D(_MatcapTex, i.matcapUV).rgb;
-        }
-        matcapColor *= _MatcapTint.rgb;
-        float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MatcapMask, _MatcapTex, Uvs[_MatcapMask_UV]).r;
-        float finalMatcapIntensity = _MatcapIntensity;
-        #if defined(_BACKLACE_AUDIOLINK)
-            finalMatcapIntensity *= i.alChannel1.w;
-        #endif // _BACKLACE_AUDIOLINK
-        float3 finalMatcap = matcapColor * finalMatcapIntensity * mask;
-        switch(_MatcapBlendMode)
-        {
-            case 0: // additive
-            Surface.FinalColor.rgb += finalMatcap;
-            break;
-            case 1: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
-            break;
-            case 2: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
-            break;
-        }
-    }
-#endif // _BACKLACE_MATCAP
-
-// rim features
-#if defined(_BACKLACE_RIMLIGHT)
-    float3 Rimlight;
-    float4 _RimColor;
-    float _RimWidth;
-    float _RimIntensity;
-    float _RimLightBased;
-    
-    void CalculateRimlight(inout BacklaceSurfaceData Surface)
-    {
-        float fresnel = 1 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
-        fresnel = pow(fresnel, _RimWidth);
-        [branch] if (_RimLightBased > 0)
-        {
-            fresnel *= Surface.NdotL;
-        }
-        Rimlight = fresnel * _RimColor.rgb * _RimIntensity;
-    }
-#endif // _BACKLACE_RIMLIGHT
-
 // clearcoat features
 #if defined(_BACKLACE_CLEARCOAT)
     UNITY_DECLARE_TEX2D_NOSAMPLER(_ClearcoatMap);
@@ -454,8 +526,8 @@
         float3 fresnel = FresnelTerm(F0, Surface.LdotH);
         float squareRoughness = max(roughness * roughness, 0.002);
         float distribution = GTR2(Surface.NdotH, squareRoughness);
-        float geometry = smithG_GGX(Surface.NdotL, squareRoughness) * smithG_GGX(Surface.NdotV, squareRoughness);
-        float3 clearcoatSpec = fresnel * distribution * geometry;
+        float geometry = SmithGGGX(Surface.NdotL, squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
+        float3 clearcoatSpec = fresnel * distribution * geometry * Surface.LightColor.a;
         highlight = clearcoatSpec * lerp(Surface.LightColor.rgb, Surface.LightColor.rgb * _ClearcoatColor.rgb, _ClearcoatColor.a) * mask;
         float3 occlusionTint = lerp(1.0, _ClearcoatColor.rgb, fresnel);
         occlusion = lerp(1.0, occlusionTint, mask);
@@ -471,71 +543,12 @@
             float roughness = _ClearcoatRoughness; // no map for this to keep it simple
             float squareRoughness = max(roughness * roughness, 0.002);
             float distribution = GTR2(saturate(dot(Surface.NormalDir, normalize(VLightDir + Surface.ViewDir))), squareRoughness);
-            float geometry = smithG_GGX(saturate(dot(Surface.NormalDir, VLightDir)), squareRoughness) * smithG_GGX(Surface.NdotV, squareRoughness);
-            float3 clearcoatV_Spec = fresnel * distribution * geometry;
+            float geometry = SmithGGGX(saturate(dot(Surface.NormalDir, VLightDir)), squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
+            float3 clearcoatV_Spec = fresnel * distribution * geometry * Surface.LightColor.a;
             Surface.FinalColor.rgb += clearcoatV_Spec * Surface.VertexDirectDiffuse * _ClearcoatColor.rgb * _ClearcoatStrength;
         }
     #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
 #endif // _BACKLACE_CLEARCOAT
-
-// screen space rim feature
-#if defined(_BACKLACE_DEPTH_RIMLIGHT)
-    #ifndef BACKLACE_DEPTH
-        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-        float4 _CameraDepthTexture_TexelSize;
-        #define BACKLACE_DEPTH
-    #endif // BACKLACE_DEPTH
-    float4 _DepthRimColor;
-    float _DepthRimWidth;
-    float _DepthRimThreshold;
-    float _DepthRimSharpness;
-    int _DepthRimBlendMode;
-
-    // sobel point array
-    static const int2 sobelPoints[9] = {
-        int2(-1, -1), int2(0, -1), int2(1, -1),
-        int2(-1, 0), int2(0, 0), int2(1, 0),
-        int2(-1, 1), int2(0, 1), int2(1, 1)
-    };
-
-    // logic to keep rim consistent regardless of camera distance / depth
-    float ScaleRimWidth(float z)
-    {
-        float scale = 1.0 / z;
-        return _DepthRimWidth * 50.0 / _ScreenParams.y * scale;
-    }
-
-    void ApplyDepthRim(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float sceneDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w)).r;
-        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
-        float modelDepthLinear = i.scrPos.w;;
-        float depthStatus = 0;
-        [unroll(9)]
-        for (int idx = 0; idx < 9; idx++)
-        {
-            float2 offset = sobelPoints[idx] * ScaleRimWidth(modelDepthLinear);
-            float sampleDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w) + offset).r;
-            float sampleDepthLinear = LinearEyeDepth(sampleDepthRaw);
-            depthStatus += step(modelDepthLinear + _DepthRimThreshold, sampleDepthLinear);
-        }
-        float edgeFactor = depthStatus / 9.0;
-        edgeFactor = pow(edgeFactor, _DepthRimSharpness);
-        float rimIntensity = edgeFactor * _DepthRimColor.a;
-        switch(_DepthRimBlendMode)
-        {
-            case 0: // additive
-            Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
-            break;
-            case 1: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
-            break;
-            default: // multiply (case 2)
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
-            break;
-        }
-    }
-#endif // _BACKLACE_DEPTH_RIMLIGHT
 
 // pathing feature
 #if defined(_BACKLACE_PATHING)
@@ -832,18 +845,18 @@
             finalIridescenceIntensity *= i.alChannel2.z;
         #endif // _BACKLACE_AUDIOLINK
         float finalIntensity = finalIridescenceIntensity * pow(fresnel_base, 2.0) * mask;
-        iridescenceColor *= _IridescenceTint.rgb * finalIntensity;
+        iridescenceColor *= _IridescenceTint.rgb * finalIntensity * Surface.LightColor.a;
         [branch] switch(_IridescenceBlendMode)
         {
             case 0: // Additive
-            Surface.FinalColor.rgb += iridescenceColor;
-            break;
+                Surface.FinalColor.rgb += iridescenceColor;
+                break;
             case 1: // Screen
-            Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
-            break;
-            case 2: // Alpha Blend
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
-            break;
+                Surface.FinalColor.rgb = 1.0 - (1.0 - Surface.FinalColor.rgb) * (1.0 - iridescenceColor);
+                break;
+            default: // (2) Alpha Blend
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, iridescenceColor, finalIntensity);
+                break;
         }
     }
 #endif // _BACKLACE_IRIDESCENCE
@@ -992,20 +1005,20 @@
             true,
             float2(0, 0)
         );
-        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb;
+        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb * Surface.LightColor.a;
         float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_WorldEffectMask, _MainTex, Uvs[0]).r;
         float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
         switch(_WorldEffectBlendMode)
         {
             case 1: // Additive
-            Surface.FinalColor.rgb += finalEffectColor * blendStrength;
-            break;
+                Surface.FinalColor.rgb += finalEffectColor * blendStrength;
+                break;
             case 2: // Multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * finalEffectColor, blendStrength);
+                break;
             default: // Alpha Blend
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, finalEffectColor, blendStrength);
+                break;
         }
     }
 #endif // _BACKLACE_WORLD_EFFECT

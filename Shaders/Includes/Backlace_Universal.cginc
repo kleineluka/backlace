@@ -1,10 +1,24 @@
 #ifndef BACKLACE_UNIVERSAL_CGINC
 #define BACKLACE_UNIVERSAL_CGINC
 
-// macros
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//    Macros, Structs, & Debugging
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 #define BACKLACE_TRANSFORM_TEX(set, name) (set[name##_UV].xy * name##_ST.xy + name##_ST.zw)
 
-// data structures
+struct BacklaceLightData
+{
+    float3 directColor;
+    float3 indirectColor;
+    float3 direction;
+    float attenuation; // will be calculated in diffuse stage
+};
+
 struct BacklaceSurfaceData
 {
     // resulting colour
@@ -64,47 +78,18 @@ struct BacklaceSurfaceData
     bool IsFrontFace;
 };
 
-// debug function
+// for debugging purposes
 float4 panty() {
     return float4(1.00, 0.98, 0.25, 1.00);
 }
 
-// loading uv function
-#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
-    #ifndef UNITY_PASS_OUTLINE
-        // load the uvs
-        float2 Uvs[4];
-        void LoadUVs()
-        {
-            Uvs[0] = FragData.uv;
-            Uvs[1] = FragData.uv1;
-            Uvs[2] = FragData.uv2;
-            Uvs[3] = FragData.uv3;
-        }
 
-        void SafeLoadUVs()
-        {
-            // quick and dirty test, just see if uv0 is zero
-            if (all(Uvs[0] == float2(0,0)))
-            {
-                LoadUVs();
-            }
-        }
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Helper Functions!
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
 
-        void SampleAlbedo(inout BacklaceSurfaceData Surface, float3 objectPos)
-        {
-            Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
-            [branch] if (_UseTextureStitching == 1)
-            {
-                float stitch_check = objectPos[_StitchAxis];
-                if (stitch_check > _StitchOffset)
-                {
-                    Surface.Albedo = UNITY_SAMPLE_TEX2D_SAMPLER(_StitchTex, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
-                }
-            }
-        }
-    #endif // !UNITY_PASS_OUTLINE
-#endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
 
 // remap float from [oldMin, oldMax] to [newMin, newMax]
 inline float remap(float value, float oldMin, float oldMax, float newMin, float newMax)
@@ -243,7 +228,7 @@ float GTR2(float NdotH, float a)
 }
 
 // ggx distribution function (for specular and clearcoat)
-float smithG_GGX(float NdotV, float alphaG)
+float SmithGGGX(float NdotV, float alphaG)
 {
     float a = alphaG * alphaG;
     float b = NdotV * NdotV;
@@ -281,6 +266,72 @@ float3 GetCameraPos()
     #endif // UNITY_SINGLE_PASS_STEREO
 }
 
+// rotates a 3D vector using euler angles (in degrees)
+float3 RotateVector(float3 pos, float3 rotation)
+{
+    float3 angles = rotation * (UNITY_PI / 180.0);
+    float3 s, c;
+    sincos(angles, s, c);
+    float3x3 rotX = float3x3(1, 0, 0, 0, c.x, -s.x, 0, s.x, c.x);
+    float3x3 rotY = float3x3(c.y, 0, s.y, 0, 1, 0, -s.y, 0, c.y);
+    float3x3 rotZ = float3x3(c.z, -s.z, 0, s.z, c.z, 0, 0, 0, 1);
+    return mul(rotZ, mul(rotY, mul(rotX, pos)));
+}
+
+// fake dithering stylised as checkerboard pattern for the aesthetics
+float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
+{
+    float u = screenPos.x + screenPos.y;
+    float v = screenPos.x - screenPos.y;
+    float2 gridPos = floor(float2(u, v) / scale);
+    return fmod(gridPos.x + gridPos.y, 2.0);
+}
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//        UV Related Functions
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// loading uv function
+#if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
+    #ifndef UNITY_PASS_OUTLINE
+        // load the uvs
+        float2 Uvs[4];
+        void LoadUVs()
+        {
+            Uvs[0] = FragData.uv;
+            Uvs[1] = FragData.uv1;
+            Uvs[2] = FragData.uv2;
+            Uvs[3] = FragData.uv3;
+        }
+
+        void SafeLoadUVs()
+        {
+            // quick and dirty test, just see if uv0 is zero
+            if (all(Uvs[0] == float2(0,0)))
+            {
+                LoadUVs();
+            }
+        }
+
+        void SampleAlbedo(inout BacklaceSurfaceData Surface, float3 objectPos)
+        {
+            Surface.Albedo = UNITY_SAMPLE_TEX2D(_MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MainTex)) * _Color;
+            [branch] if (_UseTextureStitching == 1)
+            {
+                float stitch_check = objectPos[_StitchAxis];
+                if (stitch_check > _StitchOffset)
+                {
+                    Surface.Albedo = UNITY_SAMPLE_TEX2D_SAMPLER(_StitchTex, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
+                }
+            }
+        }
+    #endif // !UNITY_PASS_OUTLINE
+#endif // defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
+
 // rotate a 2D vector around the origin
 float2 RotateUV(float2 uv, float angle)
 {
@@ -289,17 +340,78 @@ float2 RotateUV(float2 uv, float angle)
     return float2(c * uv.x - s * uv.y, s * uv.x + c * uv.y);
 }
 
-// rotates a 3D vector using euler angles (in degrees)
-float3 RotateVector(float3 pos, float3 rotation)
+// transform uv into spritesheet look up table
+float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, float fps, float scrub)
 {
-    float3 angles = rotation * (UNITY_PI / 180.0); 
-    float3 s, c;
-    sincos(angles, s, c);
-    float3x3 rotX = float3x3(1, 0, 0, 0, c.x, -s.x, 0, s.x, c.x);
-    float3x3 rotY = float3x3(c.y, 0, s.y, 0, 1, 0, -s.y, 0, c.y);
-    float3x3 rotZ = float3x3(c.z, -s.z, 0, s.z, c.z, 0, 0, 0, 1);
-    return mul(rotZ, mul(rotY, mul(rotX, pos)));
+    float frame = floor(frac(fps * _Time.y + scrub) * totalFrames);
+    float col = fmod(frame, columns);
+    float row = floor(frame / columns);
+    float2 cellSize = 1.0 / float2(columns, rows);
+    row = (rows - 1) - row;
+    float2 outputUVs = (uvs * cellSize) + float2(col, row) * cellSize;
+    return outputUVs;
 }
+
+// boiler plate manipulate uvs
+float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, float offsetx, float offsety, float scrollx, float scrolly)
+{
+    float2 finalUV = uv;
+    if (rotation != 0)
+    {
+        finalUV = uv - 0.5;
+        float angle = -rotation * (UNITY_PI / 180.0);
+        float s = sin(angle);
+        float c = cos(angle);
+        float2x2 rotationMatrix = float2x2(c, -s, s, c);
+        finalUV = mul(rotationMatrix, finalUV);
+        finalUV += 0.5;
+    }
+    finalUV *= float2(scalex, scaley);
+    finalUV += float2(offsetx, offsety);
+    finalUV += float2(scrollx, scrolly) * _Time.y;
+    return finalUV;
+}
+
+// uv effects-only features
+#if defined(_BACKLACE_UV_EFFECTS)
+    void ApplyUVEffects(inout float2 uv, in BacklaceSurfaceData Surface)
+    {
+        // triplanar uv mapping
+        [branch] if (_UVTriplanarMapping == 1) 
+        {
+            float2 uvX, uvY, uvZ;
+            float3 weights;
+            GetTriplanarUVsAndWeights(
+                FragData.worldPos, Surface.NormalDir,
+                _UVTriplanarPosition, _UVTriplanarScale, _UVTriplanarRotation, _UVTriplanarSharpness,
+                uvX, uvY, uvZ, weights
+            );
+            uv = uvX * weights.x + uvY * weights.y + uvZ * weights.z;
+        }
+        // screen space uv
+        if (_UVScreenspaceMapping == 1) 
+        {
+            uv = frac(Surface.ScreenCoords * _UVScreenspaceTiling);
+        }
+        // flipbook
+        if (_UVFlipbook == 1) {
+            uv = ApplyFlipbook(uv, _UVFlipbookColumns, _UVFlipbookRows, _UVFlipbookFrames, _UVFlipbookFPS, _UVFlipbookScrub);
+        }
+        // flow map
+        [branch] if (_UVFlowmap == 1) {
+            float2 flow = UNITY_SAMPLE_TEX2D_SAMPLER(_UVFlowmapTex, _MainTex, uv).rg * 2.0 - 1.0;
+            uv += flow * _UVFlowmapStrength * frac(_Time.y * _UVFlowmapSpeed);
+        }
+    }
+#endif // _BACKLACE_UV_EFFECTS
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//         Triplanar Features
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // triplanar uv and weight calculation
 void GetTriplanarUVsAndWeights(
@@ -368,45 +480,13 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
     return SampleTriplanar(tex, texSampler, uvX, uvY, uvZ, weights, isTiling, scroll);
 }
 
-float2 ApplyFlipbook(float2 uvs, float columns, float rows, float totalFrames, float fps, float scrub)
-{
-    float frame = floor(frac(fps * _Time.y + scrub) * totalFrames);
-    float col = fmod(frame, columns);
-    float row = floor(frame / columns);
-    float2 cellSize = 1.0 / float2(columns, rows);
-    row = (rows - 1) - row;
-    float2 outputUVs = (uvs * cellSize) + float2(col, row) * cellSize;   
-    return outputUVs;
-}
 
-// manipulate uvs
-float2 ManipulateUVs(float2 uv, float rotation, float scalex, float scaley, float offsetx, float offsety, float scrollx, float scrolly)
-{
-    float2 finalUV = uv;
-    if (rotation != 0)
-    {
-        finalUV = uv - 0.5;
-        float angle = -rotation * (UNITY_PI / 180.0);
-        float s = sin(angle);
-        float c = cos(angle);
-        float2x2 rotationMatrix = float2x2(c, -s, s, c);
-        finalUV = mul(rotationMatrix, finalUV);
-        finalUV += 0.5;
-    }
-    finalUV *= float2(scalex, scaley);
-    finalUV += float2(offsetx, offsety);
-    finalUV += float2(scrollx, scrolly) * _Time.y;
-    return finalUV;
-}
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Effects Features
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
 
-// fake dithering stylised as checkerboard pattern for the aesthetics
-float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
-{
-    float u = screenPos.x + screenPos.y;
-    float v = screenPos.x - screenPos.y;
-    float2 gridPos = floor(float2(u, v) / scale);
-    return fmod(gridPos.x + gridPos.y, 2.0);
-}
 
 // decals-only features
 #if defined(_BACKLACE_DECALS)
@@ -524,11 +604,11 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
         }
         [branch] if (_DecalStage == 0) // early
         {
-            Surface.Albedo = decal1.albedo;
+            Surface.Albedo = decal1.albedo; // attenuation only needed in late stage
         }
         else // late
         {
-            Surface.FinalColor.rgb = decal1.albedo.rgb;
+            Surface.FinalColor.rgb = decal1.albedo.rgb * Surface.LightColor.a;
         }
     }
 
@@ -573,47 +653,14 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
         }
         [branch] if (_DecalStage == 0) // early
         {
-            Surface.Albedo = decal2.albedo;
+            Surface.Albedo = decal2.albedo; // attenuation only needed in late stage
         }
         else // late
         {
-            Surface.FinalColor.rgb = decal2.albedo.rgb;
+            Surface.FinalColor.rgb = decal2.albedo.rgb * Surface.LightColor.a;
         }
     }
 #endif // _BACKLACE_DECALS
-
-// uv effects-only features
-#if defined(_BACKLACE_UV_EFFECTS)
-    void ApplyUVEffects(inout float2 uv, in BacklaceSurfaceData Surface)
-    {
-        // triplanar uv mapping
-        [branch] if (_UVTriplanarMapping == 1) 
-        {
-            float2 uvX, uvY, uvZ;
-            float3 weights;
-            GetTriplanarUVsAndWeights(
-                FragData.worldPos, Surface.NormalDir,
-                _UVTriplanarPosition, _UVTriplanarScale, _UVTriplanarRotation, _UVTriplanarSharpness,
-                uvX, uvY, uvZ, weights
-            );
-            uv = uvX * weights.x + uvY * weights.y + uvZ * weights.z;
-        }
-        // screen space uv
-        if (_UVScreenspaceMapping == 1) 
-        {
-            uv = frac(Surface.ScreenCoords * _UVScreenspaceTiling);
-        }
-        // flipbook
-        if (_UVFlipbook == 1) {
-            uv = ApplyFlipbook(uv, _UVFlipbookColumns, _UVFlipbookRows, _UVFlipbookFrames, _UVFlipbookFPS, _UVFlipbookScrub);
-        }
-        // flow map
-        [branch] if (_UVFlowmap == 1) {
-            float2 flow = UNITY_SAMPLE_TEX2D_SAMPLER(_UVFlowmapTex, _MainTex, uv).rg * 2.0 - 1.0;
-            uv += flow * _UVFlowmapStrength * frac(_Time.y * _UVFlowmapSpeed);
-        }
-    }
-#endif // _BACKLACE_UV_EFFECTS
 
 // dissolve-only features
 #if defined(_BACKLACE_DISSOLVE)
@@ -664,8 +711,15 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
     }
 #endif // _BACKLACE_DISSOLVE
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//   Shared MSSO/Emission Functions
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // here is where we leave out shadow pass
-// meta needs SOME features from specular, so we share here instead of shading or lighting
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
     // sample MSSO texture
@@ -720,7 +774,5 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
             Emission = baseEmission * emissionMap * _EmissionStrength;
         }
     #endif // _BACKLACE_EMISSION
-
 #endif // UNITY_PASS_FORWARDBASE || UNITY_PASS_FORWARDADD || UNITY_PASS_META
-
 #endif // BACKLACE_UNIVERSAL_CGINC

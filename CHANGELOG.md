@@ -1,3 +1,11 @@
+## Version 2.1.0
+- New light direction modes, "Object Relative" and "Ambient Priority"
+
+## Version 2.0.5
+- Improved SSS thickness and changed from linear approximation to Beer's Law
+- Attenuation is applied across all relevant effects now
+- Attenuation can now be manually controlled, if desired.
+
 ## Version 2.0.3
 - All anime shading modes now have proper attenuation, sorry about that (╥﹏╥)
 

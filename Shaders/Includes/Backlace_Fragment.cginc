@@ -95,9 +95,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(BACKLACE_SPECULAR)
         GetSampleData(Surface);
     #endif // BACKLACE_SPECULAR
-    GetDirectionVectors(Surface);
     GetLightData(Surface);
-    GetDotProducts(Surface);
     #if defined(BACKLACE_SPECULAR)
         SetupAlbedoAndSpecColor(Surface);
         SetupDFG(Surface);
@@ -153,9 +151,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #endif // _BACKLACE_DEPTH_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
         #if defined(_BACKLACE_AUDIOLINK)
-            Surface.FinalColor.rgb += (Emission * i.alChannel1.x);
+            Surface.FinalColor.rgb += ((Emission * Surface.LightColor.a) * i.alChannel1.x);
         #else // !_BACKLACE_AUDIOLINK
-            Surface.FinalColor.rgb += Emission;
+            Surface.FinalColor.rgb += Emission * Surface.LightColor.a;
         #endif // _BACKLACE_AUDIOLINK
     #endif // _BACKLACE_EMISSION
     #if defined(_BACKLACE_PATHING)

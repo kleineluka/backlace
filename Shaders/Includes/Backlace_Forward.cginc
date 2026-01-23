@@ -89,6 +89,7 @@ struct FragmentData
     #if defined(_BACKLACE_PS1)
         float4 affineUV : TEXCOORD16;
     #endif // _BACKLACE_PS1
+    
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

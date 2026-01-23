@@ -13,7 +13,6 @@ void ClipAlpha(inout BacklaceSurfaceData Surface)
 }
 
 // derive normals from albedo
-// Use Unity's built-in macros for cross-platform compatibility
 float3 AlbedoToNormal(float2 uv, Texture2D tex, SamplerState sampler_tex, float4 texelSize, float strength, float offset)
 {
     float2 totalOffset = texelSize.xy * offset;
@@ -55,15 +54,6 @@ void SampleNormal()
     }
 }
 
-// calculate normals from normal map
-void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bitangent, float3 normalmap)
-{
-    float3x3 tbn = float3x3(tangent, bitangent, normal);
-    normal = normalize(mul(normalmap, tbn));
-    tangent = normalize(tangent - normal * dot(normal, tangent));
-    bitangent = cross(normal, tangent) * unity_WorldTransformParams.w;
-}
-
 // get geometry vectors
 void GetGeometryVectors(inout BacklaceSurfaceData Surface, FragmentData FragData)
 {
@@ -85,23 +75,6 @@ void GetDirectionVectors(inout BacklaceSurfaceData Surface)
 {
     CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
     Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
-    //Surface.LightDir = normalize(UnityWorldSpaceLightDir(FragData.worldPos));
-    //Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
-}
-
-// get dot products
-void GetDotProducts(inout BacklaceSurfaceData Surface)
-{
-    Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);
-    Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, Surface.LightColor.a);
-    #if defined(_BACKLACE_SHADOW_MAP)
-        float shadowMask = UNITY_SAMPLE_TEX2D_SAMPLER(_ShadowMap, _MainTex, Uvs[_ShadowMap_UV]).r;
-        Surface.UnmaxedNdotL -= (shadowMask * _ShadowMapIntensity);
-    #endif // _BACKLACE_SHADOW_MAP
-    Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
-    Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
-    Surface.NdotH = max(dot(Surface.NormalDir, Surface.HalfDir), 0);
-    Surface.LdotH = max(dot(Surface.LightDir, Surface.HalfDir), 0);
 }
 
 // premultiply alpha
@@ -143,7 +116,7 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
         );
     #endif // _BACKLACE_LTCGI
     Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * ramp + Surface.IndirectDiffuse);
-    Surface.Attenuation = ramp;
+    Surface.Attenuation = ramp * Surface.LightColor.a;
     #if defined(_BACKLACE_SHADOW_TEXTURE)
         float3 litColor = Surface.Diffuse;
         float3 shadowColor = GetTexturedShadowColor(Surface);
@@ -349,7 +322,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #if defined(_BACKLACE_SHADOW_TEXTURE)
                 float3 litColor;
                 #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-                    litColor = Surface.Albedo * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+                    litColor = Surface.Albedo * (Surface.LightColor.rgb + Surface.IndirectDiffuse) * Surface.LightColor.a;
                 #else // DIRECTIONAL || DIRECTIONAL_COOKIE
                     litColor = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a;
                 #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
@@ -358,12 +331,12 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             #else // _BACKLACE_SHADOW_TEXTURE
                 // original portion of the code before shadow texture
                 #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
-                    Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse);
+                    Surface.Diffuse = Surface.Albedo * ramp.rgb * (Surface.LightColor.rgb + Surface.IndirectDiffuse) * Surface.LightColor.a;
                 #else // DIRECTIONAL || DIRECTIONAL_COOKIE
                     Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
                 #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
             #endif // _BACKLACE_SHADOW_TEXTURE
-            Surface.Attenuation = ramp.a; // so that way specular gets the proper attenuation
+            Surface.Attenuation = ramp.a * Surface.LightColor.a; // so that way specular gets the proper attenuation
             ApplyAmbientGradient(Surface);
             ApplyAreaTint(Surface);
         }
@@ -432,7 +405,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             finalColor = lerp(finalColor, directLight, lightMask);
             Surface.Diffuse = finalColor * Surface.LightColor.a;
             ApplyAmbientGradient(Surface);
-            Surface.Attenuation = lightMask;
+            Surface.Attenuation = lightMask * Surface.LightColor.a; // for specular masking
             ApplyAreaTint(Surface);
         }
 
@@ -496,7 +469,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
                 finalDiffuse += Surface.IndirectDiffuse * Surface.Albedo;
             #endif
             Surface.Diffuse = finalDiffuse * Surface.LightColor.a;
-            Surface.Attenuation = band1Edge; // for specular masking
+            Surface.Attenuation = band1Edge * Surface.LightColor.a; // for specular masking
             ApplyAmbientGradient(Surface);
             ApplyAreaTint(Surface);
         }
@@ -549,7 +522,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             float3 tint = lerp(_SkinShadowColor.rgb, float3(1, 1, 1), rampLuma);
             Surface.Diffuse = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a * skinRamp * tint;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * smoothstep(0, 0.5, rampLuma);
-            Surface.Attenuation = rampLuma;
+            Surface.Attenuation = rampLuma * Surface.LightColor.a;
             ApplyAmbientGradient(Surface);
             ApplyAreaTint(Surface);
         }
@@ -574,7 +547,7 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
             ramp *= normalizationFactor;
             Surface.Diffuse = Surface.Albedo * ramp * Surface.LightColor.rgb * Surface.LightColor.a;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo;
-            Surface.Attenuation = wrappedNdotL;
+            Surface.Attenuation = wrappedNdotL * Surface.LightColor.a;
             ApplyAmbientGradient(Surface);
             ApplyAreaTint(Surface);
         }
@@ -705,7 +678,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     }
 
     // ggx anisotropic distribution function
-    float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
+    float SmithGGGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
     {
         return 1 / (NdotV + sqrt(sqr(VdotX * ax) + sqr(VdotY * ay) + sqr(NdotV)));
     }
@@ -779,7 +752,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
         outNDF = 0;
         outGFS = 0;
         outNDF = GTR2(ndotH, Surface.SquareRoughness);
-        outGFS = smithG_GGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * smithG_GGX(ndotV, Surface.Roughness);
+        outGFS = SmithGGGX(max(ndotL, lerp(0.3, 0, Surface.SquareRoughness)), Surface.Roughness) * SmithGGGX(ndotV, Surface.Roughness);
     }
 
     #if defined(_SPECULARMODE_ANISOTROPIC)
@@ -797,8 +770,8 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
             float ax = max(Surface.SquareRoughness * (1.0 + Surface.Anisotropy), 0.005);
             float ay = max(Surface.SquareRoughness * (1.0 - Surface.Anisotropy), 0.005);
             outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
-            outGFS = smithG_GGX_aniso(ndotL, TdotL, BdotL, ax, ay);
-            outGFS *= smithG_GGX_aniso(ndotV, TdotV, BdotV, ax, ay);
+            outGFS = SmithGGGX_aniso(ndotL, TdotL, BdotL, ax, ay);
+            outGFS *= SmithGGGX_aniso(ndotV, TdotV, BdotV, ax, ay);
         }
     #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD
         // toon highlights specular
@@ -884,7 +857,8 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
     // add indirect specular to final color with fresnel-based occlusion
     void AddIndirectSpecular(inout BacklaceSurfaceData Surface)
     {
-        Surface.FinalColor.rgb += Surface.IndirectSpecular * clamp(pow(Surface.NdotV + Surface.Occlusion, exp2(-16.0 * Surface.SquareRoughness - 1.0)) - 1.0 + Surface.Occlusion, 0.0, 1.0);
+        Surface.FinalColor.rgb += 
+            (Surface.IndirectSpecular * clamp(pow(Surface.NdotV + Surface.Occlusion, exp2(-16.0 * Surface.SquareRoughness - 1.0)) - 1.0 + Surface.Occlusion, 0.0, 1.0) * Surface.Attenuation);
     }
 
     // direct specular calculations

@@ -1,17 +1,23 @@
 #ifndef BACKLACE_LIGHTING_CGINC
 #define BACKLACE_LIGHTING_CGINC
 
-// easy i/o across lighting functions
-struct BacklaceLightData
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Helper Functions!
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+// calculate normals from normal map
+void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bitangent, float3 normalmap)
 {
-    float3 directColor;
-    float3 indirectColor;
-    float3 direction;
-    float attenuation;
-};
+    float3x3 tbn = float3x3(tangent, bitangent, normal);
+    normal = normalize(mul(normalmap, tbn));
+    tangent = normalize(tangent - normal * dot(normal, tangent));
+    bitangent = cross(normal, tangent) * unity_WorldTransformParams.w;
+}
 
 // safe normalize a half3 vector
-half3 Unity_SafeNormalize(half3 inVec)
+half3 UnitySafeNormalize(half3 inVec)
 {
     half dp3 = max(0.001f, dot(inVec, inVec));
     return inVec * rsqrt(dp3);
@@ -30,27 +36,8 @@ half3 GetSHLength()
     return x + x1;
 }
 
-// fade shadows based on distance
-float FadeShadows(FragmentData i, float attenuation)
-{
-    #if HANDLE_SHADOWS_BLENDING_IN_GI && !defined(SHADOWS_SHADOWMASK)
-        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-        attenuation = saturate(attenuation + shadowFade);
-    #endif // HANDLE_SHADOWS_BLENDING_IN_GI && !SHADOWS_SHADOWMASK
-    #if defined(LIGHTMAP_ON) && defined(SHADOWS_SHADOWMASK)
-        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-        float bakedAttenuation = UnitySampleBakedOcclusion(i.lightmapUV, i.worldPos);
-        attenuation = UnityMixRealtimeAndBakedShadows(attenuation, bakedAttenuation, shadowFade);
-    #endif // LIGHTMAP_ON && SHADOWS_SHADOWMASK
-    return attenuation;
-}
-
-// From Poiyomi For Poiyomi Lighting Mode
-float shEvaluateDiffuseL1Geomerics_local(float L0, float3 L1, float3 n)
+// used in BetterSH9 for Poiyomi
+float SHEvalLinearL1Geomerics(float L0, float3 L1, float3 n)
 {
     float R0 = max(0, L0);
     float3 R1 = 0.5f * L1;
@@ -62,20 +49,20 @@ float shEvaluateDiffuseL1Geomerics_local(float L0, float3 L1, float3 n)
     return R0 * (a + (1.0f - a) * (p + 1.0f) * pow(q, p));
 }
 
-// From Poiyomi For Poiyomi Lighting Mode
+// from Poiyomi For Poiyomi Lighting Mode
 half3 BetterSH9(half4 normal)
 {
     float3 indirect;
     float3 L0 = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w) + float3(unity_SHBr.z, unity_SHBg.z, unity_SHBb.z) / 3.0;
-    indirect.r = shEvaluateDiffuseL1Geomerics_local(L0.r, unity_SHAr.xyz, normal.xyz);
-    indirect.g = shEvaluateDiffuseL1Geomerics_local(L0.g, unity_SHAg.xyz, normal.xyz);
-    indirect.b = shEvaluateDiffuseL1Geomerics_local(L0.b, unity_SHAb.xyz, normal.xyz);
+    indirect.r = SHEvalLinearL1Geomerics(L0.r, unity_SHAr.xyz, normal.xyz);
+    indirect.g = SHEvalLinearL1Geomerics(L0.g, unity_SHAg.xyz, normal.xyz);
+    indirect.b = SHEvalLinearL1Geomerics(L0.b, unity_SHAb.xyz, normal.xyz);
     indirect = max(0, indirect);
     indirect += SHEvalLinearL2(normal);
     return indirect;
 }
 
-// From Mochie For Mochie Lighting Mode
+// from Mochie For Mochie Lighting Mode
 float NonlinearSH(float L0, float3 L1, float3 normal)
 {
     float R0 = L0;
@@ -88,7 +75,7 @@ float NonlinearSH(float L0, float3 L1, float3 normal)
     return R0 * (a + (1.0f - a) * (p + 1.0f) * pow(q, p));
 }
 
-// From Mochie For Mochie Lighting Mode
+// from Mochie For Mochie Lighting Mode
 float3 ShadeSHNL(float3 normal)
 {
     float3 indirect;
@@ -98,7 +85,7 @@ float3 ShadeSHNL(float3 normal)
     return max(0, indirect);
 }
 
-// From OpenLit For OpenLit Lighting Mode
+// from OpenLit For OpenLit Lighting Mode
 void OpenLitShadeSH9ToonDouble(float3 lightDirection, out float3 shMax, out float3 shMin)
 {
     #if !defined(LIGHTMAP_ON)
@@ -124,6 +111,29 @@ void OpenLitShadeSH9ToonDouble(float3 lightDirection, out float3 shMax, out floa
         shMin = 0.0;
     #endif // LIGHTMAP_ON
 }
+
+// limit brightness of light colour
+float3 LimitLightBrightness(float3 lightColor, float minVal, float maxVal)
+{
+    // find brightest colour channel
+    float brightness = max(lightColor.r, max(lightColor.g, lightColor.b));
+    // avoid division by zero
+    if (brightness > 0.0001)
+    {
+        float newBrightness = clamp(brightness, minVal, maxVal);
+        float scale = newBrightness / brightness;
+        return lightColor * scale;
+    }
+    return lightColor;
+}
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//     Retriievve Lighting Data
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // solution to get indirect lighting to apply to all light modes
 float3 GetUniversalIndirectLight(BacklaceSurfaceData Surface)
@@ -151,6 +161,59 @@ float3 GetUniversalIndirectLight(BacklaceSurfaceData Surface)
     #endif // UNITY_PASS_FORWARDBASE
     return indirectColor;
 }
+
+// easy helper for the add pass
+void GetForwardAddLightData(out BacklaceLightData lightData)
+{
+    lightData.directColor = _LightColor0.rgb;
+    lightData.indirectColor = float3(0, 0, 0);
+    lightData.direction = normalize(_WorldSpaceLightPos0.xyz - FragData.worldPos.xyz * _WorldSpaceLightPos0.w);
+    /*#if defined(POINT) || defined(POINT_COOKIE)
+        unityShadowCoord3 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1)).xyz;
+        #if defined(POINT_COOKIE)
+            lightData.attenuation = tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).r;
+            lightData.attenuation *= texCUBE(_LightTexture0, lightCoord).w;
+        #else // POINT
+            lightData.attenuation = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).r;
+        #endif // POINT_COOKIE
+    #elif defined(SPOT)
+        unityShadowCoord4 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1));
+        lightData.attenuation = (lightCoord.z > 0) * UnitySpotCookie(lightCoord) * UnitySpotAttenuate(lightCoord.xyz);
+    #else // DIRECTIONAL
+        UNITY_LIGHT_ATTENUATION(atten, FragData, FragData.worldPos);
+        lightData.attenuation = atten;
+    #endif // DIRECTIONAL
+    lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);*/
+    UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
+    lightData.attenuation = attenuation;
+}
+
+// fade shadows based on distance
+float FadeShadows(FragmentData i, float attenuation)
+{
+    #if HANDLE_SHADOWS_BLENDING_IN_GI && !defined(SHADOWS_SHADOWMASK)
+        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
+        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
+        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
+        attenuation = saturate(attenuation + shadowFade);
+    #endif // HANDLE_SHADOWS_BLENDING_IN_GI && !SHADOWS_SHADOWMASK
+    #if defined(LIGHTMAP_ON) && defined(SHADOWS_SHADOWMASK)
+        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
+        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
+        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
+        float bakedAttenuation = UnitySampleBakedOcclusion(i.lightmapUV, i.worldPos);
+        attenuation = UnityMixRealtimeAndBakedShadows(attenuation, bakedAttenuation, shadowFade);
+    #endif // LIGHTMAP_ON && SHADOWS_SHADOWMASK
+    return attenuation;
+}
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Lighting Modes
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // the original backlace light color function
 void GetBacklaceLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
@@ -287,6 +350,14 @@ void GetMochieLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData 
     #endif
 }
 
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Light Directions
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
 // original backlace light direction modes
 float3 GetBacklaceLightDirection()
 {
@@ -305,52 +376,44 @@ float3 GetViewLightDirection()
     float3 viewLightDirection = -UNITY_MATRIX_V[2].xyz;
     viewLightDirection += UNITY_MATRIX_V[0].xyz * _ViewDirectionOffsetX; // right vector for X offset
     viewLightDirection += UNITY_MATRIX_V[1].xyz * _ViewDirectionOffsetY; // up vector for Y offset
-
     return normalize(viewLightDirection);
 }
 
-// limit brightness of light colour
-float3 LimitLightBrightness(float3 lightColor, float minVal, float maxVal)
+// object relative light direction
+float3 GetObjectLightDirection()
 {
-    // find brightest colour channel
-    float brightness = max(lightColor.r, max(lightColor.g, lightColor.b));
-    // avoid division by zero
-    if (brightness > 0.0001)
-    {
-        float newBrightness = clamp(brightness, minVal, maxVal);
-        float scale = newBrightness / brightness;
-        return lightColor * scale;
-    }
-    return lightColor;
+    float3 forward = normalize(unity_ObjectToWorld[2].xyz);
+    float3 right = normalize(unity_ObjectToWorld[0].xyz);
+    float3 up = normalize(unity_ObjectToWorld[1].xyz);
+    float3 objectLightDirection = forward;
+    objectLightDirection += right * _ViewDirectionOffsetX; // reusing offsets
+    objectLightDirection += up * _ViewDirectionOffsetY;
+    return normalize(objectLightDirection);
 }
 
-// easy helper for the add pass
-void GetForwardAddLightData(out BacklaceLightData lightData)
+// direction based on the brightest point of the spherical harmonics
+float3 GetAmbientLightDirection()
 {
-    lightData.directColor = _LightColor0.rgb;
-    lightData.indirectColor = float3(0, 0, 0);
-    lightData.direction = normalize(_WorldSpaceLightPos0.xyz - FragData.worldPos.xyz * _WorldSpaceLightPos0.w);
-    #if defined(POINT) || defined(POINT_COOKIE)
-        unityShadowCoord3 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1)).xyz;
-        #if defined(POINT_COOKIE)
-            lightData.attenuation = tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).r;
-            lightData.attenuation *= texCUBE(_LightTexture0, lightCoord).w;
-        #else // POINT
-            lightData.attenuation = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).r;
-        #endif // POINT_COOKIE
-    #elif defined(SPOT)
-        unityShadowCoord4 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1));
-        lightData.attenuation = (lightCoord.z > 0) * UnitySpotCookie(lightCoord) * UnitySpotAttenuate(lightCoord.xyz);
-    #else // DIRECTIONAL
-        UNITY_LIGHT_ATTENUATION(atten, FragData, FragData.worldPos);
-        lightData.attenuation = atten;
-    #endif // DIRECTIONAL
-    lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);
+    float3 ambientDir = unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz;
+    float len = length(ambientDir);
+    return len > 0.001 ? normalize(ambientDir) : float3(0, 1, 0);
 }
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//       Main Light Function
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // get light data
 void GetLightData(inout BacklaceSurfaceData Surface)
 {
+    // get direction vectors
+    CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
+    Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
+    // start calculating the light data
     BacklaceLightData lightData;
     #if defined(UNITY_PASS_FORWARDBASE)
         // static lightmap
@@ -385,6 +448,8 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         {
             case 1: lightData.direction = GetForcedWorldLightDirection(); break;
             case 2: lightData.direction = GetViewLightDirection(); break;
+            case 3: lightData.direction = GetObjectLightDirection(); break;
+            case 4: lightData.direction = GetAmbientLightDirection(); break;
             case 0: default: lightData.direction = GetBacklaceLightDirection(); break;
         }
         if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
@@ -398,11 +463,10 @@ void GetLightData(inout BacklaceSurfaceData Surface)
             else
             {
                 lightData.direction = float3(0, 1, 0);
-
             }
         }
         Surface.LightDir = lightData.direction;
-        Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
+        Surface.HalfDir = UnitySafeNormalize(Surface.LightDir + Surface.ViewDir);
         switch(_LightingColorMode)
         {
             case 1: GetPoiyomiLightColor(lightData, Surface); break;
@@ -414,7 +478,7 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     #else // UNITY_PASS_FORWARDADD
         GetForwardAddLightData(lightData);
         Surface.LightDir = lightData.direction;
-        Surface.HalfDir = Unity_SafeNormalize(Surface.LightDir + Surface.ViewDir);
+        Surface.HalfDir = UnitySafeNormalize(Surface.LightDir + Surface.ViewDir);
         switch(_LightingColorMode)
         {
             case 1: GetPoiyomiLightColor(lightData, Surface); break;
@@ -423,7 +487,7 @@ void GetLightData(inout BacklaceSurfaceData Surface)
             case 4: GetMochieLightColor(lightData, Surface); break;
             case 0: default: GetBacklaceLightColor(lightData, Surface); break;
         }
-    #endif
+    #endif // UNITY_PASS_FORWARDBASE
     //global modifiers for both passes
     float3 finalDirectColor = lightData.directColor;
     float3 finalIndirectColor = lightData.indirectColor;
@@ -454,10 +518,20 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     {
         combinedLight = lerp(combinedLight, _ForcedLightColor.rgb, _ForceLightColor);
     }
-    // finalize and output
+    // finalize the light colours
     Surface.LightColor = float4(combinedLight, lightData.attenuation);
     Surface.SpecLightColor = Surface.LightColor;
     Surface.IndirectDiffuse = finalIndirectColor;
+    // prepare dot products
+    Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);
+    Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, Surface.LightColor.a);
+    #if defined(_BACKLACE_SHADOW_MAP)
+        float shadowMask = UNITY_SAMPLE_TEX2D_SAMPLER(_ShadowMap, _MainTex, Uvs[_ShadowMap_UV]).r;
+        Surface.UnmaxedNdotL -= (shadowMask * _ShadowMapIntensity);
+    #endif // _BACKLACE_SHADOW_MAP
+    Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
+    Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
+    Surface.NdotH = max(dot(Surface.NormalDir, Surface.HalfDir), 0);
+    Surface.LdotH = max(dot(Surface.LightDir, Surface.HalfDir), 0);
 }
-
 #endif // BACKLACE_LIGHTING_CGINC
