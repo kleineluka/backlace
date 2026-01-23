@@ -15,6 +15,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
     Surface.IsFrontFace = (facing == 1);
     Surface.FinalColor.a = -1.0; // flag to indicate not set yet
+    Surface.Attenuation = -100; // flag to indicate not set yet
     FragData = i;
     LoadUVs();
     Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);

@@ -140,7 +140,14 @@ float3 GetUniversalIndirectLight(BacklaceSurfaceData Surface)
 {
     float3 indirectColor = float3(0, 0, 0);
     #if defined(UNITY_PASS_FORWARDBASE)
-        indirectColor = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
+        [branch] if (_LightingSource == 0) // backlace
+        {
+            indirectColor = ShadeSH9(float4(Surface.NormalDir, 1.0));
+        }
+        else // unity
+        {
+            indirectColor = float3(unity_SHAr.w, unity_SHAg.w, unity_SHAb.w);
+        }
         #if defined(LIGHTMAP_ON)
             float3 indirectBaked = Surface.Lightmap;
             #if defined(DIRLIGHTMAP_COMBINED)
@@ -168,24 +175,30 @@ void GetForwardAddLightData(out BacklaceLightData lightData)
     lightData.directColor = _LightColor0.rgb;
     lightData.indirectColor = float3(0, 0, 0);
     lightData.direction = normalize(_WorldSpaceLightPos0.xyz - FragData.worldPos.xyz * _WorldSpaceLightPos0.w);
-    /*#if defined(POINT) || defined(POINT_COOKIE)
-        unityShadowCoord3 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1)).xyz;
-        #if defined(POINT_COOKIE)
-            lightData.attenuation = tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).r;
-            lightData.attenuation *= texCUBE(_LightTexture0, lightCoord).w;
-        #else // POINT
-            lightData.attenuation = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).r;
-        #endif // POINT_COOKIE
-    #elif defined(SPOT)
-        unityShadowCoord4 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1));
-        lightData.attenuation = (lightCoord.z > 0) * UnitySpotCookie(lightCoord) * UnitySpotAttenuate(lightCoord.xyz);
-    #else // DIRECTIONAL
-        UNITY_LIGHT_ATTENUATION(atten, FragData, FragData.worldPos);
-        lightData.attenuation = atten;
-    #endif // DIRECTIONAL
-    lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);*/
-    UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
-    lightData.attenuation = attenuation;
+    [branch] if (_LightingSource == 0) // backlace
+    {
+        #if defined(POINT) || defined(POINT_COOKIE)
+            unityShadowCoord3 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1)).xyz;
+            #if defined(POINT_COOKIE)
+                lightData.attenuation = tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).r;
+                lightData.attenuation *= texCUBE(_LightTexture0, lightCoord).w;
+            #else // POINT
+                lightData.attenuation = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).r;
+            #endif // POINT_COOKIE
+        #elif defined(SPOT)
+            unityShadowCoord4 lightCoord = mul(unity_WorldToLight, float4(FragData.worldPos, 1));
+            lightData.attenuation = (lightCoord.z > 0) * UnitySpotCookie(lightCoord) * UnitySpotAttenuate(lightCoord.xyz);
+        #else // DIRECTIONAL
+            UNITY_LIGHT_ATTENUATION(atten, FragData, FragData.worldPos);
+            lightData.attenuation = atten;
+        #endif // DIRECTIONAL
+        lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);
+    }
+    else // unity
+    {
+        UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
+        lightData.attenuation = attenuation;
+    }
 }
 
 // fade shadows based on distance

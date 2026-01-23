@@ -131,12 +131,24 @@ Shader "luka/backlace/default"
         _ForceLightColor ("Force Light Color", Range(0, 1)) = 0.0
         _ForcedLightColor ("Forced Light Color", Color) = (1, 1, 1, 1)
 
+        // ATTENUATION
+        // [Space(35)]
+        // [Header(Light Attenuation)]
+        // [Space(10)]
+        [Enum(Stylised, 0, Default, 0, Manual, 1)] _AttenuationMode ("Attenuation Mode", Int) = 0
+        _AttenuationManual ("Manual Attenuation", Float) = 1.0
+        _AttenuationMin ("Attenuation Min", Float) = -100
+        _AttenuationMax ("Attenuation Max", Float) = 100
+        _AttenuationMultiplier ("Attenuation Multiplier", Float) = 1.0
+        _AttenuationBoost ("Attenuation Boost", Float) = 0.0
+
         // LIGHTING MODELS
         // [Space(35)]
         // [Header(Lighting Model)]
         // [Space(10)]
         [Enum(Backlace, 0, PoiCustom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
         [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2, Object Relative, 3, Ambient Priority, 4)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
+        [Enum(Backlace, 0, Unity, 1)] _LightingSource ("Lighting Source", Int) = 0
         _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
         _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
         _ViewDirectionOffsetY ("View Direction Offset Y", Float) = 0.0

@@ -67,6 +67,55 @@ float _StitchOffset;
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
+//        Lighting Properties
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// lighting modes
+int _LightingColorMode;
+int _LightingDirectionMode;
+int _LightingSource;
+float4 _ForcedLightDirection;
+float _ViewDirectionOffsetX;
+float _ViewDirectionOffsetY;
+float _GreyscaleLighting;
+float _ForceLightColor;
+float4 _ForcedLightColor;
+
+// lighting contributions
+float _DirectIntensity;
+float _IndirectIntensity;
+float _VertexIntensity;
+float _AdditiveIntensity;
+float _BakedDirectIntensity;
+float _BakedIndirectIntensity;
+
+// attenuation properties
+int _AttenuationMode;
+float _AttenuationManual;
+float _AttenuationMin;
+float _AttenuationMax;
+float _AttenuationMultiplier;
+float _AttenuationBoost;
+
+// min/max light (base)
+#if defined(UNITY_PASS_FORWARDBASE)
+    float _EnableBaseLightLimit;
+    float _BaseLightMin;
+    float _BaseLightMax;
+#endif // UNITY_PASS_FORWARDBASE
+
+// min/max light (add)
+#if defined(UNITY_PASS_FORWARDADD)
+    float _EnableAddLightLimit;
+    float _AddLightMin;
+    float _AddLightMax;
+#endif // UNITY_PASS_FORWARDADD
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
 //        Specular Properties
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -94,46 +143,6 @@ int _SpecularEnergyMode;
 float _SpecularEnergy;
 float _SpecularEnergyMin;
 float _SpecularEnergyMax;
-
-
-// [ ♡ ] ────────────────────── [ ♡ ]
-//
-//        Lighting Properties
-//
-// [ ♡ ] ────────────────────── [ ♡ ]
-
-
-// lighting modes
-float _LightingColorMode;
-float _LightingDirectionMode;
-float4 _ForcedLightDirection;
-float _ViewDirectionOffsetX;
-float _ViewDirectionOffsetY;
-float _GreyscaleLighting;
-float _ForceLightColor;
-float4 _ForcedLightColor;
-
-// lighting contributions
-float _DirectIntensity;
-float _IndirectIntensity;
-float _VertexIntensity;
-float _AdditiveIntensity;
-float _BakedDirectIntensity;
-float _BakedIndirectIntensity;
-
-// min/max light (base)
-#if defined(UNITY_PASS_FORWARDBASE)
-    float _EnableBaseLightLimit;
-    float _BaseLightMin;
-    float _BaseLightMax;
-#endif // UNITY_PASS_FORWARDBASE
-
-// min/max light (add)
-#if defined(UNITY_PASS_FORWARDADD)
-    float _EnableAddLightLimit;
-    float _AddLightMin;
-    float _AddLightMax;
-#endif // UNITY_PASS_FORWARDADD
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]

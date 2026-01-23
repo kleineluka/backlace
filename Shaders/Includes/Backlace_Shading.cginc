@@ -116,6 +116,40 @@ void GetDirectionVectors(inout BacklaceSurfaceData Surface)
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
+//     Light Attenuation Wrapper
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+
+
+// get final light attenuation based on mode
+float GetLightAttenuation(float stylised, float vanilla)
+{
+    float finalAtt = vanilla;
+    [branch] if (_AttenuationMode == 1) // manual
+    {
+        finalAtt = _AttenuationManual;
+    }
+    else if (_AttenuationMode == 2) // stylised
+    {
+        finalAtt = stylised;
+    }
+    finalAtt += _AttenuationBoost;
+    finalAtt *= _AttenuationMultiplier;
+    finalAtt = clamp(finalAtt, _AttenuationMin, _AttenuationMax);
+    return finalAtt;
+}
+
+// in some circumstances, we may not have diffuse-influenced attenuation
+float GetSafeAttenuation(BacklaceSurfaceData Surface)
+{
+    if (Surface.Attenuation <= -100) {
+        return Surface.LightColor.a; // default attenuation from Unity
+    }
+}
+
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
 //      PBR (Standard) Shading
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -220,7 +254,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 
     // [ ♡ ] ────────────────────── [ ♡ ]
     //
-    //          Anime Mix-Ins
+    //          Anime Mixins
     //  These can be mixed into any mode.
     //
     // [ ♡ ] ────────────────────── [ ♡ ]
