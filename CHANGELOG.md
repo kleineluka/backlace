@@ -3,8 +3,8 @@
 - Add Lighting Source modes "Backlace" and "Unity" (Backlace is a bit more expensive, but higher quality)
 
 ## Version 2.0.5
-- Improved SSS thickness and changed from linear approximation to Beer's Law
-- Attenuation is applied across all relevant effects now
+- Improved SSS thickness and changed from linear approximation to Beer's Law.
+- Attenuation is applied across all relevant Effects now!
 - Attenuation can now be manually controlled, if desired.
 
 ## Version 2.0.3

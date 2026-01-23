@@ -608,7 +608,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         }
         else // late
         {
-            Surface.FinalColor.rgb = decal1.albedo.rgb * Surface.LightColor.a;
+            Surface.FinalColor.rgb = decal1.albedo.rgb * Surface.Attenuation;
         }
     }
 
@@ -657,7 +657,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         }
         else // late
         {
-            Surface.FinalColor.rgb = decal2.albedo.rgb * Surface.LightColor.a;
+            Surface.FinalColor.rgb = decal2.albedo.rgb * Surface.Attenuation;
         }
     }
 #endif // _BACKLACE_DECALS

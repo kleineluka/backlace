@@ -160,9 +160,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #endif // _BACKLACE_DEPTH_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
         #if defined(_BACKLACE_AUDIOLINK)
-            Surface.FinalColor.rgb += ((Emission * Surface.LightColor.a) * i.alChannel1.x);
+            Surface.FinalColor.rgb += ((Emission * Surface.Attenuation) * i.alChannel1.x);
         #else // !_BACKLACE_AUDIOLINK
-            Surface.FinalColor.rgb += Emission * Surface.LightColor.a;
+            Surface.FinalColor.rgb += Emission * Surface.Attenuation;
         #endif // _BACKLACE_AUDIOLINK
     #endif // _BACKLACE_EMISSION
     #if defined(_BACKLACE_PATHING)

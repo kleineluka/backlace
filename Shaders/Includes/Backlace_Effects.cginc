@@ -101,7 +101,7 @@
         {
             fresnel *= Surface.NdotL;
         }
-        Rimlight = fresnel * _RimColor.rgb * _RimIntensity * Surface.LightColor.a;
+        Rimlight = fresnel * _RimColor.rgb * _RimIntensity * Surface.Attenuation;
     }
 #endif // _BACKLACE_RIMLIGHT
 
@@ -183,11 +183,11 @@
         {
             // use smoothness to sample a mip level
             float mipLevel = _MatcapSmoothness * 10.0;
-            matcapColor = UNITY_SAMPLE_TEX2D_LOD(_MatcapTex, i.matcapUV, mipLevel).rgb * Surface.LightColor.a;
+            matcapColor = UNITY_SAMPLE_TEX2D_LOD(_MatcapTex, i.matcapUV, mipLevel).rgb * Surface.Attenuation;
         }
         else
         {
-            matcapColor = UNITY_SAMPLE_TEX2D(_MatcapTex, i.matcapUV).rgb * Surface.LightColor.a;
+            matcapColor = UNITY_SAMPLE_TEX2D(_MatcapTex, i.matcapUV).rgb * Surface.Attenuation;
         }
         matcapColor *= _MatcapTint.rgb;
         float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MatcapMask, _MatcapTex, Uvs[_MatcapMask_UV]).r;
@@ -220,7 +220,7 @@
 
     void ApplyCubemap(inout BacklaceSurfaceData Surface)
     {
-        float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb * Surface.LightColor.a;
+        float3 cubemapColor = texCUBE(_CubemapTex, Surface.ReflectDir).rgb * _CubemapTint.rgb * Surface.Attenuation;
         float intensity = _CubemapIntensity;
         switch(_CubemapBlendMode)
         {
@@ -257,7 +257,7 @@
         float squareRoughness = max(roughness * roughness, 0.002);
         float distribution = GTR2(Surface.NdotH, squareRoughness);
         float geometry = SmithGGGX(Surface.NdotL, squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
-        float3 clearcoatSpec = fresnel * distribution * geometry * Surface.LightColor.a;
+        float3 clearcoatSpec = fresnel * distribution * geometry * Surface.Attenuation;
         highlight = clearcoatSpec * lerp(Surface.LightColor.rgb, Surface.LightColor.rgb * _ClearcoatColor.rgb, _ClearcoatColor.a) * mask;
         float3 occlusionTint = lerp(1.0, _ClearcoatColor.rgb, fresnel);
         occlusion = lerp(1.0, occlusionTint, mask);
@@ -274,7 +274,7 @@
             float squareRoughness = max(roughness * roughness, 0.002);
             float distribution = GTR2(saturate(dot(Surface.NormalDir, normalize(VLightDir + Surface.ViewDir))), squareRoughness);
             float geometry = SmithGGGX(saturate(dot(Surface.NormalDir, VLightDir)), squareRoughness) * SmithGGGX(Surface.NdotV, squareRoughness);
-            float3 clearcoatV_Spec = fresnel * distribution * geometry * Surface.LightColor.a;
+            float3 clearcoatV_Spec = fresnel * distribution * geometry * Surface.Attenuation;
             Surface.FinalColor.rgb += clearcoatV_Spec * Surface.VertexDirectDiffuse * _ClearcoatColor.rgb * _ClearcoatStrength;
         }
     #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
@@ -297,7 +297,7 @@
         float3 scatterDir = normalize(Surface.LightDir + (Surface.NormalDir * _SSSDistortion));
         float scatterDot = dot(Surface.ViewDir, -scatterDir);
         float scatterFalloff = pow(saturate(scatterDot), _SSSPower);
-        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * _SSSStrength * transmission * Surface.LightColor.a * scatterFalloff;
+        float3 sss = Surface.LightColor.rgb * _SSSColor.rgb * _SSSStrength * transmission * Surface.Attenuation * scatterFalloff;
         Surface.Diffuse += sss;
     }
 #endif // _BACKLACE_SSS
@@ -422,7 +422,7 @@
             float edgeGlow = pow(baseGradient, hardnessPower);
             edgeGlow *= masterIntensity;
             float surfaceAlpha = step(_DissolveProgress, dissolveMapValue);
-            Surface.FinalColor.rgb += _DissolveEdgeColor.rgb * edgeGlow * _DissolveEdgeColor.a * Surface.LightColor.a;
+            Surface.FinalColor.rgb += _DissolveEdgeColor.rgb * edgeGlow * _DissolveEdgeColor.a * Surface.Attenuation;
             Surface.FinalColor.a = max(surfaceAlpha, edgeGlow * _DissolveEdgeColor.a);
         }
         else // smooth fade
@@ -774,7 +774,7 @@
             finalIridescenceIntensity *= i.alChannel2.z;
         #endif // _BACKLACE_AUDIOLINK
         float finalIntensity = finalIridescenceIntensity * pow(fresnel_base, 2.0) * mask;
-        iridescenceColor *= _IridescenceTint.rgb * finalIntensity * Surface.LightColor.a;
+        iridescenceColor *= _IridescenceTint.rgb * finalIntensity * Surface.Attenuation;
         [branch] switch(_IridescenceBlendMode)
         {
             case 0: // Additive
@@ -820,7 +820,7 @@
             true,
             float2(0, 0)
         );
-        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb * Surface.LightColor.a;
+        float3 finalEffectColor = effectSample.rgb * _WorldEffectColor.rgb * Surface.Attenuation;
         float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_WorldEffectMask, _MainTex, Uvs[0]).r;
         float blendStrength = directionMask * effectSample.a * _WorldEffectIntensity * mask;
         switch(_WorldEffectBlendMode)
