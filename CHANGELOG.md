@@ -1,6 +1,9 @@
+## Version 3.0.0
+- This is a combintion of a tonne of smaller updates that I figured would be best released together.
+
 ## Version 2.2.0
 - Rewrote some less-than-ideal lighting data calculations leftover from Toony Standard Rebuild
-- Introduce "NPR" and "Cel" anime modes, starting to replace the old anime modes. I plan two more(?)
+- Introduce "NPR" and "Cel" anime modes, starting to replace the old anime modes.
 - Removed "Area Tint" from shading.
 - Streamlined shadow mapping.
 - Added "Manual Normals" feature in anime shading (for smoother shadows without SDF masking)

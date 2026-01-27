@@ -1,11 +1,13 @@
 #ifndef BACKLACE_LIGHTING_CGINC
 #define BACKLACE_LIGHTING_CGINC
 
+
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
 //          Helper Functions!
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
+
 
 // calculate normals from normal map
 void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bitangent, float3 normalmap)
