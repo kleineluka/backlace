@@ -216,48 +216,165 @@ float3 _VertexManipulationScale;
 
 
 #if defined(BACKLACE_TOON)
-    float _TintMaskSource;
-    float4 _LitTint;
-    float4 _ShadowTint;
-    float _ShadowThreshold;
-    float _LitThreshold;
+    // manual normals
+    int _ToggleManualNormals;
+    int _ManualNormalPreview;
+    float4 _ManualNormalOffset;
+    float4 _ManualNormalScale;
+    float4 _ManualApplication;
+    float _ManualNormalSharpness;
+    // ambient gradient
     float _ToggleAmbientGradient;
     float4 _AmbientUp;
     float4 _AmbientDown;
     float _AmbientIntensity;
     float _AmbientSkyThreshold;
     float _AmbientGroundThreshold;
+    //sdf shadow
     float _ToggleSDFShadow;
     UNITY_DECLARE_TEX2D(_SDFShadowTexture);
     float _SDFShadowThreshold;
     float _SDFShadowSoftness;
-    float _OcclusionOffsetIntensity;
+    float3 _SDFLocalForward;
+    float3 _SDFLocalRight;
+    // stockings
+    int _ToggleStockings;
+    UNITY_DECLARE_TEX2D(_StockingsMap);
+    float _StockingsPower;
+    float _StockingsDarkWidth;
+    float _StockingsLightedWidth;
+    float _StockingsLightedIntensity;
+    float _StockingsRoughness;
+    float4 _StockingsColor;
+    float4 _StockingsColorDark;
+    // eye parallax
+    int _ToggleEyeParallax;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxIrisTex);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxEyeMaskTex);
+    float _EyeParallaxStrength;
+    float _EyeParallaxClamp;
+    int _ToggleEyeParallaxBreathing;
+    float _EyeParallaxBreathStrength;
+    float _EyeParallaxBreathSpeed;
+    // translucent hair
+    int _ToggleHairTransparency;
+    float4 _HairHeadForward;
+    float4 _HairHeadUp;
+    float4 _HairHeadRight;
+    float _HairBlendAlpha;
+    float _HairTransparencyStrength;
+    // expression map
+    int _ToggleExpressionMap;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ExpressionMap);
+    float4 _ExCheekColor;
+    float _ExCheekIntensity;
+    float4 _ExShyColor;
+    float _ExShyIntensity;
+    float4 _ExShadowColor;
+    float _ExShadowIntensity;
+    // face map
+    int _ToggleFaceMap;
+    float4 _FaceHeadForward;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_FaceMap);
+    int _ToggleNoseLine;
+    float _NoseLinePower;
+    float4 _NoseLineColor;
+    int _ToggleEyeShadow;
+    float4 _ExEyeColor;
+    float _EyeShadowIntensity;
+    int _ToggleLipOutline;
+    float4 _LipOutlineColor;
+    float _LipOutlineIntensity;
     #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
         float _Ramp_UV;
         float4 _RampColor;
         float _RampOffset;
-        float _ShadowIntensity;
+        float _RampShadows;
         float3 _RampMin;
         int _RampNormalIntensity;
         float _RampIndex;
         float _RampTotal;
-    #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
-        float4 _AnimeShadowColor;
-        float _AnimeShadowThreshold;
-        float4 _AnimeHalftoneColor;
-        float _AnimeHalftoneThreshold;
-        float _AnimeShadowSoftness;
-        float _AnimeOcclusionToShadow;
-    #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
-        float _Hifi1Threshold;
-        float _Hifi1Feather;
-        float4 _Hifi1Color;
-        float _Hifi2Threshold;
-        float _Hifi2Feather;
-        float4 _Hifi2Color;
-        float4 _HifiBorderColor;
-        float _HifiBorderWidth;
+        float _RampOcclusionOffset;
+    #elif defined(_ANIMEMODE_CEL) // _ANIMEMODE_*
+        float _CelThreshold;
+        float _CelFeather;
+        float _CelCastShadowFeather;
+        float _CelCastShadowPower;
+        float4 _CelShadowTint;
+    #elif defined(_ANIMEMODE_NPR) // _ANIMEMODE_*
+        // npr
+        float _NPRDiffMin;
+        float _NPRDiffMax;
+        float4 _NPRLitColor;
+        float4 _NPRShadowColor;
+        // shared specular
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_NPRSpecularMask);
+        // forward specular
+        float _NPRForwardSpecular;
+        float _NPRForwardSpecularRange;
+        float _NPRForwardSpecularMultiplier;
+        float4 _NPRForwardSpecularColor;
+        // blinn phong specular
+        int _NPRBlinn;
+        float _NPRBlinnPower;
+        float _NPRBlinnMin;
+        float _NPRBlinnMax;
+        float4 _NPRBlinnColor;
+        float _NPRBlinnMultiplier;
+        // fake sss
+        int _NPRSSS;
+        float _NPRSSSExp;
+        float _NPRSSSRef;
+        float _NPRSSSMin;
+        float _NPRSSSMax;
+        float _NPRSSSShadows;
+        float4 _NPRSSSColor;
+        // rim lighting
+        int _NPRRim;
+        float _NPRRimExp;
+        float _NPRRimMin;
+        float _NPRRimMax;
+        float4 _NPRRimColor;
+    #elif defined(_ANIMEMODE_TRIBAND) // _ANIMEMODE_*
+        float _TriBandSmoothness;
+        float _TriBandThreshold;
+        float _TriBandShallowWidth;
+        float4 _TriBandShadowColor;
+        float4 _TriBandShallowColor;
+        float4 _TriBandLitColor;
+        float4 _TriBandPostShadowTint;
+        float4 _TriBandPostShallowTint;
+        float4 _TriBandPostLitTint;
+        float _TriBandAttenuatedShadows;
+    #elif defined(_ANIMEMODE_PACKED) // _ANIMEMODE_*
+        int _PackedMapStyle;
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapOne);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapTwo);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapThree);
+        float4 _PackedLitColor;
+        float4 _PackedShadowColor;
+        float _PackedShadowSmoothness;
+        float4 _PackedRimColor;
+        float _PackedRimThreshold;
+        float _PackedRimPower;
+        int _PackedMapMetals;
+        float _PackedAmbient;
+        int _PackedRimLight;
+        // uma musume
+        float _PackedUmaSpecularBoost;
+        float4 _PackedUmaMetalDark;
+        float4 _PackedUmaMetalLight;
+        // arc system works (guilty gear strive style)
+        float _PackedGGSpecularSize;
+        float _PackedGGSpecularIntensity;
+        float4 _PackedGGSpecularTint;
+        float _PackedGGShadow1Push;
+        float _PackedGGShadow1Smoothness;
+        float _PackedGGShadow2Push;
+        float _PackedGGShadow2Smoothness;
+        float4 _PackedGGShadow1Tint;
+        float4 _PackedGGShadow2Tint;
     #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
         UNITY_DECLARE_TEX2D(_SkinLUT);
         float4 _SkinShadowColor;

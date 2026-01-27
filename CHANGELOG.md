@@ -1,6 +1,14 @@
+## Version 2.2.0
+- Rewrote some less-than-ideal lighting data calculations leftover from Toony Standard Rebuild
+- Introduce "NPR" and "Cel" anime modes, starting to replace the old anime modes. I plan two more(?)
+- Removed "Area Tint" from shading.
+- Streamlined shadow mapping.
+- Added "Manual Normals" feature in anime shading (for smoother shadows without SDF masking)
+
 ## Version 2.1.0
 - New light direction modes, "Object Relative" and "Ambient Priority"
 - Add Lighting Source modes "Backlace" and "Unity" (Backlace is a bit more expensive, but higher quality)
+- Removed reused code and variables, hopefully helping register pressure
 
 ## Version 2.0.5
 - Improved SSS thickness and changed from linear approximation to Beer's Law.

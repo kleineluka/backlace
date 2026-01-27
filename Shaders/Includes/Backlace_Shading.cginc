@@ -43,7 +43,7 @@ void AddAlpha(inout BacklaceSurfaceData Surface)
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
-//          Normal Helpers
+//           Misc Helpers
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
 
@@ -106,13 +106,6 @@ void GetGeometryVectors(inout BacklaceSurfaceData Surface, FragmentData FragData
     Surface.ScreenCoords = FragData.pos.xy / _ScreenParams.xy;
 }
 
-// get direction vectors
-void GetDirectionVectors(inout BacklaceSurfaceData Surface)
-{
-    CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
-    Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
-}
-
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
@@ -124,27 +117,19 @@ void GetDirectionVectors(inout BacklaceSurfaceData Surface)
 // get final light attenuation based on mode
 float GetLightAttenuation(float stylised, float vanilla)
 {
-    float finalAtt = vanilla;
-    [branch] if (_AttenuationMode == 1) // manual
+    float finalAtt = stylised;
+    [branch] if (_AttenuationMode == 1) // unity
+    {
+        finalAtt = vanilla;
+    }
+    else if (_AttenuationMode == 2) // manual
     {
         finalAtt = _AttenuationManual;
-    }
-    else if (_AttenuationMode == 2) // stylised
-    {
-        finalAtt = stylised;
     }
     finalAtt += _AttenuationBoost;
     finalAtt *= _AttenuationMultiplier;
     finalAtt = clamp(finalAtt, _AttenuationMin, _AttenuationMax);
     return finalAtt;
-}
-
-// in some circumstances, we may not have diffuse-influenced attenuation
-float GetSafeAttenuation(BacklaceSurfaceData Surface)
-{
-    if (Surface.Attenuation <= -100) {
-        return Surface.LightColor.a; // default attenuation from Unity
-    }
 }
 
 
@@ -169,12 +154,12 @@ float DisneyDiffuse(half perceptualRoughness, inout BacklaceSurfaceData Surface)
 void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
 {
     Surface.Diffuse = 0;
-    float ramp = DisneyDiffuse(Surface.Roughness, Surface) * Surface.NdotL;
+    float diff = DisneyDiffuse(Surface.Roughness, Surface) * Surface.NdotL;
     #if defined(_BACKLACE_LTCGI)
         float2 ltcgi_lmUV = 0;
         #if defined(LIGHTMAP_ON)
             ltcgi_lmUV = FragData.lightmapUV;
-        #endif
+        #endif // LIGHTMAP_ON
         LTCGI_Contribution(
             FragData.worldPos,
             Surface.NormalDir,
@@ -185,8 +170,9 @@ void GetPBRDiffuse(inout BacklaceSurfaceData Surface)
             Surface.IndirectSpecular
         );
     #endif // _BACKLACE_LTCGI
-    Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * ramp + Surface.IndirectDiffuse);
-    Surface.Attenuation = ramp * Surface.LightColor.a;
+    Surface.Attenuation = GetLightAttenuation(diff * Surface.LightColor.a, Surface.LightColor.a);
+    //Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.LightColor.a * diff + Surface.IndirectDiffuse);
+    Surface.Diffuse = Surface.Albedo * (Surface.LightColor.rgb * Surface.Attenuation + Surface.IndirectDiffuse);
     #if defined(_BACKLACE_SHADOW_TEXTURE)
         float3 litColor = Surface.Diffuse;
         float3 shadowColor = GetTexturedShadowColor(Surface);
@@ -263,69 +249,210 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     // apply a gradient based on the world normal y
     void ApplyAmbientGradient(inout BacklaceSurfaceData Surface)
     {
-        [branch] if (_ToggleAmbientGradient == 1) {
-            float3 worldNormal = normalize(FragData.normal);
-            float updownGradient = worldNormal.y * 0.5 + 0.5; // 0 when pointing down, 0.5 horizontal, 1 pointing up.
-            float skyMask = smoothstep(_AmbientSkyThreshold, 1.0, updownGradient);
-            float groundMask = smoothstep(_AmbientGroundThreshold, 0.0, updownGradient);
-            float3 skyGradientColor = _AmbientUp.rgb * skyMask;
-            float3 groundGradientColor = _AmbientDown.rgb * groundMask;
-            Surface.Diffuse += (skyGradientColor + groundGradientColor) * _AmbientIntensity;
+        // avoid rendering per-light in add pass
+        #if defined(UNITY_PASS_FORWARDBASE)
+            [branch] if (_ToggleAmbientGradient == 1) 
+            {
+                float3 worldNormal = normalize(FragData.normal);
+                float updownGradient = worldNormal.y * 0.5 + 0.5; // 0 when pointing down, 0.5 horizontal, 1 pointing up.
+                float skyMask = smoothstep(_AmbientSkyThreshold, 1.0, updownGradient);
+                float groundMask = smoothstep(_AmbientGroundThreshold, 0.0, updownGradient);
+                float3 skyGradientColor = _AmbientUp.rgb * skyMask;
+                float3 groundGradientColor = _AmbientDown.rgb * groundMask;
+                Surface.Diffuse += (skyGradientColor + groundGradientColor) * _AmbientIntensity;
+            }
+        #endif // UNITY_PASS_FORWARDBASE
+    }
+
+    // apply stockings effect based on view angle
+    void ApplyStockings(inout BacklaceSurfaceData Surface)
+    {
+        [branch] if (_ToggleStockings == 1) 
+        {
+            float4 stockingsMap = UNITY_SAMPLE_TEX2D_SAMPLER(_StockingsMap, _MainTex, Uvs[0]);
+            float NoV = saturate(Surface.NdotV);
+            float power = max(0.04, _StockingsPower);
+            float darkWidth = max(0, _StockingsDarkWidth * power);
+            float darkIntensity = (NoV - power) / (darkWidth - power);
+            darkIntensity = saturate(darkIntensity * (1 - _StockingsLightedIntensity)) * stockingsMap.r;
+            float3 darkColor = lerp(1, _StockingsColorDark.rgb, darkIntensity);
+            darkColor = lerp(1, darkColor * Surface.Albedo.rgb, darkIntensity) * Surface.Albedo.rgb;
+            float lightIntensity = lerp(0.5, 1, stockingsMap.b * _StockingsRoughness);
+            lightIntensity *= stockingsMap.g;
+            lightIntensity *= _StockingsLightedIntensity;
+            lightIntensity *= max(0.004, pow(NoV, _StockingsLightedWidth));
+            float3 stockings = lightIntensity * (darkColor + _StockingsColor.rgb) + darkColor;
+            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, stockings, step(0.01, stockingsMap.r));
         }
     }
 
-    // apply area tinting based on light and shadow areas
-    void ApplyAreaTint(inout BacklaceSurfaceData Surface)
+    // eye parallax effect with depth, movement reactivity, and breathing
+    void ApplyEyeParallax(inout BacklaceSurfaceData Surface)
     {
-        [branch] if (_TintMaskSource != 0)
+        [branch] if (_ToggleEyeParallax == 1) 
         {
-            float finalMask;
-            switch(_TintMaskSource)
+            // convert spaces
+            float3x3 TBN = float3x3(
+                normalize(Surface.TangentDir),
+                normalize(Surface.BitangentDir),
+                normalize(Surface.NormalDir)
+            );
+            float3 viewDirTS = mul(TBN, normalize(Surface.ViewDir));
+            // angular smoothing
+            float forward = saturate(viewDirTS.z);
+            float smoothForward = smoothstep(0.25, 1.0, forward);
+            // eye "curvature"
+            float2 eyeDir = viewDirTS.xy / max(forward + 0.15, 0.15);
+            float2 eyeOffset = eyeDir * _EyeParallaxStrength * smoothForward;
+            // breathing effect
+            if (_ToggleEyeParallaxBreathing == 1) 
             {
-                case 2: // tuned light
-                {
-                    float rawMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
-                    finalMask = smoothstep(_ShadowThreshold, max(_ShadowThreshold, _LitThreshold), rawMask);
-                    break;
-                }
-                case 1: // raw light
-                {
-                    finalMask = Surface.UnmaxedNdotL * 0.5 + 0.5;
-                    break;
-                }
-                default: // ramp based (from RampDotL)
-                {
-                    finalMask = Surface.Attenuation;
-                    break;
-                }
+                float breathPhase = _Time.y * _EyeParallaxBreathSpeed;
+                float2 breathOffset;
+                breathOffset.x = sin(breathPhase);
+                breathOffset.y = cos(breathPhase * 0.8);
+                eyeOffset += breathOffset * _EyeParallaxBreathStrength;
             }
-            float shadowInfluence = (1 - finalMask) * _ShadowTint.a;
-            Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _ShadowTint.rgb, shadowInfluence);
-            float litInfluence = finalMask * _LitTint.a;
-            Surface.Diffuse.rgb = lerp(Surface.Diffuse.rgb, Surface.Diffuse.rgb * _LitTint.rgb, litInfluence);
+            // clamp it
+            eyeOffset = clamp(eyeOffset, -_EyeParallaxClamp, _EyeParallaxClamp);
+            // soft mask
+            float2 uv = FragData.uv;
+            float irisMask = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxEyeMaskTex, _MainTex, uv).r;
+            irisMask = smoothstep(0.2, 0.8, irisMask);
+            // composite all the final colours
+            float2 irisUV = uv + eyeOffset * irisMask;
+            float4 sclera = UNITY_SAMPLE_TEX2D(_MainTex, uv); // scalera is the main texture, presumably
+            float4 iris = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxIrisTex, _MainTex, irisUV);
+            Surface.Albedo.rgb = lerp(sclera.rgb, iris.rgb, iris.a * irisMask);
+        }
+    }
+    
+    // expression map (applies color tints based on expression channels)
+    void ApplyExpressionMap(inout BacklaceSurfaceData Surface)
+    {
+        [branch] if (_ToggleExpressionMap == 1)
+        {
+            float4 exprMap = UNITY_SAMPLE_TEX2D_SAMPLER(_ExpressionMap, _MainTex, Uvs[0]);
+            // cheek blush (red channel)
+            float3 exCheek = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExCheekColor.rgb, exprMap.r);
+            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exCheek, _ExCheekIntensity);
+            // shy/embarrassment (green channel)
+            float3 exShy = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExShyColor.rgb, exprMap.g);
+            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exShy, _ExShyIntensity);
+            // shadow tint (blue channel)
+            float3 exShadow = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExShadowColor.rgb, exprMap.b);
+            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exShadow, _ExShadowIntensity);
+        }
+    }
+    
+    // face map features (eye masks, nose lines, lip outlines)
+    void ApplyFaceMap(inout BacklaceSurfaceData Surface)
+    {
+        [branch] if (_ToggleFaceMap == 1)
+        {
+            float3 headForward = normalize(mul((float3x3)unity_ObjectToWorld, _FaceHeadForward.xyz));
+            float4 faceMap = UNITY_SAMPLE_TEX2D_SAMPLER(_FaceMap, _MainTex, Uvs[0]);
+            // nose line (blue channel)
+            [branch] if (_ToggleNoseLine == 1)
+            {
+                float FdotV = pow(abs(dot(headForward, Surface.ViewDir)), _NoseLinePower);
+                float noseLineMask = step(1.03 - faceMap.b, FdotV);
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _NoseLineColor.rgb, noseLineMask);
+            }
+            // eye shadow/tint (red channel)
+            [branch] if (_ToggleEyeShadow == 1)
+            {
+                float3 exEyeShadow = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExEyeColor.rgb, faceMap.r);
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exEyeShadow, _EyeShadowIntensity);
+            }
+            // lip outline (green channel: 0.5 < g < 0.95 is lip area)
+            [branch] if (_ToggleLipOutline == 1)
+            {
+                float lipMask = step(0.5, faceMap.g) - step(0.95, faceMap.g);
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _LipOutlineColor.rgb, lipMask * _LipOutlineIntensity);
+            }
         }
     }
     
     // sdf shadow mapping
     void ApplySDFShadow(inout BacklaceSurfaceData Surface)
     {
-        // face forward vs light direction
-        float3 faceForward = normalize(unity_ObjectToWorld[2].xyz); // Z axis
-        float3 faceRight = normalize(unity_ObjectToWorld[0].xyz); // X axis
-        float forwardDot = dot(faceForward, Surface.LightDir);
-        float rightDot = dot(faceRight, Surface.LightDir);
-        // flip as necessary
-        float2 uv = Uvs[0];
-        if (rightDot < 0) uv.x = 1.0 - uv.x;
-        // sample sdf
-        float sdfValue = UNITY_SAMPLE_TEX2D(_SDFShadowTexture, uv).r;
-        // thresholding
-        float halfLambert = forwardDot * 0.5 + 0.5;
-        halfLambert = saturate(halfLambert - (_SDFShadowThreshold - 0.5));
-        float shadowMask = smoothstep(sdfValue - _SDFShadowSoftness, sdfValue + _SDFShadowSoftness, halfLambert);
-        // apply to NdotL
-        Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
-        Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
+        [branch] if (_ToggleSDFShadow == 1) 
+        {
+            // face forward vs light direction
+            // float3 faceForward = normalize(unity_ObjectToWorld[2].xyz); // Z axis
+            // float3 faceRight = normalize(unity_ObjectToWorld[0].xyz); // X axis
+            float3 faceForward = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalForward.xyz));
+            float3 faceRight = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalRight.xyz));
+            float forwardDot = dot(faceForward, Surface.LightDir);
+            float rightDot = dot(faceRight, Surface.LightDir);
+            // flip as necessary
+            float2 uv = Uvs[0];
+            if (rightDot < 0) uv.x = 1.0 - uv.x;
+            // sample sdf
+            float sdfValue = UNITY_SAMPLE_TEX2D(_SDFShadowTexture, uv).r;
+            // thresholding
+            float halfLambert = forwardDot * 0.5 + 0.5;
+            halfLambert = saturate(halfLambert - (_SDFShadowThreshold - 0.5));
+            float shadowMask = smoothstep(sdfValue - _SDFShadowSoftness, sdfValue + _SDFShadowSoftness, halfLambert);
+            // apply to NdotL
+            Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
+            Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
+        }
+    }
+    
+    // angle-based hair transparency (inspired by Star Rail)
+    void ApplyHairTransparency(inout BacklaceSurfaceData Surface)
+    {
+        [branch] if (_ToggleHairTransparency == 1) 
+        {
+            float3 headForward = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadForward.xyz));
+            float3 headUp = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadUp.xyz));
+            float3 headRight = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadRight.xyz));
+            // horizontal angle (70 degrees)
+            float3 viewDirXZ = normalize(Surface.ViewDir - dot(Surface.ViewDir, headUp) * headUp);
+            float cosHorizontal = max(0, dot(viewDirXZ, headForward));
+            float alpha1 = saturate((1.0 - cosHorizontal) / 0.658); // 0.658 = 1 - cos(70°)
+            // vertical angle (45 degrees)
+            float3 viewDirYZ = normalize(Surface.ViewDir - dot(Surface.ViewDir, headRight) * headRight);
+            float cosVertical = max(0, dot(viewDirYZ, headForward));
+            float alpha2 = saturate((1.0 - cosVertical) / 0.293); // 0.293 = 1 - cos(45°)
+            // combine angles with base alpha
+            float hairAlpha = max(max(alpha1, alpha2), _HairBlendAlpha);
+            hairAlpha = lerp(1.0, hairAlpha, _HairTransparencyStrength);
+            // apply to surface
+            Surface.Albedo.a *= hairAlpha;
+        }
+    }
+    
+    // generate normals for smoother shading (ex. face) manually
+    float3 GetManualNormals(BacklaceSurfaceData Surface)
+    {
+        if (_ToggleManualNormals == 0) 
+        {
+            return Surface.NormalDir;
+        }
+        else
+        {
+            // handle rotations
+            float3 objectPos = mul(unity_WorldToObject, float4(FragData.worldPos, 1)).xyz;
+            // apply offset
+            float3 modifiedPos = objectPos + _ManualNormalOffset.xyz;
+            modifiedPos *= _ManualNormalScale.xyz;
+            // apply sharpness/pinch - higher values create more concentrated normals toward center
+            float3 normalizedPos = normalize(modifiedPos);
+            float3 sharpened = normalizedPos * pow(length(modifiedPos), _ManualNormalSharpness);
+            modifiedPos = lerp(modifiedPos, sharpened, saturate(_ManualNormalSharpness - 1.0));
+            // convert current world normal to object space for blending
+            float3 objectNormal = normalize(mul((float3x3)unity_WorldToObject, Surface.NormalDir));
+            // blend together
+            float3 fixedNormal;
+            fixedNormal.x = lerp(objectNormal.x, modifiedPos.x, _ManualApplication.x);
+            fixedNormal.y = lerp(objectNormal.y, modifiedPos.y, _ManualApplication.y);
+            fixedNormal.z = lerp(objectNormal.z, modifiedPos.z, _ManualApplication.z);
+            // back to world space/normalized before returning
+            return normalize(mul((float3x3)unity_ObjectToWorld, fixedNormal));
+        }
     }
 
 
@@ -340,14 +467,14 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         // for toon lighting, we use a ramp texture
         float4 RampDotL(inout BacklaceSurfaceData Surface)
         {
-            float offset = _RampOffset + (Surface.Occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
+            float offset = _RampOffset + (Surface.Occlusion * _RampOcclusionOffset) - _RampOcclusionOffset;
             float newMin = max(offset, 0);
             float newMax = max(offset +1, 0);
             float rampUv = remap(Surface.UnmaxedNdotL, -1, 1, newMin, newMax);
             float rampV = (_RampIndex + 0.5) / max(_RampTotal, 0.001);
             float3 ramp = UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv, rampV)).rgb;
             ramp *= _RampColor.rgb;
-            float intensity = max(_ShadowIntensity, 0.001);
+            float intensity = max(_RampShadows, 0.001);
             if (_RampNormalIntensity == 1)
             {
                 intensity *= saturate(Surface.NdotV + Surface.NdotL);
@@ -363,7 +490,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
         }
 
-        // Specific Shade4PointLights function for ramp toon shading
+        // modified version of Shade4PointLights to use ramp texture
         void RampDotLVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
         {
             //from Shade4PointLights function to get NdotL + attenuation
@@ -386,12 +513,12 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float4 atten2 = saturate(1 - (lengthSq * unity_4LightAtten0 / 25));
             atten = min(atten, atten2 * atten2);
             //ramp calculation for all 4 vertex lights
-            float offset = _RampOffset + (occlusion * _OcclusionOffsetIntensity) - _OcclusionOffsetIntensity;
+            float offset = _RampOffset + (occlusion * _RampOcclusionOffset) - _RampOcclusionOffset;
             //Calculating ramp uvs based on offset
             float newMin = max(offset, 0);
             float newMax = max(offset +1, 0);
             float4 rampUv = remap(ndl, float4(-1, -1, -1, -1), float4(1, 1, 1, 1), float4(newMin, newMin, newMin, newMin), float4(newMax, newMax, newMax, newMax));
-            float intensity = max(_ShadowIntensity, 0.001);
+            float intensity = max(_RampShadows, 0.001);
             float rampV = (_RampIndex + 0.5) / max(_RampTotal, 0.001);
             float3 rmin = remap(_RampMin, 0, 1, 1 - intensity, 1);
             float3 ramp0 = remap(remap(UNITY_SAMPLE_TEX2D(_Ramp, float2(rampUv.x, rampV)).rgb * _RampColor.rgb, float3(0, 0, 0), float3(1, 1, 1), 1 - intensity, float3(1, 1, 1)), rmin, 1, 0, 1).rgb * unity_LightColor[0].rgb * atten.r;
@@ -446,9 +573,8 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                     Surface.Diffuse = Surface.Albedo * ramp.rgb * Surface.LightColor.rgb * Surface.LightColor.a;
                 #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
             #endif // _BACKLACE_SHADOW_TEXTURE
-            Surface.Attenuation = ramp.a * Surface.LightColor.a; // so that way specular gets the proper attenuation
+            Surface.Attenuation = GetLightAttenuation(ramp.a * Surface.LightColor.a, Surface.LightColor.a);
             ApplyAmbientGradient(Surface);
-            ApplyAreaTint(Surface);
         }
 
         // get the vertex diffuse contribution using a toon ramp
@@ -469,26 +595,32 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 
     // [ ♡ ] ────────────────────── [ ♡ ]
     //
-    //         Halftone Shading
+    //           Cel Shading
     //
     // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-    #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
-        // specific anime-style vertex light function
-        void AnimeVertLight(float3 normal, float3 worldPos, float occlusion, out float3 color, out float3 direction)
+    #elif defined(_ANIMEMODE_CEL) // _ANIMEMODE_*
+        // modified version of Shade4PointLights to add cel-shading
+        void CelShade4PointLights(float3 normal, float3 worldPos, out float3 color, out float3 direction)
         {
             Shade4PointLights(normal, worldPos, color, direction);
             float luma = GetLuma(color);
-            float shadowMask = step(_AnimeHalftoneThreshold, luma + (1.0 - occlusion) * _AnimeOcclusionToShadow * 0.1);
-            color = lerp(color * _AnimeShadowColor.rgb, color, shadowMask);
+            float celMask = smoothstep(_CelThreshold, _CelThreshold + _CelFeather, luma);
+            color *= celMask;
         }
 
-        // diffuse function for anime-style lighting
-        void GetHalftoneDiffuse(inout BacklaceSurfaceData Surface)
+        // simple cel-shaded diffuse
+        void GetCelDiffuse(inout BacklaceSurfaceData Surface)
         {
-            float lightTerm = saturate(Surface.UnmaxedNdotL * 0.5 + 0.5);
-            lightTerm = saturate(lightTerm - (1.0 - Surface.Occlusion) * _AnimeOcclusionToShadow);
+            float diffuseTerm = smoothstep(_CelThreshold, _CelThreshold + _CelFeather, Surface.UnmaxedNdotL);
+            float shadow = Surface.LightColor.a;
+            float shadowTerm = smoothstep(0, _CelCastShadowFeather, shadow);
+            shadowTerm = max(shadowTerm, 1.0 - _CelCastShadowPower);
+            float finalLight = diffuseTerm * shadowTerm;
+            float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb;
+            float3 shadowColor = Surface.Albedo.rgb * _CelShadowTint.rgb;
+            Surface.Diffuse = lerp(shadowColor, litColor, finalLight) * Surface.LightColor.a;
             #if defined(_BACKLACE_LTCGI)
                 float2 ltcgi_lmUV = 0;
                 #if defined(LIGHTMAP_ON)
@@ -503,41 +635,22 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                     Surface.IndirectDiffuse,
                     Surface.IndirectSpecular
                 );
-                float3 finalColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
-            #else // _BACKLACE_LTCGI
-                float3 finalColor = Surface.Albedo.rgb * unity_AmbientSky.rgb;
             #endif // _BACKLACE_LTCGI
-            float halftoneShadow = smoothstep(_AnimeHalftoneThreshold + _AnimeShadowSoftness, _AnimeHalftoneThreshold - _AnimeShadowSoftness, lightTerm);
-            float coreShadow = smoothstep(_AnimeShadowThreshold + _AnimeShadowSoftness, _AnimeShadowThreshold - _AnimeShadowSoftness, lightTerm);
-            #if defined(_BACKLACE_SHADOW_TEXTURE)
-                float3 texturedHalftone = GetTexturedShadowColor(Surface, _AnimeHalftoneColor.rgb * _ShadowPatternColor.rgb);
-                float3 texturedCore = GetTexturedShadowColor(Surface, _AnimeShadowColor.rgb * _ShadowPatternColor.rgb);
-                finalColor = lerp(finalColor, texturedHalftone, halftoneShadow);
-                finalColor = lerp(finalColor, texturedCore, coreShadow);
-            #else // _BACKLACE_SHADOW_TEXTURE
-                // original portion of the code before shadow texture
-                finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeHalftoneColor.rgb, halftoneShadow);
-                finalColor = lerp(finalColor, Surface.Albedo.rgb * _AnimeShadowColor.rgb, coreShadow);
-            #endif // _BACKLACE_SHADOW_TEXTURE
-            float3 directLight = Surface.LightColor.rgb * Surface.Albedo.rgb;
-            float lightMask = 1.0 - halftoneShadow;
-            finalColor = lerp(finalColor, directLight, lightMask);
-            Surface.Diffuse = finalColor * Surface.LightColor.a;
+            Surface.Diffuse += (Surface.IndirectDiffuse * Surface.Albedo.rgb);// ? * Surface.LightColor.a);
+            Surface.Attenuation = GetLightAttenuation(finalLight * Surface.LightColor.a, Surface.LightColor.a);
             ApplyAmbientGradient(Surface);
-            Surface.Attenuation = lightMask * Surface.LightColor.a; // for specular masking
-            ApplyAreaTint(Surface);
         }
 
-        // get the vertex diffuse contribution using anime-style lighting
-        void GetHalftoneVertexDiffuse(inout BacklaceSurfaceData Surface)
+        // get the vertex diffuse contribution using cel-shading
+        void GetCelVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
                 #if defined(_BACKLACE_VERTEX_SPECULAR)
-                    AnimeVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, VertexLightDir);
+                    CelShade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, VertexLightDir);
                 #else
                     float3 ignoredDir;
-                    AnimeVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, ignoredDir);
+                    CelShade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
                 #endif
                 Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
             #endif
@@ -546,98 +659,396 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 
     // [ ♡ ] ────────────────────── [ ♡ ]
     //
-    //          Hi-Fi Shading
+    //          NPR Shading
     //
     // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-    #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
-        void GetHifiDiffuse(inout BacklaceSurfaceData Surface)
+    #elif defined(_ANIMEMODE_NPR) // _ANIMEMODE_*
+
+        // a few helpers for stlyised npr (separate from actual sss, rim, etc. functions)
+        float SmoothHalfLambert(BacklaceSurfaceData Surface, float minVal, float maxVal)
         {
-            float NdotL = Surface.UnmaxedNdotL;
-            NdotL -= (1.0 - Surface.Occlusion) * _OcclusionOffsetIntensity;
-            // light to first shadow
-            float band1Edge = smoothstep(_Hifi1Threshold - _Hifi1Feather, _Hifi1Threshold + _Hifi1Feather, NdotL);
-            // first shadow to second shadow
-            float band2Edge = smoothstep(_Hifi2Threshold - _Hifi2Feather, _Hifi2Threshold + _Hifi2Feather, NdotL);
-            // terminator line calculation
-            float borderMask = 1.0 - abs(step(_Hifi1Threshold, NdotL) - band1Edge) * 2.0;
-            // blurred border if desired
-            float borderDist = abs(NdotL - _Hifi1Threshold);
-            float border = 1.0 - smoothstep(0, _HifiBorderWidth + 0.001, borderDist);
-            border *= (1.0 - band1Edge); // only appear on the shadow side
-            // composite colours
-            float3 shadow1 = Surface.Albedo * _Hifi1Color.rgb;
-            float3 shadow2 = Surface.Albedo * _Hifi2Color.rgb;
-            float3 lit = Surface.Albedo * Surface.LightColor.rgb;
-            // second shadow -> first shadow
-            float3 finalDiffuse = lerp(shadow2, shadow1, band2Edge);
-            // mix result -> lit
-            finalDiffuse = lerp(finalDiffuse, lit, band1Edge);
-            // apply border colour
-            finalDiffuse = lerp(finalDiffuse, _HifiBorderColor.rgb * Surface.LightColor.rgb, border * _HifiBorderColor.a);
-            // 6. Apply Lighting Environment (LTCGI / Indirect)
-            #if defined(_BACKLACE_LTCGI)
-                float2 ltcgi_lmUV = 0;
-                #if defined(LIGHTMAP_ON)
-                    ltcgi_lmUV = FragData.lightmapUV;
-                #endif
-                LTCGI_Contribution(
-                    FragData.worldPos,
-                    Surface.NormalDir,
-                    Surface.ViewDir,
-                    Surface.Roughness,
-                    ltcgi_lmUV,
-                    Surface.IndirectDiffuse,
-                    Surface.IndirectSpecular
-                );
-                finalDiffuse += Surface.IndirectDiffuse * Surface.Albedo * band1Edge; // mask indirect by light
-            #else
-                // simple ambient add
-                finalDiffuse += Surface.IndirectDiffuse * Surface.Albedo;
-            #endif
-            Surface.Diffuse = finalDiffuse * Surface.LightColor.a;
-            Surface.Attenuation = band1Edge * Surface.LightColor.a; // for specular masking
+            float halfLambert = Surface.UnmaxedNdotL * 0.5 + 0.5;
+            return smoothstep(minVal, maxVal, halfLambert);
+        }
+
+        float ViewDirSpecular(BacklaceSurfaceData Surface)
+        {
+            return step(1.0 - _NPRForwardSpecularRange, Surface.NdotV);
+        }
+
+        float BlinnPhong(BacklaceSurfaceData Surface)
+        {
+            float spec = pow(Surface.NdotH, _NPRBlinnPower);
+            return smoothstep(_NPRBlinnMin, _NPRBlinnMax, spec);
+        }
+
+        float FakeSSS(BacklaceSurfaceData Surface)
+        {
+            float fresnelPower = pow(1.0 - Surface.NdotV, _NPRSSSExp);
+            float fresnel = _NPRSSSRef + (1.0 - _NPRSSSRef) * fresnelPower;
+            return smoothstep(_NPRSSSMin, _NPRSSSMax, fresnel);
+        }
+
+        float FresnelRim(BacklaceSurfaceData Surface, float lightMask)
+        {
+            float fresnelPower = pow(1.0 - Surface.NdotV, _NPRRimExp);
+            float fresnel = fresnelPower * lightMask;
+            return smoothstep(_NPRRimMin, _NPRRimMax, fresnel);
+        }
+
+        // get the direct diffuse contribution using npr techniques
+        void GetNPRDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            // base diffuse
+            float lightMask = SmoothHalfLambert(Surface, _NPRDiffMin, _NPRDiffMax);
+            float3 shadowCol = _NPRShadowColor.rgb;
+            #if defined(UNITY_PASS_FORWARDADD)
+                shadowCol = float3(0, 0, 0);
+            #elif defined(_BACKLACE_SHADOW_TEXTURE) // UNITY_PASS_FORWARDADD
+                shadowCol = GetTexturedShadowColor(Surface);
+            #endif // UNITY_PASS_FORWARDADD || _BACKLACE_SHADOW_TEXTURE
+            float3 colourRamp = lerp(shadowCol, _NPRLitColor.rgb, lightMask);
+            float3 outDiffuse = Surface.Albedo * colourRamp;
+            float specMask = UNITY_SAMPLE_TEX2D_SAMPLER(_NPRSpecularMask, _MainTex, Uvs[0]).r;
+            #if defined(UNITY_PASS_FORWARDBASE)
+                // mix in forward specular (the constant shine)
+                if (_NPRForwardSpecular == 1) 
+                {
+                    float forwardSpec = ViewDirSpecular(Surface);
+                    forwardSpec *= specMask;
+                    float3 specColour = outDiffuse * _NPRForwardSpecularColor.rgb * _NPRForwardSpecularMultiplier;
+                    outDiffuse = lerp(outDiffuse, specColour, forwardSpec);
+                }
+            #endif // UNITY_PASS_FORWARDBASE
+            // light-dependent specular (blinn-phong)
+            if (_NPRBlinn == 1)
+            {
+                float blinnSpec = BlinnPhong(Surface);
+                blinnSpec *= specMask;
+                float3 blinnColour = outDiffuse * _NPRBlinnColor.rgb * _NPRBlinnMultiplier;
+                outDiffuse = lerp(outDiffuse, blinnColour, blinnSpec);
+            }
+            #if defined(UNITY_PASS_FORWARDBASE)
+                // fresnel rim lighting
+                if (_NPRRim == 1)
+                {
+                    float rimMask = SmoothHalfLambert(Surface, 0, 1);
+                    float rimFresnel = FresnelRim(Surface, rimMask);
+                    float3 rimColour = rimFresnel * _NPRRimColor.rgb;
+                    outDiffuse = lerp(outDiffuse, rimColour, rimFresnel);
+                }
+            #endif // UNITY_PASS_FORWARDBASE
+            // fake sss
+            if (_NPRSSS == 1)
+            {
+                float sssFresnel = FakeSSS(Surface);
+                sssFresnel *= lerp(_NPRSSSShadows, 1.0, lightMask);
+                float3 sssColour = outDiffuse * _NPRSSSColor.rgb;
+                outDiffuse = lerp(outDiffuse, sssColour, sssFresnel);
+            }
+            Surface.Diffuse = outDiffuse * Surface.LightColor.a;
+            Surface.Attenuation = GetLightAttenuation(lightMask * Surface.LightColor.a, Surface.LightColor.a);
             ApplyAmbientGradient(Surface);
-            ApplyAreaTint(Surface);
         }
 
-        void HifiVertLight(float3 normal, float3 worldPos, out float3 color)
-        {
-            float4 toLightX = unity_4LightPosX0 - worldPos.x;
-            float4 toLightY = unity_4LightPosY0 - worldPos.y;
-            float4 toLightZ = unity_4LightPosZ0 - worldPos.z;
-            float4 lengthSq = 0;
-            lengthSq += toLightX * toLightX;
-            lengthSq += toLightY * toLightY;
-            lengthSq += toLightZ * toLightZ;
-            float4 ndl = 0;
-            ndl += toLightX * normal.x;
-            ndl += toLightY * normal.y;
-            ndl += toLightZ * normal.z;
-            float4 corr = rsqrt(lengthSq); // correct ndotl
-            ndl = ndl * corr; // range is -1 to 1
-            float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
-            // for hifi of max(0, ndl), apply the threshold step
-            float4 bandMask = smoothstep(_Hifi1Threshold - _Hifi1Feather, _Hifi1Threshold + _Hifi1Feather, ndl);
-            // combine
-            float4 diff = bandMask * atten;
-            // sum lights
-            color = 0;
-            color += unity_LightColor[0].rgb * diff.x;
-            color += unity_LightColor[1].rgb * diff.y;
-            color += unity_LightColor[2].rgb * diff.z;
-            color += unity_LightColor[3].rgb * diff.w;
-        }
-
-        void GetHifiVertexDiffuse(inout BacklaceSurfaceData Surface)
+        // simple npr-style vertex diffuse
+        void GetNPRVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
-                HifiVertLight(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse);
-                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+                float3 pointLightColor;
+                float3 ignoredDir;
+                Shade4PointLights(Surface.NormalDir, FragData.worldPos, pointLightColor, ignoredDir);
+                float luma = GetLuma(pointLightColor);
+                float mask = smoothstep(_NPRDiffMin, _NPRDiffMax, luma);
+                Surface.VertexDirectDiffuse = Surface.Albedo * pointLightColor * mask;
             #endif // VERTEXLIGHT_ON
+        }
 
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //            Tri Band
+    //   Previously called "Nitro Fuel"
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
+    #elif defined(_ANIMEMODE_TRIBAND) // _ANIMEMODE_*
+        float3 NormaliseColours(float3 color)
+        {
+            float2 magic = float2(0.56275, 0.43725);
+            float3 safeColor = color + 0.00006;
+            float avg = (safeColor.r + safeColor.g + safeColor.b) * 0.33333;
+            float3 colorDiv = saturate(safeColor / avg);
+            return color * magic.y + colorDiv * magic.x;
+        }
+
+        // calculates the 3 band weights (shadow-shallow-lit)
+        float3 GetTriWeights(BacklaceSurfaceData Surface)
+        {
+            // AO * 2 + NdotL, occlusion from [0,1] to [-1,1] 
+            float occlusion = Surface.Occlusion * lerp(1.0, Surface.LightColor.a, _TriBandAttenuatedShadows);
+            float shad = (occlusion * 2.0 - 1.0) + Surface.NdotL;
+            shad += _TriBandThreshold;
+            // edge bands
+            float shallowNormalised = _TriBandShallowWidth * 0.5;
+            float edge1 = -shallowNormalised; // start of transition (Shadow -> Shallow)
+            float edge2 = shallowNormalised;  // end of transition (Shallow -> Lit)
+            // weight for the lit area (0 -> 1)
+            float litProgress = smoothstep(edge2 - _TriBandSmoothness, edge2 + _TriBandSmoothness, shad);
+            // calculate where the shadow ends (edge1)
+            float shadowProgress = 1.0 - smoothstep(edge1 - _TriBandSmoothness, edge1 + _TriBandSmoothness, shad);
+            // shallow should be leftover
+            float weightShallow = saturate(1.0 - litProgress - shadowProgress);
+            return float3(shadowProgress, weightShallow, litProgress);
+        }
+
+        // basically a wrapper for tri weights..
+        void GetTriBandDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            // get weights
+            float3 weights = GetTriWeights(Surface);
+            // normalise colours
+            float3 shadowColour = NormaliseColours(_TriBandShadowColor.rgb);
+            float3 shallowColour = NormaliseColours(_TriBandShallowColor.rgb);
+            float3 litColour = NormaliseColours(_TriBandLitColor.rgb);
+            // extra post-processing tints
+            float3 finalShadow = shadowColour * _TriBandPostShadowTint.rgb;
+            float3 finalShallow = shallowColour * _TriBandPostShallowTint.rgb;
+            float3 finalLit = litColour * _TriBandPostLitTint.rgb;
+            // composite all the weights + colours
+            float3 diffuseResult = (finalShadow * weights.x) + (finalShallow * weights.y) + (finalLit * weights.z);
+            Surface.Diffuse = Surface.Albedo * diffuseResult * Surface.LightColor.rgb * Surface.LightColor.a;
+            #if defined(UNITY_PASS_FORWARDBASE)
+                Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * weights.x;
+            #endif // UNITY_PASS_FORWARDBASE
+            Surface.Attenuation = (weights.z + weights.y) * Surface.LightColor.a;
+            ApplyAmbientGradient(Surface);
+        }
+
+        // apply tri-band shading to vertex lights
+        void GetTriBandVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                // calculate base vertex lighting
+                float4 toLightX = unity_4LightPosX0 - FragData.worldPos.x;
+                float4 toLightY = unity_4LightPosY0 - FragData.worldPos.y;
+                float4 toLightZ = unity_4LightPosZ0 - FragData.worldPos.z;
+                float4 lengthSq = toLightX * toLightX + toLightY * toLightY + toLightZ * toLightZ;
+                float4 ndl = toLightX * Surface.NormalDir.x + toLightY * Surface.NormalDir.y + toLightZ * Surface.NormalDir.z;
+                float4 corr = rsqrt(lengthSq);
+                ndl = ndl * corr;
+                float4 atten = 1.0 / (1.0 + lengthSq * unity_4LightAtten0);
+                // apply tri-band weights for each light
+                float3 shadowColour = NormaliseColours(_TriBandShadowColor.rgb) * _TriBandPostShadowTint.rgb;
+                float3 shallowColour = NormaliseColours(_TriBandShallowColor.rgb) * _TriBandPostShallowTint.rgb;
+                float3 litColour = NormaliseColours(_TriBandLitColor.rgb) * _TriBandPostLitTint.rgb;
+                float3 finalColor = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    float shad = (Surface.Occlusion * 2.0 - 1.0) + ndl[i] + _TriBandThreshold;
+                    float shallowNormalised = _TriBandShallowWidth * 0.5;
+                    float edge1 = -shallowNormalised;
+                    float edge2 = shallowNormalised;
+                    float litProgress = smoothstep(edge2 - _TriBandSmoothness, edge2 + _TriBandSmoothness, shad);
+                    float shadowProgress = 1.0 - smoothstep(edge1 - _TriBandSmoothness, edge1 + _TriBandSmoothness, shad);
+                    float weightShallow = saturate(1.0 - litProgress - shadowProgress);
+                    float3 diffuseResult = (shadowColour * shadowProgress) + (shallowColour * weightShallow) + (litColour * litProgress);
+                    finalColor += unity_LightColor[i].rgb * diffuseResult * atten[i];
+                }
+                Surface.VertexDirectDiffuse = Surface.Albedo * finalColor * _VertexIntensity;
+            #endif // VERTEXLIGHT_ON
+        }
+
+
+    // [ ♡ ] ────────────────────── [ ♡ ]
+    //
+    //           Packed Maps
+    //     Previously called "Mona"
+    //
+    // [ ♡ ] ────────────────────── [ ♡ ]
+
+
+    #elif defined(_ANIMEMODE_PACKED) // _ANIMEMODE_*
+
+        // helper: smoothstep shadow with smoothness toggle
+        float DizzyStep(float ndl, float threshold, float smoothness)
+        {
+            float edge = (ndl / 1.0) + (-smoothness);
+            float result = smoothstep(edge, ndl, threshold);
+            float hardResult = threshold >= ndl ? 1.0 : 0.0;
+            float isHard = smoothness == 0 ? 1.0 : 0.0;
+            return lerp(result, hardResult, isHard);
+        }
+
+        // mode one: genshin
+        void GetGenshinPackedDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            // r: specular intensity, g: shadow threshold, b: shadow ramp offset, a: specular/metal mask
+            float4 lightMapData = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapOne, _MainTex, Uvs[0]);
+            // 0.5 in texture = neutral. <0.5 = harder to shadow. >0.5 = easier to shadow.
+            float halfLambert = Surface.UnmaxedNdotL * 0.5 + 0.5;
+            float shadowsLow = lightMapData.g - _PackedShadowSmoothness;
+            float shadowsHigh = lightMapData.g + _PackedShadowSmoothness;
+            float modelShadows = smoothstep(shadowsLow, shadowsHigh, halfLambert);
+            float3 shadowColour = Surface.Albedo.rgb * _PackedShadowColor.rgb;
+            float2 rampUV = float2(saturate(modelShadows), lightMapData.b);
+            float3 rampColour = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, rampUV).rgb;
+            float3 litColour = Surface.Albedo.rgb * _PackedLitColor.rgb;
+            float3 finalAlbedo = lerp(shadowColour, litColour, modelShadows) * rampColour;
+            Surface.Diffuse = finalAlbedo * Surface.LightColor.rgb * Surface.LightColor.a;
+            // metallic, in case people are not using the metallic channel properly, also gated by toggle
+            float metalMask = lightMapData.a;
+            if (metalMask > 0.01 && _PackedMapMetals == 1)
+            {
+                float3 viewNormal = mul((float3x3)UNITY_MATRIX_V, Surface.NormalDir);
+                float2 matcapUV = viewNormal.xy * 0.5 + 0.5;
+                float3 metalColor = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapThree, _MainTex, matcapUV).rgb;
+                Surface.Diffuse += metalColor * metalMask;
+            }
+            // rim lighting
+            float rimIntensity = 0.0;
+            if (_PackedRimLight == 1)
+            {
+                float rimDot = 1.0 - saturate(dot(Surface.ViewDir, Surface.NormalDir));
+                float rimMask = smoothstep(_PackedRimThreshold, _PackedRimThreshold + 0.1, rimDot);
+                float rimIntensity = rimMask * (1.0 - modelShadows) * _PackedRimPower;
+            }
+            // put it all together
+            Surface.Diffuse += _PackedRimColor.rgb * rimIntensity;
+            Surface.Attenuation = Surface.LightColor.a; // always use default attenuation for genshin
+            Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * _PackedAmbient;
+        }
+
+        // mode two: uma musume
+        void GetUmaMusumeDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            // red: ambient occlusion, green: specular mask, blue: clipping
+            float4 baseMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapOne, _MainTex, Uvs[0]);
+            // rgb: shaded colours
+            float3 shadedAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, Uvs[0]).rgb;
+            // rgb: control map (g: metal, b: rim)
+            float3 controlMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapThree, _MainTex, Uvs[0]).rgb;
+            // basic lighting
+            float halfLambert = Surface.UnmaxedNdotL * 0.5 + 0.5;
+            float lightValue = baseMap.r * halfLambert * 2.0;
+            float modelShadows = smoothstep(0.2 - _PackedShadowSmoothness, 0.2 + _PackedShadowSmoothness, lightValue);
+            Surface.Diffuse = lerp(shadedAlbedo, Surface.Albedo.rgb, modelShadows) * Surface.LightColor.rgb * Surface.LightColor.a;
+            // specular
+            Surface.Diffuse *= (1.0 + saturate(baseMap.g * _PackedUmaSpecularBoost * (Surface.NdotV - 0.6)));
+            // rim lighting
+            if (_PackedRimLight == 1)
+            {
+                float rimDot = 1.0 - saturate(dot(Surface.ViewDir, Surface.NormalDir));
+                float rimMask = smoothstep(_PackedRimThreshold, _PackedRimThreshold + 0.1, rimDot) * controlMap.b;
+                float rimIntensity = rimMask * (1.0 - modelShadows) * _PackedRimPower;
+                Surface.Diffuse += _PackedRimColor.rgb * rimIntensity;
+            }
+            // metallic, im not adding a fourth packed slot for a matcap so take this.
+            float metalMask = controlMap.g;
+            if (metalMask > 0.01 && _PackedMapMetals == 1)
+            {
+                float3 viewNormal = mul((float3x3)UNITY_MATRIX_V, Surface.NormalDir);
+                float gradient = viewNormal.y * 0.5 + 0.5;
+                float3 gradientColor = lerp(_PackedUmaMetalDark.rgb, _PackedUmaMetalLight.rgb, gradient);
+                float3 reflectedView = reflect(-Surface.ViewDir, Surface.NormalDir);
+                float3 envReflection = UNITY_SAMPLE_TEXCUBE_LOD(unity_SpecCube0, reflectedView, 0).rgb;
+                float fresnel = pow(1.0 - saturate(Surface.NdotV), 3.0);
+                float3 metalColor = lerp(gradientColor, envReflection, 0.5) * lerp(0.8, 1.5, fresnel);
+                Surface.Diffuse += metalColor * metalMask;
+            }
+            Surface.Attenuation = Surface.LightColor.a; // always use default attenuation for uma musume
+            Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * _PackedAmbient;
+            Surface.Albedo.a *= baseMap.b; // apply clipping from blue channel
+        }
+
+        // mode three: guilty gear strive
+        void GetGGSDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            // ilm texture, r: specular intensity, g: shadow threshold/occlusion, b: specular mask, a: line/detail mask
+            float4 ilmData = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapOne, _MainTex, Uvs[0]);
+            // sss/shadow colour
+            float3 sssColor = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, Uvs[0]).rgb;
+            // detail lines texture
+            float4 detailLines = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapThree, _MainTex, Uvs[0]);
+            // (fast) approximate gamma -> linear conversion for ILM channels
+            ilmData.r = ilmData.r * ilmData.r;
+            ilmData.g = ilmData.g * ilmData.g;
+            ilmData.b = ilmData.b * ilmData.b;
+            // standard toon stuff but weighted with maps
+            float halfLambert = Surface.UnmaxedNdotL * 0.5 + 0.5;
+            float ndlWithILM = (halfLambert * 0.5) + ((ilmData.g * 2.0) - 1.0);    
+            // calculate shadow masks with smoothstep
+            float shadow1Mask = DizzyStep(ndlWithILM, _PackedGGShadow1Push, _PackedGGShadow1Smoothness);
+            float shadow2Mask = DizzyStep(ndlWithILM, _PackedGGShadow2Push, _PackedGGShadow2Smoothness);
+            // layer the shadows: shadow2 is deepest, shadow1 is mid, base is lit
+            float shadow2Only = shadow2Mask;
+            float shadow1Only = max(0, shadow1Mask - shadow2Mask);
+            float litOnly = saturate(1.0 - shadow1Mask - shadow2Mask);
+            // prepare colours for each layer
+            float3 litColor = Surface.Albedo.rgb * _PackedLitColor.rgb;
+            float3 shadow1Color = sssColor * _PackedGGShadow1Tint.rgb;
+            float3 shadow2Color = sssColor * _PackedGGShadow2Tint.rgb * 0.7; // deeper shadow
+            // blend shadow layers
+            float3 shadowResult = lerp(shadow1Color, shadow2Color, saturate(1.0 - shadow1Only));
+            // final diffuse blend
+            float3 diffuseResult = lerp(shadowResult, litColor, litOnly);
+            // apply detail lines (lerp towards line color in dark areas of detail map)
+            diffuseResult = lerp(_PackedShadowColor.rgb * sssColor, diffuseResult, detailLines.r);
+            // apply ILM alpha line mask
+            diffuseResult = lerp(_PackedShadowColor.rgb * sssColor, diffuseResult, ilmData.a);
+            // specular calculation (half-vector based)
+            float3 halfVec = normalize(Surface.LightDir + Surface.ViewDir);
+            float ndh = saturate(dot(Surface.NormalDir, halfVec));
+            // colour burn style specular with ILM blue channel
+            float specBase = saturate(1.0 - ((1.0 - ndh) / max(ilmData.b, 0.00001)));
+            float specMask = specBase > (1.0 - _PackedGGSpecularSize) ? 1.0 : 0.0;
+            specMask = saturate(specMask);
+            // apply specular
+            float3 specColor = litColor * specMask * ilmData.r * _PackedGGSpecularIntensity * _PackedGGSpecularTint.rgb;
+            diffuseResult += specColor;
+            // rim lighting (fresnel-based)
+            if (_PackedRimLight == 1)
+            {
+                float rimDot = 1.0 - saturate(Surface.NdotV);
+                float rimMask = smoothstep(_PackedRimThreshold, _PackedRimThreshold + 0.1, rimDot);
+                float rimIntensity = rimMask * litOnly * _PackedRimPower; // reduce rim in shadowed areas
+                diffuseResult += _PackedRimColor.rgb * rimIntensity;
+            }
+            // apply light color and attenuation
+            Surface.Diffuse = diffuseResult * Surface.LightColor.rgb * Surface.LightColor.a;
+            Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo.rgb * _PackedAmbient;
+            Surface.Attenuation = GetLightAttenuation(litOnly * Surface.LightColor.a, Surface.LightColor.a);    
+        }
+
+        // these modes have simple diffuse calculations because they rely on textures for most
+        void GetPackedMapDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_PackedMapStyle == 0) // genshin
+            {
+                GetGenshinPackedDiffuse(Surface);
+            } else if (_PackedMapStyle == 1) // uma musume
+            {
+                GetUmaMusumeDiffuse(Surface);
+            } else if (_PackedMapStyle == 2) // guilty gear strive
+            {
+                GetGGSDiffuse(Surface);
+            }
+            ApplyAmbientGradient(Surface);
+        }
+
+        void GetPackedVertexDiffuse(inout BacklaceSurfaceData Surface)
+        {
+            Surface.VertexDirectDiffuse = 0;
+            #if defined(VERTEXLIGHT_ON)
+                float3 ignoredDir;
+                Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
+                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+            #endif
         }
 
 
@@ -661,7 +1072,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * smoothstep(0, 0.5, rampLuma);
             Surface.Attenuation = rampLuma * Surface.LightColor.a;
             ApplyAmbientGradient(Surface);
-            ApplyAreaTint(Surface);
         }
 
         void GetSkinVertexDiffuse(inout BacklaceSurfaceData Surface)
@@ -695,7 +1105,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo;
             Surface.Attenuation = wrappedNdotL * Surface.LightColor.a;
             ApplyAmbientGradient(Surface);
-            ApplyAreaTint(Surface);
         }
 
         void WrappedVertLight(float3 normal, float3 worldPos, out float3 color)
@@ -740,19 +1149,35 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     // wrapper function for toon diffuse
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
-        [branch] if (_ToggleSDFShadow == 1) ApplySDFShadow(Surface);
+        // apply applicable mixins
+        Surface.NormalDir = GetManualNormals(Surface);
+        ApplyStockings(Surface);
+        ApplyEyeParallax(Surface);
+        ApplyExpressionMap(Surface);
+        ApplyFaceMap(Surface);
+        ApplyHairTransparency(Surface);
+        ApplySDFShadow(Surface);
+        // select anime mode
         #if defined(_ANIMEMODE_RAMP)
             // traditional toony ramp
             GetRampDiffuse(Surface);
             GetRampVertexDiffuse(Surface);
-        #elif defined(_ANIMEMODE_HALFTONE) // _ANIMEMODE_*
-            // halftone anime style
-            GetHalftoneDiffuse(Surface);
-            GetHalftoneVertexDiffuse(Surface);
-        #elif defined(_ANIMEMODE_HIFI) // _ANIMEMODE_*
-            // hi-fi anime style
-            GetHifiDiffuse(Surface);
-            GetHifiVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_CEL) // _ANIMEMODE_*
+            // cel-shaded style
+            GetCelDiffuse(Surface);
+            GetCelVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_NPR) // _ANIMEMODE_*
+            // npr style
+            GetNPRDiffuse(Surface);
+            GetNPRVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_TRIBAND) // _ANIMEMODE_*
+            // tri-band style
+            GetTriBandDiffuse(Surface);
+            GetTriBandVertexDiffuse(Surface);
+        #elif defined(_ANIMEMODE_PACKED) // _ANIMEMODE_*
+            // packed texture style
+            GetPackedMapDiffuse(Surface);
+            GetPackedVertexDiffuse(Surface);
         #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
             // skin-focused anime style
             GetSkinDiffuse(Surface);
@@ -762,22 +1187,27 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             GetWrappedDiffuse(Surface);
             GetWrappedVertexDiffuse(Surface);
         #endif // _ANIMEMODE_*
+        // preview manual normals in debug mode
+        if (_ToggleManualNormals == 1 && _ManualNormalPreview != 0)
+        {
+            switch (_ManualNormalPreview)
+            {
+                case 1: // X
+                    Surface.Diffuse = abs(Surface.NormalDir.x);
+                    break;
+                case 2: // Y
+                    Surface.Diffuse = abs(Surface.NormalDir.y);
+                    break;
+                case 3: // Z
+                    Surface.Diffuse = abs(Surface.NormalDir.z);
+                    break;
+                default: // (4) XYZ
+                    Surface.Diffuse = abs(Surface.NormalDir);
+                    break;
+            }
+        }
     }
 #endif // BACKLACE_TOON
-
-
-// [ ♡ ] ────────────────────── [ ♡ ]
-//
-//         Diffuse Wrapper
-//
-// [ ♡ ] ────────────────────── [ ♡ ]
-
-
-// add diffuse
-void AddDiffuse(inout BacklaceSurfaceData Surface)
-{
-    Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse;
-}
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -1107,7 +1537,7 @@ void AddDiffuse(inout BacklaceSurfaceData Surface)
     // add direct specular to final color
     void AddDirectSpecular(inout BacklaceSurfaceData Surface)
     {
-        Surface.FinalColor.rgb += Surface.DirectSpecular * Surface.SpecLightColor.rgb * Surface.SpecLightColor.a;
+        Surface.FinalColor.rgb += Surface.DirectSpecular * Surface.LightColor.rgb * Surface.Attenuation;
     }
 
     // vertex specular feature

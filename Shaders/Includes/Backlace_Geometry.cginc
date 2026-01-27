@@ -5,6 +5,8 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
 //         Geometry Shader
+//    Warning: You probably don't 
+//            need this!
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
 
@@ -16,7 +18,6 @@ struct GeometryPrimitive
 };
 
 // stackable geometry modification stages
-
 [maxvertexcount(3)]
 void Geometry(triangle FragmentData i[3], inout TriangleStream<FragmentData> triStream)
 {

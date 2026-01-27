@@ -9,9 +9,7 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-// LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
-// NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
-// #define BACKLACE_LEGACY_MODE
+#include "./Backlace_Legacy.cginc" // toggle inside here!
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]

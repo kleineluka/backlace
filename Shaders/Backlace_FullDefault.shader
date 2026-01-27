@@ -135,7 +135,7 @@ Shader "luka/backlace/default"
         // [Space(35)]
         // [Header(Light Attenuation)]
         // [Space(10)]
-        [Enum(Stylised, 0, Default, 0, Manual, 1)] _AttenuationMode ("Attenuation Mode", Int) = 0
+        [Enum(Stylised, 0, Default, 1, Manual, 2)] _AttenuationMode ("Attenuation Mode", Int) = 0
         _AttenuationManual ("Manual Attenuation", Float) = 1.0
         _AttenuationMin ("Attenuation Min", Float) = -100
         _AttenuationMax ("Attenuation Max", Float) = 100
@@ -163,32 +163,95 @@ Shader "luka/backlace/default"
         // [Space(35)]
         // [Header(Toon Lighting)]
         // [Space(10)]
-        [KeywordEnum(Disabled, Ramp, Halftone, Hifi, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
+        [KeywordEnum(Disabled, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
         // ramp
-        _Ramp ("Toon Ramp", 2D) = "white" { }
+        _Ramp ("Ramp Map", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
-        _ShadowIntensity ("Shadow intensity", Range(0, 1)) = 0.6
-        _OcclusionOffsetIntensity ("Occlusion Offset Intensity", Range(0, 1)) = 0
+        _RampShadows ("Ramp Shadow intensity", Range(0, 1)) = 0.6
+        _RampOcclusionOffset ("Ramp Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
-        [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Apply Normals to Intensity", Float) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Ramp Normals to Intensity", Float) = 0
         [IntRange] _RampIndex ("Ramp Index", Range(0, 9)) = 0
         [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
-        // halftone
-        [HDR] _AnimeShadowColor ("Core Shadow Color", Color) = (0.5, 0.5, 1, 1)
-        _AnimeShadowThreshold ("Core Shadow Threshold", Range(0, 1)) = 0.3
-        [HDR] _AnimeHalftoneColor ("Halftone Color", Color) = (0.8, 0.8, 1, 1)
-        _AnimeHalftoneThreshold ("Halftone Threshold", Range(0, 1)) = 0.6
-        _AnimeShadowSoftness ("Shadow Softness", Range(0.001, 1)) = 0.02
-        // hifi
-        _Hifi1Threshold ("Shadow 1 Threshold", Range(-1, 1)) = 0.0
-        _Hifi1Feather ("Shadow 1 Feather", Range(0, 1)) = 0.05
-        _Hifi1Color ("Shadow 1 Color", Color) = (0.7, 0.7, 0.8, 1)
-        _Hifi2Threshold ("Shadow 2 Threshold", Range(-1, 1)) = -0.5
-        _Hifi2Feather ("Shadow 2 Feather", Range(0, 1)) = 0.05
-        _Hifi2Color ("Shadow 2 Color", Color) = (0.4, 0.4, 0.5, 1)
-        _HifiBorderColor ("Border Color", Color) = (1, 0.6, 0.4, 1)
-        _HifiBorderWidth ("Border Width", Range(0, 0.2)) = 0.0
+        // cel
+        _CelThreshold ("Cel Threshold", Range(-1, 1)) = 0
+        _CelFeather ("Cel Feather", Range(0.001, 1)) = 0.05
+        _CelCastShadowFeather ("Cast Shadow Feather", Range(0.001, 1)) = 0.1
+        _CelCastShadowPower ("Cast Shadow Power", Range(0, 1)) = 1.0
+        _CelShadowTint ("Shadow Tint", Color) = (0.7, 0.7, 0.8, 1)
+        // npr
+        _NPRDiffMin ("NPR Diffuse SmoothStep Min", Range(0, 2)) = 0.0
+        _NPRDiffMax ("NPR Diffuse SmoothStep Max", Range(0, 2)) = 1.0
+        _NPRLitColor ("NPR Lit Color", Color) = (1, 1, 1, 1)
+        _NPRShadowColor ("NPR Shadow Color", Color) = (0.3, 0.3, 0.3, 1)
+        // npr - shared specular
+        _NPRForwardSpecularTexture ("NPR Forward Specular Texture", 2D) = "white" { }
+        // npr - forward specular
+        [Enum(Disabled, 0, Enabled, 1)] _NPRForwardSpecular ("Enable NPR Forward Specular", Int) = 1
+        _NPRForwardSpecularRange ("NPR Forward Specular Range", Range(0, 1)) = 0.5
+        _NPRForwardSpecularMultiplier ("NPR Forward Specular Multiplier", Float) = 5.0
+        _NPRForwardSpecularColor ("NPR Forward Specular Color", Color) = (1, 1, 1, 1)
+        // npr - bling phong specular
+        [Enum(Disabled, 0, Enabled, 1)] _NPRBlinn ("Enable NPR Phong Specular", Int) = 1
+        _NPRBlinnPower ("NPR Phong Specular Power", Float) = 10
+        _NPRBlinnMin ("NPR Phong Specular Min", Range(0, 2)) = 0.0
+        _NPRBlinnMax ("NPR Phong Specular Max", Range(0, 2)) = 1.0
+        _NPRBlinnColor ("NPR Phong Specular Color", Color) = (1, 1, 1, 1)
+        _NPRBlinnMultiplier ("NPR Phong Specular Multiplier", Float) = 5.0
+        // npr - fake sss
+        [Enum(Disabled, 0, Enabled, 1)] _NPRSSS ("Enable NPR SSS", Int) = 1
+        _NPRSSSExp ("NPR SSS Exponent", Float) = 5.0
+        _NPRSSSRef ("NPR SSS Reflectance", Range(0, 0.5)) = 0.04
+        _NPRSSSMin ("NPR SSS Min", Range(0, 1)) = 0.0
+        _NPRSSSMax ("NPR SSS Max", Range(0, 1)) = 1.0
+        _NPRSSSShadows ("NPR SSS Shadow Strength", Range(0, 1)) = 0.5
+        _NPRSSSColor ("NPR SSS Color", Color) = (1, 0.8, 0.7, 1)
+        // npr - rim lighting
+        [Enum(Disabled, 0, Enabled, 1)] _NPRRim ("Enable NPR Rim Lighting", Int) = 1
+        _NPRRimExp ("NPR Rim Power", Float) = 10
+        _NPRRimMin ("NPR Rim Min", Range(0, 2)) = 0.0
+        _NPRRimMax ("NPR Rim Max", Range(0, 2)) = 1.0
+        _NPRRimColor ("NPR Rim Color", Color) = (1, 1, 1, 1)
+        // packed map
+        [Enum(Genshin, 0, UmaMusume, 1, GuiltyGear, 2)] _PackedMapStyle ("Packed Map Style", Int) = 0
+        _PackedMapOne ("Packed Map One", 2D) = "white" { }
+        _PackedMapTwo ("Packed Map Two", 2D) = "white" { }
+        _PackedMapThree ("Packed Map Three", 2D) = "white" { }
+        _PackedLitColor ("Packed Lit Color", Color) = (1.0, 1.0, 1.0, 1)
+        _PackedShadowColor ("Packed Shadow Color", Color) = (0.7, 0.7, 0.8, 1)
+        _PackedShadowSmoothness ("Packed Shadow Smoothness", Range(0.001, 0.5)) = 0.05
+        [Enum(Disabled, 0, Enabled, 1)] _PackedRimLight ("Enable Rimlight", Int) = 1
+        _PackedRimColor ("Packed Rim Color", Color) = (1, 1, 1, 1)
+        _PackedRimThreshold ("Packed Rim Threshold", Range(-1, 1)) = 0.5
+        _PackedRimPower ("Packed Rim Power", Range(0, 5)) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _PackedMapMetals ("Enable Metals", Int) = 0
+        _PackedAmbient ("Ambient Lights", Range(0, 1)) = 0.5
+        // packed map - umamusume specific
+        _PackedUmaSpecularBoost ("UmaMusume Specular Boost", Range(0, 100)) = 20
+        _PackedUmaMetalDark ("UmaMusume Metal Dark Colour", Color) = (0.2, 0.2, 0.2, 1)
+        _PackedUmaMetalLight ("UmaMusume Metal Light Colour", Color) = (1.0, 1.0, 1.0, 1)
+        // packed map - guilty gear specific
+        _PackedGGSpecularSize ("GG Specular Size", Range(0, 1)) = 0.2
+        _PackedGGSpecularIntensity ("GG Specular Intensity", Float) = 1.0
+        _PackedGGSpecularTint ("GG Specular Tint", Color) = (1, 1, 1, 1)
+        _PackedGGShadow1Push ("GG Shadow 1 Push", Range(-1, 1)) = 0.5
+        _PackedGGShadow1Smoothness ("GG Shadow 1 Smoothness", Range(0, 1)) = 0.0
+        _PackedGGShadow2Push ("GG Shadow 2 Push", Range(-1, 1)) = -1.0
+        _PackedGGShadow2Smoothness ("GG Shadow 2 Smoothness", Range(0, 1)) = 0.0
+        _PackedGGShadow1Tint ("GG Shadow 1 Tint", Color) = (1, 1, 1, 1)
+        _PackedGGShadow2Tint ("GG Shadow 2 Tint", Color) = (1, 1, 1, 1)
+        // tri band
+        _TriBandSmoothness ("TriBand Shadow Smoothness", Range(0.001, 0.5)) = 0.05
+        _TriBandThreshold ("TriBand Shadow Threshold", Range(-1, 1)) = 0.0
+        _TriBandShallowWidth ("TriBand Shallow Band Width", Range(0, 1)) = 0.25
+        [HDR] _TriBandShadowColor ("TriBand Shadow Color", Color) = (0.6, 0.6, 0.6, 1)
+        [HDR] _TriBandShallowColor ("TriBand Shallow (Transition) Color", Color) = (0.8, 0.8, 0.8, 1)
+        [HDR] _TriBandLitColor ("TriBand Lit Color", Color) = (1.0, 1.0, 1.0, 1)
+        _TriBandPostShadowTint ("TriBand Post Shadow Tint", Color) = (0.85, 0.78, 0.77, 1)
+        _TriBandPostShallowTint ("TriBand Post Shallow Tint", Color) = (0.95, 0.96, 0.90, 1)
+        _TriBandPostLitTint ("TriBand Post Lit/Front Tint", Color) = (1.0, 0.95, 0.93, 1)
+        _TriBandAttenuatedShadows ("TriBand Attenuated Shadows", Range(0, 1)) = 0.0
         // skin
         [NoScaleOffset] _SkinLUT ("Skin LUT (RGB)", 2D) = "white" { }
         _SkinShadowColor ("Skin Shadow Color", Color) = (0.75, 0.65, 0.65, 1)
@@ -198,25 +261,81 @@ Shader "luka/backlace/default"
         _WrapNormalization ("Wrap Normalization", Range(0, 2)) = 0.5
         _WrapColorHigh ("Wrap High Color", Color) = (1, 1, 1, 1)
         _WrapColorLow ("Wrap Low Color", Color) = (0, 0, 0, 1)
+
+        // TOON EXTRAS
+        // [Space(35)]
+        // [Header(Toon Extras)]
+        // [Space(10)]
         // ambient gradient
         [Enum(Disabled, 0, Enabled, 1)] _ToggleAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
         _AnimeOcclusionToShadow ("Occlusion To Shadow", Range(0, 1)) = 0.5
         _AmbientUp ("Sky Ambient", Color) = (0.8, 0.8, 1, 1)
         _AmbientSkyThreshold ("Sky Threshold", Range(0, 1)) = 0.5
         _AmbientDown ("Ground Ambient", Color) = (1, 0.9, 0.8, 1)
-        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5 
+        _AmbientGroundThreshold ("Ground Threshold", Range(0, 1)) = 0.5
         _AmbientIntensity ("Gradient Intensity", Range(0, 1)) = 0.25
-        // tinting
-        [Enum(Disabled, 0, Raw Light, 1, Tuned Light, 2, Ramp Based, 3)] _TintMaskSource ("Tint Mask Source", Int) = 0
-        [HDR] _LitTint ("Lit Area Tint", Color) = (1, 1, 1, 0.75)
-        _LitThreshold ("Lit Coverage", Range(0, 1)) = 0.6
-        [HDR] _ShadowTint ("Shadow Area Tint", Color) = (1, 1, 1, 0.75)
-        _ShadowThreshold ("Shadow Coverage", Range(0, 1)) = 0.4
+        // manual normals
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleManualNormals ("Enable Manual Normals", Int) = 0.0
+        [Enum(Disabled, 0, Preview X, 1, Preview Y, 2, Preview Z, 3, Preview XYZ, 4)] _ManualNormalPreview ("Manual Normal Preview", Int) = 0
+        _ManualNormalOffset ("Manual Normal Offset", Vector) = (0, 0, 0, 0)
+        _ManualNormalScale ("Manual Normal Scale", Vector) = (1, 1, 1, 0)
+        _ManualApplication ("Manual Normal Application", Vector) = (1, 1, 1, 0)
+        _ManualNormalSharpness ("Manual Normal Sharpness", Range(0.1, 5)) = 1.0
         // sdf shadow
         [Enum(Disabled, 0, Enabled, 1)] _ToggleSDFShadow ("Enable SDF Shadow", Float) = 0.0
+        _SDFLocalForward ("Local Forward (e.g. 0,0,1)", Vector) = (0, 0, 1, 0)
+        _SDFLocalRight ("Local Right (e.g. 1,0,0)", Vector) = (1, 0, 0, 0)
         _SDFShadowTexture ("SDF Shadow Texture", 2D) = "white" { }
         _SDFShadowThreshold ("SDF Shadow Threshold", Range(0, 1)) = 0.5
         _SDFShadowSoftness ("SDF Shadow Softness", Range(0.001, 1)) = 0.05
+        // stocking feature
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleStockings ("Enable Stockings", Int) = 0
+        _StockingsMap ("Stockings Map (R:Mask G:Light B:Rough)", 2D) = "white" { }
+        _StockingsPower ("Stockings Power", Range(0.04, 1)) = 0.7
+        _StockingsDarkWidth ("Stockings Dark Width", Range(0, 2)) = 0.5
+        _StockingsLightedWidth ("Stockings Light Width", Range(0, 10)) = 1
+        _StockingsLightedIntensity ("Stockings Light Intensity", Range(0, 1)) = 0.25
+        _StockingsRoughness ("Stockings Roughness", Range(0, 1)) = 1
+        _StockingsColor ("Stockings Color", Color) = (1, 1, 1, 1)
+        _StockingsColorDark ("Stockings Dark Color", Color) = (0.5, 0.5, 0.5, 1)
+        // parallax eye
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleEyeParallax ("Enable Eye Parallax", Int) = 0
+        [NoScaleOffset] _EyeParallaxIrisTex ("Iris Texture", 2D) = "white" {}
+        [NoScaleOffset] _EyeParallaxEyeMaskTex ("Eye Mask Texture (R=Mask)", 2D) = "white" { }
+        _EyeParallaxStrength ("Eye Parallax Strength", Float) = 0.02
+        _EyeParallaxClamp ("Eye Parallax Clamp", Float) = 0.1
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleEyeParallaxBreathing ("Enable Eye Parallax Breathing", Int) = 0
+        _EyeParallaxBreathStrength ("Breathing Eye Parallax Strength", Range(0, 1)) = 0.01
+        _EyeParallaxBreathSpeed ("Breathing Eye Parallax Speed", Float) = 1.0
+        // translucent hair
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleHairTransparency ("Enable Hair Transparency", Int) = 0
+        _HairHeadForward ("Head Forward Direction", Vector) = (0, 0, 1, 0)
+        _HairHeadUp ("Head Up Direction", Vector) = (0, 1, 0, 0)
+        _HairHeadRight ("Head Right Direction", Vector) = (1, 0, 0, 0)
+        [PowerSlider(2.0)] _HairBlendAlpha ("Minimum Alpha", Range(0, 1)) = 0.5
+        _HairTransparencyStrength ("Transparency Strength", Range(0, 1)) = 1.0
+        // expression map
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleExpressionMap ("Enable Expression Map", Int) = 0
+        [NoScaleOffset] _ExpressionMap ("Expression Map (RGBA)", 2D) = "white" { }
+        _ExCheekColor ("Cheek Color", Color) = (1, 0.6, 0.6, 1)
+        _ExCheekIntensity ("Cheek Intensity", Range(0, 1)) = 1.0
+        _ExShyColor ("Shy Color", Color) = (1, 0.6, 0.6, 1)
+        _ExShyIntensity ("Shy Intensity", Range(0, 1)) = 1.0
+        _ExShadowColor ("Shadow Tint Color", Color) = (0.9, 0.85, 1, 1)
+        _ExShadowIntensity ("Shadow Tint Intensity", Range(0, 1)) = 1.0
+        // face map
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleFaceMap ("Enable Face Map", Int) = 0
+        _FaceHeadForward ("Face Head Forward (Local)", Vector) = (0, 0, 1, 0)
+        [NoScaleOffset] _FaceMap ("Face Map (RGBA)", 2D) = "white" { }
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleNoseLine ("Enable Nose Line", Int) = 0
+        _NoseLinePower ("Nose Line Power", Float) = 2.0
+        _NoseLineColor ("Nose Line Color", Color) = (0.25, 0.25, 0.25, 1)
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleEyeShadow ("Enable Eye Shadow", Int) = 0
+        _ExEyeColor ("Eye Shadow Color", Color) = (0.9, 0.6, 0.6, 1)
+        _EyeShadowIntensity ("Eye Shadow Intensity", Range(0, 1)) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleLipOutline ("Enable Lip Outline", Int) = 0
+        _LipOutlineColor ("Lip Outline Color", Color) = (0.6, 0.1, 0.1, 1)
+        _LipOutlineIntensity ("Lip Outline Intensity", Range(0, 1)) = 1.0
 
         // SPECULAR
         // [Space(35)]
@@ -946,6 +1065,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
             #endif // UNITY_PASS_FORWARDBASE
+            #include "./Variants/Backlace_FullDefault.cginc"
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -962,6 +1082,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
             #endif // UNITY_PASS_FORWARDADD
+            #include "./Variants/Backlace_FullDefault.cginc"
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -977,6 +1098,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER
             #endif // UNITY_PASS_SHADOWCASTER
+            #include "./Variants/Backlace_FullDefault.cginc"
             #include "./Includes/Backlace_Shadow.cginc"
             ENDCG
         }
@@ -991,6 +1113,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_META
                 #define UNITY_PASS_META
             #endif // UNITY_PASS_META
+            #include "./Variants/Backlace_FullDefault.cginc"
             #include "./Includes/Backlace_Meta.cginc"
             ENDCG
         }

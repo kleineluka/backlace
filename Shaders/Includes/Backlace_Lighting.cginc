@@ -39,7 +39,7 @@ half3 GetSHLength()
 // used in BetterSH9 for Poiyomi
 float SHEvalLinearL1Geomerics(float L0, float3 L1, float3 n)
 {
-    float R0 = max(0, L0);
+    float R0 = max(0.00001, L0);
     float3 R1 = 0.5f * L1;
     float lenR1 = length(R1);
     float q = dot(normalize(R1), n) * 0.5 + 0.5;
@@ -65,7 +65,7 @@ half3 BetterSH9(half4 normal)
 // from Mochie For Mochie Lighting Mode
 float NonlinearSH(float L0, float3 L1, float3 normal)
 {
-    float R0 = L0;
+    float R0 = max(0.00001, L0);
     float3 R1 = 0.5f * L1;
     float lenR1 = length(R1);
     float q = dot(normalize(R1), normal) * 0.5 + 0.5;
@@ -169,12 +169,40 @@ float3 GetUniversalIndirectLight(BacklaceSurfaceData Surface)
     return indirectColor;
 }
 
-// easy helper for the add pass
-void GetForwardAddLightData(out BacklaceLightData lightData)
+// easy helper for the forward pass
+void GetForwardBaseLightmapData(inout BacklaceSurfaceData Surface)
 {
-    lightData.directColor = _LightColor0.rgb;
-    lightData.indirectColor = float3(0, 0, 0);
-    lightData.direction = normalize(_WorldSpaceLightPos0.xyz - FragData.worldPos.xyz * _WorldSpaceLightPos0.w);
+    // static lightmap
+    #if defined(LIGHTMAP_ON)
+        Surface.Lightmap = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
+        Surface.Lightmap = max(Surface.Lightmap, 0);
+        #if defined(DIRLIGHTMAP_COMBINED)
+            Surface.LightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd, unity_Lightmap, FragData.lightmapUV);
+        #else // DIRLIGHTMAP_COMBINED
+            Surface.LightmapDirection = float4(0, 0, 0, 0);
+        #endif // DIRLIGHTMAP_COMBINED
+    #else // LIGHTMAP_ON
+        Surface.Lightmap = float3(0, 0, 0);
+        Surface.LightmapDirection = float4(0, 0, 0, 0);
+    #endif // LIGHTMAP_ON
+    // dynamic lightmap
+    #if defined(DYNAMICLIGHTMAP_ON)
+        Surface.DynamicLightmap = DecodeRealtimeLightmap(UNITY_SAMPLE_TEX2D(unity_DynamicLightmap, FragData.dynamicLightmapUV));
+        Surface.DynamicLightmap = max(Surface.DynamicLightmap, 0);
+        #if defined(DIRLIGHTMAP_COMBINED)
+            Surface.DynamicLightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_DynamicDirectionality, unity_DynamicLightmap, FragData.dynamicLightmapUV);
+        #else // DIRLIGHTMAP_COMBINED
+            Surface.DynamicLightmapDirection = float4(0, 0, 0, 0);
+        #endif // DIRLIGHTMAP_COMBINED
+    #else
+        Surface.DynamicLightmap = float3(0, 0, 0);
+        Surface.DynamicLightmapDirection = float4(0, 0, 0, 0);
+    #endif // DYNAMICLIGHTMAP_ON
+}
+
+// easy helper for the add pass
+void GetForwardAddLightData(inout BacklaceLightData lightData)
+{
     [branch] if (_LightingSource == 0) // backlace
     {
         #if defined(POINT) || defined(POINT_COOKIE)
@@ -250,7 +278,7 @@ void GetBacklaceLightColor(inout BacklaceLightData lightData, BacklaceSurfaceDat
     #endif
 }
 
-// From Poiyomi For Poiyomi Lighting Mode
+// from Poiyomi For Poiyomi Lighting Mode
 void GetPoiyomiLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
@@ -275,7 +303,7 @@ void GetPoiyomiLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData
         lightData.indirectColor = GetUniversalIndirectLight(Surface);
         bool lightExists = dot(_WorldSpaceLightPos0.xyz, _WorldSpaceLightPos0.xyz) > 0.000001 && _LightColor0.a > 0.01;
         #if defined(BACKLACE_TOON)
-            if (!lightExists > 0)
+            if (!lightExists)
             {
                 lightData.directColor = lightData.indirectColor;
                 lightData.indirectColor = 0;
@@ -336,7 +364,7 @@ void GetStandardLightColor(inout BacklaceLightData lightData, BacklaceSurfaceDat
     #endif
 }
 
-// From Mochie For Mochie Lighting Mode
+// from Mochie For Mochie Lighting Mode
 void GetMochieLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
 {
     #if defined(UNITY_PASS_FORWARDBASE)
@@ -361,6 +389,19 @@ void GetMochieLightColor(inout BacklaceLightData lightData, BacklaceSurfaceData 
         lightData.directColor = _LightColor0.rgb;
         lightData.indirectColor = 0;
     #endif
+}
+
+// wrapper for getting the chosen light color
+void GetLightColour(inout BacklaceLightData lightData, BacklaceSurfaceData Surface)
+{
+    switch(_LightingColorMode)
+    {
+        case 1: GetPoiyomiLightColor(lightData, Surface); break;
+        case 2: GetOpenLitLightColor(lightData, Surface); break;
+        case 3: GetStandardLightColor(lightData, Surface); break;
+        case 4: GetMochieLightColor(lightData, Surface); break;
+        case 0: default: GetBacklaceLightColor(lightData, Surface); break;
+    }
 }
 
 
@@ -412,6 +453,19 @@ float3 GetAmbientLightDirection()
     return len > 0.001 ? normalize(ambientDir) : float3(0, 1, 0);
 }
 
+// wrapper for getting the chosen light direction
+float3 GetLightDirection()
+{
+    switch(_LightingDirectionMode)
+    {
+        case 1: return GetForcedWorldLightDirection(); break;
+        case 2: return GetViewLightDirection(); break;
+        case 3: return GetObjectLightDirection(); break;
+        case 4: return GetAmbientLightDirection(); break;
+        case 0: default: return GetBacklaceLightDirection(); break;
+    }
+}
+
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
@@ -420,7 +474,6 @@ float3 GetAmbientLightDirection()
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-// get light data
 void GetLightData(inout BacklaceSurfaceData Surface)
 {
     // get direction vectors
@@ -429,42 +482,10 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     // start calculating the light data
     BacklaceLightData lightData;
     #if defined(UNITY_PASS_FORWARDBASE)
-        // static lightmap
-        #if defined(LIGHTMAP_ON)
-            Surface.Lightmap = DecodeLightmap(UNITY_SAMPLE_TEX2D(unity_Lightmap, FragData.lightmapUV));
-            Surface.Lightmap = max(Surface.Lightmap, 0);
-            #if defined(DIRLIGHTMAP_COMBINED)
-                Surface.LightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd, unity_Lightmap, FragData.lightmapUV);
-            #else // DIRLIGHTMAP_COMBINED
-                Surface.LightmapDirection = float4(0, 0, 0, 0);
-            #endif // DIRLIGHTMAP_COMBINED
-        #else // LIGHTMAP_ON
-            Surface.Lightmap = float3(0, 0, 0);
-            Surface.LightmapDirection = float4(0, 0, 0, 0);
-        #endif // LIGHTMAP_ON
-        // dynamic lightmap
-        #if defined(DYNAMICLIGHTMAP_ON)
-            Surface.DynamicLightmap = DecodeRealtimeLightmap(UNITY_SAMPLE_TEX2D(unity_DynamicLightmap, FragData.dynamicLightmapUV));
-            Surface.DynamicLightmap = max(Surface.DynamicLightmap, 0);
-            #if defined(DIRLIGHTMAP_COMBINED)
-                Surface.DynamicLightmapDirection = UNITY_SAMPLE_TEX2D_SAMPLER(unity_DynamicDirectionality, unity_DynamicLightmap, FragData.dynamicLightmapUV);
-            #else // DIRLIGHTMAP_COMBINED
-                Surface.DynamicLightmapDirection = float4(0, 0, 0, 0);
-            #endif // DIRLIGHTMAP_COMBINED
-        #else
-            Surface.DynamicLightmap = float3(0, 0, 0);
-            Surface.DynamicLightmapDirection = float4(0, 0, 0, 0);
-        #endif // DYNAMICLIGHTMAP_ON
+        GetForwardBaseLightmapData(Surface);
         UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
         lightData.attenuation = FadeShadows(FragData, attenuation);
-        switch(_LightingDirectionMode)
-        {
-            case 1: lightData.direction = GetForcedWorldLightDirection(); break;
-            case 2: lightData.direction = GetViewLightDirection(); break;
-            case 3: lightData.direction = GetObjectLightDirection(); break;
-            case 4: lightData.direction = GetAmbientLightDirection(); break;
-            case 0: default: lightData.direction = GetBacklaceLightDirection(); break;
-        }
+        lightData.direction = GetLightDirection();
         if (any(_WorldSpaceLightPos0.xyz) == 0 || _LightColor0.a < 0.01)
         {
             float3 ambientDir = unity_SHAr.xyz + unity_SHAg.xyz + unity_SHAb.xyz;
@@ -480,26 +501,15 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         }
         Surface.LightDir = lightData.direction;
         Surface.HalfDir = UnitySafeNormalize(Surface.LightDir + Surface.ViewDir);
-        switch(_LightingColorMode)
-        {
-            case 1: GetPoiyomiLightColor(lightData, Surface); break;
-            case 2: GetOpenLitLightColor(lightData, Surface); break;
-            case 3: GetStandardLightColor(lightData, Surface); break;
-            case 4: GetMochieLightColor(lightData, Surface); break;
-            case 0: default: GetBacklaceLightColor(lightData, Surface); break;
-        }
+        GetLightColour(lightData, Surface);
     #else // UNITY_PASS_FORWARDADD
+        lightData.directColor = _LightColor0.rgb;
+        lightData.indirectColor = float3(0, 0, 0);
+        lightData.direction = GetLightDirection();
         GetForwardAddLightData(lightData);
         Surface.LightDir = lightData.direction;
         Surface.HalfDir = UnitySafeNormalize(Surface.LightDir + Surface.ViewDir);
-        switch(_LightingColorMode)
-        {
-            case 1: GetPoiyomiLightColor(lightData, Surface); break;
-            case 2: GetOpenLitLightColor(lightData, Surface); break;
-            case 3: GetStandardLightColor(lightData, Surface); break;
-            case 4: GetMochieLightColor(lightData, Surface); break;
-            case 0: default: GetBacklaceLightColor(lightData, Surface); break;
-        }
+        GetLightColour(lightData, Surface);
     #endif // UNITY_PASS_FORWARDBASE
     //global modifiers for both passes
     float3 finalDirectColor = lightData.directColor;
@@ -533,7 +543,7 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     }
     // finalize the light colours
     Surface.LightColor = float4(combinedLight, lightData.attenuation);
-    Surface.SpecLightColor = Surface.LightColor;
+    Surface.Attenuation = Surface.LightColor.a;
     Surface.IndirectDiffuse = finalIndirectColor;
     // prepare dot products
     Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);
@@ -543,7 +553,8 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         Surface.UnmaxedNdotL -= (shadowMask * _ShadowMapIntensity);
     #endif // _BACKLACE_SHADOW_MAP
     Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
-    Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
+    // Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
+    Surface.NdotV = saturate(dot(Surface.NormalDir, Surface.ViewDir));
     Surface.NdotH = max(dot(Surface.NormalDir, Surface.HalfDir), 0);
     Surface.LdotH = max(dot(Surface.LightDir, Surface.HalfDir), 0);
 }

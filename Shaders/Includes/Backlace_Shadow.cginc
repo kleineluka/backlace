@@ -9,9 +9,7 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-// LEGACY MODE: Uncomment the line below to enable shader model 3.0 for older hardware
-// NOTE: Legacy mode automatically disables AudioLink and LTCGI to reduce interpolator usage
-// #define BACKLACE_LEGACY_MODE
+#include "./Backlace_Legacy.cginc" // toggle inside here!
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -278,7 +276,7 @@ float4 Fragment(FragmentData i) : SV_TARGET
         SafeLoadUVs();
         float dissolveMapValue = GetDissolveMapValue(i.worldPos, i.vertex.xyz, i.normal);
         clip(_DissolveProgress - dissolveMapValue); // dont need edge glow, just clip
-    #endif
+    #endif // _BACKLACE_DISSOLVE
     #if defined(SHADOWS_CUBE)
         float depth = length(i.lightVec) + unity_LightShadowBias.x;
         depth *= _LightPositionRange.w;

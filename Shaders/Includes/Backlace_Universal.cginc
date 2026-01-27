@@ -16,7 +16,7 @@ struct BacklaceLightData
     float3 directColor;
     float3 indirectColor;
     float3 direction;
-    float attenuation; // will be calculated in diffuse stage
+    float attenuation;
 };
 
 struct BacklaceSurfaceData
@@ -49,7 +49,6 @@ struct BacklaceSurfaceData
     float LdotH;
     // calculated light data
     float4 LightColor;
-    float4 SpecLightColor;
     float3 IndirectDiffuse;
     float3 Diffuse;
     float3 DirectSpecular;
@@ -73,7 +72,7 @@ struct BacklaceSurfaceData
         float HairShiftMask;
         float SpecularJitter;
     #endif // BACKLACE_SPECULAR
-    // extra data cos we ball >.<
+    // misc data
     float2 ScreenCoords;
     bool IsFrontFace;
 };
@@ -81,6 +80,14 @@ struct BacklaceSurfaceData
 // for debugging purposes
 float4 panty() {
     return float4(1.00, 0.98, 0.25, 1.00);
+}
+
+// in some circumstances, we may not have diffuse-influenced attenuation
+float GetSafeAttenuation(BacklaceSurfaceData Surface)
+{
+    if (Surface.Attenuation <= -100) {
+        return Surface.LightColor.a; // default attenuation from Unity
+    }
 }
 
 
@@ -745,8 +752,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         void SetupAlbedoAndSpecColor(inout BacklaceSurfaceData Surface)
         {
             float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
-            float sp = Surface.Specular;
-            Surface.SpecularColor = lerp(float3(sp, sp, sp), Surface.Albedo.rgb, Surface.Metallic);
+            Surface.SpecularColor = lerp(float3(Surface.Specular, Surface.Specular, Surface.Specular), Surface.Albedo.rgb, Surface.Metallic);
             if (_ReplaceSpecular == 1)
             {
                 Surface.SpecularColor = specularTint;
@@ -755,7 +761,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             {
                 Surface.SpecularColor *= specularTint;
             }
-            Surface.OneMinusReflectivity = (1 - sp) - (Surface.Metallic * (1 - sp));
+            Surface.OneMinusReflectivity = (1 - Surface.Specular) - (Surface.Metallic * (1 - Surface.Specular));
             Surface.Albedo.rgb *= Surface.OneMinusReflectivity;
         }
     #endif // defined(BACKLACE_SPECULAR)

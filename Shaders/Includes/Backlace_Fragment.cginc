@@ -128,7 +128,7 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         }
         GetIndirectSpecular(Surface);
     #endif // BACKLACE_SPECULAR
-    AddDiffuse(Surface);
+    Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse; // AddDiffuse(Surface)
     #if defined(_BACKLACE_TOUCH_REACTIVE)
         ApplyTouchReactive(Surface, i);
     #endif // _BACKLACE_TOUCH_REACTIVE
