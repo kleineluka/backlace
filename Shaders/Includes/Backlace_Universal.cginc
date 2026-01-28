@@ -11,6 +11,7 @@
 
 #define BACKLACE_TRANSFORM_TEX(set, name) (set[name##_UV].xy * name##_ST.xy + name##_ST.zw)
 
+// essentially, what's passed back and forth when reading lights from unity
 struct BacklaceLightData
 {
     float3 directColor;
@@ -19,6 +20,7 @@ struct BacklaceLightData
     float attenuation;
 };
 
+// the "master" struct that holds all data that is consistently reused
 struct BacklaceSurfaceData
 {
     // resulting colour
@@ -62,7 +64,6 @@ struct BacklaceSurfaceData
     // specular intermediates
     float3 SpecularColor;
     float3 EnergyCompensation;
-    float3 Dfg;
     float3 CustomIndirect;
     // specular samples
     #if defined(BACKLACE_SPECULAR)
@@ -729,18 +730,18 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
 // here is where we leave out shadow pass
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
-    // sample MSSO texture
-    void SampleMSSO(inout BacklaceSurfaceData Surface)
-    {
-        Msso = UNITY_SAMPLE_TEX2D_SAMPLER(_MSSO, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MSSO));
-        Surface.Occlusion = lerp(1, Msso.a, _Occlusion);
-    }
-
     // specular feature
     #if defined(BACKLACE_SPECULAR)
+        // sample MSSO texture
+        void SampleMSSO(inout BacklaceSurfaceData Surface)
+        {
+            Msso = UNITY_SAMPLE_TEX2D_SAMPLER(_MSSO, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _MSSO));
+        }
+
         // get sample data from MSSO texture
         void GetSampleData(inout BacklaceSurfaceData Surface)
         {
+            Surface.Occlusion = lerp(1, Msso.a, _Occlusion);
             Surface.Metallic = Msso.r * _Metallic;
             Surface.Glossiness = Msso.g * _Glossiness;
             Surface.Specular = Msso.b * _Specular;
@@ -763,6 +764,12 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             }
             Surface.OneMinusReflectivity = (1 - Surface.Specular) - (Surface.Metallic * (1 - Surface.Specular));
             Surface.Albedo.rgb *= Surface.OneMinusReflectivity;
+        }
+    #else // BACKLACE_SPECULAR
+        // default msso with no specular
+        void SampleMSSO(inout BacklaceSurfaceData Surface)
+        {
+            Msso = float4(1, 1, 1, 1);
         }
     #endif // defined(BACKLACE_SPECULAR)
 

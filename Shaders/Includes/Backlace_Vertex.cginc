@@ -43,15 +43,15 @@ FragmentData Vertex(VertexData v)
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
     // ps1 effect
-    #if defined(_BACKLACE_PS1)
-        ApplyPS1Vertex(i, v);
-    #endif // _BACKLACE_PS1
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_TogglePS1 == 1) ApplyPS1Vertex(i, v);
+        #endif // BACKLACE_CAPABILITIES_HIGH
     // for screen related effects
     i.scrPos = ComputeScreenPos(i.pos);
     // flat model feature
-    #if defined(_BACKLACE_FLAT_MODEL)
-        FlattenModel(v.vertex, v.normal, i.pos, i.worldPos, i.normal);
-    #endif // _BACKLACE_FLAT_MODEL
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_ToggleFlatModel == 1) FlattenModel(v.vertex, v.normal, i.pos, i.worldPos, i.normal);
+    #endif // BACKLACE_CAPABILITIES_HIGH
     UNITY_TRANSFER_SHADOW(i, v.uv);
     UNITY_TRANSFER_FOG(i, i.pos);
     #if defined(LIGHTMAP_ON)

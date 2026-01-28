@@ -31,14 +31,18 @@
 #pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
 #pragma skip_variants LIGHTMAP_ON DYNAMICLIGHTMAP_ON DIRLIGHTMAP_COMBINED SHADOWS_SHADOWMASK
 #pragma multi_compile_instancing
-#pragma multi_compile_shadowcaster
 #pragma vertex Vertex
 #pragma fragment Fragment
 
 // keywords
 #pragma multi_compile _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
-#pragma shader_feature_local _ _BACKLACE_PARALLAX
-#pragma shader_feature_local _ _BACKLACE_AUDIOLINK
+#pragma shader_feature_local _ _BACKLACE_UV_EFFECTS
+#if defined(BACKLACE_CAPABILITIES_HIGH)
+    #pragma shader_feature_local _ _BACKLACE_PARALLAX
+    #pragma shader_feature_local _ _BACKLACE_DISSOLVE
+    #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
+    #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
+#endif // BACKLACE_CAPABILITIES_HIGH
 
 // unity includes
 #include "UnityCG.cginc"
@@ -60,6 +64,9 @@ struct VertexData
     float2 uv1 : TEXCOORD1;
     float2 uv2 : TEXCOORD2;
     float2 uv3 : TEXCOORD3;
+    #if defined(_BACKLACE_VERTEX_DISTORTION)
+        fixed4 color : COLOR;
+    #endif // _BACKLACE_VERTEX_DISTORTION
 };
 
 struct VertexOutput
@@ -191,7 +198,6 @@ float _StitchOffset;
 
 #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     float _DirectLightMode;
-    float _EnableSpecular;  
     float _IndirectFallbackMode;
     void ClipShadowAlpha(inout BacklaceSurfaceData Surface)
     {
@@ -226,26 +232,38 @@ VertexOutput  Vertex(VertexData v)
     #endif // _BACKLACE_AUDIOLINK
     v.vertex.xyz += _VertexManipulationPosition;
     #if defined(_BACKLACE_VERTEX_DISTORTION)
-        ApplyVertexDistortion(v.vertex);
+        ApplyVertexDistortion(v.vertex, mul(unity_ObjectToWorld, v.vertex).xyz, v.color);
     #endif // _BACKLACE_VERTEX_DISTORTION
     i.vertex = v.vertex;
     i.normal = UnityObjectToWorldNormal(v.normal);
     i.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
     // flat model shadow casting
-    #if defined(_BACKLACE_FLAT_MODEL)
-        float4 finalClipPos;
-        float3 finalWorldPos;
-        float3 finalWorldNormal;
-        FlattenModel(v, finalClipPos, finalWorldPos, finalWorldNormal);
-        i.pos = UnityClipSpaceShadowCasterPos(mul(unity_WorldToObject, float4(finalWorldPos, 1.0)).xyz, finalWorldNormal);
-    #else // _BACKLACE_FLAT_MODEL
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_ToggleFlatModel == 1) // flat model effect
+        {
+            float4 finalClipPos;
+            float3 finalWorldPos;
+            float3 finalWorldNormal;
+            FlattenModel(v.vertex, v.normal, finalClipPos, finalWorldPos, finalWorldNormal);
+            i.worldPos.xyz = finalWorldPos;
+            i.pos = UnityClipSpaceShadowCasterPos(mul(unity_WorldToObject, float4(finalWorldPos, 1.0)).xyz, finalWorldNormal);
+        } else { // no flat model (default)
+            // original shadow caster position calculation
+            #if defined(SHADOWS_CUBE)
+                i.pos = UnityObjectToClipPos(v.vertex);
+                i.lightVec = mul(unity_ObjectToWorld, v.vertex).xyz - _LightPositionRange.xyz;
+            #else // SHADOWS_CUBE
+                i.pos = UnityClipSpaceShadowCasterPos(v.vertex.xyz, v.normal);
+            #endif // SHADOWS_CUBE
+        }
+    #else // BACKLACE_CAPABILITIES_HIGH
         // original shadow caster position calculation
         #if defined(SHADOWS_CUBE)
             i.pos = UnityObjectToClipPos(v.vertex);
             i.lightVec = mul(unity_ObjectToWorld, v.vertex).xyz - _LightPositionRange.xyz;
-        #else
+        #else // SHADOWS_CUBE
             i.pos = UnityClipSpaceShadowCasterPos(v.vertex.xyz, v.normal);
-        #endif
+        #endif // SHADOWS_CUBE
     #endif
     i.pos = UnityApplyLinearShadowBias(i.pos);
     #if defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)

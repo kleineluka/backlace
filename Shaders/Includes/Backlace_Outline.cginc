@@ -35,7 +35,7 @@
 // keywords that need alpha support in the outline
 #pragma shader_feature_local _ _BACKLACE_DISSOLVE
 #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
-#pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
+// #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
 #pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 #pragma shader_feature_local _ _BLENDMODE_CUTOUT
@@ -145,14 +145,17 @@ v2f vert(appdata v)
         worldNormal.rgb = (v.color.rgb - 0.5) * 2.0;
     }
     // optionally, flatten the model
-    #if defined(_BACKLACE_FLAT_MODEL)
-        float4 finalClipPos;
-        float3 finalWorldPos;
-        float3 finalWorldNormal;
-        FlattenModel(v.vertex, v.normal, finalClipPos, finalWorldPos, finalWorldNormal);
-        worldPos.xyz = finalWorldPos;
-        worldNormal = finalWorldNormal;
-    #endif
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        if (_ToggleFlatModel == 1)
+        {
+            float4 finalClipPos;
+            float3 finalWorldPos;
+            float3 finalWorldNormal;
+            FlattenModel(v.vertex, v.normal, finalClipPos, finalWorldPos, finalWorldNormal);
+            worldPos.xyz = finalWorldPos;
+            worldNormal = finalWorldNormal;
+        }
+    #endif // BACKLACE_CAPABILITIES_HIGH
     // outline extrusion logic
     float mask = lerp(1.0, v.color.r, _OutlineVertexColorMask);
     if (_OutlineSpace == 1) // world space
@@ -204,23 +207,27 @@ fixed4 frag(v2f i) : SV_Target
         }
     #endif // _BACKLACE_VRCHAT_MIRROR
     // handle dithering
-    #if defined(_BACKLACE_DITHER)
-        float ditheredAlpha = lerp(baseAlpha, 0.0, _DitherAmount);
-        float2 ditherUV = 0;
-        switch (_DitherSpace) {
-            case 1: // world
-                ditherUV = frac(i.worldPos.xy) * _ScreenParams.xy;
-                break;
-            case 2: // uv
-                ditherUV = i.uv * _ScreenParams.xy;
-                break;
-            default: // screen
-                ditherUV = i.screenPos.xy / i.screenPos.w * _ScreenParams.xy;
-                break;
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_ToggleDither == 1)
+        {
+            // calculate dithered alpha
+            float ditheredAlpha = lerp(baseAlpha, 0.0, _DitherAmount);
+            float2 ditherUV = 0;
+            switch (_DitherSpace) {
+                case 1: // world
+                    ditherUV = frac(i.worldPos.xy) * _ScreenParams.xy;
+                    break;
+                case 2: // uv
+                    ditherUV = i.uv * _ScreenParams.xy;
+                    break;
+                default: // screen
+                    ditherUV = i.screenPos.xy / i.screenPos.w * _ScreenParams.xy;
+                    break;
+            }
+            float pattern = 1.0 - GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
+            clip(ditheredAlpha - pattern);
         }
-        float pattern = 1.0 - GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
-        clip(ditheredAlpha - pattern);
-    #endif // _BACKLACE_DITHER
+    #endif // BACKLACE_CAPABILITIES_HIGH
     // finally, draw the outline
     fixed4 finalColor = _OutlineColor;
     if (_OutlineMode == 1) // texture

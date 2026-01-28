@@ -13,6 +13,8 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 **Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, BepinEx Targetting BiRP, and more!
 <br>
 **Built With:** Unity 2022 LTS (but compatible with 2019.4+)
+<br>
+**Notice!!** It is best to download from [Releases](https://github.com/kleineluka/backlace/releases) or on another platform like [Gumroad](https://kleineluka.gumroad.com/l/backlace), because the Github Repo has many in-development settings on (ex. no UI).
 
 <details>
 

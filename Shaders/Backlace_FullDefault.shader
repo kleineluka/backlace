@@ -386,6 +386,17 @@ Shader "luka/backlace/default"
         _RimIntensity ("Rim Intensity", Float) = 1.0
         [Enum(Disabled, 0, Enabled, 1)] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
 
+        // SCREEN SPACE RIM LIGHTING
+        // [Space(35)]
+        // [Header(Depth Rim Lighting)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_DEPTH_RIMLIGHT)] _ToggleDepthRim ("Enable Depth Rim Lighting", Float) = 0.0
+        [HDR] _DepthRimColor ("Color", Color) = (0.5, 0.75, 1, 1)
+        _DepthRimWidth ("Width", Range(0, 0.5)) = 0.1
+        _DepthRimThreshold ("Threshold", Range(0.01, 1)) = 0.1
+        _DepthRimSharpness ("Sharpness", Range(0.01, 1)) = 0.1
+        [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
+
         // CLEARCOAT
         // [Space(35)]
         // [Header(Clear Coat)]
@@ -592,17 +603,6 @@ Shader "luka/backlace/default"
         _PathingStart ("Path Start", Range(0, 1)) = 0.0
         _PathingEnd ("Path End", Range(0, 1)) = 1.0
 
-        // SCREEN SPACE RIM LIGHTING
-        // [Space(35)]
-        // [Header(Depth Rim Lighting)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_DEPTH_RIMLIGHT)] _ToggleDepthRim ("Enable Depth Rim Lighting", Float) = 0.0
-        [HDR] _DepthRimColor ("Color", Color) = (0.5, 0.75, 1, 1)
-        _DepthRimWidth ("Width", Range(0, 0.5)) = 0.1
-        _DepthRimThreshold ("Threshold", Range(0.01, 1)) = 0.1
-        _DepthRimSharpness ("Sharpness", Range(0.01, 1)) = 0.1
-        [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
-
         // AUDIOLINK
         // [Space(35)]
         // [Header(AudioLink)]
@@ -720,7 +720,7 @@ Shader "luka/backlace/default"
         // [Space(35)]
         // [Header(Flat Model)]
         // [Space(10)]
-        [Toggle(_BACKLACE_FLAT_MODEL)] _ToggleFlatModel ("Enable Flat Model", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleFlatModel ("Enable Flat Model", Float) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _FlatModeAutoflip ("Auto-Flip", Float) = 0.0
         _FlatModel ("Flat Model Strength", Range(0, 1)) = 0.0
         _FlatModelDepthCorrection ("Depth Correction", Range(-0.2, 0.2)) = -0.1
@@ -862,7 +862,7 @@ Shader "luka/backlace/default"
         // [Space(35)]
         // [Header(Dither)]
         // [Space(10)]
-        [Toggle(_BACKLACE_DITHER)] _ToggleDither ("Enable Dither", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleDither ("Enable Dither", Float) = 0.0
         [Enum(Screen, 0, World, 1, UV, 2)] _DitherSpace ("Dither Space", Int) = 0
         _DitherAmount ("Dither Amount", Range(0, 1)) = 0
         _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
@@ -871,10 +871,9 @@ Shader "luka/backlace/default"
         // [Space(35)]
         // [Header(Low Precision)]
         // [Space(10)]
-        [Toggle(_BACKLACE_PS1)] _TogglePS1 ("Enable Low Precision (PS1)", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _TogglePS1 ("Enable Low Precision (PS1)", Float) = 0.0
         [Enum(Disabled, 0, World Space, 1, Screen Space, 2)] _PS1Rounding ("Rounding Style", Int) = 0.0
         _PS1RoundingPrecision ("Rounding Precision", Float) = 64
-        [Enum(Disabled, 0, Enabled, 1)] _PS1Affine ("Enable Affine Texture Mapping", Int) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
         _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 

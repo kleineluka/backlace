@@ -23,10 +23,6 @@
 #pragma shader_feature_local _ _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON _SPECULARMODE_HAIR _SPECULARMODE_CLOTH
 #pragma shader_feature_local _ _ANIMEMODE_RAMP _ANIMEMODE_CEL _ANIMEMODE_NPR _ANIMEMODE_PACKED _ANIMEMODE_TRIBAND _ANIMEMODE_SKIN _ANIMEMODE_WRAPPED
 
-// to be removed
-#pragma shader_feature_local _ _BACKLACE_DITHER
-#pragma shader_feature_local _ _BACKLACE_PS1
-#pragma shader_feature_local _ _BACKLACE_FLAT_MODEL
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
@@ -82,6 +78,9 @@
     #pragma shader_feature_local _ _BACKLACE_TOUCH_REACTIVE
     #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
     #pragma shader_feature_local _ _BACKLACE_SHADOW_TEXTURE
+    // #pragma shader_feature_local _ _BACKLACE_DITHER <-- no longer keyword, but still HIGH only
+    // #pragma shader_feature_local _ _BACKLACE_PS1 <-- no longer keyword, but still HIGH only
+    // #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL <-- no longer keyword, but still HIGH only
 #endif // BACKLACE_CAPABILITIES_HIGH
 
 
@@ -114,11 +113,11 @@
 // GENERATED DEFINES
 #if defined(_ANIMEMODE_RAMP) || defined(_ANIMEMODE_CEL) || defined(_ANIMEMODE_NPR) || defined(_ANIMEMODE_PACKED) || defined(_ANIMEMODE_TRIBAND) || defined(_ANIMEMODE_SKIN) || defined(_ANIMEMODE_WRAPPED)
     #define BACKLACE_TOON
-#endif // _ANIMEMODE_RAMP || _ANIMEMODE_HALFTONE || _ANIMEMODE_HIFI || _ANIMEMODE_SKIN || _ANIMEMODE_WRAPPED
+#endif // _ANIMEMODE_*
 
 #if defined(_SPECULARMODE_STANDARD) || defined(_SPECULARMODE_ANISOTROPIC) || defined(_SPECULARMODE_TOON) || defined(_SPECULARMODE_HAIR) || defined(_SPECULARMODE_CLOTH)
     #define BACKLACE_SPECULAR
-#endif // _SPECULARMODE_STANDARD || _SPECULARMODE_ANISOTROPIC || _SPECULARMODE_TOON || _SPECULARMODE_HAIR || _SPECULARMODE_CLOTH
+#endif // _SPECULARMODE_*
 
 
 #endif // BACKLACE_KEYWORDS_CGINC

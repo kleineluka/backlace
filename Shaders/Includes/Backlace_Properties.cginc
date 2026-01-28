@@ -116,37 +116,6 @@ float _AttenuationBoost;
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
-//        Specular Properties
-//
-// [ ♡ ] ────────────────────── [ ♡ ]
-
-
-float _Occlusion;
-float _Metallic;
-float _Glossiness;
-float _Specular;
-float _SpecularIntensity;
-float _ReplaceSpecular;
-float _Anisotropy;
-float _EnableSpecular;
-samplerCUBE _FallbackCubemap;
-UNITY_DECLARE_TEX2D_NOSAMPLER(_MSSO);
-UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
-UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
-float4 _MSSO_ST;
-float4 _SpecularTintTexture_ST;
-float4 _SpecularTint;
-float4 _TangentMap_ST;
-int _SpecularStandardKind;
-int _SpecularSpecialKind;
-int _SpecularEnergyMode;
-float _SpecularEnergy;
-float _SpecularEnergyMin;
-float _SpecularEnergyMax;
-
-
-// [ ♡ ] ────────────────────── [ ♡ ]
-//
 //          UV Properties
 //
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -396,6 +365,26 @@ float3 _VertexManipulationScale;
 
 
 #if defined(BACKLACE_SPECULAR)
+    // used in specular calculations
+    float _Occlusion;
+    float _Metallic;
+    float _Glossiness;
+    float _Specular;
+    float _SpecularIntensity;
+    float _ReplaceSpecular;
+    float _Anisotropy;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_MSSO);
+    float4 _MSSO_ST;
+    samplerCUBE _FallbackCubemap;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_TangentMap);
+    float4 _SpecularTintTexture_ST;
+    float4 _SpecularTint;
+    float4 _TangentMap_ST;
+    int _SpecularEnergyMode;
+    float _SpecularEnergy;
+    float _SpecularEnergyMin;
+    float _SpecularEnergyMax;
     // specific specular modes
     #if defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
         UNITY_DECLARE_TEX2D(_HighlightRamp);

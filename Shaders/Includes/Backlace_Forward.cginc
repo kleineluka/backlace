@@ -111,9 +111,6 @@ struct FragmentData
         float4 alChannel2 : TEXCOORD14; // x=pathing, y=glitter, z=iridescence, w=decalHue
         float2 alChannel3 : TEXCOORD15; // x=decalEmission, y=decalOpacity
     #endif // _BACKLACE_AUDIOLINK
-    #if defined(_BACKLACE_PS1)
-        float4 affineUV : TEXCOORD16;
-    #endif // _BACKLACE_PS1
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

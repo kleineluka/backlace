@@ -839,7 +839,8 @@
 #endif // _BACKLACE_WORLD_EFFECT
 
 // dither feature
-#if defined(_BACKLACE_DITHER)
+#if defined(BACKLACE_CAPABILITIES_HIGH)
+    int _ToggleDither;
     float _DitherAmount;
     float _DitherScale;
     float _DitherSpace;
@@ -863,7 +864,7 @@
         float pattern = GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
         Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
     }
-#endif // _BACKLACE_DITHER
+#endif // BACKLACE_CAPABILITIES_HIGH
 
 // touch reactive effect
 #if defined(_BACKLACE_TOUCH_REACTIVE)
@@ -910,7 +911,8 @@
 #endif // _BACKLACE_TOUCH_REACTIVE
 
 // flat model feature
-#if defined(_BACKLACE_FLAT_MODEL)
+#if defined(BACKLACE_CAPABILITIES_HIGH)
+    int _ToggleFlatModel;
     float _FlatModel;
     float _FlatModelDepthCorrection;
     float _FlatModelFacing;
@@ -946,7 +948,7 @@
         finalClipPos = UnityWorldToClipPos(float4(finalWorldPos, 1.0));
         finalWorldNormal = UnityObjectToWorldNormal(normal);
     }
-#endif // _BACKLACE_FLAT_MODEL
+#endif // BACKLACE_CAPABILITIES_HIGH
 
 // vertex distortion feature
 #if defined(_BACKLACE_VERTEX_DISTORTION)
@@ -1324,10 +1326,10 @@
 #endif // _BACKLACE_PARALLAX
 
 // ps1 feature
-#if defined(_BACKLACE_PS1)
+#if defined(BACKLACE_CAPABILITIES_HIGH)
+    int _TogglePS1; // replaced keyword
     int _PS1Rounding;
     float _PS1RoundingPrecision;
-    int _PS1Affine;
     int _PS1Compression;
     float _PS1CompressionPrecision;
 
@@ -1347,18 +1349,6 @@
             pos.xy *= pos.w;
             i.pos = pos;
         }
-        if (_PS1Affine == 1)
-        {
-            i.affineUV = float4(v.uv.x, v.uv.y, 0, 0) * i.pos.w;
-        }
-    }
-
-    void ApplyPS1AffineUV(inout float2 uv, in FragmentData i)
-    {
-        if (_PS1Affine == 1)
-        {
-            uv = i.affineUV.xy / i.pos.w;
-        }
     }
 
     void ApplyPS1ColorCompression(inout float4 finalColor)
@@ -1368,7 +1358,7 @@
             finalColor.rgb = floor(finalColor.rgb * _PS1CompressionPrecision) / _PS1CompressionPrecision;
         }
     }
-#endif // _BACKLACE_PS1
+#endif // BACKLACE_CAPABILITIES_HIGH
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]

@@ -1,5 +1,7 @@
 ## Version 3.0.0
-- This is a combintion of a tonne of smaller updates that I figured would be best released together.
+- This is a combintion of a tonne of smaller updates that I figured would be best released together. Anyways..
+- Improved Shadowcaster pass when using various options (Flat Model, UV Effects, etc.)
+- Removed many keywords!
 
 ## Version 2.2.0
 - Rewrote some less-than-ideal lighting data calculations leftover from Toony Standard Rebuild

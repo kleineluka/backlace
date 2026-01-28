@@ -19,9 +19,6 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     FragData = i;
     LoadUVs();
     Uvs[0] = ManipulateUVs(FragData.uv, _UV_Rotation, _UV_Scale_X, _UV_Scale_Y, _UV_Offset_X, _UV_Offset_Y, _UV_Scroll_X_Speed, _UV_Scroll_Y_Speed);
-    #if defined(_BACKLACE_PS1)
-        ApplyPS1AffineUV(Uvs[0], i);
-    #endif // _BACKLACE_PS1
     GetGeometryVectors(Surface, FragData);
     #if defined(_BACKLACE_UV_EFFECTS)
         ApplyUVEffects(Uvs[0], Surface);
@@ -195,9 +192,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
             AddClearcoatVertex(Surface);
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // _BACKLACE_CLEARCOAT
-    #if defined(_BACKLACE_PS1)
-        ApplyPS1ColorCompression(Surface.FinalColor);
-    #endif // _BACKLACE_PS1
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_TogglePS1 == 1) ApplyPS1ColorCompression(Surface.FinalColor);
+    #endif // BACKLACE_CAPABILITIES_HIGH
     #if defined(_BACKLACE_DECALS)
         [branch] if (_DecalStage == 1) // late
         {
@@ -209,9 +206,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_DISTANCE_FADE)
         ApplyDistanceFadePost(i, fadeFactor, isNearFading, Surface);
     #endif // _BACKLACE_DISTANCE_FADE
-    #if defined(_BACKLACE_DITHER)
-        ApplyDither(Surface, i.worldPos.xy, Uvs[_Dither_UV]);
-    #endif // _BACKLACE_DITHER
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_ToggleDither == 1) ApplyDither(Surface, i.worldPos.xy, Uvs[_Dither_UV]);
+    #endif // BACKLACE_CAPABILITIES_HIGH
     #if defined(_BACKLACE_VRCHAT_MIRROR)
         ApplyMirrorDetectionPost(Surface); // todo: move before lighting but store alpha if not culling
     #endif // _BACKLACE_VRCHAT_MIRROR 
