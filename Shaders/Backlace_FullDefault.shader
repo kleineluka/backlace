@@ -377,25 +377,24 @@ Shader "luka/backlace/default"
         _SheenRoughness ("Sheen Roughness", Float) = 0.5
 
         // RIM LIGHTING
-        // [Space(35)]
-        // [Header(Rim Lighting)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_RIMLIGHT)] _ToggleRimlight ("Enable Rim Lighting", Float) = 0.0
+        [KeywordEnum(Disabled, Fresnel, Depth, Normal)] _RimMode ("Rim Light Mode", Int) = 0
+        // fresnel
         [HDR] _RimColor ("Rim Color", Color) = (1, 1, 1, 1)
         _RimWidth ("Rim Width", Range(20, 0.1)) = 2.5
         _RimIntensity ("Rim Intensity", Float) = 1.0
         [Enum(Disabled, 0, Enabled, 1)] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
-
-        // SCREEN SPACE RIM LIGHTING
-        // [Space(35)]
-        // [Header(Depth Rim Lighting)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_DEPTH_RIMLIGHT)] _ToggleDepthRim ("Enable Depth Rim Lighting", Float) = 0.0
+        // depth
         [HDR] _DepthRimColor ("Color", Color) = (0.5, 0.75, 1, 1)
         _DepthRimWidth ("Width", Range(0, 0.5)) = 0.1
         _DepthRimThreshold ("Threshold", Range(0.01, 1)) = 0.1
         _DepthRimSharpness ("Sharpness", Range(0.01, 1)) = 0.1
         [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
+        // normal
+        [HDR] _OffsetRimColor ("Color", Color) = (1, 1, 1, 1)
+        _OffsetRimWidth ("Width", Range(0, 0.2)) = 0.02
+        _OffsetRimHardness ("Hardness", Range(0.01, 1)) = 0.5
+        [Enum(Disabled, 0, Enabled, 1)] _OffsetRimLightBased ("Light-Based", Float) = 1.0
+        [Enum(Additive, 0, Replace, 1, Multiply, 2)] _OffsetRimBlendMode ("Blend Mode", Int) = 0
 
         // CLEARCOAT
         // [Space(35)]
@@ -489,8 +488,14 @@ Shader "luka/backlace/default"
         _HueShift ("Hue Shift", Range(-1, 1)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _ToggleAutoCycle ("Enable Auto Cycle Hue", Float) = 0.0
         _AutoCycleSpeed ("Auto Cycle Speed", Float) = 0.1
-        [NoScaleOffset] _ColorGradingLUT ("Color Grading LUT", 2D) = "white" { }
+        [Enum(Disabled, 0, LUT, 1, ACES, 2, GT, 3, Lit Colour Wheel, 4)] _ColorGradingMode ("Colour Grading Mode", Int) = 0
+        [NoScaleOffset] _ColorGradingLUT ("Colour Grading LUT", 2D) = "white" { }
         _ColorGradingIntensity ("Grading Intensity", Range(0, 1)) = 0.0
+        _GTShadows ("Black Tightness", Range(1, 2)) = 1.33
+        _GTHighlights ("Highlight Roll-off", Range(0.1, 1)) = 1.0
+        _LCWLift ("LCW Lift", Color) = (0, 0, 0, 0)
+        _LCWGamma ("LCW Gamma", Color) = (1, 1, 1, 1)
+        _LCWGain ("LCW Gain", Color) = (1, 1, 1, 1)
         _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
         _Brightness ("Brightness", Range(0, 2)) = 1.0
 

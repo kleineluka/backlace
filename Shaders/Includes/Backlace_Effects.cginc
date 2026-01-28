@@ -25,6 +25,65 @@
     float _ColorGradingIntensity;
     float _BlackAndWhite;
     float _Brightness;
+    int _ColorGradingMode;
+    float _GTShadows;
+    float _GTHighlights;
+    float3 _LCWLift;
+    float3 _LCWGamma;
+    float3 _LCWGain;
+
+    // attribution: Krzysztof Narkowicz
+    float3 ApplyTonemapACES(float3 x)
+    {
+        const float a = 2.51;
+        const float b = 0.03;
+        const float c = 2.43;
+        const float d = 0.59;
+        const float e = 0.14;
+        return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
+    }
+
+    // attribution: Hajime Uchimura (presented at CEDEC 2017)
+    float3 ApplyTonemapGT(float3 x, float shadows, float highlights)
+    {
+        const float P = 1.0;  // max brightness
+        const float a = highlights;
+        const float m = 0.22; // linear section start
+        const float l = 0.4;  // linear section length
+        const float c = shadows;
+        const float b = 0.0;  // black drift
+        float l0 = ((P - m) * l) / a;
+        float L0 = m - m / a;
+        float L1 = m + (1.0 - m) / a;
+        float S0 = m + l0;
+        float S1 = m + a * l0;
+        float C2 = (a * P) / (P - S1);
+        float cp = -C2 / P;
+        float3 w0 = 1.0 - smoothstep(0.0, m, x);
+        float3 w2 = step(m + l0, x);
+        float3 w1 = 1.0 - w0 - w2;
+        float3 T = m * pow(max(0.0, x / m), c) + b;
+        float3 L = m + a * (x - m);
+        float3 S = P - (P - S1) * exp(cp * (x - S0));
+        return T * w0 + L * w1 + S * w2;
+    }
+
+    float3 ApplyColourWheelLit(float3 color, float3 lift, float3 gamma, float3 gain, float lightWeight)
+    {
+        float luminance = dot(color, float3(0.2126, 0.7152, 0.0722));
+        float shadowMask = saturate(1.0 - luminance * 2.0);
+        float highlightMask = saturate((luminance - 0.5) * 2.0);
+        float midMask = saturate(1.0 - shadowMask - highlightMask);
+        float3 graded = color;
+        graded += lift * shadowMask * (1.0 - lightWeight);
+        graded *= lerp(1.0, gain, highlightMask * lightWeight);
+        graded = pow(
+            max(graded, 1e-5),
+            lerp(1.0, gamma, midMask)
+        );
+        return saturate(graded);
+    }
+
 
     void ApplyPostProcessing(inout BacklaceSurfaceData Surface, FragmentData i)
     {
@@ -60,10 +119,27 @@
 
         }
         // colour grading
-        [branch] if (_ColorGradingIntensity > 0)
+        [branch] if (_ColorGradingMode != 0)
         {
-            float3 gradedColor = UNITY_SAMPLE_TEX2D_SAMPLER(_ColorGradingLUT, _MainTex, finalColor.rg).rgb;
-            finalColor = lerp(finalColor, gradedColor, _ColorGradingIntensity);
+            switch (_ColorGradingMode)
+            {
+                case 2: // ACES
+                    float3 acesColor = ApplyTonemapACES(finalColor);
+                    finalColor = lerp(finalColor, acesColor, _ColorGradingIntensity);
+                    break;
+                case 3: // GT
+                    float3 gtColor = ApplyTonemapGT(finalColor, _GTShadows, _GTHighlights);
+                    finalColor = lerp(finalColor, gtColor, _ColorGradingIntensity);
+                    break;
+                case 4: // Lit Colour Wheel
+                    float3 lcwColor = ApplyColourWheelLit(finalColor, _LCWLift, _LCWGamma, _LCWGain, Surface.UnmaxedNdotL);
+                    finalColor = lerp(finalColor, lcwColor, _ColorGradingIntensity);
+                    break;
+                default: // (1) LUT
+                    float3 gradedColor = UNITY_SAMPLE_TEX2D_SAMPLER(_ColorGradingLUT, _MainTex, finalColor.rg).rgb;
+                    finalColor = lerp(finalColor, gradedColor, _ColorGradingIntensity);
+                    break;
+            }
         }
         // black and white
         [branch] if (_BlackAndWhite > 0)
@@ -85,84 +161,153 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-// fresnel rim features
-#if defined(_BACKLACE_RIMLIGHT)
-    float3 Rimlight;
-    float4 _RimColor;
-    float _RimWidth;
-    float _RimIntensity;
-    float _RimLightBased;
-    
-    void CalculateRimlight(inout BacklaceSurfaceData Surface)
-    {
-        float fresnel = 1 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
-        fresnel = pow(fresnel, _RimWidth);
-        [branch] if (_RimLightBased > 0)
+// all rim effects 
+#if defined(BACKLACE_RIMLIGHT)
+    // simple fresnel rim
+    #if defined(_RIMMODE_FRESNEL)
+        float3 Rimlight;
+        float4 _RimColor;
+        float _RimWidth;
+        float _RimIntensity;
+        float _RimLightBased;
+        
+        void CalculateRimlight(inout BacklaceSurfaceData Surface)
         {
-            fresnel *= Surface.NdotL;
+            float fresnel = 1 - saturate(dot(Surface.NormalDir, Surface.ViewDir));
+            fresnel = pow(fresnel, _RimWidth);
+            if (_RimLightBased > 0)
+            {
+                fresnel *= Surface.NdotL;
+            }
+            Rimlight = fresnel * _RimColor.rgb * _RimIntensity * Surface.Attenuation;
         }
-        Rimlight = fresnel * _RimColor.rgb * _RimIntensity * Surface.Attenuation;
-    }
-#endif // _BACKLACE_RIMLIGHT
+    // depth-based rim
+    #elif defined(_RIMMODE_DEPTH) // _RIMMODE_*
+        #include "./Backlace_Depth.cginc"
+        float4 _DepthRimColor;
+        float _DepthRimWidth;
+        float _DepthRimThreshold;
+        float _DepthRimSharpness;
+        int _DepthRimBlendMode;
 
-// depth rim features
-#if defined(_BACKLACE_DEPTH_RIMLIGHT)
-    #ifndef BACKLACE_DEPTH
-        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-        float4 _CameraDepthTexture_TexelSize;
-        #define BACKLACE_DEPTH
-    #endif // BACKLACE_DEPTH
-    float4 _DepthRimColor;
-    float _DepthRimWidth;
-    float _DepthRimThreshold;
-    float _DepthRimSharpness;
-    int _DepthRimBlendMode;
+        // sobel point array
+        static const int2 sobelPoints[9] = {
+            int2(-1, -1), int2(0, -1), int2(1, -1),
+            int2(-1, 0), int2(0, 0), int2(1, 0),
+            int2(-1, 1), int2(0, 1), int2(1, 1)
+        };
 
-    // sobel point array
-    static const int2 sobelPoints[9] = {
-        int2(-1, -1), int2(0, -1), int2(1, -1),
-        int2(-1, 0), int2(0, 0), int2(1, 0),
-        int2(-1, 1), int2(0, 1), int2(1, 1)
-    };
-
-    // logic to keep rim consistent regardless of camera distance / depth
-    float ScaleRimWidth(float z)
-    {
-        float scale = 1.0 / z;
-        return _DepthRimWidth * 50.0 / _ScreenParams.y * scale;
-    }
-
-    void ApplyDepthRim(inout BacklaceSurfaceData Surface, FragmentData i)
-    {
-        float sceneDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w)).r;
-        float sceneDepthLinear = LinearEyeDepth(sceneDepthRaw);
-        float modelDepthLinear = i.scrPos.w;;
-        float depthStatus = 0;
-        [unroll(9)]
-        for (int idx = 0; idx < 9; idx++)
+        // logic to keep rim consistent regardless of camera distance / depth
+        float ScaleRimWidth(float z)
         {
-            float2 offset = sobelPoints[idx] * ScaleRimWidth(modelDepthLinear);
-            float sampleDepthRaw = tex2D(_CameraDepthTexture, float2(i.scrPos.xy / i.scrPos.w) + offset).r;
-            float sampleDepthLinear = LinearEyeDepth(sampleDepthRaw);
-            depthStatus += step(modelDepthLinear + _DepthRimThreshold, sampleDepthLinear);
+            float scale = 1.0 / z;
+            return _DepthRimWidth * 50.0 / _ScreenParams.y * scale;
         }
-        float edgeFactor = depthStatus / 9.0;
-        edgeFactor = pow(edgeFactor, _DepthRimSharpness);
-        float rimIntensity = edgeFactor * _DepthRimColor.a;
-        switch(_DepthRimBlendMode)
+
+        void ApplyDepthRim(inout BacklaceSurfaceData Surface, FragmentData i)
         {
-            case 0: // additive
-            Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
-            break;
-            case 1: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
-            break;
-            default: // multiply (case 2)
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
-            break;
+            float2 screenUV = float2(i.scrPos.xy / i.scrPos.w);
+            float sceneDepthRaw = tex2D(_CameraDepthTexture, screenUV).r;
+            float sceneDepthLinear = GetLinearZFromZDepthWorksWithMirrors(sceneDepthRaw, screenUV);
+            float modelDepthLinear = i.scrPos.w;;
+            float depthStatus = 0;
+            [unroll(9)]
+            for (int idx = 0; idx < 9; idx++)
+            {
+                float2 offset = sobelPoints[idx] * ScaleRimWidth(modelDepthLinear);
+                float2 offsetUV = screenUV + offset;
+                float sampleDepthRaw = tex2D(_CameraDepthTexture, offsetUV).r;
+                float sampleDepthLinear = GetLinearZFromZDepthWorksWithMirrors(sampleDepthRaw, offsetUV);
+                depthStatus += step(modelDepthLinear + _DepthRimThreshold, sampleDepthLinear);
+            }
+            float edgeFactor = depthStatus / 9.0;
+            edgeFactor = pow(edgeFactor, _DepthRimSharpness);
+            float rimIntensity = edgeFactor * _DepthRimColor.a;
+            switch(_DepthRimBlendMode)
+            {
+                case 0: // additive
+                Surface.FinalColor.rgb += _DepthRimColor.rgb * rimIntensity;
+                break;
+                case 1: // replace
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _DepthRimColor.rgb, rimIntensity);
+                break;
+                default: // multiply (case 2)
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _DepthRimColor.rgb, rimIntensity);
+                break;
+            }
         }
-    }
-#endif // _BACKLACE_DEPTH_RIMLIGHT
+    // normal offset rim
+    #elif defined(_RIMMODE_NORMAL) // _RIMMODE_*
+        #include "./Backlace_Depth.cginc"
+        float4 _OffsetRimColor;
+        float _OffsetRimWidth;
+        float _OffsetRimHardness;
+        float _OffsetRimLightBased;
+        int _OffsetRimBlendMode;
+
+        // Helper Functions
+        float ExtractFOV()
+        {
+            // Extracts vertical FOV in degrees from the projection matrix
+            return 2.0 * atan(1.0 / unity_CameraProjection._m11) * 57.2958;
+        }
+
+        float FOVRange(float minFOV, float maxFOV, float currentFOV)
+        {
+            return saturate((currentFOV - minFOV) / (maxFOV - minFOV));
+        }
+
+        void ApplyOffsetRim(inout BacklaceSurfaceData Surface, FragmentData i)
+        {
+            float3 viewNormal = mul((float3x3)UNITY_MATRIX_V, Surface.NormalDir);
+            float2 screenUV = i.scrPos.xy / i.scrPos.w;
+            // depth samples
+            float modelDepthLinear = i.scrPos.w;
+            float sceneDepthRaw = tex2D(_CameraDepthTexture, screenUV).r;
+            float sceneDepthLinear = GetLinearZFromZDepthWorksWithMirrors(sceneDepthRaw, screenUV);
+            // fov-based scaling logic
+            float fov = clamp(ExtractFOV(), 1.0, 179.0);
+            float range = FOVRange(0.0, 180.0, fov);
+            // calculate width relative to distance and FOV
+            float cameraDistScale = 1.0 / modelDepthLinear;
+            float width_depth = cameraDistScale / (range + 0.0001); // avoid / by zero
+            float rim_width = _OffsetRimWidth * 0.0025;
+            // tighten the width based on range
+            float finalWidth = lerp(rim_width * 0.5, rim_width * 0.45, range) * width_depth;
+            // apply offset and sample
+            float2 uvOffset = viewNormal.xy * finalWidth;
+            uvOffset.x *= (_ScreenParams.y / _ScreenParams.x); // aspect ratio correction
+            float2 offsetUV = screenUV + uvOffset;
+            float offsetDepthRaw = tex2D(_CameraDepthTexture, offsetUV).r;
+            float offsetDepthLinear = GetLinearZFromZDepthWorksWithMirrors(offsetDepthRaw, offsetUV);
+            // calculate intensity
+            float rimDiff = offsetDepthLinear - modelDepthLinear;
+            float rimIntensity = smoothstep(0.0, _OffsetRimHardness * 0.25, rimDiff);
+            // light based adjustment (optional..)
+            if (_OffsetRimLightBased == 1)
+            {
+                float ndotl = saturate(dot(Surface.NormalDir, _WorldSpaceLightPos0.xyz));
+                float lightMask = smoothstep(0.0, 0.2, ndotl); // a tiny smoothen
+                rimIntensity = lerp(0.0, rimIntensity, lightMask);
+            }
+            // composite final rim colour
+            rimIntensity = saturate(rimIntensity);
+            // blend it in
+            switch(_OffsetRimBlendMode)
+            {
+                case 0: // Additive
+                Surface.FinalColor.rgb += float3(_OffsetRimColor.rgb * _OffsetRimColor.a * rimIntensity);
+                    break;
+                case 1: // Replace
+                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, _OffsetRimColor.rgb, rimIntensity * _OffsetRimColor.a);
+                    break;
+                default: // Multiply
+                    Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * _OffsetRimColor.rgb, rimIntensity * _OffsetRimColor.a);
+                    break;
+            }
+        }
+    #endif // _RIMMODE_*
+#endif // BACKLACE_RIMLIGHT
 
 // matcap features
 #if defined(_BACKLACE_MATCAP)
@@ -868,11 +1013,7 @@
 
 // touch reactive effect
 #if defined(_BACKLACE_TOUCH_REACTIVE)
-    #ifndef BACKLACE_DEPTH // prevent re-declaration of depth texture
-        UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-        float4 _CameraDepthTexture_TexelSize;
-        #define BACKLACE_DEPTH
-    #endif // BACKLACE_DEPTH
+    #include "./Backlace_Depth.cginc"
     float4 _TouchColor;
     float _TouchRadius;
     float _TouchHardness;
@@ -1506,6 +1647,7 @@
 
     // screen space reflection feature
     #if defined(_BACKLACE_SSR)
+        #include "./Backlace_Depth.cginc"
         float _SSRMode;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_SSRMask);
         float4 _SSRTint;
@@ -1534,12 +1676,6 @@
         float _SSRCamFadeEnd;
         int _SSRSourceMode;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_SSRTexture);
-
-        #ifndef BACKLACE_DEPTH
-            UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
-            float4 _CameraDepthTexture_TexelSize;
-            #define BACKLACE_DEPTH
-        #endif // BACKLACE_DEPTH
 
         float3 SampleSSRSource(float2 uv)
         {

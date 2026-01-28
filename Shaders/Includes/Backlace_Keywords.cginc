@@ -48,8 +48,9 @@
 
 
 #if defined(BACKLACE_CAPABILITIES_MEDIUM)
-    #pragma shader_feature_local _ _BACKLACE_RIMLIGHT
-    #pragma shader_feature_local _ _BACKLACE_DEPTH_RIMLIGHT
+    // #pragma shader_feature_local _ _BACKLACE_RIMLIGHT <- merged
+    // #pragma shader_feature_local _ _BACKLACE_DEPTH_RIMLIGHT <- merged
+    #pragma shader_feature_local _ _RIMMODE_FRESNEL _RIMMODE_DEPTH _RIMMODE_NORMAL
     #pragma shader_feature_local _ _BACKLACE_MATCAP
     #pragma shader_feature_local _ _BACKLACE_CUBEMAP
     #pragma shader_feature_local _ _BACKLACE_CLEARCOAT
@@ -118,6 +119,10 @@
 #if defined(_SPECULARMODE_STANDARD) || defined(_SPECULARMODE_ANISOTROPIC) || defined(_SPECULARMODE_TOON) || defined(_SPECULARMODE_HAIR) || defined(_SPECULARMODE_CLOTH)
     #define BACKLACE_SPECULAR
 #endif // _SPECULARMODE_*
+
+#if defined(_RIMMODE_FRESNEL) || defined(_RIMMODE_DEPTH) || defined(_RIMMODE_NORMAL)
+    #define BACKLACE_RIMLIGHT
+#endif // _RIMMODE_*
 
 
 #endif // BACKLACE_KEYWORDS_CGINC

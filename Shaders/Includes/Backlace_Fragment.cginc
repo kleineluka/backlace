@@ -145,16 +145,19 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
             AddVertexSpecular(Surface);
         #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
     #endif // BACKLACE_SPECULAR
-    #if defined(_BACKLACE_RIMLIGHT)
-        CalculateRimlight(Surface);
-        #if defined(_BACKLACE_AUDIOLINK)
-            Rimlight *= i.alChannel1.y;
-        #endif // !_BACKLACE_AUDIOLINK
-        Surface.FinalColor.rgb += Rimlight;
-    #endif // _BACKLACE_RIMLIGHT
-    #if defined(_BACKLACE_DEPTH_RIMLIGHT)
-        ApplyDepthRim(Surface, i);
-    #endif // _BACKLACE_DEPTH_RIMLIGHT
+    #if defined(BACKLACE_RIMLIGHT)
+        #if defined(_RIMMODE_FRESNEL)
+            CalculateRimlight(Surface);
+            #if defined(_BACKLACE_AUDIOLINK)
+                Rimlight *= i.alChannel1.y;
+            #endif // !_BACKLACE_AUDIOLINK
+            Surface.FinalColor.rgb += Rimlight;
+        #elif defined(_RIMMODE_DEPTH) // _RIMMODE_*
+            ApplyDepthRim(Surface, i);
+        #elif defined(_RIMMODE_NORMAL) // _RIMMODE_*
+            ApplyOffsetRim(Surface, i);
+        #endif // _RIMMODE_*
+    #endif // BACKLACE_RIMLIGHT
     #if defined(_BACKLACE_EMISSION)
         #if defined(_BACKLACE_AUDIOLINK)
             Surface.FinalColor.rgb += ((Emission * Surface.Attenuation) * i.alChannel1.x);
