@@ -43,7 +43,7 @@
         return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
     }
 
-    // attribution: Hajime Uchimura (presented at CEDEC 2017)
+    // attribution: hajime uchimura
     float3 ApplyTonemapGT(float3 x, float shadows, float highlights)
     {
         const float P = 1.0;  // max brightness
@@ -245,10 +245,8 @@
         float _OffsetRimLightBased;
         int _OffsetRimBlendMode;
 
-        // Helper Functions
         float ExtractFOV()
         {
-            // Extracts vertical FOV in degrees from the projection matrix
             return 2.0 * atan(1.0 / unity_CameraProjection._m11) * 57.2958;
         }
 
@@ -344,14 +342,14 @@
         switch(_MatcapBlendMode)
         {
             case 0: // additive
-            Surface.FinalColor.rgb += finalMatcap;
-            break;
+                Surface.FinalColor.rgb += finalMatcap;
+                break;
             case 1: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * matcapColor, mask * _MatcapIntensity);
+                break;
             case 2: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, matcapColor * _MatcapIntensity, mask);
+                break;
         }
     }
 #endif // _BACKLACE_MATCAP
@@ -487,7 +485,6 @@
         switch(_ShadowTextureMappingMode)
         {
             case 0: // uv albedo
-
             {
                 float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
                 texturedShadow = shadowAlbedoSample.rgb;
@@ -495,7 +492,6 @@
                 break;
             }
             case 1: // screen pattern
-
             {
                 float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
                 float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
@@ -504,7 +500,6 @@
                 break;
             }
             case 2: // triplanar
-
             {
                 float4 patternSample = SampleTextureTriplanar(
                     _ShadowTex, sampler_MainTex,
@@ -522,14 +517,14 @@
         switch(_ShadowTextureBlendMode)
         {
             case 0: // additive
-            finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
-            break;
+                finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
+                break;
             case 1: // multiply
-            finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
-            break;
+                finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
+                break;
             default: // alpha blend (2)
-            finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
-            break;
+                finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
+                break;
         }
         float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
         return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);

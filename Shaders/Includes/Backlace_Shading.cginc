@@ -455,6 +455,30 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         }
     }
 
+    // apply an anime gradient
+    void ApplyAnimeGradient(inout BacklaceSurfaceData Surface)
+    {
+        if (_ToggleAnimeGradient == 0)
+        { 
+            return;
+        }
+        else
+        {
+            float3 localPos = mul(unity_WorldToObject, float4(FragData.worldPos.xyz, 1.0)).xyz;
+            float grad = dot(localPos.xyz, _AnimeGradientDirection.xyz);
+            float mask = saturate((grad + _AnimeGradientOffset) * _AnimeGradientMultiplier);
+            float3 gradColour = lerp(_AnimeGradientColourA, _AnimeGradientColourB, mask);
+            if (_AnimeGradientMode == 0) // replace
+            {
+                Surface.Albedo.rgb = gradColour;
+            }
+            else // multiply
+            {
+                Surface.Albedo.rgb *= gradColour;
+            }
+        }
+    }
+
 
     // [ ♡ ] ────────────────────── [ ♡ ]
     //
@@ -618,9 +642,15 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float shadowTerm = smoothstep(0, _CelCastShadowFeather, shadow);
             shadowTerm = max(shadowTerm, 1.0 - _CelCastShadowPower);
             float finalLight = diffuseTerm * shadowTerm;
-            float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb;
-            float3 shadowColor = Surface.Albedo.rgb * _CelShadowTint.rgb;
-            Surface.Diffuse = lerp(shadowColor, litColor, finalLight) * Surface.LightColor.a;
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb;
+                float3 shadowColor = GetTexturedShadowColor(Surface);
+                Surface.Diffuse = lerp(shadowColor, litColor, finalLight) * Surface.LightColor.a;
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb;
+                float3 shadowColor = Surface.Albedo.rgb * _CelShadowTint.rgb;
+                Surface.Diffuse = lerp(shadowColor, litColor, finalLight) * Surface.LightColor.a;
+            #endif // _BACKLACE_SHADOW_TEXTURE
             #if defined(_BACKLACE_LTCGI)
                 float2 ltcgi_lmUV = 0;
                 #if defined(LIGHTMAP_ON)
@@ -816,7 +846,12 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float3 shallowColour = NormaliseColours(_TriBandShallowColor.rgb);
             float3 litColour = NormaliseColours(_TriBandLitColor.rgb);
             // extra post-processing tints
-            float3 finalShadow = shadowColour * _TriBandPostShadowTint.rgb;
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 texturedShadow = GetTexturedShadowColor(Surface) / Surface.Albedo; // normalize to get color multiplier
+                float3 finalShadow = texturedShadow;
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 finalShadow = shadowColour * _TriBandPostShadowTint.rgb;
+            #endif // _BACKLACE_SHADOW_TEXTURE
             float3 finalShallow = shallowColour * _TriBandPostShallowTint.rgb;
             float3 finalLit = litColour * _TriBandPostLitTint.rgb;
             // composite all the weights + colours
@@ -895,7 +930,11 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float shadowsLow = lightMapData.g - _PackedShadowSmoothness;
             float shadowsHigh = lightMapData.g + _PackedShadowSmoothness;
             float modelShadows = smoothstep(shadowsLow, shadowsHigh, halfLambert);
-            float3 shadowColour = Surface.Albedo.rgb * _PackedShadowColor.rgb;
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 shadowColour = GetTexturedShadowColor(Surface);
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 shadowColour = Surface.Albedo.rgb * _PackedShadowColor.rgb;
+            #endif // _BACKLACE_SHADOW_TEXTURE
             float2 rampUV = float2(saturate(modelShadows), lightMapData.b);
             float3 rampColour = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, rampUV).rgb;
             float3 litColour = Surface.Albedo.rgb * _PackedLitColor.rgb;
@@ -930,7 +969,11 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             // red: ambient occlusion, green: specular mask, blue: clipping
             float4 baseMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapOne, _MainTex, Uvs[0]);
             // rgb: shaded colours
-            float3 shadedAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, Uvs[0]).rgb;
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 shadedAlbedo = GetTexturedShadowColor(Surface);
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 shadedAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, Uvs[0]).rgb;
+            #endif // _BACKLACE_SHADOW_TEXTURE
             // rgb: control map (g: metal, b: rim)
             float3 controlMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapThree, _MainTex, Uvs[0]).rgb;
             // basic lighting
@@ -991,16 +1034,29 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float litOnly = saturate(1.0 - shadow1Mask - shadow2Mask);
             // prepare colours for each layer
             float3 litColor = Surface.Albedo.rgb * _PackedLitColor.rgb;
-            float3 shadow1Color = sssColor * _PackedGGShadow1Tint.rgb;
-            float3 shadow2Color = sssColor * _PackedGGShadow2Tint.rgb * 0.7; // deeper shadow
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 texturedShadowBase = GetTexturedShadowColor(Surface);
+                float3 shadow1Color = texturedShadowBase * _PackedGGShadow1Tint.rgb;
+                float3 shadow2Color = texturedShadowBase * _PackedGGShadow2Tint.rgb * 0.7; // deeper shadow
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 shadow1Color = sssColor * _PackedGGShadow1Tint.rgb;
+                float3 shadow2Color = sssColor * _PackedGGShadow2Tint.rgb * 0.7; // deeper shadow
+            #endif // _BACKLACE_SHADOW_TEXTURE
             // blend shadow layers
             float3 shadowResult = lerp(shadow1Color, shadow2Color, saturate(1.0 - shadow1Only));
             // final diffuse blend
             float3 diffuseResult = lerp(shadowResult, litColor, litOnly);
             // apply detail lines (lerp towards line color in dark areas of detail map)
-            diffuseResult = lerp(_PackedShadowColor.rgb * sssColor, diffuseResult, detailLines.r);
-            // apply ILM alpha line mask
-            diffuseResult = lerp(_PackedShadowColor.rgb * sssColor, diffuseResult, ilmData.a);
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 lineColor = GetTexturedShadowColor(Surface);
+                diffuseResult = lerp(lineColor, diffuseResult, detailLines.r);
+                // apply ILM alpha line mask
+                diffuseResult = lerp(lineColor, diffuseResult, ilmData.a);
+            #else // _BACKLACE_SHADOW_TEXTURE
+                diffuseResult = lerp(_PackedShadowColor.rgb * sssColor, diffuseResult, detailLines.r);
+                // apply ILM alpha line mask
+                diffuseResult = lerp(_PackedShadowColor.rgb * sssColor, diffuseResult, ilmData.a);
+            #endif // _BACKLACE_SHADOW_TEXTURE
             // specular calculation (half-vector based)
             float3 halfVec = normalize(Surface.LightDir + Surface.ViewDir);
             float ndh = saturate(dot(Surface.NormalDir, halfVec));
@@ -1067,7 +1123,11 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float2 lutUV = float2(ndotl, _SkinScattering);
             float3 skinRamp = UNITY_SAMPLE_TEX2D(_SkinLUT, lutUV).rgb;
             float rampLuma = GetLuma(skinRamp);
-            float3 tint = lerp(_SkinShadowColor.rgb, float3(1, 1, 1), rampLuma);
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 tint = lerp(GetTexturedShadowColor(Surface) / Surface.Albedo, float3(1, 1, 1), rampLuma);
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 tint = lerp(_SkinShadowColor.rgb, float3(1, 1, 1), rampLuma);
+            #endif // _BACKLACE_SHADOW_TEXTURE
             Surface.Diffuse = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a * skinRamp * tint;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * smoothstep(0, 0.5, rampLuma);
             Surface.Attenuation = rampLuma * Surface.LightColor.a;
@@ -1099,7 +1159,12 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float wrappedTerm = (Surface.UnmaxedNdotL + _WrapFactor) / (1.0 + _WrapFactor); // (N*L + w) / (1 + w)
             float wrappedNdotL = saturate(wrappedTerm);
             float normalizationFactor = lerp(1.0, 1.0 / (1.0 + _WrapFactor), _WrapNormalization);
-            float3 ramp = lerp(_WrapColorLow.rgb, _WrapColorHigh.rgb, wrappedNdotL);
+            #if defined(_BACKLACE_SHADOW_TEXTURE)
+                float3 shadowColor = GetTexturedShadowColor(Surface) / Surface.Albedo;
+                float3 ramp = lerp(shadowColor, _WrapColorHigh.rgb, wrappedNdotL);
+            #else // _BACKLACE_SHADOW_TEXTURE
+                float3 ramp = lerp(_WrapColorLow.rgb, _WrapColorHigh.rgb, wrappedNdotL);
+            #endif // _BACKLACE_SHADOW_TEXTURE
             ramp *= normalizationFactor;
             Surface.Diffuse = Surface.Albedo * ramp * Surface.LightColor.rgb * Surface.LightColor.a;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo;
@@ -1150,6 +1215,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
         // apply applicable mixins
+        ApplyAnimeGradient(Surface);
         Surface.NormalDir = GetManualNormals(Surface);
         ApplyStockings(Surface);
         ApplyEyeParallax(Surface);

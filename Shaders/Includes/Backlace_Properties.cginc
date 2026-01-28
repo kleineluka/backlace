@@ -254,6 +254,14 @@ float3 _VertexManipulationScale;
     int _ToggleLipOutline;
     float4 _LipOutlineColor;
     float _LipOutlineIntensity;
+    // anime gradient
+    int _ToggleAnimeGradient;
+    int _AnimeGradientMode;
+    float4 _AnimeGradientDirection;
+    float4 _AnimeGradientColourA;
+    float4 _AnimeGradientColourB;
+    float _AnimeGradientOffset;
+    float _AnimeGradientMultiplier;
     #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
         float _Ramp_UV;

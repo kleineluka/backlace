@@ -336,6 +336,14 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _ToggleLipOutline ("Enable Lip Outline", Int) = 0
         _LipOutlineColor ("Lip Outline Color", Color) = (0.6, 0.1, 0.1, 1)
         _LipOutlineIntensity ("Lip Outline Intensity", Range(0, 1)) = 1.0
+        // anime gradient
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleAnimeGradient ("Enable Anime Gradient", Int) = 0
+        [Enum(Replace, 0, Multiply, 1)] _AnimeGradientMode ("Gradient Mode", Int) = 0
+        _AnimeGradientDirection ("Gradient Direction", Vector) = (0, 1, 0, 0)
+        _AnimeGradientColourA ("Gradient Color A", Color) = (1, 1, 1, 1)
+        _AnimeGradientColourB ("Gradient Color B", Color) = (0, 0, 0, 1)
+        _AnimeGradientOffset ("Gradient Offset", Range(-1, 1)) = 0.0
+        _AnimeGradientMultiplier ("Gradient Multiplier", Float) = 1.0
 
         // SPECULAR
         // [Space(35)]
