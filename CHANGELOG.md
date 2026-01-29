@@ -4,7 +4,7 @@
 - Removed many keywords!
 
 ## Version 2.2.0
-- Rewrote some less-than-ideal lighting data calculations leftover from Toony Standard Rebuild
+- Rewrote some less-than-ideal lighting data calculations
 - Introduce "NPR" and "Cel" anime modes, starting to replace the old anime modes.
 - Removed "Area Tint" from shading.
 - Streamlined shadow mapping.

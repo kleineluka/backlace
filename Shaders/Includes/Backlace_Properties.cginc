@@ -232,6 +232,22 @@ float3 _VertexManipulationScale;
     float4 _HairHeadRight;
     float _HairBlendAlpha;
     float _HairTransparencyStrength;
+    // hair masking
+    int _HairHeadMaskMode;
+    int _HairSDFPreview;
+    float4 _HairHeadCenter;
+    float4 _HairSDFScale;
+    float _HairSDFSoftness;
+    float _HairSDFBlend;
+    float _HairDistanceFalloffStart;
+    float _HairDistanceFalloffEnd;
+    float _HairDistanceFalloffStrength;
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_HairMaskTex);
+    float _HairMaskStrength;
+    int _HairExtremeAngleGuard;
+    float _HairAngleFadeStart;
+    float _HairAngleFadeEnd;
+    float _HairAngleGuardStrength;
     // expression map
     int _ToggleExpressionMap;
     UNITY_DECLARE_TEX2D_NOSAMPLER(_ExpressionMap);
@@ -395,25 +411,34 @@ float3 _VertexManipulationScale;
     float _SpecularEnergyMax;
     // specific specular modes
     #if defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
-        UNITY_DECLARE_TEX2D(_HighlightRamp);
-        float4 _HighlightRampColor;
-        float _HighlightIntensity;
-        float _HighlightRampOffset;
-        float _HighlightHardness;
-    #elif defined(_SPECULARMODE_HAIR) // _SPECULARMODE_*
-        // hair
-        UNITY_DECLARE_TEX2D(_HairFlowMap);
-        float _HairFlowMap_UV;
-        float _PrimarySpecularShift;
-        float _SecondarySpecularShift;
-        float4 _SecondarySpecularColor;
-        float _SpecularExponent;
-        float _SpecularJitter;
-    #elif defined(_SPECULARMODE_CLOTH) // _SPECULARMODE_*
-        // cloth
-        float4 _SheenColor;
-        float _SheenIntensity;
-        float _SheenRoughness;
+        // toon highlights
+        float _SpecularToonShininess;
+        float _SpecularToonRoughness;
+        float _SpecularToonSharpness;
+        float _SpecularToonIntensity;
+        float _SpecularToonThreshold;
+        float4 _SpecularToonColor;
+    #elif defined(_SPECULARMODE_ANGELHAIR) // _SPECULARMODE_*
+        // hair specular
+        int _AngelRingMode;
+        float _AngelRingSharpness;
+        float _AngelRingThreshold;
+        float _AngelRingSoftness;
+        float _AngelRing1Position;
+        float _AngelRing1Width;
+        float4 _AngelRing1Color;
+        int _UseSecondaryRing;
+        float _AngelRing2Position;
+        float _AngelRing2Width;
+        float4 _AngelRing2Color;
+        float _AngelRingHeightOffset;
+        float _AngelRingHeightScale;
+        float3 _AngelRingHeightDirection;
+        int _AngelRingBlendMode;
+        int _UseTertiaryRing;
+        float _AngelRing3Position;
+        float _AngelRing3Width;
+        float4 _AngelRing3Color;
     #endif // _SPECULARMODE_*
     // vertex specular feature
     #if defined(_BACKLACE_VERTEX_SPECULAR) // VERTEX SPECULAR

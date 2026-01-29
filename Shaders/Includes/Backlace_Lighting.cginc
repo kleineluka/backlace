@@ -509,6 +509,7 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         lightData.indirectColor = float3(0, 0, 0);
         lightData.direction = GetLightDirection();
         GetForwardAddLightData(lightData);
+        GetForwardBaseLightmapData(Surface); // still need lightmap data for shadows
         Surface.LightDir = lightData.direction;
         Surface.HalfDir = UnitySafeNormalize(Surface.LightDir + Surface.ViewDir);
         GetLightColour(lightData, Surface);

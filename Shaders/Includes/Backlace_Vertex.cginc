@@ -42,6 +42,15 @@ FragmentData Vertex(VertexData v)
     i.uv1 = v.uv1;
     i.uv2 = v.uv2;
     i.uv3 = v.uv3;
+    // unity macros / provided data
+    UNITY_TRANSFER_SHADOW(i, v.uv);
+    UNITY_TRANSFER_FOG(i, i.pos);
+    #if defined(LIGHTMAP_ON)
+        i.lightmapUV = v.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
+    #endif // LIGHTMAP_ON
+    #if defined(DYNAMICLIGHTMAP_ON)
+        i.dynamicLightmapUV = v.uv2 * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+    #endif // DYNAMICLIGHTMAP_ON
     // ps1 effect
     #if defined(BACKLACE_CAPABILITIES_HIGH)
         [branch] if (_TogglePS1 == 1) ApplyPS1Vertex(i, v);
@@ -52,14 +61,6 @@ FragmentData Vertex(VertexData v)
     #if defined(BACKLACE_CAPABILITIES_HIGH)
         [branch] if (_ToggleFlatModel == 1) FlattenModel(v.vertex, v.normal, i.pos, i.worldPos, i.normal);
     #endif // BACKLACE_CAPABILITIES_HIGH
-    UNITY_TRANSFER_SHADOW(i, v.uv);
-    UNITY_TRANSFER_FOG(i, i.pos);
-    #if defined(LIGHTMAP_ON)
-        i.lightmapUV = v.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
-    #endif // LIGHTMAP_ON
-    #if defined(DYNAMICLIGHTMAP_ON)
-        i.dynamicLightmapUV = v.uv2 * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
-    #endif // DYNAMICLIGHTMAP_ON
     #if defined(_BACKLACE_MATCAP)
         float3 worldN = UnityObjectToWorldNormal(v.normal);
         float3 viewN = mul((float3x3)UNITY_MATRIX_V, worldN);

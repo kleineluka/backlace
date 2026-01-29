@@ -314,6 +314,22 @@ Shader "luka/backlace/default"
         _HairHeadRight ("Head Right Direction", Vector) = (1, 0, 0, 0)
         [PowerSlider(2.0)] _HairBlendAlpha ("Minimum Alpha", Range(0, 1)) = 0.5
         _HairTransparencyStrength ("Transparency Strength", Range(0, 1)) = 1.0
+        // hair masking
+        [Enum(Disabled, 0, SDF Volume, 1, Distance, 2, Texture Mask, 3)] _HairHeadMaskMode ("Head Mask Mode", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _HairSDFPreview ("Enable SDF Preview", Int) = 0
+        _HairHeadCenter ("Head Center Position (Local)", Vector) = (0, 0, 0, 0)
+        _HairSDFScale ("SDF Head Scale (XYZ)", Vector) = (0.15, 0.2, 0.12, 0)
+        _HairSDFSoftness ("SDF Softness", Float) = 0.05
+        _HairSDFBlend ("SDF Blend", Range(0, 1)) = 0.8
+        _HairDistanceFalloffStart ("Distance Falloff Start", Float) = 0.05
+        _HairDistanceFalloffEnd ("Distance Falloff End", Float) = 0.15
+        _HairDistanceFalloffStrength ("Distance Falloff Strength", Range(0, 1)) = 1
+        [NoScaleOffset] _HairMaskTex ("Hair Mask Texture (R = Allow Transparency)", 2D) = "white" { }
+        _HairMaskStrength ("Hair Mask Strength", Range(0, 1)) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _HairExtremeAngleGuard ("Guard Extreme Up/Down Angles", Int) = 0
+        _HairAngleFadeStart ("Angle Guard Start (Degrees)", Float) = 55
+        _HairAngleFadeEnd ("Angle Guard End (Degrees)", Float) = 75
+        _HairAngleGuardStrength ("Angle Guard Strength", Range(0, 1)) = 1
         // expression map
         [Enum(Disabled, 0, Enabled, 1)] _ToggleExpressionMap ("Enable Expression Map", Int) = 0
         [NoScaleOffset] _ExpressionMap ("Expression Map (RGBA)", 2D) = "white" { }
@@ -350,7 +366,7 @@ Shader "luka/backlace/default"
         // [Header(Specular)]
         // [Space(10)]
         [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
-        [KeywordEnum(Disabled, Standard, Anisotropic, Toon, Hair, Cloth)] _SpecularMode ("Specular Mode", Float) = 0
+        [KeywordEnum(Disabled, Standard, Anisotropic, Toon, AngelHair)] _SpecularMode ("Specular Mode", Float) = 0
         [Enum(Disabled, 0, Turquin, 1, Safe, 2, Manual, 3)] _SpecularEnergyMode ("Specular Energy Mode", Int) = 0
         _SpecularEnergyMin ("Specular Energy Min", Float) = 0.0
         _SpecularEnergyMax ("Specular Energy Max", Float) = 3.0
@@ -367,22 +383,32 @@ Shader "luka/backlace/default"
         _Anisotropy ("Anisotropy", Range(-1, 1)) = 0
         [Enum(Disabled, 0, Enabled, 1)] _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
         // toon highlights
-        _HighlightRamp ("Highlight Ramp", 2D) = "white" { }
-        _HighlightRampColor ("Highlight Color", Color) = (1, 1, 1, 1)
-        _HighlightIntensity ("Highlight Intensity", Float) = 1.0
-        _HighlightRampOffset ("Highlight Ramp Offset", Range(-1, 1)) = 0.0
-        _HighlightHardness ("Highlight Hardness", Range(0.01, 10)) = 0.1
+        _SpecularToonShininess ("Specular Shininess", Range(1, 128)) = 32
+        _SpecularToonRoughness ("Specular Roughness", Range(0, 0.5)) = 0.1
+        _SpecularToonSharpness ("Specular Sharpness", Range(0, 1)) = 1.0
+        _SpecularToonIntensity ("Specular Intensity", Float) = 1.0
+        _SpecularToonThreshold ("Specular Threshold", Float) = 1.0
+        [HDR] _SpecularToonColor ("Specular Color", Color) = (1, 1, 1, 1)
         // hair specular
-        [NoScaleOffset] _HairFlowMap ("Hair Flow/Tangent Map (RG)", 2D) = "gray" { }
-        _PrimarySpecularShift ("Primary Specular Shift", Range(-1, 1)) = 0
-        _SecondarySpecularShift ("Secondary Specular Shift", Range(-1, 1)) = 0.1
-        [HDR] _SecondarySpecularColor ("Secondary Specular Color", Color) = (1, 1, 1, 1)
-        _SpecularExponent ("Specular Exponent", Range(1, 256)) = 64
-        _SpecularJitter ("Specular Jitter", Range(0, 1)) = 0.02
-        // cloth specular
-        _SheenColor ("Sheen Color", Color) = (1, 1, 1, 1)
-        _SheenIntensity ("Sheen Intensity", Float) = 0.5
-        _SheenRoughness ("Sheen Roughness", Float) = 0.5
+        [Enum(View Aligned, 0, UV Flow, 1)] _AngelRingMode ("Angel Ring Mode", Int) = 0
+        _AngelRingSharpness ("Ring Sharpness", Range(1, 100)) = 20
+        _AngelRingThreshold ("Ring Threshold", Range(0, 1)) = 0.5
+        _AngelRingSoftness ("Ring Softness", Range(0, 0.5)) = 0.05
+        _AngelRing1Position ("Primary Ring Position", Range(0, 1)) = 0.5
+        _AngelRing1Width ("Primary Ring Width", Range(0.01, 0.5)) = 0.15
+        _AngelRing1Color ("Primary Ring Colour", Color) = (1, 1, 1, 1)
+        [Enum(Disabled, 0, Enabled, 1)] _UseSecondaryRing ("Enable Secondary Ring", Int) = 1
+        _AngelRing2Position ("Secondary Ring Position", Range(0, 1)) = 0.7
+        _AngelRing2Width ("Secondary Ring Width", Range(0.01, 0.5)) = 0.2
+        [HDR] _AngelRing2Color ("Secondary Ring Colour", Color) = (0.8, 0.9, 1, 0.6)
+        [Enum(Disabled, 0, Enabled, 1)] _UseTertiaryRing ("Enable Tertiary Ring", Int) = 0
+        _AngelRing3Position ("Tertiary Ring Position", Range(0, 1)) = 0.3
+        _AngelRing3Width ("Tertiary Ring Width", Range(0.01, 0.5)) = 0.1
+        [HDR] _AngelRing3Color ("Tertiary Ring Colour", Color) = (1, 0.8, 0.8, 0.5)
+        _AngelRingHeightDirection ("Height Direction", Vector) = (0, 1, 0, 0)
+        _AngelRingHeightScale ("Height Scale", Float) = 1.0
+        _AngelRingHeightOffset ("Height Offset", Float) = 0.0
+        [Enum(Add, 0, Screen, 1, Multiply, 2)] _AngelRingBlendMode ("Composite Blend Mode", Int) = 0
 
         // RIM LIGHTING
         [KeywordEnum(Disabled, Fresnel, Depth, Normal)] _RimMode ("Rim Light Mode", Int) = 0
@@ -1116,7 +1142,7 @@ Shader "luka/backlace/default"
         }
         
         // Meta Pass
-        Pass
+        /*Pass
         {
             Name "Meta"
             Tags { "LightMode" = "Meta" }
@@ -1128,7 +1154,7 @@ Shader "luka/backlace/default"
             #include "./Variants/Backlace_FullDefault.cginc"
             #include "./Includes/Backlace_Meta.cginc"
             ENDCG
-        }
+        }*/
 
     }
     //CustomEditor "Luka.Backlace.Interface"

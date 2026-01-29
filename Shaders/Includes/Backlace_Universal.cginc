@@ -69,9 +69,6 @@ struct BacklaceSurfaceData
     #if defined(BACKLACE_SPECULAR)
         float Anisotropy;
         float3 ModifiedTangent;
-        float3 HairFlow;
-        float HairShiftMask;
-        float SpecularJitter;
     #endif // BACKLACE_SPECULAR
     // misc data
     float2 ScreenCoords;
