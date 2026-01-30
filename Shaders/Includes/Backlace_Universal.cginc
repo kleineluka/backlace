@@ -76,6 +76,7 @@ struct BacklaceSurfaceData
 };
 
 // for debugging purposes
+float _ILovePantyAnarchy; // drop-in debug variable
 float4 panty() {
     return float4(1.00, 0.98, 0.25, 1.00);
 }

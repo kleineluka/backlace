@@ -1458,6 +1458,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     //
     // [ ♡ ] ────────────────────── [ ♡ ]
 
+
     #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD
         // toon highlights specular
         float3 ToonSpecular(inout BacklaceSurfaceData Surface)
@@ -1490,7 +1491,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 hairLength = Uvs[0].y;
                 flowTangent = normalize(Surface.TangentDir);
             }
-            else // view aligned
+            else if (_AngelRingMode == 0) // view aligned
             {
                 /*hairLength = (FragData.worldPos.y - FragData.worldObjectCenter.y) * _AngelRingHeightScale + _AngelRingHeightOffset;
                 hairLength = saturate(hairLength); // keep it 0-1
@@ -1503,16 +1504,63 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 float3 up = normalize(_AngelRingHeightDirection.xyz);
                 float3 right = normalize(cross(up, Surface.NormalDir));
                 flowTangent = normalize(cross(Surface.NormalDir, right));
+            } 
+            else // world aligned
+            {
+                hairLength = dot(FragData.worldPos, _AngelRingHeightDirection) - _AngelRingHeightScale;
+                float3 right = normalize(cross(_AngelRingHeightDirection, Surface.NormalDir));
+                flowTangent = normalize(cross(Surface.NormalDir, right));
+            }
+            // optional breakup mix-in
+            float breakup = 1.0;
+            float heightOffset = 0.0;
+            [branch] if (_AngelRingBreakup != 0)
+            {
+                float3 toFragment = normalize(FragData.worldPos - FragData.worldObjectCenter);
+                float3 up = normalize(_AngelRingHeightDirection.xyz);
+                float3 forward = normalize(cross(up, float3(1, 0, 0))); // or use view direction
+                float3 right = normalize(cross(up, forward));
+                float angleX = atan2(dot(toFragment, right), dot(toFragment, forward));
+                float strandCoord = (angleX / 6.28318530718) + 0.5; // 0-1 range
+                if (_AngelRingBreakup == 1)
+                {
+                    float stripes = frac(strandCoord * _AngelRingBreakupDensity);
+                    stripes = abs(stripes - 0.5) * 2.0;
+                    breakup = smoothstep(
+                        _AngelRingBreakupWidthMin,
+                        _AngelRingBreakupWidthMin + _AngelRingBreakupSoftness,
+                        stripes
+                    );
+                }
+                else if (_AngelRingBreakup == 2)
+                {
+                    float cell = floor(strandCoord * _AngelRingBreakupDensity);
+                    float rand = frac(sin(cell * 91.3458) * 47453.5453);
+                    float verticalRand = frac(sin(cell * 78.233) * 43758.5453);
+                    heightOffset = lerp(-1.0, 1.0, verticalRand) * _AngelRingBreakupHeight;
+                    float localCoord = frac(strandCoord * _AngelRingBreakupDensity);
+                    float width = lerp(
+                        _AngelRingBreakupWidthMin,
+                        _AngelRingBreakupWidthMax,
+                        rand
+                    );
+                    float center = lerp(0.3, 0.7, rand);
+                    float stripeDist = abs(localCoord - center);
+                    breakup = smoothstep(
+                        width,
+                        width + _AngelRingBreakupSoftness,
+                        stripeDist
+                    );
+                }
             }
             // specular shape
-            float dotTH = dot(flowTangent, Surface.HalfDir);
-            float sinTH = sqrt(max(0.0, 1.0 - dotTH * dotTH));
+            float dotTH = dot(flowTangent, Surface.HalfDir) + _AngelRingManualOffset;
+            float sinTH = sqrt(max(0.0, 1.0 - dotTH * dotTH)) + _AngelRingManualScale + heightOffset;
             float specShape = pow(sinTH, max(1.0, _AngelRingSharpness));
             // ring 1 logic
             float primaryDist = abs(hairLength - _AngelRing1Position);
             float primaryMask = saturate(1.0 - (primaryDist / max(0.01, _AngelRing1Width)));
-            // smoothen
-            float ring1 = specShape * smoothstep(0, 1, primaryMask);
+            float ring1 = specShape * smoothstep(0, 1, primaryMask) * breakup;
             ring1 = smoothstep(_AngelRingThreshold - _AngelRingSoftness, _AngelRingThreshold + _AngelRingSoftness, ring1);
             // ring 2 logic
             float3 ring2Final = 0;

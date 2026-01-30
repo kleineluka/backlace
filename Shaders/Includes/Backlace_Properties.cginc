@@ -439,6 +439,14 @@ float3 _VertexManipulationScale;
         float _AngelRing3Position;
         float _AngelRing3Width;
         float4 _AngelRing3Color;
+        float _AngelRingManualOffset;
+        float _AngelRingManualScale;
+        int _AngelRingBreakup;
+        float _AngelRingBreakupDensity;
+        float _AngelRingBreakupWidthMin;
+        float _AngelRingBreakupWidthMax;
+        float _AngelRingBreakupSoftness;
+        float _AngelRingBreakupHeight;
     #endif // _SPECULARMODE_*
     // vertex specular feature
     #if defined(_BACKLACE_VERTEX_SPECULAR) // VERTEX SPECULAR

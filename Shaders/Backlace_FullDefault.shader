@@ -390,7 +390,7 @@ Shader "luka/backlace/default"
         _SpecularToonThreshold ("Specular Threshold", Float) = 1.0
         [HDR] _SpecularToonColor ("Specular Color", Color) = (1, 1, 1, 1)
         // hair specular
-        [Enum(View Aligned, 0, UV Flow, 1)] _AngelRingMode ("Angel Ring Mode", Int) = 0
+        [Enum(View Aligned, 0, UV Flow, 1, Object Aligned, 2)] _AngelRingMode ("Angel Ring Mode", Int) = 0
         _AngelRingSharpness ("Ring Sharpness", Range(1, 100)) = 20
         _AngelRingThreshold ("Ring Threshold", Range(0, 1)) = 0.5
         _AngelRingSoftness ("Ring Softness", Range(0, 0.5)) = 0.05
@@ -409,6 +409,14 @@ Shader "luka/backlace/default"
         _AngelRingHeightScale ("Height Scale", Float) = 1.0
         _AngelRingHeightOffset ("Height Offset", Float) = 0.0
         [Enum(Add, 0, Screen, 1, Multiply, 2)] _AngelRingBlendMode ("Composite Blend Mode", Int) = 0
+        _AngelRingManualOffset ("Manual Offset", Float) = 0
+        _AngelRingManualScale ("Manual Scale", Float) = 0
+        [Enum(Disabled, 0, Uniform, 1, Random, 2)] _AngelRingBreakup ("Ring Breakup", Int) = 0
+        _AngelRingBreakupDensity ("Breakup Density", Float) = 1.0
+        _AngelRingBreakupWidthMin ("Breakup Width Min", Float) = 0.1
+        _AngelRingBreakupWidthMax ("Breakup Width Max", Float) = 0.3
+        _AngelRingBreakupSoftness ("Breakup Softness", Float) = 0.1
+        _AngelRingBreakupHeight ("Breakup Height", Float) = 0
 
         // RIM LIGHTING
         [KeywordEnum(Disabled, Fresnel, Depth, Normal)] _RimMode ("Rim Light Mode", Int) = 0
