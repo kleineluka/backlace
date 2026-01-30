@@ -123,7 +123,7 @@ float _UV_Scroll_Y_Speed;
 #endif // _BACKLACE_EMISSION
 
 // specular-only features
-#if defined(BACKLACE_SPECULAR)
+#if defined(_BACKLACE_SPECULAR)
     UNITY_DECLARE_TEX2D_NOSAMPLER(_SpecularTintTexture);
     float4 _SpecularTintTexture_ST;
     float4 _SpecularTint;
@@ -136,7 +136,7 @@ float _UV_Scroll_Y_Speed;
     float _SpecularEnergy;
     float _SpecularEnergyMin;
     float _SpecularEnergyMax;
-#endif // BACKLACE_SPECULAR
+#endif // _BACKLACE_SPECULAR
 
 //decal1/2-only features
 float _DecalStage;
@@ -280,15 +280,15 @@ float4 Fragment(FragmentData i) : SV_TARGET
     #else // _BACKLACE_EMISSION
         surfaceData.Emission = 0;
     #endif // _BACKLACE_EMISSION
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         SampleMSSO(Surface);
         GetSampleData(Surface);
         SetupAlbedoAndSpecColor(Surface);
-    #endif // BACKLACE_SPECULAR
+    #endif // _BACKLACE_SPECULAR
     surfaceData.Albedo = Surface.Albedo.rgb;
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         surfaceData.Albedo += Surface.SpecularColor * Surface.Roughness * Surface.Roughness * 0.5;
-    #endif // BACKLACE_SPECULAR
+    #endif // _BACKLACE_SPECULAR
     return UnityMetaFragment(surfaceData);
 }
 

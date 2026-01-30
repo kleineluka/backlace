@@ -406,9 +406,10 @@
         occlusion = lerp(1.0, occlusionTint, mask);
     }
 
-    #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
+    #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON)
         void AddClearcoatVertex(inout BacklaceSurfaceData Surface)
         {
+            if (_ToggleVertexSpecular == 0) return;
             float3 VLightDir = normalize(VertexLightDir);
             if (dot(VLightDir, VLightDir) < 0.01) return;
             float3 F0 = lerp(0.04, 1.0, _ClearcoatReflectionStrength);
@@ -420,7 +421,7 @@
             float3 clearcoatV_Spec = fresnel * distribution * geometry * Surface.Attenuation;
             Surface.FinalColor.rgb += clearcoatV_Spec * Surface.VertexDirectDiffuse * _ClearcoatColor.rgb * _ClearcoatStrength;
         }
-    #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
+    #endif // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
 #endif // _BACKLACE_CLEARCOAT
 
 // subsurface scattering features

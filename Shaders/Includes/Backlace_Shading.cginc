@@ -204,27 +204,37 @@ void Shade4PointLights(float3 normal, float3 worldPos, out float3 color, out flo
     color += unity_LightColor[2].rgb * diff.z;
     color += unity_LightColor[3].rgb * diff.w;
     direction = 0;
-    #if defined(BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
-        direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(unity_LightColor[0].rgb, 1) * diff.x;
-        direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(unity_LightColor[1].rgb, 1) * diff.y;
-        direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(unity_LightColor[2].rgb, 1) * diff.z;
-        direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(unity_LightColor[3].rgb, 1) * diff.w;
-    #endif // BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
+    #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON)
+        if (_ToggleVertexSpecular == 1)
+        {
+            direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(unity_LightColor[0].rgb, 1) * diff.x;
+            direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(unity_LightColor[1].rgb, 1) * diff.y;
+            direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(unity_LightColor[2].rgb, 1) * diff.z;
+            direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(unity_LightColor[3].rgb, 1) * diff.w;
+        }
+    #endif // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
 }
 
 // get vertex diffuse for vertex lighting
 void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 {
     Surface.VertexDirectDiffuse = 0;
-    #if defined(VERTEXLIGHT_ON)
-        #if defined(_BACKLACE_VERTEX_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON)
+        if (_ToggleVertexSpecular == 1)
+        {
             Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, VertexLightDir);
-        #else // _BACKLACE_VERTEX_SPECULAR
+        }
+        else
+        {
             float3 ignoredDir;
             Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
-        #endif // _BACKLACE_VERTEX_SPECULAR
-        Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
-    #endif // VERTEXLIGHT_ON
+        }
+        Surface.VertexDirectDiffuse *= Surface.Albedo;
+    #elif defined(VERTEXLIGHT_ON) // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
+        float3 ignoredDir;
+        Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
+        Surface.VertexDirectDiffuse *= Surface.Albedo;
+    #endif // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
 }
 
 
@@ -400,10 +410,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
         }
     }
-    float SphereSDF(float3 p, float3 center, float radius)
-    {
-        return length(p - center) - radius;
-    }
 
     // angle-based hair transparency (inspired by Star Rail)
     void ApplyHairTransparency(inout BacklaceSurfaceData Surface)
@@ -527,6 +533,146 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         }
     }
 
+    void ApplyToonHighlights(inout BacklaceSurfaceData Surface)
+    {
+        if (_ToggleSpecularToon == 0)
+        {
+            return;
+        }
+        else 
+        {
+            float blinnPhong = pow(max(0.0, Surface.NdotH), _SpecularToonShininess) * Surface.Attenuation;
+            float threshold = 1.05 - _SpecularToonThreshold;
+            float specularRaw = smoothstep(threshold - _SpecularToonRoughness, threshold + _SpecularToonRoughness, blinnPhong);
+            float sharpCurve = (specularRaw * - 2.0 + 3.0) * pow(specularRaw, 2.0);
+            specularRaw = lerp(specularRaw, sharpCurve, _SpecularToonSharpness);
+            float specularMask = specularRaw * _SpecularToonIntensity;
+            float3 specularColour = _SpecularToonColor.rgb * specularMask;
+            if (_SpecularToonUseLighting == 1)
+            {
+                specularColour *= Surface.LightColor.rgb * Surface.Attenuation;
+            }
+            Surface.FinalColor.rgb += specularColour;
+        }
+    }
+
+    void ApplyAngelRings(inout BacklaceSurfaceData Surface)
+    {
+        if (_AngelRingMode == 0)
+        {
+            return;
+        }
+        else
+        {
+            // set up between modes
+            float3 flowTangent;
+            float hairLength;
+            if (_AngelRingMode == 2) // uv mode
+            {
+                hairLength = Uvs[0].y;
+                flowTangent = normalize(Surface.TangentDir);
+            }
+            else if (_AngelRingMode == 1) // view aligned
+            {
+                /*hairLength = (FragData.worldPos.y - FragData.worldObjectCenter.y) * _AngelRingHeightScale + _AngelRingHeightOffset;
+                    hairLength = saturate(hairLength); // keep it 0-1
+                    float3 up = float3(0, 1, 0);
+                    float3 right = normalize(cross(up, Surface.NormalDir));
+                flowTangent = normalize(cross(Surface.NormalDir, right));*/
+                float3 relativePos = FragData.worldPos - FragData.worldObjectCenter;
+                float projection = dot(relativePos, normalize(_AngelRingHeightDirection.xyz));
+                hairLength = saturate(projection * _AngelRingHeightScale + _AngelRingHeightOffset);
+                float3 up = normalize(_AngelRingHeightDirection.xyz);
+                float3 right = normalize(cross(up, Surface.NormalDir));
+                flowTangent = normalize(cross(Surface.NormalDir, right));
+            }
+            else // (3) world aligned
+            {
+                hairLength = dot(FragData.worldPos, _AngelRingHeightDirection) - _AngelRingHeightScale;
+                float3 right = normalize(cross(_AngelRingHeightDirection, Surface.NormalDir));
+                flowTangent = normalize(cross(Surface.NormalDir, right));
+            }
+            // optional breakup mix-in
+            float breakup = 1.0;
+            float heightOffset = 0.0;
+            [branch] if (_AngelRingBreakup != 0)
+            {
+                float3 toFragment = normalize(FragData.worldPos - FragData.worldObjectCenter);
+                float3 up = normalize(_AngelRingHeightDirection.xyz);
+                float3 forward = normalize(cross(up, float3(1, 0, 0))); // or use view direction
+                float3 right = normalize(cross(up, forward));
+                float angleX = atan2(dot(toFragment, right), dot(toFragment, forward));
+                float strandCoord = (angleX / 6.28318530718) + 0.5; // 0-1 range
+                if (_AngelRingBreakup == 1)
+                {
+                    float stripes = frac(strandCoord * _AngelRingBreakupDensity);
+                    stripes = abs(stripes - 0.5) * 2.0;
+                    breakup = smoothstep(
+                        _AngelRingBreakupWidthMin,
+                        _AngelRingBreakupWidthMin + _AngelRingBreakupSoftness,
+                        stripes
+                    );
+                }
+                else if (_AngelRingBreakup == 2)
+                {
+                    float cell = floor(strandCoord * _AngelRingBreakupDensity);
+                    float rand = frac(sin(cell * 91.3458) * 47453.5453);
+                    float verticalRand = frac(sin(cell * 78.233) * 43758.5453);
+                    heightOffset = lerp(-1.0, 1.0, verticalRand) * _AngelRingBreakupHeight;
+                    float localCoord = frac(strandCoord * _AngelRingBreakupDensity);
+                    float width = lerp(
+                        _AngelRingBreakupWidthMin,
+                        _AngelRingBreakupWidthMax,
+                        rand
+                    );
+                    float center = lerp(0.3, 0.7, rand);
+                    float stripeDist = abs(localCoord - center);
+                    breakup = smoothstep(
+                        width,
+                        width + _AngelRingBreakupSoftness,
+                        stripeDist
+                    );
+                }
+            }
+            // specular shape
+            float dotTH = dot(flowTangent, Surface.HalfDir) + _AngelRingManualOffset;
+            float sinTH = sqrt(max(0.0, 1.0 - dotTH * dotTH)) + _AngelRingManualScale + heightOffset;
+            float specShape = pow(sinTH, max(1.0, _AngelRingSharpness));
+            // ring 1 logic
+            float primaryDist = abs(hairLength - _AngelRing1Position);
+            float primaryMask = saturate(1.0 - (primaryDist / max(0.01, _AngelRing1Width)));
+            float ring1 = specShape * smoothstep(0, 1, primaryMask) * breakup;
+            ring1 = smoothstep(_AngelRingThreshold - _AngelRingSoftness, _AngelRingThreshold + _AngelRingSoftness, ring1);
+            // ring 2 logic
+            float3 ring2Final = 0;
+            if (_UseSecondaryRing == 1)
+            {
+                float secondaryDist = abs(hairLength - _AngelRing2Position);
+                float secondaryMask = saturate(1.0 - (secondaryDist / max(0.01, _AngelRing2Width)));
+                float ring2 = pow(sinTH, _AngelRingSharpness * 0.6) * smoothstep(0, 1, secondaryMask);
+                ring2 = smoothstep(_AngelRingThreshold * 0.7, (_AngelRingThreshold * 0.7) + _AngelRingSoftness, ring2);
+                ring2Final = ring2 * (_AngelRing2Color.rgb * _AngelRing2Color.a);
+            }
+            // ring 3 logic
+            float3 ring3Final = 0;
+            if (_UseTertiaryRing == 1)
+            {
+                float tertiaryDist = abs(hairLength - _AngelRing3Position);
+                float tertiaryMask = saturate(1.0 - (tertiaryDist / max(0.01, _AngelRing3Width)));
+                float ring3 = pow(sinTH, _AngelRingSharpness * 0.8) * smoothstep(0, 1, tertiaryMask);
+                ring3 = smoothstep(_AngelRingThreshold * 0.8, (_AngelRingThreshold * 0.8) + _AngelRingSoftness, ring3);
+                ring3Final = ring3 * (_AngelRing3Color.rgb * _AngelRing3Color.a);
+            }
+            // composite
+            float3 ringColours = (ring1 * _AngelRing1Color.rgb * _AngelRing1Color.a) + ring2Final + ring3Final;
+            if (_AngelRingUseLighting) 
+            {
+                ringColours.rgb *= Surface.LightColor.rgb * Surface.Attenuation;
+            }
+            Surface.FinalColor.rgb += ringColours;
+        }
+    }
+
 
     // [ ♡ ] ────────────────────── [ ♡ ]
     //
@@ -600,12 +746,15 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             color = ramp0 + ramp1 + ramp2 + ramp3;
             // direction calculation
             direction = 0;
-            #if defined(BACKLACE_SPECULAR) && defined(_BACKLACE_VERTEX_SPECULAR)
-                direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(ramp0, 1);
-                direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(ramp1, 1);
-                direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(ramp2, 1);
-                direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(ramp3, 1);
-            #endif // BACKLACE_SPECULAR && _BACKLACE_VERTEX_SPECULAR
+            #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON)
+                if (_ToggleVertexSpecular == 1)
+                {
+                    direction += (float3(toLightX.x, toLightY.x, toLightZ.x) * corr.x) * dot(ramp0, 1);
+                    direction += (float3(toLightX.y, toLightY.y, toLightZ.y) * corr.y) * dot(ramp1, 1);
+                    direction += (float3(toLightX.z, toLightY.z, toLightZ.z) * corr.z) * dot(ramp2, 1);
+                    direction += (float3(toLightX.w, toLightY.w, toLightZ.w) * corr.w) * dot(ramp3, 1);
+                }
+            #endif // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
         }
 
         // get the direct diffuse contribution using a toon ramp
@@ -653,15 +802,22 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         void GetRampVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.VertexDirectDiffuse = 0;
-            #if defined(VERTEXLIGHT_ON)
-                #if defined(_BACKLACE_VERTEX_SPECULAR)
+            #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON)
+                if (_ToggleVertexSpecular == 1)
+                {
                     RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, VertexLightDir);
-                #else
+                }
+                else
+                {
                     float3 ignoredDir;
                     RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, ignoredDir);
-                #endif
-                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
-            #endif
+                }
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
+            #elif defined(VERTEXLIGHT_ON) // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
+                float3 ignoredDir;
+                RampDotLVertLight(Surface.NormalDir, FragData.worldPos, Surface.Occlusion, Surface.VertexDirectDiffuse, ignoredDir);
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
+            #endif // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
         }
 
 
@@ -723,15 +879,22 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         void GetCelVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.VertexDirectDiffuse = 0;
-            #if defined(VERTEXLIGHT_ON)
-                #if defined(_BACKLACE_VERTEX_SPECULAR)
+            #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON)
+                if (_ToggleVertexSpecular == 1)
+                {
                     CelShade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, VertexLightDir);
-                #else
+                }
+                else
+                {
                     float3 ignoredDir;
                     CelShade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
-                #endif
-                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
-            #endif
+                }
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
+            #elif defined(VERTEXLIGHT_ON) // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
+                float3 ignoredDir;
+                CelShade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
+            #endif // _BACKLACE_SPECULAR && VERTEXLIGHT_ON
         }
 
 
@@ -944,7 +1107,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                     float3 diffuseResult = (shadowColour * shadowProgress) + (shallowColour * weightShallow) + (litColour * litProgress);
                     finalColor += unity_LightColor[i].rgb * diffuseResult * atten[i];
                 }
-                Surface.VertexDirectDiffuse = Surface.Albedo * finalColor * _VertexIntensity;
+                Surface.VertexDirectDiffuse = Surface.Albedo * finalColor;
             #endif // VERTEXLIGHT_ON
         }
 
@@ -1152,7 +1315,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             #if defined(VERTEXLIGHT_ON)
                 float3 ignoredDir;
                 Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
-                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
             #endif
         }
 
@@ -1189,7 +1352,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             #if defined(VERTEXLIGHT_ON)
                 float3 ignoredDir;
                 Shade4PointLights(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse, ignoredDir);
-                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
                 Surface.VertexDirectDiffuse = lerp(Surface.VertexDirectDiffuse * _SkinShadowColor.rgb, Surface.VertexDirectDiffuse, 0.8);
             #endif // VERTEXLIGHT_ON
         }
@@ -1247,7 +1410,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.VertexDirectDiffuse = 0;
             #if defined(VERTEXLIGHT_ON)
                 WrappedVertLight(Surface.NormalDir, FragData.worldPos, Surface.VertexDirectDiffuse);
-                Surface.VertexDirectDiffuse *= Surface.Albedo * _VertexIntensity;
+                Surface.VertexDirectDiffuse *= Surface.Albedo;
             #endif // VERTEXLIGHT_ON
         }
     #endif // _ANIMEMODE_*
@@ -1302,6 +1465,9 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             GetWrappedDiffuse(Surface);
             GetWrappedVertexDiffuse(Surface);
         #endif // _ANIMEMODE_*
+        // anime-styled specular goes after lighting
+        ApplyToonHighlights(Surface);
+        ApplyAngelRings(Surface);
         // preview manual normals in debug mode
         if (_ToggleManualNormals == 1 && _ManualNormalPreview != 0)
         {
@@ -1332,7 +1498,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-#if defined(BACKLACE_SPECULAR)
+#if defined(_BACKLACE_SPECULAR)
 
 
     // [ ♡ ] ────────────────────── [ ♡ ]
@@ -1395,7 +1561,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
 
     // [ ♡ ] ────────────────────── [ ♡ ]
     //
-    //          Specular ENergy
+    //          Specular Energy
     //
     // [ ♡ ] ────────────────────── [ ♡ ]
 
@@ -1432,160 +1598,22 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-    #if defined(_SPECULARMODE_ANISOTROPIC)
-        // calculates anisotropic direct specular reflection using tangent space and view/light directions
-        void AnisoSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
-        {
-            outNDF = 0;
-            outGFS = 0;
-            float TdotH = dot(Surface.ModifiedTangent, halfDir);
-            float TdotL = dot(Surface.ModifiedTangent, lightDir);
-            float BdotH = dot(bitangentDir, halfDir);
-            float BdotL = dot(bitangentDir, lightDir);
-            float TdotV = dot(Surface.ViewDir, Surface.ModifiedTangent);
-            float BdotV = dot(bitangentDir, Surface.ViewDir);
-            float ax = max(Surface.SquareRoughness * (1.0 + Surface.Anisotropy), 0.005);
-            float ay = max(Surface.SquareRoughness * (1.0 - Surface.Anisotropy), 0.005);
-            outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
-            outGFS = SmithGGGX_aniso(ndotL, TdotL, BdotL, ax, ay);
-            outGFS *= SmithGGGX_aniso(ndotV, TdotV, BdotV, ax, ay);
-        }
-
-
-    // [ ♡ ] ────────────────────── [ ♡ ]
-    //
-    //          Toon Specular
-    //
-    // [ ♡ ] ────────────────────── [ ♡ ]
-
-
-    #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_STANDARD
-        // toon highlights specular
-        float3 ToonSpecular(inout BacklaceSurfaceData Surface)
-        {
-            float blinnPhong = pow(max(0.0, Surface.NdotH), _SpecularToonShininess) * Surface.Attenuation;
-            float threshold = 1.05 - _SpecularToonThreshold;
-            float specularRaw = smoothstep(threshold - _SpecularToonRoughness, threshold + _SpecularToonRoughness, blinnPhong);
-            float sharpCurve = (specularRaw * - 2.0 + 3.0) * pow(specularRaw, 2.0);
-            specularRaw = lerp(specularRaw, sharpCurve, _SpecularToonSharpness);
-            float specularMask = specularRaw * _SpecularToonIntensity;
-            return _SpecularToonColor.rgb * specularMask;
-        }
-
-
-    // [ ♡ ] ────────────────────── [ ♡ ]
-    //
-    //          Hair Specular
-    //
-    // [ ♡ ] ────────────────────── [ ♡ ]
-
-
-    #elif defined(_SPECULARMODE_ANGELHAIR) // _SPECULARMODE_*
-        float3 HairSpecular(inout BacklaceSurfaceData Surface)
-        {
-            // set up between modes
-            float3 flowTangent;
-            float hairLength;
-            if (_AngelRingMode == 1) // uv mode
-            {
-                hairLength = Uvs[0].y;
-                flowTangent = normalize(Surface.TangentDir);
-            }
-            else if (_AngelRingMode == 0) // view aligned
-            {
-                /*hairLength = (FragData.worldPos.y - FragData.worldObjectCenter.y) * _AngelRingHeightScale + _AngelRingHeightOffset;
-                hairLength = saturate(hairLength); // keep it 0-1
-                float3 up = float3(0, 1, 0);
-                float3 right = normalize(cross(up, Surface.NormalDir));
-                flowTangent = normalize(cross(Surface.NormalDir, right));*/
-                float3 relativePos = FragData.worldPos - FragData.worldObjectCenter;
-                float projection = dot(relativePos, normalize(_AngelRingHeightDirection.xyz));
-                hairLength = saturate(projection * _AngelRingHeightScale + _AngelRingHeightOffset);
-                float3 up = normalize(_AngelRingHeightDirection.xyz);
-                float3 right = normalize(cross(up, Surface.NormalDir));
-                flowTangent = normalize(cross(Surface.NormalDir, right));
-            } 
-            else // world aligned
-            {
-                hairLength = dot(FragData.worldPos, _AngelRingHeightDirection) - _AngelRingHeightScale;
-                float3 right = normalize(cross(_AngelRingHeightDirection, Surface.NormalDir));
-                flowTangent = normalize(cross(Surface.NormalDir, right));
-            }
-            // optional breakup mix-in
-            float breakup = 1.0;
-            float heightOffset = 0.0;
-            [branch] if (_AngelRingBreakup != 0)
-            {
-                float3 toFragment = normalize(FragData.worldPos - FragData.worldObjectCenter);
-                float3 up = normalize(_AngelRingHeightDirection.xyz);
-                float3 forward = normalize(cross(up, float3(1, 0, 0))); // or use view direction
-                float3 right = normalize(cross(up, forward));
-                float angleX = atan2(dot(toFragment, right), dot(toFragment, forward));
-                float strandCoord = (angleX / 6.28318530718) + 0.5; // 0-1 range
-                if (_AngelRingBreakup == 1)
-                {
-                    float stripes = frac(strandCoord * _AngelRingBreakupDensity);
-                    stripes = abs(stripes - 0.5) * 2.0;
-                    breakup = smoothstep(
-                        _AngelRingBreakupWidthMin,
-                        _AngelRingBreakupWidthMin + _AngelRingBreakupSoftness,
-                        stripes
-                    );
-                }
-                else if (_AngelRingBreakup == 2)
-                {
-                    float cell = floor(strandCoord * _AngelRingBreakupDensity);
-                    float rand = frac(sin(cell * 91.3458) * 47453.5453);
-                    float verticalRand = frac(sin(cell * 78.233) * 43758.5453);
-                    heightOffset = lerp(-1.0, 1.0, verticalRand) * _AngelRingBreakupHeight;
-                    float localCoord = frac(strandCoord * _AngelRingBreakupDensity);
-                    float width = lerp(
-                        _AngelRingBreakupWidthMin,
-                        _AngelRingBreakupWidthMax,
-                        rand
-                    );
-                    float center = lerp(0.3, 0.7, rand);
-                    float stripeDist = abs(localCoord - center);
-                    breakup = smoothstep(
-                        width,
-                        width + _AngelRingBreakupSoftness,
-                        stripeDist
-                    );
-                }
-            }
-            // specular shape
-            float dotTH = dot(flowTangent, Surface.HalfDir) + _AngelRingManualOffset;
-            float sinTH = sqrt(max(0.0, 1.0 - dotTH * dotTH)) + _AngelRingManualScale + heightOffset;
-            float specShape = pow(sinTH, max(1.0, _AngelRingSharpness));
-            // ring 1 logic
-            float primaryDist = abs(hairLength - _AngelRing1Position);
-            float primaryMask = saturate(1.0 - (primaryDist / max(0.01, _AngelRing1Width)));
-            float ring1 = specShape * smoothstep(0, 1, primaryMask) * breakup;
-            ring1 = smoothstep(_AngelRingThreshold - _AngelRingSoftness, _AngelRingThreshold + _AngelRingSoftness, ring1);
-            // ring 2 logic
-            float3 ring2Final = 0;
-            if (_UseSecondaryRing == 1)
-            {
-                float secondaryDist = abs(hairLength - _AngelRing2Position);
-                float secondaryMask = saturate(1.0 - (secondaryDist / max(0.01, _AngelRing2Width)));
-                float ring2 = pow(sinTH, _AngelRingSharpness * 0.6) * smoothstep(0, 1, secondaryMask);
-                ring2 = smoothstep(_AngelRingThreshold * 0.7, (_AngelRingThreshold * 0.7) + _AngelRingSoftness, ring2);
-                ring2Final = ring2 * (_AngelRing2Color.rgb * _AngelRing2Color.a);
-            }
-            // ring 3 logic
-            float3 ring3Final = 0;
-            if (_UseTertiaryRing == 1)
-            {
-                float tertiaryDist = abs(hairLength - _AngelRing3Position);
-                float tertiaryMask = saturate(1.0 - (tertiaryDist / max(0.01, _AngelRing3Width)));
-                float ring3 = pow(sinTH, _AngelRingSharpness * 0.8) * smoothstep(0, 1, tertiaryMask);
-                ring3 = smoothstep(_AngelRingThreshold * 0.8, (_AngelRingThreshold * 0.8) + _AngelRingSoftness, ring3);
-                ring3Final = ring3 * (_AngelRing3Color.rgb * _AngelRing3Color.a);
-            }
-            // composite
-            return (ring1 * _AngelRing1Color.rgb * _AngelRing1Color.a) + ring2Final + ring3Final;
-        }
-    #endif // _SPECULARMODE_*
+    void AnisoSpecular(float3 tangentDir, float3 bitangentDir, float3 lightDir, float3 halfDir, float ndotH, float ndotL, float ndotV, out float outNDF, out float outGFS, inout BacklaceSurfaceData Surface)
+    {
+        outNDF = 0;
+        outGFS = 0;
+        float TdotH = dot(Surface.ModifiedTangent, halfDir);
+        float TdotL = dot(Surface.ModifiedTangent, lightDir);
+        float BdotH = dot(bitangentDir, halfDir);
+        float BdotL = dot(bitangentDir, lightDir);
+        float TdotV = dot(Surface.ViewDir, Surface.ModifiedTangent);
+        float BdotV = dot(bitangentDir, Surface.ViewDir);
+        float ax = max(Surface.SquareRoughness * (1.0 + Surface.Anisotropy), 0.005);
+        float ay = max(Surface.SquareRoughness * (1.0 - Surface.Anisotropy), 0.005);
+        outNDF = GTR2_aniso(ndotH, TdotH, BdotH, ax, ay) * UNITY_PI;
+        outGFS = SmithGGGX_aniso(ndotL, TdotL, BdotL, ax, ay);
+        outGFS *= SmithGGGX_aniso(ndotV, TdotV, BdotV, ax, ay);
+    }
 
 
     // [ ♡ ] ────────────────────── [ ♡ ]
@@ -1619,14 +1647,8 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             half lightColGrey = max((Surface.LightColor.r + Surface.LightColor.g + Surface.LightColor.b) / 3, (Surface.IndirectDiffuse.r + Surface.IndirectDiffuse.g + Surface.IndirectDiffuse.b) / 3);
             Surface.IndirectSpecular = Surface.CustomIndirect * min(lightColGrey, 1);
         }
-        // horizon is too much for specular
-        #if defined(_SPECULARMODE_TOON) || defined(_SPECULARMODE_ANGELHAIR)
-            float viewMask = saturate(pow(Surface.NdotV, 4.0));
-            Surface.IndirectSpecular *= viewMask;
-        #else // _SPECULARMODE_TOON
-            float horizon = min(1.0 + dot(Surface.ReflectDir, Surface.NormalDir), 1.0);
-            Surface.IndirectSpecular *= Surface.EnergyCompensation * horizon * horizon * Surface.SpecularColor;
-        #endif // _SPECULARMODE_TOON
+        float horizon = min(1.0 + dot(Surface.ReflectDir, Surface.NormalDir), 1.0);
+        Surface.IndirectSpecular *= Surface.EnergyCompensation * horizon * horizon * Surface.SpecularColor;
         #if defined(_BACKLACE_CLEARCOAT)
             Surface.IndirectSpecular *= _ClearcoatReflectionStrength;
         #endif // _BACKLACE_CLEARCOAT
@@ -1648,9 +1670,11 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             return 0.0; // safety checks
         }
-        float3 specTerm = 0; // using local variable for the result
-        #if defined(_SPECULARMODE_STANDARD)
-            float NDF_Term, GFS_Term;
+        float3 specTerm = float3(0, 0, 0);
+        float NDF_Term = 0;
+        float GFS_Term = 0;
+        [branch] if (_SpecularMode == 0) // standard
+        {
             float3 F_Term = FresnelTerm(Surface.SpecularColor, ldotH);
             StandardSpecular(ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
             float3 numerator = NDF_Term * GFS_Term * F_Term;
@@ -1661,7 +1685,9 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 specTerm = sqrt(max(1e-4h, specTerm));
             #endif // UNITY_COLORSPACE_GAMMA
             return max(0, specTerm * attenuation);
-        #elif defined(_SPECULARMODE_ANISOTROPIC) // _SPECULARMODE_*
+        }
+        else // anisotropic 
+        {
             float4 tangentTS = UNITY_SAMPLE_TEX2D_SAMPLER(_TangentMap, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _TangentMap));
             Surface.Anisotropy = tangentTS.a * _Anisotropy;
             Surface.ModifiedTangent = GetModifiedTangent(tangentTS.rgb, Surface.TangentDir);
@@ -1671,7 +1697,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float bendFactor = abs(Surface.Anisotropy) * saturate(1 - (Pow5(1 - Surface.SquareRoughness)));
             float3 bentNormal = normalize(lerp(Surface.NormalDir, anisotropicNormal, bendFactor));
             Surface.ReflectDir = reflect(-Surface.ViewDir, bentNormal);
-            float NDF_Term, GFS_Term;
             AnisoSpecular(tangentDir, bitangentDir, lightDir, halfDir, ndotH, ndotL, ndotV, NDF_Term, GFS_Term, Surface);
             float3 F_Term = FresnelTerm(Surface.SpecularColor, ldotH);
             float3 numerator = NDF_Term * GFS_Term * F_Term;
@@ -1682,16 +1707,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 specTerm = sqrt(max(1e-4h, specTerm));
             #endif // UNITY_COLORSPACE_GAMMA
             return max(0, specTerm * attenuation);
-        #elif defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
-            return max(0, ToonSpecular(Surface) * _SpecularIntensity * Surface.EnergyCompensation);
-        #elif defined(_SPECULARMODE_ANGELHAIR) // _SPECULARMODE_*
-            specTerm = HairSpecular(Surface);
-            specTerm *= Surface.EnergyCompensation * _SpecularIntensity;
-            #ifdef UNITY_COLORSPACE_GAMMA
-                specTerm = sqrt(max(1e-4h, specTerm));
-            #endif // UNITY_COLORSPACE_GAMMA
-            return max(0, specTerm * attenuation);
-        #endif // _SPECULARMODE_*
+        }
     }
 
     // add direct specular to final color
@@ -1701,9 +1717,10 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     }
 
     // vertex specular feature
-    #if defined(_BACKLACE_VERTEX_SPECULAR)
+    #if defined(VERTEXLIGHT_ON)
         void AddVertexSpecular(inout BacklaceSurfaceData Surface)
         {
+            if (_ToggleVertexSpecular == 0) return;
             if (dot(VertexLightDir, VertexLightDir) < 0.0001) return;
             float3 VLightDir = normalize(VertexLightDir);
             float3 V_HalfDir = normalize(VLightDir + Surface.ViewDir);
@@ -1714,8 +1731,8 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float3 VertexSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, VLightDir, V_HalfDir, V_NdotH, V_NdotL, Surface.NdotV, V_LdotH, 1.0, Surface);
             Surface.FinalColor.rgb += VertexSpecular * Surface.VertexDirectDiffuse;
         }
-    #endif // _BACKLACE_VERTEX_SPECULAR
-#endif // BACKLACE_SPECULAR
+    #endif // VERTEXLIGHT_ON
+#endif // _BACKLACE_SPECULAR
 
 
 #endif // BACKLACE_SHADING_CGINC

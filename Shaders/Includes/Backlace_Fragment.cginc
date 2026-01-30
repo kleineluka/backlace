@@ -98,14 +98,14 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_EMISSION)
         CalculateEmission(Surface);
     #endif
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         GetSampleData(Surface);
-    #endif // BACKLACE_SPECULAR
+    #endif // _BACKLACE_SPECULAR
     GetLightData(Surface);
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         SetupAlbedoAndSpecColor(Surface);
         SetupDFG(Surface);
-    #endif // BACKLACE_SPECULAR
+    #endif // _BACKLACE_SPECULAR
     PremultiplyAlpha(Surface);
     #if defined(BACKLACE_TOON) // TOON LIGHTING
         GetAnimeDiffuse(Surface); // (includes vertex diffuse inside wrapper)
@@ -116,15 +116,15 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_SSS)
         ApplySubsurfaceScattering(Surface);
     #endif // _BACKLACE_SSS
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         Surface.DirectSpecular = CalculateDirectSpecular(Surface.TangentDir, Surface.BitangentDir, Surface.LightDir, Surface.HalfDir, Surface.NdotH, Surface.NdotL, Surface.NdotV, Surface.LdotH, Surface.Attenuation, Surface);
         [branch] if (_IndirectFallbackMode == 1)
         {
             GetFallbackCubemap(Surface);
         }
         GetIndirectSpecular(Surface);
-    #endif // BACKLACE_SPECULAR
-    Surface.FinalColor.rgb += Surface.Diffuse + Surface.VertexDirectDiffuse; // AddDiffuse(Surface)
+    #endif // _BACKLACE_SPECULAR
+    Surface.FinalColor.rgb += Surface.Diffuse + (Surface.VertexDirectDiffuse * _VertexIntensity); // AddDiffuse(Surface)
     #if defined(_BACKLACE_TOUCH_REACTIVE)
         ApplyTouchReactive(Surface, i);
     #endif // _BACKLACE_TOUCH_REACTIVE
@@ -137,13 +137,13 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
     #if defined(_BACKLACE_CUBEMAP)
         ApplyCubemap(Surface);
     #endif // _BACKLACE_CUBEMAP
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         AddDirectSpecular(Surface);
         AddIndirectSpecular(Surface);
-        #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
+        #if defined(VERTEXLIGHT_ON)
             AddVertexSpecular(Surface);
-        #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
-    #endif // BACKLACE_SPECULAR
+        #endif // VERTEXLIGHT_ON
+    #endif // _BACKLACE_SPECULAR
     #if defined(BACKLACE_RIMLIGHT)
         #if defined(_RIMMODE_FRESNEL)
             CalculateRimlight(Surface);
@@ -190,9 +190,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         float3 clearcoatAttenuation;
         CalculateClearcoat(Surface, clearcoatHighlight, clearcoatAttenuation);
         Surface.FinalColor.rgb = (baseColor * clearcoatAttenuation) + clearcoatHighlight;
-        #if defined(_BACKLACE_VERTEX_SPECULAR) && defined(VERTEXLIGHT_ON)
+        #if defined(_BACKLACE_SPECULAR) && defined(VERTEXLIGHT_ON) 
             AddClearcoatVertex(Surface);
-        #endif // _BACKLACE_VERTEX_SPECULAR && VERTEXLIGHT_ON
+        #endif // VERTEXLIGHT_ON
     #endif // _BACKLACE_CLEARCOAT
     #if defined(BACKLACE_CAPABILITIES_HIGH)
         [branch] if (_TogglePS1 == 1) ApplyPS1ColorCompression(Surface.FinalColor);

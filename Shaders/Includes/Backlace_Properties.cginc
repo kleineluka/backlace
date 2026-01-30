@@ -278,6 +278,44 @@ float3 _VertexManipulationScale;
     float4 _AnimeGradientColourB;
     float _AnimeGradientOffset;
     float _AnimeGradientMultiplier;
+    // toon highlights
+    int _ToggleSpecularToon;
+    float _SpecularToonShininess;
+    float _SpecularToonRoughness;
+    float _SpecularToonSharpness;
+    float _SpecularToonIntensity;
+    float _SpecularToonThreshold;
+    float4 _SpecularToonColor;
+    int _SpecularToonUseLighting;
+    // hair specular
+    int _AngelRingMode;
+    float _AngelRingSharpness;
+    float _AngelRingThreshold;
+    float _AngelRingSoftness;
+    float _AngelRing1Position;
+    float _AngelRing1Width;
+    float4 _AngelRing1Color;
+    int _UseSecondaryRing;
+    float _AngelRing2Position;
+    float _AngelRing2Width;
+    float4 _AngelRing2Color;
+    float _AngelRingHeightOffset;
+    float _AngelRingHeightScale;
+    float3 _AngelRingHeightDirection;
+    int _AngelRingBlendMode;
+    int _UseTertiaryRing;
+    float _AngelRing3Position;
+    float _AngelRing3Width;
+    float4 _AngelRing3Color;
+    float _AngelRingManualOffset;
+    float _AngelRingManualScale;
+    int _AngelRingBreakup;
+    float _AngelRingBreakupDensity;
+    float _AngelRingBreakupWidthMin;
+    float _AngelRingBreakupWidthMax;
+    float _AngelRingBreakupSoftness;
+    float _AngelRingBreakupHeight;
+    int _AngelRingUseLighting;
     #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
         float _Ramp_UV;
@@ -388,8 +426,9 @@ float3 _VertexManipulationScale;
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-#if defined(BACKLACE_SPECULAR)
+#if defined(_BACKLACE_SPECULAR)
     // used in specular calculations
+    int _SpecularMode;
     float _Occlusion;
     float _Metallic;
     float _Glossiness;
@@ -409,50 +448,10 @@ float3 _VertexManipulationScale;
     float _SpecularEnergy;
     float _SpecularEnergyMin;
     float _SpecularEnergyMax;
-    // specific specular modes
-    #if defined(_SPECULARMODE_TOON) // _SPECULARMODE_*
-        // toon highlights
-        float _SpecularToonShininess;
-        float _SpecularToonRoughness;
-        float _SpecularToonSharpness;
-        float _SpecularToonIntensity;
-        float _SpecularToonThreshold;
-        float4 _SpecularToonColor;
-    #elif defined(_SPECULARMODE_ANGELHAIR) // _SPECULARMODE_*
-        // hair specular
-        int _AngelRingMode;
-        float _AngelRingSharpness;
-        float _AngelRingThreshold;
-        float _AngelRingSoftness;
-        float _AngelRing1Position;
-        float _AngelRing1Width;
-        float4 _AngelRing1Color;
-        int _UseSecondaryRing;
-        float _AngelRing2Position;
-        float _AngelRing2Width;
-        float4 _AngelRing2Color;
-        float _AngelRingHeightOffset;
-        float _AngelRingHeightScale;
-        float3 _AngelRingHeightDirection;
-        int _AngelRingBlendMode;
-        int _UseTertiaryRing;
-        float _AngelRing3Position;
-        float _AngelRing3Width;
-        float4 _AngelRing3Color;
-        float _AngelRingManualOffset;
-        float _AngelRingManualScale;
-        int _AngelRingBreakup;
-        float _AngelRingBreakupDensity;
-        float _AngelRingBreakupWidthMin;
-        float _AngelRingBreakupWidthMax;
-        float _AngelRingBreakupSoftness;
-        float _AngelRingBreakupHeight;
-    #endif // _SPECULARMODE_*
     // vertex specular feature
-    #if defined(_BACKLACE_VERTEX_SPECULAR) // VERTEX SPECULAR
-        float3 VertexLightDir;
-    #endif // _BACKLACE_VERTEX_SPECULAR
-#endif // BACKLACE_SPECULAR
+    int _ToggleVertexSpecular;
+    float3 VertexLightDir;
+#endif // _BACKLACE_SPECULAR
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]

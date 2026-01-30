@@ -20,7 +20,6 @@
 
 
 #pragma shader_feature_local _BLENDMODE_CUTOUT _BLENDMODE_FADE _BLENDMODE_TRANSPARENT _BLENDMODE_PREMULTIPLY
-#pragma shader_feature_local _ _SPECULARMODE_STANDARD _SPECULARMODE_ANISOTROPIC _SPECULARMODE_TOON _SPECULARMODE_ANGELHAIR
 #pragma shader_feature_local _ _ANIMEMODE_RAMP _ANIMEMODE_CEL _ANIMEMODE_NPR _ANIMEMODE_PACKED _ANIMEMODE_TRIBAND _ANIMEMODE_SKIN _ANIMEMODE_WRAPPED
 
 
@@ -32,11 +31,13 @@
 
 
 #if defined(BACKLACE_CAPABILITIES_LOW)
+    #pragma shader_feature_local _ _BACKLACE_ANIME_EXTRAS
     #pragma shader_feature_local _ _BACKLACE_UV_EFFECTS
     #pragma shader_feature_local _ _BACKLACE_DECALS
     #pragma shader_feature_local _ _BACKLACE_POST_PROCESSING
     #pragma shader_feature_local _ _BACKLACE_EMISSION
-    #pragma shader_feature_local _ _BACKLACE_VERTEX_SPECULAR
+    #pragma shader_feature_local _ _BACKLACE_SPECULAR
+    // #pragma shader_feature_local _ _BACKLACE_VERTEX_SPECULAR <-- removed
 #endif // BACKLACE_CAPABILITIES_LOW
 
 
@@ -115,10 +116,6 @@
 #if defined(_ANIMEMODE_RAMP) || defined(_ANIMEMODE_CEL) || defined(_ANIMEMODE_NPR) || defined(_ANIMEMODE_PACKED) || defined(_ANIMEMODE_TRIBAND) || defined(_ANIMEMODE_SKIN) || defined(_ANIMEMODE_WRAPPED)
     #define BACKLACE_TOON
 #endif // _ANIMEMODE_*
-
-#if defined(_SPECULARMODE_STANDARD) || defined(_SPECULARMODE_ANISOTROPIC) || defined(_SPECULARMODE_TOON) || defined(_SPECULARMODE_ANGELHAIR)
-    #define BACKLACE_SPECULAR
-#endif // _SPECULARMODE_*
 
 #if defined(_RIMMODE_FRESNEL) || defined(_RIMMODE_DEPTH) || defined(_RIMMODE_NORMAL)
     #define BACKLACE_RIMLIGHT

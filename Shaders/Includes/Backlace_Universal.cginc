@@ -66,10 +66,10 @@ struct BacklaceSurfaceData
     float3 EnergyCompensation;
     float3 CustomIndirect;
     // specular samples
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         float Anisotropy;
         float3 ModifiedTangent;
-    #endif // BACKLACE_SPECULAR
+    #endif // _BACKLACE_SPECULAR
     // misc data
     float2 ScreenCoords;
     bool IsFrontFace;
@@ -77,6 +77,7 @@ struct BacklaceSurfaceData
 
 // for debugging purposes
 float _ILovePantyAnarchy; // drop-in debug variable
+//#define VERTEXLIGHT_ON // enable vertex specular globally to make sure no compile errors occur
 float4 panty() {
     return float4(1.00, 0.98, 0.25, 1.00);
 }
@@ -729,7 +730,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META)
 
     // specular feature
-    #if defined(BACKLACE_SPECULAR)
+    #if defined(_BACKLACE_SPECULAR)
         // sample MSSO texture
         void SampleMSSO(inout BacklaceSurfaceData Surface)
         {
@@ -763,13 +764,13 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             Surface.OneMinusReflectivity = (1 - Surface.Specular) - (Surface.Metallic * (1 - Surface.Specular));
             Surface.Albedo.rgb *= Surface.OneMinusReflectivity;
         }
-    #else // BACKLACE_SPECULAR
+    #else // _BACKLACE_SPECULAR
         // default msso with no specular
         void SampleMSSO(inout BacklaceSurfaceData Surface)
         {
             Msso = float4(1, 1, 1, 1);
         }
-    #endif // defined(BACKLACE_SPECULAR)
+    #endif // defined(_BACKLACE_SPECULAR)
 
     // emission feature
     #if defined(_BACKLACE_EMISSION)

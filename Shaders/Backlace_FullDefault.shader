@@ -267,6 +267,7 @@ Shader "luka/backlace/default"
         // [Header(Toon Extras)]
         // [Space(10)]
         // ambient gradient
+        [Toggle(_BACKLACE_ANIME_EXTRAS)] _ToggleAnimeExtras ("Enable Anime Extras", Int) = 0
         [Enum(Disabled, 0, Enabled, 1)] _ToggleAmbientGradient ("Enable Ambient Gradient", Float) = 0.0
         _AnimeOcclusionToShadow ("Occlusion To Shadow", Range(0, 1)) = 0.5
         _AmbientUp ("Sky Ambient", Color) = (0.8, 0.8, 1, 1)
@@ -360,37 +361,17 @@ Shader "luka/backlace/default"
         _AnimeGradientColourB ("Gradient Color B", Color) = (0, 0, 0, 1)
         _AnimeGradientOffset ("Gradient Offset", Range(-1, 1)) = 0.0
         _AnimeGradientMultiplier ("Gradient Multiplier", Float) = 1.0
-
-        // SPECULAR
-        // [Space(35)]
-        // [Header(Specular)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_VERTEX_SPECULAR)] _ToggleVertexSpecular ("Enable Vertex Specular", Float) = 0.0
-        [KeywordEnum(Disabled, Standard, Anisotropic, Toon, AngelHair)] _SpecularMode ("Specular Mode", Float) = 0
-        [Enum(Disabled, 0, Turquin, 1, Safe, 2, Manual, 3)] _SpecularEnergyMode ("Specular Energy Mode", Int) = 0
-        _SpecularEnergyMin ("Specular Energy Min", Float) = 0.0
-        _SpecularEnergyMax ("Specular Energy Max", Float) = 3.0
-        _SpecularEnergy ("Specular Energy", Float) = 1.0
-        _MSSO ("MSSO", 2D) = "white" { }
-        _Metallic ("Metallic", Range(0, 1)) = 0
-        _Glossiness ("Glossiness", Range(0, 1)) = 0
-        _Occlusion ("Occlusion", Range(0, 1)) = 1
-        [PowerSlider(2.0)] _SpecularIntensity ("Specular Intensity", Range(0.01, 25)) = 1.0
-        _Specular ("Specular", Range(0, 1)) = 0.5
-        _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
-        _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
-        _TangentMap ("Tangent Map", 2D) = "white" { }
-        _Anisotropy ("Anisotropy", Range(-1, 1)) = 0
-        [Enum(Disabled, 0, Enabled, 1)] _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
         // toon highlights
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleSpecularToon ("Enable Specular Toon Highlights", Int) = 0
         _SpecularToonShininess ("Specular Shininess", Range(1, 128)) = 32
         _SpecularToonRoughness ("Specular Roughness", Range(0, 0.5)) = 0.1
         _SpecularToonSharpness ("Specular Sharpness", Range(0, 1)) = 1.0
         _SpecularToonIntensity ("Specular Intensity", Float) = 1.0
         _SpecularToonThreshold ("Specular Threshold", Float) = 1.0
         [HDR] _SpecularToonColor ("Specular Color", Color) = (1, 1, 1, 1)
-        // hair specular
-        [Enum(View Aligned, 0, UV Flow, 1, Object Aligned, 2)] _AngelRingMode ("Angel Ring Mode", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _SpecularToonUseLighting ("Use Lighting", Int) = 0
+        // angel rings
+        [Enum(Disabled, 0, View Aligned, 1, UV Flow, 2)] _AngelRingMode ("Angel Ring Mode", Int) = 0
         _AngelRingSharpness ("Ring Sharpness", Range(1, 100)) = 20
         _AngelRingThreshold ("Ring Threshold", Range(0, 1)) = 0.5
         _AngelRingSoftness ("Ring Softness", Range(0, 0.5)) = 0.05
@@ -417,6 +398,30 @@ Shader "luka/backlace/default"
         _AngelRingBreakupWidthMax ("Breakup Width Max", Float) = 0.3
         _AngelRingBreakupSoftness ("Breakup Softness", Float) = 0.1
         _AngelRingBreakupHeight ("Breakup Height", Float) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _AngelRingUseLighting ("Use Lighting", Int) = 0
+
+        // SPECULAR
+        // [Space(35)]
+        // [Header(Specular)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_SPECULAR)] _ToggleSpecular ("Enable Specular", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleVertexSpecular ("Enable Vertex Specular", Int) = 0
+        [Enum(Standard, 0, Anisotropic, 1)] _SpecularMode ("Specular Mode", Int) = 0
+        [Enum(Disabled, 0, Turquin, 1, Safe, 2, Manual, 3)] _SpecularEnergyMode ("Specular Energy Mode", Int) = 0
+        _SpecularEnergyMin ("Specular Energy Min", Float) = 0.0
+        _SpecularEnergyMax ("Specular Energy Max", Float) = 3.0
+        _SpecularEnergy ("Specular Energy", Float) = 1.0
+        _MSSO ("MSSO", 2D) = "white" { }
+        _Metallic ("Metallic", Range(0, 1)) = 0
+        _Glossiness ("Glossiness", Range(0, 1)) = 0
+        _Occlusion ("Occlusion", Range(0, 1)) = 1
+        [PowerSlider(2.0)] _SpecularIntensity ("Specular Intensity", Range(0.01, 25)) = 1.0
+        _Specular ("Specular", Range(0, 1)) = 0.5
+        _SpecularTintTexture ("Specular Tint Texture", 2D) = "white" { }
+        _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
+        _TangentMap ("Tangent Map", 2D) = "white" { }
+        _Anisotropy ("Anisotropy", Range(-1, 1)) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
 
         // RIM LIGHTING
         [KeywordEnum(Disabled, Fresnel, Depth, Normal)] _RimMode ("Rim Light Mode", Int) = 0
