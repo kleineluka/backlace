@@ -841,17 +841,39 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         // simple cel-shaded diffuse
         void GetCelDiffuse(inout BacklaceSurfaceData Surface)
         {
-            float diffuseTerm = smoothstep(_CelThreshold, _CelThreshold + _CelFeather, Surface.UnmaxedNdotL);
-            float shadow = Surface.LightColor.a;
-            float shadowTerm = smoothstep(0, _CelCastShadowFeather, shadow);
-            shadowTerm = max(shadowTerm, 1.0 - _CelCastShadowPower);
-            float finalLight = diffuseTerm * shadowTerm;
+            float diffuseTerm = 0;
+            float shadowTerm = 0;
+            float finalLight = 0;
+            if (_CelMode == 0) // default
+            {
+                diffuseTerm = smoothstep(_CelThreshold, _CelThreshold + _CelFeather, Surface.UnmaxedNdotL);
+                shadowTerm = smoothstep(0, _CelCastShadowFeather, Surface.LightColor.a);
+                shadowTerm = max(shadowTerm, 1.0 - _CelCastShadowPower);
+                finalLight = diffuseTerm * shadowTerm;
+            }
+            else if (_CelMode == 1) // harsh
+            {
+                diffuseTerm = step(_CelThreshold, Surface.UnmaxedNdotL);
+                shadowTerm = step(_CelCastShadowFeather, Surface.LightColor.a);
+                shadowTerm = max(shadowTerm, 1.0 - _CelCastShadowPower);
+                finalLight = diffuseTerm * shadowTerm;
+            }
+            else // smooth
+            {
+                float halfLambert = Surface.UnmaxedNdotL * 0.5 + 0.5;
+                halfLambert = saturate(halfLambert + (Surface.Occlusion * _CelSmoothOcclusionStrength) - _CelSmoothOcclusionStrength);
+                halfLambert = pow(saturate(halfLambert), _CelSmoothGradientPower);
+                diffuseTerm = smoothstep(_CelThreshold, _CelThreshold + _CelFeather, halfLambert);
+                shadowTerm = smoothstep(0, _CelCastShadowFeather, Surface.LightColor.a);
+                shadowTerm = max(shadowTerm, 1.0 - _CelCastShadowPower);
+                finalLight = diffuseTerm * shadowTerm;
+            }
             #if defined(_BACKLACE_SHADOW_TEXTURE)
-                float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb;
+                float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb * _CelLitTint.rgb;
                 float3 shadowColor = GetTexturedShadowColor(Surface);
                 Surface.Diffuse = lerp(shadowColor, litColor, finalLight) * Surface.LightColor.a;
             #else // _BACKLACE_SHADOW_TEXTURE
-                float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb;
+                float3 litColor = Surface.Albedo.rgb * Surface.LightColor.rgb * _CelLitTint.rgb;
                 float3 shadowColor = Surface.Albedo.rgb * _CelShadowTint.rgb;
                 Surface.Diffuse = lerp(shadowColor, litColor, finalLight) * Surface.LightColor.a;
             #endif // _BACKLACE_SHADOW_TEXTURE

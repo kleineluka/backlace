@@ -175,11 +175,15 @@ Shader "luka/backlace/default"
         [IntRange] _RampIndex ("Ramp Index", Range(0, 9)) = 0
         [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
         // cel
+        [Enum(Default, 0, Harsh, 1, Smooth, 2)] _CelMode ("Cel Shading Mode", Int) = 0
         _CelThreshold ("Cel Threshold", Range(-1, 1)) = 0
         _CelFeather ("Cel Feather", Range(0.001, 1)) = 0.05
         _CelCastShadowFeather ("Cast Shadow Feather", Range(0.001, 1)) = 0.1
         _CelCastShadowPower ("Cast Shadow Power", Range(0, 1)) = 1.0
-        _CelShadowTint ("Shadow Tint", Color) = (0.7, 0.7, 0.8, 1)
+        _CelShadowTint ("Cel Shadow Tint", Color) = (0.7, 0.7, 0.8, 1)
+        _CelLitTint ("Cel Lit Tint", Color) = (1.0, 1.0, 1.0, 1)
+        _CelSmoothGradientPower ("Cel Gradient Power", Range(0.1, 4)) = 1.0
+        _CelSmoothOcclusionStrength ("Cel Occlusion Strength", Range(0, 1)) = 0.5
         // npr
         _NPRDiffMin ("NPR Diffuse SmoothStep Min", Range(0, 2)) = 0.0
         _NPRDiffMax ("NPR Diffuse SmoothStep Max", Range(0, 2)) = 1.0

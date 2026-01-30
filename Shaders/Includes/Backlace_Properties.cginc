@@ -333,6 +333,10 @@ float3 _VertexManipulationScale;
         float _CelCastShadowFeather;
         float _CelCastShadowPower;
         float4 _CelShadowTint;
+        int _CelMode;
+        float4 _CelLitTint;
+        float _CelSmoothGradientPower;
+        float _CelSmoothOcclusionStrength;
     #elif defined(_ANIMEMODE_NPR) // _ANIMEMODE_*
         // npr
         float _NPRDiffMin;
