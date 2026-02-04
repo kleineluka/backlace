@@ -327,6 +327,9 @@ float3 _VertexManipulationScale;
         float _RampIndex;
         float _RampTotal;
         float _RampOcclusionOffset;
+        int _RampMode;
+        float _RampProceduralShift;
+        float _RampProceduralToony;
     #elif defined(_ANIMEMODE_CEL) // _ANIMEMODE_*
         float _CelThreshold;
         float _CelFeather;

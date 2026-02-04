@@ -479,36 +479,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         }
     }
 
-    // generate normals for smoother shading (ex. face) manually
-    float3 GetManualNormals(BacklaceSurfaceData Surface)
-    {
-        if (_ToggleManualNormals == 0) 
-        {
-            return Surface.NormalDir;
-        }
-        else
-        {
-            // handle rotations
-            float3 objectPos = mul(unity_WorldToObject, float4(FragData.worldPos, 1)).xyz;
-            // apply offset
-            float3 modifiedPos = objectPos + _ManualNormalOffset.xyz;
-            modifiedPos *= _ManualNormalScale.xyz;
-            // apply sharpness/pinch - higher values create more concentrated normals toward center
-            float3 normalizedPos = normalize(modifiedPos);
-            float3 sharpened = normalizedPos * pow(length(modifiedPos), _ManualNormalSharpness);
-            modifiedPos = lerp(modifiedPos, sharpened, saturate(_ManualNormalSharpness - 1.0));
-            // convert current world normal to object space for blending
-            float3 objectNormal = normalize(mul((float3x3)unity_WorldToObject, Surface.NormalDir));
-            // blend together
-            float3 fixedNormal;
-            fixedNormal.x = lerp(objectNormal.x, modifiedPos.x, _ManualApplication.x);
-            fixedNormal.y = lerp(objectNormal.y, modifiedPos.y, _ManualApplication.y);
-            fixedNormal.z = lerp(objectNormal.z, modifiedPos.z, _ManualApplication.z);
-            // back to world space/normalized before returning
-            return normalize(mul((float3x3)unity_ObjectToWorld, fixedNormal));
-        }
-    }
-
     // apply an anime gradient
     void ApplyAnimeGradient(inout BacklaceSurfaceData Surface)
     {
@@ -704,8 +674,17 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
                 return float4(ramp, rampGrey);
             #else // DIRECTIONAL || DIRECTIONAL_COOKIE
-                return float4(rampA, rampGrey);
+                return float4(rampA, rampGrey); // use adjusted ramp for point/spot lights
             #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
+        }
+
+        // or.. optionally, a procedural ramp
+        float4 PrcoeduralDotL(inout BacklaceSurfaceData Surface)
+        {
+            float lightIntensity = Surface.UnmaxedNdotL * 0.5 + 0.5;
+            float maxThreshold = lerp(1.0, _RampProceduralShift, _RampProceduralToony);
+            float rampVal = saturate((lightIntensity - _RampProceduralShift) / max(0.0001, (maxThreshold - _RampProceduralShift)));
+            return float4(rampVal, rampVal, rampVal, rampVal);
         }
 
         // modified version of Shade4PointLights to use ramp texture
@@ -761,7 +740,15 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         void GetRampDiffuse(inout BacklaceSurfaceData Surface)
         {
             Surface.Diffuse = 0;
-            float4 ramp = RampDotL(Surface);
+            float4 ramp = float4(0, 0, 0, 0);
+            [branch] if (_RampMode == 0) // texture
+            {
+                ramp = RampDotL(Surface);
+            }
+            else // procedural
+            {
+                ramp = PrcoeduralDotL(Surface);
+            }
             #if defined(_BACKLACE_LTCGI)
                 float2 ltcgi_lmUV = 0;
                 #if defined(LIGHTMAP_ON)
@@ -1450,7 +1437,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     {
         // apply applicable mixins
         ApplyAnimeGradient(Surface);
-        Surface.NormalDir = GetManualNormals(Surface);
         ApplyStockings(Surface);
         ApplyEyeParallax(Surface);
         ApplyExpressionMap(Surface);

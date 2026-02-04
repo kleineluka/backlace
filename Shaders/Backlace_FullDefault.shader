@@ -165,12 +165,15 @@ Shader "luka/backlace/default"
         // [Space(10)]
         [KeywordEnum(Disabled, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
         // ramp
+        [Enum(Texture, 0, Procedural, 1)] _RampMode ("Ramp Mode", Int) = 0
         _Ramp ("Ramp Map", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
         _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
         _RampShadows ("Ramp Shadow intensity", Range(0, 1)) = 0.6
         _RampOcclusionOffset ("Ramp Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
+        _RampProceduralShift ("Ramp Shift", Range(-1, 1)) = 0
+        _RampProceduralToony ("Ramp Toony Factor", Range(0, 1)) = 0.9
         [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Ramp Normals to Intensity", Float) = 0
         [IntRange] _RampIndex ("Ramp Index", Range(0, 9)) = 0
         [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
@@ -180,8 +183,8 @@ Shader "luka/backlace/default"
         _CelFeather ("Cel Feather", Range(0.001, 1)) = 0.05
         _CelCastShadowFeather ("Cast Shadow Feather", Range(0.001, 1)) = 0.1
         _CelCastShadowPower ("Cast Shadow Power", Range(0, 1)) = 1.0
-        _CelShadowTint ("Cel Shadow Tint", Color) = (0.7, 0.7, 0.8, 1)
-        _CelLitTint ("Cel Lit Tint", Color) = (1.0, 1.0, 1.0, 1)
+        [HDR] _CelShadowTint ("Cel Shadow Tint", Color) = (0.7, 0.7, 0.8, 1)
+        [HDR] _CelLitTint ("Cel Lit Tint", Color) = (1.0, 1.0, 1.0, 1)
         _CelSmoothGradientPower ("Cel Gradient Power", Range(0.1, 4)) = 1.0
         _CelSmoothOcclusionStrength ("Cel Occlusion Strength", Range(0, 1)) = 0.5
         // npr
@@ -1042,6 +1045,8 @@ Shader "luka/backlace/default"
         // [Space(70)]
         // [Header(Outline)]
         // [Space(10)]
+        [Toggle(_BACKLACE_LIT_OUTLINE)] _ToggleLitOutline ("Enable Lit Outline", Float) = 0.0
+        _OutlineLitMix ("Lit Outline Mix", Range(0, 1)) = 0.5
         _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
         _OutlineWidth ("Outline Width", Range(0, 0.1)) = 0.005
         [Enum(Disabled, 0, Enabled, 1)] _OutlineVertexColorMask ("Use Vertex Color (R) Mask", Float) = 0.0

@@ -18,6 +18,36 @@ void CalculateNormals(inout float3 normal, inout float3 tangent, inout float3 bi
     bitangent = cross(normal, tangent) * unity_WorldTransformParams.w;
 }
 
+// generate normals for smoother shading (ex. face) manually
+float3 GetManualNormals(BacklaceSurfaceData Surface)
+{
+    if (_ToggleManualNormals == 0) 
+    {
+        return Surface.NormalDir;
+    }
+    else
+    {
+        // handle rotations
+        float3 objectPos = mul(unity_WorldToObject, float4(FragData.worldPos, 1)).xyz;
+        // apply offset
+        float3 modifiedPos = objectPos + _ManualNormalOffset.xyz;
+        modifiedPos *= _ManualNormalScale.xyz;
+        // apply sharpness/pinch - higher values create more concentrated normals toward center
+        float3 normalizedPos = normalize(modifiedPos);
+        float3 sharpened = normalizedPos * pow(length(modifiedPos), _ManualNormalSharpness);
+        modifiedPos = lerp(modifiedPos, sharpened, saturate(_ManualNormalSharpness - 1.0));
+        // convert current world normal to object space for blending
+        float3 objectNormal = normalize(mul((float3x3)unity_WorldToObject, Surface.NormalDir));
+        // blend together
+        float3 fixedNormal;
+        fixedNormal.x = lerp(objectNormal.x, modifiedPos.x, _ManualApplication.x);
+        fixedNormal.y = lerp(objectNormal.y, modifiedPos.y, _ManualApplication.y);
+        fixedNormal.z = lerp(objectNormal.z, modifiedPos.z, _ManualApplication.z);
+        // back to world space/normalized before returning
+        return normalize(mul((float3x3)unity_ObjectToWorld, fixedNormal));
+    }
+}
+
 // safe normalize a half3 vector
 half3 UnitySafeNormalize(half3 inVec)
 {
@@ -480,6 +510,7 @@ void GetLightData(inout BacklaceSurfaceData Surface)
 {
     // get direction vectors
     CalculateNormals(Surface.NormalDir, Surface.TangentDir, Surface.BitangentDir, NormalMap);
+    Surface.NormalDir = GetManualNormals(Surface);
     Surface.ReflectDir = reflect(-Surface.ViewDir, Surface.NormalDir);
     // start calculating the light data
     BacklaceLightData lightData;
