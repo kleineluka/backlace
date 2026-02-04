@@ -302,11 +302,9 @@ float GetTiltedCheckerboardPattern(float2 screenPos, float scale)
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-// loading uv function
+float2 Uvs[4];
 #if defined(UNITY_PASS_FORWARDBASE) || defined(UNITY_PASS_FORWARDADD) || defined(UNITY_PASS_META) || defined(_BLENDMODE_CUTOUT) || defined(_BLENDMODE_TRANSPARENT) || defined(_BLENDMODE_PREMULTIPLY) || defined(_BLENDMODE_FADE)
     #ifndef UNITY_PASS_OUTLINE
-        // load the uvs
-        float2 Uvs[4];
         void LoadUVs()
         {
             Uvs[0] = FragData.uv;

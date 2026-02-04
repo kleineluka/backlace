@@ -39,6 +39,7 @@
 #pragma shader_feature_local _ _BACKLACE_VRCHAT_MIRROR
 #pragma shader_feature_local _ _BACKLACE_AUDIOLINK
 #pragma shader_feature_local _ _BLENDMODE_CUTOUT
+#pragma shader_feature_local _ _BACKLACE_LIT_OUTLINE
 
 // includes
 #include "UnityCG.cginc"
@@ -56,12 +57,6 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-// properties
-UNITY_DECLARE_TEX2D(_MainTex);
-float4 _MainTex_ST;
-float _Cutoff;
-float _MainTex_UV;
-float _Alpha;
 int _OutlineSpace;
 float _OutlineWidth;
 int _OutlineVertexColorMask;
@@ -80,10 +75,6 @@ float4 _OutlineColor;
 float3 _OutlineOffset;
 int _OutlineStyle;
 
-// Vertex manipulation
-float3 _VertexManipulationPosition;
-float3 _VertexManipulationScale;
-
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
@@ -101,15 +92,55 @@ struct appdata
     fixed4 color : COLOR;
 };
 
-struct v2f
-{
-    float4 pos : SV_POSITION;
-    float3 worldPos : TEXCOORD0;
-    float2 uv : TEXCOORD1;
-    float4 screenPos : TEXCOORD2;
-    float4 vertex : TEXCOORD3;
-    float3 normal : TEXCOORD4;
-};
+
+// [ ♡ ] ────────────────────── [ ♡ ]
+//
+//          Outline Lighting
+//
+// [ ♡ ] ────────────────────── [ ♡ ]
+#if defined(_BACKLACE_LIT_OUTLINE)
+    float _OutlineLitMix;
+    #include "UnityLightingCommon.cginc"
+    #include "UnityStandardUtils.cginc"
+    #include "AutoLight.cginc"
+    struct FragmentData
+    {
+        float4 pos : SV_POSITION;
+        float3 normal : NORMAL;
+        float4 tangentDir : TANGENT;
+        float2 uv : TEXCOORD0;
+        float4 screenPos : TEXCOORD2;
+        float3 worldPos : TEXCOORD4;
+        UNITY_SHADOW_COORDS(6)
+        #if defined(LIGHTMAP_ON)
+            float2 lightmapUV : TEXCOORD8;
+        #endif
+        #if defined(DYNAMICLIGHTMAP_ON)
+            float2 dynamicLightmapUV : TEXCOORD9;
+        #endif
+        float4 vertex : TEXCOORD3;
+    };
+    #include "./Backlace_Properties.cginc"
+    #include "./Backlace_Lighting.cginc"
+    #include "./Backlace_Shading.cginc" // For GetGeometryVectors 
+#else // _BACKLACE_LIT_OUTLINE
+    UNITY_DECLARE_TEX2D(_MainTex);
+    float4 _MainTex_ST;
+    float _Cutoff;
+    float _MainTex_UV;
+    float _Alpha;
+    float3 _VertexManipulationPosition;
+    float3 _VertexManipulationScale;
+    struct FragmentData
+    {
+        float4 pos : SV_POSITION;
+        float3 worldPos : TEXCOORD0;
+        float2 uv : TEXCOORD1;
+        float4 screenPos : TEXCOORD2;
+        float4 vertex : TEXCOORD3;
+        float3 normal : TEXCOORD4;
+    };
+#endif // _BACKLACE_LIT_OUTLINE
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -119,9 +150,9 @@ struct v2f
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-v2f vert(appdata v)
+FragmentData vert(appdata v)
 {
-    v2f o;
+    FragmentData o;
     // apply vertex modifications
     #if defined(_BACKLACE_AUDIOLINK)
         BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
@@ -185,7 +216,7 @@ v2f vert(appdata v)
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-fixed4 frag(v2f i) : SV_Target
+fixed4 frag(FragmentData i) : SV_Target
 {
     float baseAlpha = UNITY_SAMPLE_TEX2D(_MainTex, i.uv).a;
     // handle cutout blending for the outline
@@ -259,6 +290,28 @@ fixed4 frag(v2f i) : SV_Target
         float fadeFactor = 1.0 - smoothstep(_OutlineFadeStart, _OutlineFadeEnd, dist);
         finalColor.a *= saturate(fadeFactor);
     }
+    #if defined(_BACKLACE_LIT_OUTLINE)
+        FragData.pos = i.pos;
+        FragData.worldPos = i.worldPos;
+        FragData.normal = UnityObjectToWorldNormal(i.normal);
+        FragData.tangentDir = float4(1, 0, 0, 1); // dummy tangent
+        FragData.uv = i.uv;
+        #if defined(LIGHTMAP_ON)
+            FragData.lightmapUV = i.uv;
+        #endif // LIGHTMAP_ON
+        #if defined(DYNAMICLIGHTMAP_ON)
+            FragData.dynamicLightmapUV = i.uv;
+        #endif // DYNAMICLIGHTMAP_ON
+        BacklaceSurfaceData Surface = (BacklaceSurfaceData)0;
+        Surface.Albedo.rgb = finalColor.rgb;
+        Surface.Albedo.a = 1;
+        GetGeometryVectors(Surface, FragData);
+        float3 NormalMap = float3(0, 0, 1); // flat normal
+        GetLightData(Surface);
+        float3 direct = Surface.LightColor.rgb * Surface.Attenuation * Surface.NdotL;
+        float3 combinedLight = direct + Surface.IndirectDiffuse;
+        finalColor.rgb *= lerp(float3(1, 1, 1), direct, _OutlineLitMix);
+    #endif // _BACKLACE_LIT_OUTLINE
     finalColor.a *= _OutlineOpacity;
     finalColor.a *= _Alpha;
     finalColor.a *= baseAlpha;

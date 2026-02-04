@@ -993,14 +993,14 @@
         switch(_DitherSpace)
         {
             case 1: // world
-            ditherUV = frac(worldPos) * _ScreenParams.xy;
-            break;
+                ditherUV = frac(worldPos) * _ScreenParams.xy;
+                break;
             case 2: // uv
-            ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
-            break;
+                ditherUV = uvs * _ScreenParams.xy; // passed to avoid outline pass needing Uvs[]
+                break;
             default: // screen
-            ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
-            break;
+                ditherUV = Surface.ScreenCoords * _ScreenParams.xy;
+                break;
         }
         float pattern = GetTiltedCheckerboardPattern(ditherUV, _DitherScale);
         Surface.FinalColor.a = lerp(Surface.FinalColor.a, Surface.FinalColor.a * pattern, _DitherAmount);
@@ -1029,20 +1029,20 @@
         switch(_TouchMode)
         {
             case 1: // replace
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+                break;
             case 2: // multiply
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
-            break;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, Surface.FinalColor.rgb * touchEffect, intersect);
+                break;
             case 3: // rainbow
-            float time = _Time.y * _TouchRainbowSpeed;
-            float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
-            touchEffect = rainbowColor * intersect * _TouchColor.a;
-            Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
-            break;
+                float time = _Time.y * _TouchRainbowSpeed;
+                float3 rainbowColor = Sinebow(depthDifference * _TouchRainbowSpread + time);
+                touchEffect = rainbowColor * intersect * _TouchColor.a;
+                Surface.FinalColor.rgb = lerp(Surface.FinalColor.rgb, touchEffect, intersect);
+                break;
             default: // additive
-            Surface.FinalColor.rgb += touchEffect;
-            break;
+                Surface.FinalColor.rgb += touchEffect;
+                break;
         }
     }
 #endif // _BACKLACE_TOUCH_REACTIVE
@@ -1115,20 +1115,20 @@
         switch(_VertexDistortionColorMask)
         {
             case 1: // red
-            mask = vertexColor.r;
-            break;
+                mask = vertexColor.r;
+                break;
             case 2: // green
-            mask = vertexColor.g;
-            break;
+                mask = vertexColor.g;
+                break;
             case 3: // blue
-            mask = vertexColor.b;
-            break;
+                mask = vertexColor.b;
+                break;
             case 4: // all
-            mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
-            break;
+                mask = (vertexColor.r + vertexColor.g + vertexColor.b) / 3.0;
+                break;
             default: // disabled
-            mask = 1.0;
-            break;
+                mask = 1.0;
+                break;
         }
         // apply mask to strength
         switch(_VertexDistortionMode)

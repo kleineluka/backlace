@@ -256,392 +256,394 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-    // apply a gradient based on the world normal y
-    void ApplyAmbientGradient(inout BacklaceSurfaceData Surface)
-    {
-        // avoid rendering per-light in add pass
-        #if defined(UNITY_PASS_FORWARDBASE)
-            [branch] if (_ToggleAmbientGradient == 1) 
-            {
-                float3 worldNormal = normalize(FragData.normal);
-                float updownGradient = worldNormal.y * 0.5 + 0.5; // 0 when pointing down, 0.5 horizontal, 1 pointing up.
-                float skyMask = smoothstep(_AmbientSkyThreshold, 1.0, updownGradient);
-                float groundMask = smoothstep(_AmbientGroundThreshold, 0.0, updownGradient);
-                float3 skyGradientColor = _AmbientUp.rgb * skyMask;
-                float3 groundGradientColor = _AmbientDown.rgb * groundMask;
-                Surface.Diffuse += (skyGradientColor + groundGradientColor) * _AmbientIntensity;
-            }
-        #endif // UNITY_PASS_FORWARDBASE
-    }
-
-    // apply stockings effect based on view angle
-    void ApplyStockings(inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_ToggleStockings == 1) 
+    #if defined(_BACKLACE_ANIME_EXTRAS)
+        // apply a gradient based on the world normal y
+        void ApplyAmbientGradient(inout BacklaceSurfaceData Surface)
         {
-            float4 stockingsMap = UNITY_SAMPLE_TEX2D_SAMPLER(_StockingsMap, _MainTex, Uvs[0]);
-            float NoV = saturate(Surface.NdotV);
-            float power = max(0.04, _StockingsPower);
-            float darkWidth = max(0, _StockingsDarkWidth * power);
-            float darkIntensity = (NoV - power) / (darkWidth - power);
-            darkIntensity = saturate(darkIntensity * (1 - _StockingsLightedIntensity)) * stockingsMap.r;
-            float3 darkColor = lerp(1, _StockingsColorDark.rgb, darkIntensity);
-            darkColor = lerp(1, darkColor * Surface.Albedo.rgb, darkIntensity) * Surface.Albedo.rgb;
-            float lightIntensity = lerp(0.5, 1, stockingsMap.b * _StockingsRoughness);
-            lightIntensity *= stockingsMap.g;
-            lightIntensity *= _StockingsLightedIntensity;
-            lightIntensity *= max(0.004, pow(NoV, _StockingsLightedWidth));
-            float3 stockings = lightIntensity * (darkColor + _StockingsColor.rgb) + darkColor;
-            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, stockings, step(0.01, stockingsMap.r));
-        }
-    }
-
-    // eye parallax effect with depth, movement reactivity, and breathing
-    void ApplyEyeParallax(inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_ToggleEyeParallax == 1) 
-        {
-            // convert spaces
-            float3x3 TBN = float3x3(
-                normalize(Surface.TangentDir),
-                normalize(Surface.BitangentDir),
-                normalize(Surface.NormalDir)
-            );
-            float3 viewDirTS = mul(TBN, normalize(Surface.ViewDir));
-            // angular smoothing
-            float forward = saturate(viewDirTS.z);
-            float smoothForward = smoothstep(0.25, 1.0, forward);
-            // eye "curvature"
-            float2 eyeDir = viewDirTS.xy / max(forward + 0.15, 0.15);
-            float2 eyeOffset = eyeDir * _EyeParallaxStrength * smoothForward;
-            // breathing effect
-            if (_ToggleEyeParallaxBreathing == 1) 
-            {
-                float breathPhase = _Time.y * _EyeParallaxBreathSpeed;
-                float2 breathOffset;
-                breathOffset.x = sin(breathPhase);
-                breathOffset.y = cos(breathPhase * 0.8);
-                eyeOffset += breathOffset * _EyeParallaxBreathStrength;
-            }
-            // clamp it
-            eyeOffset = clamp(eyeOffset, -_EyeParallaxClamp, _EyeParallaxClamp);
-            // soft mask
-            float2 uv = FragData.uv;
-            float irisMask = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxEyeMaskTex, _MainTex, uv).r;
-            irisMask = smoothstep(0.2, 0.8, irisMask);
-            // composite all the final colours
-            float2 irisUV = uv + eyeOffset * irisMask;
-            float4 sclera = UNITY_SAMPLE_TEX2D(_MainTex, uv); // scalera is the main texture, presumably
-            float4 iris = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxIrisTex, _MainTex, irisUV);
-            Surface.Albedo.rgb = lerp(sclera.rgb, iris.rgb, iris.a * irisMask);
-        }
-    }
-    
-    // expression map (applies color tints based on expression channels)
-    void ApplyExpressionMap(inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_ToggleExpressionMap == 1)
-        {
-            float4 exprMap = UNITY_SAMPLE_TEX2D_SAMPLER(_ExpressionMap, _MainTex, Uvs[0]);
-            // cheek blush (red channel)
-            float3 exCheek = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExCheekColor.rgb, exprMap.r);
-            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exCheek, _ExCheekIntensity);
-            // shy/embarrassment (green channel)
-            float3 exShy = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExShyColor.rgb, exprMap.g);
-            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exShy, _ExShyIntensity);
-            // shadow tint (blue channel)
-            float3 exShadow = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExShadowColor.rgb, exprMap.b);
-            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exShadow, _ExShadowIntensity);
-        }
-    }
-    
-    // face map features (eye masks, nose lines, lip outlines)
-    void ApplyFaceMap(inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_ToggleFaceMap == 1)
-        {
-            float3 headForward = normalize(mul((float3x3)unity_ObjectToWorld, _FaceHeadForward.xyz));
-            float4 faceMap = UNITY_SAMPLE_TEX2D_SAMPLER(_FaceMap, _MainTex, Uvs[0]);
-            // nose line (blue channel)
-            [branch] if (_ToggleNoseLine == 1)
-            {
-                float FdotV = pow(abs(dot(headForward, Surface.ViewDir)), _NoseLinePower);
-                float noseLineMask = step(1.03 - faceMap.b, FdotV);
-                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _NoseLineColor.rgb, noseLineMask);
-            }
-            // eye shadow/tint (red channel)
-            [branch] if (_ToggleEyeShadow == 1)
-            {
-                float3 exEyeShadow = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExEyeColor.rgb, faceMap.r);
-                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exEyeShadow, _EyeShadowIntensity);
-            }
-            // lip outline (green channel: 0.5 < g < 0.95 is lip area)
-            [branch] if (_ToggleLipOutline == 1)
-            {
-                float lipMask = step(0.5, faceMap.g) - step(0.95, faceMap.g);
-                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _LipOutlineColor.rgb, lipMask * _LipOutlineIntensity);
-            }
-        }
-    }
-    
-    // sdf shadow mapping
-    void ApplySDFShadow(inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_ToggleSDFShadow == 1) 
-        {
-            // face forward vs light direction
-            // float3 faceForward = normalize(unity_ObjectToWorld[2].xyz); // Z axis
-            // float3 faceRight = normalize(unity_ObjectToWorld[0].xyz); // X axis
-            float3 faceForward = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalForward.xyz));
-            float3 faceRight = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalRight.xyz));
-            float forwardDot = dot(faceForward, Surface.LightDir);
-            float rightDot = dot(faceRight, Surface.LightDir);
-            // flip as necessary
-            float2 uv = Uvs[0];
-            if (rightDot < 0) uv.x = 1.0 - uv.x;
-            // sample sdf
-            float sdfValue = UNITY_SAMPLE_TEX2D(_SDFShadowTexture, uv).r;
-            // thresholding
-            float halfLambert = forwardDot * 0.5 + 0.5;
-            halfLambert = saturate(halfLambert - (_SDFShadowThreshold - 0.5));
-            float shadowMask = smoothstep(sdfValue - _SDFShadowSoftness, sdfValue + _SDFShadowSoftness, halfLambert);
-            // apply to NdotL
-            Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
-            Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
-        }
-    }
-
-    // angle-based hair transparency (inspired by Star Rail)
-    void ApplyHairTransparency(inout BacklaceSurfaceData Surface)
-    {
-        [branch] if (_ToggleHairTransparency == 1) 
-        {
-            float3 headForward = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadForward.xyz));
-            float3 headUp = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadUp.xyz));
-            float3 headRight = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadRight.xyz));
-            // horizontal angle (70 degrees)
-            float3 viewDirXZ = normalize(Surface.ViewDir - dot(Surface.ViewDir, headUp) * headUp);
-            float cosHorizontal = max(0, dot(viewDirXZ, headForward));
-            float alpha1 = saturate((1.0 - cosHorizontal) / 0.658); // 0.658 = 1 - cos(70°)
-            // vertical angle (45 degrees)
-            float3 viewDirYZ = normalize(Surface.ViewDir - dot(Surface.ViewDir, headRight) * headRight);
-            float cosVertical = max(0, dot(viewDirYZ, headForward));
-            float alpha2 = saturate((1.0 - cosVertical) / 0.293); // 0.293 = 1 - cos(45°)
-            // optional masking to make other parts of the hair not impacted
-            float hairMask = 1.0;
-            [branch] if (_HairHeadMaskMode != 0)
-            {
-                float3 headCenterWS = mul(unity_ObjectToWorld, float4(_HairHeadCenter.xyz, 1.0)).xyz;
-                float distToHead = distance(FragData.worldPos, headCenterWS);
-                if (_HairHeadMaskMode == 1) //sdf
+            // avoid rendering per-light in add pass
+            #if defined(UNITY_PASS_FORWARDBASE)
+                [branch] if (_ToggleAmbientGradient == 1) 
                 {
-                    float radius = _HairSDFScale.x;
-                    // signed distance (negative = inside)
-                    float sdf = distToHead - radius;
-                    hairMask = saturate(1.0 - sdf / max(_HairSDFSoftness, 1e-5));
-                    hairMask = pow(hairMask, _HairSDFBlend);
+                    float3 worldNormal = normalize(FragData.normal);
+                    float updownGradient = worldNormal.y * 0.5 + 0.5; // 0 when pointing down, 0.5 horizontal, 1 pointing up.
+                    float skyMask = smoothstep(_AmbientSkyThreshold, 1.0, updownGradient);
+                    float groundMask = smoothstep(_AmbientGroundThreshold, 0.0, updownGradient);
+                    float3 skyGradientColor = _AmbientUp.rgb * skyMask;
+                    float3 groundGradientColor = _AmbientDown.rgb * groundMask;
+                    Surface.Diffuse += (skyGradientColor + groundGradientColor) * _AmbientIntensity;
                 }
-                else if (_HairHeadMaskMode == 2) // distance falloff
+            #endif // UNITY_PASS_FORWARDBASE
+        }
+
+        // apply stockings effect based on view angle
+        void ApplyStockings(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_ToggleStockings == 1) 
+            {
+                float4 stockingsMap = UNITY_SAMPLE_TEX2D_SAMPLER(_StockingsMap, _MainTex, Uvs[0]);
+                float NoV = saturate(Surface.NdotV);
+                float power = max(0.04, _StockingsPower);
+                float darkWidth = max(0, _StockingsDarkWidth * power);
+                float darkIntensity = (NoV - power) / (darkWidth - power);
+                darkIntensity = saturate(darkIntensity * (1 - _StockingsLightedIntensity)) * stockingsMap.r;
+                float3 darkColor = lerp(1, _StockingsColorDark.rgb, darkIntensity);
+                darkColor = lerp(1, darkColor * Surface.Albedo.rgb, darkIntensity) * Surface.Albedo.rgb;
+                float lightIntensity = lerp(0.5, 1, stockingsMap.b * _StockingsRoughness);
+                lightIntensity *= stockingsMap.g;
+                lightIntensity *= _StockingsLightedIntensity;
+                lightIntensity *= max(0.004, pow(NoV, _StockingsLightedWidth));
+                float3 stockings = lightIntensity * (darkColor + _StockingsColor.rgb) + darkColor;
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, stockings, step(0.01, stockingsMap.r));
+            }
+        }
+
+        // eye parallax effect with depth, movement reactivity, and breathing
+        void ApplyEyeParallax(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_ToggleEyeParallax == 1) 
+            {
+                // convert spaces
+                float3x3 TBN = float3x3(
+                    normalize(Surface.TangentDir),
+                    normalize(Surface.BitangentDir),
+                    normalize(Surface.NormalDir)
+                );
+                float3 viewDirTS = mul(TBN, normalize(Surface.ViewDir));
+                // angular smoothing
+                float forward = saturate(viewDirTS.z);
+                float smoothForward = smoothstep(0.25, 1.0, forward);
+                // eye "curvature"
+                float2 eyeDir = viewDirTS.xy / max(forward + 0.15, 0.15);
+                float2 eyeOffset = eyeDir * _EyeParallaxStrength * smoothForward;
+                // breathing effect
+                if (_ToggleEyeParallaxBreathing == 1) 
                 {
-                    hairMask = smoothstep(
-                        _HairDistanceFalloffStart,
-                        _HairDistanceFalloffEnd,
-                        distToHead
-                    );
-                    // invert so near-head = 1
-                    hairMask = 1.0 - hairMask;
-                    hairMask = lerp(1.0, hairMask, _HairDistanceFalloffStrength);
+                    float breathPhase = _Time.y * _EyeParallaxBreathSpeed;
+                    float2 breathOffset;
+                    breathOffset.x = sin(breathPhase);
+                    breathOffset.y = cos(breathPhase * 0.8);
+                    eyeOffset += breathOffset * _EyeParallaxBreathStrength;
                 }
-                if (_HairExtremeAngleGuard == 1)
+                // clamp it
+                eyeOffset = clamp(eyeOffset, -_EyeParallaxClamp, _EyeParallaxClamp);
+                // soft mask
+                float2 uv = FragData.uv;
+                float irisMask = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxEyeMaskTex, _MainTex, uv).r;
+                irisMask = smoothstep(0.2, 0.8, irisMask);
+                // composite all the final colours
+                float2 irisUV = uv + eyeOffset * irisMask;
+                float4 sclera = UNITY_SAMPLE_TEX2D(_MainTex, uv); // scalera is the main texture, presumably
+                float4 iris = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxIrisTex, _MainTex, irisUV);
+                Surface.Albedo.rgb = lerp(sclera.rgb, iris.rgb, iris.a * irisMask);
+            }
+        }
+        
+        // expression map (applies color tints based on expression channels)
+        void ApplyExpressionMap(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_ToggleExpressionMap == 1)
+            {
+                float4 exprMap = UNITY_SAMPLE_TEX2D_SAMPLER(_ExpressionMap, _MainTex, Uvs[0]);
+                // cheek blush (red channel)
+                float3 exCheek = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExCheekColor.rgb, exprMap.r);
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exCheek, _ExCheekIntensity);
+                // shy/embarrassment (green channel)
+                float3 exShy = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExShyColor.rgb, exprMap.g);
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exShy, _ExShyIntensity);
+                // shadow tint (blue channel)
+                float3 exShadow = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExShadowColor.rgb, exprMap.b);
+                Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exShadow, _ExShadowIntensity);
+            }
+        }
+        
+        // face map features (eye masks, nose lines, lip outlines)
+        void ApplyFaceMap(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_ToggleFaceMap == 1)
+            {
+                float3 headForward = normalize(mul((float3x3)unity_ObjectToWorld, _FaceHeadForward.xyz));
+                float4 faceMap = UNITY_SAMPLE_TEX2D_SAMPLER(_FaceMap, _MainTex, Uvs[0]);
+                // nose line (blue channel)
+                [branch] if (_ToggleNoseLine == 1)
                 {
-                    // 0 = side view, 1 = straight up/down
-                    float vertical = abs(dot(normalize(Surface.ViewDir), headUp));
-                    float start = cos(radians(_HairAngleFadeStart));
-                    float end = cos(radians(_HairAngleFadeEnd));
-                    // Fade OUT transparency at extreme angles
-                    float angleGuard = smoothstep(start, end, vertical);
-                    angleGuard = 1.0 - angleGuard;
-                    angleGuard = lerp(1.0, angleGuard, _HairAngleGuardStrength);
-                    hairMask *= angleGuard;
+                    float FdotV = pow(abs(dot(headForward, Surface.ViewDir)), _NoseLinePower);
+                    float noseLineMask = step(1.03 - faceMap.b, FdotV);
+                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _NoseLineColor.rgb, noseLineMask);
                 }
-                if (_HairSDFPreview == 1)
+                // eye shadow/tint (red channel)
+                [branch] if (_ToggleEyeShadow == 1)
                 {
-                    Surface.Albedo.rgb = lerp(float3(1, 0, 0), float3(0, 1, 0), hairMask);
-                    Surface.Albedo.a = 1;
-                    return;
+                    float3 exEyeShadow = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _ExEyeColor.rgb, faceMap.r);
+                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, exEyeShadow, _EyeShadowIntensity);
+                }
+                // lip outline (green channel: 0.5 < g < 0.95 is lip area)
+                [branch] if (_ToggleLipOutline == 1)
+                {
+                    float lipMask = step(0.5, faceMap.g) - step(0.95, faceMap.g);
+                    Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _LipOutlineColor.rgb, lipMask * _LipOutlineIntensity);
                 }
             }
-            // combine angles with base alpha
-            float hairAlpha = max(max(alpha1, alpha2), _HairBlendAlpha);
-            hairAlpha = lerp(1.0, hairAlpha, _HairTransparencyStrength * hairMask);
-            // apply to surface
-            Surface.Albedo.a *= hairAlpha;
         }
-    }
+        
+        // sdf shadow mapping
+        void ApplySDFShadow(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_ToggleSDFShadow == 1) 
+            {
+                // face forward vs light direction
+                // float3 faceForward = normalize(unity_ObjectToWorld[2].xyz); // Z axis
+                // float3 faceRight = normalize(unity_ObjectToWorld[0].xyz); // X axis
+                float3 faceForward = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalForward.xyz));
+                float3 faceRight = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalRight.xyz));
+                float forwardDot = dot(faceForward, Surface.LightDir);
+                float rightDot = dot(faceRight, Surface.LightDir);
+                // flip as necessary
+                float2 uv = Uvs[0];
+                if (rightDot < 0) uv.x = 1.0 - uv.x;
+                // sample sdf
+                float sdfValue = UNITY_SAMPLE_TEX2D(_SDFShadowTexture, uv).r;
+                // thresholding
+                float halfLambert = forwardDot * 0.5 + 0.5;
+                halfLambert = saturate(halfLambert - (_SDFShadowThreshold - 0.5));
+                float shadowMask = smoothstep(sdfValue - _SDFShadowSoftness, sdfValue + _SDFShadowSoftness, halfLambert);
+                // apply to NdotL
+                Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
+                Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
+            }
+        }
 
-    // apply an anime gradient
-    void ApplyAnimeGradient(inout BacklaceSurfaceData Surface)
-    {
-        if (_ToggleAnimeGradient == 0)
-        { 
-            return;
-        }
-        else
+        // angle-based hair transparency (inspired by Star Rail)
+        void ApplyHairTransparency(inout BacklaceSurfaceData Surface)
         {
-            float3 localPos = mul(unity_WorldToObject, float4(FragData.worldPos.xyz, 1.0)).xyz;
-            float grad = dot(localPos.xyz, _AnimeGradientDirection.xyz);
-            float mask = saturate((grad + _AnimeGradientOffset) * _AnimeGradientMultiplier);
-            float3 gradColour = lerp(_AnimeGradientColourA, _AnimeGradientColourB, mask);
-            if (_AnimeGradientMode == 0) // replace
+            [branch] if (_ToggleHairTransparency == 1) 
             {
-                Surface.Albedo.rgb = gradColour;
-            }
-            else // multiply
-            {
-                Surface.Albedo.rgb *= gradColour;
+                float3 headForward = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadForward.xyz));
+                float3 headUp = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadUp.xyz));
+                float3 headRight = normalize(mul((float3x3)unity_ObjectToWorld, _HairHeadRight.xyz));
+                // horizontal angle (70 degrees)
+                float3 viewDirXZ = normalize(Surface.ViewDir - dot(Surface.ViewDir, headUp) * headUp);
+                float cosHorizontal = max(0, dot(viewDirXZ, headForward));
+                float alpha1 = saturate((1.0 - cosHorizontal) / 0.658); // 0.658 = 1 - cos(70°)
+                // vertical angle (45 degrees)
+                float3 viewDirYZ = normalize(Surface.ViewDir - dot(Surface.ViewDir, headRight) * headRight);
+                float cosVertical = max(0, dot(viewDirYZ, headForward));
+                float alpha2 = saturate((1.0 - cosVertical) / 0.293); // 0.293 = 1 - cos(45°)
+                // optional masking to make other parts of the hair not impacted
+                float hairMask = 1.0;
+                [branch] if (_HairHeadMaskMode != 0)
+                {
+                    float3 headCenterWS = mul(unity_ObjectToWorld, float4(_HairHeadCenter.xyz, 1.0)).xyz;
+                    float distToHead = distance(FragData.worldPos, headCenterWS);
+                    if (_HairHeadMaskMode == 1) //sdf
+                    {
+                        float radius = _HairSDFScale.x;
+                        // signed distance (negative = inside)
+                        float sdf = distToHead - radius;
+                        hairMask = saturate(1.0 - sdf / max(_HairSDFSoftness, 1e-5));
+                        hairMask = pow(hairMask, _HairSDFBlend);
+                    }
+                    else if (_HairHeadMaskMode == 2) // distance falloff
+                    {
+                        hairMask = smoothstep(
+                            _HairDistanceFalloffStart,
+                            _HairDistanceFalloffEnd,
+                            distToHead
+                        );
+                        // invert so near-head = 1
+                        hairMask = 1.0 - hairMask;
+                        hairMask = lerp(1.0, hairMask, _HairDistanceFalloffStrength);
+                    }
+                    if (_HairExtremeAngleGuard == 1)
+                    {
+                        // 0 = side view, 1 = straight up/down
+                        float vertical = abs(dot(normalize(Surface.ViewDir), headUp));
+                        float start = cos(radians(_HairAngleFadeStart));
+                        float end = cos(radians(_HairAngleFadeEnd));
+                        // Fade OUT transparency at extreme angles
+                        float angleGuard = smoothstep(start, end, vertical);
+                        angleGuard = 1.0 - angleGuard;
+                        angleGuard = lerp(1.0, angleGuard, _HairAngleGuardStrength);
+                        hairMask *= angleGuard;
+                    }
+                    if (_HairSDFPreview == 1)
+                    {
+                        Surface.Albedo.rgb = lerp(float3(1, 0, 0), float3(0, 1, 0), hairMask);
+                        Surface.Albedo.a = 1;
+                        return;
+                    }
+                }
+                // combine angles with base alpha
+                float hairAlpha = max(max(alpha1, alpha2), _HairBlendAlpha);
+                hairAlpha = lerp(1.0, hairAlpha, _HairTransparencyStrength * hairMask);
+                // apply to surface
+                Surface.Albedo.a *= hairAlpha;
             }
         }
-    }
 
-    void ApplyToonHighlights(inout BacklaceSurfaceData Surface)
-    {
-        if (_ToggleSpecularToon == 0)
+        // apply an anime gradient
+        void ApplyAnimeGradient(inout BacklaceSurfaceData Surface)
         {
-            return;
-        }
-        else 
-        {
-            float blinnPhong = pow(max(0.0, Surface.NdotH), _SpecularToonShininess) * Surface.Attenuation;
-            float threshold = 1.05 - _SpecularToonThreshold;
-            float specularRaw = smoothstep(threshold - _SpecularToonRoughness, threshold + _SpecularToonRoughness, blinnPhong);
-            float sharpCurve = (specularRaw * - 2.0 + 3.0) * pow(specularRaw, 2.0);
-            specularRaw = lerp(specularRaw, sharpCurve, _SpecularToonSharpness);
-            float specularMask = specularRaw * _SpecularToonIntensity;
-            float3 specularColour = _SpecularToonColor.rgb * specularMask;
-            if (_SpecularToonUseLighting == 1)
-            {
-                specularColour *= Surface.LightColor.rgb * Surface.Attenuation;
+            if (_ToggleAnimeGradient == 0)
+            { 
+                return;
             }
-            Surface.FinalColor.rgb += specularColour;
+            else
+            {
+                float3 localPos = mul(unity_WorldToObject, float4(FragData.worldPos.xyz, 1.0)).xyz;
+                float grad = dot(localPos.xyz, _AnimeGradientDirection.xyz);
+                float mask = saturate((grad + _AnimeGradientOffset) * _AnimeGradientMultiplier);
+                float3 gradColour = lerp(_AnimeGradientColourA, _AnimeGradientColourB, mask);
+                if (_AnimeGradientMode == 0) // replace
+                {
+                    Surface.Albedo.rgb = gradColour;
+                }
+                else // multiply
+                {
+                    Surface.Albedo.rgb *= gradColour;
+                }
+            }
         }
-    }
 
-    void ApplyAngelRings(inout BacklaceSurfaceData Surface)
-    {
-        if (_AngelRingMode == 0)
+        void ApplyToonHighlights(inout BacklaceSurfaceData Surface)
         {
-            return;
-        }
-        else
-        {
-            // set up between modes
-            float3 flowTangent;
-            float hairLength;
-            if (_AngelRingMode == 2) // uv mode
+            if (_ToggleSpecularToon == 0)
             {
-                hairLength = Uvs[0].y;
-                flowTangent = normalize(Surface.TangentDir);
+                return;
             }
-            else if (_AngelRingMode == 1) // view aligned
+            else 
             {
-                /*hairLength = (FragData.worldPos.y - FragData.worldObjectCenter.y) * _AngelRingHeightScale + _AngelRingHeightOffset;
-                    hairLength = saturate(hairLength); // keep it 0-1
-                    float3 up = float3(0, 1, 0);
+                float blinnPhong = pow(max(0.0, Surface.NdotH), _SpecularToonShininess) * Surface.Attenuation;
+                float threshold = 1.05 - _SpecularToonThreshold;
+                float specularRaw = smoothstep(threshold - _SpecularToonRoughness, threshold + _SpecularToonRoughness, blinnPhong);
+                float sharpCurve = (specularRaw * - 2.0 + 3.0) * pow(specularRaw, 2.0);
+                specularRaw = lerp(specularRaw, sharpCurve, _SpecularToonSharpness);
+                float specularMask = specularRaw * _SpecularToonIntensity;
+                float3 specularColour = _SpecularToonColor.rgb * specularMask;
+                if (_SpecularToonUseLighting == 1)
+                {
+                    specularColour *= Surface.LightColor.rgb * Surface.Attenuation;
+                }
+                Surface.FinalColor.rgb += specularColour;
+            }
+        }
+
+        void ApplyAngelRings(inout BacklaceSurfaceData Surface)
+        {
+            if (_AngelRingMode == 0)
+            {
+                return;
+            }
+            else
+            {
+                // set up between modes
+                float3 flowTangent;
+                float hairLength;
+                if (_AngelRingMode == 2) // uv mode
+                {
+                    hairLength = Uvs[0].y;
+                    flowTangent = normalize(Surface.TangentDir);
+                }
+                else if (_AngelRingMode == 1) // view aligned
+                {
+                    /*hairLength = (FragData.worldPos.y - FragData.worldObjectCenter.y) * _AngelRingHeightScale + _AngelRingHeightOffset;
+                        hairLength = saturate(hairLength); // keep it 0-1
+                        float3 up = float3(0, 1, 0);
+                        float3 right = normalize(cross(up, Surface.NormalDir));
+                    flowTangent = normalize(cross(Surface.NormalDir, right));*/
+                    float3 relativePos = FragData.worldPos - FragData.worldObjectCenter;
+                    float projection = dot(relativePos, normalize(_AngelRingHeightDirection.xyz));
+                    hairLength = saturate(projection * _AngelRingHeightScale + _AngelRingHeightOffset);
+                    float3 up = normalize(_AngelRingHeightDirection.xyz);
                     float3 right = normalize(cross(up, Surface.NormalDir));
-                flowTangent = normalize(cross(Surface.NormalDir, right));*/
-                float3 relativePos = FragData.worldPos - FragData.worldObjectCenter;
-                float projection = dot(relativePos, normalize(_AngelRingHeightDirection.xyz));
-                hairLength = saturate(projection * _AngelRingHeightScale + _AngelRingHeightOffset);
-                float3 up = normalize(_AngelRingHeightDirection.xyz);
-                float3 right = normalize(cross(up, Surface.NormalDir));
-                flowTangent = normalize(cross(Surface.NormalDir, right));
-            }
-            else // (3) world aligned
-            {
-                hairLength = dot(FragData.worldPos, _AngelRingHeightDirection) - _AngelRingHeightScale;
-                float3 right = normalize(cross(_AngelRingHeightDirection, Surface.NormalDir));
-                flowTangent = normalize(cross(Surface.NormalDir, right));
-            }
-            // optional breakup mix-in
-            float breakup = 1.0;
-            float heightOffset = 0.0;
-            [branch] if (_AngelRingBreakup != 0)
-            {
-                float3 toFragment = normalize(FragData.worldPos - FragData.worldObjectCenter);
-                float3 up = normalize(_AngelRingHeightDirection.xyz);
-                float3 forward = normalize(cross(up, float3(1, 0, 0))); // or use view direction
-                float3 right = normalize(cross(up, forward));
-                float angleX = atan2(dot(toFragment, right), dot(toFragment, forward));
-                float strandCoord = (angleX / 6.28318530718) + 0.5; // 0-1 range
-                if (_AngelRingBreakup == 1)
-                {
-                    float stripes = frac(strandCoord * _AngelRingBreakupDensity);
-                    stripes = abs(stripes - 0.5) * 2.0;
-                    breakup = smoothstep(
-                        _AngelRingBreakupWidthMin,
-                        _AngelRingBreakupWidthMin + _AngelRingBreakupSoftness,
-                        stripes
-                    );
+                    flowTangent = normalize(cross(Surface.NormalDir, right));
                 }
-                else if (_AngelRingBreakup == 2)
+                else // (3) world aligned
                 {
-                    float cell = floor(strandCoord * _AngelRingBreakupDensity);
-                    float rand = frac(sin(cell * 91.3458) * 47453.5453);
-                    float verticalRand = frac(sin(cell * 78.233) * 43758.5453);
-                    heightOffset = lerp(-1.0, 1.0, verticalRand) * _AngelRingBreakupHeight;
-                    float localCoord = frac(strandCoord * _AngelRingBreakupDensity);
-                    float width = lerp(
-                        _AngelRingBreakupWidthMin,
-                        _AngelRingBreakupWidthMax,
-                        rand
-                    );
-                    float center = lerp(0.3, 0.7, rand);
-                    float stripeDist = abs(localCoord - center);
-                    breakup = smoothstep(
-                        width,
-                        width + _AngelRingBreakupSoftness,
-                        stripeDist
-                    );
+                    hairLength = dot(FragData.worldPos, _AngelRingHeightDirection) - _AngelRingHeightScale;
+                    float3 right = normalize(cross(_AngelRingHeightDirection, Surface.NormalDir));
+                    flowTangent = normalize(cross(Surface.NormalDir, right));
                 }
+                // optional breakup mix-in
+                float breakup = 1.0;
+                float heightOffset = 0.0;
+                [branch] if (_AngelRingBreakup != 0)
+                {
+                    float3 toFragment = normalize(FragData.worldPos - FragData.worldObjectCenter);
+                    float3 up = normalize(_AngelRingHeightDirection.xyz);
+                    float3 forward = normalize(cross(up, float3(1, 0, 0))); // or use view direction
+                    float3 right = normalize(cross(up, forward));
+                    float angleX = atan2(dot(toFragment, right), dot(toFragment, forward));
+                    float strandCoord = (angleX / 6.28318530718) + 0.5; // 0-1 range
+                    if (_AngelRingBreakup == 1)
+                    {
+                        float stripes = frac(strandCoord * _AngelRingBreakupDensity);
+                        stripes = abs(stripes - 0.5) * 2.0;
+                        breakup = smoothstep(
+                            _AngelRingBreakupWidthMin,
+                            _AngelRingBreakupWidthMin + _AngelRingBreakupSoftness,
+                            stripes
+                        );
+                    }
+                    else if (_AngelRingBreakup == 2)
+                    {
+                        float cell = floor(strandCoord * _AngelRingBreakupDensity);
+                        float rand = frac(sin(cell * 91.3458) * 47453.5453);
+                        float verticalRand = frac(sin(cell * 78.233) * 43758.5453);
+                        heightOffset = lerp(-1.0, 1.0, verticalRand) * _AngelRingBreakupHeight;
+                        float localCoord = frac(strandCoord * _AngelRingBreakupDensity);
+                        float width = lerp(
+                            _AngelRingBreakupWidthMin,
+                            _AngelRingBreakupWidthMax,
+                            rand
+                        );
+                        float center = lerp(0.3, 0.7, rand);
+                        float stripeDist = abs(localCoord - center);
+                        breakup = smoothstep(
+                            width,
+                            width + _AngelRingBreakupSoftness,
+                            stripeDist
+                        );
+                    }
+                }
+                // specular shape
+                float dotTH = dot(flowTangent, Surface.HalfDir) + _AngelRingManualOffset;
+                float sinTH = sqrt(max(0.0, 1.0 - dotTH * dotTH)) + _AngelRingManualScale + heightOffset;
+                float specShape = pow(sinTH, max(1.0, _AngelRingSharpness));
+                // ring 1 logic
+                float primaryDist = abs(hairLength - _AngelRing1Position);
+                float primaryMask = saturate(1.0 - (primaryDist / max(0.01, _AngelRing1Width)));
+                float ring1 = specShape * smoothstep(0, 1, primaryMask) * breakup;
+                ring1 = smoothstep(_AngelRingThreshold - _AngelRingSoftness, _AngelRingThreshold + _AngelRingSoftness, ring1);
+                // ring 2 logic
+                float3 ring2Final = 0;
+                if (_UseSecondaryRing == 1)
+                {
+                    float secondaryDist = abs(hairLength - _AngelRing2Position);
+                    float secondaryMask = saturate(1.0 - (secondaryDist / max(0.01, _AngelRing2Width)));
+                    float ring2 = pow(sinTH, _AngelRingSharpness * 0.6) * smoothstep(0, 1, secondaryMask);
+                    ring2 = smoothstep(_AngelRingThreshold * 0.7, (_AngelRingThreshold * 0.7) + _AngelRingSoftness, ring2);
+                    ring2Final = ring2 * (_AngelRing2Color.rgb * _AngelRing2Color.a);
+                }
+                // ring 3 logic
+                float3 ring3Final = 0;
+                if (_UseTertiaryRing == 1)
+                {
+                    float tertiaryDist = abs(hairLength - _AngelRing3Position);
+                    float tertiaryMask = saturate(1.0 - (tertiaryDist / max(0.01, _AngelRing3Width)));
+                    float ring3 = pow(sinTH, _AngelRingSharpness * 0.8) * smoothstep(0, 1, tertiaryMask);
+                    ring3 = smoothstep(_AngelRingThreshold * 0.8, (_AngelRingThreshold * 0.8) + _AngelRingSoftness, ring3);
+                    ring3Final = ring3 * (_AngelRing3Color.rgb * _AngelRing3Color.a);
+                }
+                // composite
+                float3 ringColours = (ring1 * _AngelRing1Color.rgb * _AngelRing1Color.a) + ring2Final + ring3Final;
+                if (_AngelRingUseLighting) 
+                {
+                    ringColours.rgb *= Surface.LightColor.rgb * Surface.Attenuation;
+                }
+                Surface.FinalColor.rgb += ringColours;
             }
-            // specular shape
-            float dotTH = dot(flowTangent, Surface.HalfDir) + _AngelRingManualOffset;
-            float sinTH = sqrt(max(0.0, 1.0 - dotTH * dotTH)) + _AngelRingManualScale + heightOffset;
-            float specShape = pow(sinTH, max(1.0, _AngelRingSharpness));
-            // ring 1 logic
-            float primaryDist = abs(hairLength - _AngelRing1Position);
-            float primaryMask = saturate(1.0 - (primaryDist / max(0.01, _AngelRing1Width)));
-            float ring1 = specShape * smoothstep(0, 1, primaryMask) * breakup;
-            ring1 = smoothstep(_AngelRingThreshold - _AngelRingSoftness, _AngelRingThreshold + _AngelRingSoftness, ring1);
-            // ring 2 logic
-            float3 ring2Final = 0;
-            if (_UseSecondaryRing == 1)
-            {
-                float secondaryDist = abs(hairLength - _AngelRing2Position);
-                float secondaryMask = saturate(1.0 - (secondaryDist / max(0.01, _AngelRing2Width)));
-                float ring2 = pow(sinTH, _AngelRingSharpness * 0.6) * smoothstep(0, 1, secondaryMask);
-                ring2 = smoothstep(_AngelRingThreshold * 0.7, (_AngelRingThreshold * 0.7) + _AngelRingSoftness, ring2);
-                ring2Final = ring2 * (_AngelRing2Color.rgb * _AngelRing2Color.a);
-            }
-            // ring 3 logic
-            float3 ring3Final = 0;
-            if (_UseTertiaryRing == 1)
-            {
-                float tertiaryDist = abs(hairLength - _AngelRing3Position);
-                float tertiaryMask = saturate(1.0 - (tertiaryDist / max(0.01, _AngelRing3Width)));
-                float ring3 = pow(sinTH, _AngelRingSharpness * 0.8) * smoothstep(0, 1, tertiaryMask);
-                ring3 = smoothstep(_AngelRingThreshold * 0.8, (_AngelRingThreshold * 0.8) + _AngelRingSoftness, ring3);
-                ring3Final = ring3 * (_AngelRing3Color.rgb * _AngelRing3Color.a);
-            }
-            // composite
-            float3 ringColours = (ring1 * _AngelRing1Color.rgb * _AngelRing1Color.a) + ring2Final + ring3Final;
-            if (_AngelRingUseLighting) 
-            {
-                ringColours.rgb *= Surface.LightColor.rgb * Surface.Attenuation;
-            }
-            Surface.FinalColor.rgb += ringColours;
         }
-    }
+    #endif // _BACKLACE_ANIME_EXTRAS
 
 
     // [ ♡ ] ────────────────────── [ ♡ ]
@@ -782,7 +784,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
             #endif // _BACKLACE_SHADOW_TEXTURE
             Surface.Attenuation = GetLightAttenuation(ramp.a * Surface.LightColor.a, Surface.LightColor.a);
-            ApplyAmbientGradient(Surface);
         }
 
         // get the vertex diffuse contribution using a toon ramp
@@ -881,7 +882,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             #endif // _BACKLACE_LTCGI
             Surface.Diffuse += (Surface.IndirectDiffuse * Surface.Albedo.rgb); // * Surface.LightColor.a);
             Surface.Attenuation = GetLightAttenuation(finalLight * Surface.LightColor.a, Surface.LightColor.a);
-            ApplyAmbientGradient(Surface);
         }
 
         // get the vertex diffuse contribution using cel-shading
@@ -1001,7 +1001,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.Diffuse = outDiffuse * Surface.LightColor.rgb * Surface.LightColor.a;
             // ? Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo; // * Surface.LightColor.a;
             Surface.Attenuation = GetLightAttenuation(lightMask * Surface.LightColor.a, Surface.LightColor.a);
-            ApplyAmbientGradient(Surface);
         }
 
         // simple npr-style vertex diffuse
@@ -1082,7 +1081,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * weights.x;
             #endif // UNITY_PASS_FORWARDBASE
             Surface.Attenuation = (weights.z + weights.y) * Surface.LightColor.a;
-            ApplyAmbientGradient(Surface);
         }
 
         // apply tri-band shading to vertex lights
@@ -1315,7 +1313,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             {
                 GetGGSDiffuse(Surface);
             }
-            ApplyAmbientGradient(Surface);
         }
 
         void GetPackedVertexDiffuse(inout BacklaceSurfaceData Surface)
@@ -1352,7 +1349,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.Diffuse = Surface.Albedo * Surface.LightColor.rgb * Surface.LightColor.a * skinRamp * tint;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo * smoothstep(0, 0.5, rampLuma);
             Surface.Attenuation = rampLuma * Surface.LightColor.a;
-            ApplyAmbientGradient(Surface);
         }
 
         void GetSkinVertexDiffuse(inout BacklaceSurfaceData Surface)
@@ -1390,7 +1386,6 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             Surface.Diffuse = Surface.Albedo * ramp * Surface.LightColor.rgb * Surface.LightColor.a;
             Surface.Diffuse += Surface.IndirectDiffuse * Surface.Albedo;
             Surface.Attenuation = wrappedNdotL * Surface.LightColor.a;
-            ApplyAmbientGradient(Surface);
         }
 
         void WrappedVertLight(float3 normal, float3 worldPos, out float3 color)
@@ -1436,13 +1431,15 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
     void GetAnimeDiffuse(inout BacklaceSurfaceData Surface)
     {
         // apply applicable mixins
-        ApplyAnimeGradient(Surface);
-        ApplyStockings(Surface);
-        ApplyEyeParallax(Surface);
-        ApplyExpressionMap(Surface);
-        ApplyFaceMap(Surface);
-        ApplyHairTransparency(Surface);
-        ApplySDFShadow(Surface);
+        #if defined(_BACKLACE_ANIME_EXTRAS)
+            ApplyAnimeGradient(Surface);
+            ApplyStockings(Surface);
+            ApplyEyeParallax(Surface);
+            ApplyExpressionMap(Surface);
+            ApplyFaceMap(Surface);
+            ApplyHairTransparency(Surface);
+            ApplySDFShadow(Surface);
+        #endif // _BACKLACE_ANIME_EXTRAS
         // select anime mode
         #if defined(_ANIMEMODE_RAMP)
             // traditional toony ramp
@@ -1473,28 +1470,32 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             GetWrappedDiffuse(Surface);
             GetWrappedVertexDiffuse(Surface);
         #endif // _ANIMEMODE_*
-        // anime-styled specular goes after lighting
-        ApplyToonHighlights(Surface);
-        ApplyAngelRings(Surface);
-        // preview manual normals in debug mode
-        if (_ToggleManualNormals == 1 && _ManualNormalPreview != 0)
-        {
-            switch (_ManualNormalPreview)
+        // continue the optional mixins
+        #if defined(_BACKLACE_ANIME_EXTRAS)
+            ApplyAmbientGradient(Surface);
+            // anime-styled specular goes after lighting
+            ApplyToonHighlights(Surface);
+            ApplyAngelRings(Surface);
+            // preview manual normals in debug mode
+            if (_ToggleManualNormals == 1 && _ManualNormalPreview != 0)
             {
-                case 1: // X
-                    Surface.Diffuse = abs(Surface.NormalDir.x);
-                    break;
-                case 2: // Y
-                    Surface.Diffuse = abs(Surface.NormalDir.y);
-                    break;
-                case 3: // Z
-                    Surface.Diffuse = abs(Surface.NormalDir.z);
-                    break;
-                default: // (4) XYZ
-                    Surface.Diffuse = abs(Surface.NormalDir);
-                    break;
+                switch (_ManualNormalPreview)
+                {
+                    case 1: // X
+                        Surface.Diffuse = abs(Surface.NormalDir.x);
+                        break;
+                    case 2: // Y
+                        Surface.Diffuse = abs(Surface.NormalDir.y);
+                        break;
+                    case 3: // Z
+                        Surface.Diffuse = abs(Surface.NormalDir.z);
+                        break;
+                    default: // (4) XYZ
+                        Surface.Diffuse = abs(Surface.NormalDir);
+                        break;
+                }
             }
-        }
+        #endif // _BACKLACE_ANIME_EXTRAS
     }
 #endif // BACKLACE_TOON
 

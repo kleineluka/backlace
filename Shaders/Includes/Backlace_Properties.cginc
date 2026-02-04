@@ -185,137 +185,139 @@ float3 _VertexManipulationScale;
 
 
 #if defined(BACKLACE_TOON)
-    // manual normals
-    int _ToggleManualNormals;
-    int _ManualNormalPreview;
-    float4 _ManualNormalOffset;
-    float4 _ManualNormalScale;
-    float4 _ManualApplication;
-    float _ManualNormalSharpness;
-    // ambient gradient
-    float _ToggleAmbientGradient;
-    float4 _AmbientUp;
-    float4 _AmbientDown;
-    float _AmbientIntensity;
-    float _AmbientSkyThreshold;
-    float _AmbientGroundThreshold;
-    //sdf shadow
-    float _ToggleSDFShadow;
-    UNITY_DECLARE_TEX2D(_SDFShadowTexture);
-    float _SDFShadowThreshold;
-    float _SDFShadowSoftness;
-    float3 _SDFLocalForward;
-    float3 _SDFLocalRight;
-    // stockings
-    int _ToggleStockings;
-    UNITY_DECLARE_TEX2D(_StockingsMap);
-    float _StockingsPower;
-    float _StockingsDarkWidth;
-    float _StockingsLightedWidth;
-    float _StockingsLightedIntensity;
-    float _StockingsRoughness;
-    float4 _StockingsColor;
-    float4 _StockingsColorDark;
-    // eye parallax
-    int _ToggleEyeParallax;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxIrisTex);
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxEyeMaskTex);
-    float _EyeParallaxStrength;
-    float _EyeParallaxClamp;
-    int _ToggleEyeParallaxBreathing;
-    float _EyeParallaxBreathStrength;
-    float _EyeParallaxBreathSpeed;
-    // translucent hair
-    int _ToggleHairTransparency;
-    float4 _HairHeadForward;
-    float4 _HairHeadUp;
-    float4 _HairHeadRight;
-    float _HairBlendAlpha;
-    float _HairTransparencyStrength;
-    // hair masking
-    int _HairHeadMaskMode;
-    int _HairSDFPreview;
-    float4 _HairHeadCenter;
-    float4 _HairSDFScale;
-    float _HairSDFSoftness;
-    float _HairSDFBlend;
-    float _HairDistanceFalloffStart;
-    float _HairDistanceFalloffEnd;
-    float _HairDistanceFalloffStrength;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_HairMaskTex);
-    float _HairMaskStrength;
-    int _HairExtremeAngleGuard;
-    float _HairAngleFadeStart;
-    float _HairAngleFadeEnd;
-    float _HairAngleGuardStrength;
-    // expression map
-    int _ToggleExpressionMap;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_ExpressionMap);
-    float4 _ExCheekColor;
-    float _ExCheekIntensity;
-    float4 _ExShyColor;
-    float _ExShyIntensity;
-    float4 _ExShadowColor;
-    float _ExShadowIntensity;
-    // face map
-    int _ToggleFaceMap;
-    float4 _FaceHeadForward;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_FaceMap);
-    int _ToggleNoseLine;
-    float _NoseLinePower;
-    float4 _NoseLineColor;
-    int _ToggleEyeShadow;
-    float4 _ExEyeColor;
-    float _EyeShadowIntensity;
-    int _ToggleLipOutline;
-    float4 _LipOutlineColor;
-    float _LipOutlineIntensity;
-    // anime gradient
-    int _ToggleAnimeGradient;
-    int _AnimeGradientMode;
-    float4 _AnimeGradientDirection;
-    float4 _AnimeGradientColourA;
-    float4 _AnimeGradientColourB;
-    float _AnimeGradientOffset;
-    float _AnimeGradientMultiplier;
-    // toon highlights
-    int _ToggleSpecularToon;
-    float _SpecularToonShininess;
-    float _SpecularToonRoughness;
-    float _SpecularToonSharpness;
-    float _SpecularToonIntensity;
-    float _SpecularToonThreshold;
-    float4 _SpecularToonColor;
-    int _SpecularToonUseLighting;
-    // hair specular
-    int _AngelRingMode;
-    float _AngelRingSharpness;
-    float _AngelRingThreshold;
-    float _AngelRingSoftness;
-    float _AngelRing1Position;
-    float _AngelRing1Width;
-    float4 _AngelRing1Color;
-    int _UseSecondaryRing;
-    float _AngelRing2Position;
-    float _AngelRing2Width;
-    float4 _AngelRing2Color;
-    float _AngelRingHeightOffset;
-    float _AngelRingHeightScale;
-    float3 _AngelRingHeightDirection;
-    int _AngelRingBlendMode;
-    int _UseTertiaryRing;
-    float _AngelRing3Position;
-    float _AngelRing3Width;
-    float4 _AngelRing3Color;
-    float _AngelRingManualOffset;
-    float _AngelRingManualScale;
-    int _AngelRingBreakup;
-    float _AngelRingBreakupDensity;
-    float _AngelRingBreakupWidthMin;
-    float _AngelRingBreakupWidthMax;
-    float _AngelRingBreakupSoftness;
-    float _AngelRingBreakupHeight;
-    int _AngelRingUseLighting;
+    #if defined(_BACKLACE_ANIME_EXTRAS)
+        // manual normals
+        int _ToggleManualNormals;
+        int _ManualNormalPreview;
+        float4 _ManualNormalOffset;
+        float4 _ManualNormalScale;
+        float4 _ManualApplication;
+        float _ManualNormalSharpness;
+        // ambient gradient
+        float _ToggleAmbientGradient;
+        float4 _AmbientUp;
+        float4 _AmbientDown;
+        float _AmbientIntensity;
+        float _AmbientSkyThreshold;
+        float _AmbientGroundThreshold;
+        //sdf shadow
+        float _ToggleSDFShadow;
+        UNITY_DECLARE_TEX2D(_SDFShadowTexture);
+        float _SDFShadowThreshold;
+        float _SDFShadowSoftness;
+        float3 _SDFLocalForward;
+        float3 _SDFLocalRight;
+        // stockings
+        int _ToggleStockings;
+        UNITY_DECLARE_TEX2D(_StockingsMap);
+        float _StockingsPower;
+        float _StockingsDarkWidth;
+        float _StockingsLightedWidth;
+        float _StockingsLightedIntensity;
+        float _StockingsRoughness;
+        float4 _StockingsColor;
+        float4 _StockingsColorDark;
+        // eye parallax
+        int _ToggleEyeParallax;
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxIrisTex);
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxEyeMaskTex);
+        float _EyeParallaxStrength;
+        float _EyeParallaxClamp;
+        int _ToggleEyeParallaxBreathing;
+        float _EyeParallaxBreathStrength;
+        float _EyeParallaxBreathSpeed;
+        // translucent hair
+        int _ToggleHairTransparency;
+        float4 _HairHeadForward;
+        float4 _HairHeadUp;
+        float4 _HairHeadRight;
+        float _HairBlendAlpha;
+        float _HairTransparencyStrength;
+        // hair masking
+        int _HairHeadMaskMode;
+        int _HairSDFPreview;
+        float4 _HairHeadCenter;
+        float4 _HairSDFScale;
+        float _HairSDFSoftness;
+        float _HairSDFBlend;
+        float _HairDistanceFalloffStart;
+        float _HairDistanceFalloffEnd;
+        float _HairDistanceFalloffStrength;
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_HairMaskTex);
+        float _HairMaskStrength;
+        int _HairExtremeAngleGuard;
+        float _HairAngleFadeStart;
+        float _HairAngleFadeEnd;
+        float _HairAngleGuardStrength;
+        // expression map
+        int _ToggleExpressionMap;
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_ExpressionMap);
+        float4 _ExCheekColor;
+        float _ExCheekIntensity;
+        float4 _ExShyColor;
+        float _ExShyIntensity;
+        float4 _ExShadowColor;
+        float _ExShadowIntensity;
+        // face map
+        int _ToggleFaceMap;
+        float4 _FaceHeadForward;
+        UNITY_DECLARE_TEX2D_NOSAMPLER(_FaceMap);
+        int _ToggleNoseLine;
+        float _NoseLinePower;
+        float4 _NoseLineColor;
+        int _ToggleEyeShadow;
+        float4 _ExEyeColor;
+        float _EyeShadowIntensity;
+        int _ToggleLipOutline;
+        float4 _LipOutlineColor;
+        float _LipOutlineIntensity;
+        // anime gradient
+        int _ToggleAnimeGradient;
+        int _AnimeGradientMode;
+        float4 _AnimeGradientDirection;
+        float4 _AnimeGradientColourA;
+        float4 _AnimeGradientColourB;
+        float _AnimeGradientOffset;
+        float _AnimeGradientMultiplier;
+        // toon highlights
+        int _ToggleSpecularToon;
+        float _SpecularToonShininess;
+        float _SpecularToonRoughness;
+        float _SpecularToonSharpness;
+        float _SpecularToonIntensity;
+        float _SpecularToonThreshold;
+        float4 _SpecularToonColor;
+        int _SpecularToonUseLighting;
+        // hair specular
+        int _AngelRingMode;
+        float _AngelRingSharpness;
+        float _AngelRingThreshold;
+        float _AngelRingSoftness;
+        float _AngelRing1Position;
+        float _AngelRing1Width;
+        float4 _AngelRing1Color;
+        int _UseSecondaryRing;
+        float _AngelRing2Position;
+        float _AngelRing2Width;
+        float4 _AngelRing2Color;
+        float _AngelRingHeightOffset;
+        float _AngelRingHeightScale;
+        float3 _AngelRingHeightDirection;
+        int _AngelRingBlendMode;
+        int _UseTertiaryRing;
+        float _AngelRing3Position;
+        float _AngelRing3Width;
+        float4 _AngelRing3Color;
+        float _AngelRingManualOffset;
+        float _AngelRingManualScale;
+        int _AngelRingBreakup;
+        float _AngelRingBreakupDensity;
+        float _AngelRingBreakupWidthMin;
+        float _AngelRingBreakupWidthMax;
+        float _AngelRingBreakupSoftness;
+        float _AngelRingBreakupHeight;
+        int _AngelRingUseLighting;
+    #endif // _BACKLACE_ANIME_EXTRAS
     #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
         float _Ramp_UV;

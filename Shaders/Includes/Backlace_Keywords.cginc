@@ -112,11 +112,6 @@
     #pragma shader_feature_local _ _BACKLACE_BOMBING
 #endif // BACKLACE_WORLD
 
-// OUTLINE KEYWORDS
-#if defined(BACKLACE_OUTLINE)
-    #pragma shader_feature_local _ _BACKLACE_LIT_OUTLINE
-#endif // BACKLACE_OUTLINE
-
 // GENERATED DEFINES
 #if defined(_ANIMEMODE_RAMP) || defined(_ANIMEMODE_CEL) || defined(_ANIMEMODE_NPR) || defined(_ANIMEMODE_PACKED) || defined(_ANIMEMODE_TRIBAND) || defined(_ANIMEMODE_SKIN) || defined(_ANIMEMODE_WRAPPED)
     #define BACKLACE_TOON
