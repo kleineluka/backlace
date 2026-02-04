@@ -503,6 +503,15 @@ Shader "luka/backlace/default"
         _Decal1HueShift ("Hue Shift", Range(0, 2)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal1AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
         _Decal1CycleSpeed ("Cycle Speed", Float) = 0.1
+        [Enum(Disabled, 0, Enabled, 1)] _Decal1Spritesheet ("Enable Spritesheet Animation", Float) = 0.0
+        _Decal1SheetCols ("Spritesheet Columns", Int) = 1
+        _Decal1SheetRows ("Spritesheet Rows", Int) = 1
+        _Decal1SheetFPS ("Spritesheet FPS", Float) = 10.0
+        _Decal1SheetSlider ("Spritesheet Frame Slider", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Distortion, 1, Glitch, 2)] _Decal1SpecialEffect ("Special Effect", Int) = 0
+        _Decal1DistortionControls ("Distortion Controls", Vector) = (0, 0, 0, 0)
+        _Decal1DistortionSpeed ("Distortion Speed", Float) = 0
+        _Decal1GlitchControls ("Glitch Controls", Vector) = (0, 0, 0, 0)
 
         // DECAL 2
         // [Space(35)]
@@ -526,6 +535,15 @@ Shader "luka/backlace/default"
         _Decal2HueShift ("Hue Shift", Range(0, 2)) = 0.0
         [Enum(Disabled, 0, Enabled, 1)] _Decal2AutoCycleHue ("Auto Cycle Hue", Float) = 0.0
         _Decal2CycleSpeed ("Cycle Speed", Float) = 0.1
+        [Enum(Disabled, 0, Enabled, 1)] _Decal2Spritesheet ("Enable Spritesheet Animation", Float) = 0.0
+        _Decal2SheetCols ("Spritesheet Columns", Int) = 1
+        _Decal2SheetRows ("Spritesheet Rows", Int) = 1
+        _Decal2SheetFPS ("Spritesheet FPS", Float) = 10.0
+        _Decal2SheetSlider ("Spritesheet Frame Slider", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Distortion, 1, Glitch, 2)] _Decal2SpecialEffect ("Special Effect", Int) = 0
+        _Decal2DistortionControls ("Distortion Controls", Vector) = (0, 0, 0, 0)
+        _Decal2DistortionSpeed ("Distortion Speed", Float) = 0
+        _Decal2GlitchControls ("Glitch Controls", Vector) = (0, 0, 0, 0)
 
         // POST-PROCESSING
         // [Space(35)]
@@ -1114,23 +1132,6 @@ Shader "luka/backlace/default"
         ZWrite [_ZWrite]
         Cull [_Cull]
         Stencil { Ref [_StencilRef] Comp [_StencilComp] Pass [_StencilPass] Fail [_StencilFail] ZFail [_StencilZFail] }
-
-        // Outline Pass
-        Pass
-        {
-            Name "Outline"
-            Tags { "LightMode" = "Always" }
-            Cull Front
-            ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha
-            Stencil { Ref [_OutlineStencilRef] Comp [_OutlineStencilComp] Pass [_OutlineStencilPass] Fail [_OutlineStencilFail] ZFail [_OutlineStencilZFail] }
-            CGPROGRAM
-            #ifndef UNITY_PASS_OUTLINE
-                #define UNITY_PASS_OUTLINE
-            #endif // UNITY_PASS_OUTLINE
-            #include "./Includes/Backlace_Outline.cginc"
-            ENDCG
-        }
 
         // Forward Base Pass
         Pass

@@ -310,7 +310,7 @@ fixed4 frag(FragmentData i) : SV_Target
         GetLightData(Surface);
         float3 direct = Surface.LightColor.rgb * Surface.Attenuation * Surface.NdotL;
         float3 combinedLight = direct + Surface.IndirectDiffuse;
-        finalColor.rgb *= lerp(float3(1, 1, 1), direct, _OutlineLitMix);
+        finalColor.rgb = lerp(finalColor.rgb, finalColor.rgb * direct, _OutlineLitMix);
     #endif // _BACKLACE_LIT_OUTLINE
     finalColor.a *= _OutlineOpacity;
     finalColor.a *= _Alpha;

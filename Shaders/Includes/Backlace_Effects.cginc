@@ -1147,7 +1147,7 @@
                 float offsetX = sin(vertex.x * _VertexDistortionFrequency.x) * cos(vertex.y * _VertexDistortionFrequency.x) * _VertexDistortionStrength.x;
                 float offsetY = cos(vertex.y * _VertexDistortionFrequency.y) * sin(vertex.z * _VertexDistortionFrequency.y) * _VertexDistortionStrength.y;
                 float offsetZ = sin(vertex.z * _VertexDistortionFrequency.z) * cos(vertex.x * _VertexDistortionFrequency.z) * _VertexDistortionStrength.z;
-                distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed.x); // Use one speed channel for sync
+                distortion = float3(offsetX, offsetY, offsetZ) * sin(time * _VertexDistortionSpeed.x); // 1d speed
                 break;
             }
             case 2: // wind
@@ -1171,13 +1171,7 @@
         vertex.xyz += distortion;
     }
 
-    // glitch helpers
-    float GlitchHash(float2 p)
-    {
-        float h = dot(p, float2(127.1, 311.7));
-        return frac(sin(h) * 43758.5453);
-    }
-
+    // glitch helper
     float GlitchBlockNoise(float2 p, float blockSize)
     {
         float2 block = floor(p / blockSize) * blockSize;

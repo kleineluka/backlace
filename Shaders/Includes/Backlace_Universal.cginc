@@ -199,6 +199,12 @@ float3 Hash32(float2 p)
     return frac((p3.xxy + p3.yxx) * p3.zyx);
 }
 
+float GlitchHash(float2 p)
+{
+    float h = dot(p, float2(127.1, 311.7));
+    return frac(sin(h) * 43758.5453);
+}
+
 // convert HSV to RGB
 float3 HSVtoRGB(float3 c)
 {
@@ -513,9 +519,86 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         float alHue;       // audiolink only
         float alEmission;  // audiolink only
         float alOpacity;   // audiolink only
+        int spritesheet;
+        int sheetCols;
+        int sheetRows;
+        float sheetFPS;
+        float sheetSlider;
+        int specialEffect;
+        float4 distortionEffect;
+        float distortionSpeed;
+        float4 glitchEffect;
     };
 
-    void ApplyDecal_UVSpace(inout SuperCuteSticker decal, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, int uvChannel)
+    float2 GetDecalGlitch(inout SuperCuteSticker decal, float2 baseUV)
+    {
+        float glitchTime = _Time.y * decal.glitchEffect.w;
+        float glitchTrigger = step(decal.glitchEffect.x, GlitchHash(float2(floor(glitchTime), 0.0)));
+        float blockSize = 1.0 / max(decal.glitchEffect.y, 0.001);
+        float sliceY = floor(baseUV.y / blockSize) * blockSize;
+        float sliceNoise = GlitchHash(float2(sliceY, floor(glitchTime * 0.5)));
+        float sliceActive = step(0.7, sliceNoise) * glitchTrigger;
+        float offsetAmount = (sliceNoise * 2.0 - 1.0) * decal.glitchEffect.z * sliceActive;
+        return float2(offsetAmount, 0);
+    }
+
+    float3 GetDecalGlitch(inout SuperCuteSticker decal, float3 baseUV)
+    {
+        float glitchTime = _Time.y * decal.glitchEffect.w;
+        float glitchTrigger = step(decal.glitchEffect.x, GlitchHash(float2(floor(glitchTime), 0.0)));
+        float blockSize = 1.0 / max(decal.glitchEffect.y, 0.001);
+        float sliceY = floor(baseUV.y / blockSize) * blockSize;
+        float sliceNoise = GlitchHash(float2(sliceY, floor(glitchTime * 0.5)));
+        float sliceActive = step(0.7, sliceNoise) * glitchTrigger;
+        float offsetAmount = (sliceNoise * 2.0 - 1.0) * decal.glitchEffect.z * sliceActive;
+        return float3(offsetAmount, 0, offsetAmount);
+    }
+
+    float2 GetDecalDistortion(inout SuperCuteSticker decal, float2 baseUV)
+    {
+        float2 scaledUV = baseUV * decal.distortionEffect.z;
+        float offsetX = sin(scaledUV.x) * cos(scaledUV.y) * decal.distortionEffect.x;
+        float offsetY = cos(scaledUV.x) * sin(scaledUV.y) * decal.distortionEffect.y;
+        float2 distortion = float2(offsetX, offsetY) * sin(_Time.y * decal.distortionEffect.w);
+        return distortion;
+    }
+
+    float3 GetDecalDistortion(inout SuperCuteSticker decal, float3 baseUV)
+    {
+        float3 scaledUV = baseUV * decal.distortionEffect.z;
+        float offsetX = sin(scaledUV.x) * cos(scaledUV.y) * decal.distortionEffect.x;
+        float offsetY = cos(scaledUV.y) * sin(scaledUV.z) * decal.distortionEffect.y;
+        float offsetZ = sin(scaledUV.z) * cos(scaledUV.x) * decal.distortionEffect.x;
+        float3 distortion = float3(offsetX, offsetY, offsetZ) * sin(_Time.y * decal.distortionEffect.w);
+        return distortion;
+    }
+
+    void ApplyDecalSpecial(inout SuperCuteSticker decal, inout float2 baseUV)
+    {
+        [branch] if (decal.specialEffect == 1) // distortion
+        {
+            baseUV += GetDecalDistortion(decal, baseUV);
+        }
+        else if (decal.specialEffect == 2) // glitch
+        {
+            baseUV += GetDecalGlitch(decal, baseUV);
+        }
+    }
+
+    void ApplyDecalSpecial(inout SuperCuteSticker decal, inout float3 baseUV)
+    {
+        [branch] if (decal.specialEffect == 1) // distortion
+        {
+            baseUV += GetDecalDistortion(decal, baseUV);
+        }
+        else if (decal.specialEffect == 2) // glitch
+        {
+            baseUV += GetDecalGlitch(decal, baseUV);
+        }
+    }
+
+    // standard uv space decal wrapper (uv + sampling)
+    void ApplyDecalUV(inout SuperCuteSticker decal, float2 baseUV, Texture2D decalTex, SamplerState decalSampler, int uvChannel)
     {
         baseUV += decal.scroll * _Time.y;
         float angle = -decal.rotation.x * (UNITY_PI / 180.0);
@@ -537,6 +620,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
                 return;
             }
         } // else default behaviour
+        ApplyDecalSpecial(decal, localUV);
         float4 decalColor = decalTex.Sample(decalSampler, localUV) * decal.tint;
         decalColor.rgb = ApplyHueShift(decalColor.rgb, decal.hueShift + decal.alHue, decal.autoCycle, decal.cycleSpeed);
         decalColor.a *= decal.alOpacity;
@@ -549,8 +633,10 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         }
     }
 
-    void ApplyDecal_Triplanar(inout SuperCuteSticker decal, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler)
+    // triplanar decal wrapper (sampling, uv is in a universal function)
+    void ApplyDecalTriplanar(inout SuperCuteSticker decal, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler)
     {
+        ApplyDecalSpecial(decal, worldPos); // swap to float3 overload
         float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, decal.position, decal.scale.x, decal.rotation, decal.sharpness, decal.repeat > 0.5, (decal.scroll == 1));
         decalColor *= decal.tint;
         if (decal.hueShift != 0) 
@@ -584,6 +670,15 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         decal1.alHue = 0;
         decal1.alEmission = 1;
         decal1.alOpacity = 1;
+        decal1.spritesheet = _Decal1Spritesheet;
+        decal1.sheetCols = _Decal1SheetCols;
+        decal1.sheetRows = _Decal1SheetRows;
+        decal1.sheetFPS = _Decal1SheetFPS;
+        decal1.sheetSlider = _Decal1SheetSlider;
+        decal1.specialEffect = _Decal1SpecialEffect;
+        decal1.distortionEffect = _Decal1DistortionControls;
+        decal1.distortionSpeed = _Decal1DistortionSpeed;
+        decal1.glitchEffect = _Decal1GlitchControls;
         #if defined(_BACKLACE_AUDIOLINK)
             decal1.alHue = i.alChannel2.w;
             decal1.alEmission = i.alChannel3.x;
@@ -596,7 +691,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             decal1.scale = float3(_Decal1TriplanarScale, _Decal1TriplanarScale, _Decal1TriplanarScale);
             decal1.rotation = _Decal1TriplanarRotation.xyz;
             decal1.sharpness = _Decal1TriplanarSharpness;
-            ApplyDecal_Triplanar(decal1, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex);
+            ApplyDecalTriplanar(decal1, i.worldPos, Surface.NormalDir, _Decal1Tex, sampler_Decal1Tex);
         }
         else // UV Space
         {
@@ -605,7 +700,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             decal1.rotation = float3(_Decal1Rotation, 0, 0);
             decal1.sharpness = 0;
             float2 decal1Uv = (_Decal1Space == 0) ? Uvs[_Decal1_UV] : i.scrPos.xy / i.scrPos.w;
-            ApplyDecal_UVSpace(decal1, decal1Uv, _Decal1Tex, sampler_Decal1Tex, _Decal1_UV);
+            ApplyDecalUV(decal1, decal1Uv, _Decal1Tex, sampler_Decal1Tex, _Decal1_UV);
         }
         [branch] if (_DecalStage == 0) // early
         {
@@ -633,6 +728,15 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         decal2.alHue = 0;
         decal2.alEmission = 1;
         decal2.alOpacity = 1;
+        decal2.spritesheet = _Decal2Spritesheet;
+        decal2.sheetCols = _Decal2SheetCols;
+        decal2.sheetRows = _Decal2SheetRows;
+        decal2.sheetFPS = _Decal2SheetFPS;
+        decal2.sheetSlider = _Decal2SheetSlider;
+        decal2.specialEffect = _Decal2SpecialEffect;
+        decal2.distortionSpeed = _Decal2DistortionSpeed;
+        decal2.distortionEffect = _Decal2DistortionControls;
+        decal2.glitchEffect = _Decal2GlitchControls;
         #if defined(_BACKLACE_AUDIOLINK)
             decal2.alHue = i.alChannel2.w;
             decal2.alEmission = i.alChannel3.x;
@@ -645,7 +749,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             decal2.scale = float3(_Decal2TriplanarScale, _Decal2TriplanarScale, _Decal2TriplanarScale);
             decal2.rotation = _Decal2TriplanarRotation.xyz;
             decal2.sharpness = _Decal2TriplanarSharpness;
-            ApplyDecal_Triplanar(decal2, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal1Tex);
+            ApplyDecalTriplanar(decal2, i.worldPos, Surface.NormalDir, _Decal2Tex, sampler_Decal1Tex);
         }
         else // UV Space
         {
@@ -654,7 +758,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             decal2.rotation = float3(_Decal2Rotation, 0, 0);
             decal2.sharpness = 0;
             float2 decal2Uv = (_Decal2Space == 0) ? Uvs[_Decal2_UV] : i.scrPos.xy / i.scrPos.w;
-            ApplyDecal_UVSpace(decal2, decal2Uv, _Decal2Tex, sampler_Decal1Tex, _Decal2_UV);
+            ApplyDecalUV(decal2, decal2Uv, _Decal2Tex, sampler_Decal1Tex, _Decal2_UV);
         }
         [branch] if (_DecalStage == 0) // early
         {

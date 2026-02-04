@@ -494,6 +494,15 @@ float3 _VertexManipulationScale;
     float _Decal1HueShift;
     float _Decal1AutoCycleHue;
     float _Decal1CycleSpeed;
+    int _Decal1Spritesheet;
+    int _Decal1SheetCols;
+    int _Decal1SheetRows;
+    float _Decal1SheetFPS;
+    float _Decal1SheetSlider;
+    int _Decal1SpecialEffect;
+    float4 _Decal1DistortionControls;
+    float _Decal1DistortionSpeed;
+    float4 _Decal1GlitchControls;
     // decal 2
     int _Decal2Enable;
     UNITY_DECLARE_TEX2D_NOSAMPLER(_Decal2Tex); // share sampler with decal1
@@ -514,6 +523,15 @@ float3 _VertexManipulationScale;
     float _Decal2HueShift;
     float _Decal2AutoCycleHue;
     float _Decal2CycleSpeed;
+    int _Decal2Spritesheet;
+    int _Decal2SheetCols;
+    int _Decal2SheetRows;
+    float _Decal2SheetFPS;
+    float _Decal2SheetSlider;
+    int _Decal2SpecialEffect;
+    float4 _Decal2DistortionControls;
+    float _Decal2DistortionSpeed;
+    float4 _Decal2GlitchControls;
 #endif // _BACKLACE_DECALS
 
 // shadow map properties
