@@ -385,6 +385,10 @@
             "value": "Sombreado Anime"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "Extras de Anime"
+        },
+        {
             "key": "tab_specular",
             "value": "Especular"
         },

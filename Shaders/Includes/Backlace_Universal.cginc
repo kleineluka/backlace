@@ -621,6 +621,11 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
             }
         } // else default behaviour
         ApplyDecalSpecial(decal, localUV);
+        // apply spritesheet if enabled
+        [branch] if (decal.spritesheet == 1)
+        {
+            localUV = ApplyFlipbook(localUV, decal.sheetCols, decal.sheetRows, decal.sheetCols * decal.sheetRows, decal.sheetFPS, decal.sheetSlider);
+        }
         float4 decalColor = decalTex.Sample(decalSampler, localUV) * decal.tint;
         decalColor.rgb = ApplyHueShift(decalColor.rgb, decal.hueShift + decal.alHue, decal.autoCycle, decal.cycleSpeed);
         decalColor.a *= decal.alOpacity;
@@ -637,7 +642,20 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
     void ApplyDecalTriplanar(inout SuperCuteSticker decal, float3 worldPos, float3 normal, Texture2D decalTex, SamplerState decalSampler)
     {
         ApplyDecalSpecial(decal, worldPos); // swap to float3 overload
-        float4 decalColor = SampleTextureTriplanar(decalTex, decalSampler, worldPos, normal, decal.position, decal.scale.x, decal.rotation, decal.sharpness, decal.repeat > 0.5, (decal.scroll == 1));
+        // calculate triplanar UVs and weights
+        float2 uvX, uvY, uvZ;
+        float3 weights;
+        GetTriplanarUVsAndWeights(worldPos, normal, decal.position, decal.scale.x, decal.rotation, decal.sharpness, uvX, uvY, uvZ, weights);
+        // apply spritesheet if enabled
+        [branch] if (decal.spritesheet == 1)
+        {
+            float totalFrames = decal.sheetCols * decal.sheetRows;
+            uvX = ApplyFlipbook(uvX, decal.sheetCols, decal.sheetRows, totalFrames, decal.sheetFPS, decal.sheetSlider);
+            uvY = ApplyFlipbook(uvY, decal.sheetCols, decal.sheetRows, totalFrames, decal.sheetFPS, decal.sheetSlider);
+            uvZ = ApplyFlipbook(uvZ, decal.sheetCols, decal.sheetRows, totalFrames, decal.sheetFPS, decal.sheetSlider);
+        }
+        // sample with potentially modified UVs
+        float4 decalColor = SampleTriplanar(decalTex, decalSampler, uvX, uvY, uvZ, weights, decal.repeat > 0.5, (decal.scroll == 1));
         decalColor *= decal.tint;
         if (decal.hueShift != 0) 
         {

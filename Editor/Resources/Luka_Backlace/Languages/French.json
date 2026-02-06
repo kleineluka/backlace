@@ -385,6 +385,10 @@
             "value": "Ombrage Anime"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "Extras Anime"
+        },
+        {
             "key": "tab_specular",
             "value": "Spéculaire"
         },

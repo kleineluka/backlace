@@ -385,6 +385,10 @@
             "value": "二次元/动漫着色"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "动漫附加功能"
+        },
+        {
             "key": "tab_specular",
             "value": "高光"
         },

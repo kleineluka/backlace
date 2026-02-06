@@ -385,6 +385,10 @@
             "value": "Аниме шейдинг"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "Дополнительные аниме"
+        },
+        {
             "key": "tab_specular",
             "value": "Блики (Specular)"
         },

@@ -385,6 +385,10 @@
             "value": "Anime Shading"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "Anime Extras"
+        },
+        {
             "key": "tab_specular",
             "value": "Specular"
         },
@@ -3223,6 +3227,18 @@
         {
             "key": "custom_badge_wrapped",
             "value": "Wrapped"
+        },
+        {
+            "key": "tab_anime",
+            "value": "Anime Effects"
+        },
+        {
+            "key": "sub_tab_shading",
+            "value": "Shading"
+        },
+        {
+            "key": "sub_tab_main_textures",
+            "value": "Main Textures"
         }
     ]
 }

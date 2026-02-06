@@ -203,6 +203,7 @@ float3 _VertexManipulationScale;
         //sdf shadow
         float _ToggleSDFShadow;
         UNITY_DECLARE_TEX2D(_SDFShadowTexture);
+        float _SDFShadowTexture_UV;
         float _SDFShadowThreshold;
         float _SDFShadowSoftness;
         float3 _SDFLocalForward;
@@ -210,6 +211,7 @@ float3 _VertexManipulationScale;
         // stockings
         int _ToggleStockings;
         UNITY_DECLARE_TEX2D(_StockingsMap);
+        float _StockingsMap_UV;
         float _StockingsPower;
         float _StockingsDarkWidth;
         float _StockingsLightedWidth;
@@ -221,6 +223,8 @@ float3 _VertexManipulationScale;
         int _ToggleEyeParallax;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxIrisTex);
         UNITY_DECLARE_TEX2D_NOSAMPLER(_EyeParallaxEyeMaskTex);
+        float _EyeParallaxIrisTex_UV;
+        float _EyeParallaxEyeMaskTex_UV;
         float _EyeParallaxStrength;
         float _EyeParallaxClamp;
         int _ToggleEyeParallaxBreathing;
@@ -244,6 +248,7 @@ float3 _VertexManipulationScale;
         float _HairDistanceFalloffEnd;
         float _HairDistanceFalloffStrength;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_HairMaskTex);
+        float _HairMaskTex_UV;
         float _HairMaskStrength;
         int _HairExtremeAngleGuard;
         float _HairAngleFadeStart;
@@ -252,6 +257,7 @@ float3 _VertexManipulationScale;
         // expression map
         int _ToggleExpressionMap;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_ExpressionMap);
+        float _ExpressionMap_UV;
         float4 _ExCheekColor;
         float _ExCheekIntensity;
         float4 _ExShyColor;
@@ -262,6 +268,7 @@ float3 _VertexManipulationScale;
         int _ToggleFaceMap;
         float4 _FaceHeadForward;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_FaceMap);
+        float _FaceMap_UV;
         int _ToggleNoseLine;
         float _NoseLinePower;
         float4 _NoseLineColor;
@@ -350,6 +357,7 @@ float3 _VertexManipulationScale;
         float4 _NPRShadowColor;
         // shared specular
         UNITY_DECLARE_TEX2D_NOSAMPLER(_NPRSpecularMask);
+        float _NPRSpecularMask_UV;
         // forward specular
         float _NPRForwardSpecular;
         float _NPRForwardSpecularRange;
@@ -392,6 +400,9 @@ float3 _VertexManipulationScale;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapOne);
         UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapTwo);
         UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapThree);
+        float _PackedMapOne_UV;
+        float _PackedMapTwo_UV;
+        float _PackedMapThree_UV;
         float4 _PackedLitColor;
         float4 _PackedShadowColor;
         float _PackedShadowSmoothness;
@@ -417,6 +428,7 @@ float3 _VertexManipulationScale;
         float4 _PackedGGShadow2Tint;
     #elif defined(_ANIMEMODE_SKIN) // _ANIMEMODE_*
         UNITY_DECLARE_TEX2D(_SkinLUT);
+        float _SkinLUT_UV;
         float4 _SkinShadowColor;
         float _SkinScattering;
     #elif defined(_ANIMEMODE_WRAPPED) // _ANIMEMODE_*

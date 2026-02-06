@@ -7,43 +7,26 @@ Shader "luka/backlace/default"
         // [Space(35)]
         // [Header(Rendering Settings)]
         // [Space(10)]
-        // [Enum(Opaque, 0, Cutout, 1, Fade, 2, Transparent, 3, TransClipping, 4, Additive, 6, Multiplicative, 7)] _BlendMode ("Rendering Mode", Float) = 0 // removed 5=soft additive, 8=2x multiplicative
-        // [Enum(Opaque, 0, Cutout, 1, Fade, 2, OpaqueFade, 3, Transparent, 4, Premultiply, 5, Additive, 6, Soft Additive, 7, Multiplicative, 8, 2Multiplicative, 9)]
         _BlendMode ("Rendering Mode", Int) = 0
-        // base blend
         [Toggle] _OverrideBaseBlend ("Override Base Blend", Float) = 0
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
         [Enum(UnityEngine.Rendering.BlendOp)] _BlendOp ("Blend Operation", Float) = 0
-        // additive blend
         [Toggle] _OverrideAddBlend ("Override Additive Blend", Float) = 0
         [Enum(UnityEngine.Rendering.BlendMode)] _AddSrcBlend ("Additive Src Blend", Float) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _AddDstBlend ("Additive Dst Blend", Float) = 1
         [Enum(UnityEngine.Rendering.BlendOp)] _AddBlendOp ("Additive Blend Operation", Float) = 0
-        // zwrite
         [Toggle] _OverrideZWrite ("Override ZWrite", Float) = 0
         [Enum(Off, 0, On, 1)] _ZWrite ("ZWrite", Float) = 1
-        // render queue
         [Toggle] _OverrideRenderQueue ("Override Render Queue", Float) = 0
-        // culling
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull Mode", Int) = 2
-        // ztest 
         [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest ("ZTest", Int) = 4
-        // stencil
         [IntRange] _StencilRef ("Stencil Reference", Range(0, 255)) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Int) = 8 // Always
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilPass ("Stencil Pass Op", Int) = 0 // Keep
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilFail ("Stencil Fail Op", Int) = 0 // Keep
         [Enum(UnityEngine.Rendering.StencilOp)] _StencilZFail ("Stencil ZFail Op", Int) = 0 // Keep
-        // outline stencil
-        [IntRange] _OutlineStencilRef ("Outline Stencil Reference", Range(0, 255)) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _OutlineStencilComp ("Outline Stencil Comparison", Int) = 8 // Always
-        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilPass ("Outline Stencil Pass Op", Int) = 0 // Keep
-        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilFail ("Outline Stencil Fail Op", Int) = 0 // Keep
-        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilZFail ("Outline Stencil ZFail Op", Int) = 0 // Keep
-        // vrchat fallback
         [Enum(Toon, 0, Double Sided, 1, Unlit, 2, Particle, 3, Matcap, 4, Sprite, 5, Hidden, 6)] _VRCFallback ("VRChat Fallback", Int) = 0
-        // flip backface normals
         [Enum(Disabled, 0, Enabled, 1)] _ToggleFlipNormals ("Flip Backface Normals", Int) = 0
 
         // MAIN MAPS AND ALPHA
@@ -59,6 +42,15 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _BumpFromAlbedo ("Derive Normals", Int) = 0
         _BumpFromAlbedoOffset ("Derived Offset", Float) = 1
         _Alpha ("Alpha", Range(0, 1)) = 1.0
+
+        // TEXTURE STITCHING
+        // [Space(35)]
+        // [Header(Texture Stitching)]
+        // [Space(10)]
+        [Enum(Disabled, 0, Enabled, 1)] _UseTextureStitching ("Enable Texture Stitching", Int) = 0
+        [NoScaleOffset] _StitchTex ("Stitch Texture (RGB)", 2D) = "white" { }
+        [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
+        _StitchOffset ("Stitch Seam Offset", Float) = 0
 
         // UV MANIPULATION
         // [Space(35)]
@@ -106,6 +98,75 @@ Shader "luka/backlace/default"
         // [Space(10)]
         _VertexManipulationPosition ("World Position (XYZ)", Vector) = (0, 0, 0, 0)
         _VertexManipulationScale ("World Scale (XYZ)", Vector) = (1, 1, 1, 0)
+
+        // POST-PROCESSING
+        // [Space(35)]
+        // [Header(Post Processing)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_POST_PROCESSING)] _TogglePostProcessing ("Enable Post Processing", Float) = 0.0
+        [HDR] _RGBColor ("RGB Tint", Color) = (1, 1, 1, 1)
+        _RGBBlendMode ("RGB Multiply/Replace", Range(0, 1)) = 0.0
+        [Enum(Disabled, 0, Additive, 1, Multiply, 2)] _HSVMode ("HSV Mode", Float) = 0.0
+        _HSVHue ("Hue", Float) = 0.0
+        _HSVSaturation ("Saturation", Float) = 1.0
+        _HSVValue ("Value (Brightness)", Float) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleHueShift ("Enable Hue Shift", Range(0, 1)) = 0.0
+        _HueShift ("Hue Shift", Range(-1, 1)) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleAutoCycle ("Enable Auto Cycle Hue", Float) = 0.0
+        _AutoCycleSpeed ("Auto Cycle Speed", Float) = 0.1
+        [Enum(Disabled, 0, LUT, 1, ACES, 2, GT, 3, Lit Colour Wheel, 4)] _ColorGradingMode ("Colour Grading Mode", Int) = 0
+        [NoScaleOffset] _ColorGradingLUT ("Colour Grading LUT", 2D) = "white" { }
+        _ColorGradingIntensity ("Grading Intensity", Range(0, 1)) = 0.0
+        _GTShadows ("Black Tightness", Range(1, 2)) = 1.33
+        _GTHighlights ("Highlight Roll-off", Range(0.1, 1)) = 1.0
+        _LCWLift ("LCW Lift", Color) = (0, 0, 0, 0)
+        _LCWGamma ("LCW Gamma", Color) = (1, 1, 1, 1)
+        _LCWGain ("LCW Gain", Color) = (1, 1, 1, 1)
+        _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
+        _Brightness ("Brightness", Range(0, 2)) = 1.0
+
+        // UV SETTINGS
+        // [Space(35)]
+        // [Header(UV Settings)]
+        // [Space(10)]
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MainTex_UV ("Main texture UV set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _BumpMap_UV ("Bump map UV set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MSSO_UV ("MSSO UV set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SpecularTintTexture_UV ("Specular Tint UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _TangentMap_UV ("Tangent Map UV", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EmissionMap_UV ("Emission Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ClearcoatMap_UV ("Clear Coat Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MatcapMask_UV ("Clear Coat Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ParallaxMap_UV ("Height Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ThicknessMap_UV ("Thickness Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _DetailMap_UV ("Detail Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Decal 1 UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal2_UV ("Decal 2 UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Glitter_UV ("Glitter UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _IridescenceMask_UV ("Iridescence Mask UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _GlitterMask_UV ("Glitter Mask UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _HairFlowMap_UV ("Hair Flow Map UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowTex_UV ("Shadow Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Flowmap_UV ("Flowmap UV Set", Int) = 0.0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _RefractionMask_UV ("Refraction Mask UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Dither_UV ("Dither UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _StitchTex_UV ("Stitch Texture UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SDFShadowTexture_UV ("SDF Shadow UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _StockingsMap_UV ("Stockings Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EyeParallaxIrisTex_UV ("Eye Parallax Iris UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EyeParallaxEyeMaskTex_UV ("Eye Parallax Mask UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _HairMaskTex_UV ("Hair Mask UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ExpressionMap_UV ("Expression Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _FaceMap_UV ("Face Map UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _NPRSpecularMask_UV ("NPR Specular Mask UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PackedMapOne_UV ("Packed Map One UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PackedMapTwo_UV ("Packed Map Two UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PackedMapThree_UV ("Packed Map Three UV Set", Int) = 0
+        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SkinLUT_UV ("Skin LUT UV Set", Int) = 0
 
         // EMISSION
         // [Space(35)]
@@ -193,7 +254,7 @@ Shader "luka/backlace/default"
         _NPRLitColor ("NPR Lit Color", Color) = (1, 1, 1, 1)
         _NPRShadowColor ("NPR Shadow Color", Color) = (0.3, 0.3, 0.3, 1)
         // npr - shared specular
-        _NPRForwardSpecularTexture ("NPR Forward Specular Texture", 2D) = "white" { }
+        _NPRSpecularMask ("NPR Specular Mask", 2D) = "white" { }
         // npr - forward specular
         [Enum(Disabled, 0, Enabled, 1)] _NPRForwardSpecular ("Enable NPR Forward Specular", Int) = 1
         _NPRForwardSpecularRange ("NPR Forward Specular Range", Range(0, 1)) = 0.5
@@ -544,32 +605,6 @@ Shader "luka/backlace/default"
         _Decal2DistortionControls ("Distortion Controls", Vector) = (0, 0, 0, 0)
         _Decal2DistortionSpeed ("Distortion Speed", Float) = 0
         _Decal2GlitchControls ("Glitch Controls", Vector) = (0, 0, 0, 0)
-
-        // POST-PROCESSING
-        // [Space(35)]
-        // [Header(Post Processing)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_POST_PROCESSING)] _TogglePostProcessing ("Enable Post Processing", Float) = 0.0
-        [HDR] _RGBColor ("RGB Tint", Color) = (1, 1, 1, 1)
-        _RGBBlendMode ("RGB Multiply/Replace", Range(0, 1)) = 0.0
-        [Enum(Disabled, 0, Additive, 1, Multiply, 2)] _HSVMode ("HSV Mode", Float) = 0.0
-        _HSVHue ("Hue", Float) = 0.0
-        _HSVSaturation ("Saturation", Float) = 1.0
-        _HSVValue ("Value (Brightness)", Float) = 1.0
-        [Enum(Disabled, 0, Enabled, 1)] _ToggleHueShift ("Enable Hue Shift", Range(0, 1)) = 0.0
-        _HueShift ("Hue Shift", Range(-1, 1)) = 0.0
-        [Enum(Disabled, 0, Enabled, 1)] _ToggleAutoCycle ("Enable Auto Cycle Hue", Float) = 0.0
-        _AutoCycleSpeed ("Auto Cycle Speed", Float) = 0.1
-        [Enum(Disabled, 0, LUT, 1, ACES, 2, GT, 3, Lit Colour Wheel, 4)] _ColorGradingMode ("Colour Grading Mode", Int) = 0
-        [NoScaleOffset] _ColorGradingLUT ("Colour Grading LUT", 2D) = "white" { }
-        _ColorGradingIntensity ("Grading Intensity", Range(0, 1)) = 0.0
-        _GTShadows ("Black Tightness", Range(1, 2)) = 1.33
-        _GTHighlights ("Highlight Roll-off", Range(0.1, 1)) = 1.0
-        _LCWLift ("LCW Lift", Color) = (0, 0, 0, 0)
-        _LCWGamma ("LCW Gamma", Color) = (1, 1, 1, 1)
-        _LCWGain ("LCW Gain", Color) = (1, 1, 1, 1)
-        _BlackAndWhite ("Black and White", Range(0, 1)) = 0.0
-        _Brightness ("Brightness", Range(0, 2)) = 1.0
 
         // CUBEMAP
         // [Space(35)]
@@ -954,15 +989,6 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
         _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 
-        // TEXTURE STITCHING
-        // [Space(35)]
-        // [Header(Texture Stitching)]
-        // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _UseTextureStitching ("Enable Texture Stitching", Int) = 0
-        [NoScaleOffset] _StitchTex ("Stitch Texture (RGB)", 2D) = "white" { }
-        [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
-        _StitchOffset ("Stitch Seam Offset", Float) = 0
-
         // STOCHASTIC SAMPLING
         // [Space(35)]
         // [Header(Stochastic Sampling)]
@@ -1082,6 +1108,12 @@ Shader "luka/backlace/default"
         _OutlineTexScroll ("Outline Texture Scroll", Vector) = (0, 0, 0, 0)
         _OutlineOffset ("Outline Offset", Vector) = (0, 0, 0, 0)
         [Enum(Outline, 0, Silhouette, 1)] _OutlineStyle ("Outline Style", Int) = 0
+        // stencil
+        [IntRange] _OutlineStencilRef ("Outline Stencil Reference", Range(0, 255)) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _OutlineStencilComp ("Outline Stencil Comparison", Int) = 8 // Always
+        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilPass ("Outline Stencil Pass Op", Int) = 0 // Keep
+        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilFail ("Outline Stencil Fail Op", Int) = 0 // Keep
+        [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilZFail ("Outline Stencil ZFail Op", Int) = 0 // Keep
 
         // INDIRECT LIGHTING
         // [Space(35)]
@@ -1090,37 +1122,6 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _IndirectOverride ("Indirect Override", Float) = 0.0
         [Enum(Disabled, 0, Cubemap, 1)] _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
         _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
-
-        // UV SETTINGS
-        // [Space(35)]
-        // [Header(UV Settings)]
-        // [Space(10)]
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MainTex_UV ("Main texture UV set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _BumpMap_UV ("Bump map UV set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MSSO_UV ("MSSO UV set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SpecularTintTexture_UV ("Specular Tint UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _TangentMap_UV ("Tangent Map UV", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _EmissionMap_UV ("Emission Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ClearcoatMap_UV ("Clear Coat Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MatcapMask_UV ("Clear Coat Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ParallaxMap_UV ("Height Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ThicknessMap_UV ("Thickness Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _DetailMap_UV ("Detail Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal1_UV ("Decal 1 UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Decal2_UV ("Decal 2 UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Glitter_UV ("Glitter UV Set", Int) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _IridescenceMask_UV ("Iridescence Mask UV Set", Int) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _GlitterMask_UV ("Glitter Mask UV Set", Int) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _HairFlowMap_UV ("Hair Flow Map UV Set", Int) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowTex_UV ("Shadow Texture UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Flowmap_UV ("Flowmap UV Set", Int) = 0.0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _MirrorDetectionTexture_UV ("Mirror Detection Texture UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _RefractionMask_UV ("Refraction Mask UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingMap_UV ("Pathing Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _ShadowMap_UV ("Shadow Map UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PathingTexture_UV ("Pathing Texture UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _Dither_UV ("Dither UV Set", Int) = 0
-        [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _StitchTex_UV ("Stitch Texture UV Set", Int) = 0
     }
     SubShader
     {
@@ -1197,5 +1198,5 @@ Shader "luka/backlace/default"
         }*/
 
     }
-    //CustomEditor "Luka.Backlace.Interface"
+    CustomEditor "Luka.Backlace.Interface"
 }

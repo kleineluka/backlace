@@ -385,6 +385,10 @@
             "value": "애니메이션 쉐이딩"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "애니메이션 추가 기능"
+        },
+        {
             "key": "tab_specular",
             "value": "스페큘러 (반사광)"
         },

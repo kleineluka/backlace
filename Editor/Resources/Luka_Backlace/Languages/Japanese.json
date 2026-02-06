@@ -385,6 +385,10 @@
             "value": "アニメシェーディング"
         },
         {
+            "key": "sub_tab_anime_extras",
+            "value": "アニメ追加機能"
+        },
+        {
             "key": "tab_specular",
             "value": "スペキュラー"
         },

@@ -280,7 +280,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             [branch] if (_ToggleStockings == 1) 
             {
-                float4 stockingsMap = UNITY_SAMPLE_TEX2D_SAMPLER(_StockingsMap, _MainTex, Uvs[0]);
+                float4 stockingsMap = UNITY_SAMPLE_TEX2D_SAMPLER(_StockingsMap, _MainTex, Uvs[_StockingsMap_UV]);
                 float NoV = saturate(Surface.NdotV);
                 float power = max(0.04, _StockingsPower);
                 float darkWidth = max(0, _StockingsDarkWidth * power);
@@ -327,12 +327,13 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 // clamp it
                 eyeOffset = clamp(eyeOffset, -_EyeParallaxClamp, _EyeParallaxClamp);
                 // soft mask
-                float2 uv = FragData.uv;
+                float2 uv = Uvs[_EyeParallaxEyeMaskTex_UV];
                 float irisMask = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxEyeMaskTex, _MainTex, uv).r;
                 irisMask = smoothstep(0.2, 0.8, irisMask);
                 // composite all the final colours
-                float2 irisUV = uv + eyeOffset * irisMask;
-                float4 sclera = UNITY_SAMPLE_TEX2D(_MainTex, uv); // scalera is the main texture, presumably
+                float2 irisBaseUV = Uvs[_EyeParallaxIrisTex_UV];
+                float2 irisUV = irisBaseUV + eyeOffset * irisMask;
+                float4 sclera = UNITY_SAMPLE_TEX2D(_MainTex, FragData.uv); // scalera is the main texture, presumably
                 float4 iris = UNITY_SAMPLE_TEX2D_SAMPLER(_EyeParallaxIrisTex, _MainTex, irisUV);
                 Surface.Albedo.rgb = lerp(sclera.rgb, iris.rgb, iris.a * irisMask);
             }
@@ -398,7 +399,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 float forwardDot = dot(faceForward, Surface.LightDir);
                 float rightDot = dot(faceRight, Surface.LightDir);
                 // flip as necessary
-                float2 uv = Uvs[0];
+                float2 uv = Uvs[_SDFShadowTexture_UV];
                 if (rightDot < 0) uv.x = 1.0 - uv.x;
                 // sample sdf
                 float sdfValue = UNITY_SAMPLE_TEX2D(_SDFShadowTexture, uv).r;
@@ -1186,15 +1187,15 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         void GetUmaMusumeDiffuse(inout BacklaceSurfaceData Surface)
         {
             // red: ambient occlusion, green: specular mask, blue: clipping
-            float4 baseMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapOne, _MainTex, Uvs[0]);
+            float4 baseMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapOne, _MainTex, Uvs[_PackedMapOne_UV]);
             // rgb: shaded colours
             #if defined(_BACKLACE_SHADOW_TEXTURE)
                 float3 shadedAlbedo = GetTexturedShadowColor(Surface);
             #else // _BACKLACE_SHADOW_TEXTURE
-                float3 shadedAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, Uvs[0]).rgb;
+                float3 shadedAlbedo = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapTwo, _MainTex, Uvs[_PackedMapTwo_UV]).rgb;
             #endif // _BACKLACE_SHADOW_TEXTURE
             // rgb: control map (g: metal, b: rim)
-            float3 controlMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapThree, _MainTex, Uvs[0]).rgb;
+            float3 controlMap = UNITY_SAMPLE_TEX2D_SAMPLER(_PackedMapThree, _MainTex, Uvs[_PackedMapThree_UV]).rgb;
             // basic lighting
             float halfLambert = Surface.UnmaxedNdotL * 0.5 + 0.5;
             float lightValue = baseMap.r * halfLambert * 2.0;

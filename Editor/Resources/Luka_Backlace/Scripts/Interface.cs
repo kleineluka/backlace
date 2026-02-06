@@ -53,7 +53,7 @@ namespace Luka.Backlace
         // main
         private static Tab tab_main = null;
         private static Tab sub_tab_rendering = null;
-        private static Tab sub_tab_textures = null;
+        private static Tab sub_tab_main_textures = null;
         private static Tab sub_tab_stitching = null;
         private static Tab sub_tab_uv_manipulation = null;
         private static Tab sub_tab_uv_effects = null;
@@ -73,14 +73,22 @@ namespace Luka.Backlace
         private static Tab sub_tab_stylised_specular = null;
         // shading
         private static Tab tab_shading = null;
-        private static Tab sub_tab_anime = null;
+        // anime
+        private static Tab tab_anime = null;
         private static Tab sub_tab_ambient_gradient = null;
-        private static Tab sub_tab_light_tinting = null;
         private static Tab sub_tab_sdf_shadow = null;
+        private static Tab sub_tab_stocking = null;
+        private static Tab sub_tab_eye_parallax = null;
+        private static Tab sub_tab_translucent_hair = null;
+        private static Tab sub_tab_hair_masking = null;
+        private static Tab sub_tab_expression_map = null;
+        private static Tab sub_tab_face_map = null;
+        private static Tab sub_tab_gradient = null;
+        private static Tab sub_tab_toon_highlights = null;
+        private static Tab sub_tab_angel_rings = null;
         // stylise
         private static Tab tab_stylise = null;
         private static Tab sub_tab_rim_lighting = null;
-        private static Tab sub_tab_depth_rim = null;
         private static Tab sub_tab_clear_coat = null;
         private static Tab sub_tab_matcap = null;
         private static Tab sub_tab_cubemap = null;
@@ -88,6 +96,12 @@ namespace Luka.Backlace
         private static Tab sub_tab_subsurface = null;
         private static Tab sub_tab_detail_map = null;
         private static Tab sub_tab_shadow_map = null;
+        // stickers
+        private static Tab tab_stickers = null;
+        private static Tab sub_tab_decal1_settings = null;
+        private static Tab sub_tab_decal1_effects = null;
+        private static Tab sub_tab_decal2_settings = null;
+        private static Tab sub_tab_decal2_effects = null;
         // effects
         private static Tab tab_effects = null;
         private static Tab sub_tab_dissolve = null;
@@ -147,25 +161,30 @@ namespace Luka.Backlace
         private MaterialProperty prop_OutlineStencilZFail = null;
         private MaterialProperty prop_VRCFallback = null;
         private MaterialProperty prop_ToggleFlipNormals = null;
-        // texture properties
+        // main maps and alpha
         private MaterialProperty prop_MainTex = null;
         private MaterialProperty prop_Color = null;
         private MaterialProperty prop_Cutoff = null;
+        private MaterialProperty prop_UseBump = null;
         private MaterialProperty prop_BumpMap = null;
         private MaterialProperty prop_BumpScale = null;
-        private MaterialProperty prop_UseBump = null;
         private MaterialProperty prop_BumpFromAlbedo = null;
         private MaterialProperty prop_BumpFromAlbedoOffset = null;
         private MaterialProperty prop_Alpha = null;
-        // uv manipulation properties
-        private MaterialProperty prop_UV_Offset_X = null;
-        private MaterialProperty prop_UV_Offset_Y = null;
-        private MaterialProperty prop_UV_Scale_X = null;
-        private MaterialProperty prop_UV_Scale_Y = null;
-        private MaterialProperty prop_UV_Rotation = null;
-        private MaterialProperty prop_UV_Scroll_X_Speed = null;
-        private MaterialProperty prop_UV_Scroll_Y_Speed = null;
-        // uv effects properties
+        // texture stitching
+        private MaterialProperty prop_UseTextureStitching = null;
+        private MaterialProperty prop_StitchTex = null;
+        private MaterialProperty prop_StitchAxis = null;
+        private MaterialProperty prop_StitchOffset = null;
+        // uv manipulation
+        private MaterialProperty prop_UVOffsetX = null;
+        private MaterialProperty prop_UVOffsetY = null;
+        private MaterialProperty prop_UVScaleX = null;
+        private MaterialProperty prop_UVScaleY = null;
+        private MaterialProperty prop_UVRotation = null;
+        private MaterialProperty prop_UVScrollXSpeed = null;
+        private MaterialProperty prop_UVScrollYSpeed = null;
+        // uv effects
         private MaterialProperty prop_ToggleUVEffects = null;
         private MaterialProperty prop_UVTriplanarMapping = null;
         private MaterialProperty prop_UVTriplanarPosition = null;
@@ -185,179 +204,9 @@ namespace Luka.Backlace
         private MaterialProperty prop_UVFlowmapStrength = null;
         private MaterialProperty prop_UVFlowmapSpeed = null;
         private MaterialProperty prop_UVFlowmapDistortion = null;
-        // vertex manipulation properties
+        // vertex manipulation
         private MaterialProperty prop_VertexManipulationPosition = null;
         private MaterialProperty prop_VertexManipulationScale = null;
-        // emission properties
-        private MaterialProperty prop_ToggleEmission = null;
-        private MaterialProperty prop_EmissionColor = null;
-        private MaterialProperty prop_EmissionMap = null;
-        private MaterialProperty prop_UseAlbedoAsEmission = null;
-        private MaterialProperty prop_EmissionStrength = null;
-        // light limiting properties
-        private MaterialProperty prop_EnableBaseLightLimit = null;
-        private MaterialProperty prop_BaseLightMin = null;
-        private MaterialProperty prop_BaseLightMax = null;
-        private MaterialProperty prop_EnableAddLightLimit = null;
-        private MaterialProperty prop_AddLightMin = null;
-        private MaterialProperty prop_AddLightMax = null;
-        private MaterialProperty prop_GreyscaleLighting = null;
-        private MaterialProperty prop_ForceLightColor = null;
-        private MaterialProperty prop_ForcedLightColor = null;
-        // lighting model properties
-        private MaterialProperty prop_LightingColorMode = null;
-        private MaterialProperty prop_LightingDirectionMode = null;
-        private MaterialProperty prop_ForcedLightDirection = null;
-        private MaterialProperty prop_ViewDirectionOffsetX = null;
-        private MaterialProperty prop_ViewDirectionOffsetY = null;
-        private MaterialProperty prop_DirectIntensity = null;
-        private MaterialProperty prop_IndirectIntensity = null;
-        private MaterialProperty prop_VertexIntensity = null;
-        private MaterialProperty prop_AdditiveIntensity = null;
-        private MaterialProperty prop_BakedDirectIntensity = null;
-        private MaterialProperty prop_BakedIndirectIntensity = null;
-        // toon lighting properties
-        private MaterialProperty prop_AnimeMode = null;
-        private MaterialProperty prop_Ramp = null;
-        private MaterialProperty prop_RampColor = null;
-        private MaterialProperty prop_RampOffset = null;
-        private MaterialProperty prop_ShadowIntensity = null;
-        private MaterialProperty prop_OcclusionOffsetIntensity = null;
-        private MaterialProperty prop_RampMin = null;
-        private MaterialProperty prop_RampNormalIntensity = null;
-        private MaterialProperty prop_AnimeShadowColor = null;
-        private MaterialProperty prop_AnimeShadowThreshold = null;
-        private MaterialProperty prop_AnimeHalftoneColor = null;
-        private MaterialProperty prop_AnimeHalftoneThreshold = null;
-        private MaterialProperty prop_AnimeShadowSoftness = null;
-        private MaterialProperty prop_RampIndex = null;
-        private MaterialProperty prop_RampTotal = null;
-        private MaterialProperty prop_Hifi1Threshold = null;
-        private MaterialProperty prop_Hifi1Feather = null;
-        private MaterialProperty prop_Hifi1Color = null;
-        private MaterialProperty prop_Hifi2Threshold = null;
-        private MaterialProperty prop_Hifi2Feather = null;
-        private MaterialProperty prop_Hifi2Color = null;
-        private MaterialProperty prop_HifiBorderColor = null;
-        private MaterialProperty prop_HifiBorderWidth = null;
-        private MaterialProperty prop_SkinLUT = null;
-        private MaterialProperty prop_SkinShadowColor = null;
-        private MaterialProperty prop_SkinScattering = null;
-        private MaterialProperty prop_WrapFactor = null;
-        private MaterialProperty prop_WrapNormalization = null;
-        private MaterialProperty prop_WrapColorHigh = null;
-        private MaterialProperty prop_WrapColorLow = null;
-        private MaterialProperty prop_ToggleAmbientGradient = null;
-        private MaterialProperty prop_AnimeOcclusionToShadow = null;
-        private MaterialProperty prop_AmbientUp = null;
-        private MaterialProperty prop_AmbientSkyThreshold = null;
-        private MaterialProperty prop_AmbientDown = null;
-        private MaterialProperty prop_AmbientGroundThreshold = null;
-        private MaterialProperty prop_AmbientIntensity = null;
-        private MaterialProperty prop_TintMaskSource = null;
-        private MaterialProperty prop_LitTint = null;
-        private MaterialProperty prop_LitThreshold = null;
-        private MaterialProperty prop_ShadowTint = null;
-        private MaterialProperty prop_ShadowThreshold = null;
-        private MaterialProperty prop_ToggleSDFShadow = null;
-        private MaterialProperty prop_SDFShadowTexture = null;
-        private MaterialProperty prop_SDFShadowThreshold = null;
-        private MaterialProperty prop_SDFShadowSoftness = null;
-        // specular properties
-        private MaterialProperty prop_ToggleVertexSpecular = null;
-        private MaterialProperty prop_SpecularMode = null;
-        private MaterialProperty prop_MSSO = null;
-        private MaterialProperty prop_Metallic = null;
-        private MaterialProperty prop_Glossiness = null;
-        private MaterialProperty prop_Occlusion = null;
-        private MaterialProperty prop_Specular = null;
-        private MaterialProperty prop_SpecularIntensity = null;
-        private MaterialProperty prop_SpecularTintTexture = null;
-        private MaterialProperty prop_SpecularTint = null;
-        private MaterialProperty prop_TangentMap = null;
-        private MaterialProperty prop_Anisotropy = null;
-        private MaterialProperty prop_ReplaceSpecular = null;
-        private MaterialProperty prop_HighlightRamp = null;
-        private MaterialProperty prop_HighlightHardness = null;
-        private MaterialProperty prop_HighlightRampColor = null;
-        private MaterialProperty prop_HighlightIntensity = null;
-        private MaterialProperty prop_HighlightRampOffset = null;
-        private MaterialProperty prop_HairFlowMap = null;
-        private MaterialProperty prop_PrimarySpecularShift = null;
-        private MaterialProperty prop_SecondarySpecularShift = null;
-        private MaterialProperty prop_SecondarySpecularColor = null;
-        private MaterialProperty prop_SpecularExponent = null;
-        private MaterialProperty prop_SheenColor = null;
-        private MaterialProperty prop_SheenIntensity = null;
-        private MaterialProperty prop_SheenRoughness = null;
-        private MaterialProperty prop_SpecularJitter = null;
-        private MaterialProperty prop_SpecularEnergyMode = null;
-        private MaterialProperty prop_SpecularEnergy = null;
-        private MaterialProperty prop_SpecularEnergyMin = null;
-        private MaterialProperty prop_SpecularEnergyMax = null;
-        // rim lighting properties
-        private MaterialProperty prop_ToggleRimlight = null;
-        private MaterialProperty prop_RimColor = null;
-        private MaterialProperty prop_RimWidth = null;
-        private MaterialProperty prop_RimIntensity = null;
-        private MaterialProperty prop_RimLightBased = null;
-        // clearcoat properties
-        private MaterialProperty prop_ToggleClearcoat = null;
-        private MaterialProperty prop_ClearcoatStrength = null;
-        private MaterialProperty prop_ClearcoatReflectionStrength = null;
-        private MaterialProperty prop_ClearcoatMap = null;
-        private MaterialProperty prop_ClearcoatRoughness = null;
-        private MaterialProperty prop_ClearcoatColor = null;
-        // matcap properties
-        private MaterialProperty prop_ToggleMatcap = null;
-        private MaterialProperty prop_MatcapTex = null;
-        private MaterialProperty prop_MatcapTint = null;
-        private MaterialProperty prop_MatcapIntensity = null;
-        private MaterialProperty prop_MatcapBlendMode = null;
-        private MaterialProperty prop_MatcapMask = null;
-        private MaterialProperty prop_MatcapSmoothnessEnabled = null;
-        private MaterialProperty prop_MatcapSmoothness = null;
-        // decal shared properties
-        private MaterialProperty prop_ToggleDecals = null;
-        private MaterialProperty prop_DecalStage = null;
-        // decal one properties
-        private MaterialProperty prop_Decal1Enable = null;
-        private MaterialProperty prop_Decal1Tex = null;
-        private MaterialProperty prop_Decal1Tint = null;
-        private MaterialProperty prop_Decal1BlendMode = null;
-        private MaterialProperty prop_Decal1Space = null;
-        private MaterialProperty prop_Decal1Behavior = null;
-        private MaterialProperty prop_Decal1Position = null;
-        private MaterialProperty prop_Decal1Scale = null;
-        private MaterialProperty prop_Decal1Rotation = null;
-        private MaterialProperty prop_Decal1TriplanarPosition = null;
-        private MaterialProperty prop_Decal1TriplanarScale = null;
-        private MaterialProperty prop_Decal1TriplanarRotation = null;
-        private MaterialProperty prop_Decal1TriplanarSharpness = null;
-        private MaterialProperty prop_Decal1Repeat = null;
-        private MaterialProperty prop_Decal1Scroll = null;
-        private MaterialProperty prop_Decal1HueShift = null;
-        private MaterialProperty prop_Decal1AutoCycleHue = null;
-        private MaterialProperty prop_Decal1CycleSpeed = null;
-        // decal two properties
-        private MaterialProperty prop_Decal2Enable = null;
-        private MaterialProperty prop_Decal2Tex = null;
-        private MaterialProperty prop_Decal2Tint = null;
-        private MaterialProperty prop_Decal2BlendMode = null;
-        private MaterialProperty prop_Decal2Space = null;
-        private MaterialProperty prop_Decal2Behavior = null;
-        private MaterialProperty prop_Decal2Position = null;
-        private MaterialProperty prop_Decal2Scale = null;
-        private MaterialProperty prop_Decal2Rotation = null;
-        private MaterialProperty prop_Decal2TriplanarPosition = null;
-        private MaterialProperty prop_Decal2TriplanarScale = null;
-        private MaterialProperty prop_Decal2TriplanarRotation = null;
-        private MaterialProperty prop_Decal2TriplanarSharpness = null;
-        private MaterialProperty prop_Decal2Repeat = null;
-        private MaterialProperty prop_Decal2Scroll = null;
-        private MaterialProperty prop_Decal2HueShift = null;
-        private MaterialProperty prop_Decal2AutoCycleHue = null;
-        private MaterialProperty prop_Decal2CycleSpeed = null;
         // post processing properties
         private MaterialProperty prop_TogglePostProcessing = null;
         private MaterialProperty prop_RGBColor = null;
@@ -370,400 +219,17 @@ namespace Luka.Backlace
         private MaterialProperty prop_HueShift = null;
         private MaterialProperty prop_ToggleAutoCycle = null;
         private MaterialProperty prop_AutoCycleSpeed = null;
+        private MaterialProperty prop_ColorGradingMode = null;
         private MaterialProperty prop_ColorGradingLUT = null;
         private MaterialProperty prop_ColorGradingIntensity = null;
+        private MaterialProperty prop_GTShadows = null;
+        private MaterialProperty prop_GTHighlights = null;
+        private MaterialProperty prop_LCWLift = null;
+        private MaterialProperty prop_LCWGamma = null;
+        private MaterialProperty prop_LCWGain = null;
         private MaterialProperty prop_BlackAndWhite = null;
         private MaterialProperty prop_Brightness = null;
-        // cubemap properties
-        private MaterialProperty prop_ToggleCubemap = null;
-        private MaterialProperty prop_CubemapTex = null;
-        private MaterialProperty prop_CubemapTint = null;
-        private MaterialProperty prop_CubemapIntensity = null;
-        private MaterialProperty prop_CubemapBlendMode = null;
-        // parallax properties
-        private MaterialProperty prop_ToggleParallax = null;
-        private MaterialProperty prop_ParallaxMode = null;
-        private MaterialProperty prop_ParallaxMap = null;
-        private MaterialProperty prop_ParallaxStrength = null;
-        private MaterialProperty prop_ParallaxSteps = null;
-        private MaterialProperty prop_ParallaxBlend = null;
-        private MaterialProperty prop_ParallaxBlendWeight = null;
-        private MaterialProperty prop_ParallaxStack = null;
-        private MaterialProperty prop_ParallaxTile = null;
-        // interior settings
-        private MaterialProperty prop_InteriorCubemap = null;
-        private MaterialProperty prop_InteriorColor = null;
-        private MaterialProperty prop_InteriorTiling = null;
-        // layered settings
-        private MaterialProperty prop_ParallaxLayer1 = null;
-        private MaterialProperty prop_ParallaxLayer2 = null;
-        private MaterialProperty prop_ParallaxLayer3 = null;
-        private MaterialProperty prop_ParallaxLayerDepth1 = null;
-        private MaterialProperty prop_ParallaxLayerDepth2 = null;
-        private MaterialProperty prop_ParallaxLayerDepth3 = null;
-        // subsurface properties
-        private MaterialProperty prop_ToggleSSS = null;
-        private MaterialProperty prop_SSSColor = null;
-        private MaterialProperty prop_SSSStrength = null;
-        private MaterialProperty prop_SSSPower = null;
-        private MaterialProperty prop_SSSDistortion = null;
-        private MaterialProperty prop_SSSThicknessMap = null;
-        private MaterialProperty prop_SSSThickness = null;
-        // shadow map properties
-        private MaterialProperty prop_ToggleShadowMap = null;
-        private MaterialProperty prop_ShadowMap = null;
-        private MaterialProperty prop_ShadowMapIntensity = null;
-        // detail map properties
-        private MaterialProperty prop_ToggleDetail = null;
-        private MaterialProperty prop_DetailAlbedoMap = null;
-        private MaterialProperty prop_DetailNormalMap = null;
-        private MaterialProperty prop_DetailTiling = null;
-        private MaterialProperty prop_DetailNormalStrength = null;
-        // dissolve properties
-        private MaterialProperty prop_ToggleDissolve = null;
-        private MaterialProperty prop_DissolveProgress = null;
-        private MaterialProperty prop_DissolveType = null;
-        private MaterialProperty prop_DissolveEdgeColor = null;
-        private MaterialProperty prop_DissolveEdgeWidth = null;
-        private MaterialProperty prop_DissolveEdgeMode = null;
-        private MaterialProperty prop_DissolveEdgeSharpness = null;
-        private MaterialProperty prop_DissolveNoiseTex = null;
-        private MaterialProperty prop_DissolveNoiseScale = null;
-        private MaterialProperty prop_DissolveDirection = null;
-        private MaterialProperty prop_DissolveDirectionSpace = null;
-        private MaterialProperty prop_DissolveDirectionBounds = null;
-        private MaterialProperty prop_DissolveVoxelDensity = null;
-        // pathing properties
-        private MaterialProperty prop_TogglePathing = null;
-        private MaterialProperty prop_PathingMappingMode = null;
-        private MaterialProperty prop_PathingMap = null;
-        private MaterialProperty prop_PathingScale = null;
-        private MaterialProperty prop_PathingBlendMode = null;
-        private MaterialProperty prop_PathingColor = null;
-        private MaterialProperty prop_PathingEmission = null;
-        private MaterialProperty prop_PathingType = null;
-        private MaterialProperty prop_PathingSpeed = null;
-        private MaterialProperty prop_PathingWidth = null;
-        private MaterialProperty prop_PathingSoftness = null;
-        private MaterialProperty prop_PathingOffset = null;
-        private MaterialProperty prop_PathingColorMode = null;
-        private MaterialProperty prop_PathingTexture = null;
-        private MaterialProperty prop_PathingColor2 = null;
-        private MaterialProperty prop_PathingStart = null;
-        private MaterialProperty prop_PathingEnd = null;
-        // screen space rim lighting properties
-        private MaterialProperty prop_ToggleDepthRim = null;
-        private MaterialProperty prop_DepthRimColor = null;
-        private MaterialProperty prop_DepthRimWidth = null;
-        private MaterialProperty prop_DepthRimThreshold = null;
-        private MaterialProperty prop_DepthRimSharpness = null;
-        private MaterialProperty prop_DepthRimBlendMode = null;
-        // audiolink properties
-        private MaterialProperty prop_ToggleAudioLink = null;
-        private MaterialProperty prop_AudioLinkFallback = null;
-        private MaterialProperty prop_AudioLinkMode = null;
-        private MaterialProperty prop_AudioLinkSmoothLevel = null;
-        private MaterialProperty prop_AudioLinkEmissionBand = null;
-        private MaterialProperty prop_AudioLinkEmissionStrength = null;
-        private MaterialProperty prop_AudioLinkEmissionRange = null;
-        private MaterialProperty prop_AudioLinkRimBand = null;
-        private MaterialProperty prop_AudioLinkRimStrength = null;
-        private MaterialProperty prop_AudioLinkRimRange = null;
-        private MaterialProperty prop_AudioLinkHueShiftBand = null;
-        private MaterialProperty prop_AudioLinkHueShiftStrength = null;
-        private MaterialProperty prop_AudioLinkHueShiftRange = null;
-        private MaterialProperty prop_AudioLinkDecalHueBand = null;
-        private MaterialProperty prop_AudioLinkDecalHueStrength = null;
-        private MaterialProperty prop_AudioLinkDecalHueRange = null;
-        private MaterialProperty prop_AudioLinkDecalEmissionBand = null;
-        private MaterialProperty prop_AudioLinkDecalEmissionStrength = null;
-        private MaterialProperty prop_AudioLinkDecalEmissionRange = null;
-        private MaterialProperty prop_AudioLinkDecalOpacityBand = null;
-        private MaterialProperty prop_AudioLinkDecalOpacityStrength = null;
-        private MaterialProperty prop_AudioLinkDecalOpacityRange = null;
-        private MaterialProperty prop_AudioLinkVertexBand = null;
-        private MaterialProperty prop_AudioLinkVertexStrength = null;
-        private MaterialProperty prop_AudioLinkVertexRange = null;
-        private MaterialProperty prop_AudioLinkOutlineBand = null;
-        private MaterialProperty prop_AudioLinkOutlineStrength = null;
-        private MaterialProperty prop_AudioLinkOutlineRange = null;
-        private MaterialProperty prop_AudioLinkMatcapBand = null;
-        private MaterialProperty prop_AudioLinkMatcapStrength = null;
-        private MaterialProperty prop_AudioLinkMatcapRange = null;
-        private MaterialProperty prop_AudioLinkPathingBand = null;
-        private MaterialProperty prop_AudioLinkPathingStrength = null;
-        private MaterialProperty prop_AudioLinkPathingRange = null;
-        private MaterialProperty prop_AudioLinkGlitterBand = null;
-        private MaterialProperty prop_AudioLinkGlitterStrength = null;
-        private MaterialProperty prop_AudioLinkGlitterRange = null;
-        private MaterialProperty prop_AudioLinkIridescenceBand = null;
-        private MaterialProperty prop_AudioLinkIridescenceStrength = null;
-        private MaterialProperty prop_AudioLinkIridescenceRange = null;
-        // ltcgi properties
-        private MaterialProperty prop_ToggleLTCGI = null;
-        // glitter properties
-        private MaterialProperty prop_ToggleGlitter = null;
-        private MaterialProperty prop_GlitterMode = null;
-        private MaterialProperty prop_GlitterNoiseTex = null;
-        private MaterialProperty prop_GlitterMask = null;
-        private MaterialProperty prop_GlitterTint = null;
-        private MaterialProperty prop_GlitterFrequency = null;
-        private MaterialProperty prop_GlitterThreshold = null;
-        private MaterialProperty prop_GlitterSize = null;
-        private MaterialProperty prop_GlitterFlickerSpeed = null;
-        private MaterialProperty prop_GlitterBrightness = null;
-        private MaterialProperty prop_GlitterContrast = null;
-        private MaterialProperty prop_ToggleGlitterRainbow = null;
-        private MaterialProperty prop_GlitterRainbowSpeed = null;
-        // distance fading properties
-        private MaterialProperty prop_ToggleDistanceFade = null;
-        private MaterialProperty prop_DistanceFadeReference = null;
-        private MaterialProperty prop_ToggleNearFade = null;
-        private MaterialProperty prop_NearFadeMode = null;
-        private MaterialProperty prop_NearFadeDitherScale = null;
-        private MaterialProperty prop_NearFadeStart = null;
-        private MaterialProperty prop_NearFadeEnd = null;
-        private MaterialProperty prop_ToggleFarFade = null;
-        private MaterialProperty prop_FarFadeStart = null;
-        private MaterialProperty prop_FarFadeEnd = null;
-        // iridescence properties
-        private MaterialProperty prop_ToggleIridescence = null;
-        private MaterialProperty prop_IridescenceMode = null;
-        private MaterialProperty prop_IridescenceMask = null;
-        private MaterialProperty prop_IridescenceTint = null;
-        private MaterialProperty prop_IridescenceIntensity = null;
-        private MaterialProperty prop_IridescenceBlendMode = null;
-        private MaterialProperty prop_IridescenceParallax = null;
-        private MaterialProperty prop_IridescenceRamp = null;
-        private MaterialProperty prop_IridescencePower = null;
-        private MaterialProperty prop_IridescenceFrequency = null;
-        // shadow textures properties
-        private MaterialProperty prop_ToggleShadowTexture = null;
-        private MaterialProperty prop_ShadowTextureMappingMode = null;
-        private MaterialProperty prop_ShadowTextureIntensity = null;
-        private MaterialProperty prop_ShadowTex = null;
-        private MaterialProperty prop_ShadowPatternColor = null;
-        private MaterialProperty prop_ShadowPatternScale = null;
-        private MaterialProperty prop_ShadowPatternTriplanarSharpness = null;
-        private MaterialProperty prop_ShadowPatternTransparency = null;
-        private MaterialProperty prop_ShadowTextureBlendMode;
-        // flatten model properties
-        private MaterialProperty prop_ToggleFlatModel = null;
-        private MaterialProperty prop_FlatModeAutoflip = null;
-        private MaterialProperty prop_FlatModel = null;
-        private MaterialProperty prop_FlatModelDepthCorrection = null;
-        private MaterialProperty prop_FlatModelFacing = null;
-        private MaterialProperty prop_FlatModelLockAxis = null;
-        // world aligned properties
-        private MaterialProperty prop_ToggleWorldEffect = null;
-        private MaterialProperty prop_WorldEffectBlendMode = null;
-        private MaterialProperty prop_WorldEffectTex = null;
-        private MaterialProperty prop_WorldEffectMask = null;
-        private MaterialProperty prop_WorldEffectColor = null;
-        private MaterialProperty prop_WorldEffectDirection = null;
-        private MaterialProperty prop_WorldEffectScale = null;
-        private MaterialProperty prop_WorldEffectBlendSharpness = null;
-        private MaterialProperty prop_WorldEffectIntensity = null;
-        private MaterialProperty prop_WorldEffectPosition = null;
-        private MaterialProperty prop_WorldEffectRotation = null;
-        // vrchat mirror properties
-        private MaterialProperty prop_ToggleMirrorDetection = null;
-        private MaterialProperty prop_MirrorDetectionMode = null;
-        private MaterialProperty prop_MirrorDetectionTexture = null;
-        // touch reactive properties
-        private MaterialProperty prop_ToggleTouchReactive = null;
-        private MaterialProperty prop_TouchColor = null;
-        private MaterialProperty prop_TouchRadius = null;
-        private MaterialProperty prop_TouchHardness = null;
-        private MaterialProperty prop_TouchMode = null;
-        private MaterialProperty prop_TouchRainbowSpeed = null;
-        private MaterialProperty prop_TouchRainbowSpread = null;
-        // refraction properties
-        private MaterialProperty prop_ToggleRefraction = null;
-        private MaterialProperty prop_RefractionMask = null;
-        private MaterialProperty prop_RefractionTint = null;
-        private MaterialProperty prop_RefractionIOR = null;
-        private MaterialProperty prop_RefractionFresnel = null;
-        private MaterialProperty prop_RefractionOpacity = null;
-        private MaterialProperty prop_RefractionSeeThrough = null;
-        private MaterialProperty prop_RefractionMode = null;
-        private MaterialProperty prop_RefractionMixStrength = null;
-        private MaterialProperty prop_RefractionBlendMode = null;
-        private MaterialProperty prop_RefractionGrabpassTint = null;
-        private MaterialProperty prop_RefractionZoomToggle = null;
-        private MaterialProperty prop_RefractionZoom = null;
-        private MaterialProperty prop_CausticsTex = null;
-        private MaterialProperty prop_CausticsColor = null;
-        private MaterialProperty prop_CausticsTiling = null;
-        private MaterialProperty prop_CausticsSpeed = null;
-        private MaterialProperty prop_CausticsIntensity = null;
-        private MaterialProperty prop_DistortionNoiseTex = null;
-        private MaterialProperty prop_DistortionNoiseTiling = null;
-        private MaterialProperty prop_DistortionNoiseStrength = null;
-        private MaterialProperty prop_RefractionDistortionMode = null;
-        private MaterialProperty prop_RefractionCAStrength = null;
-        private MaterialProperty prop_RefractionBlurStrength = null;
-        private MaterialProperty prop_RefractionCAUseFresnel = null;
-        private MaterialProperty prop_RefractionCAEdgeFade = null;
-        private MaterialProperty prop_RefractionSourceMode = null;
-        private MaterialProperty prop_RefractionTexture = null;
-        // dither properties
-        private MaterialProperty prop_ToggleDither = null;
-        private MaterialProperty prop_DitherAmount = null;
-        private MaterialProperty prop_DitherScale = null;
-        private MaterialProperty prop_DitherSpace = null;
-        // ps1 properties
-        private MaterialProperty prop_TogglePS1 = null;
-        private MaterialProperty prop_PS1Rounding = null;
-        private MaterialProperty prop_PS1RoundingPrecision = null;
-        private MaterialProperty prop_PS1Affine = null;
-        private MaterialProperty prop_PS1AffineStrength = null;
-        private MaterialProperty prop_PS1Compression = null;
-        private MaterialProperty prop_PS1CompressionPrecision = null;
-        // texture stitching properties
-        private MaterialProperty prop_UseTextureStitching = null;
-        private MaterialProperty prop_StitchTex = null;
-        private MaterialProperty prop_StitchAxis = null;
-        private MaterialProperty prop_StitchOffset = null;
-        // vertex distortion properties
-        private MaterialProperty prop_ToggleVertexDistortion = null;
-        private MaterialProperty prop_VertexDistortionMode = null;
-        private MaterialProperty prop_VertexDistortionColorMask = null;
-        private MaterialProperty prop_VertexDistortionStrength = null;
-        private MaterialProperty prop_VertexDistortionSpeed = null;
-        private MaterialProperty prop_VertexDistortionFrequency = null;
-        private MaterialProperty prop_WindStrength = null;
-        private MaterialProperty prop_WindSpeed = null;
-        private MaterialProperty prop_WindScale = null;
-        private MaterialProperty prop_WindDirection = null;
-        private MaterialProperty prop_WindNoiseTex = null;
-        private MaterialProperty prop_VertexEffectType = null;
-        private MaterialProperty prop_VertexGlitchMode = null;
-        private MaterialProperty prop_GlitchFrequency = null;
-        // breathing
-        private MaterialProperty prop_BreathingStrength = null;
-        private MaterialProperty prop_BreathingSpeed = null;
-        // fake screenspace reflection properties
-        private MaterialProperty prop_ToggleSSR = null;
-        private MaterialProperty prop_SSRMask = null;
-        private MaterialProperty prop_SSRTint = null;
-        private MaterialProperty prop_SSRIntensity = null;
-        private MaterialProperty prop_SSRBlendMode = null;
-        private MaterialProperty prop_SSRFresnelPower = null;
-        private MaterialProperty prop_SSRFresnelScale = null;
-        private MaterialProperty prop_SSRFresnelBias = null;
-        private MaterialProperty prop_SSRParallax = null;
-        private MaterialProperty prop_SSRDistortionMap = null;
-        private MaterialProperty prop_SSRDistortionStrength = null;
-        private MaterialProperty prop_SSRWorldDistortion = null;
-        private MaterialProperty prop_SSRBlur = null;
-        private MaterialProperty prop_SSRMaxSteps = null;
-        private MaterialProperty prop_SSRStepSize = null;
-        private MaterialProperty prop_SSREdgeFade = null;
-        private MaterialProperty prop_SSRCoverage = null;
-        private MaterialProperty prop_SSRCamFade = null;
-        private MaterialProperty prop_SSRCamFadeStart = null;
-        private MaterialProperty prop_SSRCamFadeEnd = null;
-        private MaterialProperty prop_SSRFlipUV = null;
-        private MaterialProperty prop_SSRAdaptiveStep = null;
-        private MaterialProperty prop_SSRThickness = null;
-        private MaterialProperty prop_SSROutOfViewMode = null;
-        private MaterialProperty prop_SSRMode = null;
-        private MaterialProperty prop_SSRSourceMode = null;
-        private MaterialProperty prop_SSRTexture = null;
-        // world properties - stochastic sampling
-        private MaterialProperty prop_StochasticSampling = null;
-        private MaterialProperty prop_StochasticSamplingMode = null;
-        private MaterialProperty prop_StochasticTexture = null;
-        private MaterialProperty prop_StochasticOpacity = null;
-        private MaterialProperty prop_StochasticBlendMode = null;
-        private MaterialProperty prop_StochasticScale = null;
-        private MaterialProperty prop_StochasticOffsetX = null;
-        private MaterialProperty prop_StochasticOffsetY = null;
-        private MaterialProperty prop_StochasticTint = null;
-        private MaterialProperty prop_StochasticBlend = null;
-        private MaterialProperty prop_StochasticRotationRange = null;
-        private MaterialProperty prop_StochasticPriority = null;
-        private MaterialProperty prop_StochasticContrastStrength = null;
-        private MaterialProperty prop_StochasticContrastThreshold = null;
-        private MaterialProperty prop_StochasticHeightBlend = null;
-        private MaterialProperty prop_StochasticHeightMap = null;
-        private MaterialProperty prop_StochasticHeightStrength = null;
-        private MaterialProperty prop_StochasticMipBias = null;
-        private MaterialProperty prop_StochasticAlpha = null;
-        private MaterialProperty prop_StochasticNormals = null;
-        // world properties - splatter mapping
-        private MaterialProperty prop_SplatterMapping = null;
-        private MaterialProperty prop_SplatterMappingMode = null;
-        private MaterialProperty prop_SplatterControl = null;
-        private MaterialProperty prop_SplatterUseNormals = null;
-        private MaterialProperty prop_SplatterAlbedo0 = null;
-        private MaterialProperty prop_SplatterNormal0 = null;
-        private MaterialProperty prop_SplatterMasks0 = null;
-        private MaterialProperty prop_SplatterColor0 = null;
-        private MaterialProperty prop_SplatterTiling0 = null;
-        private MaterialProperty prop_SplatterNormalStrength0 = null;
-        private MaterialProperty prop_SplatterBlendMode0 = null;
-        private MaterialProperty prop_SplatterAlbedo1 = null;
-        private MaterialProperty prop_SplatterNormal1 = null;
-        private MaterialProperty prop_SplatterMasks1 = null;
-        private MaterialProperty prop_SplatterColor1 = null;
-        private MaterialProperty prop_SplatterTiling1 = null;
-        private MaterialProperty prop_SplatterNormalStrength1 = null;
-        private MaterialProperty prop_SplatterBlendMode1 = null;
-        private MaterialProperty prop_SplatterCullThreshold = null;
-        private MaterialProperty prop_SplatterBlendSharpness = null;
-        private MaterialProperty prop_SplatterMipBias = null;
-        private MaterialProperty prop_SplatterAlphaChannel = null;
-        // world properties - texture bombing
-        private MaterialProperty prop_BombingTextures = null;
-        private MaterialProperty prop_BombingMode = null;
-        private MaterialProperty prop_BombingBlendMode = null;
-        private MaterialProperty prop_BombingMappingMode = null;
-        private MaterialProperty prop_BombingTriplanarSharpness = null;
-        private MaterialProperty prop_BombingThreshold = null;
-        private MaterialProperty prop_BombingOpacity = null;
-        private MaterialProperty prop_BombingTex = null;
-        private MaterialProperty prop_BombingColor = null;
-        private MaterialProperty prop_BombingTiling = null;
-        private MaterialProperty prop_BombingDensity = null;
-        private MaterialProperty prop_BombingGlobalScale = null;
-        private MaterialProperty prop_BombingJitterAmount = null;
-        private MaterialProperty prop_BombingScaleVar = null;
-        private MaterialProperty prop_BombingRotVar = null;
-        private MaterialProperty prop_BombingHueVar = null;
-        private MaterialProperty prop_BombingSatVar = null;
-        private MaterialProperty prop_BombingValVar = null;
-        private MaterialProperty prop_BombingUseNormal = null;
-        private MaterialProperty prop_BombingNormal = null;
-        private MaterialProperty prop_BombingNormalStrength = null;
-        private MaterialProperty prop_BombingUseSheet = null;
-        private MaterialProperty prop_BombingSheetData = null;
-        private MaterialProperty prop_BombingCullDist = null;
-        private MaterialProperty prop_BombingCullFalloff = null;
-        // outline properties
-        private MaterialProperty prop_OutlineSpace = null;
-        private MaterialProperty prop_OutlineColor = null;
-        private MaterialProperty prop_OutlineWidth = null;
-        private MaterialProperty prop_OutlineVertexColorMask = null;
-        private MaterialProperty prop_OutlineDistanceFade = null;
-        private MaterialProperty prop_OutlineFadeStart = null;
-        private MaterialProperty prop_OutlineFadeEnd = null;
-        private MaterialProperty prop_OutlineHueShift = null;
-        private MaterialProperty prop_OutlineHueShiftSpeed = null;
-        private MaterialProperty prop_OutlineOpacity = null;
-        private MaterialProperty prop_OutlineMode = null;
-        private MaterialProperty prop_OutlineTexMap = null;
-        private MaterialProperty prop_OutlineTex = null;
-        private MaterialProperty prop_OutlineTexTiling = null;
-        private MaterialProperty prop_OutlineTexScroll = null;
-        private MaterialProperty prop_OutlineOffset = null;
-        private MaterialProperty prop_OutlineStyle = null;
-        // indirect lighting
-        private MaterialProperty prop_IndirectFallbackMode = null;
-        private MaterialProperty prop_IndirectOverride = null;
-        private MaterialProperty prop_FallbackCubemap = null;
-        // uv settings
+        // uv sets
         private MaterialProperty prop_MainTex_UV = null;
         private MaterialProperty prop_BumpMap_UV = null;
         private MaterialProperty prop_MSSO_UV = null;
@@ -783,15 +249,27 @@ namespace Luka.Backlace
         private MaterialProperty prop_HairFlowMap_UV = null;
         private MaterialProperty prop_ShadowTex_UV = null;
         private MaterialProperty prop_Flowmap_UV = null;
-        private MaterialProperty prop_StitchTex_UV = null;
         private MaterialProperty prop_MirrorDetectionTexture_UV = null;
         private MaterialProperty prop_RefractionMask_UV = null;
         private MaterialProperty prop_PathingMap_UV = null;
         private MaterialProperty prop_ShadowMap_UV = null;
         private MaterialProperty prop_PathingTexture_UV = null;
         private MaterialProperty prop_Dither_UV = null;
+        private MaterialProperty prop_StitchTex_UV = null;
+        private MaterialProperty prop_SDFShadowTexture_UV = null;
+        private MaterialProperty prop_StockingsMap_UV = null;
+        private MaterialProperty prop_EyeParallaxIrisTex_UV = null;
+        private MaterialProperty prop_EyeParallaxEyeMaskTex_UV = null;
+        private MaterialProperty prop_HairMaskTex_UV = null;
+        private MaterialProperty prop_ExpressionMap_UV = null;
+        private MaterialProperty prop_FaceMap_UV = null;
+        private MaterialProperty prop_NPRSpecularMask_UV = null;
+        private MaterialProperty prop_PackedMapOne_UV = null;
+        private MaterialProperty prop_PackedMapTwo_UV = null;
+        private MaterialProperty prop_PackedMapThree_UV = null;
+        private MaterialProperty prop_SkinLUT_UV = null;
         #endregion // Properties
-
+        
         // unload the material (ex. on shader change)
         public static void close_all_tabs()
         {
@@ -801,12 +279,11 @@ namespace Luka.Backlace
             if (premonition_tab != null) { premonition_tab.is_expanded = false; premonition_tab.is_active = false; }
             if (tab_main != null) { tab_main.is_expanded = false; tab_main.is_active = false; }
             if (sub_tab_rendering != null) { sub_tab_rendering.is_expanded = false; sub_tab_rendering.is_active = false; }
-            if (sub_tab_textures != null) { sub_tab_textures.is_expanded = false; sub_tab_textures.is_active = false; }
+            if (sub_tab_main_textures != null) { sub_tab_main_textures.is_expanded = false; sub_tab_main_textures.is_active = false; }
             if (sub_tab_stitching != null) { sub_tab_stitching.is_expanded = false; sub_tab_stitching.is_active = false; }
             if (sub_tab_uv_manipulation != null) { sub_tab_uv_manipulation.is_expanded = false; sub_tab_uv_manipulation.is_active = false; }
             if (sub_tab_uv_effects != null) { sub_tab_uv_effects.is_expanded = false; sub_tab_uv_effects.is_active = false; }
             if (sub_tab_vertex_manipulation != null) { sub_tab_vertex_manipulation.is_expanded = false; sub_tab_vertex_manipulation.is_active = false; }
-            if (sub_tab_stickers != null) { sub_tab_stickers.is_expanded = false; sub_tab_stickers.is_active = false; }
             if (sub_tab_post_processing != null) { sub_tab_post_processing.is_expanded = false; sub_tab_post_processing.is_active = false; }
             if (sub_tab_uv_sets != null) { sub_tab_uv_sets.is_expanded = false; sub_tab_uv_sets.is_active = false; }
             if (sub_tab_legacy_mode != null) { sub_tab_legacy_mode.is_expanded = false; sub_tab_legacy_mode.is_active = false; }
@@ -818,13 +295,20 @@ namespace Luka.Backlace
             if (sub_tab_pbr_specular != null) { sub_tab_pbr_specular.is_expanded = false; sub_tab_pbr_specular.is_active = false; }
             if (sub_tab_stylised_specular != null) { sub_tab_stylised_specular.is_expanded = false; sub_tab_stylised_specular.is_active = false; }
             if (tab_shading != null) { tab_shading.is_expanded = false; tab_shading.is_active = false; }
-            if (sub_tab_anime != null) { sub_tab_anime.is_expanded = false; sub_tab_anime.is_active = false; }
+            if (tab_anime != null) { tab_anime.is_expanded = false; tab_anime.is_active = false; }
             if (sub_tab_ambient_gradient != null) { sub_tab_ambient_gradient.is_expanded = false; sub_tab_ambient_gradient.is_active = false; }
-            if (sub_tab_light_tinting != null) { sub_tab_light_tinting.is_expanded = false; sub_tab_light_tinting.is_active = false; }
             if (sub_tab_sdf_shadow != null) { sub_tab_sdf_shadow.is_expanded = false; sub_tab_sdf_shadow.is_active = false; }
+            if (sub_tab_stocking != null) { sub_tab_stocking.is_expanded = false; sub_tab_stocking.is_active = false; }
+            if (sub_tab_eye_parallax != null) { sub_tab_eye_parallax.is_expanded = false; sub_tab_eye_parallax.is_active = false; }
+            if (sub_tab_translucent_hair != null) { sub_tab_translucent_hair.is_expanded = false; sub_tab_translucent_hair.is_active = false; }
+            if (sub_tab_hair_masking != null) { sub_tab_hair_masking.is_expanded = false; sub_tab_hair_masking.is_active = false; }
+            if (sub_tab_expression_map != null) { sub_tab_expression_map.is_expanded = false; sub_tab_expression_map.is_active = false; }
+            if (sub_tab_face_map != null) { sub_tab_face_map.is_expanded = false; sub_tab_face_map.is_active = false; }
+            if (sub_tab_gradient != null) { sub_tab_gradient.is_expanded = false; sub_tab_gradient.is_active = false; }
+            if (sub_tab_toon_highlights != null) { sub_tab_toon_highlights.is_expanded = false; sub_tab_toon_highlights.is_active = false; }
+            if (sub_tab_angel_rings != null) { sub_tab_angel_rings.is_expanded = false; sub_tab_angel_rings.is_active = false; }
             if (tab_stylise != null) { tab_stylise.is_expanded = false; tab_stylise.is_active = false; }
             if (sub_tab_rim_lighting != null) { sub_tab_rim_lighting.is_expanded = false; sub_tab_rim_lighting.is_active = false; }
-            if (sub_tab_depth_rim != null) { sub_tab_depth_rim.is_expanded = false; sub_tab_depth_rim.is_active = false; }
             if (sub_tab_clear_coat != null) { sub_tab_clear_coat.is_expanded = false; sub_tab_clear_coat.is_active = false; }
             if (sub_tab_matcap != null) { sub_tab_matcap.is_expanded = false; sub_tab_matcap.is_active = false; }
             if (sub_tab_cubemap != null) { sub_tab_cubemap.is_expanded = false; sub_tab_cubemap.is_active = false; }
@@ -832,6 +316,11 @@ namespace Luka.Backlace
             if (sub_tab_subsurface != null) { sub_tab_subsurface.is_expanded = false; sub_tab_subsurface.is_active = false; }
             if (sub_tab_detail_map != null) { sub_tab_detail_map.is_expanded = false; sub_tab_detail_map.is_active = false; }
             if (sub_tab_shadow_map != null) { sub_tab_shadow_map.is_expanded = false; sub_tab_shadow_map.is_active = false; }
+            if (tab_stickers != null) { tab_stickers.is_expanded = false; tab_stickers.is_active = false; }
+            if (sub_tab_decal1_settings != null) { sub_tab_decal1_settings.is_expanded = false; sub_tab_decal1_settings.is_active = false; }
+            if (sub_tab_decal1_effects != null) { sub_tab_decal1_effects.is_expanded = false; sub_tab_decal1_effects.is_active = false; }
+            if (sub_tab_decal2_settings != null) { sub_tab_decal2_settings.is_expanded = false; sub_tab_decal2_settings.is_active = false; }
+            if (sub_tab_decal2_effects != null) { sub_tab_decal2_effects.is_expanded = false; sub_tab_decal2_effects.is_active = false; }
             if (tab_effects != null) { tab_effects.is_expanded = false; tab_effects.is_active = false; }
             if (sub_tab_dissolve != null) { sub_tab_dissolve.is_expanded = false; sub_tab_dissolve.is_active = false; }
             if (sub_tab_pathing != null) { sub_tab_pathing.is_expanded = false; sub_tab_pathing.is_active = false; }
@@ -891,11 +380,10 @@ namespace Luka.Backlace
             tab_main = null;
             sub_tab_rendering = null;
             sub_tab_stitching = null;
-            sub_tab_textures = null;
+            sub_tab_main_textures = null;
             sub_tab_uv_manipulation = null;
             sub_tab_uv_effects = null;
             sub_tab_vertex_manipulation = null;
-            sub_tab_stickers = null;
             sub_tab_post_processing = null;
             sub_tab_uv_sets = null;
             sub_tab_legacy_mode = null;
@@ -907,13 +395,20 @@ namespace Luka.Backlace
             sub_tab_emission = null;
             sub_tab_light_limiting = null;
             tab_shading = null;
-            sub_tab_anime = null;
+            tab_anime = null;
             sub_tab_ambient_gradient = null;
-            sub_tab_light_tinting = null;
             sub_tab_sdf_shadow = null;
+            sub_tab_stocking = null;
+            sub_tab_eye_parallax = null;
+            sub_tab_translucent_hair = null;
+            sub_tab_hair_masking = null;
+            sub_tab_expression_map = null;
+            sub_tab_face_map = null;
+            sub_tab_gradient = null;
+            sub_tab_toon_highlights = null;
+            sub_tab_angel_rings = null;
             tab_stylise = null;
             sub_tab_rim_lighting = null;
-            sub_tab_depth_rim = null;
             sub_tab_clear_coat = null;
             sub_tab_matcap = null;
             sub_tab_cubemap = null;
@@ -921,6 +416,11 @@ namespace Luka.Backlace
             sub_tab_subsurface = null;
             sub_tab_detail_map = null;
             sub_tab_shadow_map = null;
+            tab_stickers = null;
+            sub_tab_decal1_settings = null;
+            sub_tab_decal1_effects = null;
+            sub_tab_decal2_settings = null;
+            sub_tab_decal2_effects = null;
             tab_effects = null;
             sub_tab_dissolve = null;
             sub_tab_pathing = null;
@@ -994,38 +494,49 @@ namespace Luka.Backlace
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"), null, null, null, null, Project.blend_mode_badges);
-            sub_tab_textures = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_textures"));
+            sub_tab_main_textures = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_main_textures"));
             sub_tab_stitching = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_stitching"));
             sub_tab_uv_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_uv_manipulation"));
             sub_tab_uv_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_uv_effects"), null, "_ToggleUVEffects");
             sub_tab_vertex_manipulation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_vertex_manipulation"));
-            sub_tab_stickers = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_stickers"), null, "_ToggleDecals");
-            sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
-            sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_uv_sets"));
-            sub_tab_legacy_mode = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("tab_legacy_mode"));
+            sub_tab_post_processing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_post_processing"), null, "_TogglePostProcessing");
+            sub_tab_uv_sets = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_uv_sets"));
+            sub_tab_legacy_mode = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("tab_legacy_mode"));
             tab_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 1, languages.speak("tab_lighting"));
             sub_tab_lighting_model = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_lighting_model"), null, null, null, null, Project.lighting_mode_badges);
             tab_shading = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 2, languages.speak("tab_shading"));
-            sub_tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_anime"), null, "_AnimeMode", null, null, Project.anime_mode_badges);
-            sub_tab_ambient_gradient = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ambient_gradient"), null, "_ToggleAmbientGradient");
-            sub_tab_light_tinting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_light_tinting"), null, "_ToggleLightTinting");
-            sub_tab_sdf_shadow = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_sdf_shadow"), null, "_ToggleSDFShadow");
-            tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_specular"));
+            tab_anime = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 3, languages.speak("tab_anime"));
+            sub_tab_ambient_gradient = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_ambient_gradient"), null, "_ToggleAmbientGradient");
+            sub_tab_sdf_shadow = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_sdf_shadow"), null, "_ToggleSDFShadow");
+            sub_tab_stocking = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_stocking"), null, "_ToggleStocking");
+            sub_tab_eye_parallax = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_eye_parallax"), null, "_ToggleEyeParallax");
+            sub_tab_translucent_hair = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_translucent_hair"), null, "_ToggleTranslucentHair");
+            sub_tab_hair_masking = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_hair_masking"), null, "_ToggleHairMasking");
+            sub_tab_expression_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_expression_map"), null, "_ToggleExpressionMap");
+            sub_tab_face_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_face_map"), null, "_ToggleFaceMap");
+            sub_tab_gradient = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_gradient"), null, "_ToggleGradient");
+            sub_tab_toon_highlights = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_toon_highlights"), null, "_ToggleToonHighlights");
+            sub_tab_angel_rings = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_angel_rings"), null, "_ToggleAngelRings");
+            tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_specular"));
             sub_tab_pbr_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_pbr_specular"));
             sub_tab_stylised_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_stylised_specular"));
             sub_tab_emission = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_emission"), null, "_ToggleEmission");
             sub_tab_light_limiting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_light_limiting"));
-            tab_stylise = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_stylise"));
-            sub_tab_rim_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rim_lighting"), null, "_ToggleRimlight");
-            sub_tab_depth_rim = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_depth_rim"), null, "_ToggleDepthRim", Project.shader_capabilities[0]);
-            sub_tab_clear_coat = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_clear_coat"), null, "_ToggleClearcoat");
-            sub_tab_matcap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_matcap"), null, "_ToggleMatcap");
-            sub_tab_cubemap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_cubemap"), null, "_ToggleCubemap");
-            sub_tab_parallax = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_parallax"), null, "_ToggleParallax", null, null, Project.parallax_mode_badges);
-            sub_tab_subsurface = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_subsurface"), null, "_ToggleSSS");
-            sub_tab_detail_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_detail_map"), null, "_ToggleDetail");
-            sub_tab_shadow_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_shadow_map"), null, "_ToggleShadowMap");
-            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_effects"));
+            tab_stylise = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 5, languages.speak("tab_stylise"));
+            sub_tab_rim_lighting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rim_lighting"), null, "_RimMode");
+            sub_tab_clear_coat = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_clear_coat"), null, "_ToggleClearcoat");
+            sub_tab_matcap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_matcap"), null, "_ToggleMatcap");
+            sub_tab_cubemap = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_cubemap"), null, "_ToggleCubemap");
+            sub_tab_parallax = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_parallax"), null, "_ToggleParallax", null, null, Project.parallax_mode_badges);
+            sub_tab_subsurface = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_subsurface"), null, "_ToggleSSS");
+            sub_tab_detail_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 6, languages.speak("sub_tab_detail_map"), null, "_ToggleDetail");
+            sub_tab_shadow_map = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 7, languages.speak("sub_tab_shadow_map"), null, "_ToggleShadowMap");
+            tab_stickers = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_stickers"), null, "_ToggleDecals");
+            sub_tab_decal1_settings = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_decal1_settings"));
+            sub_tab_decal1_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_decal1_effects"));
+            sub_tab_decal2_settings = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_decal2_settings"));
+            sub_tab_decal2_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_decal2_effects"));
+            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_effects"));
             sub_tab_dissolve = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_dissolve"), null, "_ToggleDissolve", null, null, Project.dissolve_mode_badges);
             sub_tab_pathing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_pathing"), null, "_TogglePathing");
             sub_tab_glitter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_glitter"), null, "_ToggleGlitter", null, null, Project.glitter_mode_badges);
@@ -1041,12 +552,12 @@ namespace Luka.Backlace
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion", null, null, Project.distortion_mode_badges);
             sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
-            tab_world = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 6, languages.speak("tab_world"),  Project.shader_variants[3]);
+            tab_world = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_world"),  Project.shader_variants[3]);
             sub_tab_stochastic = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_stochastic"), null, "_StochasticSampling");
             sub_tab_splatter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_splatter"), null, "_SplatterMapping");
             sub_tab_bombing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_bombing"), null, "_BombingTextures");
-            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_outline"), Project.shader_variants[1]);
-            tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_third_party"));
+            tab_outline = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 9, languages.speak("tab_outline"), Project.shader_variants[1]);
+            tab_third_party = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 10, languages.speak("tab_third_party"));
             sub_tab_audiolink = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_audiolink"), null, "_ToggleAudioLink", null);
             sub_tab_superplug = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_superplug"), null, null, null, Project.dependencies[1]);
             sub_tab_ltcgi = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_ltcgi"), null, "_ToggleLTCGI", null, Project.dependencies[0]);
@@ -1100,6 +611,29 @@ namespace Luka.Backlace
         private void DrawUI(MaterialEditor materialEditor, MaterialProperty[] properties)
         {
             Material targetMat = materialEditor.target as Material;
+            // fetch properties
+            prop_TogglePostProcessing = FindProperty("_TogglePostProcessing", properties);
+            prop_RGBColor = FindProperty("_RGBColor", properties);
+            prop_RGBBlendMode = FindProperty("_RGBBlendMode", properties);
+            prop_HSVMode = FindProperty("_HSVMode", properties);
+            prop_HSVHue = FindProperty("_HSVHue", properties);
+            prop_HSVSaturation = FindProperty("_HSVSaturation", properties);
+            prop_HSVValue = FindProperty("_HSVValue", properties);
+            prop_ToggleHueShift = FindProperty("_ToggleHueShift", properties);
+            prop_HueShift = FindProperty("_HueShift", properties);
+            prop_ToggleAutoCycle = FindProperty("_ToggleAutoCycle", properties);
+            prop_AutoCycleSpeed = FindProperty("_AutoCycleSpeed", properties);
+            prop_ColorGradingMode = FindProperty("_ColorGradingMode", properties);
+            prop_ColorGradingLUT = FindProperty("_ColorGradingLUT", properties);
+            prop_ColorGradingIntensity = FindProperty("_ColorGradingIntensity", properties);
+            prop_GTShadows = FindProperty("_GTShadows", properties);
+            prop_GTHighlights = FindProperty("_GTHighlights", properties);
+            prop_LCWLift = FindProperty("_LCWLift", properties);
+            prop_LCWGamma = FindProperty("_LCWGamma", properties);
+            prop_LCWGain = FindProperty("_LCWGain", properties);
+            prop_BlackAndWhite = FindProperty("_BlackAndWhite", properties);
+            prop_Brightness = FindProperty("_Brightness", properties);
+
             EditorGUI.BeginChangeCheck();
             header.draw();
             if (is_compact) {
@@ -1112,8 +646,7 @@ namespace Luka.Backlace
             tab_main.process(() => {
                 Components.start_foldout();
                 sub_tab_rendering.process(() => {
-                    // main - rendering
-                    prop_BlendMode = FindProperty("_BlendMode", properties);
+                                        prop_BlendMode = FindProperty("_BlendMode", properties);
                     prop_OverrideBaseBlend = FindProperty("_OverrideBaseBlend", properties);
                     prop_SrcBlend = FindProperty("_SrcBlend", properties);
                     prop_DstBlend = FindProperty("_DstBlend", properties);
@@ -1187,35 +720,30 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(prop_StencilRef.floatValue.Equals(0), configs);
                     materialEditor.LightmapEmissionProperty();
                 });
-                sub_tab_textures.process(() => {
-                    // main - textures
+                sub_tab_main_textures.process(() => {
                     prop_MainTex = FindProperty("_MainTex", properties);
                     prop_Color = FindProperty("_Color", properties);
                     prop_Cutoff = FindProperty("_Cutoff", properties);
+                    prop_UseBump = FindProperty("_UseBump", properties);
                     prop_BumpMap = FindProperty("_BumpMap", properties);
                     prop_BumpScale = FindProperty("_BumpScale", properties);
-                    prop_Alpha = FindProperty("_Alpha", properties);
-                    prop_UseBump = FindProperty("_UseBump", properties);
                     prop_BumpFromAlbedo = FindProperty("_BumpFromAlbedo", properties);
                     prop_BumpFromAlbedoOffset = FindProperty("_BumpFromAlbedoOffset", properties);
+                    prop_Alpha = FindProperty("_Alpha", properties);
                     materialEditor.ShaderProperty(prop_MainTex, languages.speak("prop_MainTex"));
                     materialEditor.ShaderProperty(prop_Color, languages.speak("prop_Color"));
+                    materialEditor.ShaderProperty(prop_Cutoff, languages.speak("prop_Cutoff"));
                     materialEditor.ShaderProperty(prop_UseBump, languages.speak("prop_UseBump"));
                     Components.start_dynamic_disable(!prop_UseBump.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BumpMap, languages.speak("prop_BumpMap"));
-                    materialEditor.ShaderProperty(prop_BumpFromAlbedo, languages.speak("prop_BumpFromAlbedo"));
-                    Components.start_dynamic_disable(!prop_BumpFromAlbedo.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel++;
+                    materialEditor.TexturePropertySingleLine(new GUIContent(languages.speak("prop_BumpMap")), prop_BumpMap, prop_BumpScale);
+                    materialEditor.ShaderProperty(prop_BumpFromAlbedo, languages.speak("prop_BumpFromAlbedo"));
                     materialEditor.ShaderProperty(prop_BumpFromAlbedoOffset, languages.speak("prop_BumpFromAlbedoOffset"));
                     EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_BumpFromAlbedo.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_UseBump.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BumpScale, languages.speak("prop_BumpScale"));
                     materialEditor.ShaderProperty(prop_Alpha, languages.speak("prop_Alpha"));
-                    materialEditor.ShaderProperty(prop_Cutoff, languages.speak("prop_Cutoff"));
                 });
                 sub_tab_stitching.process(() => {
-                    // main - texture stitching
                     prop_UseTextureStitching = FindProperty("_UseTextureStitching", properties);
                     prop_StitchTex = FindProperty("_StitchTex", properties);
                     prop_StitchAxis = FindProperty("_StitchAxis", properties);
@@ -1223,195 +751,31 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_UseTextureStitching, languages.speak("prop_UseTextureStitching"));
                     Components.start_dynamic_disable(!prop_UseTextureStitching.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_StitchTex, languages.speak("prop_StitchTex"));
-                    materialEditor.ShaderProperty(prop_StitchAxis, languages.speak("prop_StitchAxis"));
+                    materialEditor.TexturePropertySingleLine(new GUIContent(languages.speak("prop_StitchTex")), prop_StitchTex);
+                    int currentAxis = (int)prop_StitchAxis.floatValue;
+                    int newAxis = EditorGUILayout.Popup(languages.speak("prop_StitchAxis"), currentAxis, new string[] { "X Axis", "Y Axis", "Z Axis" });
+                    if (newAxis != currentAxis) prop_StitchAxis.floatValue = newAxis;
                     materialEditor.ShaderProperty(prop_StitchOffset, languages.speak("prop_StitchOffset"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_UseTextureStitching.floatValue.Equals(1), configs);
                 });
-                sub_tab_post_processing.process(() => {
-                    // main - post processing
-                    prop_TogglePostProcessing = FindProperty("_TogglePostProcessing", properties);
-                    prop_RGBColor = FindProperty("_RGBColor", properties);
-                    prop_RGBBlendMode = FindProperty("_RGBBlendMode", properties);
-                    prop_HSVMode = FindProperty("_HSVMode", properties);
-                    prop_HSVHue = FindProperty("_HSVHue", properties);
-                    prop_HSVSaturation = FindProperty("_HSVSaturation", properties);
-                    prop_HSVValue = FindProperty("_HSVValue", properties);
-                    prop_ToggleHueShift = FindProperty("_ToggleHueShift", properties);
-                    prop_HueShift = FindProperty("_HueShift", properties);
-                    prop_ToggleAutoCycle = FindProperty("_ToggleAutoCycle", properties);
-                    prop_AutoCycleSpeed = FindProperty("_AutoCycleSpeed", properties);
-                    prop_ColorGradingLUT = FindProperty("_ColorGradingLUT", properties);
-                    prop_ColorGradingIntensity = FindProperty("_ColorGradingIntensity", properties);
-                    prop_BlackAndWhite = FindProperty("_BlackAndWhite", properties);
-                    prop_Brightness = FindProperty("_Brightness", properties);
-                    materialEditor.ShaderProperty(prop_TogglePostProcessing, languages.speak("prop_TogglePostProcessing"));
-                    Components.start_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_RGBColor, languages.speak("prop_RGBColor"));
-                    materialEditor.ShaderProperty(prop_RGBBlendMode, languages.speak("prop_RGBBlendMode"));
-                    materialEditor.ShaderProperty(prop_HSVMode, languages.speak("prop_HSVMode"));
-                    Components.start_dynamic_disable(prop_HSVMode.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_HSVHue, languages.speak("prop_HSVHue"));
-                    materialEditor.ShaderProperty(prop_HSVSaturation, languages.speak("prop_HSVSaturation"));
-                    materialEditor.ShaderProperty(prop_HSVValue, languages.speak("prop_HSVValue"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_HSVMode.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_ToggleHueShift, languages.speak("prop_ToggleHueShift"));
-                    Components.start_dynamic_disable(!prop_ToggleHueShift.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_HueShift, languages.speak("prop_HueShift"));
-                    materialEditor.ShaderProperty(prop_ToggleAutoCycle, languages.speak("prop_ToggleAutoCycle"));
-                    materialEditor.ShaderProperty(prop_AutoCycleSpeed, languages.speak("prop_AutoCycleSpeed"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_ToggleHueShift.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ColorGradingIntensity, languages.speak("prop_ColorGradingIntensity"));
-                    Components.start_dynamic_disable(prop_ColorGradingIntensity.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_ColorGradingLUT, languages.speak("prop_ColorGradingLUT"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_ColorGradingIntensity.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_BlackAndWhite, languages.speak("prop_BlackAndWhite"));
-                    materialEditor.ShaderProperty(prop_Brightness, languages.speak("prop_Brightness"));
-                    Components.end_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
-                });
-                sub_tab_stickers.process(() => {
-                    // main - decal one
-                    prop_Decal1Enable = FindProperty("_Decal1Enable", properties);
-                    prop_Decal1Tex = FindProperty("_Decal1Tex", properties);
-                    prop_Decal1Tint = FindProperty("_Decal1Tint", properties);
-                    prop_Decal1BlendMode = FindProperty("_Decal1BlendMode", properties);
-                    prop_Decal1Space = FindProperty("_Decal1Space", properties);
-                    prop_Decal1Behavior = FindProperty("_Decal1Behavior", properties);
-                    prop_Decal1Position = FindProperty("_Decal1Position", properties);
-                    prop_Decal1Scale = FindProperty("_Decal1Scale", properties);
-                    prop_Decal1Rotation = FindProperty("_Decal1Rotation", properties);
-                    prop_Decal1TriplanarPosition = FindProperty("_Decal1TriplanarPosition", properties);
-                    prop_Decal1TriplanarScale = FindProperty("_Decal1TriplanarScale", properties);
-                    prop_Decal1TriplanarRotation = FindProperty("_Decal1TriplanarRotation", properties);
-                    prop_Decal1TriplanarSharpness = FindProperty("_Decal1TriplanarSharpness", properties);
-                    prop_Decal1Repeat = FindProperty("_Decal1Repeat", properties);
-                    prop_Decal1Scroll = FindProperty("_Decal1Scroll", properties);
-                    prop_Decal1HueShift = FindProperty("_Decal1HueShift", properties);
-                    prop_Decal1AutoCycleHue = FindProperty("_Decal1AutoCycleHue", properties);
-                    prop_Decal1CycleSpeed = FindProperty("_Decal1CycleSpeed", properties);
-                    prop_ToggleDecals = FindProperty("_ToggleDecals", properties);
-                    prop_DecalStage = FindProperty("_DecalStage", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDecals, languages.speak("prop_ToggleDecals"));
-                    materialEditor.ShaderProperty(prop_DecalStage, languages.speak("prop_DecalStage"));
-                    Components.draw_divider();
-                    Components.start_dynamic_disable(!prop_ToggleDecals.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_Decal1Enable, languages.speak("prop_Decal1Enable"));
-                    Components.start_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_Decal1Tex, languages.speak("prop_Decal1Tex"));
-                    materialEditor.ShaderProperty(prop_Decal1Tint, languages.speak("prop_Decal1Tint"));
-                    materialEditor.ShaderProperty(prop_Decal1BlendMode, languages.speak("prop_Decal1BlendMode"));
-                    materialEditor.ShaderProperty(prop_Decal1Space, languages.speak("prop_Decal1Space"));
-                    EditorGUI.indentLevel++;
-                    if (prop_Decal1Space.floatValue.Equals(0) || prop_Decal1Space.floatValue.Equals(2)) {
-                        // uv or screen decal settings
-                        materialEditor.ShaderProperty(prop_Decal1Behavior, languages.speak("prop_Decal1Behavior"));
-                        Components.Vector2Property(materialEditor, prop_Decal1Position, languages.speak("prop_Decal1Position"));
-                        Components.Vector2Property(materialEditor, prop_Decal1Scale, languages.speak("prop_Decal1Scale"));
-                        materialEditor.ShaderProperty(prop_Decal1Rotation, languages.speak("prop_Decal1Rotation"));
-                    } else {
-                        // triplanar decal settings
-                        Components.Vector3Property(materialEditor, prop_Decal1TriplanarPosition, languages.speak("prop_Decal1TriplanarPosition"));
-                        materialEditor.ShaderProperty(prop_Decal1TriplanarScale, languages.speak("prop_Decal1TriplanarScale"));
-                        materialEditor.ShaderProperty(prop_Decal1TriplanarRotation, languages.speak("prop_Decal1TriplanarRotation"));
-                        materialEditor.ShaderProperty(prop_Decal1TriplanarSharpness, languages.speak("prop_Decal1TriplanarSharpness"));
-                    }
-                    Components.Vector2Property(materialEditor, prop_Decal1Scroll, languages.speak("prop_Decal1Scroll")); // shared on both
-                    EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_Decal1Repeat, languages.speak("prop_Decal1Repeat"));
-                    materialEditor.ShaderProperty(prop_Decal1HueShift, languages.speak("prop_Decal1HueShift"));
-                    Components.start_dynamic_disable(prop_Decal1HueShift.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_Decal1AutoCycleHue, languages.speak("prop_Decal1AutoCycleHue"));
-                    materialEditor.ShaderProperty(prop_Decal1CycleSpeed, languages.speak("prop_Decal1CycleSpeed"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_Decal1HueShift.floatValue.Equals(0), configs);
-                    Components.end_dynamic_disable(!prop_Decal1Enable.floatValue.Equals(1), configs);
-                    Components.draw_divider();
-                    // main - decal two
-                    prop_Decal2Enable = FindProperty("_Decal2Enable", properties);
-                    prop_Decal2Tex = FindProperty("_Decal2Tex", properties);
-                    prop_Decal2Tint = FindProperty("_Decal2Tint", properties);
-                    prop_Decal2BlendMode = FindProperty("_Decal2BlendMode", properties);
-                    prop_Decal2Space = FindProperty("_Decal2Space", properties);
-                    prop_Decal2Behavior = FindProperty("_Decal2Behavior", properties);
-                    prop_Decal2Position = FindProperty("_Decal2Position", properties);
-                    prop_Decal2Scale = FindProperty("_Decal2Scale", properties);
-                    prop_Decal2Rotation = FindProperty("_Decal2Rotation", properties);
-                    prop_Decal2TriplanarPosition = FindProperty("_Decal2TriplanarPosition", properties);
-                    prop_Decal2TriplanarScale = FindProperty("_Decal2TriplanarScale", properties);
-                    prop_Decal2TriplanarRotation = FindProperty("_Decal2TriplanarRotation", properties);
-                    prop_Decal2TriplanarSharpness = FindProperty("_Decal2TriplanarSharpness", properties);
-                    prop_Decal2Repeat = FindProperty("_Decal2Repeat", properties);
-                    prop_Decal2Scroll = FindProperty("_Decal2Scroll", properties);
-                    prop_Decal2HueShift = FindProperty("_Decal2HueShift", properties);
-                    prop_Decal2AutoCycleHue = FindProperty("_Decal2AutoCycleHue", properties);
-                    prop_Decal2CycleSpeed = FindProperty("_Decal2CycleSpeed", properties);
-                    materialEditor.ShaderProperty(prop_Decal2Enable, languages.speak("prop_Decal2Enable"));
-                    Components.start_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_Decal2Tex, languages.speak("prop_Decal2Tex"));
-                    materialEditor.ShaderProperty(prop_Decal2Tint, languages.speak("prop_Decal2Tint"));
-                    materialEditor.ShaderProperty(prop_Decal2BlendMode, languages.speak("prop_Decal2BlendMode"));
-                    materialEditor.ShaderProperty(prop_Decal2Space, languages.speak("prop_Decal2Space"));
-                    EditorGUI.indentLevel++;
-                    if (prop_Decal2Space.floatValue.Equals(0) || prop_Decal2Space.floatValue.Equals(2)) {
-                        // uv or screen decal settings
-                        materialEditor.ShaderProperty(prop_Decal2Behavior, languages.speak("prop_Decal2Behavior"));
-                        Components.Vector2Property(materialEditor, prop_Decal2Position, languages.speak("prop_Decal2Position"));
-                        Components.Vector2Property(materialEditor, prop_Decal2Scale, languages.speak("prop_Decal2Scale"));
-                        materialEditor.ShaderProperty(prop_Decal2Rotation, languages.speak("prop_Decal2Rotation"));
-                    } else {
-                        // triplanar decal settings
-                        Components.Vector3Property(materialEditor, prop_Decal2TriplanarPosition, languages.speak("prop_Decal2TriplanarPosition"));
-                        materialEditor.ShaderProperty(prop_Decal2TriplanarScale, languages.speak("prop_Decal2TriplanarScale"));
-                        materialEditor.ShaderProperty(prop_Decal2TriplanarRotation, languages.speak("prop_Decal2TriplanarRotation"));
-                        materialEditor.ShaderProperty(prop_Decal2TriplanarSharpness, languages.speak("prop_Decal2TriplanarSharpness"));
-                    }
-                    Components.Vector2Property(materialEditor, prop_Decal2Scroll, languages.speak("prop_Decal2Scroll")); // shared on both
-                    EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_Decal2Repeat, languages.speak("prop_Decal2Repeat"));
-                    materialEditor.ShaderProperty(prop_Decal2HueShift, languages.speak("prop_Decal2HueShift"));
-                    Components.start_dynamic_disable(prop_Decal2HueShift.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_Decal2AutoCycleHue, languages.speak("prop_Decal2AutoCycleHue"));
-                    materialEditor.ShaderProperty(prop_Decal2CycleSpeed, languages.speak("prop_Decal2CycleSpeed"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_Decal2HueShift.floatValue.Equals(0), configs);
-                    Components.end_dynamic_disable(!prop_Decal2Enable.floatValue.Equals(1), configs);
-                    Components.end_dynamic_disable(!prop_ToggleDecals.floatValue.Equals(1), configs);
-                });
-                sub_tab_vertex_manipulation.process(() => {
-                    // main - vertex manipulation
-                    prop_VertexManipulationPosition = FindProperty("_VertexManipulationPosition", properties);
-                    prop_VertexManipulationScale = FindProperty("_VertexManipulationScale", properties);
-                    Components.Vector3Property(materialEditor, prop_VertexManipulationPosition, languages.speak("prop_VertexManipulationPosition"));
-                    Components.Vector3Property(materialEditor, prop_VertexManipulationScale, languages.speak("prop_VertexManipulationScale"));
-                });
                 sub_tab_uv_manipulation.process(() => {
-                    // main - uv manipulation
-                    prop_UV_Offset_X = FindProperty("_UV_Offset_X", properties);
-                    prop_UV_Offset_Y = FindProperty("_UV_Offset_Y", properties);
-                    prop_UV_Scale_X = FindProperty("_UV_Scale_X", properties);
-                    prop_UV_Scale_Y = FindProperty("_UV_Scale_Y", properties);
-                    prop_UV_Rotation = FindProperty("_UV_Rotation", properties);
-                    prop_UV_Scroll_X_Speed = FindProperty("_UV_Scroll_X_Speed", properties);
-                    prop_UV_Scroll_Y_Speed = FindProperty("_UV_Scroll_Y_Speed", properties);
-                    materialEditor.ShaderProperty(prop_UV_Offset_X, languages.speak("prop_UV_Offset_X"));
-                    materialEditor.ShaderProperty(prop_UV_Offset_Y, languages.speak("prop_UV_Offset_Y"));
-                    materialEditor.ShaderProperty(prop_UV_Scale_X, languages.speak("prop_UV_Scale_X"));
-                    materialEditor.ShaderProperty(prop_UV_Scale_Y, languages.speak("prop_UV_Scale_Y"));
-                    materialEditor.ShaderProperty(prop_UV_Scroll_X_Speed, languages.speak("prop_UV_Scroll_X_Speed"));
-                    materialEditor.ShaderProperty(prop_UV_Scroll_Y_Speed, languages.speak("prop_UV_Scroll_Y_Speed"));
-                    materialEditor.ShaderProperty(prop_UV_Rotation, languages.speak("prop_UV_Rotation"));
+                    prop_UVOffsetX = FindProperty("_UV_Offset_X", properties);
+                    prop_UVOffsetY = FindProperty("_UV_Offset_Y", properties);
+                    prop_UVScaleX = FindProperty("_UV_Scale_X", properties);
+                    prop_UVScaleY = FindProperty("_UV_Scale_Y", properties);
+                    prop_UVRotation = FindProperty("_UV_Rotation", properties);
+                    prop_UVScrollXSpeed = FindProperty("_UV_Scroll_X_Speed", properties);
+                    prop_UVScrollYSpeed = FindProperty("_UV_Scroll_Y_Speed", properties);
+                    materialEditor.ShaderProperty(prop_UVOffsetX, languages.speak("prop_UV_Offset_X"));
+                    materialEditor.ShaderProperty(prop_UVOffsetY, languages.speak("prop_UV_Offset_Y"));
+                    materialEditor.ShaderProperty(prop_UVScaleX, languages.speak("prop_UV_Scale_X"));
+                    materialEditor.ShaderProperty(prop_UVScaleY, languages.speak("prop_UV_Scale_Y"));
+                    materialEditor.ShaderProperty(prop_UVRotation, languages.speak("prop_UV_Rotation"));
+                    materialEditor.ShaderProperty(prop_UVScrollXSpeed, languages.speak("prop_UV_Scroll_X_Speed"));
+                    materialEditor.ShaderProperty(prop_UVScrollYSpeed, languages.speak("prop_UV_Scroll_Y_Speed"));
                 });
                 sub_tab_uv_effects.process(() => {
-                    // main - uv effects
                     prop_ToggleUVEffects = FindProperty("_ToggleUVEffects", properties);
                     prop_UVTriplanarMapping = FindProperty("_UVTriplanarMapping", properties);
                     prop_UVTriplanarPosition = FindProperty("_UVTriplanarPosition", properties);
@@ -1433,23 +797,24 @@ namespace Luka.Backlace
                     prop_UVFlowmapDistortion = FindProperty("_UVFlowmapDistortion", properties);
                     materialEditor.ShaderProperty(prop_ToggleUVEffects, languages.speak("prop_ToggleUVEffects"));
                     Components.start_dynamic_disable(!prop_ToggleUVEffects.floatValue.Equals(1), configs);
+                    // triplanar
                     materialEditor.ShaderProperty(prop_UVTriplanarMapping, languages.speak("prop_UVTriplanarMapping"));
-                    Components.start_dynamic_disable(prop_UVTriplanarMapping.floatValue.Equals(0), configs);
+                    Components.start_dynamic_disable(!prop_UVTriplanarMapping.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_UVTriplanarPosition, languages.speak("prop_UVTriplanarPosition"));
                     materialEditor.ShaderProperty(prop_UVTriplanarScale, languages.speak("prop_UVTriplanarScale"));
                     materialEditor.ShaderProperty(prop_UVTriplanarRotation, languages.speak("prop_UVTriplanarRotation"));
                     materialEditor.ShaderProperty(prop_UVTriplanarSharpness, languages.speak("prop_UVTriplanarSharpness"));
                     EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_UVTriplanarMapping.floatValue.Equals(0), configs);
-                    Components.draw_divider();
+                    Components.end_dynamic_disable(!prop_UVTriplanarMapping.floatValue.Equals(1), configs);
+                    // screenspace
                     materialEditor.ShaderProperty(prop_UVScreenspaceMapping, languages.speak("prop_UVScreenspaceMapping"));
-                    Components.start_dynamic_disable(prop_UVScreenspaceMapping.floatValue.Equals(0), configs);
+                    Components.start_dynamic_disable(!prop_UVScreenspaceMapping.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel++;
                     materialEditor.ShaderProperty(prop_UVScreenspaceTiling, languages.speak("prop_UVScreenspaceTiling"));
                     EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_UVScreenspaceMapping.floatValue.Equals(0), configs);
-                    Components.draw_divider();
+                    Components.end_dynamic_disable(!prop_UVScreenspaceMapping.floatValue.Equals(1), configs);
+                    // flipbook
                     materialEditor.ShaderProperty(prop_UVFlipbook, languages.speak("prop_UVFlipbook"));
                     Components.start_dynamic_disable(!prop_UVFlipbook.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel++;
@@ -1460,11 +825,11 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_UVFlipbookScrub, languages.speak("prop_UVFlipbookScrub"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_UVFlipbook.floatValue.Equals(1), configs);
-                    Components.draw_divider();
+                    // flowmap
                     materialEditor.ShaderProperty(prop_UVFlowmap, languages.speak("prop_UVFlowmap"));
                     Components.start_dynamic_disable(!prop_UVFlowmap.floatValue.Equals(1), configs);
                     EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_UVFlowmapTex, languages.speak("prop_UVFlowmapTex"));
+                    materialEditor.TexturePropertySingleLine(new GUIContent(languages.speak("prop_UVFlowmapTex")), prop_UVFlowmapTex);
                     materialEditor.ShaderProperty(prop_UVFlowmapStrength, languages.speak("prop_UVFlowmapStrength"));
                     materialEditor.ShaderProperty(prop_UVFlowmapSpeed, languages.speak("prop_UVFlowmapSpeed"));
                     materialEditor.ShaderProperty(prop_UVFlowmapDistortion, languages.speak("prop_UVFlowmapDistortion"));
@@ -1472,8 +837,62 @@ namespace Luka.Backlace
                     Components.end_dynamic_disable(!prop_UVFlowmap.floatValue.Equals(1), configs);
                     Components.end_dynamic_disable(!prop_ToggleUVEffects.floatValue.Equals(1), configs);
                 });
+                sub_tab_vertex_manipulation.process(() => {
+                    prop_VertexManipulationPosition = FindProperty("_VertexManipulationPosition", properties);
+                    prop_VertexManipulationScale = FindProperty("_VertexManipulationScale", properties);
+                    materialEditor.ShaderProperty(prop_VertexManipulationPosition, languages.speak("prop_VertexManipulationPosition"));
+                    materialEditor.ShaderProperty(prop_VertexManipulationScale, languages.speak("prop_VertexManipulationScale"));
+                });
+                sub_tab_post_processing.process(() => {
+                    materialEditor.ShaderProperty(prop_TogglePostProcessing, languages.speak("prop_TogglePostProcessing"));
+                    Components.start_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_RGBColor, languages.speak("prop_RGBColor"));
+                    materialEditor.ShaderProperty(prop_RGBBlendMode, languages.speak("prop_RGBBlendMode"));
+                    materialEditor.ShaderProperty(prop_Brightness, languages.speak("prop_Brightness"));
+                    materialEditor.ShaderProperty(prop_BlackAndWhite, languages.speak("prop_BlackAndWhite"));
+                    materialEditor.ShaderProperty(prop_HSVMode, languages.speak("prop_HSVMode"));
+                    Components.start_dynamic_disable(prop_HSVMode.floatValue == 0, configs);    
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_HSVHue, languages.speak("prop_HSVHue"));
+                    materialEditor.ShaderProperty(prop_HSVSaturation, languages.speak("prop_HSVSaturation"));
+                    materialEditor.ShaderProperty(prop_HSVValue, languages.speak("prop_HSVValue"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_HSVMode.floatValue == 0, configs);
+                    materialEditor.ShaderProperty(prop_ToggleHueShift, languages.speak("prop_ToggleHueShift"));
+                    Components.start_dynamic_disable(prop_ToggleHueShift.floatValue == 0, configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_HueShift, languages.speak("prop_HueShift"));
+                    materialEditor.ShaderProperty(prop_ToggleAutoCycle, languages.speak("prop_ToggleAutoCycle"));
+                    Components.start_dynamic_disable(prop_ToggleAutoCycle.floatValue == 0, configs);
+                    materialEditor.ShaderProperty(prop_AutoCycleSpeed, languages.speak("prop_AutoCycleSpeed"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_ToggleAutoCycle.floatValue == 0, configs);
+                    Components.end_dynamic_disable(prop_ToggleHueShift.floatValue == 0, configs);
+                    materialEditor.ShaderProperty(prop_ColorGradingMode, languages.speak("prop_ColorGradingMode"));
+                    EditorGUI.indentLevel++;
+                    Components.start_dynamic_disable(prop_ColorGradingMode.floatValue == 0, configs);
+                    int gradingMode = (int)prop_ColorGradingMode.floatValue;
+                    if (gradingMode != 0)
+                    {
+                        materialEditor.ShaderProperty(prop_ColorGradingIntensity, languages.speak("prop_ColorGradingIntensity"));
+                        if (gradingMode == 1) materialEditor.TexturePropertySingleLine(new GUIContent(languages.speak("prop_ColorGradingLUT")), prop_ColorGradingLUT);
+                        if (gradingMode == 3)
+                        {
+                            materialEditor.ShaderProperty(prop_GTShadows, languages.speak("prop_GTShadows"));
+                            materialEditor.ShaderProperty(prop_GTHighlights, languages.speak("prop_GTHighlights"));
+                        }
+                        if (gradingMode == 4)
+                        {
+                            materialEditor.ShaderProperty(prop_LCWLift, languages.speak("prop_LCWLift"));
+                            materialEditor.ShaderProperty(prop_LCWGamma, languages.speak("prop_LCWGamma"));
+                            materialEditor.ShaderProperty(prop_LCWGain, languages.speak("prop_LCWGain"));
+                        }
+                    }
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_ColorGradingMode.floatValue == 0, configs);
+                    Components.end_dynamic_disable(!prop_TogglePostProcessing.floatValue.Equals(1), configs);
+                });
                 sub_tab_uv_sets.process(() => {
-                    // main - uv sets
                     prop_MainTex_UV = FindProperty("_MainTex_UV", properties);
                     prop_BumpMap_UV = FindProperty("_BumpMap_UV", properties);
                     prop_MSSO_UV = FindProperty("_MSSO_UV", properties);
@@ -1493,13 +912,25 @@ namespace Luka.Backlace
                     prop_HairFlowMap_UV = FindProperty("_HairFlowMap_UV", properties);
                     prop_ShadowTex_UV = FindProperty("_ShadowTex_UV", properties);
                     prop_Flowmap_UV = FindProperty("_Flowmap_UV", properties);
-                    prop_StitchTex_UV = FindProperty("_StitchTex_UV", properties);
                     prop_MirrorDetectionTexture_UV = FindProperty("_MirrorDetectionTexture_UV", properties);
                     prop_RefractionMask_UV = FindProperty("_RefractionMask_UV", properties);
                     prop_PathingMap_UV = FindProperty("_PathingMap_UV", properties);
                     prop_ShadowMap_UV = FindProperty("_ShadowMap_UV", properties);
                     prop_PathingTexture_UV = FindProperty("_PathingTexture_UV", properties);
                     prop_Dither_UV = FindProperty("_Dither_UV", properties);
+                    prop_StitchTex_UV = FindProperty("_StitchTex_UV", properties);
+                    prop_SDFShadowTexture_UV = FindProperty("_SDFShadowTexture_UV", properties);
+                    prop_StockingsMap_UV = FindProperty("_StockingsMap_UV", properties);
+                    prop_EyeParallaxIrisTex_UV = FindProperty("_EyeParallaxIrisTex_UV", properties);
+                    prop_EyeParallaxEyeMaskTex_UV = FindProperty("_EyeParallaxEyeMaskTex_UV", properties);
+                    prop_HairMaskTex_UV = FindProperty("_HairMaskTex_UV", properties);
+                    prop_ExpressionMap_UV = FindProperty("_ExpressionMap_UV", properties);
+                    prop_FaceMap_UV = FindProperty("_FaceMap_UV", properties);
+                    prop_NPRSpecularMask_UV = FindProperty("_NPRSpecularMask_UV", properties);
+                    prop_PackedMapOne_UV = FindProperty("_PackedMapOne_UV", properties);
+                    prop_PackedMapTwo_UV = FindProperty("_PackedMapTwo_UV", properties);
+                    prop_PackedMapThree_UV = FindProperty("_PackedMapThree_UV", properties);
+                    prop_SkinLUT_UV = FindProperty("_SkinLUT_UV", properties);
                     materialEditor.ShaderProperty(prop_MainTex_UV, languages.speak("prop_MainTex_UV"));
                     materialEditor.ShaderProperty(prop_BumpMap_UV, languages.speak("prop_BumpMap_UV"));
                     materialEditor.ShaderProperty(prop_MSSO_UV, languages.speak("prop_MSSO_UV"));
@@ -1526,11 +957,20 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_PathingTexture_UV, languages.speak("prop_PathingTexture_UV"));
                     materialEditor.ShaderProperty(prop_Dither_UV, languages.speak("prop_Dither_UV"));
                     materialEditor.ShaderProperty(prop_StitchTex_UV, languages.speak("prop_StitchTex_UV"));
+                    materialEditor.ShaderProperty(prop_SDFShadowTexture_UV, languages.speak("prop_SDFShadowTexture_UV"));
+                    materialEditor.ShaderProperty(prop_StockingsMap_UV, languages.speak("prop_StockingsMap_UV"));
+                    materialEditor.ShaderProperty(prop_EyeParallaxIrisTex_UV, languages.speak("prop_EyeParallaxIrisTex_UV"));
+                    materialEditor.ShaderProperty(prop_EyeParallaxEyeMaskTex_UV, languages.speak("prop_EyeParallaxEyeMaskTex_UV"));
+                    materialEditor.ShaderProperty(prop_HairMaskTex_UV, languages.speak("prop_HairMaskTex_UV"));
+                    materialEditor.ShaderProperty(prop_ExpressionMap_UV, languages.speak("prop_ExpressionMap_UV"));
+                    materialEditor.ShaderProperty(prop_FaceMap_UV, languages.speak("prop_FaceMap_UV"));
+                    materialEditor.ShaderProperty(prop_NPRSpecularMask_UV, languages.speak("prop_NPRSpecularMask_UV"));
+                    materialEditor.ShaderProperty(prop_PackedMapOne_UV, languages.speak("prop_PackedMapOne_UV"));
+                    materialEditor.ShaderProperty(prop_PackedMapTwo_UV, languages.speak("prop_PackedMapTwo_UV"));
+                    materialEditor.ShaderProperty(prop_PackedMapThree_UV, languages.speak("prop_PackedMapThree_UV"));
+                    materialEditor.ShaderProperty(prop_SkinLUT_UV, languages.speak("prop_SkinLUT_UV"));
                 });
                 sub_tab_legacy_mode.process(() => {
-                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
-                    wrappedStyle.wordWrap = true;
-                    GUILayout.Label(theme.language_manager.speak("legacy_mode"), wrappedStyle);
                 });
                 Components.end_foldout();
             });
@@ -1538,488 +978,87 @@ namespace Luka.Backlace
             tab_lighting.process(() => {
                 Components.start_foldout();
                 sub_tab_lighting_model.process(() => {
-                    // lighting - lighting model
-                    prop_LightingColorMode = FindProperty("_LightingColorMode", properties);
-                    prop_LightingDirectionMode = FindProperty("_LightingDirectionMode", properties);
-                    prop_ForcedLightDirection = FindProperty("_ForcedLightDirection", properties);
-                    prop_ViewDirectionOffsetX = FindProperty("_ViewDirectionOffsetX", properties);
-                    prop_ViewDirectionOffsetY = FindProperty("_ViewDirectionOffsetY", properties);
-                    prop_DirectIntensity = FindProperty("_DirectIntensity", properties);
-                    prop_IndirectIntensity = FindProperty("_IndirectIntensity", properties);
-                    prop_VertexIntensity = FindProperty("_VertexIntensity", properties);
-                    prop_AdditiveIntensity = FindProperty("_AdditiveIntensity", properties);
-                    prop_BakedDirectIntensity = FindProperty("_BakedDirectIntensity", properties);
-                    prop_BakedIndirectIntensity = FindProperty("_BakedIndirectIntensity", properties);
-                    materialEditor.ShaderProperty(prop_LightingColorMode, languages.speak("prop_LightingColorMode"));
-                    materialEditor.ShaderProperty(prop_LightingDirectionMode, languages.speak("prop_LightingDirectionMode"));
-                    switch ((int)prop_LightingDirectionMode.floatValue)
-                    {
-                        case 1: // forced light direction
-                            materialEditor.ShaderProperty(prop_ForcedLightDirection, languages.speak("prop_ForcedLightDirection"));
-                            break;
-                        case 2: // view direction
-                            materialEditor.ShaderProperty(prop_ViewDirectionOffsetX, languages.speak("prop_ViewDirectionOffsetX"));
-                            materialEditor.ShaderProperty(prop_ViewDirectionOffsetY, languages.speak("prop_ViewDirectionOffsetY"));
-                            break;
-                    }
-                    materialEditor.ShaderProperty(prop_DirectIntensity, languages.speak("prop_DirectIntensity"));
-                    materialEditor.ShaderProperty(prop_IndirectIntensity, languages.speak("prop_IndirectIntensity"));
-                    materialEditor.ShaderProperty(prop_VertexIntensity, languages.speak("prop_VertexIntensity"));
-                    materialEditor.ShaderProperty(prop_AdditiveIntensity, languages.speak("prop_AdditiveIntensity"));
-                    materialEditor.ShaderProperty(prop_BakedDirectIntensity, languages.speak("prop_BakedDirectIntensity"));
-                    materialEditor.ShaderProperty(prop_BakedIndirectIntensity, languages.speak("prop_BakedIndirectIntensity"));
-                    // todo: move these to another are?
-                    prop_IndirectFallbackMode = FindProperty("_IndirectFallbackMode", properties);
-                    prop_IndirectOverride = FindProperty("_IndirectOverride", properties);
-                    prop_FallbackCubemap = FindProperty("_FallbackCubemap", properties);
-                    materialEditor.ShaderProperty(prop_IndirectOverride, languages.speak("prop_IndirectOverride"));
-                    materialEditor.ShaderProperty(prop_IndirectFallbackMode, languages.speak("prop_IndirectFallbackMode"));
-                    materialEditor.ShaderProperty(prop_FallbackCubemap, languages.speak("prop_FallbackCubemap"));
-                });
-                sub_tab_light_limiting.process(() => {
-                    // lighting - light limiting
-                    prop_EnableBaseLightLimit = FindProperty("_EnableBaseLightLimit", properties);
-                    prop_BaseLightMin = FindProperty("_BaseLightMin", properties);
-                    prop_BaseLightMax = FindProperty("_BaseLightMax", properties);
-                    prop_EnableAddLightLimit = FindProperty("_EnableAddLightLimit", properties);
-                    prop_AddLightMin = FindProperty("_AddLightMin", properties);
-                    prop_AddLightMax = FindProperty("_AddLightMax", properties);
-                    prop_GreyscaleLighting = FindProperty("_GreyscaleLighting", properties);
-                    prop_ForceLightColor = FindProperty("_ForceLightColor", properties);
-                    prop_ForcedLightColor = FindProperty("_ForcedLightColor", properties);
-                    materialEditor.ShaderProperty(prop_EnableBaseLightLimit, languages.speak("prop_EnableBaseLightLimit"));
-                    Components.start_dynamic_disable(!prop_EnableBaseLightLimit.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BaseLightMin, languages.speak("prop_BaseLightMin"));
-                    materialEditor.ShaderProperty(prop_BaseLightMax, languages.speak("prop_BaseLightMax"));
-                    Components.end_dynamic_disable(!prop_EnableBaseLightLimit.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_EnableAddLightLimit, languages.speak("prop_EnableAddLightLimit"));
-                    Components.start_dynamic_disable(!prop_EnableAddLightLimit.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_AddLightMin, languages.speak("prop_AddLightMin"));
-                    materialEditor.ShaderProperty(prop_AddLightMax, languages.speak("prop_AddLightMax"));
-                    Components.end_dynamic_disable(!prop_EnableAddLightLimit.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_GreyscaleLighting, languages.speak("prop_GreyscaleLighting"));
-                    materialEditor.ShaderProperty(prop_ForceLightColor, languages.speak("prop_ForceLightColor"));
-                    Components.start_dynamic_disable(prop_ForceLightColor.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_ForcedLightColor, languages.speak("prop_ForcedLightColor"));
-                    Components.end_dynamic_disable(prop_ForceLightColor.floatValue.Equals(0), configs);
                 });
                 sub_tab_emission.process(() => {
-                    // lighting - emission
-                    prop_ToggleEmission = FindProperty("_ToggleEmission", properties);
-                    prop_EmissionColor = FindProperty("_EmissionColor", properties);
-                    prop_EmissionMap = FindProperty("_EmissionMap", properties);
-                    prop_UseAlbedoAsEmission = FindProperty("_UseAlbedoAsEmission", properties);
-                    prop_EmissionStrength = FindProperty("_EmissionStrength", properties);
-                    materialEditor.ShaderProperty(prop_ToggleEmission, languages.speak("prop_ToggleEmission"));
-                    Components.start_dynamic_disable(!prop_ToggleEmission.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_EmissionMap, languages.speak("prop_EmissionMap"));
-                    materialEditor.ShaderProperty(prop_EmissionColor, languages.speak("prop_EmissionColor"));
-                    materialEditor.ShaderProperty(prop_UseAlbedoAsEmission, languages.speak("prop_UseAlbedoAsEmission"));
-                    materialEditor.ShaderProperty(prop_EmissionStrength, languages.speak("prop_EmissionStrength"));
-                    Components.end_dynamic_disable(!prop_ToggleEmission.floatValue.Equals(1), configs);
+                });
+                sub_tab_light_limiting.process(() => {
                 });
                 Components.end_foldout();
             });
             // shading tab
             tab_shading.process(() => {
+            });
+            // anime tab
+            tab_anime.process(() => {
                 Components.start_foldout();
-                sub_tab_anime.process(() => {
-                    // lighting - diffuse
-                    prop_AnimeMode = FindProperty("_AnimeMode", properties);
-                    prop_Ramp = FindProperty("_Ramp", properties);
-                    prop_RampColor = FindProperty("_RampColor", properties);
-                    prop_RampOffset = FindProperty("_RampOffset", properties);
-                    prop_ShadowIntensity = FindProperty("_ShadowIntensity", properties);
-                    prop_OcclusionOffsetIntensity = FindProperty("_OcclusionOffsetIntensity", properties);
-                    prop_RampMin = FindProperty("_RampMin", properties);
-                    prop_AnimeShadowColor = FindProperty("_AnimeShadowColor", properties);
-                    prop_AnimeShadowThreshold = FindProperty("_AnimeShadowThreshold", properties);
-                    prop_AnimeHalftoneColor = FindProperty("_AnimeHalftoneColor", properties);
-                    prop_AnimeOcclusionToShadow = FindProperty("_AnimeOcclusionToShadow", properties);
-                    prop_AnimeHalftoneThreshold = FindProperty("_AnimeHalftoneThreshold", properties);
-                    prop_AnimeShadowSoftness = FindProperty("_AnimeShadowSoftness", properties);
-                    prop_RampIndex = FindProperty("_RampIndex", properties);
-                    prop_RampTotal = FindProperty("_RampTotal", properties);
-                    prop_Hifi1Threshold = FindProperty("_Hifi1Threshold", properties);
-                    prop_Hifi1Feather = FindProperty("_Hifi1Feather", properties);
-                    prop_Hifi1Color = FindProperty("_Hifi1Color", properties);
-                    prop_Hifi2Threshold = FindProperty("_Hifi2Threshold", properties);
-                    prop_Hifi2Feather = FindProperty("_Hifi2Feather", properties);
-                    prop_Hifi2Color = FindProperty("_Hifi2Color", properties);
-                    prop_HifiBorderColor = FindProperty("_HifiBorderColor", properties);
-                    prop_HifiBorderWidth = FindProperty("_HifiBorderWidth", properties);
-                    prop_SkinLUT = FindProperty("_SkinLUT", properties);
-                    prop_SkinShadowColor = FindProperty("_SkinShadowColor", properties);
-                    prop_SkinScattering = FindProperty("_SkinScattering", properties);
-                    prop_WrapFactor = FindProperty("_WrapFactor", properties);
-                    prop_WrapNormalization = FindProperty("_WrapNormalization", properties);
-                    prop_WrapColorHigh = FindProperty("_WrapColorHigh", properties);
-                    prop_WrapColorLow = FindProperty("_WrapColorLow", properties);
-                    prop_RampNormalIntensity = FindProperty("_RampNormalIntensity", properties);
-                    materialEditor.ShaderProperty(prop_AnimeMode, languages.speak("prop_AnimeMode"));
-                    int animeMode = (int)prop_AnimeMode.floatValue;
-                    Components.start_dynamic_disable(animeMode == 0, configs);
-                    switch (animeMode)
-                    {
-                        case 2: // Halftone
-                            materialEditor.ShaderProperty(prop_AnimeShadowColor, languages.speak("prop_AnimeShadowColor"));
-                            materialEditor.ShaderProperty(prop_AnimeShadowThreshold, languages.speak("prop_AnimeShadowThreshold"));
-                            materialEditor.ShaderProperty(prop_AnimeHalftoneColor, languages.speak("prop_AnimeHalftoneColor"));
-                            materialEditor.ShaderProperty(prop_AnimeHalftoneThreshold, languages.speak("prop_AnimeHalftoneThreshold"));
-                            materialEditor.ShaderProperty(prop_AnimeShadowSoftness, languages.speak("prop_AnimeShadowSoftness"));
-                            materialEditor.ShaderProperty(prop_AnimeOcclusionToShadow, languages.speak("prop_AnimeOcclusionToShadow"));
-                            break;
-                        case 3: // Hifi
-                            materialEditor.ShaderProperty(prop_Hifi1Threshold, languages.speak("prop_Hifi1Threshold"));
-                            materialEditor.ShaderProperty(prop_Hifi1Feather, languages.speak("prop_Hifi1Feather"));
-                            materialEditor.ShaderProperty(prop_Hifi1Color, languages.speak("prop_Hifi1Color"));
-                            materialEditor.ShaderProperty(prop_Hifi2Threshold, languages.speak("prop_Hifi2Threshold"));
-                            materialEditor.ShaderProperty(prop_Hifi2Feather, languages.speak("prop_Hifi2Feather"));
-                            materialEditor.ShaderProperty(prop_Hifi2Color, languages.speak("prop_Hifi2Color"));
-                            materialEditor.ShaderProperty(prop_HifiBorderColor, languages.speak("prop_HifiBorderColor"));
-                            materialEditor.ShaderProperty(prop_HifiBorderWidth, languages.speak("prop_HifiBorderWidth"));
-                            break;
-                        case 4: // Skin
-                            materialEditor.ShaderProperty(prop_SkinLUT, languages.speak("prop_SkinLUT"));
-                            materialEditor.ShaderProperty(prop_SkinShadowColor, languages.speak("prop_SkinShadowColor"));
-                            materialEditor.ShaderProperty(prop_SkinScattering, languages.speak("prop_SkinScattering"));
-                            break;
-                        case 5: // Wrapped
-                            materialEditor.ShaderProperty(prop_WrapFactor, languages.speak("prop_WrapFactor"));
-                            materialEditor.ShaderProperty(prop_WrapNormalization, languages.speak("prop_WrapNormalization"));
-                            materialEditor.ShaderProperty(prop_WrapColorHigh, languages.speak("prop_WrapColorHigh"));
-                            materialEditor.ShaderProperty(prop_WrapColorLow, languages.speak("prop_WrapColorLow"));
-                            break;
-                        default: // (0, 1) Ramp
-                            materialEditor.ShaderProperty(prop_Ramp, languages.speak("prop_Ramp"));
-                            materialEditor.ShaderProperty(prop_RampColor, languages.speak("prop_RampColor"));
-                            materialEditor.ShaderProperty(prop_RampOffset, languages.speak("prop_RampOffset"));
-                            materialEditor.ShaderProperty(prop_ShadowIntensity, languages.speak("prop_ShadowIntensity"));
-                            materialEditor.ShaderProperty(prop_RampIndex, languages.speak("prop_RampIndex"));
-                            materialEditor.ShaderProperty(prop_RampTotal, languages.speak("prop_RampTotal"));
-                            materialEditor.ShaderProperty(prop_OcclusionOffsetIntensity, languages.speak("prop_OcclusionOffsetIntensity"));
-                            materialEditor.ShaderProperty(prop_RampMin, languages.speak("prop_RampMin"));
-                            materialEditor.ShaderProperty(prop_RampNormalIntensity, languages.speak("prop_RampNormalIntensity"));
-                            break;
-                    }
-                    Components.end_dynamic_disable(animeMode == 0, configs);
-                });
                 sub_tab_ambient_gradient.process(() => {
-                    // shading - ambient gradient
-                    prop_ToggleAmbientGradient = FindProperty("_ToggleAmbientGradient", properties);
-                    prop_AmbientUp = FindProperty("_AmbientUp", properties);
-                    prop_AmbientSkyThreshold = FindProperty("_AmbientSkyThreshold", properties);
-                    prop_AmbientDown = FindProperty("_AmbientDown", properties);
-                    prop_AmbientGroundThreshold = FindProperty("_AmbientGroundThreshold", properties);
-                    prop_AmbientIntensity = FindProperty("_AmbientIntensity", properties);
-                    materialEditor.ShaderProperty(prop_ToggleAmbientGradient, languages.speak("prop_ToggleAmbientGradient"));
-                    Components.start_dynamic_disable(!prop_ToggleAmbientGradient.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_AmbientUp, languages.speak("prop_AmbientUp"));
-                    materialEditor.ShaderProperty(prop_AmbientSkyThreshold, languages.speak("prop_AmbientSkyThreshold"));
-                    materialEditor.ShaderProperty(prop_AmbientDown, languages.speak("prop_AmbientDown"));
-                    materialEditor.ShaderProperty(prop_AmbientGroundThreshold, languages.speak("prop_AmbientGroundThreshold"));
-                    materialEditor.ShaderProperty(prop_AmbientIntensity, languages.speak("prop_AmbientIntensity"));
-                    Components.end_dynamic_disable(!prop_ToggleAmbientGradient.floatValue.Equals(1), configs);
-                });
-                sub_tab_light_tinting.process(() => {
-                    // shading - light tinting
-                    prop_TintMaskSource = FindProperty("_TintMaskSource", properties);
-                    prop_LitTint = FindProperty("_LitTint", properties);
-                    prop_LitThreshold = FindProperty("_LitThreshold", properties);
-                    prop_ShadowTint = FindProperty("_ShadowTint", properties);
-                    prop_ShadowThreshold = FindProperty("_ShadowThreshold", properties);
-                    materialEditor.ShaderProperty(prop_TintMaskSource, languages.speak("prop_TintMaskSource"));
-                    Components.start_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_LitTint, languages.speak("prop_LitTint"));
-                    materialEditor.ShaderProperty(prop_LitThreshold, languages.speak("prop_LitThreshold"));
-                    materialEditor.ShaderProperty(prop_ShadowTint, languages.speak("prop_ShadowTint"));
-                    materialEditor.ShaderProperty(prop_ShadowThreshold, languages.speak("prop_ShadowThreshold"));
-                    Components.end_dynamic_disable(prop_TintMaskSource.floatValue.Equals(0), configs);
                 });
                 sub_tab_sdf_shadow.process(() => {
-                    // shading - sdf shadow
-                    prop_ToggleSDFShadow = FindProperty("_ToggleSDFShadow", properties);
-                    prop_SDFShadowTexture = FindProperty("_SDFShadowTexture", properties);
-                    prop_SDFShadowThreshold = FindProperty("_SDFShadowThreshold", properties);
-                    prop_SDFShadowSoftness = FindProperty("_SDFShadowSoftness", properties);
-                    materialEditor.ShaderProperty(prop_ToggleSDFShadow, languages.speak("prop_ToggleSDFShadow"));
-                    Components.start_dynamic_disable(!prop_ToggleSDFShadow.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_SDFShadowTexture, languages.speak("prop_SDFShadowTexture"));
-                    materialEditor.ShaderProperty(prop_SDFShadowThreshold, languages.speak("prop_SDFShadowThreshold"));
-                    materialEditor.ShaderProperty(prop_SDFShadowSoftness, languages.speak("prop_SDFShadowSoftness"));
-                    Components.end_dynamic_disable(!prop_ToggleSDFShadow.floatValue.Equals(1), configs);
+                });
+                sub_tab_stocking.process(() => {
+                });
+                sub_tab_eye_parallax.process(() => {
+                });
+                sub_tab_translucent_hair.process(() => {
+                });
+                sub_tab_hair_masking.process(() => {
+                });
+                sub_tab_expression_map.process(() => {
+                });
+                sub_tab_face_map.process(() => {
+                });
+                sub_tab_gradient.process(() => {
+                });
+                sub_tab_toon_highlights.process(() => {
+                });
+                sub_tab_angel_rings.process(() => {
                 });
                 Components.end_foldout();
             });
             // specular tab
             tab_specular.process(() => {
                 Components.start_foldout();
-                prop_ToggleVertexSpecular = FindProperty("_ToggleVertexSpecular", properties);
-                prop_SpecularMode = FindProperty("_SpecularMode", properties);
-                prop_SpecularEnergyMode = FindProperty("_SpecularEnergyMode", properties);
-                prop_SpecularEnergy = FindProperty("_SpecularEnergy", properties);
-                prop_SpecularEnergyMin = FindProperty("_SpecularEnergyMin", properties);
-                prop_SpecularEnergyMax = FindProperty("_SpecularEnergyMax", properties);
-                materialEditor.ShaderProperty(prop_SpecularMode, languages.speak("prop_SpecularMode"));
-                int specularMode = (int)prop_SpecularMode.floatValue;
-                Components.start_dynamic_disable(specularMode == 0, configs);
-                materialEditor.ShaderProperty(prop_SpecularEnergyMode, languages.speak("prop_SpecularEnergyMode"));
-                if ((int)prop_SpecularEnergyMode.floatValue == 3) // manual
-                {
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_SpecularEnergy, languages.speak("prop_SpecularEnergy"));
-                    EditorGUI.indentLevel--;
-                }
-                EditorGUI.indentLevel++;
-                Components.start_dynamic_disable(prop_SpecularEnergyMode.floatValue.Equals(0), configs);
-                materialEditor.ShaderProperty(prop_SpecularEnergyMin, languages.speak("prop_SpecularEnergyMin"));
-                materialEditor.ShaderProperty(prop_SpecularEnergyMax, languages.speak("prop_SpecularEnergyMax"));
-                Components.end_dynamic_disable(prop_SpecularEnergyMode.floatValue.Equals(0), configs);
-                EditorGUI.indentLevel--;
-                materialEditor.ShaderProperty(prop_ToggleVertexSpecular, languages.speak("prop_ToggleVertexSpecular"));
                 sub_tab_pbr_specular.process(() => {
-                    // specular - pbr specualr
-                    prop_MSSO = FindProperty("_MSSO", properties);
-                    prop_Metallic = FindProperty("_Metallic", properties);
-                    prop_Glossiness = FindProperty("_Glossiness", properties);
-                    prop_Occlusion = FindProperty("_Occlusion", properties);
-                    prop_Specular = FindProperty("_Specular", properties);
-                    prop_SpecularIntensity = FindProperty("_SpecularIntensity", properties);
-                    prop_SpecularTintTexture = FindProperty("_SpecularTintTexture", properties);
-                    prop_SpecularTint = FindProperty("_SpecularTint", properties);
-                    prop_ReplaceSpecular = FindProperty("_ReplaceSpecular", properties);
-                    materialEditor.ShaderProperty(prop_MSSO, languages.speak("prop_MSSO"));
-                    materialEditor.ShaderProperty(prop_Metallic, languages.speak("prop_Metallic"));
-                    materialEditor.ShaderProperty(prop_Glossiness, languages.speak("prop_Glossiness"));
-                    materialEditor.ShaderProperty(prop_Occlusion, languages.speak("prop_Occlusion"));
-                    materialEditor.ShaderProperty(prop_Specular, languages.speak("prop_Specular"));
-                    materialEditor.ShaderProperty(prop_SpecularIntensity, languages.speak("prop_SpecularIntensity"));
-                    materialEditor.ShaderProperty(prop_SpecularTintTexture, languages.speak("prop_SpecularTintTexture"));
-                    materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
-                    materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));
                 });
                 sub_tab_stylised_specular.process(() => {
-                    // specular - stylised specular
-                    prop_HighlightRamp = FindProperty("_HighlightRamp", properties);
-                    prop_HighlightRampColor = FindProperty("_HighlightRampColor", properties);
-                    prop_HighlightIntensity = FindProperty("_HighlightIntensity", properties);
-                    prop_HighlightRampOffset = FindProperty("_HighlightRampOffset", properties);
-                    prop_HighlightHardness = FindProperty("_HighlightHardness", properties);
-                    prop_HairFlowMap = FindProperty("_HairFlowMap", properties);
-                    prop_PrimarySpecularShift = FindProperty("_PrimarySpecularShift", properties);
-                    prop_SecondarySpecularShift = FindProperty("_SecondarySpecularShift", properties);
-                    prop_SecondarySpecularColor = FindProperty("_SecondarySpecularColor", properties);
-                    prop_SpecularExponent = FindProperty("_SpecularExponent", properties);
-                    prop_SheenColor = FindProperty("_SheenColor", properties);
-                    prop_SheenIntensity = FindProperty("_SheenIntensity", properties);
-                    prop_SheenRoughness = FindProperty("_SheenRoughness", properties);
-                    prop_TangentMap = FindProperty("_TangentMap", properties);
-                    prop_Anisotropy = FindProperty("_Anisotropy", properties);
-                    prop_SpecularTint = FindProperty("_SpecularTint", properties); // hair uses it, so display twice
-                    prop_SpecularJitter = FindProperty("_SpecularJitter", properties);
-                    // show the right properties for this specular..
-                    switch (specularMode)
-                    {
-                        case 2: // anisotropic
-                            materialEditor.ShaderProperty(prop_TangentMap, languages.speak("prop_TangentMap"));
-                            materialEditor.ShaderProperty(prop_Anisotropy, languages.speak("prop_Anisotropy"));
-                            break;
-                        case 3: // toon
-                            materialEditor.ShaderProperty(prop_HighlightRamp, languages.speak("prop_HighlightRamp"));
-                            materialEditor.ShaderProperty(prop_HighlightRampColor, languages.speak("prop_HighlightRampColor"));
-                            materialEditor.ShaderProperty(prop_HighlightIntensity, languages.speak("prop_HighlightIntensity"));
-                            materialEditor.ShaderProperty(prop_HighlightRampOffset, languages.speak("prop_HighlightRampOffset"));
-                            materialEditor.ShaderProperty(prop_HighlightHardness, languages.speak("prop_HighlightHardness"));
-                            break;
-                        case 4: // hair
-                            materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint")); // hair uses this as primary color
-                            materialEditor.ShaderProperty(prop_HairFlowMap, languages.speak("prop_HairFlowMap"));
-                            materialEditor.ShaderProperty(prop_PrimarySpecularShift, languages.speak("prop_PrimarySpecularShift"));
-                            materialEditor.ShaderProperty(prop_SecondarySpecularShift, languages.speak("prop_SecondarySpecularShift"));
-                            materialEditor.ShaderProperty(prop_SecondarySpecularColor, languages.speak("prop_SecondarySpecularColor"));
-                            materialEditor.ShaderProperty(prop_SpecularExponent, languages.speak("prop_SpecularExponent"));
-                            materialEditor.ShaderProperty(prop_SpecularJitter, languages.speak("prop_SpecularJitter"));
-                            break;
-                        case 5: // cloth
-                            materialEditor.ShaderProperty(prop_SheenColor, languages.speak("prop_SheenColor"));
-                            materialEditor.ShaderProperty(prop_SheenIntensity, languages.speak("prop_SheenIntensity"));
-                            materialEditor.ShaderProperty(prop_SheenRoughness, languages.speak("prop_SheenRoughness"));
-                            break;
-                        default: // none, just a label
-                            GUIStyle boldWrap = new GUIStyle(EditorStyles.boldLabel);
-                            boldWrap.wordWrap = true;
-                            GUILayout.Label(theme.language_manager.speak("specular_standard_stylised_info"), boldWrap);
-                            break;
-                    }
                 });
-                Components.end_dynamic_disable(specularMode == 0, configs);
+                sub_tab_emission.process(() => {
+                });
+                sub_tab_light_limiting.process(() => {
+                });
                 Components.end_foldout();
             });
             // stylise tab
             tab_stylise.process(() => {
                 Components.start_foldout();
                 sub_tab_rim_lighting.process(() => {
-                    // stylise - rim lighting
-                    prop_ToggleRimlight = FindProperty("_ToggleRimlight", properties);
-                    prop_RimColor = FindProperty("_RimColor", properties);
-                    prop_RimWidth = FindProperty("_RimWidth", properties);
-                    prop_RimIntensity = FindProperty("_RimIntensity", properties);
-                    prop_RimLightBased = FindProperty("_RimLightBased", properties);
-                    materialEditor.ShaderProperty(prop_ToggleRimlight, languages.speak("prop_ToggleRimlight"));
-                    Components.start_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_RimColor, languages.speak("prop_RimColor"));
-                    materialEditor.ShaderProperty(prop_RimLightBased, languages.speak("prop_RimLightBased"));
-                    materialEditor.ShaderProperty(prop_RimIntensity, languages.speak("prop_RimIntensity"));
-                    materialEditor.ShaderProperty(prop_RimWidth, languages.speak("prop_RimWidth"));
-                    Components.end_dynamic_disable(!prop_ToggleRimlight.floatValue.Equals(1), configs);
-                });
-                sub_tab_depth_rim.process(() => {
-                    // stylise - depth rim
-                    prop_ToggleDepthRim = FindProperty("_ToggleDepthRim", properties);
-                    prop_DepthRimColor = FindProperty("_DepthRimColor", properties);
-                    prop_DepthRimWidth = FindProperty("_DepthRimWidth", properties);
-                    prop_DepthRimThreshold = FindProperty("_DepthRimThreshold", properties);
-                    prop_DepthRimSharpness = FindProperty("_DepthRimSharpness", properties);
-                    prop_DepthRimBlendMode = FindProperty("_DepthRimBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDepthRim, languages.speak("prop_ToggleDepthRim"));
-                    Components.start_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DepthRimColor, languages.speak("prop_DepthRimColor"));
-                    materialEditor.ShaderProperty(prop_DepthRimBlendMode, languages.speak("prop_DepthRimBlendMode"));
-                    materialEditor.ShaderProperty(prop_DepthRimWidth, languages.speak("prop_DepthRimWidth"));
-                    materialEditor.ShaderProperty(prop_DepthRimThreshold, languages.speak("prop_DepthRimThreshold"));
-                    materialEditor.ShaderProperty(prop_DepthRimSharpness, languages.speak("prop_DepthRimSharpness"));
-                    Components.end_dynamic_disable(!prop_ToggleDepthRim.floatValue.Equals(1), configs);
-                });
-                sub_tab_matcap.process(() => {
-                    // stylise - matcap
-                    prop_ToggleMatcap = FindProperty("_ToggleMatcap", properties);
-                    prop_MatcapTex = FindProperty("_MatcapTex", properties);
-                    prop_MatcapTint = FindProperty("_MatcapTint", properties);
-                    prop_MatcapIntensity = FindProperty("_MatcapIntensity", properties);
-                    prop_MatcapBlendMode = FindProperty("_MatcapBlendMode", properties);
-                    prop_MatcapMask = FindProperty("_MatcapMask", properties);
-                    prop_MatcapSmoothnessEnabled = FindProperty("_MatcapSmoothnessEnabled", properties);
-                    prop_MatcapSmoothness = FindProperty("_MatcapSmoothness", properties);
-                    materialEditor.ShaderProperty(prop_ToggleMatcap, languages.speak("prop_ToggleMatcap"));
-                    Components.start_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_MatcapTex, languages.speak("prop_MatcapTex"));
-                    materialEditor.ShaderProperty(prop_MatcapMask, languages.speak("prop_MatcapMask"));
-                    materialEditor.ShaderProperty(prop_MatcapTint, languages.speak("prop_MatcapTint"));
-                    materialEditor.ShaderProperty(prop_MatcapBlendMode, languages.speak("prop_MatcapBlendMode"));
-                    materialEditor.ShaderProperty(prop_MatcapIntensity, languages.speak("prop_MatcapIntensity"));
-                    materialEditor.ShaderProperty(prop_MatcapSmoothnessEnabled, languages.speak("prop_MatcapSmoothnessEnabled"));
-                    Components.start_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_MatcapSmoothness, languages.speak("prop_MatcapSmoothness"));
-                    Components.end_dynamic_disable(!prop_MatcapSmoothnessEnabled.floatValue.Equals(1), configs);
-                    Components.end_dynamic_disable(!prop_ToggleMatcap.floatValue.Equals(1), configs);
-                });
-                sub_tab_cubemap.process(() => {
-                    // stylise - cubemap
-                    prop_ToggleCubemap = FindProperty("_ToggleCubemap", properties);
-                    prop_CubemapTex = FindProperty("_CubemapTex", properties);
-                    prop_CubemapTint = FindProperty("_CubemapTint", properties);
-                    prop_CubemapIntensity = FindProperty("_CubemapIntensity", properties);
-                    prop_CubemapBlendMode = FindProperty("_CubemapBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleCubemap, languages.speak("prop_ToggleCubemap"));
-                    Components.start_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_CubemapTex, languages.speak("prop_CubemapTex"));
-                    materialEditor.ShaderProperty(prop_CubemapTint, languages.speak("prop_CubemapTint"));
-                    materialEditor.ShaderProperty(prop_CubemapBlendMode, languages.speak("prop_CubemapBlendMode"));
-                    materialEditor.ShaderProperty(prop_CubemapIntensity, languages.speak("prop_CubemapIntensity"));
-                    Components.end_dynamic_disable(!prop_ToggleCubemap.floatValue.Equals(1), configs);
                 });
                 sub_tab_clear_coat.process(() => {
-                    // stylise - clear coat
-                    prop_ToggleClearcoat = FindProperty("_ToggleClearcoat", properties);
-                    prop_ClearcoatStrength = FindProperty("_ClearcoatStrength", properties);
-                    prop_ClearcoatReflectionStrength = FindProperty("_ClearcoatReflectionStrength", properties);
-                    prop_ClearcoatMap = FindProperty("_ClearcoatMap", properties);
-                    prop_ClearcoatRoughness = FindProperty("_ClearcoatRoughness", properties);
-                    prop_ClearcoatColor = FindProperty("_ClearcoatColor", properties);
-                    materialEditor.ShaderProperty(prop_ToggleClearcoat, languages.speak("prop_ToggleClearcoat"));
-                    Components.start_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ClearcoatMap, languages.speak("prop_ClearcoatMap"));
-                    materialEditor.ShaderProperty(prop_ClearcoatColor, languages.speak("prop_ClearcoatColor"));
-                    materialEditor.ShaderProperty(prop_ClearcoatStrength, languages.speak("prop_ClearcoatStrength"));
-                    materialEditor.ShaderProperty(prop_ClearcoatReflectionStrength, languages.speak("prop_ClearcoatReflectionStrength"));
-                    materialEditor.ShaderProperty(prop_ClearcoatRoughness, languages.speak("prop_ClearcoatRoughness"));
-                    Components.end_dynamic_disable(!prop_ToggleClearcoat.floatValue.Equals(1), configs);
+                });
+                sub_tab_matcap.process(() => {
+                });
+                sub_tab_cubemap.process(() => {
+                });
+                sub_tab_parallax.process(() => {
                 });
                 sub_tab_subsurface.process(() => {
-                    // stylise - subsurface
-                    prop_ToggleSSS = FindProperty("_ToggleSSS", properties);
-                    prop_SSSColor = FindProperty("_SSSColor", properties);
-                    prop_SSSStrength = FindProperty("_SSSStrength", properties);
-                    prop_SSSPower = FindProperty("_SSSPower", properties);
-                    prop_SSSDistortion = FindProperty("_SSSDistortion", properties);
-                    prop_SSSThicknessMap = FindProperty("_SSSThicknessMap", properties);
-                    prop_SSSThickness = FindProperty("_SSSThickness", properties);
-                    materialEditor.ShaderProperty(prop_ToggleSSS, languages.speak("prop_ToggleSSS"));
-                    Components.start_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_SSSColor, languages.speak("prop_SSSColor"));
-                    materialEditor.ShaderProperty(prop_SSSStrength, languages.speak("prop_SSSStrength"));
-                    materialEditor.ShaderProperty(prop_SSSPower, languages.speak("prop_SSSPower"));
-                    materialEditor.ShaderProperty(prop_SSSDistortion, languages.speak("prop_SSSDistortion"));
-                    materialEditor.ShaderProperty(prop_SSSThicknessMap, languages.speak("prop_SSSThicknessMap"));
-                    Components.start_dynamic_disable(prop_SSSThicknessMap.textureValue == null, configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_SSSThickness, languages.speak("prop_SSSThickness"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_SSSThicknessMap.textureValue == null, configs);
-                    Components.end_dynamic_disable(!prop_ToggleSSS.floatValue.Equals(1), configs);
                 });
                 sub_tab_detail_map.process(() => {
-                    // stylise - detail map
-                    prop_ToggleDetail = FindProperty("_ToggleDetail", properties);
-                    prop_DetailAlbedoMap = FindProperty("_DetailAlbedoMap", properties);
-                    prop_DetailNormalMap = FindProperty("_DetailNormalMap", properties);
-                    prop_DetailTiling = FindProperty("_DetailTiling", properties);
-                    prop_DetailNormalStrength = FindProperty("_DetailNormalStrength", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDetail, languages.speak("prop_ToggleDetail"));
-                    Components.start_dynamic_disable(!prop_ToggleDetail.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DetailAlbedoMap, languages.speak("prop_DetailAlbedoMap"));
-                    materialEditor.ShaderProperty(prop_DetailNormalMap, languages.speak("prop_DetailNormalMap"));
-                    materialEditor.ShaderProperty(prop_DetailTiling, languages.speak("prop_DetailTiling"));
-                    materialEditor.ShaderProperty(prop_DetailNormalStrength, languages.speak("prop_DetailNormalStrength"));
-                    Components.end_dynamic_disable(!prop_ToggleDetail.floatValue.Equals(1), configs);
                 });
                 sub_tab_shadow_map.process(() => {
-                    // stylise - shadow map
-                    prop_ToggleShadowMap = FindProperty("_ToggleShadowMap", properties);
-                    prop_ShadowMap = FindProperty("_ShadowMap", properties);
-                    prop_ShadowMapIntensity = FindProperty("_ShadowMapIntensity", properties);
-                    materialEditor.ShaderProperty(prop_ToggleShadowMap, languages.speak("prop_ToggleShadowMap"));
-                    Components.start_dynamic_disable(!prop_ToggleShadowMap.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ShadowMap, languages.speak("prop_ShadowMap"));
-                    materialEditor.ShaderProperty(prop_ShadowMapIntensity, languages.speak("prop_ShadowMapIntensity"));
-                    Components.end_dynamic_disable(!prop_ToggleShadowMap.floatValue.Equals(1), configs);
                 });
-                sub_tab_shadow_textures.process(() => {
-                    // effects - shadow textures
-                    prop_ToggleShadowTexture = FindProperty("_ToggleShadowTexture", properties);
-                    prop_ShadowTextureMappingMode = FindProperty("_ShadowTextureMappingMode", properties);
-                    prop_ShadowTextureIntensity = FindProperty("_ShadowTextureIntensity", properties);
-                    prop_ShadowTex = FindProperty("_ShadowTex", properties);
-                    prop_ShadowPatternColor = FindProperty("_ShadowPatternColor", properties);
-                    prop_ShadowPatternScale = FindProperty("_ShadowPatternScale", properties);
-                    prop_ShadowPatternTriplanarSharpness = FindProperty("_ShadowPatternTriplanarSharpness", properties);
-                    prop_ShadowPatternTransparency = FindProperty("_ShadowPatternTransparency", properties);
-                    prop_ShadowTextureBlendMode = FindProperty("_ShadowTextureBlendMode", properties);
-                    materialEditor.ShaderProperty(prop_ToggleShadowTexture, languages.speak("prop_ToggleShadowTexture"));
-                    Components.start_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ShadowTextureMappingMode, languages.speak("prop_ShadowTextureMappingMode"));
-                    materialEditor.ShaderProperty(prop_ShadowTextureBlendMode, languages.speak("prop_ShadowTextureBlendMode"));
-                    materialEditor.ShaderProperty(prop_ShadowTextureIntensity, languages.speak("prop_ShadowTextureIntensity"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternTransparency, languages.speak("prop_ShadowPatternTransparency"));
-                    materialEditor.ShaderProperty(prop_ShadowTex, languages.speak("prop_ShadowTex"));
-                    materialEditor.ShaderProperty(prop_ShadowPatternColor, languages.speak("prop_ShadowPatternColor"));
-                    if (prop_ShadowTextureMappingMode.floatValue.Equals(2)) {
-                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
-                        materialEditor.ShaderProperty(prop_ShadowPatternTriplanarSharpness, languages.speak("prop_ShadowPatternTriplanarSharpness"));
-                    } else if (prop_ShadowTextureMappingMode.floatValue.Equals(1)) {
-                        materialEditor.ShaderProperty(prop_ShadowPatternScale, languages.speak("prop_ShadowPatternScale"));
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleShadowTexture.floatValue.Equals(1), configs);
+                Components.end_foldout();
+            });
+            // stickers tab
+            tab_stickers.process(() => {
+                Components.start_foldout();
+                sub_tab_decal1_settings.process(() => {
+                });
+                sub_tab_decal1_effects.process(() => {
+                });
+                sub_tab_decal2_settings.process(() => {
+                });
+                sub_tab_decal2_effects.process(() => {
                 });
                 Components.end_foldout();
             });
@@ -2027,591 +1066,34 @@ namespace Luka.Backlace
             tab_effects.process(() => {
                 Components.start_foldout();
                 sub_tab_dissolve.process(() => {
-                    // effects - dissolve
-                    prop_ToggleDissolve = FindProperty("_ToggleDissolve", properties);
-                    prop_DissolveProgress = FindProperty("_DissolveProgress", properties);
-                    prop_DissolveType = FindProperty("_DissolveType", properties);
-                    prop_DissolveEdgeColor = FindProperty("_DissolveEdgeColor", properties);
-                    prop_DissolveEdgeWidth = FindProperty("_DissolveEdgeWidth", properties);
-                    prop_DissolveEdgeMode = FindProperty("_DissolveEdgeMode", properties);
-                    prop_DissolveEdgeSharpness = FindProperty("_DissolveEdgeSharpness", properties);
-                    prop_DissolveNoiseTex = FindProperty("_DissolveNoiseTex", properties);
-                    prop_DissolveNoiseScale = FindProperty("_DissolveNoiseScale", properties);
-                    prop_DissolveDirection = FindProperty("_DissolveDirection", properties);
-                    prop_DissolveDirectionSpace = FindProperty("_DissolveDirectionSpace", properties);
-                    prop_DissolveDirectionBounds = FindProperty("_DissolveDirectionBounds", properties);
-                    prop_DissolveVoxelDensity = FindProperty("_DissolveVoxelDensity", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDissolve, languages.speak("prop_ToggleDissolve"));
-                    Components.start_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DissolveType, languages.speak("prop_DissolveType"));
-                    materialEditor.ShaderProperty(prop_DissolveProgress, languages.speak("prop_DissolveProgress"));
-                    materialEditor.ShaderProperty(prop_DissolveEdgeMode, languages.speak("prop_DissolveEdgeMode"));
-                    EditorGUI.indentLevel++;
-                    Components.start_dynamic_disable(prop_DissolveEdgeMode.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DissolveEdgeColor, languages.speak("prop_DissolveEdgeColor"));
-                    Components.end_dynamic_disable(prop_DissolveEdgeMode.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DissolveEdgeWidth, languages.speak("prop_DissolveEdgeWidth"));
-                    materialEditor.ShaderProperty(prop_DissolveEdgeSharpness, languages.speak("prop_DissolveEdgeSharpness"));
-                    EditorGUI.indentLevel--;
-                    switch ((int)prop_DissolveType.floatValue) {
-                        case 1: // directional
-                            materialEditor.ShaderProperty(prop_DissolveDirection, languages.speak("prop_DissolveDirection"));
-                            materialEditor.ShaderProperty(prop_DissolveDirectionSpace, languages.speak("prop_DissolveDirectionSpace"));
-                            materialEditor.ShaderProperty(prop_DissolveDirectionBounds, languages.speak("prop_DissolveDirectionBounds"));
-                            break;
-                        case 2: // voxel
-                            materialEditor.ShaderProperty(prop_DissolveVoxelDensity, languages.speak("prop_DissolveVoxelDensity"));
-                            break;
-                        default: // noise
-                            materialEditor.ShaderProperty(prop_DissolveNoiseTex, languages.speak("prop_DissolveNoiseTex"));
-                            materialEditor.ShaderProperty(prop_DissolveNoiseScale, languages.speak("prop_DissolveNoiseScale"));
-                            break;
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleDissolve.floatValue.Equals(1), configs);
-                });
-                sub_tab_distance_fading.process(() => {
-                    // effects - distance fading
-                    prop_ToggleDistanceFade = FindProperty("_ToggleDistanceFade", properties);
-                    prop_DistanceFadeReference = FindProperty("_DistanceFadeReference", properties);
-                    prop_ToggleNearFade = FindProperty("_ToggleNearFade", properties);
-                    prop_NearFadeMode = FindProperty("_NearFadeMode", properties);
-                    prop_NearFadeDitherScale = FindProperty("_NearFadeDitherScale", properties);
-                    prop_NearFadeStart = FindProperty("_NearFadeStart", properties);
-                    prop_NearFadeEnd = FindProperty("_NearFadeEnd", properties);
-                    prop_ToggleFarFade = FindProperty("_ToggleFarFade", properties);
-                    prop_FarFadeStart = FindProperty("_FarFadeStart", properties);
-                    prop_FarFadeEnd = FindProperty("_FarFadeEnd", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDistanceFade, languages.speak("prop_ToggleDistanceFade"));
-                    Components.start_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DistanceFadeReference, languages.speak("prop_DistanceFadeReference"));
-                    materialEditor.ShaderProperty(prop_ToggleNearFade, languages.speak("prop_ToggleNearFade"));
-                    Components.start_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_NearFadeMode, languages.speak("prop_NearFadeMode"));
-                    materialEditor.ShaderProperty(prop_NearFadeDitherScale, languages.speak("prop_NearFadeDitherScale"));
-                    materialEditor.ShaderProperty(prop_NearFadeStart, languages.speak("prop_NearFadeStart"));
-                    materialEditor.ShaderProperty(prop_NearFadeEnd, languages.speak("prop_NearFadeEnd"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_ToggleNearFade.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ToggleFarFade, languages.speak("prop_ToggleFarFade"));
-                    Components.start_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_FarFadeStart, languages.speak("prop_FarFadeStart"));
-                    materialEditor.ShaderProperty(prop_FarFadeEnd, languages.speak("prop_FarFadeEnd"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_ToggleFarFade.floatValue.Equals(1), configs);
-                    Components.end_dynamic_disable(!prop_ToggleDistanceFade.floatValue.Equals(1), configs);
-                });
-                sub_tab_vrchat_mirror.process(() => {
-                    // effects - vrchat mirror
-                    prop_ToggleMirrorDetection = FindProperty("_ToggleMirrorDetection", properties);
-                    prop_MirrorDetectionMode = FindProperty("_MirrorDetectionMode", properties);
-                    prop_MirrorDetectionTexture = FindProperty("_MirrorDetectionTexture", properties);
-                    materialEditor.ShaderProperty(prop_ToggleMirrorDetection, languages.speak("prop_ToggleMirrorDetection"));
-                    Components.start_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_MirrorDetectionMode, languages.speak("prop_MirrorDetectionMode"));
-                    materialEditor.ShaderProperty(prop_MirrorDetectionTexture, languages.speak("prop_MirrorDetectionTexture"));
-                    Components.end_dynamic_disable(!prop_ToggleMirrorDetection.floatValue.Equals(1), configs);
                 });
                 sub_tab_pathing.process(() => {
-                    // effects - pathing
-                    prop_TogglePathing = FindProperty("_TogglePathing", properties);
-                    prop_PathingMappingMode = FindProperty("_PathingMappingMode", properties);
-                    prop_PathingMap = FindProperty("_PathingMap", properties);
-                    prop_PathingScale = FindProperty("_PathingScale", properties);
-                    prop_PathingBlendMode = FindProperty("_PathingBlendMode", properties);
-                    prop_PathingColor = FindProperty("_PathingColor", properties);
-                    prop_PathingEmission = FindProperty("_PathingEmission", properties);
-                    prop_PathingType = FindProperty("_PathingType", properties);
-                    prop_PathingSpeed = FindProperty("_PathingSpeed", properties);
-                    prop_PathingWidth = FindProperty("_PathingWidth", properties);
-                    prop_PathingSoftness = FindProperty("_PathingSoftness", properties);
-                    prop_PathingOffset = FindProperty("_PathingOffset", properties);
-                    prop_PathingColorMode = FindProperty("_PathingColorMode", properties);
-                    prop_PathingTexture = FindProperty("_PathingTexture", properties);
-                    prop_PathingColor2 = FindProperty("_PathingColor2", properties);
-                    prop_PathingStart = FindProperty("_PathingStart", properties);
-                    prop_PathingEnd = FindProperty("_PathingEnd", properties);
-                    materialEditor.ShaderProperty(prop_TogglePathing, languages.speak("prop_TogglePathing"));
-                    Components.start_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_PathingMappingMode, languages.speak("prop_PathingMappingMode"));
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PathingMap, languages.speak("prop_PathingMap"));
-                    materialEditor.ShaderProperty(prop_PathingScale, languages.speak("prop_PathingScale"));
-                    EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_PathingColorMode, languages.speak("prop_PathingColorMode"));
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PathingBlendMode, languages.speak("prop_PathingBlendMode"));
-                    materialEditor.ShaderProperty(prop_PathingEmission, languages.speak("prop_PathingEmission"));
-                    switch ((int)prop_PathingColorMode.floatValue) {
-                        case 1: // texture
-                            materialEditor.ShaderProperty(prop_PathingTexture, languages.speak("prop_PathingTexture"));
-                            break;
-                        case 2: // gradient
-                            materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
-                            materialEditor.ShaderProperty(prop_PathingColor2, languages.speak("prop_PathingColor2"));
-                            break;
-                        default: // single color
-                            materialEditor.ShaderProperty(prop_PathingColor, languages.speak("prop_PathingColor"));
-                            break;
-                    }
-                    EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_PathingType, languages.speak("prop_PathingType"));
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PathingSpeed, languages.speak("prop_PathingSpeed"));
-                    materialEditor.ShaderProperty(prop_PathingWidth, languages.speak("prop_PathingWidth"));
-                    materialEditor.ShaderProperty(prop_PathingSoftness, languages.speak("prop_PathingSoftness"));
-                    materialEditor.ShaderProperty(prop_PathingOffset, languages.speak("prop_PathingOffset"));
-                    materialEditor.ShaderProperty(prop_PathingStart, languages.speak("prop_PathingStart"));
-                    materialEditor.ShaderProperty(prop_PathingEnd, languages.speak("prop_PathingEnd"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_TogglePathing.floatValue.Equals(1), configs);
                 });
                 sub_tab_glitter.process(() => {
-                    // effects - glitter
-                    prop_ToggleGlitter = FindProperty("_ToggleGlitter", properties);
-                    prop_GlitterMode = FindProperty("_GlitterMode", properties);
-                    prop_GlitterNoiseTex = FindProperty("_GlitterNoiseTex", properties);
-                    prop_GlitterMask = FindProperty("_GlitterMask", properties);
-                    prop_GlitterTint = FindProperty("_GlitterTint", properties);
-                    prop_GlitterFrequency = FindProperty("_GlitterFrequency", properties);
-                    prop_GlitterThreshold = FindProperty("_GlitterThreshold", properties);
-                    prop_GlitterSize = FindProperty("_GlitterSize", properties);
-                    prop_GlitterFlickerSpeed = FindProperty("_GlitterFlickerSpeed", properties);
-                    prop_GlitterBrightness = FindProperty("_GlitterBrightness", properties);
-                    prop_GlitterContrast = FindProperty("_GlitterContrast", properties);
-                    prop_ToggleGlitterRainbow = FindProperty("_ToggleGlitterRainbow", properties);
-                    prop_GlitterRainbowSpeed = FindProperty("_GlitterRainbowSpeed", properties);
-                    materialEditor.ShaderProperty(prop_ToggleGlitter, languages.speak("prop_ToggleGlitter"));
-                    Components.start_dynamic_disable(!prop_ToggleGlitter.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_GlitterMode, languages.speak("prop_GlitterMode"));
-                    if (prop_GlitterMode.floatValue.Equals(1)) {
-                        EditorGUI.indentLevel++;
-                        materialEditor.ShaderProperty(prop_GlitterNoiseTex, languages.speak("prop_GlitterNoiseTex"));
-                        EditorGUI.indentLevel--;
-                    }
-                    materialEditor.ShaderProperty(prop_GlitterMask, languages.speak("prop_GlitterMask"));
-                    materialEditor.ShaderProperty(prop_GlitterTint, languages.speak("prop_GlitterTint"));
-                    materialEditor.ShaderProperty(prop_GlitterFrequency, languages.speak("prop_GlitterFrequency"));
-                    materialEditor.ShaderProperty(prop_GlitterThreshold, languages.speak("prop_GlitterThreshold"));
-                    materialEditor.ShaderProperty(prop_GlitterSize, languages.speak("prop_GlitterSize"));
-                    materialEditor.ShaderProperty(prop_GlitterFlickerSpeed, languages.speak("prop_GlitterFlickerSpeed"));
-                    materialEditor.ShaderProperty(prop_GlitterBrightness, languages.speak("prop_GlitterBrightness"));
-                    materialEditor.ShaderProperty(prop_GlitterContrast, languages.speak("prop_GlitterContrast"));
-                    materialEditor.ShaderProperty(prop_ToggleGlitterRainbow, languages.speak("prop_ToggleGlitterRainbow"));
-                    Components.start_dynamic_disable(!prop_ToggleGlitterRainbow.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_GlitterRainbowSpeed, languages.speak("prop_GlitterRainbowSpeed"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_ToggleGlitterRainbow.floatValue.Equals(1), configs);
-                    Components.end_dynamic_disable(!prop_ToggleGlitter.floatValue.Equals(1), configs);
+                });
+                sub_tab_distance_fading.process(() => {
                 });
                 sub_tab_iridescence.process(() => {
-                    // effects - iridescence
-                    prop_ToggleIridescence = FindProperty("_ToggleIridescence", properties);
-                    prop_IridescenceMode = FindProperty("_IridescenceMode", properties);
-                    prop_IridescenceMask = FindProperty("_IridescenceMask", properties);
-                    prop_IridescenceTint = FindProperty("_IridescenceTint", properties);
-                    prop_IridescenceIntensity = FindProperty("_IridescenceIntensity", properties);
-                    prop_IridescenceBlendMode = FindProperty("_IridescenceBlendMode", properties);
-                    prop_IridescenceParallax = FindProperty("_IridescenceParallax", properties);
-                    prop_IridescenceRamp = FindProperty("_IridescenceRamp", properties);
-                    prop_IridescencePower = FindProperty("_IridescencePower", properties);
-                    prop_IridescenceFrequency = FindProperty("_IridescenceFrequency", properties);
-                    materialEditor.ShaderProperty(prop_ToggleIridescence, languages.speak("prop_ToggleIridescence"));
-                    Components.start_dynamic_disable(!prop_ToggleIridescence.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_IridescenceMode, languages.speak("prop_IridescenceMode"));
-                    materialEditor.ShaderProperty(prop_IridescenceMask, languages.speak("prop_IridescenceMask"));
-                    materialEditor.ShaderProperty(prop_IridescenceTint, languages.speak("prop_IridescenceTint"));
-                    materialEditor.ShaderProperty(prop_IridescenceIntensity, languages.speak("prop_IridescenceIntensity"));
-                    materialEditor.ShaderProperty(prop_IridescenceBlendMode, languages.speak("prop_IridescenceBlendMode"));
-                    materialEditor.ShaderProperty(prop_IridescenceParallax, languages.speak("prop_IridescenceParallax"));
-                    materialEditor.ShaderProperty(prop_IridescenceRamp, languages.speak("prop_IridescenceRamp"));
-                    materialEditor.ShaderProperty(prop_IridescencePower, languages.speak("prop_IridescencePower"));
-                    materialEditor.ShaderProperty(prop_IridescenceFrequency, languages.speak("prop_IridescenceFrequency"));
-                    Components.end_dynamic_disable(!prop_ToggleIridescence.floatValue.Equals(1), configs);
                 });
-                sub_tab_world_aligned.process(() => {
-                    // effects - world aligned
-                    prop_ToggleWorldEffect = FindProperty("_ToggleWorldEffect", properties);
-                    prop_WorldEffectBlendMode = FindProperty("_WorldEffectBlendMode", properties);
-                    prop_WorldEffectTex = FindProperty("_WorldEffectTex", properties);
-                    prop_WorldEffectMask = FindProperty("_WorldEffectMask", properties);
-                    prop_WorldEffectColor = FindProperty("_WorldEffectColor", properties);
-                    prop_WorldEffectDirection = FindProperty("_WorldEffectDirection", properties);
-                    prop_WorldEffectScale = FindProperty("_WorldEffectScale", properties);
-                    prop_WorldEffectBlendSharpness = FindProperty("_WorldEffectBlendSharpness", properties);
-                    prop_WorldEffectIntensity = FindProperty("_WorldEffectIntensity", properties);
-                    prop_WorldEffectPosition = FindProperty("_WorldEffectPosition", properties);
-                    prop_WorldEffectRotation = FindProperty("_WorldEffectRotation", properties);
-                    materialEditor.ShaderProperty(prop_ToggleWorldEffect, languages.speak("prop_ToggleWorldEffect"));
-                    Components.start_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_WorldEffectBlendMode, languages.speak("prop_WorldEffectBlendMode"));
-                    materialEditor.ShaderProperty(prop_WorldEffectTex, languages.speak("prop_WorldEffectTex"));
-                    materialEditor.ShaderProperty(prop_WorldEffectMask, languages.speak("prop_WorldEffectMask"));
-                    materialEditor.ShaderProperty(prop_WorldEffectColor, languages.speak("prop_WorldEffectColor"));
-                    materialEditor.ShaderProperty(prop_WorldEffectScale, languages.speak("prop_WorldEffectScale"));
-                    Components.Vector3Property(materialEditor, prop_WorldEffectDirection, languages.speak("prop_WorldEffectDirection"));
-                    Components.Vector3Property(materialEditor, prop_WorldEffectPosition, languages.speak("prop_WorldEffectPosition"));
-                    Components.Vector3Property(materialEditor, prop_WorldEffectRotation, languages.speak("prop_WorldEffectRotation"));
-                    materialEditor.ShaderProperty(prop_WorldEffectBlendSharpness, languages.speak("prop_WorldEffectBlendSharpness"));
-                    materialEditor.ShaderProperty(prop_WorldEffectIntensity, languages.speak("prop_WorldEffectIntensity"));
-                    Components.end_dynamic_disable(!prop_ToggleWorldEffect.floatValue.Equals(1), configs);
-                });
-                sub_tab_dither.process(() => {
-                    // effects - dither
-                    prop_ToggleDither = FindProperty("_ToggleDither", properties);
-                    prop_DitherAmount = FindProperty("_DitherAmount", properties);
-                    prop_DitherScale = FindProperty("_DitherScale", properties);
-                    prop_DitherSpace = FindProperty("_DitherSpace", properties);
-                    materialEditor.ShaderProperty(prop_ToggleDither, languages.speak("prop_ToggleDither"));
-                    Components.start_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_DitherSpace, languages.speak("prop_DitherSpace"));
-                    materialEditor.ShaderProperty(prop_DitherAmount, languages.speak("prop_DitherAmount"));
-                    materialEditor.ShaderProperty(prop_DitherScale, languages.speak("prop_DitherScale"));
-                    Components.end_dynamic_disable(!prop_ToggleDither.floatValue.Equals(1), configs);
-                });
-                sub_tab_touch_interactions.process(() => {
-                    // effects - touch interactions
-                    prop_ToggleTouchReactive = FindProperty("_ToggleTouchReactive", properties);
-                    prop_TouchColor = FindProperty("_TouchColor", properties);
-                    prop_TouchRadius = FindProperty("_TouchRadius", properties);
-                    prop_TouchHardness = FindProperty("_TouchHardness", properties);
-                    prop_TouchMode = FindProperty("_TouchMode", properties);
-                    prop_TouchRainbowSpeed = FindProperty("_TouchRainbowSpeed", properties);
-                    prop_TouchRainbowSpread = FindProperty("_TouchRainbowSpread", properties);
-                    materialEditor.ShaderProperty(prop_ToggleTouchReactive, languages.speak("prop_ToggleTouchReactive"));
-                    Components.start_dynamic_disable(!prop_ToggleTouchReactive.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_TouchColor, languages.speak("prop_TouchColor"));
-                    materialEditor.ShaderProperty(prop_TouchRadius, languages.speak("prop_TouchRadius"));
-                    materialEditor.ShaderProperty(prop_TouchHardness, languages.speak("prop_TouchHardness"));
-                    materialEditor.ShaderProperty(prop_TouchMode, languages.speak("prop_TouchMode"));
-                    Components.start_dynamic_disable(!prop_TouchMode.floatValue.Equals(3), configs); // rainbow mode
-                    materialEditor.ShaderProperty(prop_TouchRainbowSpeed, languages.speak("prop_TouchRainbowSpeed"));
-                    materialEditor.ShaderProperty(prop_TouchRainbowSpread, languages.speak("prop_TouchRainbowSpread"));
-                    Components.end_dynamic_disable(!prop_TouchMode.floatValue.Equals(3), configs);
-                    Components.end_dynamic_disable(!prop_ToggleTouchReactive.floatValue.Equals(1), configs);
+                sub_tab_shadow_textures.process(() => {
                 });
                 sub_tab_flatten_model.process(() => {
-                    // effects - flatten model
-                    prop_ToggleFlatModel = FindProperty("_ToggleFlatModel", properties);
-                    prop_FlatModeAutoflip = FindProperty("_FlatModeAutoflip", properties);
-                    prop_FlatModel = FindProperty("_FlatModel", properties);
-                    prop_FlatModelDepthCorrection = FindProperty("_FlatModelDepthCorrection", properties);
-                    prop_FlatModelFacing = FindProperty("_FlatModelFacing", properties);
-                    prop_FlatModelLockAxis = FindProperty("_FlatModelLockAxis", properties);
-                    materialEditor.ShaderProperty(prop_ToggleFlatModel, languages.speak("prop_ToggleFlatModel"));
-                    Components.start_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_FlatModeAutoflip, languages.speak("prop_FlatModeAutoflip"));
-                    materialEditor.ShaderProperty(prop_FlatModel, languages.speak("prop_FlatModel"));
-                    materialEditor.ShaderProperty(prop_FlatModelDepthCorrection, languages.speak("prop_FlatModelDepthCorrection"));
-                    materialEditor.ShaderProperty(prop_FlatModelFacing, languages.speak("prop_FlatModelFacing"));
-                    materialEditor.ShaderProperty(prop_FlatModelLockAxis, languages.speak("prop_FlatModelLockAxis"));
-                    Components.end_dynamic_disable(!prop_ToggleFlatModel.floatValue.Equals(1), configs);
                 });
-                sub_tab_vertex_distortion.process(() => {
-                    // effects - vertex distortion
-                    prop_ToggleVertexDistortion = FindProperty("_ToggleVertexDistortion", properties);
-                    prop_VertexDistortionMode = FindProperty("_VertexDistortionMode", properties);
-                    prop_VertexDistortionColorMask = FindProperty("_VertexDistortionColorMask", properties);
-                    prop_VertexDistortionStrength = FindProperty("_VertexDistortionStrength", properties);
-                    prop_VertexDistortionSpeed = FindProperty("_VertexDistortionSpeed", properties);
-                    prop_VertexDistortionFrequency = FindProperty("_VertexDistortionFrequency", properties);
-                    prop_WindStrength = FindProperty("_WindStrength", properties);
-                    prop_WindSpeed = FindProperty("_WindSpeed", properties);
-                    prop_WindScale = FindProperty("_WindScale", properties);
-                    prop_WindDirection = FindProperty("_WindDirection", properties);
-                    prop_WindNoiseTex = FindProperty("_WindNoiseTex", properties);
-                    prop_BreathingStrength = FindProperty("_BreathingStrength", properties);
-                    prop_BreathingSpeed = FindProperty("_BreathingSpeed", properties);
-                    prop_VertexEffectType = FindProperty("_VertexEffectType", properties);
-                    prop_VertexGlitchMode = FindProperty("_VertexGlitchMode", properties);
-                    prop_GlitchFrequency = FindProperty("_GlitchFrequency", properties);
-                    materialEditor.ShaderProperty(prop_ToggleVertexDistortion, languages.speak("prop_ToggleVertexDistortion"));
-                    Components.start_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_VertexEffectType, languages.speak("prop_VertexEffectType"));
-                    if (prop_VertexEffectType.floatValue.Equals(0)) // distortion 
-                    {
-                        materialEditor.ShaderProperty(prop_VertexDistortionMode, languages.speak("prop_VertexDistortionMode"));
-                        materialEditor.ShaderProperty(prop_VertexDistortionColorMask, languages.speak("prop_VertexDistortionColorMask"));
-                        int distortionMode = (int)prop_VertexDistortionMode.floatValue;
-                        switch (distortionMode)
-                        {
-                            case 0: // wave
-                                // fallthrough
-                            case 1: // jumble
-                                Components.Vector3Property(materialEditor, prop_VertexDistortionStrength, languages.speak("prop_VertexDistortionStrength"));
-                                Components.Vector3Property(materialEditor, prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
-                                Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
-                                break;
-                            case 2: // wind
-                                materialEditor.ShaderProperty(prop_WindStrength, languages.speak("prop_WindStrength"));
-                                materialEditor.ShaderProperty(prop_WindSpeed, languages.speak("prop_WindSpeed"));
-                                materialEditor.ShaderProperty(prop_WindScale, languages.speak("prop_WindScale"));
-                                Components.Vector3Property(materialEditor, prop_WindDirection, languages.speak("prop_WindDirection"));
-                                materialEditor.ShaderProperty(prop_WindNoiseTex, languages.speak("prop_WindNoiseTex"));
-                                break;
-                            case 3: // breathing
-                                materialEditor.ShaderProperty(prop_BreathingStrength, languages.speak("prop_BreathingStrength"));
-                                materialEditor.ShaderProperty(prop_BreathingSpeed, languages.speak("prop_BreathingSpeed"));
-                                break;
-                        }
-                    } else // glitch
-                    {
-                        materialEditor.ShaderProperty(prop_VertexGlitchMode, languages.speak("prop_VertexGlitchMode"));
-                        materialEditor.ShaderProperty(prop_VertexDistortionColorMask, languages.speak("prop_VertexDistortionColorMask"));
-                        Components.Vector3Property(materialEditor, prop_VertexDistortionStrength, languages.speak("prop_VertexDistortionStrength"));
-                        Components.Vector3Property(materialEditor, prop_VertexDistortionSpeed, languages.speak("prop_VertexDistortionSpeed"));
-                        Components.Vector3Property(materialEditor, prop_VertexDistortionFrequency, languages.speak("prop_VertexDistortionFrequency"));
-                        materialEditor.ShaderProperty(prop_GlitchFrequency, languages.speak("prop_GlitchFrequency"));
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleVertexDistortion.floatValue.Equals(1), configs);
+                sub_tab_world_aligned.process(() => {
                 });
-                sub_tab_parallax.process(() => {
-                    // stylise - parallax
-                    prop_ToggleParallax = FindProperty("_ToggleParallax", properties);
-                    prop_ParallaxMode = FindProperty("_ParallaxMode", properties);
-                    prop_ParallaxMap = FindProperty("_ParallaxMap", properties);
-                    prop_ParallaxStrength = FindProperty("_ParallaxStrength", properties);
-                    prop_ParallaxSteps = FindProperty("_ParallaxSteps", properties);
-                    prop_ParallaxBlend = FindProperty("_ParallaxBlend", properties);
-                    prop_ParallaxBlendWeight = FindProperty("_ParallaxBlendWeight", properties);
-                    prop_InteriorCubemap = FindProperty("_InteriorCubemap", properties);
-                    prop_InteriorColor = FindProperty("_InteriorColor", properties);
-                    prop_InteriorTiling = FindProperty("_InteriorTiling", properties);
-                    prop_ParallaxLayer1 = FindProperty("_ParallaxLayer1", properties);
-                    prop_ParallaxLayer2 = FindProperty("_ParallaxLayer2", properties);
-                    prop_ParallaxLayer3 = FindProperty("_ParallaxLayer3", properties);
-                    prop_ParallaxLayerDepth1 = FindProperty("_ParallaxLayerDepth1", properties);
-                    prop_ParallaxLayerDepth2 = FindProperty("_ParallaxLayerDepth2", properties);
-                    prop_ParallaxLayerDepth3 = FindProperty("_ParallaxLayerDepth3", properties);
-                    prop_ParallaxStack = FindProperty("_ParallaxStack", properties);
-                    prop_ParallaxTile = FindProperty("_ParallaxTile", properties);
-                    materialEditor.ShaderProperty(prop_ToggleParallax, languages.speak("prop_ToggleParallax"));
-                    Components.start_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_ParallaxMode, languages.speak("prop_ParallaxMode"));
-                    switch ((int)prop_ParallaxMode.floatValue)
-                    {
-                        case 0: // fast uv, fallthrough
-                        case 1: // fancy uv
-                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxMap"));
-                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                            if ((int)prop_ParallaxMode.floatValue == 1) materialEditor.ShaderProperty(prop_ParallaxSteps, languages.speak("prop_ParallaxSteps"));
-                            break;
-                        case 3: // interior mapping
-                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
-                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
-                            materialEditor.ShaderProperty(prop_InteriorCubemap, languages.speak("prop_InteriorCubemap"));
-                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                            materialEditor.ShaderProperty(prop_InteriorColor, languages.speak("prop_InteriorColor"));
-                            materialEditor.ShaderProperty(prop_InteriorTiling, languages.speak("prop_InteriorTiling"));
-                            break;
-                        default: // parallax layers (initially, i thought this was 3..)
-                            materialEditor.ShaderProperty(prop_ParallaxBlend, languages.speak("prop_ParallaxBlend"));
-                            materialEditor.ShaderProperty(prop_ParallaxBlendWeight, languages.speak("prop_ParallaxBlendWeight"));
-                            materialEditor.ShaderProperty(prop_ParallaxStack, languages.speak("prop_ParallaxStack"));
-                            materialEditor.ShaderProperty(prop_ParallaxTile, languages.speak("prop_ParallaxTile"));
-                            materialEditor.ShaderProperty(prop_ParallaxStrength, languages.speak("prop_ParallaxStrength"));
-                            materialEditor.ShaderProperty(prop_ParallaxMap, languages.speak("prop_ParallaxLayerMask")); // reused variable, diff language file
-                            materialEditor.ShaderProperty(prop_ParallaxLayer1, languages.speak("prop_ParallaxLayer1"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth1, languages.speak("prop_ParallaxLayerDepth1"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayer2, languages.speak("prop_ParallaxLayer2"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth2, languages.speak("prop_ParallaxLayerDepth2"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayer3, languages.speak("prop_ParallaxLayer3"));
-                            materialEditor.ShaderProperty(prop_ParallaxLayerDepth3, languages.speak("prop_ParallaxLayerDepth3"));
-                            break;
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleParallax.floatValue.Equals(1), configs);
+                sub_tab_vrchat_mirror.process(() => {
+                });
+                sub_tab_touch_interactions.process(() => {
+                });
+                sub_tab_dither.process(() => {
                 });
                 sub_tab_ps1.process(() => {
-                    // effects - ps1
-                    prop_TogglePS1 = FindProperty("_TogglePS1", properties);
-                    prop_PS1Rounding = FindProperty("_PS1Rounding", properties);
-                    prop_PS1RoundingPrecision = FindProperty("_PS1RoundingPrecision", properties);
-                    prop_PS1Affine = FindProperty("_PS1Affine", properties);
-                    prop_PS1Compression = FindProperty("_PS1Compression", properties);
-                    prop_PS1CompressionPrecision = FindProperty("_PS1CompressionPrecision", properties);
-                    materialEditor.ShaderProperty(prop_TogglePS1, languages.speak("prop_TogglePS1"));
-                    Components.start_dynamic_disable(!prop_TogglePS1.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_PS1Rounding, languages.speak("prop_PS1Rounding"));
-                    Components.start_dynamic_disable(prop_PS1Rounding.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PS1RoundingPrecision, languages.speak("prop_PS1RoundingPrecision"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_PS1Rounding.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_PS1Affine, languages.speak("prop_PS1Affine"));
-                    materialEditor.ShaderProperty(prop_PS1Compression, languages.speak("prop_PS1Compression"));
-                    Components.start_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_PS1CompressionPrecision, languages.speak("prop_PS1CompressionPrecision"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_PS1Compression.floatValue.Equals(0), configs);
-                    Components.end_dynamic_disable(!prop_TogglePS1.floatValue.Equals(1), configs);
+                });
+                sub_tab_vertex_distortion.process(() => {
                 });
                 sub_tab_refraction.process(() => {
-                    // effects - refraction
-                    prop_ToggleRefraction = FindProperty("_ToggleRefraction", properties);
-                    prop_RefractionSourceMode = FindProperty("_RefractionSourceMode", properties);
-                    prop_RefractionTexture = FindProperty("_RefractionTexture", properties);
-                    prop_RefractionMask = FindProperty("_RefractionMask", properties);
-                    prop_RefractionTint = FindProperty("_RefractionTint", properties);
-                    prop_RefractionIOR = FindProperty("_RefractionIOR", properties);
-                    prop_RefractionFresnel = FindProperty("_RefractionFresnel", properties);
-                    prop_RefractionOpacity = FindProperty("_RefractionOpacity", properties);
-                    prop_RefractionSeeThrough = FindProperty("_RefractionSeeThrough", properties);
-                    prop_RefractionMode = FindProperty("_RefractionMode", properties);
-                    prop_RefractionMixStrength = FindProperty("_RefractionMixStrength", properties);
-                    prop_RefractionBlendMode = FindProperty("_RefractionBlendMode", properties);
-                    prop_CausticsTex = FindProperty("_CausticsTex", properties);
-                    prop_CausticsColor = FindProperty("_CausticsColor", properties);
-                    prop_CausticsTiling = FindProperty("_CausticsTiling", properties);
-                    prop_CausticsSpeed = FindProperty("_CausticsSpeed", properties);
-                    prop_CausticsIntensity = FindProperty("_CausticsIntensity", properties);
-                    prop_DistortionNoiseTex = FindProperty("_DistortionNoiseTex", properties);
-                    prop_DistortionNoiseTiling = FindProperty("_DistortionNoiseTiling", properties);
-                    prop_DistortionNoiseStrength = FindProperty("_DistortionNoiseStrength", properties);
-                    prop_RefractionDistortionMode = FindProperty("_RefractionDistortionMode", properties);
-                    prop_RefractionCAStrength = FindProperty("_RefractionCAStrength", properties);
-                    prop_RefractionBlurStrength = FindProperty("_RefractionBlurStrength", properties);
-                    prop_RefractionCAUseFresnel = FindProperty("_RefractionCAUseFresnel", properties);
-                    prop_RefractionCAEdgeFade = FindProperty("_RefractionCAEdgeFade", properties);
-                    prop_RefractionGrabpassTint = FindProperty("_RefractionGrabpassTint", properties);
-                    prop_RefractionZoomToggle = FindProperty("_RefractionZoomToggle", properties);
-                    prop_RefractionZoom = FindProperty("_RefractionZoom", properties);
-                    materialEditor.ShaderProperty(prop_ToggleRefraction, languages.speak("prop_ToggleRefraction"));
-                    Components.start_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_RefractionSourceMode, languages.speak("prop_RefractionSourceMode"));
-                    if (prop_RefractionSourceMode.floatValue.Equals(1)) {
-                        EditorGUI.indentLevel++;
-                        materialEditor.ShaderProperty(prop_RefractionTexture, languages.speak("prop_RefractionTexture"));
-                        EditorGUI.indentLevel--;
-                    }
-                    materialEditor.ShaderProperty(prop_RefractionMask, languages.speak("prop_RefractionMask"));
-                    materialEditor.ShaderProperty(prop_RefractionIOR, languages.speak("prop_RefractionIOR"));
-                    materialEditor.ShaderProperty(prop_RefractionOpacity, languages.speak("prop_RefractionOpacity"));
-                    materialEditor.ShaderProperty(prop_RefractionSeeThrough, languages.speak("prop_RefractionSeeThrough"));
-                    materialEditor.ShaderProperty(prop_RefractionGrabpassTint, languages.speak("prop_RefractionGrabpassTint"));
-                    materialEditor.ShaderProperty(prop_RefractionTint, languages.speak("prop_RefractionTint"));
-                    materialEditor.ShaderProperty(prop_RefractionFresnel, languages.speak("prop_RefractionFresnel"));
-                    materialEditor.ShaderProperty(prop_RefractionMode, languages.speak("prop_RefractionMode"));
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_RefractionMixStrength, languages.speak("prop_RefractionMixStrength"));
-                    EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_CausticsTex, languages.speak("prop_CausticsTex"));
-                    Components.start_dynamic_disable(prop_CausticsTex.textureValue == null, configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_CausticsColor, languages.speak("prop_CausticsColor"));
-                    materialEditor.ShaderProperty(prop_CausticsTiling, languages.speak("prop_CausticsTiling"));
-                    materialEditor.ShaderProperty(prop_RefractionBlendMode, languages.speak("prop_RefractionBlendMode"));
-                    materialEditor.ShaderProperty(prop_CausticsSpeed, languages.speak("prop_CausticsSpeed"));
-                    materialEditor.ShaderProperty(prop_CausticsIntensity, languages.speak("prop_CausticsIntensity"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_CausticsTex.textureValue == null, configs);
-                    materialEditor.ShaderProperty(prop_DistortionNoiseTex, languages.speak("prop_DistortionNoiseTex"));
-                    Components.start_dynamic_disable(prop_DistortionNoiseTex.textureValue == null, configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_DistortionNoiseTiling, languages.speak("prop_DistortionNoiseTiling"));
-                    materialEditor.ShaderProperty(prop_DistortionNoiseStrength, languages.speak("prop_DistortionNoiseStrength"));
-                    materialEditor.ShaderProperty(prop_RefractionZoomToggle, languages.speak("prop_RefractionZoomToggle"));
-                    Components.start_dynamic_disable(!prop_RefractionZoomToggle.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_RefractionZoom, languages.speak("prop_RefractionZoom"));
-                    Components.end_dynamic_disable(!prop_RefractionZoomToggle.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_DistortionNoiseTex.textureValue == null, configs);
-                    materialEditor.ShaderProperty(prop_RefractionDistortionMode, languages.speak("prop_RefractionDistortionMode"));
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_RefractionCAStrength, languages.speak("prop_RefractionCAStrength"));
-                    materialEditor.ShaderProperty(prop_RefractionBlurStrength, languages.speak("prop_RefractionBlurStrength"));
-                    if (prop_RefractionDistortionMode.floatValue.Equals(1)) {
-                        materialEditor.ShaderProperty(prop_RefractionCAUseFresnel, languages.speak("prop_RefractionCAUseFresnel"));
-                        Components.start_dynamic_disable(!prop_RefractionCAUseFresnel.floatValue.Equals(1), configs);
-                        materialEditor.ShaderProperty(prop_RefractionCAEdgeFade, languages.speak("prop_RefractionCAEdgeFade"));
-                        Components.end_dynamic_disable(!prop_RefractionCAUseFresnel.floatValue.Equals(1), configs);
-                    }
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_ToggleRefraction.floatValue.Equals(1), configs);
                 });
                 sub_tab_screenspace_reflection.process(() => {
-                    // effects - screenspace reflection
-                    prop_ToggleSSR = FindProperty("_ToggleSSR", properties);
-                    prop_SSRMask = FindProperty("_SSRMask", properties);
-                    prop_SSRTint = FindProperty("_SSRTint", properties);
-                    prop_SSRIntensity = FindProperty("_SSRIntensity", properties);
-                    prop_SSRBlendMode = FindProperty("_SSRBlendMode", properties);
-                    prop_SSRFresnelPower = FindProperty("_SSRFresnelPower", properties);
-                    prop_SSRFresnelScale = FindProperty("_SSRFresnelScale", properties);
-                    prop_SSRFresnelBias = FindProperty("_SSRFresnelBias", properties);
-                    prop_SSRParallax = FindProperty("_SSRParallax", properties);
-                    prop_SSRDistortionMap = FindProperty("_SSRDistortionMap", properties);
-                    prop_SSRDistortionStrength = FindProperty("_SSRDistortionStrength", properties);
-                    prop_SSRWorldDistortion = FindProperty("_SSRWorldDistortion", properties);
-                    prop_SSRBlur = FindProperty("_SSRBlur", properties);
-                    prop_SSRMaxSteps = FindProperty("_SSRMaxSteps", properties);
-                    prop_SSRStepSize = FindProperty("_SSRStepSize", properties);
-                    prop_SSREdgeFade = FindProperty("_SSREdgeFade", properties);
-                    prop_SSRCoverage = FindProperty("_SSRCoverage", properties);
-                    prop_SSRCamFade = FindProperty("_SSRCamFade", properties);
-                    prop_SSRCamFadeStart = FindProperty("_SSRCamFadeStart", properties);
-                    prop_SSRCamFadeEnd = FindProperty("_SSRCamFadeEnd", properties);
-                    prop_SSRFlipUV = FindProperty("_SSRFlipUV", properties);
-                    prop_SSRAdaptiveStep = FindProperty("_SSRAdaptiveStep", properties);
-                    prop_SSRThickness = FindProperty("_SSRThickness", properties);
-                    prop_SSROutOfViewMode = FindProperty("_SSROutOfViewMode", properties);
-                    prop_SSRMode = FindProperty("_SSRMode", properties);
-                    prop_SSRSourceMode = FindProperty("_SSRSourceMode", properties);
-                    prop_SSRTexture = FindProperty("_SSRTexture", properties);
-                    materialEditor.ShaderProperty(prop_ToggleSSR, languages.speak("prop_ToggleSSR"));
-                    Components.start_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_SSRSourceMode, languages.speak("prop_SSRSourceMode"));
-                    if (prop_SSRSourceMode.floatValue.Equals(1)) {
-                        EditorGUI.indentLevel++;
-                        materialEditor.ShaderProperty(prop_SSRTexture, languages.speak("prop_SSRTexture"));
-                        EditorGUI.indentLevel--;
-                    }
-                    materialEditor.ShaderProperty(prop_SSRMode, languages.speak("prop_SSRMode"));
-                    materialEditor.ShaderProperty(prop_SSRMask, languages.speak("prop_SSRMask"));
-                    materialEditor.ShaderProperty(prop_SSRTint, languages.speak("prop_SSRTint"));
-                    materialEditor.ShaderProperty(prop_SSRBlendMode, languages.speak("prop_SSRBlendMode"));
-                    materialEditor.ShaderProperty(prop_SSRIntensity, languages.speak("prop_SSRIntensity"));
-                    materialEditor.ShaderProperty(prop_SSRFresnelPower, languages.speak("prop_SSRFresnelPower"));
-                    materialEditor.ShaderProperty(prop_SSRFresnelScale, languages.speak("prop_SSRFresnelScale"));
-                    materialEditor.ShaderProperty(prop_SSRFresnelBias, languages.speak("prop_SSRFresnelBias"));
-                    materialEditor.ShaderProperty(prop_SSRCoverage, languages.speak("prop_SSRCoverage")); 
-                    if (prop_SSRMode.floatValue.Equals(0)) {
-                        // planar
-                        materialEditor.ShaderProperty(prop_SSRParallax, languages.speak("prop_SSRParallax"));
-                        materialEditor.ShaderProperty(prop_SSRBlur, languages.speak("prop_SSRBlur"));
-                        materialEditor.ShaderProperty(prop_SSRDistortionMap, languages.speak("prop_SSRDistortionMap"));
-                        Components.start_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
-                        EditorGUI.indentLevel++;
-                        materialEditor.ShaderProperty(prop_SSRDistortionStrength, languages.speak("prop_SSRDistortionStrength"));
-                        materialEditor.ShaderProperty(prop_SSRWorldDistortion, languages.speak("prop_SSRWorldDistortion"));
-                        EditorGUI.indentLevel--;
-                        Components.end_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
-                    } else {
-                        // raymarched
-                        materialEditor.ShaderProperty(prop_SSRFlipUV, languages.speak("prop_SSRFlipUV"));
-                        materialEditor.ShaderProperty(prop_SSROutOfViewMode, languages.speak("prop_SSROutOfViewMode"));
-                        materialEditor.ShaderProperty(prop_SSRAdaptiveStep, languages.speak("prop_SSRAdaptiveStep"));
-                        materialEditor.ShaderProperty(prop_SSRMaxSteps, languages.speak("prop_SSRMaxSteps"));
-                        materialEditor.ShaderProperty(prop_SSRStepSize, languages.speak("prop_SSRStepSize"));
-                        materialEditor.ShaderProperty(prop_SSRThickness, languages.speak("prop_SSRThickness"));
-                        materialEditor.ShaderProperty(prop_SSRDistortionMap, languages.speak("prop_SSRDistortionMap"));
-                        Components.start_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
-                        EditorGUI.indentLevel++;
-                        materialEditor.ShaderProperty(prop_SSRDistortionStrength, languages.speak("prop_SSRDistortionStrength"));
-                        EditorGUI.indentLevel--;
-                        Components.end_dynamic_disable(prop_SSRDistortionMap.textureValue == null, configs);
-                        materialEditor.ShaderProperty(prop_SSREdgeFade, languages.speak("prop_SSREdgeFade"));
-                        materialEditor.ShaderProperty(prop_SSRCamFade, languages.speak("prop_SSRCamFade"));
-                        Components.start_dynamic_disable(!prop_SSRCamFade.floatValue.Equals(1), configs);
-                        EditorGUI.indentLevel++;
-                        materialEditor.ShaderProperty(prop_SSRCamFadeStart, languages.speak("prop_SSRCamFadeStart"));
-                        materialEditor.ShaderProperty(prop_SSRCamFadeEnd, languages.speak("prop_SSRCamFadeEnd"));
-                        EditorGUI.indentLevel--;
-                        Components.end_dynamic_disable(!prop_SSRCamFade.floatValue.Equals(1), configs);
-                    }
-                    Components.end_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
                 });
                 Components.end_foldout();
             });
@@ -2619,419 +1101,28 @@ namespace Luka.Backlace
             tab_world.process(() => {
                 Components.start_foldout();
                 sub_tab_stochastic.process(() => {
-                    // world - stochastic sampling
-                    prop_StochasticSampling = FindProperty("_StochasticSampling", properties);
-                    prop_StochasticSamplingMode = FindProperty("_StochasticSamplingMode", properties);
-                    prop_StochasticTexture = FindProperty("_StochasticTexture", properties);
-                    prop_StochasticOpacity = FindProperty("_StochasticOpacity", properties);
-                    prop_StochasticBlendMode = FindProperty("_StochasticBlendMode", properties);
-                    prop_StochasticScale = FindProperty("_StochasticScale", properties);
-                    prop_StochasticOffsetX = FindProperty("_StochasticOffsetX", properties);
-                    prop_StochasticOffsetY = FindProperty("_StochasticOffsetY", properties);
-                    prop_StochasticTint = FindProperty("_StochasticTint", properties);
-                    prop_StochasticBlend = FindProperty("_StochasticBlend", properties);
-                    prop_StochasticRotationRange = FindProperty("_StochasticRotationRange", properties);
-                    prop_StochasticPriority = FindProperty("_StochasticPriority", properties);
-                    prop_StochasticContrastStrength = FindProperty("_StochasticContrastStrength", properties);
-                    prop_StochasticContrastThreshold = FindProperty("_StochasticContrastThreshold", properties);
-                    prop_StochasticHeightBlend = FindProperty("_StochasticHeightBlend", properties);
-                    prop_StochasticHeightMap = FindProperty("_StochasticHeightMap", properties);
-                    prop_StochasticHeightStrength = FindProperty("_StochasticHeightStrength", properties);
-                    prop_StochasticMipBias = FindProperty("_StochasticMipBias", properties);
-                    prop_StochasticAlpha = FindProperty("_StochasticAlpha", properties);
-                    prop_StochasticNormals = FindProperty("_StochasticNormals", properties);
-                    materialEditor.ShaderProperty(prop_StochasticSampling, languages.speak("prop_StochasticSampling"));
-                    Components.start_dynamic_disable(!prop_StochasticSampling.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_StochasticSamplingMode, languages.speak("prop_StochasticSamplingMode"));
-                    EditorGUI.indentLevel++;
-                    if (prop_StochasticSamplingMode.floatValue.Equals(0)) {
-                        materialEditor.ShaderProperty(prop_StochasticBlend, languages.speak("prop_StochasticBlend"));
-                        materialEditor.ShaderProperty(prop_StochasticRotationRange, languages.speak("prop_StochasticRotationRange"));
-                    } else {
-                        materialEditor.ShaderProperty(prop_StochasticPriority, languages.speak("prop_StochasticPriority"));
-                        materialEditor.ShaderProperty(prop_StochasticContrastStrength, languages.speak("prop_StochasticContrastStrength"));
-                        materialEditor.ShaderProperty(prop_StochasticContrastThreshold, languages.speak("prop_StochasticContrastThreshold"));
-                    }
-                    EditorGUI.indentLevel--;
-                    materialEditor.ShaderProperty(prop_StochasticTexture, languages.speak("prop_StochasticTexture"));
-                    materialEditor.ShaderProperty(prop_StochasticTint, languages.speak("prop_StochasticTint"));
-                    materialEditor.ShaderProperty(prop_StochasticOpacity, languages.speak("prop_StochasticOpacity"));
-                    materialEditor.ShaderProperty(prop_StochasticBlendMode, languages.speak("prop_StochasticBlendMode"));
-                    materialEditor.ShaderProperty(prop_StochasticScale, languages.speak("prop_StochasticScale"));
-                    materialEditor.ShaderProperty(prop_StochasticOffsetX, languages.speak("prop_StochasticOffsetX"));
-                    materialEditor.ShaderProperty(prop_StochasticOffsetY, languages.speak("prop_StochasticOffsetY"));
-                    materialEditor.ShaderProperty(prop_StochasticHeightBlend, languages.speak("prop_StochasticHeightBlend"));
-                    Components.start_dynamic_disable(!prop_StochasticHeightBlend.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_StochasticHeightMap, languages.speak("prop_StochasticHeightMap"));
-                    materialEditor.ShaderProperty(prop_StochasticHeightStrength, languages.speak("prop_StochasticHeightStrength"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_StochasticHeightBlend.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_StochasticMipBias, languages.speak("prop_StochasticMipBias"));
-                    materialEditor.ShaderProperty(prop_StochasticAlpha, languages.speak("prop_StochasticAlpha"));
-                    materialEditor.ShaderProperty(prop_StochasticNormals, languages.speak("prop_StochasticNormals"));
-                    Components.end_dynamic_disable(!prop_StochasticSampling.floatValue.Equals(1), configs);
                 });
                 sub_tab_splatter.process(() => {
-                    // world - splatter mapping
-                    prop_SplatterMapping = FindProperty("_SplatterMapping", properties);
-                    prop_SplatterMappingMode = FindProperty("_SplatterMappingMode", properties);
-                    prop_SplatterControl = FindProperty("_SplatterControl", properties);
-                    prop_SplatterUseNormals = FindProperty("_SplatterUseNormals", properties);
-                    prop_SplatterAlbedo0 = FindProperty("_SplatterAlbedo0", properties);
-                    prop_SplatterNormal0 = FindProperty("_SplatterNormal0", properties);
-                    prop_SplatterMasks0 = FindProperty("_SplatterMasks0", properties);
-                    prop_SplatterColor0 = FindProperty("_SplatterColor0", properties);
-                    prop_SplatterTiling0 = FindProperty("_SplatterTiling0", properties);
-                    prop_SplatterNormalStrength0 = FindProperty("_SplatterNormalStrength0", properties);
-                    prop_SplatterBlendMode0 = FindProperty("_SplatterBlendMode0", properties);
-                    prop_SplatterAlbedo1 = FindProperty("_SplatterAlbedo1", properties);
-                    prop_SplatterNormal1 = FindProperty("_SplatterNormal1", properties);
-                    prop_SplatterMasks1 = FindProperty("_SplatterMasks1", properties);
-                    prop_SplatterColor1 = FindProperty("_SplatterColor1", properties);
-                    prop_SplatterTiling1 = FindProperty("_SplatterTiling1", properties);
-                    prop_SplatterNormalStrength1 = FindProperty("_SplatterNormalStrength1", properties);
-                    prop_SplatterBlendMode1 = FindProperty("_SplatterBlendMode1", properties);
-                    prop_SplatterCullThreshold = FindProperty("_SplatterCullThreshold", properties);
-                    prop_SplatterBlendSharpness = FindProperty("_SplatterBlendSharpness", properties);
-                    prop_SplatterMipBias = FindProperty("_SplatterMipBias", properties);
-                    prop_SplatterAlphaChannel = FindProperty("_SplatterAlphaChannel", properties);
-                    materialEditor.ShaderProperty(prop_SplatterMapping, languages.speak("prop_SplatterMapping"));
-                    Components.start_dynamic_disable(!prop_SplatterMapping.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_SplatterMappingMode, languages.speak("prop_SplatterMappingMode"));
-                    materialEditor.ShaderProperty(prop_SplatterControl, languages.speak("prop_SplatterControl"));
-                    materialEditor.ShaderProperty(prop_SplatterUseNormals, languages.speak("prop_SplatterUseNormals"));
-                    materialEditor.ShaderProperty(prop_SplatterAlbedo0, languages.speak("prop_SplatterAlbedo0"));
-                    Components.start_dynamic_disable(!prop_SplatterUseNormals.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_SplatterNormal0, languages.speak("prop_SplatterNormal0"));
-                    materialEditor.ShaderProperty(prop_SplatterNormalStrength0, languages.speak("prop_SplatterNormalStrength0"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_SplatterUseNormals.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_SplatterMasks0, languages.speak("prop_SplatterMasks0"));
-                    materialEditor.ShaderProperty(prop_SplatterColor0, languages.speak("prop_SplatterColor0"));
-                    materialEditor.ShaderProperty(prop_SplatterTiling0, languages.speak("prop_SplatterTiling0"));
-                    materialEditor.ShaderProperty(prop_SplatterBlendMode0, languages.speak("prop_SplatterBlendMode0"));
-                    materialEditor.ShaderProperty(prop_SplatterAlbedo1, languages.speak("prop_SplatterAlbedo1"));
-                    Components.start_dynamic_disable(!prop_SplatterUseNormals.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_SplatterNormal1, languages.speak("prop_SplatterNormal1"));
-                    materialEditor.ShaderProperty(prop_SplatterNormalStrength1, languages.speak("prop_SplatterNormalStrength1"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_SplatterUseNormals.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_SplatterMasks1, languages.speak("prop_SplatterMasks1"));
-                    materialEditor.ShaderProperty(prop_SplatterColor1, languages.speak("prop_SplatterColor1"));
-                    materialEditor.ShaderProperty(prop_SplatterTiling1, languages.speak("prop_SplatterTiling1"));
-                    materialEditor.ShaderProperty(prop_SplatterBlendMode1, languages.speak("prop_SplatterBlendMode1"));
-                    materialEditor.ShaderProperty(prop_SplatterCullThreshold, languages.speak("prop_SplatterCullThreshold"));
-                    materialEditor.ShaderProperty(prop_SplatterBlendSharpness, languages.speak("prop_SplatterBlendSharpness"));
-                    materialEditor.ShaderProperty(prop_SplatterMipBias, languages.speak("prop_SplatterMipBias"));
-                    materialEditor.ShaderProperty(prop_SplatterAlphaChannel, languages.speak("prop_SplatterAlphaChannel"));
-                    Components.end_dynamic_disable(!prop_SplatterMapping.floatValue.Equals(1), configs);
                 });
                 sub_tab_bombing.process(() => {
-                    // world - texture bombing
-                    prop_BombingTextures = FindProperty("_BombingTextures", properties);
-                    prop_BombingMode = FindProperty("_BombingMode", properties);
-                    prop_BombingBlendMode = FindProperty("_BombingBlendMode", properties);
-                    prop_BombingMappingMode = FindProperty("_BombingMappingMode", properties);
-                    prop_BombingTriplanarSharpness = FindProperty("_BombingTriplanarSharpness", properties);
-                    prop_BombingThreshold = FindProperty("_BombingThreshold", properties);
-                    prop_BombingOpacity = FindProperty("_BombingOpacity", properties);
-                    prop_BombingTex = FindProperty("_BombingTex", properties);
-                    prop_BombingColor = FindProperty("_BombingColor", properties);
-                    prop_BombingTiling = FindProperty("_BombingTiling", properties);
-                    prop_BombingDensity = FindProperty("_BombingDensity", properties);
-                    prop_BombingGlobalScale = FindProperty("_BombingGlobalScale", properties);
-                    prop_BombingJitterAmount = FindProperty("_BombingJitterAmount", properties);
-                    prop_BombingScaleVar = FindProperty("_BombingScaleVar", properties);
-                    prop_BombingRotVar = FindProperty("_BombingRotVar", properties);
-                    prop_BombingHueVar = FindProperty("_BombingHueVar", properties);
-                    prop_BombingSatVar = FindProperty("_BombingSatVar", properties);
-                    prop_BombingValVar = FindProperty("_BombingValVar", properties);
-                    prop_BombingUseNormal = FindProperty("_BombingUseNormal", properties);
-                    prop_BombingNormal = FindProperty("_BombingNormal", properties);
-                    prop_BombingNormalStrength = FindProperty("_BombingNormalStrength", properties);
-                    prop_BombingUseSheet = FindProperty("_BombingUseSheet", properties);
-                    prop_BombingSheetData = FindProperty("_BombingSheetData", properties);
-                    prop_BombingCullDist = FindProperty("_BombingCullDist", properties);
-                    prop_BombingCullFalloff = FindProperty("_BombingCullFalloff", properties);
-                    materialEditor.ShaderProperty(prop_BombingTextures, languages.speak("prop_BombingTextures"));
-                    Components.start_dynamic_disable(!prop_BombingTextures.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BombingMode, languages.speak("prop_BombingMode"));
-                    materialEditor.ShaderProperty(prop_BombingBlendMode, languages.speak("prop_BombingBlendMode"));
-                    materialEditor.ShaderProperty(prop_BombingMappingMode, languages.speak("prop_BombingMappingMode"));
-                    Components.start_dynamic_disable(!prop_BombingMappingMode.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_BombingTriplanarSharpness, languages.speak("prop_BombingTriplanarSharpness"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_BombingMappingMode.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BombingTex, languages.speak("prop_BombingTex"));
-                    materialEditor.ShaderProperty(prop_BombingColor, languages.speak("prop_BombingColor"));
-                    materialEditor.ShaderProperty(prop_BombingTiling, languages.speak("prop_BombingTiling"));
-                    materialEditor.ShaderProperty(prop_BombingThreshold, languages.speak("prop_BombingThreshold"));
-                    materialEditor.ShaderProperty(prop_BombingOpacity, languages.speak("prop_BombingOpacity"));
-                    materialEditor.ShaderProperty(prop_BombingDensity, languages.speak("prop_BombingDensity"));
-                    materialEditor.ShaderProperty(prop_BombingGlobalScale, languages.speak("prop_BombingGlobalScale"));
-                    materialEditor.ShaderProperty(prop_BombingJitterAmount, languages.speak("prop_BombingJitterAmount"));
-                    materialEditor.ShaderProperty(prop_BombingScaleVar, languages.speak("prop_BombingScaleVar"));
-                    materialEditor.ShaderProperty(prop_BombingRotVar, languages.speak("prop_BombingRotVar"));
-                    materialEditor.ShaderProperty(prop_BombingHueVar, languages.speak("prop_BombingHueVar"));
-                    materialEditor.ShaderProperty(prop_BombingSatVar, languages.speak("prop_BombingSatVar"));
-                    materialEditor.ShaderProperty(prop_BombingValVar, languages.speak("prop_BombingValVar"));
-                    materialEditor.ShaderProperty(prop_BombingUseNormal, languages.speak("prop_BombingUseNormal"));
-                    Components.start_dynamic_disable(!prop_BombingUseNormal.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_BombingNormal, languages.speak("prop_BombingNormal"));
-                    materialEditor.ShaderProperty(prop_BombingNormalStrength, languages.speak("prop_BombingNormalStrength"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_BombingUseNormal.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BombingUseSheet, languages.speak("prop_BombingUseSheet"));
-                    Components.start_dynamic_disable(!prop_BombingUseSheet.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    Components.Vector2Property(materialEditor, prop_BombingSheetData, languages.speak("prop_BombingSheetData"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_BombingUseSheet.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_BombingCullDist, languages.speak("prop_BombingCullDist"));
-                    materialEditor.ShaderProperty(prop_BombingCullFalloff, languages.speak("prop_BombingCullFalloff"));
-                    Components.end_dynamic_disable(!prop_BombingTextures.floatValue.Equals(1), configs);
                 });
                 Components.end_foldout();
             });
             // outline tab
             tab_outline.process(() => {
-                Components.start_foldout();
-                // outline
-                prop_OutlineSpace = FindProperty("_OutlineSpace", properties);
-                prop_OutlineColor = FindProperty("_OutlineColor", properties);
-                prop_OutlineWidth = FindProperty("_OutlineWidth", properties);
-                prop_OutlineVertexColorMask = FindProperty("_OutlineVertexColorMask", properties);
-                prop_OutlineDistanceFade = FindProperty("_OutlineDistanceFade", properties);
-                prop_OutlineFadeStart = FindProperty("_OutlineFadeStart", properties);
-                prop_OutlineFadeEnd = FindProperty("_OutlineFadeEnd", properties);
-                prop_OutlineHueShift = FindProperty("_OutlineHueShift", properties);
-                prop_OutlineHueShiftSpeed = FindProperty("_OutlineHueShiftSpeed", properties);
-                prop_OutlineOpacity = FindProperty("_OutlineOpacity", properties);
-                prop_OutlineMode = FindProperty("_OutlineMode", properties);
-                prop_OutlineTexMap = FindProperty("_OutlineTexMap", properties);
-                prop_OutlineTex = FindProperty("_OutlineTex", properties);
-                prop_OutlineTexTiling = FindProperty("_OutlineTexTiling", properties);
-                prop_OutlineTexScroll = FindProperty("_OutlineTexScroll", properties);
-                prop_OutlineOffset = FindProperty("_OutlineOffset", properties);
-                prop_OutlineStencilRef = FindProperty("_OutlineStencilRef", properties);
-                prop_OutlineStencilComp = FindProperty("_OutlineStencilComp", properties);
-                prop_OutlineStencilPass = FindProperty("_OutlineStencilPass", properties);
-                prop_OutlineStencilFail = FindProperty("_OutlineStencilFail", properties);
-                prop_OutlineStencilZFail = FindProperty("_OutlineStencilZFail", properties);
-                prop_OutlineStyle = FindProperty("_OutlineStyle", properties);
-                materialEditor.ShaderProperty(prop_OutlineSpace, languages.speak("prop_OutlineSpace"));
-                materialEditor.ShaderProperty(prop_OutlineStyle, languages.speak("prop_OutlineStyle"));
-                materialEditor.ShaderProperty(prop_OutlineWidth, languages.speak("prop_OutlineWidth"));
-                materialEditor.ShaderProperty(prop_OutlineOpacity, languages.speak("prop_OutlineOpacity"));
-                materialEditor.ShaderProperty(prop_OutlineMode, languages.speak("prop_OutlineMode"));
-                EditorGUI.indentLevel++;
-                if (prop_OutlineMode.floatValue.Equals(1)) {
-                    // texture mode
-                    materialEditor.ShaderProperty(prop_OutlineTexMap, languages.speak("prop_OutlineTexMap"));
-                    materialEditor.ShaderProperty(prop_OutlineTex, languages.speak("prop_OutlineTex"));
-                    Components.Vector2Property(materialEditor, prop_OutlineTexTiling, languages.speak("prop_OutlineTexTiling"));
-                    Components.Vector2Property(materialEditor, prop_OutlineTexScroll, languages.speak("prop_OutlineTexScroll"));
-                } else {
-                    // colour mode
-                    materialEditor.ShaderProperty(prop_OutlineColor, languages.speak("prop_OutlineColor"));
-                }
-                EditorGUI.indentLevel--;
-                materialEditor.ShaderProperty(prop_OutlineVertexColorMask, languages.speak("prop_OutlineVertexColorMask"));
-                materialEditor.ShaderProperty(prop_OutlineDistanceFade, languages.speak("prop_OutlineDistanceFade"));
-                Components.start_dynamic_disable(!prop_OutlineDistanceFade.floatValue.Equals(1), configs);
-                EditorGUI.indentLevel++;
-                materialEditor.ShaderProperty(prop_OutlineFadeStart, languages.speak("prop_OutlineFadeStart"));
-                materialEditor.ShaderProperty(prop_OutlineFadeEnd, languages.speak("prop_OutlineFadeEnd"));
-                EditorGUI.indentLevel--;
-                Components.end_dynamic_disable(!prop_OutlineDistanceFade.floatValue.Equals(1), configs);
-                materialEditor.ShaderProperty(prop_OutlineHueShift, languages.speak("prop_OutlineHueShift"));
-                Components.start_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
-                EditorGUI.indentLevel++;
-                materialEditor.ShaderProperty(prop_OutlineHueShiftSpeed, languages.speak("prop_OutlineHueShiftSpeed"));
-                EditorGUI.indentLevel--;
-                Components.end_dynamic_disable(!prop_OutlineHueShift.floatValue.Equals(1), configs);
-                Components.Vector3Property(materialEditor, prop_OutlineOffset, languages.speak("prop_OutlineOffset"));
-                materialEditor.ShaderProperty(prop_OutlineStencilRef, languages.speak("prop_OutlineStencilRef"));
-                Components.start_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
-                EditorGUI.indentLevel++;
-                materialEditor.ShaderProperty(prop_OutlineStencilComp, languages.speak("prop_OutlineStencilComp"));
-                materialEditor.ShaderProperty(prop_OutlineStencilPass, languages.speak("prop_OutlineStencilPass"));
-                materialEditor.ShaderProperty(prop_OutlineStencilFail, languages.speak("prop_OutlineStencilFail"));
-                materialEditor.ShaderProperty(prop_OutlineStencilZFail, languages.speak("prop_OutlineStencilZFail"));
-                EditorGUI.indentLevel--;
-                Components.end_dynamic_disable(prop_OutlineStencilRef.floatValue.Equals(0), configs);
-                Components.end_foldout();
             });
             // third party tab
             tab_third_party.process(() => {
                 Components.start_foldout();
                 sub_tab_audiolink.process(() => {
-                    // third party - audiolink
-                    prop_ToggleAudioLink = FindProperty("_ToggleAudioLink", properties);
-                    prop_AudioLinkFallback = FindProperty("_AudioLinkFallback", properties);
-                    prop_AudioLinkMode = FindProperty("_AudioLinkMode", properties);
-                    prop_AudioLinkSmoothLevel = FindProperty("_AudioLinkSmoothLevel", properties);
-                    prop_AudioLinkEmissionBand = FindProperty("_AudioLinkEmissionBand", properties);
-                    prop_AudioLinkEmissionStrength = FindProperty("_AudioLinkEmissionStrength", properties);
-                    prop_AudioLinkEmissionRange = FindProperty("_AudioLinkEmissionRange", properties);
-                    prop_AudioLinkRimBand = FindProperty("_AudioLinkRimBand", properties);
-                    prop_AudioLinkRimStrength = FindProperty("_AudioLinkRimStrength", properties);
-                    prop_AudioLinkRimRange = FindProperty("_AudioLinkRimRange", properties);
-                    prop_AudioLinkHueShiftBand = FindProperty("_AudioLinkHueShiftBand", properties);
-                    prop_AudioLinkHueShiftStrength = FindProperty("_AudioLinkHueShiftStrength", properties);
-                    prop_AudioLinkHueShiftRange = FindProperty("_AudioLinkHueShiftRange", properties);
-                    prop_AudioLinkDecalHueBand = FindProperty("_AudioLinkDecalHueBand", properties);
-                    prop_AudioLinkDecalHueStrength = FindProperty("_AudioLinkDecalHueStrength", properties);
-                    prop_AudioLinkDecalHueRange = FindProperty("_AudioLinkDecalHueRange", properties);
-                    prop_AudioLinkDecalEmissionBand = FindProperty("_AudioLinkDecalEmissionBand", properties);
-                    prop_AudioLinkDecalEmissionStrength = FindProperty("_AudioLinkDecalEmissionStrength", properties);
-                    prop_AudioLinkDecalEmissionRange = FindProperty("_AudioLinkDecalEmissionRange", properties);
-                    prop_AudioLinkDecalOpacityBand = FindProperty("_AudioLinkDecalOpacityBand", properties);
-                    prop_AudioLinkDecalOpacityStrength = FindProperty("_AudioLinkDecalOpacityStrength", properties);
-                    prop_AudioLinkDecalOpacityRange = FindProperty("_AudioLinkDecalOpacityRange", properties);
-                    prop_AudioLinkVertexBand = FindProperty("_AudioLinkVertexBand", properties);
-                    prop_AudioLinkVertexStrength = FindProperty("_AudioLinkVertexStrength", properties);
-                    prop_AudioLinkVertexRange = FindProperty("_AudioLinkVertexRange", properties);
-                    prop_AudioLinkOutlineBand = FindProperty("_AudioLinkOutlineBand", properties);
-                    prop_AudioLinkOutlineStrength = FindProperty("_AudioLinkOutlineStrength", properties);
-                    prop_AudioLinkOutlineRange = FindProperty("_AudioLinkOutlineRange", properties);
-                    prop_AudioLinkMatcapBand = FindProperty("_AudioLinkMatcapBand", properties);
-                    prop_AudioLinkMatcapStrength = FindProperty("_AudioLinkMatcapStrength", properties);
-                    prop_AudioLinkMatcapRange = FindProperty("_AudioLinkMatcapRange", properties);
-                    prop_AudioLinkPathingBand = FindProperty("_AudioLinkPathingBand", properties);
-                    prop_AudioLinkPathingStrength = FindProperty("_AudioLinkPathingStrength", properties);
-                    prop_AudioLinkPathingRange = FindProperty("_AudioLinkPathingRange", properties);
-                    prop_AudioLinkGlitterBand = FindProperty("_AudioLinkGlitterBand", properties);
-                    prop_AudioLinkGlitterStrength = FindProperty("_AudioLinkGlitterStrength", properties);
-                    prop_AudioLinkGlitterRange = FindProperty("_AudioLinkGlitterRange", properties);
-                    prop_AudioLinkIridescenceBand = FindProperty("_AudioLinkIridescenceBand", properties);
-                    prop_AudioLinkIridescenceStrength = FindProperty("_AudioLinkIridescenceStrength", properties);
-                    prop_AudioLinkIridescenceRange = FindProperty("_AudioLinkIridescenceRange", properties);
-                    materialEditor.ShaderProperty(prop_ToggleAudioLink, languages.speak("prop_ToggleAudioLink"));
-                    Components.start_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkFallback, languages.speak("prop_AudioLinkFallback"));
-                    materialEditor.ShaderProperty(prop_AudioLinkMode, languages.speak("prop_AudioLinkMode"));
-                    Components.start_dynamic_disable(!prop_AudioLinkMode.floatValue.Equals(1), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkSmoothLevel, languages.speak("prop_AudioLinkSmoothLevel"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(!prop_AudioLinkMode.floatValue.Equals(1), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkEmissionBand, languages.speak("prop_AudioLinkEmissionBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkEmissionBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkEmissionStrength, languages.speak("prop_AudioLinkEmissionStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkEmissionRange, languages.speak("prop_AudioLinkEmissionRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkEmissionBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkRimBand, languages.speak("prop_AudioLinkRimBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkRimBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkRimStrength, languages.speak("prop_AudioLinkRimStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkRimRange, languages.speak("prop_AudioLinkRimRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkRimBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftBand, languages.speak("prop_AudioLinkHueShiftBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkHueShiftBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftStrength, languages.speak("prop_AudioLinkHueShiftStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkHueShiftRange, languages.speak("prop_AudioLinkHueShiftRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkHueShiftBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueBand, languages.speak("prop_AudioLinkDecalHueBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkDecalHueBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueStrength, languages.speak("prop_AudioLinkDecalHueStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalHueRange, languages.speak("prop_AudioLinkDecalHueRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkDecalHueBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionBand, languages.speak("prop_AudioLinkDecalEmissionBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkDecalEmissionBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionStrength, languages.speak("prop_AudioLinkDecalEmissionStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalEmissionRange, languages.speak("prop_AudioLinkDecalEmissionRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkDecalEmissionBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityBand, languages.speak("prop_AudioLinkDecalOpacityBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkDecalOpacityBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityStrength, languages.speak("prop_AudioLinkDecalOpacityStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkDecalOpacityRange, languages.speak("prop_AudioLinkDecalOpacityRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkDecalOpacityBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkVertexBand, languages.speak("prop_AudioLinkVertexBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkVertexBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkVertexStrength, languages.speak("prop_AudioLinkVertexStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkVertexRange, languages.speak("prop_AudioLinkVertexRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkVertexBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkOutlineBand, languages.speak("prop_AudioLinkOutlineBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkOutlineBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkOutlineStrength, languages.speak("prop_AudioLinkOutlineStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkOutlineRange, languages.speak("prop_AudioLinkOutlineRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkOutlineBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkMatcapBand, languages.speak("prop_AudioLinkMatcapBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkMatcapBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkMatcapStrength, languages.speak("prop_AudioLinkMatcapStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkMatcapRange, languages.speak("prop_AudioLinkMatcapRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkMatcapBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkPathingBand, languages.speak("prop_AudioLinkPathingBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkPathingBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkPathingStrength, languages.speak("prop_AudioLinkPathingStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkPathingRange, languages.speak("prop_AudioLinkPathingRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkPathingBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkGlitterBand, languages.speak("prop_AudioLinkGlitterBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkGlitterBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkGlitterStrength, languages.speak("prop_AudioLinkGlitterStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkGlitterRange, languages.speak("prop_AudioLinkGlitterRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkGlitterBand.floatValue.Equals(0), configs);
-                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceBand, languages.speak("prop_AudioLinkIridescenceBand"));
-                    Components.start_dynamic_disable(prop_AudioLinkIridescenceBand.floatValue.Equals(0), configs);
-                    EditorGUI.indentLevel++;
-                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceStrength, languages.speak("prop_AudioLinkIridescenceStrength"));
-                    materialEditor.ShaderProperty(prop_AudioLinkIridescenceRange, languages.speak("prop_AudioLinkIridescenceRange"));
-                    EditorGUI.indentLevel--;
-                    Components.end_dynamic_disable(prop_AudioLinkIridescenceBand.floatValue.Equals(0), configs);
-                    Components.end_dynamic_disable(!prop_ToggleAudioLink.floatValue.Equals(1), configs);
                 });
-                sub_tab_superplug.draw();
-                if (sub_tab_superplug.is_expanded) {
-                    // third party - superplug
-                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
-                    wrappedStyle.wordWrap = true;
-                    GUILayout.Label(theme.language_manager.speak("superplug_notice"), wrappedStyle);
-                    if (GUILayout.Button(theme.language_manager.speak("superplug_button"))) {
-                        Components.open_external_website("https://vrcfury.com/sps/", ref theme);
-                    }
-                }
-                sub_tab_ltcgi.draw();
-                if (sub_tab_ltcgi.is_expanded) {
-                    // third party - ltcgi
-                    prop_ToggleLTCGI = FindProperty("_ToggleLTCGI", properties);
-                    materialEditor.ShaderProperty(prop_ToggleLTCGI, languages.speak("prop_ToggleLTCGI"));
-                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
-                    wrappedStyle.wordWrap = true;
-                    GUILayout.Label(theme.language_manager.speak("ltcgi_notice"), wrappedStyle);
-                    if (GUILayout.Button(theme.language_manager.speak("ltcgi_button"))) {
-                        Components.open_external_website("https://github.com/PiMaker/ltcgi/", ref theme);
-                    }                  
-                }
+                sub_tab_superplug.process(() => {
+                });
+                sub_tab_ltcgi.process(() => {
+                });
                 Components.end_foldout();
             });
-            #endregion
+            #endregion // Backlace
             config_menu?.draw();
             presets_menu?.draw();
             premonition_menu?.draw();

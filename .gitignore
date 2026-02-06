@@ -1,6 +1,7 @@
 # Mine
 indev/*
 Resources/Luka_Backlace/Presets/User/*
+*.unused
 
 # VSCode
 *.code-workspace
