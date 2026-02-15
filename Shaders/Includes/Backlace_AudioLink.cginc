@@ -419,22 +419,26 @@ float4 AudioLinkGetAudioSourcePosition()
 
 // backlace changes to this cginclude start here !!
 #if defined(_BACKLACE_AUDIOLINK)
-    // data structures
-    struct BacklaceAudioLinkData
+    struct Divine
+    {
+        float vertexScale;
+        float outlineWidth;
+    };
+
+    struct Chocolat
     {
         float emission;
         float rim;
         float hueShift;
-        float decalHue;
-        float decalEmission;
-        float decalOpacity;
         float matcap;
         float pathing;
         float glitter;
         float iridescence;
-        float vertexScale;
-        float outlineWidth;
+        float decalHue;
+        float decalEmission;
+        float decalOpacity;
     };
+    static Chocolat Music;
 
     // parameters
     float _AudioLinkFallback;
@@ -499,10 +503,23 @@ float4 AudioLinkGetAudioSourcePosition()
         return lerp(range.x, range.y, raw) * strength;
     }
 
-    // initialise all effects and their values
-    BacklaceAudioLinkData CalculateAudioLinkEffects()
+    Divine CalculateDivine()
     {
-        BacklaceAudioLinkData data = (BacklaceAudioLinkData)0;
+        Divine data = (Divine)0;
+        if (!AudioLinkIsAvailable())
+        {
+            data.vertexScale = _AudioLinkFallback;
+            data.outlineWidth = _AudioLinkFallback;
+            return data;
+        }
+        data.vertexScale = CalculateAudioLinkEffect(_AudioLinkVertexBand, _AudioLinkVertexRange, _AudioLinkVertexStrength);
+        data.outlineWidth = CalculateAudioLinkEffect(_AudioLinkOutlineBand, _AudioLinkOutlineRange, _AudioLinkOutlineStrength);
+        return data;
+    }
+
+    void InitChocolat()
+    {
+        Chocolat data = (Chocolat)0;
         if (!AudioLinkIsAvailable())
         {
             data.emission = _AudioLinkFallback;
@@ -511,13 +528,12 @@ float4 AudioLinkGetAudioSourcePosition()
             data.decalHue = _AudioLinkFallback;
             data.decalEmission = _AudioLinkFallback;
             data.decalOpacity = _AudioLinkFallback;
-            data.vertexScale = _AudioLinkFallback;
-            data.outlineWidth = _AudioLinkFallback;
             data.matcap = _AudioLinkFallback;
             data.pathing = _AudioLinkFallback;
             data.glitter = _AudioLinkFallback;
             data.iridescence = _AudioLinkFallback;
-            return data;
+            Music = data;
+            return;
         }
         data.emission = CalculateAudioLinkEffect(_AudioLinkEmissionBand, _AudioLinkEmissionRange, _AudioLinkEmissionStrength);
         data.rim = CalculateAudioLinkEffect(_AudioLinkRimBand, _AudioLinkRimRange, _AudioLinkRimStrength);
@@ -525,13 +541,11 @@ float4 AudioLinkGetAudioSourcePosition()
         data.decalHue = CalculateAudioLinkEffect(_AudioLinkDecalHueBand, _AudioLinkDecalHueRange, _AudioLinkDecalHueStrength);
         data.decalEmission = CalculateAudioLinkEffect(_AudioLinkDecalEmissionBand, _AudioLinkDecalEmissionRange, _AudioLinkDecalEmissionStrength);
         data.decalOpacity = CalculateAudioLinkEffect(_AudioLinkDecalOpacityBand, _AudioLinkDecalOpacityRange, _AudioLinkDecalOpacityStrength);
-        data.vertexScale = CalculateAudioLinkEffect(_AudioLinkVertexBand, _AudioLinkVertexRange, _AudioLinkVertexStrength);
-        data.outlineWidth = CalculateAudioLinkEffect(_AudioLinkOutlineBand, _AudioLinkOutlineRange, _AudioLinkOutlineStrength);
         data.matcap = CalculateAudioLinkEffect(_AudioLinkMatcapBand, _AudioLinkMatcapRange, _AudioLinkMatcapStrength);
         data.pathing = CalculateAudioLinkEffect(_AudioLinkPathingBand, _AudioLinkPathingRange, _AudioLinkPathingStrength);
         data.glitter = CalculateAudioLinkEffect(_AudioLinkGlitterBand, _AudioLinkGlitterRange, _AudioLinkGlitterStrength);
         data.iridescence = CalculateAudioLinkEffect(_AudioLinkIridescenceBand, _AudioLinkIridescenceRange, _AudioLinkIridescenceStrength);
-        return data;
+        Music = data;
     }
 #endif // _BACKLACE_AUDIOLINK
 

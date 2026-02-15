@@ -155,7 +155,7 @@ FragmentData vert(appdata v)
     FragmentData o;
     // apply vertex modifications
     #if defined(_BACKLACE_AUDIOLINK)
-        BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
+        Divine al_data = CalculateDivine();
         v.vertex.xyz *= _VertexManipulationScale * al_data.vertexScale; // scale
     #else // _BACKLACE_AUDIOLINK
         v.vertex.xyz *= _VertexManipulationScale; // scale

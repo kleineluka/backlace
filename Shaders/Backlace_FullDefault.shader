@@ -168,6 +168,31 @@ Shader "luka/backlace/default"
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _PackedMapThree_UV ("Packed Map Three UV Set", Int) = 0
         [Enum(Zero, 0, One, 1, Two, 2, Three, 3)] _SkinLUT_UV ("Skin LUT UV Set", Int) = 0
 
+        // LIGHTING MODELS
+        // [Space(35)]
+        // [Header(Lighting Model)]
+        // [Space(10)]
+        [Enum(Backlace, 0, PoiCustom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
+        [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2, Object Relative, 3, Ambient Priority, 4)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
+        [Enum(Backlace, 0, Unity, 1)] _LightingSource ("Lighting Source", Int) = 0
+        [Enum(Mix, 0, Stack, 1)] _IndirectAlbedo ("Indirect Albedo", Int) = 1
+        [Enum(Natural, 0, Stylised, 1)] _DirectDiffuse ("Direct Diffuse", Int) = 1
+        [Enum(Natural, 0, Stylised, 1)] _IndirectDiffuse ("Indirect Diffuse", Int) = 0
+        [Enum(Disabled, 0, Enabled, 1)] _DirectionalAmbience ("Directional Ambience", Int) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _IndirectAdditive ("Indirect Additive", Int) = 0
+        _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
+        _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
+        _ViewDirectionOffsetY ("View Direction Offset Y", Float) = 0.0
+        _DirectIntensity ("RT Direct Intensity", Float) = 1.0
+        _IndirectIntensity ("RT Indirect Intensity", Float) = 1.0
+        _VertexIntensity ("RT Vertex Intensity", Float) = 1.0
+        _AdditiveIntensity ("RT Additive Intensity", Float) = 1.0
+        _BakedDirectIntensity ("Baked Direct Intensity", Float) = 1.0
+        _BakedIndirectIntensity ("Baked Indirect Intensity", Float) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _IndirectOverride ("Indirect Override", Float) = 0.0
+        [Enum(Disabled, 0, Cubemap, 1)] _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
+        _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
+
         // EMISSION
         // [Space(35)]
         // [Header(Emission)]
@@ -177,6 +202,18 @@ Shader "luka/backlace/default"
         _EmissionMap ("Emission Map (Mask)", 2D) = "black" { }
         [IntRange] _UseAlbedoAsEmission ("Use Albedo for Emission", Range(0, 1)) = 0.0
         _EmissionStrength ("Emission Strength", Float) = 1.0
+
+        // ATTENUATION
+        // [Space(35)]
+        // [Header(Light Attenuation)]
+        // [Space(10)]
+        _AttenuationOverride ("Override Attenuation", Range(0, 1)) = 0
+        _AttenuationManual ("Manual Attenuation", Float) = 1.0
+        _AttenuationMin ("Attenuation Min", Float) = -100
+        _AttenuationMax ("Attenuation Max", Float) = 100
+        _AttenuationMultiplier ("Attenuation Multiplier", Float) = 1.0
+        _AttenuationBoost ("Attenuation Boost", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _AttenuationShaded ("Shaded Attenuation", Int) = 0
 
         // LIGHT LIMITING
         // [Space(35)]
@@ -192,39 +229,11 @@ Shader "luka/backlace/default"
         _ForceLightColor ("Force Light Color", Range(0, 1)) = 0.0
         _ForcedLightColor ("Forced Light Color", Color) = (1, 1, 1, 1)
 
-        // ATTENUATION
+        // SHADING
         // [Space(35)]
-        // [Header(Light Attenuation)]
+        // [Header(Shading)]
         // [Space(10)]
-        [Enum(Stylised, 0, Default, 1, Manual, 2)] _AttenuationMode ("Attenuation Mode", Int) = 0
-        _AttenuationManual ("Manual Attenuation", Float) = 1.0
-        _AttenuationMin ("Attenuation Min", Float) = -100
-        _AttenuationMax ("Attenuation Max", Float) = 100
-        _AttenuationMultiplier ("Attenuation Multiplier", Float) = 1.0
-        _AttenuationBoost ("Attenuation Boost", Float) = 0.0
-
-        // LIGHTING MODELS
-        // [Space(35)]
-        // [Header(Lighting Model)]
-        // [Space(10)]
-        [Enum(Backlace, 0, PoiCustom, 1, OpenLit, 2, Standard, 3, Mochie, 4)] _LightingColorMode ("Light Color Mode", Int) = 0
-        [Enum(Backlace, 0, Forced World Direction, 1, View Direction, 2, Object Relative, 3, Ambient Priority, 4)] _LightingDirectionMode ("Light Direction Mode", Int) = 0
-        [Enum(Backlace, 0, Unity, 1)] _LightingSource ("Lighting Source", Int) = 0
-        _ForcedLightDirection ("Forced Light Direction", Vector) = (0.0, 1.0, 0.0, 0.0)
-        _ViewDirectionOffsetX ("View Direction Offset X", Float) = 0.0
-        _ViewDirectionOffsetY ("View Direction Offset Y", Float) = 0.0
-        _DirectIntensity ("RT Direct Intensity", Float) = 1.0
-        _IndirectIntensity ("RT Indirect Intensity", Float) = 1.0
-        _VertexIntensity ("RT Vertex Intensity", Float) = 1.0
-        _AdditiveIntensity ("RT Additive Intensity", Float) = 1.0
-        _BakedDirectIntensity ("Baked Direct Intensity", Float) = 1.0
-        _BakedIndirectIntensity ("Baked Indirect Intensity", Float) = 1.0
-
-        // TOON LIGHTING
-        // [Space(35)]
-        // [Header(Toon Lighting)]
-        // [Space(10)]
-        [KeywordEnum(Disabled, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
+        [KeywordEnum(PBR, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
         // ramp
         [Enum(Texture, 0, Procedural, 1)] _RampMode ("Ramp Mode", Int) = 0
         _Ramp ("Ramp Map", 2D) = "white" { }
@@ -320,8 +329,9 @@ Shader "luka/backlace/default"
         _TriBandPostShallowTint ("TriBand Post Shallow Tint", Color) = (0.95, 0.96, 0.90, 1)
         _TriBandPostLitTint ("TriBand Post Lit/Front Tint", Color) = (1.0, 0.95, 0.93, 1)
         _TriBandAttenuatedShadows ("TriBand Attenuated Shadows", Range(0, 1)) = 0.0
+        _TriBandIndirectShallow ("TriBand Indirect to Shallow Only", Range(0, 1)) = 0.0
         // skin
-        [NoScaleOffset] _SkinLUT ("Skin LUT (RGB)", 2D) = "white" { }
+        _SkinLUT ("Skin LUT (RGB)", 2D) = "white" { }
         _SkinShadowColor ("Skin Shadow Color", Color) = (0.75, 0.65, 0.65, 1)
         _SkinScattering ("Skin Scattering", Range(0, 1)) = 0.5
         // wrapped
@@ -330,9 +340,9 @@ Shader "luka/backlace/default"
         _WrapColorHigh ("Wrap High Color", Color) = (1, 1, 1, 1)
         _WrapColorLow ("Wrap Low Color", Color) = (0, 0, 0, 1)
 
-        // TOON EXTRAS
+        // ANIME EXTRAS
         // [Space(35)]
-        // [Header(Toon Extras)]
+        // [Header(Anime Extras)]
         // [Space(10)]
         // ambient gradient
         [Toggle(_BACKLACE_ANIME_EXTRAS)] _ToggleAnimeExtras ("Enable Anime Extras", Int) = 0
@@ -365,8 +375,8 @@ Shader "luka/backlace/default"
         _StockingsLightedWidth ("Stockings Light Width", Range(0, 10)) = 1
         _StockingsLightedIntensity ("Stockings Light Intensity", Range(0, 1)) = 0.25
         _StockingsRoughness ("Stockings Roughness", Range(0, 1)) = 1
-        _StockingsColor ("Stockings Color", Color) = (1, 1, 1, 1)
-        _StockingsColorDark ("Stockings Dark Color", Color) = (0.5, 0.5, 0.5, 1)
+        _StockingsColor ("Stockings Colour", Color) = (1, 1, 1, 1)
+        _StockingsColorDark ("Stockings Dark Colour", Color) = (0.5, 0.5, 0.5, 1)
         // parallax eye
         [Enum(Disabled, 0, Enabled, 1)] _ToggleEyeParallax ("Enable Eye Parallax", Int) = 0
         [NoScaleOffset] _EyeParallaxIrisTex ("Iris Texture", 2D) = "white" {}
@@ -383,7 +393,7 @@ Shader "luka/backlace/default"
         _HairHeadRight ("Head Right Direction", Vector) = (1, 0, 0, 0)
         [PowerSlider(2.0)] _HairBlendAlpha ("Minimum Alpha", Range(0, 1)) = 0.5
         _HairTransparencyStrength ("Transparency Strength", Range(0, 1)) = 1.0
-        // hair masking
+        // translucent hair - hair masking
         [Enum(Disabled, 0, SDF Volume, 1, Distance, 2, Texture Mask, 3)] _HairHeadMaskMode ("Head Mask Mode", Int) = 0
         [Enum(Disabled, 0, Enabled, 1)] _HairSDFPreview ("Enable SDF Preview", Int) = 0
         _HairHeadCenter ("Head Center Position (Local)", Vector) = (0, 0, 0, 0)
@@ -401,7 +411,7 @@ Shader "luka/backlace/default"
         _HairAngleGuardStrength ("Angle Guard Strength", Range(0, 1)) = 1
         // expression map
         [Enum(Disabled, 0, Enabled, 1)] _ToggleExpressionMap ("Enable Expression Map", Int) = 0
-        [NoScaleOffset] _ExpressionMap ("Expression Map (RGBA)", 2D) = "white" { }
+        _ExpressionMap ("Expression Map (RGBA)", 2D) = "white" { }
         _ExCheekColor ("Cheek Color", Color) = (1, 0.6, 0.6, 1)
         _ExCheekIntensity ("Cheek Intensity", Range(0, 1)) = 1.0
         _ExShyColor ("Shy Color", Color) = (1, 0.6, 0.6, 1)
@@ -411,7 +421,7 @@ Shader "luka/backlace/default"
         // face map
         [Enum(Disabled, 0, Enabled, 1)] _ToggleFaceMap ("Enable Face Map", Int) = 0
         _FaceHeadForward ("Face Head Forward (Local)", Vector) = (0, 0, 1, 0)
-        [NoScaleOffset] _FaceMap ("Face Map (RGBA)", 2D) = "white" { }
+        _FaceMap ("Face Map (RGBA)", 2D) = "white" { }
         [Enum(Disabled, 0, Enabled, 1)] _ToggleNoseLine ("Enable Nose Line", Int) = 0
         _NoseLinePower ("Nose Line Power", Float) = 2.0
         _NoseLineColor ("Nose Line Color", Color) = (0.25, 0.25, 0.25, 1)
@@ -535,12 +545,77 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _MatcapSmoothnessEnabled ("Enable Smoothness", Float) = 0.0
         _MatcapSmoothness ("Smoothness", Range(0, 1)) = 0.0
 
+        // CUBEMAP
+        // [Space(35)]
+        // [Header(Cubemap)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_CUBEMAP)] _ToggleCubemap ("Enable Cubemap", Float) = 0.0
+        [NoScaleOffset] _CubemapTex ("Cubemap", Cube) = "" { }
+        [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
+        _CubemapIntensity ("Cubemap Intensity", Range(0, 2)) = 1.0
+        [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
+
+        // PARALLAX MAPPING
+        // [Space(35)]
+        // [Header(Parallax Mapping)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
+        [Enum(Fast UV, 0, Fancy UV, 1, Layered, 2, Interior, 3)] _ParallaxMode ("Parallax Mode", Int) = 0
+        [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
+        _ParallaxStrength ("Parallax Strength", Float) = 0.02 // initially (0, 0.35)
+        _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
+        [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2, Replace, 3)] _ParallaxBlend ("Parallax Blend Mode", Int) = 0
+        // interior settings
+        [NoScaleOffset] _InteriorCubemap ("Interior Cubemap", Cube) = "" { }
+        _InteriorColor ("Interior Color", Color) = (1, 1, 1, 1)
+        _InteriorTiling ("Interior Tiling", Float) = 1.0
+        // layered settings
+        [NoScaleOffset] _ParallaxLayer1 ("Parallax Layer 1", 2D) = "white" {}
+        [NoScaleOffset] _ParallaxLayer2 ("Parallax Layer 2", 2D) = "white" {}
+        [NoScaleOffset] _ParallaxLayer3 ("Parallax Layer 3", 2D) = "white" {}
+        _ParallaxLayerDepth1 ("Parallax Layer Depth 1", Float) = 0.05
+        _ParallaxLayerDepth2 ("Parallax Layer Depth 2", Float) = 0.1
+        _ParallaxLayerDepth3 ("Parallax Layer Depth 3", Float) = 0.2
+        [Enum(Top to Bottom, 0, Bottom to Top, 1, Additive, 2, Average, 3)] _ParallaxStack ("Layer Stack Mode", Int) = 0
+        _ParallaxBlendWeight ("Layer Blend Weight", Range(0, 2)) = 1.0
+        [Enum(Disabled, 0, Enabled, 1)] _ParallaxTile ("Tile Layers", Int) = 1
+
+        // SUBSURFACE SCATTERING
+        // [Space(35)]
+        // [Header(Subsurface Scattering)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
+        _SSSColor ("SSS Color", Color) = (1, 0.8, 0.7, 1) 
+        _SSSStrength ("SSS Strength", Range(0, 5)) = 1.0
+        _SSSPower ("SSS Power", Range(0.1, 10)) = 2.0
+        _SSSDistortion ("SSS Distortion", Range(0, 1)) = 0.5
+        [NoScaleOffset] _SSSThicknessMap ("SSS Thickness Map (R)", 2D) = "white" { }
+        _SSSThickness ("SSS Thickness Attenuation", Range(0, 2)) = 1.0
+
+        // DETAIL MAPPING
+        // [Space(35)]
+        // [Header(Detail Mapping)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_DETAIL)] _ToggleDetail ("Enable Detail Maps", Float) = 0.0
+        [NoScaleOffset] _DetailAlbedoMap ("Detail Albedo (A=Strength)", 2D) = "gray" { }
+        [NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" { }
+        _DetailTiling ("Detail Tiling", Float) = 16
+        _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
+
+        // SHADOW MAP
+        // [Space(35)]
+        // [Header(Shadow Map)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_SHADOW_MAP)] _ToggleShadowMap ("Enable Shadow Map", Float) = 0.0
+        [NoScaleOffset] _ShadowMap ("Shadow Map (R=Mask)", 2D) = "white" { }
+        _ShadowMapIntensity ("Intensity", Range(0, 1)) = 1.0
+
         // DECAL SHARED
         // [Space(35)]
         // [Header(Decal Shared Settings)]
         // [Space(10)]
         [Toggle(_BACKLACE_DECALS)] _ToggleDecals ("Enable Decals", Int) = 0
-        [Enum(Early, 0, Late, 1)] _DecalStage ("Decal Stage", Int) = 1
+        [Enum(Lit, 0, Unlit, 1)] _DecalStage ("Decal Stage", Int) = 1
 
         // DECAL 1
         // [Space(35)]
@@ -606,71 +681,6 @@ Shader "luka/backlace/default"
         _Decal2DistortionSpeed ("Distortion Speed", Float) = 0
         _Decal2GlitchControls ("Glitch Controls", Vector) = (0, 0, 0, 0)
 
-        // CUBEMAP
-        // [Space(35)]
-        // [Header(Cubemap)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_CUBEMAP)] _ToggleCubemap ("Enable Cubemap", Float) = 0.0
-        [NoScaleOffset] _CubemapTex ("Cubemap", Cube) = "" { }
-        [HDR] _CubemapTint ("Cubemap Tint", Color) = (1, 1, 1, 1)
-        _CubemapIntensity ("Cubemap Intensity", Range(0, 2)) = 1.0
-        [Enum(Additive, 0, Multiply, 1, Replace, 2)] _CubemapBlendMode ("Blend Mode", Int) = 0
-
-        // PARALLAX MAPPING
-        // [Space(35)]
-        // [Header(Parallax Mapping)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_PARALLAX)] _ToggleParallax ("Enable Parallax Mapping", Float) = 0.0
-        [Enum(Fast UV, 0, Fancy UV, 1, Layered, 2, Interior, 3)] _ParallaxMode ("Parallax Mode", Int) = 0
-        [NoScaleOffset] _ParallaxMap ("Height Map (R)", 2D) = "black" { }
-        _ParallaxStrength ("Parallax Strength", Float) = 0.02 // initially (0, 0.35)
-        _ParallaxSteps ("High Quality Steps", Range(4, 64)) = 16
-        [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2, Replace, 3)] _ParallaxBlend ("Parallax Blend Mode", Int) = 0
-        // interior settings
-        [NoScaleOffset] _InteriorCubemap ("Interior Cubemap", Cube) = "" { }
-        _InteriorColor ("Interior Color", Color) = (1, 1, 1, 1)
-        _InteriorTiling ("Interior Tiling", Float) = 1.0
-        // layered settings
-        [NoScaleOffset] _ParallaxLayer1 ("Parallax Layer 1", 2D) = "white" {}
-        [NoScaleOffset] _ParallaxLayer2 ("Parallax Layer 2", 2D) = "white" {}
-        [NoScaleOffset] _ParallaxLayer3 ("Parallax Layer 3", 2D) = "white" {}
-        _ParallaxLayerDepth1 ("Parallax Layer Depth 1", Float) = 0.05
-        _ParallaxLayerDepth2 ("Parallax Layer Depth 2", Float) = 0.1
-        _ParallaxLayerDepth3 ("Parallax Layer Depth 3", Float) = 0.2
-        [Enum(Top to Bottom, 0, Bottom to Top, 1, Additive, 2, Average, 3)] _ParallaxStack ("Layer Stack Mode", Int) = 0
-        _ParallaxBlendWeight ("Layer Blend Weight", Range(0, 2)) = 1.0
-        [Enum(Disabled, 0, Enabled, 1)] _ParallaxTile ("Tile Layers", Int) = 1
-
-        // SUBSURFACE SCATTERING
-        // [Space(35)]
-        // [Header(Subsurface Scattering)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_SSS)] _ToggleSSS ("Enable Subsurface Scattering", Float) = 0.0
-        _SSSColor ("SSS Color", Color) = (1, 0.8, 0.7, 1) 
-        _SSSStrength ("SSS Strength", Range(0, 5)) = 1.0
-        _SSSPower ("SSS Power", Range(0.1, 10)) = 2.0
-        _SSSDistortion ("SSS Distortion", Range(0, 1)) = 0.5
-        [NoScaleOffset] _SSSThicknessMap ("SSS Thickness Map (R)", 2D) = "white" { }
-        _SSSThickness ("SSS Thickness Attenuation", Range(0, 2)) = 1.0
-
-        // SHADOW MAP
-        // [Space(35)]
-        // [Header(Shadow Map)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_SHADOW_MAP)] _ToggleShadowMap ("Enable Shadow Map", Float) = 0.0
-        [NoScaleOffset] _ShadowMap ("Shadow Map (R=Mask)", 2D) = "white" { }
-        _ShadowMapIntensity ("Intensity", Range(0, 1)) = 1.0
-
-        // DETAIL MAPPING
-        // [Space(35)]
-        // [Header(Detail Mapping)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_DETAIL)] _ToggleDetail ("Enable Detail Maps", Float) = 0.0
-        [NoScaleOffset] _DetailAlbedoMap ("Detail Albedo (A=Strength)", 2D) = "gray" { }
-        [NoScaleOffset] _DetailNormalMap ("Detail Normal Map", 2D) = "bump" { }
-        _DetailTiling ("Detail Tiling", Float) = 16
-        _DetailNormalStrength ("Detail Normal Strength", Range(0, 2)) = 1.0
-
         // DISSOLVE EFFECT
         // [Space(35)]
         // [Header(Dissolve Effect)]
@@ -714,57 +724,6 @@ Shader "luka/backlace/default"
         _PathingOffset ("Time Offset", Range(0, 1)) = 0.0
         _PathingStart ("Path Start", Range(0, 1)) = 0.0
         _PathingEnd ("Path End", Range(0, 1)) = 1.0
-
-        // AUDIOLINK
-        // [Space(35)]
-        // [Header(AudioLink)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_AUDIOLINK)] _ToggleAudioLink ("Enable AudioLink", Float) = 0.0
-        _AudioLinkFallback ("Fallback Level", Range(0, 1)) = 1.0
-        [Enum(Raw, 0, Smooth, 1, Chronotensity, 2)] _AudioLinkMode ("AudioLink Mode", Float) = 0
-        [IntRange] _AudioLinkSmoothLevel ("Smoothing Level", Range(0, 15)) = 8
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkEmissionBand ("Emission Band", Float) = 0
-        _AudioLinkEmissionStrength ("  Strength", Range(0, 10)) = 1.0
-        _AudioLinkEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkRimBand ("Rim Light Band", Float) = 0
-        _AudioLinkRimStrength ("  Strength", Range(0, 10)) = 1.0
-        _AudioLinkRimRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkHueShiftBand ("Hue Shift Band", Float) = 0
-        _AudioLinkHueShiftStrength ("  Strength", Range(0, 1)) = 0.2
-        _AudioLinkHueShiftRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalHueBand ("Decal Hue Band", Float) = 0
-        _AudioLinkDecalHueStrength ("  Strength", Range(0, 10)) = 2.0
-        _AudioLinkDecalHueRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalEmissionBand ("Decal Emission Band", Float) = 0
-        _AudioLinkDecalEmissionStrength ("  Strength", Range(0, 10)) = 2.0
-        _AudioLinkDecalEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalOpacityBand ("Decal Opacity Band", Float) = 0
-        _AudioLinkDecalOpacityStrength ("  Strength", Range(0, 10)) = 2.0
-        _AudioLinkDecalOpacityRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkVertexBand ("Vertex Grow/Shrink Band", Float) = 0
-        _AudioLinkVertexStrength ("  Strength", Range(-0.2, 0.2)) = 0.05
-        _AudioLinkVertexRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkOutlineBand ("Outline Band", Float) = 0
-        _AudioLinkOutlineStrength ("  Strength", Range(0, 0.1)) = 0.01
-        _AudioLinkOutlineRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkMatcapBand ("Matcap Band", Float) = 0
-        _AudioLinkMatcapStrength ("  Strength", Range(0, 5)) = 1.0
-        _AudioLinkMatcapRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkPathingBand ("Pathing Band", Float) = 0
-        _AudioLinkPathingStrength ("  Strength", Range(0, 0.5)) = 0.1
-        _AudioLinkPathingRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkGlitterBand ("Glitter Band", Float) = 0
-        _AudioLinkGlitterStrength ("  Strength", Range(0, 1)) = 1.0
-        _AudioLinkGlitterRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkIridescenceBand ("Iridescence Band", Float) = 0
-        _AudioLinkIridescenceStrength ("  Strength", Range(0, 5)) = 1.0
-        _AudioLinkIridescenceRange ("  Min/Max", Vector) = (0, 1, 0, 0)
-
-        // LTCGI
-        // [Space(35)]
-        // [Header(LTCGI)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_LTCGI)] _ToggleLTCGI ("Enable LTCGI", Float) = 0.0
 
         // GLITTER
         // [Space(35)]
@@ -827,6 +786,8 @@ Shader "luka/backlace/default"
         _ShadowPatternScale ("Pattern Scale / Tiling", Float) = 5.0
         _ShadowPatternTriplanarSharpness ("Triplanar Blend Sharpness", Range(0.01, 10)) = 2.0
         _ShadowPatternTransparency ("Pattern Transparency", Range(0, 1)) = 1
+        [Enum(Disabled, 0, Enabled, 1)] _ShadowPatternLightBased ("Light-Based Texturing", Int) = 1
+        [Enum(Disabled, 0, Indirect, 1, Full, 2)] _ShadowPatternLit ("Shadow Recieves Light", Int) = 1
 
         // FLAT MODEL
         // [Space(35)]
@@ -839,7 +800,7 @@ Shader "luka/backlace/default"
         _FlatModelFacing ("Facing Direction", Range(-1, 1)) = 0.0
         [Enum(Disabled, 1, Enabled, 0)] _FlatModelLockAxis ("Follow Camera", Range(0, 1)) = 1.0
 
-        // WORLD AFFECT
+        // WORLD ALIGNED
         // [Space(35)]
         // [Header(World Aligned Effect)]
         // [Space(10)]
@@ -874,6 +835,50 @@ Shader "luka/backlace/default"
         [Enum(Additive, 0, Replace, 1, Multiply, 2, Rainbow, 3)] _TouchMode ("Touch Mode", Float) = 0.0
         _TouchRainbowSpeed ("Touch Rainbow Speed", Float) = 0.1
         _TouchRainbowSpread ("Touch Rainbow Spread", Float) = 1.0
+
+        // DITHER
+        // [Space(35)]
+        // [Header(Dither)]
+        // [Space(10)]
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleDither ("Enable Dither", Float) = 0.0
+        [Enum(Screen, 0, World, 1, UV, 2)] _DitherSpace ("Dither Space", Int) = 0
+        _DitherAmount ("Dither Amount", Range(0, 1)) = 0
+        _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
+
+        // LOW PRECISION
+        // [Space(35)]
+        // [Header(Low Precision)]
+        // [Space(10)]
+        [Enum(Disabled, 0, Enabled, 1)] _TogglePS1 ("Enable Low Precision (PS1)", Float) = 0.0
+        [Enum(Disabled, 0, World Space, 1, Screen Space, 2)] _PS1Rounding ("Rounding Style", Int) = 0.0
+        _PS1RoundingPrecision ("Rounding Precision", Float) = 64
+        [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
+        _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
+
+        // VERTEX DISTORTION
+        // [Space(35)]
+        // [Header(Vertex Distortion)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_VERTEX_DISTORTION)] _ToggleVertexDistortion ("Enable Vertex Distortion", Float) = 0.0
+        [Enum(Distortion, 0, Glitch, 1)] _VertexEffectType ("Effect Type", Int) = 0
+        [Enum(Wave, 0, Jumble, 1, Wind, 2, Breathing, 3)] _VertexDistortionMode ("Distortion Mode", Int) = 0
+        [Enum(Slice, 0, Blocky, 1, Wave, 2, Jitter, 3)] _VertexGlitchMode ("Glitch Mode", Int) = 0
+        [Enum(Disabled, 0, Red, 1, Green, 2, Blue, 3, All, 4)] _VertexDistortionColorMask ("Color Channel Mask", Int) = 0
+        // shared (glitch, wave and jumble)
+        _VertexDistortionStrength ("Distortion Strength", Vector) = (0.1, 0.1, 0.1, 0)
+        _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
+        _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
+        // wind
+        _WindStrength ("Wind Strength", Range(0, 1)) = 0.1
+        _WindSpeed ("Wind Speed", Range(0, 5)) = 1.0
+        _WindScale ("Wind Noise Scale", Float) = 1.0
+        _WindDirection ("Wind Direction (XYZ)", Vector) = (1, 0, 0, 0)
+        [NoScaleOffset] _WindNoiseTex ("Wind Noise Texture (R)", 2D) = "gray" { }
+        // breathing
+        _BreathingStrength ("Breathing Strength", Range(0, 0.1)) = 0.01
+        _BreathingSpeed ("Breathing Speed", Range(0, 5)) = 1.0
+        // glitch settings
+        _GlitchFrequency ("Glitch Frequency", Float) = 1.0
 
         // REFREACTION
         // [Space(35)]
@@ -911,31 +916,6 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _RefractionCAUseFresnel ("Use Fresnel for CA", Int) = 0.0 
         _RefractionCAEdgeFade ("CA Fresnel Power", Range(0.1, 10)) = 2.0 
 
-        // VERTEX DISTORTION
-        // [Space(35)]
-        // [Header(Vertex Distortion)]
-        // [Space(10)]
-        [Toggle(_BACKLACE_VERTEX_DISTORTION)] _ToggleVertexDistortion ("Enable Vertex Distortion", Float) = 0.0
-        [Enum(Distortion, 0, Glitch, 1)] _VertexEffectType ("Effect Type", Int) = 0
-        [Enum(Wave, 0, Jumble, 1, Wind, 2, Breathing, 3)] _VertexDistortionMode ("Distortion Mode", Int) = 0
-        [Enum(Slice, 0, Blocky, 1, Wave, 2, Jitter, 3)] _VertexGlitchMode ("Glitch Mode", Int) = 0
-        [Enum(Disabled, 0, Red, 1, Green, 2, Blue, 3, All, 4)] _VertexDistortionColorMask ("Color Channel Mask", Int) = 0
-        // shared (glitch, wave and jumble)
-        _VertexDistortionStrength ("Distortion Strength", Vector) = (0.1, 0.1, 0.1, 0)
-        _VertexDistortionSpeed ("Distortion Speed", Vector) = (1, 1, 1, 0)
-        _VertexDistortionFrequency ("Distortion Frequency", Vector) = (1, 1, 1, 0)
-        // wind
-        _WindStrength ("Wind Strength", Range(0, 1)) = 0.1
-        _WindSpeed ("Wind Speed", Range(0, 5)) = 1.0
-        _WindScale ("Wind Noise Scale", Float) = 1.0
-        _WindDirection ("Wind Direction (XYZ)", Vector) = (1, 0, 0, 0)
-        [NoScaleOffset] _WindNoiseTex ("Wind Noise Texture (R)", 2D) = "gray" { }
-        // breathing
-        _BreathingStrength ("Breathing Strength", Range(0, 0.1)) = 0.01
-        _BreathingSpeed ("Breathing Speed", Range(0, 5)) = 1.0
-        // glitch settings
-        _GlitchFrequency ("Glitch Frequency", Float) = 1.0
-
         // FAKE SCREEN SPACE REFLECTIONS
         // [Space(35)]
         // [Header(Fake Screen Space Reflections)]
@@ -969,25 +949,6 @@ Shader "luka/backlace/default"
         [Enum(Disabled, 0, Enabled, 1)] _SSRAdaptiveStep ("Enable Adaptive Step Size", Int) = 1
         _SSRThickness ("Culling Thickness", Float) = 0.01
         [Enum(Stretch, 0, Fade, 1, Cutoff, 2, Mirror, 3)] _SSROutOfViewMode ("Out Of View Mode", Int) = 0
-
-        // DITHER
-        // [Space(35)]
-        // [Header(Dither)]
-        // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _ToggleDither ("Enable Dither", Float) = 0.0
-        [Enum(Screen, 0, World, 1, UV, 2)] _DitherSpace ("Dither Space", Int) = 0
-        _DitherAmount ("Dither Amount", Range(0, 1)) = 0
-        _DitherScale ("Dither Scale", Range(100, 0.1)) = 10
-
-        // LOW PRECISION
-        // [Space(35)]
-        // [Header(Low Precision)]
-        // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _TogglePS1 ("Enable Low Precision (PS1)", Float) = 0.0
-        [Enum(Disabled, 0, World Space, 1, Screen Space, 2)] _PS1Rounding ("Rounding Style", Int) = 0.0
-        _PS1RoundingPrecision ("Rounding Precision", Float) = 64
-        [Enum(Disabled, 0, Enabled, 1)] _PS1Compression ("Enable Color Compression", Int) = 0.0
-        _PS1CompressionPrecision ("Color Compression Precision", Float) = 32
 
         // STOCHASTIC SAMPLING
         // [Space(35)]
@@ -1115,13 +1076,56 @@ Shader "luka/backlace/default"
         [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilFail ("Outline Stencil Fail Op", Int) = 0 // Keep
         [Enum(UnityEngine.Rendering.StencilOp)] _OutlineStencilZFail ("Outline Stencil ZFail Op", Int) = 0 // Keep
 
-        // INDIRECT LIGHTING
+        // AUDIOLINK
         // [Space(35)]
-        // [Header(Indirect Lighting)]
+        // [Header(AudioLink)]
         // [Space(10)]
-        [Enum(Disabled, 0, Enabled, 1)] _IndirectOverride ("Indirect Override", Float) = 0.0
-        [Enum(Disabled, 0, Cubemap, 1)] _IndirectFallbackMode ("Indirect Fallback Mode", Float) = 0.0
-        _FallbackCubemap ("Fallback Cubemap", Cube) = "" { }
+        [Toggle(_BACKLACE_AUDIOLINK)] _ToggleAudioLink ("Enable AudioLink", Float) = 0.0
+        _AudioLinkFallback ("Fallback Level", Range(0, 1)) = 1.0
+        [Enum(Raw, 0, Smooth, 1, Chronotensity, 2)] _AudioLinkMode ("AudioLink Mode", Float) = 0
+        [IntRange] _AudioLinkSmoothLevel ("Smoothing Level", Range(0, 15)) = 8
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkEmissionBand ("Emission Band", Float) = 0
+        _AudioLinkEmissionStrength ("  Strength", Range(0, 10)) = 1.0
+        _AudioLinkEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkRimBand ("Rim Light Band", Float) = 0
+        _AudioLinkRimStrength ("  Strength", Range(0, 10)) = 1.0
+        _AudioLinkRimRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkHueShiftBand ("Hue Shift Band", Float) = 0
+        _AudioLinkHueShiftStrength ("  Strength", Range(0, 1)) = 0.2
+        _AudioLinkHueShiftRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalHueBand ("Decal Hue Band", Float) = 0
+        _AudioLinkDecalHueStrength ("  Strength", Range(0, 10)) = 2.0
+        _AudioLinkDecalHueRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalEmissionBand ("Decal Emission Band", Float) = 0
+        _AudioLinkDecalEmissionStrength ("  Strength", Range(0, 10)) = 2.0
+        _AudioLinkDecalEmissionRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkDecalOpacityBand ("Decal Opacity Band", Float) = 0
+        _AudioLinkDecalOpacityStrength ("  Strength", Range(0, 10)) = 2.0
+        _AudioLinkDecalOpacityRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkVertexBand ("Vertex Grow/Shrink Band", Float) = 0
+        _AudioLinkVertexStrength ("  Strength", Range(-0.2, 0.2)) = 0.05
+        _AudioLinkVertexRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkOutlineBand ("Outline Band", Float) = 0
+        _AudioLinkOutlineStrength ("  Strength", Range(0, 0.1)) = 0.01
+        _AudioLinkOutlineRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkMatcapBand ("Matcap Band", Float) = 0
+        _AudioLinkMatcapStrength ("  Strength", Range(0, 5)) = 1.0
+        _AudioLinkMatcapRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkPathingBand ("Pathing Band", Float) = 0
+        _AudioLinkPathingStrength ("  Strength", Range(0, 0.5)) = 0.1
+        _AudioLinkPathingRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkGlitterBand ("Glitter Band", Float) = 0
+        _AudioLinkGlitterStrength ("  Strength", Range(0, 1)) = 1.0
+        _AudioLinkGlitterRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+        [Enum(Disabled, 0, Bass, 1, Low Mids, 2, High Mids, 3, Treble, 4, Overall, 5)] _AudioLinkIridescenceBand ("Iridescence Band", Float) = 0
+        _AudioLinkIridescenceStrength ("  Strength", Range(0, 5)) = 1.0
+        _AudioLinkIridescenceRange ("  Min/Max", Vector) = (0, 1, 0, 0)
+
+        // LTCGI
+        // [Space(35)]
+        // [Header(LTCGI)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_LTCGI)] _ToggleLTCGI ("Enable LTCGI", Float) = 0.0
     }
     SubShader
     {
@@ -1183,7 +1187,7 @@ Shader "luka/backlace/default"
         }
         
         // Meta Pass
-        /*Pass
+        Pass
         {
             Name "Meta"
             Tags { "LightMode" = "Meta" }
@@ -1195,7 +1199,7 @@ Shader "luka/backlace/default"
             #include "./Variants/Backlace_FullDefault.cginc"
             #include "./Includes/Backlace_Meta.cginc"
             ENDCG
-        }*/
+        }
 
     }
     CustomEditor "Luka.Backlace.Interface"

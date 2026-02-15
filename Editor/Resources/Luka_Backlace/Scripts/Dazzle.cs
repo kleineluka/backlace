@@ -799,6 +799,9 @@ namespace Luka.Backlace
 
         // instance search properties
         private HashSet<string> keywords = new HashSet<string>();
+
+        // property tracking for per-tab reset
+        private HashSet<string> tracked_property_names = new HashSet<string>();
         
         // there are different kinds of tabs..
         public enum tab_sizes
@@ -827,6 +830,59 @@ namespace Luka.Backlace
         // tab state
         public bool is_expanded = false;
         public bool is_active = false;
+
+        // register a property name with all active tabs in the stack
+        public static void RegisterPropertyName(string name)
+        {
+            if (!is_indexing || string.IsNullOrEmpty(name)) return;
+            foreach (var tab in active_tabs)
+            {
+                tab.tracked_property_names.Add(name);
+            }
+        }
+
+        // reset all tracked properties in this tab to their shader defaults
+        public void ResetTrackedProperties()
+        {
+            if (material == null || material.shader == null || tracked_property_names.Count == 0) return;
+            bool confirm = EditorUtility.DisplayDialog(
+                theme.language_manager.speak("tab_reset_title"),
+                theme.language_manager.speak("tab_reset_confirm", tab_label),
+                theme.language_manager.speak("tab_reset_yes"),
+                theme.language_manager.speak("dialog_cancel")
+            );
+            if (!confirm) return;
+            Undo.RecordObject(material, "Reset Tab Properties");
+            Material defaultMat = new Material(material.shader);
+            Shader shader = material.shader;
+            int propCount = shader.GetPropertyCount();
+            for (int i = 0; i < propCount; i++)
+            {
+                string propName = shader.GetPropertyName(i);
+                if (!tracked_property_names.Contains(propName)) continue;
+                var propType = shader.GetPropertyType(i);
+                switch (propType)
+                {
+                    case UnityEngine.Rendering.ShaderPropertyType.Color:
+                        material.SetColor(propName, defaultMat.GetColor(propName));
+                        break;
+                    case UnityEngine.Rendering.ShaderPropertyType.Vector:
+                        material.SetVector(propName, defaultMat.GetVector(propName));
+                        break;
+                    case UnityEngine.Rendering.ShaderPropertyType.Float:
+                    case UnityEngine.Rendering.ShaderPropertyType.Range:
+                        material.SetFloat(propName, defaultMat.GetFloat(propName));
+                        break;
+                    case UnityEngine.Rendering.ShaderPropertyType.Texture:
+                        material.SetTexture(propName, defaultMat.GetTexture(propName));
+                        material.SetTextureOffset(propName, defaultMat.GetTextureOffset(propName));
+                        material.SetTextureScale(propName, defaultMat.GetTextureScale(propName));
+                        break;
+                }
+            }
+            UnityEngine.Object.DestroyImmediate(defaultMat);
+            EditorUtility.SetDirty(material);
+        }
 
         // constructor for a tab
         public Tab(ref Material material, ref Theme theme, int tab_size, int tab_index, string tab_label, 
@@ -1103,6 +1159,19 @@ namespace Luka.Backlace
                     }
                 }
             }
+            // reset badge
+            string resetMode = theme.config_manager?.json_data?.@interface?.reset_mode ?? "Symbol";
+            if (tracked_property_names.Count > 0 && resetMode != "Disabled")
+            {
+                string resetText = resetMode == "Text" ? theme.language_manager.speak("tab_reset_badge") : "\u21BA";
+                badgesToDraw.Insert(0, new BadgeMetadata
+                {
+                    Text = resetText,
+                    Color = new Color(0.5f, 0.5f, 0.5f),
+                    Style = theme.styler_manager.load_style_variant_badge_large(),
+                    OnClick = () => ResetTrackedProperties()
+                });
+            }
             draw_badges(rect, badgesToDraw, 20f, 5f);
             // handle foldout arrow
             Event currentEvent = Event.current;
@@ -1262,6 +1331,19 @@ namespace Luka.Backlace
                         });
                     }
                 }
+            }
+            // reset badge
+            string resetModeSub = theme.config_manager?.json_data?.@interface?.reset_mode ?? "Symbol";
+            if (tracked_property_names.Count > 0 && resetModeSub != "Disabled")
+            {
+                string resetTextSub = resetModeSub == "Text" ? theme.language_manager.speak("tab_reset_badge") : "\u21BA";
+                badgesToDraw.Insert(0, new BadgeMetadata
+                {
+                    Text = resetTextSub,
+                    Color = new Color(0.5f, 0.5f, 0.5f),
+                    Style = theme.styler_manager.load_style_variant_badge_small(),
+                    OnClick = () => ResetTrackedProperties()
+                });
             }
             draw_badges(rect, badgesToDraw, 10f, 5f);
             // handle foldout arrow
@@ -2026,6 +2108,14 @@ namespace Luka.Backlace
                 {
                     config.json_data.@interface.expand_searches = newExpandIndex == 0;
                 }
+                // ignore some preset properties (preset_ignore)
+                bool presetIgnore = config.json_data.@interface.preset_ignore;
+                int currentPresetIgnoreIndex = presetIgnore ? 0 : 1;
+                int newPresetIgnoreIndex = EditorGUILayout.Popup(languages.speak("config_toggle_preset_ignore"), currentPresetIgnoreIndex, toggleOptions);
+                if (newPresetIgnoreIndex != currentPresetIgnoreIndex)
+                {
+                    config.json_data.@interface.preset_ignore = newPresetIgnoreIndex == 0;
+                }
                 // optimise presets (optimise_presets)
                 bool optimisePresets = config.json_data.@interface.optimise_presets;
                 int currentOptimiseIndex = optimisePresets ? 0 : 1;
@@ -2033,6 +2123,16 @@ namespace Luka.Backlace
                 if (newOptimiseIndex != currentOptimiseIndex)
                 {
                     config.json_data.@interface.optimise_presets = newOptimiseIndex == 0;
+                }
+                // reset mode (reset_mode)
+                string[] resetModeOptions = new string[] { "Symbol", "Text", "Disabled" };
+                string currentResetMode = config.json_data.@interface.reset_mode ?? "Symbol";
+                int currentResetIndex = Array.IndexOf(resetModeOptions, currentResetMode);
+                if (currentResetIndex < 0) currentResetIndex = 0;
+                int newResetIndex = EditorGUILayout.Popup(languages.speak("config_reset_mode"), currentResetIndex, resetModeOptions);
+                if (newResetIndex != currentResetIndex)
+                {
+                    config.json_data.@interface.reset_mode = resetModeOptions[newResetIndex];
                 }
                 Components.draw_divider();
                 GUILayout.Label(theme.language_manager.speak("config_extra_options"), EditorStyles.boldLabel);
@@ -2330,7 +2430,7 @@ namespace Luka.Backlace
                     {
                         if (selectedProjectPresetIndex >= 0 && selectedProjectPresetIndex < bags.projectPresets.Count)
                         {
-                            Bags.ApplyPreset(bags.projectPresets[selectedProjectPresetIndex], material);
+                            Bags.ApplyPreset(bags.projectPresets[selectedProjectPresetIndex], material, config.json_data.@interface.preset_ignore);
                         }
                     }
                     if (GUILayout.Button(theme.language_manager.speak("preset_reload"), GUILayout.Width(60)))
@@ -2355,7 +2455,7 @@ namespace Luka.Backlace
                     {
                         if (selectedUserPresetIndex >= 0 && selectedUserPresetIndex < bags.userPresets.Count)
                         {
-                            Bags.ApplyPreset(bags.userPresets[selectedUserPresetIndex], material);
+                            Bags.ApplyPreset(bags.userPresets[selectedUserPresetIndex], material, config.json_data.@interface.preset_ignore);
                         }
                     }
                     if (GUILayout.Button("X", GUILayout.Width(20)))
@@ -2385,7 +2485,7 @@ namespace Luka.Backlace
                     newUserPresetName = Regex.Replace(newUserPresetName, "[^a-zA-Z0-9_ ]", ""); // sanitize
                     if (!string.IsNullOrEmpty(newUserPresetName))
                     {
-                        bags.SavePreset(material, newUserPresetName, config.json_data.@interface.optimise_presets);
+                        bags.SavePreset(material, newUserPresetName, config.json_data.@interface.optimise_presets, config.json_data.@interface.preset_ignore);
                         newUserPresetName = "";
                         bags.LoadPresets();
                     }

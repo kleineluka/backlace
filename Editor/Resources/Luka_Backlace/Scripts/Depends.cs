@@ -806,21 +806,22 @@ namespace Luka.Backlace
             userPresets = LoadMaterialsFromPath(real_user_path, SearchOption.TopDirectoryOnly);
         }
 
-        public static void ApplyPreset(Material preset, Material targetMaterial)
+        public static void ApplyPreset(Material preset, Material targetMaterial, bool usePresetIgnore = false)
         {
             if (preset == null || targetMaterial == null)
             {
                 Pretty.print("Preset or target material is null. Cannot apply.", Pretty.LogKind.Error);
                 return;
             }
+            HashSet<string> ignoreSet = usePresetIgnore ? new HashSet<string>(Project.preset_ignore) : null;
             Undo.RecordObject(targetMaterial, "Apply Dazzle Preset '" + preset.name + "'");
             // reset material to default shader properties first for forward compatibility
             Shader currentShader = targetMaterial.shader;
             Material defaultMaterial = new Material(currentShader);
-            CopyMaterialProperties(defaultMaterial, targetMaterial);
+            CopyMaterialProperties(defaultMaterial, targetMaterial, ignoreSet);
             UnityEngine.Object.DestroyImmediate(defaultMaterial);
-            // copy all shader properties from preset
-            CopyMaterialProperties(preset, targetMaterial);
+            // copy all shader properties from preset, skipping ignored ones
+            CopyMaterialProperties(preset, targetMaterial, ignoreSet);
             targetMaterial.shaderKeywords = preset.shaderKeywords;
             targetMaterial.renderQueue = preset.renderQueue;
             // trigger logic from beautyblender and cushion if needed
@@ -829,7 +830,7 @@ namespace Luka.Backlace
             EditorUtility.SetDirty(targetMaterial);
         }
 
-        public bool SavePreset(Material sourceMaterial, string presetName, bool optimisePreset = false)
+        public bool SavePreset(Material sourceMaterial, string presetName, bool optimisePreset = false, bool usePresetIgnore = false)
         {
             if (sourceMaterial == null || string.IsNullOrEmpty(presetName))
             {
@@ -854,6 +855,10 @@ namespace Luka.Backlace
                 AssetDatabase.DeleteAsset(finalAssetPath);
             }
             Material newPreset = new Material(sourceMaterial);
+            if (usePresetIgnore)
+            {
+                ResetIgnoredProperties(newPreset);
+            }
             if (optimisePreset)
             {
                 OptimiseMaterial(newPreset);
@@ -1014,13 +1019,46 @@ namespace Luka.Backlace
             }
         }
         
-        private static void CopyMaterialProperties(Material source, Material dest)
+        private static void ResetIgnoredProperties(Material mat)
+        {
+            if (mat == null || mat.shader == null) return;
+            Material defaultMat = new Material(mat.shader);
+            HashSet<string> ignoreSet = new HashSet<string>(Project.preset_ignore);
+            int propertyCount = ShaderUtil.GetPropertyCount(mat.shader);
+            for (int i = 0; i < propertyCount; i++)
+            {
+                string propertyName = ShaderUtil.GetPropertyName(mat.shader, i);
+                if (!ignoreSet.Contains(propertyName)) continue;
+                switch (ShaderUtil.GetPropertyType(mat.shader, i))
+                {
+                    case ShaderUtil.ShaderPropertyType.Color:
+                        mat.SetColor(propertyName, defaultMat.GetColor(propertyName));
+                        break;
+                    case ShaderUtil.ShaderPropertyType.Vector:
+                        mat.SetVector(propertyName, defaultMat.GetVector(propertyName));
+                        break;
+                    case ShaderUtil.ShaderPropertyType.Float:
+                    case ShaderUtil.ShaderPropertyType.Range:
+                        mat.SetFloat(propertyName, defaultMat.GetFloat(propertyName));
+                        break;
+                    case ShaderUtil.ShaderPropertyType.TexEnv:
+                        mat.SetTexture(propertyName, defaultMat.GetTexture(propertyName));
+                        mat.SetTextureOffset(propertyName, defaultMat.GetTextureOffset(propertyName));
+                        mat.SetTextureScale(propertyName, defaultMat.GetTextureScale(propertyName));
+                        break;
+                }
+            }
+            UnityEngine.Object.DestroyImmediate(defaultMat);
+        }
+
+        private static void CopyMaterialProperties(Material source, Material dest, HashSet<string> ignoreProperties = null)
         {
             dest.shader = source.shader;
             int propertyCount = ShaderUtil.GetPropertyCount(source.shader);
             for (int i = 0; i < propertyCount; i++)
             {
                 string propertyName = ShaderUtil.GetPropertyName(source.shader, i);
+                if (ignoreProperties != null && ignoreProperties.Contains(propertyName)) continue;
                 if (dest.HasProperty(propertyName))
                 {
                     switch (ShaderUtil.GetPropertyType(source.shader, i))

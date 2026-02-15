@@ -169,6 +169,25 @@ float3 LimitLightBrightness(float3 lightColor, float minVal, float maxVal)
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
+// fade shadows based on distance
+float FadeShadows(FragmentData i, float attenuation)
+{
+    #if HANDLE_SHADOWS_BLENDING_IN_GI && !defined(SHADOWS_SHADOWMASK)
+        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
+        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
+        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
+        attenuation = saturate(attenuation + shadowFade);
+    #endif // HANDLE_SHADOWS_BLENDING_IN_GI && !SHADOWS_SHADOWMASK
+    #if defined(LIGHTMAP_ON) && defined(SHADOWS_SHADOWMASK)
+        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
+        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
+        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
+        float bakedAttenuation = UnitySampleBakedOcclusion(i.lightmapUV, i.worldPos);
+        attenuation = UnityMixRealtimeAndBakedShadows(attenuation, bakedAttenuation, shadowFade);
+    #endif // LIGHTMAP_ON && SHADOWS_SHADOWMASK
+    return attenuation;
+}
+
 // solution to get indirect lighting to apply to all light modes
 float3 GetUniversalIndirectLight(BacklaceSurfaceData Surface)
 {
@@ -254,32 +273,16 @@ void GetForwardAddLightData(inout BacklaceLightData lightData)
             UNITY_LIGHT_ATTENUATION(atten, FragData, FragData.worldPos);
             lightData.attenuation = atten;
         #endif // DIRECTIONAL
-        lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);
+        #if !defined(DIRECTIONAL)
+            // this should be included in light attenuation
+            lightData.attenuation *= UNITY_SHADOW_ATTENUATION(FragData, FragData.worldPos);
+        #endif // !DIRECTIONAL
     }
     else // unity
     {
         UNITY_LIGHT_ATTENUATION(attenuation, FragData, FragData.worldPos);
         lightData.attenuation = attenuation;
     }
-}
-
-// fade shadows based on distance
-float FadeShadows(FragmentData i, float attenuation)
-{
-    #if HANDLE_SHADOWS_BLENDING_IN_GI && !defined(SHADOWS_SHADOWMASK)
-        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-        attenuation = saturate(attenuation + shadowFade);
-    #endif // HANDLE_SHADOWS_BLENDING_IN_GI && !SHADOWS_SHADOWMASK
-    #if defined(LIGHTMAP_ON) && defined(SHADOWS_SHADOWMASK)
-        float viewZ = dot(_WorldSpaceCameraPos - i.worldPos, UNITY_MATRIX_V[2].xyz);
-        float shadowFadeDistance = UnityComputeShadowFadeDistance(i.worldPos, viewZ);
-        float shadowFade = UnityComputeShadowFade(shadowFadeDistance);
-        float bakedAttenuation = UnitySampleBakedOcclusion(i.lightmapUV, i.worldPos);
-        attenuation = UnityMixRealtimeAndBakedShadows(attenuation, bakedAttenuation, shadowFade);
-    #endif // LIGHTMAP_ON && SHADOWS_SHADOWMASK
-    return attenuation;
 }
 
 
@@ -549,6 +552,19 @@ void GetLightData(inout BacklaceSurfaceData Surface)
         Surface.HalfDir = UnitySafeNormalize(Surface.LightDir + Surface.ViewDir);
         GetLightColour(lightData, Surface);
     #endif // UNITY_PASS_FORWARDBASE
+    // attenuation modifiers
+    [branch] if (_AttenuationOverride > 0) {
+        lightData.attenuation = lerp(lightData.attenuation, _AttenuationManual, _AttenuationOverride);
+    }
+    lightData.attenuation += _AttenuationBoost;
+    lightData.attenuation *= _AttenuationMultiplier;
+    lightData.attenuation = clamp(lightData.attenuation, _AttenuationMin, _AttenuationMax);
+    // extra modifiers, like if we respect attenuation in directional (we most likely shouldn't)
+    #if defined(DIRECTIONAL) || defined(DIRECTIONAL_COOKIE)
+        lightData.attenuation = lerp(lightData.attenuation, 1, _DirectionalAmbience);
+    #else // DIRECTIONAL || DIRECTIONAL_COOKIE
+        lightData.indirectColor = lerp(0, lightData.indirectColor, _IndirectAdditive);
+    #endif // DIRECTIONAL || DIRECTIONAL_COOKIE
     //global modifiers for both passes
     float3 finalDirectColor = lightData.directColor;
     float3 finalIndirectColor = lightData.indirectColor;
@@ -581,7 +597,7 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     }
     // finalize the light colours
     Surface.LightColor = float4(combinedLight, lightData.attenuation);
-    Surface.Attenuation = Surface.LightColor.a;
+    Surface.Attenuation = Surface.LightColor.a; // default to vanilla attenuation, may be styled later
     Surface.IndirectDiffuse = finalIndirectColor;
     // prepare dot products
     Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);

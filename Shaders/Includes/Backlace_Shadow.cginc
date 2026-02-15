@@ -225,7 +225,7 @@ VertexOutput  Vertex(VertexData v)
     VertexOutput  i;
     // vertex effects from forward passes
     #if defined(_BACKLACE_AUDIOLINK)
-        BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
+        Divine al_data = CalculateDivine();
         v.vertex.xyz *= _VertexManipulationScale * al_data.vertexScale; // scale
     #else // _BACKLACE_AUDIOLINK
         v.vertex.xyz *= _VertexManipulationScale; // scale

@@ -96,21 +96,16 @@ struct FragmentData
     UNITY_SHADOW_COORDS(6)
     UNITY_FOG_COORDS(7)
     #if defined(LIGHTMAP_ON)
-        float2 lightmapUV : TEXCOORD8;
+        float2 lightmapUV : TEXCOORD9;
     #endif // LIGHTMAP_ON
     #if defined(DYNAMICLIGHTMAP_ON)
-        float2 dynamicLightmapUV : TEXCOORD9;
+        float2 dynamicLightmapUV : TEXCOORD10;
     #endif // DYNAMICLIGHTMAP_ON
     #if defined(_BACKLACE_MATCAP)
-        float2 matcapUV : TEXCOORD10;
+        float2 matcapUV : TEXCOORD11;
     #endif // _BACKLACE_MATCAP
-    float3 worldObjectCenter : TEXCOORD11;
-    float4 scrPos : TEXCOORD12;
-    #if defined(_BACKLACE_AUDIOLINK)
-        float4 alChannel1 : TEXCOORD13; // x=emission, y=rim, z=hueShift, w=matcap
-        float4 alChannel2 : TEXCOORD14; // x=pathing, y=glitter, z=iridescence, w=decalHue
-        float2 alChannel3 : TEXCOORD15; // x=decalEmission, y=decalOpacity
-    #endif // _BACKLACE_AUDIOLINK
+    float3 worldObjectCenter : TEXCOORD12;
+    float4 scrPos : TEXCOORD13;
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

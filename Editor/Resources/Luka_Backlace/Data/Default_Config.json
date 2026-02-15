@@ -11,6 +11,8 @@
         "expand_searches": true,
         "check_updates": true,
         "optimise_presets": false,
-        "info_badges": true
+        "info_badges": true,
+        "reset_mode": "Symbol",
+        "preset_ignore": true
     }
 }

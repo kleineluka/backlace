@@ -698,9 +698,9 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         decal1.distortionSpeed = _Decal1DistortionSpeed;
         decal1.glitchEffect = _Decal1GlitchControls;
         #if defined(_BACKLACE_AUDIOLINK)
-            decal1.alHue = i.alChannel2.w;
-            decal1.alEmission = i.alChannel3.x;
-            decal1.alOpacity = i.alChannel3.y;
+            decal1.alHue = Music.decalHue;
+            decal1.alEmission = Music.decalEmission;
+            decal1.alOpacity = Music.decalOpacity;
         #endif // _BACKLACE_AUDIOLINK
         // assign position, scale, rotation, and sharpness based on space
         [branch] if (_Decal1Space == 1) // Triplanar
@@ -756,9 +756,9 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         decal2.distortionEffect = _Decal2DistortionControls;
         decal2.glitchEffect = _Decal2GlitchControls;
         #if defined(_BACKLACE_AUDIOLINK)
-            decal2.alHue = i.alChannel2.w;
-            decal2.alEmission = i.alChannel3.x;
-            decal2.alOpacity = i.alChannel3.y;
+            decal2.alHue = Music.decalHue;
+            decal2.alEmission = Music.decalEmission;
+            decal2.alOpacity = Music.decalOpacity;
         #endif // _BACKLACE_AUDIOLINK
         // assign position, scale, rotation, and sharpness based on space
         [branch] if (_Decal2Space == 1) // Triplanar

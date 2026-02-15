@@ -112,7 +112,7 @@
         [branch] if (_ToggleHueShift > 0)
         {
             #if defined(_BACKLACE_AUDIOLINK)
-                finalColor = ApplyHueShift(finalColor, _HueShift + i.alChannel1.z, _ToggleAutoCycle, _AutoCycleSpeed);
+                finalColor = ApplyHueShift(finalColor, _HueShift + Music.hueShift, _ToggleAutoCycle, _AutoCycleSpeed);
             #else // _BACKLACE_AUDIOLINK
                 finalColor = ApplyHueShift(finalColor, _HueShift, _ToggleAutoCycle, _AutoCycleSpeed);
             #endif // _BACKLACE_AUDIOLINK
@@ -336,7 +336,7 @@
         float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_MatcapMask, _MatcapTex, Uvs[_MatcapMask_UV]).r;
         float finalMatcapIntensity = _MatcapIntensity;
         #if defined(_BACKLACE_AUDIOLINK)
-            finalMatcapIntensity *= i.alChannel1.w;
+            finalMatcapIntensity *= Music.matcap;
         #endif // _BACKLACE_AUDIOLINK
         float3 finalMatcap = matcapColor * finalMatcapIntensity * mask;
         switch(_MatcapBlendMode)
@@ -476,28 +476,29 @@
     float _ShadowPatternTriplanarSharpness;
     float _ShadowPatternTransparency;
     int _ShadowTextureBlendMode;
+    int _ShadowPatternLightBased;
+    int _ShadowPatternLit;
 
-    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface, float3 shadowTint)
+    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface, float3 totalLight, float3 originalShadowColor)
     {
         float3 texturedShadow;
         float blendFactor;
-        float3 albedoTintedShadow = shadowTint * Surface.Albedo.rgb;
-        float shadowMask = 1.0 - Surface.NdotL;
+        float shadowMask = (_ShadowPatternLightBased == 1.0) ? 1.0 - Surface.NdotL : 1.0;
         switch(_ShadowTextureMappingMode)
         {
             case 0: // uv albedo
             {
                 float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
-                texturedShadow = shadowAlbedoSample.rgb;
-                blendFactor = shadowAlbedoSample.a * shadowMask;
+                texturedShadow = shadowAlbedoSample.rgb * _ShadowPatternColor.rgb;
+                blendFactor = shadowAlbedoSample.a;
                 break;
             }
             case 1: // screen pattern
             {
                 float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
                 float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
-                texturedShadow = albedoTintedShadow;
-                blendFactor = patternSample.r * patternSample.a * shadowMask;
+                texturedShadow = patternSample.rgb * _ShadowPatternColor.rgb;
+                blendFactor = patternSample.a;
                 break;
             }
             case 2: // triplanar
@@ -508,32 +509,35 @@
                     float3(0, 0, 0), _ShadowPatternScale, float3(0, 0, 0),
                     _ShadowPatternTriplanarSharpness, true, float2(0, 0)
                 );
-                texturedShadow = albedoTintedShadow;
-                blendFactor = patternSample.r * patternSample.a * shadowMask;
+                texturedShadow = patternSample.rgb * _ShadowPatternColor.rgb;
+                blendFactor = patternSample.a;
                 break;
             }
         }
-        float3 baseShadowColour = Surface.Albedo.rgb * lerp(Surface.IndirectDiffuse, 1.0, _ShadowPatternTransparency);
+        blendFactor *= _ShadowPatternTransparency * shadowMask;
         float3 finalShadowColor;
         switch(_ShadowTextureBlendMode)
         {
             case 0: // additive
-                finalShadowColor = baseShadowColour + texturedShadow * blendFactor;
+                finalShadowColor = Surface.Albedo.rgb + texturedShadow * blendFactor;
                 break;
             case 1: // multiply
-                finalShadowColor = lerp(baseShadowColour, baseShadowColour * texturedShadow, blendFactor);
+                finalShadowColor = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * texturedShadow, blendFactor);
                 break;
             default: // alpha blend (2)
-                finalShadowColor = lerp(baseShadowColour, texturedShadow, blendFactor);
+                finalShadowColor = lerp(Surface.Albedo.rgb, texturedShadow, blendFactor);
                 break;
         }
-        float3 originalShadowColor = Surface.Albedo.rgb * Surface.IndirectDiffuse;
-        return lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);
-    }
-
-    float3 GetTexturedShadowColor(inout BacklaceSurfaceData Surface)
-    {
-        return GetTexturedShadowColor(Surface, _ShadowPatternColor.rgb);
+        finalShadowColor = lerp(originalShadowColor, finalShadowColor, _ShadowTextureIntensity);
+        if (_ShadowPatternLit == 1) // add indirect
+        {
+            finalShadowColor += Surface.IndirectDiffuse;
+        } 
+        else if (_ShadowPatternLit == 2) // take full light
+        {
+            finalShadowColor *= totalLight + Surface.IndirectDiffuse;
+        }
+        return finalShadowColor;
     }
 #endif // _BACKLACE_SHADOW_TEXTURE
 
@@ -758,7 +762,7 @@
         }
         pathAlpha = smoothstep(0, _PathingSoftness, pathAlpha);
         #if defined(_BACKLACE_AUDIOLINK)
-            pathAlpha *= i.alChannel2.x;
+            pathAlpha *= Music.pathing;
         #endif // _BACKLACE_AUDIOLINK
         if (pathAlpha <= 0.001) return;
         //float3 pathEmission = pathAlpha * _PathingColor.rgb * _PathingEmission;
@@ -868,7 +872,7 @@
         }
         float finalGlitterBrightness = _GlitterBrightness;
         #if defined(_BACKLACE_AUDIOLINK)
-            finalGlitterBrightness *= i.alChannel2.y;
+            finalGlitterBrightness *= Music.glitter;
         #endif // _BACKLACE_AUDIOLINK
         final_glitter = glitter_mask * glitter_color * finalGlitterBrightness;
         float mask_val = UNITY_SAMPLE_TEX2D_SAMPLER(_GlitterMask, _MainTex, Uvs[_GlitterMask_UV]).r;
@@ -912,7 +916,7 @@
         float mask = UNITY_SAMPLE_TEX2D_SAMPLER(_IridescenceMask, _MainTex, Uvs[_IridescenceMask_UV]).r;
         float finalIridescenceIntensity = _IridescenceIntensity;
         #if defined(_BACKLACE_AUDIOLINK)
-            finalIridescenceIntensity *= i.alChannel2.z;
+            finalIridescenceIntensity *= Music.iridescence;
         #endif // _BACKLACE_AUDIOLINK
         float finalIntensity = finalIridescenceIntensity * pow(fresnel_base, 2.0) * mask;
         iridescenceColor *= _IridescenceTint.rgb * finalIntensity * Surface.Attenuation;

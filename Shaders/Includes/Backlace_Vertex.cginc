@@ -17,10 +17,7 @@ FragmentData Vertex(VertexData v)
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(i);
     // set up audio link values
     #if defined(_BACKLACE_AUDIOLINK)
-        BacklaceAudioLinkData al_data = CalculateAudioLinkEffects();
-        i.alChannel1 = float4(al_data.emission, al_data.rim, al_data.hueShift, al_data.matcap);
-        i.alChannel2 = float4(al_data.pathing, al_data.glitter, al_data.iridescence, al_data.decalHue);
-        i.alChannel3 = float2(al_data.decalEmission, al_data.decalOpacity);
+        Divine al_data = CalculateDivine();
         v.vertex.xyz *= _VertexManipulationScale * al_data.vertexScale; // scale
     #else // _BACKLACE_AUDIOLINK
         v.vertex.xyz *= _VertexManipulationScale; // scale
@@ -44,6 +41,7 @@ FragmentData Vertex(VertexData v)
     i.uv3 = v.uv3;
     // unity macros / provided data
     UNITY_TRANSFER_SHADOW(i, v.uv);
+    //UNITY_TRANSFER_LIGHTING(i, v.uv1);
     UNITY_TRANSFER_FOG(i, i.pos);
     #if defined(LIGHTMAP_ON)
         i.lightmapUV = v.uv1 * unity_LightmapST.xy + unity_LightmapST.zw;
@@ -54,7 +52,7 @@ FragmentData Vertex(VertexData v)
     // ps1 effect
     #if defined(BACKLACE_CAPABILITIES_HIGH)
         [branch] if (_TogglePS1 == 1) ApplyPS1Vertex(i, v);
-        #endif // BACKLACE_CAPABILITIES_HIGH
+    #endif // BACKLACE_CAPABILITIES_HIGH
     // for screen related effects
     i.scrPos = ComputeScreenPos(i.pos);
     // flat model feature

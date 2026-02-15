@@ -76,6 +76,11 @@ float _StitchOffset;
 int _LightingColorMode;
 int _LightingDirectionMode;
 int _LightingSource;
+int _IndirectDiffuse;
+int _IndirectAlbedo;
+int _DirectDiffuse;
+int _DirectionalAmbience;
+int _IndirectAdditive;
 float4 _ForcedLightDirection;
 float _ViewDirectionOffsetX;
 float _ViewDirectionOffsetY;
@@ -92,7 +97,8 @@ float _BakedDirectIntensity;
 float _BakedIndirectIntensity;
 
 // attenuation properties
-int _AttenuationMode;
+int _AttenuationShaded;
+float _AttenuationOverride;
 float _AttenuationManual;
 float _AttenuationMin;
 float _AttenuationMax;
@@ -395,6 +401,7 @@ float3 _VertexManipulationScale;
         float4 _TriBandPostShallowTint;
         float4 _TriBandPostLitTint;
         float _TriBandAttenuatedShadows;
+        float _TriBandIndirectShallow;
     #elif defined(_ANIMEMODE_PACKED) // _ANIMEMODE_*
         int _PackedMapStyle;
         UNITY_DECLARE_TEX2D_NOSAMPLER(_PackedMapOne);

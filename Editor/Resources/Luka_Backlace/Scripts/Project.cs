@@ -47,6 +47,10 @@ namespace Luka.Backlace
             new Dependency("LTCGI", DependencyType.Package, folderPath: "", packageName: "at.pimaker.ltcgi", infoUrl: "https://github.com/PiMaker/ltcgi"),
             new Dependency("SPS", DependencyType.Package, folderPath: "", packageName: "com.vrcfury.vrcfury", infoUrl: "https://github.com/VRCFury/VRCFury"),
         };
+        public static readonly List<string> preset_ignore = new List<string>
+        {
+            "_MainTex"
+        };
         public static readonly DependencyManager dependency_manager = new DependencyManager(dependencies);
         public static readonly List<CustomBadge> lighting_mode_badges = new List<CustomBadge>
         {
