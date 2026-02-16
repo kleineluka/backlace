@@ -110,11 +110,11 @@
         },
         {
             "key": "tab_license",
-            "value": "License"
+            "value": "Licence"
         },
         {
             "key": "button_show_license",
-            "value": "Show License in Unity"
+            "value": "Show Licence in Unity"
         },
         {
             "key": "config_toggle_grey_unused",
@@ -2154,11 +2154,11 @@
         },
         {
             "key": "prop_PS1Compression",
-            "value": "Enable Color Compression"
+            "value": "Enable Colour Compression"
         },
         {
             "key": "prop_PS1CompressionPrecision",
-            "value": "Color Compression Precision"
+            "value": "Colour Compression Precision"
         },
         {
             "key": "prop_UseTextureStitching",
@@ -2566,7 +2566,7 @@
         },
         {
             "key": "prop_InteriorColor",
-            "value": "Interior Color"
+            "value": "Interior Colour"
         },
         {
             "key": "prop_InteriorTiling",
@@ -3230,7 +3230,7 @@
         },
         {
             "key": "tab_anime",
-            "value": "Anime Effects"
+            "value": "Character"
         },
         {
             "key": "sub_tab_shading",
@@ -3286,7 +3286,7 @@
         },
         {
             "key": "prop_AngelRing1Color",
-            "value": "Angel Ring 1 Color"
+            "value": "Angel Ring 1 Colour"
         },
         {
             "key": "prop_AngelRing1Position",
@@ -3298,7 +3298,7 @@
         },
         {
             "key": "prop_AngelRing2Color",
-            "value": "Angel Ring 2 Color"
+            "value": "Angel Ring 2 Colour"
         },
         {
             "key": "prop_AngelRing2Position",
@@ -3310,7 +3310,7 @@
         },
         {
             "key": "prop_AngelRing3Color",
-            "value": "Angel Ring 3 Color"
+            "value": "Angel Ring 3 Colour"
         },
         {
             "key": "prop_AngelRing3Position",
@@ -3414,7 +3414,7 @@
         },
         {
             "key": "prop_AnimeModeNew",
-            "value": "Anime Mode New"
+            "value": "Shading Mode"
         },
         {
             "key": "prop_AttenuationBoost",
@@ -3482,7 +3482,7 @@
         },
         {
             "key": "prop_ColorGradingMode",
-            "value": "Color Grading Mode"
+            "value": "Colour Grading Mode"
         },
         {
             "key": "prop_Decal1DistortionControls",
@@ -3570,7 +3570,7 @@
         },
         {
             "key": "prop_ExCheekColor",
-            "value": "Ex Cheek Color"
+            "value": "Ex Cheek Colour"
         },
         {
             "key": "prop_ExCheekIntensity",
@@ -3578,7 +3578,7 @@
         },
         {
             "key": "prop_ExEyeColor",
-            "value": "Ex Eye Color"
+            "value": "Ex Eye Colour"
         },
         {
             "key": "prop_ExpressionMap",
@@ -3590,7 +3590,7 @@
         },
         {
             "key": "prop_ExShadowColor",
-            "value": "Ex Shadow Color"
+            "value": "Ex Shadow Colour"
         },
         {
             "key": "prop_ExShadowIntensity",
@@ -3598,7 +3598,7 @@
         },
         {
             "key": "prop_ExShyColor",
-            "value": "Ex Shy Color"
+            "value": "Ex Shy Colour"
         },
         {
             "key": "prop_ExShyIntensity",
@@ -3694,7 +3694,7 @@
         },
         {
             "key": "prop_HairHeadCenter",
-            "value": "Hair Head Center"
+            "value": "Hair Head Centre"
         },
         {
             "key": "prop_HairHeadForward",
@@ -3774,7 +3774,7 @@
         },
         {
             "key": "prop_LipOutlineColor",
-            "value": "Lip Outline Color"
+            "value": "Lip Outline Colour"
         },
         {
             "key": "prop_LipOutlineIntensity",
@@ -3802,7 +3802,7 @@
         },
         {
             "key": "prop_NoseLineColor",
-            "value": "Nose Line Color"
+            "value": "Nose Line Colour"
         },
         {
             "key": "prop_NoseLinePower",
@@ -3814,7 +3814,7 @@
         },
         {
             "key": "prop_NPRBlinnColor",
-            "value": "NPR Blinn Color"
+            "value": "NPR Blinn Colour"
         },
         {
             "key": "prop_NPRBlinnMax",
@@ -3846,7 +3846,7 @@
         },
         {
             "key": "prop_NPRForwardSpecularColor",
-            "value": "NPR Forward Specular Color"
+            "value": "NPR Forward Specular Colour"
         },
         {
             "key": "prop_NPRForwardSpecularMultiplier",
@@ -3858,7 +3858,7 @@
         },
         {
             "key": "prop_NPRLitColor",
-            "value": "NPR Lit Color"
+            "value": "NPR Lit Colour"
         },
         {
             "key": "prop_NPRRim",
@@ -3866,7 +3866,7 @@
         },
         {
             "key": "prop_NPRRimColor",
-            "value": "NPR Rim Color"
+            "value": "NPR Rim Colour"
         },
         {
             "key": "prop_NPRRimExp",
@@ -3882,7 +3882,7 @@
         },
         {
             "key": "prop_NPRShadowColor",
-            "value": "NPR Shadow Color"
+            "value": "NPR Shadow Colour"
         },
         {
             "key": "prop_NPRSpecularMask",
@@ -3898,7 +3898,7 @@
         },
         {
             "key": "prop_NPRSSSColor",
-            "value": "NPR SSS Color"
+            "value": "NPR SSS Colour"
         },
         {
             "key": "prop_NPRSSSExp",
@@ -3926,7 +3926,7 @@
         },
         {
             "key": "prop_OffsetRimColor",
-            "value": "Offset Rim Color"
+            "value": "Offset Rim Colour"
         },
         {
             "key": "prop_OffsetRimHardness",
@@ -3986,7 +3986,7 @@
         },
         {
             "key": "prop_PackedLitColor",
-            "value": "Packed Lit Color"
+            "value": "Packed Lit Colour"
         },
         {
             "key": "prop_PackedMapMetals",
@@ -4022,7 +4022,7 @@
         },
         {
             "key": "prop_PackedRimColor",
-            "value": "Packed Rim Color"
+            "value": "Packed Rim Colour"
         },
         {
             "key": "prop_PackedRimLight",
@@ -4038,7 +4038,7 @@
         },
         {
             "key": "prop_PackedShadowColor",
-            "value": "Packed Shadow Color"
+            "value": "Packed Shadow Colour"
         },
         {
             "key": "prop_PackedShadowSmoothness",
@@ -4110,7 +4110,7 @@
         },
         {
             "key": "prop_SpecularToonColor",
-            "value": "Specular Toon Color"
+            "value": "Specular Toon Colour"
         },
         {
             "key": "prop_SpecularToonIntensity",
@@ -4138,11 +4138,11 @@
         },
         {
             "key": "prop_StockingsColor",
-            "value": "Stockings Color"
+            "value": "Stockings Colour"
         },
         {
             "key": "prop_StockingsColorDark",
-            "value": "Stockings Color Dark"
+            "value": "Stockings Colour Dark"
         },
         {
             "key": "prop_StockingsDarkWidth",
@@ -4174,7 +4174,7 @@
         },
         {
             "key": "prop_ToggleAnimeExtras",
-            "value": "Toggle Anime Extras"
+            "value": "Toggle Character Extras"
         },
         {
             "key": "prop_ToggleAnimeGradient",
@@ -4238,7 +4238,7 @@
         },
         {
             "key": "prop_TriBandLitColor",
-            "value": "Tri Band Lit Color"
+            "value": "Tri Band Lit Colour"
         },
         {
             "key": "prop_TriBandPostLitTint",
@@ -4254,11 +4254,11 @@
         },
         {
             "key": "prop_TriBandShadowColor",
-            "value": "Tri Band Shadow Color"
+            "value": "Tri Band Shadow Colour"
         },
         {
             "key": "prop_TriBandShallowColor",
-            "value": "Tri Band Shallow Color"
+            "value": "Tri Band Shallow Colour"
         },
         {
             "key": "prop_TriBandShallowWidth",
@@ -4355,6 +4355,26 @@
         {
             "key": "render_queue_notice",
             "value": "This effect may require a specific render queue to function properly. Please try adjusting it (lowering or raising) if it appears incorrect in your scene."
+        },
+        {
+            "key": "prop_DecalLighting_NEW",
+            "value": "Sticker Lighting"
+        },
+        {
+            "key": "header_angel_ring_one",
+            "value": "Ring One"
+        },
+        {
+            "key": "header_angel_ring_two",
+            "value": "Ring Two"
+        },
+        {
+            "key": "header_angel_ring_three",
+            "value": "Ring Three"
+        },
+        {
+            "key": "header_angel_ring_breakup",
+            "value": "Breakup"
         }
     ]
 }

@@ -1468,21 +1468,21 @@
     int _PS1Compression;
     float _PS1CompressionPrecision;
 
-    void ApplyPS1Vertex(inout FragmentData i, in VertexData v)
+    void ApplyPS1Vertex(inout float4 clipPos, float4 objectVertex)
     {
         if (_PS1Rounding == 1)
         {
-            float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
+            float4 worldPos = mul(unity_ObjectToWorld, objectVertex);
             worldPos.xyz = ceil(worldPos.xyz * _PS1RoundingPrecision) / _PS1RoundingPrecision;
-            i.pos = mul(UNITY_MATRIX_VP, worldPos);
+            clipPos = mul(UNITY_MATRIX_VP, worldPos);
         }
         else if (_PS1Rounding == 2)
         {
-            float4 pos = i.pos;
+            float4 pos = clipPos;
             pos.xy /= pos.w;
             pos.xy = round(pos.xy * _PS1RoundingPrecision) / _PS1RoundingPrecision;
             pos.xy *= pos.w;
-            i.pos = pos;
+            clipPos = pos;
         }
     }
 

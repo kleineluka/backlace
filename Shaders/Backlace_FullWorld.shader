@@ -1,4 +1,4 @@
-Shader "luka/backlace/default"
+Shader "luka/backlace/full/world"
 {
 
     Properties
@@ -1132,7 +1132,7 @@ Shader "luka/backlace/default"
 
         // Rendering Settings
         // Tags { "RenderType" = "TransparentCutout" "Queue" = "AlphaTest" } or Transparent
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="2.0.0" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "VRCFallback"="Toon" "Backlace"="3.0.0" }
         Blend [_SrcBlend] [_DstBlend]
         ZWrite [_ZWrite]
         Cull [_Cull]
@@ -1148,7 +1148,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDBASE
                 #define UNITY_PASS_FORWARDBASE
             #endif // UNITY_PASS_FORWARDBASE
-            #include "./Variants/Backlace_FullDefault.cginc"
+            #include "./Variants/Backlace_FullWorld.cginc"
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -1165,7 +1165,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_FORWARDADD
                 #define UNITY_PASS_FORWARDADD
             #endif // UNITY_PASS_FORWARDADD
-            #include "./Variants/Backlace_FullDefault.cginc"
+            #include "./Variants/Backlace_FullWorld.cginc"
             #include "./Includes/Backlace_Forward.cginc"
             ENDCG
         }
@@ -1181,7 +1181,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_SHADOWCASTER
                 #define UNITY_PASS_SHADOWCASTER
             #endif // UNITY_PASS_SHADOWCASTER
-            #include "./Variants/Backlace_FullDefault.cginc"
+            #include "./Variants/Backlace_FullWorld.cginc"
             #include "./Includes/Backlace_Shadow.cginc"
             ENDCG
         }
@@ -1196,7 +1196,7 @@ Shader "luka/backlace/default"
             #ifndef UNITY_PASS_META
                 #define UNITY_PASS_META
             #endif // UNITY_PASS_META
-            #include "./Variants/Backlace_FullDefault.cginc"
+            #include "./Variants/Backlace_FullWorld.cginc"
             #include "./Includes/Backlace_Meta.cginc"
             ENDCG
         }

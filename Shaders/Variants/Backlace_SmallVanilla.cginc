@@ -1,5 +1,5 @@
-#ifndef BACKLACE_VARIANT_DEFAULTDEFAULT
-#define BACKLACE_VARIANT_DEFAULTDEFAULT
+#ifndef BACKLACE_VARIANT_SMALLVANILLA
+#define BACKLACE_VARIANT_SMALLVANILLA
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -9,9 +9,9 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-#ifndef BACKLACE_DEFAULT
-    #define BACKLACE_DEFAULT
-#endif // BACKLACE_DEFAULT
+#ifndef BACKLACE_SMALL
+    #define BACKLACE_SMALL
+#endif // BACKLACE_SMALL
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]
@@ -25,10 +25,6 @@
     #define BACKLACE_CAPABILITIES_LOW
 #endif // BACKLACE_CAPABILITIES_LOW
 
-#ifndef BACKLACE_CAPABILITIES_MEDIUM
-    #define BACKLACE_CAPABILITIES_MEDIUM
-#endif // BACKLACE_CAPABILITIES_MEDIUM
-
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
@@ -37,4 +33,4 @@
 // [ ♡ ] ────────────────────── [ ♡ ]
 
 
-#endif // BACKLACE_VARIANT_DEFAULTDEFAULT
+#endif // BACKLACE_VARIANT_SMALLVANILLA

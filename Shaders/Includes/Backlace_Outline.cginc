@@ -205,6 +205,9 @@ FragmentData vert(appdata v)
     }
     o.worldPos = worldPos.xyz;
     o.screenPos = ComputeScreenPos(o.pos); // for dithering
+    #if defined(BACKLACE_CAPABILITIES_HIGH)
+        [branch] if (_TogglePS1 == 1) ApplyPS1Vertex(o.pos, v.vertex);
+    #endif // BACKLACE_CAPABILITIES_HIGH
     return o;
 }
 

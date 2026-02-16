@@ -51,7 +51,7 @@ FragmentData Vertex(VertexData v)
     #endif // DYNAMICLIGHTMAP_ON
     // ps1 effect
     #if defined(BACKLACE_CAPABILITIES_HIGH)
-        [branch] if (_TogglePS1 == 1) ApplyPS1Vertex(i, v);
+        [branch] if (_TogglePS1 == 1) ApplyPS1Vertex(i.pos, v.vertex);
     #endif // BACKLACE_CAPABILITIES_HIGH
     // for screen related effects
     i.scrPos = ComputeScreenPos(i.pos);
