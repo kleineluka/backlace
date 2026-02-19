@@ -6,15 +6,15 @@
 
 > *High heels, cute face, all the boys, they want a taste~*
 
-Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Refraction! (─‿‿─)♡
+Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Liquid Layers! (─‿‿─)♡
 
-**Latest Release:** 2.0.3 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
+**Latest Release:** 3.0.0 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
 <br>
 **Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, BepinEx Targetting BiRP, and more!
 <br>
 **Built With:** Unity 2022 LTS (but compatible with 2019.4+)
 <br>
-**Notice!!** It is best to download from [Releases](https://github.com/kleineluka/backlace/releases) or on another platform like [Gumroad](https://kleineluka.gumroad.com/l/backlace), because the Github Repo has many in-development settings on (ex. no UI).
+**Notice!!** It is best to download from [Releases](https://github.com/kleineluka/backlace/releases) or on another platform like [Gumroad](https://kleineluka.gumroad.com/l/backlace), because the Github Repo has many in-development settings on (ex. limited/no UI).
 
 <details>
 
@@ -34,31 +34,22 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 
 ## Features 🍒
 - **Main Settings:**
-	- Extensive Control, 10 Rendering Presets, VRCFallback Control, and Global Illumination
+	- Rendering Presets/Control, VRChat Fallback, GI/GPU Instancing
 	- Albedo, Normal (Supplied Map/Albedo Derived), Alpha Controls
-	- Texture Stitching, Texture Post-Processing, Stickers (2 Overlays/Decals)
-	- UV Manipulation, Vertex Manipulation, 4 Assignable UV Sets
-	- UV Effects: Triplanar, Screen Space, Flipbook/Spritesheet, Flow Map
-- **Lighting:**
-	- Models: Backlace (Default), PoiCustom, OpenLit, Standard, Mochie
-	- Direction Modes: Backlace (Default), Forced, View Direction
-	- Per-Pass Light Limits, Colour Controls, and (Optional) Greyscale Lighting
-	- Emission (Masked Texture/Colour)
-- **Anime Shading:** 6 Modes (Disabled (Standard PBR), Ramp, Halftone, HiFi, Skin, Wrapped), Ambient Gradient, Area Tinting, SDF Shadows
-- **Specular:** 5 Modes (Standard, Anisotropic, Toon, Hair, Cloth), Energy Conservation Control (Disabled, Turquin, Safe, Manual), Vertex Specular and MSSO, Glossiness, Reflectivity, Highlights
-- **Stylise:** Fresnel Rim, Depth Rim, Matcap, Cubemap, Clearcoat, Subsurface Scattering, Detail Mapping, Shadow Mapping, Shadow Textures
-- **Effects:** Dissolve, Distance Fading, VRChat Mirror Detection, Pathing (6 Modes), Glitter, Iridesence, World Aligned Textures, Dithering, Touch Interactions, Flatten Model, Vertex Distortion (4 Distortion Modes, 4 Glitch Modes), Parallax Mapping (Fast/Fancy UV, Layered, Interior), Low-Precision (PS1), Refraction, (Fake) Screen Space Reflections
-- **World Building:** Stochastic Tiling (Triangle Grid, Contrast Aware), Splatter Mapping (2 Splatters, UV Mode, Triplanar Mode), Texture Bombing (Jittered, Layered)
-- **Outline:** View/World Space, Outline/Silhouette Mode, Colour/Texture Outline, Vertex Colour Mask, Offset, Distance Fade, and More
-- **Legacy Mode** can optionally be enabled to support older hardware (Shader Model 3.0)
-- **Third Party Support:** Extensive AudioLink Controls, Super Plug Shader, LTCGI Lighting
-- **Shader Variants:** Default, Grabpass, Outline, World, Grabpass Outline, World Outline
-- **Custom UI** built with my Dazzle library! It's quite pretty...
-- **Compact Shader Generation** with my Premonitions library!
-- **Presets** system built in, alongside custom preset saving (and tonnes of pre-made presets! from slime girls to metallic robots)
-- **Optimised** with local shader features, shared sampler states, split shader files, and strict culling, branching, and math
-- **9 Languages!** English, German, Japanese, French, Chinese, Spanish, Korean, Russian, and Cat :)
-- **Fully documented** on [my website](https://www.luka.moe/docs/backlace) and plenty of inline comments to help out ^^
+	- Texture Stitching, Texture Post-Processing, Legacy Mode (for older hardware)
+	- UV Effects (Triplanar, Screen, Spritesheet/Flipbook, Flow), UV Manipulation, Vertex Manipulation, 4 Assignable UV Sets
+- **Anime Shading:** PBR, Ramp (Texutre/Procedural), Cel (Harsh/Default/Soft), NPR, Packed (Genshin/UmaMusume/GuiltyGear), TriBand, Skin, Wrapped
+- **Lighting:** Extensive Control, Multiple Lighting Models, Manual Controls, Light Limiting, Attenuation Control, and Emission
+- **Character Settings:** Ambient Gradient, Manual Normals, SDF Shadows, Stocking, Eye Parallax, Translucent Hair, Expression Map, Face Map, Gradient, Toon Highlights, Angel Rings (Hair)
+- **Specular:** Standard/Anisotropic, Vertex Specular, Energy Control
+- **Stylise:** Rim Lighting (Fresnel/Depth/Normal), Clearcoat, Matcap, Parallax Mapping (UV/Layered/Interior), Subsurface Scattering, Detail Mapping, Shadow Mapping
+- **Stickers:** Two Sticker Slots, UV/Triplanar/Screen Mapping, Hue Shift, Distortion, Glitch
+- **Effects:** Dissolve (Noise/Directional/Voxel), Texture Pathing, Glitter, Distance Fading, Iridescence, Shadow Textures, Flatten Model, World Aligned Textures, VRChat Mirror Detection, Touch Interactions, Dithering, Low-Precision (PS1), Vertex Distortion (Distortion/Glitch), Refraction, Screen Space Reflections, Liquid Layer (Sweat/Blood/Oil/Icing/Slime/Wax/Mud)
+
+## Other Perks 😇
+- **Variant Splitting:** Backlace is divided into multiple shaders so that you only need the performance cost of the features you need!
+- **Fair Keyword Usage:**
+- **Fully Documented:**
 
 ## Where Backlace Is Used 🍰
 This section will be updated when I make things with it! If you make something with Backlace ~ whether a game or shader ~ please let me know so I can add it here! ♡＾▽＾♡

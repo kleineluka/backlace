@@ -2174,8 +2174,8 @@
             switch (_LiquidLookViscous)
             {
                 case 0: ApplyIcing(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
-                case 1: ApplyWax(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
-                case 2: ApplySlime(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
+                case 2: ApplyWax(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
+                case 1: ApplySlime(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
                 case 3: ApplyMud(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, glossiness, wetMask); break;
                 default: ApplyIcing(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
             }
