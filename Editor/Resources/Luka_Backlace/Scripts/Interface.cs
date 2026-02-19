@@ -47,6 +47,7 @@ namespace Luka.Backlace
         private static Tab debug_tab = null;
         private static DevMenu debug_menu = null;
         private static NoticeBox compact_notice = null;
+        private static VariantSwitcher variant_switcher = null;
         private static bool is_compact = false;
         
         #region Tabs
@@ -118,6 +119,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_vertex_distortion = null;
         private static Tab sub_tab_refraction = null;
         private static Tab sub_tab_screenspace_reflection = null;
+        private static Tab sub_tab_liquid_layer = null;
         // world
         private static Tab tab_world = null;
         private static Tab sub_tab_stochastic = null;
@@ -707,6 +709,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_ToggleVertexDistortion = null;
         private MaterialProperty prop_ToggleRefraction = null;
         private MaterialProperty prop_ToggleSSR = null;
+        private MaterialProperty prop_LiquidToggleLiquid = null;
         // dissolve
         private MaterialProperty prop_DissolveProgress = null;
         private MaterialProperty prop_DissolveType = null;
@@ -888,6 +891,82 @@ namespace Luka.Backlace
         private MaterialProperty prop_SSRAdaptiveStep = null;
         private MaterialProperty prop_SSRThickness = null;
         private MaterialProperty prop_SSROutOfViewMode = null;
+        // liquid layer
+        private MaterialProperty prop_LiquidEnabled = null;
+        private MaterialProperty prop_LiquidFeel = null;
+        private MaterialProperty prop_LiquidLookWatery = null;
+        private MaterialProperty prop_LiquidLookViscous = null;
+        private MaterialProperty prop_LiquidSpace = null;
+        private MaterialProperty prop_LiquidMapScale = null;
+        private MaterialProperty prop_LiquidTriplanarSharpness = null;
+        private MaterialProperty prop_LiquidMaskMap = null;
+        private MaterialProperty prop_LiquidUseForceMap = null;
+        private MaterialProperty prop_LiquidForceMap = null;
+        private MaterialProperty prop_LiquidSpecularLit = null;
+        private MaterialProperty prop_LiquidGloss = null;
+        private MaterialProperty prop_LiquidShine = null;
+        private MaterialProperty prop_LiquidShineTightness = null;
+        private MaterialProperty prop_LiquidShadow = null;
+        private MaterialProperty prop_LiquidRim = null;
+        private MaterialProperty prop_LiquidDepth = null;
+        private MaterialProperty prop_LiquidNormalStrength = null;
+        private MaterialProperty prop_LiquidOpacity = null;
+        private MaterialProperty prop_LiquidDarken = null;
+        private MaterialProperty prop_LiquidManualDirection = null;
+        private MaterialProperty prop_LiquidDirectionOne = null;
+        private MaterialProperty prop_LiquidDirectionTwo = null;
+        private MaterialProperty prop_LiquidLayerOneScale = null;
+        private MaterialProperty prop_LiquidLayerOneDensity = null;
+        private MaterialProperty prop_LiquidLayerOneStretch = null;
+        private MaterialProperty prop_LiquidLayerOneSpeed = null;
+        private MaterialProperty prop_LiquidLayerOneRandomness = null;
+        private MaterialProperty prop_LiquidLayerOneSeed = null;
+        private MaterialProperty prop_LiquidLayerOneMod = null;
+        private MaterialProperty prop_LiquidUseLayerTwo = null;
+        private MaterialProperty prop_LiquidLayerTwoScale = null;
+        private MaterialProperty prop_LiquidLayerTwoDensity = null;
+        private MaterialProperty prop_LiquidLayerTwoStretch = null;
+        private MaterialProperty prop_LiquidLayerTwoSpeed = null;
+        private MaterialProperty prop_LiquidLayerTwoRandomness = null;
+        private MaterialProperty prop_LiquidLayerTwoSeed = null;
+        private MaterialProperty prop_LiquidLayerTwoAmount = null;
+        private MaterialProperty prop_LiquidLayerTwoMod = null;
+        private MaterialProperty prop_LiquidClusterScale = null;
+        private MaterialProperty prop_LiquidClusterSeed = null;
+        private MaterialProperty prop_LiquidThreshold = null;
+        private MaterialProperty prop_LiquidSoftness = null;
+        private MaterialProperty prop_LiquidWateryCoverage = null;
+        private MaterialProperty prop_LiquidViscousSmooth = null;
+        private MaterialProperty prop_LiquidViscousThinning = null;
+        private MaterialProperty prop_LiquidViscousThinSeed = null;
+        private MaterialProperty prop_LiquidViscousThinScale = null;
+        private MaterialProperty prop_LiquidSweatUseTint = null;
+        private MaterialProperty prop_LiquidSweatTintColor = null;
+        private MaterialProperty prop_LiquidBloodColorFresh = null;
+        private MaterialProperty prop_LiquidBloodColorDark = null;
+        private MaterialProperty prop_LiquidBloodPooling = null;
+        private MaterialProperty prop_LiquidBloodDryingRate = null;
+        private MaterialProperty prop_LiquidBloodDryGloss = null;
+        private MaterialProperty prop_LiquidOilColor = null;
+        private MaterialProperty prop_LiquidOilIridescence = null;
+        private MaterialProperty prop_LiquidOilIridescenceScale = null;
+        private MaterialProperty prop_LiquidIcingColor = null;
+        private MaterialProperty prop_LiquidIcingColorVariation = null;
+        private MaterialProperty prop_LiquidIcingColorMin = null;
+        private MaterialProperty prop_LiquidIcingColorMax = null;
+        private MaterialProperty prop_LiquidIcingColorScale = null;
+        private MaterialProperty prop_LiquidIcingColorSeed = null;
+        private MaterialProperty prop_LiquidWaxColor = null;
+        private MaterialProperty prop_LiquidWaxColorVariation = null;
+        private MaterialProperty prop_LiquidWaxCoolRate = null;
+        private MaterialProperty prop_LiquidSlimeColor = null;
+        private MaterialProperty prop_LiquidSlimeColorShift = null;
+        private MaterialProperty prop_LiquidSlimeTranslucency = null;
+        private MaterialProperty prop_LiquidSlimeIridescence = null;
+        private MaterialProperty prop_LiquidSlimeStickiness = null;
+        private MaterialProperty prop_LiquidMudColor = null;
+        private MaterialProperty prop_LiquidMudColorDark = null;
+        private MaterialProperty prop_LiquidMudRoughness = null;
         // stochastic sampling
         private MaterialProperty prop_StochasticSampling = null;
         private MaterialProperty prop_StochasticSamplingMode = null;
@@ -1090,6 +1169,7 @@ namespace Luka.Backlace
             if (sub_tab_vertex_distortion != null) { sub_tab_vertex_distortion.is_expanded = false; sub_tab_vertex_distortion.is_active = false; }
             if (sub_tab_refraction != null) { sub_tab_refraction.is_expanded = false; sub_tab_refraction.is_active = false; }
             if (sub_tab_screenspace_reflection != null) { sub_tab_screenspace_reflection.is_expanded = false; sub_tab_screenspace_reflection.is_active = false; }
+            if (sub_tab_liquid_layer != null) { sub_tab_liquid_layer.is_expanded = false; sub_tab_liquid_layer.is_active = false; }
             if (tab_outline != null) { tab_outline.is_expanded = false; tab_outline.is_active = false; }
             if (tab_world != null) { tab_world.is_expanded = false; tab_world.is_active = false; }
             if (sub_tab_stochastic != null) { sub_tab_stochastic.is_expanded = false; sub_tab_stochastic.is_active = false; }
@@ -1129,6 +1209,7 @@ namespace Luka.Backlace
             premonition_tab = null;
             is_compact = false;
             compact_notice = null;
+            variant_switcher = null;
             premonition_menu = null;
             #region Tabs
             tab_main = null;
@@ -1191,6 +1272,7 @@ namespace Luka.Backlace
             sub_tab_vertex_distortion = null;
             sub_tab_refraction = null;
             sub_tab_screenspace_reflection = null;
+            sub_tab_liquid_layer = null;
             tab_world = null;
             sub_tab_stochastic = null;
             sub_tab_splatter = null;
@@ -1245,6 +1327,7 @@ namespace Luka.Backlace
             is_compact = targetMat.shader.name.ToLower().Contains("_compact_");
             compact_notice = new NoticeBox(ref theme, languages.speak("premonition_compact_notice"));
             premonition_menu = new PremonitionMenu(ref theme, ref targetMat, ref premonition_tab, is_compact);
+            variant_switcher = new VariantSwitcher(ref theme, ref targetMat);
             #region Tabs
             tab_main = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 0, languages.speak("tab_main"));
             sub_tab_rendering = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_rendering"), null, null, null, null, Project.blend_mode_badges);
@@ -1306,7 +1389,8 @@ namespace Luka.Backlace
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion", null, null, Project.distortion_mode_badges);
             sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
             sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
-            tab_world = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_world"),  Project.shader_variants[3]);
+            sub_tab_liquid_layer = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 16, languages.speak("sub_tab_liquid_layer"), null, "_LiquidToggleLiquid");
+            tab_world = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_world"),  Project.shader_variants[4]);
             sub_tab_stochastic = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_stochastic"), null, "_StochasticSampling");
             sub_tab_splatter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_splatter"), null, "_SplatterMapping");
             sub_tab_bombing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_bombing"), null, "_BombingTextures");
@@ -1400,6 +1484,10 @@ namespace Luka.Backlace
             if (is_compact) {
                 compact_notice.draw();
                 GUILayout.Space(4);
+            }
+            if (variant_switcher != null && variant_switcher.draw())
+            {
+                return;
             }
             search_bar.draw(ref theme);
             #region Backlace
@@ -3510,6 +3598,227 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_SSRCamFade.floatValue.Equals(0), configs);
                     Components.end_dynamic_disable(!prop_ToggleSSR.floatValue.Equals(1), configs);
+                });
+                sub_tab_liquid_layer.process(() => {
+                    prop_LiquidToggleLiquid = TrackProperty("_LiquidToggleLiquid", properties);
+                    prop_LiquidEnabled = TrackProperty("_LiquidEnabled", properties);
+                    prop_LiquidFeel = TrackProperty("_LiquidFeel", properties);
+                    prop_LiquidLookWatery = TrackProperty("_LiquidLookWatery", properties);
+                    prop_LiquidLookViscous = TrackProperty("_LiquidLookViscous", properties);
+                    prop_LiquidSpace = TrackProperty("_LiquidSpace", properties);
+                    prop_LiquidMapScale = TrackProperty("_LiquidMapScale", properties);
+                    prop_LiquidTriplanarSharpness = TrackProperty("_LiquidTriplanarSharpness", properties);
+                    prop_LiquidMaskMap = TrackProperty("_LiquidMaskMap", properties);
+                    prop_LiquidUseForceMap = TrackProperty("_LiquidUseForceMap", properties);
+                    prop_LiquidForceMap = TrackProperty("_LiquidForceMap", properties);
+                    prop_LiquidSpecularLit = TrackProperty("_LiquidSpecularLit", properties);
+                    prop_LiquidGloss = TrackProperty("_LiquidGloss", properties);
+                    prop_LiquidShine = TrackProperty("_LiquidShine", properties);
+                    prop_LiquidShineTightness = TrackProperty("_LiquidShineTightness", properties);
+                    prop_LiquidShadow = TrackProperty("_LiquidShadow", properties);
+                    prop_LiquidRim = TrackProperty("_LiquidRim", properties);
+                    prop_LiquidDepth = TrackProperty("_LiquidDepth", properties);
+                    prop_LiquidNormalStrength = TrackProperty("_LiquidNormalStrength", properties);
+                    prop_LiquidOpacity = TrackProperty("_LiquidOpacity", properties);
+                    prop_LiquidDarken = TrackProperty("_LiquidDarken", properties);
+                    prop_LiquidManualDirection = TrackProperty("_LiquidManualDirection", properties);
+                    prop_LiquidDirectionOne = TrackProperty("_LiquidDirectionOne", properties);
+                    prop_LiquidDirectionTwo = TrackProperty("_LiquidDirectionTwo", properties);
+                    prop_LiquidLayerOneScale = TrackProperty("_LiquidLayerOneScale", properties);
+                    prop_LiquidLayerOneDensity = TrackProperty("_LiquidLayerOneDensity", properties);
+                    prop_LiquidLayerOneStretch = TrackProperty("_LiquidLayerOneStretch", properties);
+                    prop_LiquidLayerOneSpeed = TrackProperty("_LiquidLayerOneSpeed", properties);
+                    prop_LiquidLayerOneRandomness = TrackProperty("_LiquidLayerOneRandomness", properties);
+                    prop_LiquidLayerOneSeed = TrackProperty("_LiquidLayerOneSeed", properties);
+                    prop_LiquidLayerOneMod = TrackProperty("_LiquidLayerOneMod", properties);
+                    prop_LiquidUseLayerTwo = TrackProperty("_LiquidUseLayerTwo", properties);
+                    prop_LiquidLayerTwoScale = TrackProperty("_LiquidLayerTwoScale", properties);
+                    prop_LiquidLayerTwoDensity = TrackProperty("_LiquidLayerTwoDensity", properties);
+                    prop_LiquidLayerTwoStretch = TrackProperty("_LiquidLayerTwoStretch", properties);
+                    prop_LiquidLayerTwoSpeed = TrackProperty("_LiquidLayerTwoSpeed", properties);
+                    prop_LiquidLayerTwoRandomness = TrackProperty("_LiquidLayerTwoRandomness", properties);
+                    prop_LiquidLayerTwoSeed = TrackProperty("_LiquidLayerTwoSeed", properties);
+                    prop_LiquidLayerTwoAmount = TrackProperty("_LiquidLayerTwoAmount", properties);
+                    prop_LiquidLayerTwoMod = TrackProperty("_LiquidLayerTwoMod", properties);
+                    prop_LiquidClusterScale = TrackProperty("_LiquidClusterScale", properties);
+                    prop_LiquidClusterSeed = TrackProperty("_LiquidClusterSeed", properties);
+                    prop_LiquidThreshold = TrackProperty("_LiquidThreshold", properties);
+                    prop_LiquidSoftness = TrackProperty("_LiquidSoftness", properties);
+                    prop_LiquidWateryCoverage = TrackProperty("_LiquidWateryCoverage", properties);
+                    prop_LiquidViscousSmooth = TrackProperty("_LiquidViscousSmooth", properties);
+                    prop_LiquidViscousThinning = TrackProperty("_LiquidViscousThinning", properties);
+                    prop_LiquidViscousThinSeed = TrackProperty("_LiquidViscousThinSeed", properties);
+                    prop_LiquidViscousThinScale = TrackProperty("_LiquidViscousThinScale", properties);
+                    prop_LiquidSweatUseTint = TrackProperty("_LiquidSweatUseTint", properties);
+                    prop_LiquidSweatTintColor = TrackProperty("_LiquidSweatTintColor", properties);
+                    prop_LiquidBloodColorFresh = TrackProperty("_LiquidBloodColorFresh", properties);
+                    prop_LiquidBloodColorDark = TrackProperty("_LiquidBloodColorDark", properties);
+                    prop_LiquidBloodPooling = TrackProperty("_LiquidBloodPooling", properties);
+                    prop_LiquidBloodDryingRate = TrackProperty("_LiquidBloodDryingRate", properties);
+                    prop_LiquidBloodDryGloss = TrackProperty("_LiquidBloodDryGloss", properties);
+                    prop_LiquidOilColor = TrackProperty("_LiquidOilColor", properties);
+                    prop_LiquidOilIridescence = TrackProperty("_LiquidOilIridescence", properties);
+                    prop_LiquidOilIridescenceScale = TrackProperty("_LiquidOilIridescenceScale", properties);
+                    prop_LiquidIcingColor = TrackProperty("_LiquidIcingColor", properties);
+                    prop_LiquidIcingColorVariation = TrackProperty("_LiquidIcingColorVariation", properties);
+                    prop_LiquidIcingColorMin = TrackProperty("_LiquidIcingColorMin", properties);
+                    prop_LiquidIcingColorMax = TrackProperty("_LiquidIcingColorMax", properties);
+                    prop_LiquidIcingColorScale = TrackProperty("_LiquidIcingColorScale", properties);
+                    prop_LiquidIcingColorSeed = TrackProperty("_LiquidIcingColorSeed", properties);
+                    prop_LiquidWaxColor = TrackProperty("_LiquidWaxColor", properties);
+                    prop_LiquidWaxColorVariation = TrackProperty("_LiquidWaxColorVariation", properties);
+                    prop_LiquidWaxCoolRate = TrackProperty("_LiquidWaxCoolRate", properties);
+                    prop_LiquidSlimeColor = TrackProperty("_LiquidSlimeColor", properties);
+                    prop_LiquidSlimeColorShift = TrackProperty("_LiquidSlimeColorShift", properties);
+                    prop_LiquidSlimeTranslucency = TrackProperty("_LiquidSlimeTranslucency", properties);
+                    prop_LiquidSlimeIridescence = TrackProperty("_LiquidSlimeIridescence", properties);
+                    prop_LiquidSlimeStickiness = TrackProperty("_LiquidSlimeStickiness", properties);
+                    prop_LiquidMudColor = TrackProperty("_LiquidMudColor", properties);
+                    prop_LiquidMudColorDark = TrackProperty("_LiquidMudColorDark", properties);
+                    prop_LiquidMudRoughness = TrackProperty("_LiquidMudRoughness", properties);
+                    materialEditor.ShaderProperty(prop_LiquidToggleLiquid, languages.speak("prop_LiquidToggleLiquid"));
+                    Components.start_dynamic_disable(!prop_LiquidToggleLiquid.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_LiquidEnabled, languages.speak("prop_LiquidEnabled"));
+                    materialEditor.ShaderProperty(prop_LiquidFeel, languages.speak("prop_LiquidFeel"));
+                    int liquidFeel = (int)prop_LiquidFeel.floatValue;
+                    if (liquidFeel == 0) // watery
+                    {
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_LiquidLookWatery, languages.speak("prop_LiquidLookWatery"));
+                        EditorGUI.indentLevel--;
+                    }
+                    else if (liquidFeel == 1) // viscous
+                    {
+                        EditorGUI.indentLevel++;
+                        materialEditor.ShaderProperty(prop_LiquidLookViscous, languages.speak("prop_LiquidLookViscous"));
+                        EditorGUI.indentLevel--;
+                    }
+                    materialEditor.ShaderProperty(prop_LiquidSpace, languages.speak("prop_LiquidSpace"));
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_LiquidMapScale, languages.speak("prop_LiquidMapScale"));
+                    if ((int)prop_LiquidSpace.floatValue == 5) // triplanar
+                    {
+                        materialEditor.ShaderProperty(prop_LiquidTriplanarSharpness, languages.speak("prop_LiquidTriplanarSharpness"));
+                    }
+                    EditorGUI.indentLevel--;
+                    materialEditor.ShaderProperty(prop_LiquidMaskMap, languages.speak("prop_LiquidMaskMap"));
+                    materialEditor.ShaderProperty(prop_LiquidUseForceMap, languages.speak("prop_LiquidUseForceMap"));
+                    Components.start_dynamic_disable(prop_LiquidUseForceMap.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_LiquidForceMap, languages.speak("prop_LiquidForceMap"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_LiquidUseForceMap.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_LiquidSpecularLit, languages.speak("prop_LiquidSpecularLit"));
+                    materialEditor.ShaderProperty(prop_LiquidGloss, languages.speak("prop_LiquidGloss"));
+                    materialEditor.ShaderProperty(prop_LiquidShine, languages.speak("prop_LiquidShine"));
+                    materialEditor.ShaderProperty(prop_LiquidShineTightness, languages.speak("prop_LiquidShineTightness"));
+                    materialEditor.ShaderProperty(prop_LiquidShadow, languages.speak("prop_LiquidShadow"));
+                    materialEditor.ShaderProperty(prop_LiquidRim, languages.speak("prop_LiquidRim"));
+                    materialEditor.ShaderProperty(prop_LiquidDepth, languages.speak("prop_LiquidDepth"));
+                    materialEditor.ShaderProperty(prop_LiquidNormalStrength, languages.speak("prop_LiquidNormalStrength"));
+                    materialEditor.ShaderProperty(prop_LiquidOpacity, languages.speak("prop_LiquidOpacity"));
+                    materialEditor.ShaderProperty(prop_LiquidDarken, languages.speak("prop_LiquidDarken"));
+                    materialEditor.ShaderProperty(prop_LiquidManualDirection, languages.speak("prop_LiquidManualDirection"));
+                    Components.start_dynamic_disable(prop_LiquidManualDirection.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    Components.Vector3Property(materialEditor, prop_LiquidDirectionOne, languages.speak("prop_LiquidDirectionOne"));
+                    Components.Vector3Property(materialEditor, prop_LiquidDirectionTwo, languages.speak("prop_LiquidDirectionTwo"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_LiquidManualDirection.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneScale, languages.speak("prop_LiquidLayerOneScale"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneDensity, languages.speak("prop_LiquidLayerOneDensity"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneStretch, languages.speak("prop_LiquidLayerOneStretch"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneSpeed, languages.speak("prop_LiquidLayerOneSpeed"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneRandomness, languages.speak("prop_LiquidLayerOneRandomness"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneSeed, languages.speak("prop_LiquidLayerOneSeed"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerOneMod, languages.speak("prop_LiquidLayerOneMod"));
+                    materialEditor.ShaderProperty(prop_LiquidUseLayerTwo, languages.speak("prop_LiquidUseLayerTwo"));
+                    Components.start_dynamic_disable(prop_LiquidUseLayerTwo.floatValue.Equals(0), configs);
+                    EditorGUI.indentLevel++;
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoScale, languages.speak("prop_LiquidLayerTwoScale"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoDensity, languages.speak("prop_LiquidLayerTwoDensity"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoStretch, languages.speak("prop_LiquidLayerTwoStretch"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoSpeed, languages.speak("prop_LiquidLayerTwoSpeed"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoRandomness, languages.speak("prop_LiquidLayerTwoRandomness"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoSeed, languages.speak("prop_LiquidLayerTwoSeed"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoAmount, languages.speak("prop_LiquidLayerTwoAmount"));
+                    materialEditor.ShaderProperty(prop_LiquidLayerTwoMod, languages.speak("prop_LiquidLayerTwoMod"));
+                    EditorGUI.indentLevel--;
+                    Components.end_dynamic_disable(prop_LiquidUseLayerTwo.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_LiquidClusterScale, languages.speak("prop_LiquidClusterScale"));
+                    materialEditor.ShaderProperty(prop_LiquidClusterSeed, languages.speak("prop_LiquidClusterSeed"));
+                    materialEditor.ShaderProperty(prop_LiquidThreshold, languages.speak("prop_LiquidThreshold"));
+                    materialEditor.ShaderProperty(prop_LiquidSoftness, languages.speak("prop_LiquidSoftness"));
+                    if (liquidFeel == 0) // watery
+                    {
+                        materialEditor.ShaderProperty(prop_LiquidWateryCoverage, languages.speak("prop_LiquidWateryCoverage"));
+                        int wateryLook = (int)prop_LiquidLookWatery.floatValue;
+                        if (wateryLook == 0) // sweat
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidSweatUseTint, languages.speak("prop_LiquidSweatUseTint"));
+                            Components.start_dynamic_disable(prop_LiquidSweatUseTint.floatValue.Equals(0), configs);
+                            EditorGUI.indentLevel++;
+                            materialEditor.ShaderProperty(prop_LiquidSweatTintColor, languages.speak("prop_LiquidSweatTintColor"));
+                            EditorGUI.indentLevel--;
+                            Components.end_dynamic_disable(prop_LiquidSweatUseTint.floatValue.Equals(0), configs);
+                        }
+                        else if (wateryLook == 1) // blood
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidBloodColorFresh, languages.speak("prop_LiquidBloodColorFresh"));
+                            materialEditor.ShaderProperty(prop_LiquidBloodColorDark, languages.speak("prop_LiquidBloodColorDark"));
+                            materialEditor.ShaderProperty(prop_LiquidBloodPooling, languages.speak("prop_LiquidBloodPooling"));
+                            materialEditor.ShaderProperty(prop_LiquidBloodDryingRate, languages.speak("prop_LiquidBloodDryingRate"));
+                            materialEditor.ShaderProperty(prop_LiquidBloodDryGloss, languages.speak("prop_LiquidBloodDryGloss"));
+                        }
+                        else if (wateryLook == 2) // oil
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidOilColor, languages.speak("prop_LiquidOilColor"));
+                            materialEditor.ShaderProperty(prop_LiquidOilIridescence, languages.speak("prop_LiquidOilIridescence"));
+                            materialEditor.ShaderProperty(prop_LiquidOilIridescenceScale, languages.speak("prop_LiquidOilIridescenceScale"));
+                        }
+                    }
+                    else if (liquidFeel == 1) // viscous
+                    {
+                        materialEditor.ShaderProperty(prop_LiquidViscousSmooth, languages.speak("prop_LiquidViscousSmooth"));
+                        materialEditor.ShaderProperty(prop_LiquidViscousThinning, languages.speak("prop_LiquidViscousThinning"));
+                        materialEditor.ShaderProperty(prop_LiquidViscousThinSeed, languages.speak("prop_LiquidViscousThinSeed"));
+                        materialEditor.ShaderProperty(prop_LiquidViscousThinScale, languages.speak("prop_LiquidViscousThinScale"));
+                        int viscousLook = (int)prop_LiquidLookViscous.floatValue;
+                        if (viscousLook == 0) // icing
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidIcingColor, languages.speak("prop_LiquidIcingColor"));
+                            materialEditor.ShaderProperty(prop_LiquidIcingColorVariation, languages.speak("prop_LiquidIcingColorVariation"));
+                            Components.start_dynamic_disable(prop_LiquidIcingColorVariation.floatValue.Equals(0), configs);
+                            EditorGUI.indentLevel++;
+                            materialEditor.ShaderProperty(prop_LiquidIcingColorMin, languages.speak("prop_LiquidIcingColorMin"));
+                            materialEditor.ShaderProperty(prop_LiquidIcingColorMax, languages.speak("prop_LiquidIcingColorMax"));
+                            materialEditor.ShaderProperty(prop_LiquidIcingColorScale, languages.speak("prop_LiquidIcingColorScale"));
+                            materialEditor.ShaderProperty(prop_LiquidIcingColorSeed, languages.speak("prop_LiquidIcingColorSeed"));
+                            EditorGUI.indentLevel--;
+                            Components.end_dynamic_disable(prop_LiquidIcingColorVariation.floatValue.Equals(0), configs);
+                        }
+                        else if (viscousLook == 1) // slime
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidSlimeColor, languages.speak("prop_LiquidSlimeColor"));
+                            materialEditor.ShaderProperty(prop_LiquidSlimeColorShift, languages.speak("prop_LiquidSlimeColorShift"));
+                            materialEditor.ShaderProperty(prop_LiquidSlimeTranslucency, languages.speak("prop_LiquidSlimeTranslucency"));
+                            materialEditor.ShaderProperty(prop_LiquidSlimeIridescence, languages.speak("prop_LiquidSlimeIridescence"));
+                            materialEditor.ShaderProperty(prop_LiquidSlimeStickiness, languages.speak("prop_LiquidSlimeStickiness"));
+                        }
+                        else if (viscousLook == 2) // wax
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidWaxColor, languages.speak("prop_LiquidWaxColor"));
+                            materialEditor.ShaderProperty(prop_LiquidWaxColorVariation, languages.speak("prop_LiquidWaxColorVariation"));
+                            materialEditor.ShaderProperty(prop_LiquidWaxCoolRate, languages.speak("prop_LiquidWaxCoolRate"));
+                        }
+                        else if (viscousLook == 3) // mud
+                        {
+                            materialEditor.ShaderProperty(prop_LiquidMudColor, languages.speak("prop_LiquidMudColor"));
+                            materialEditor.ShaderProperty(prop_LiquidMudColorDark, languages.speak("prop_LiquidMudColorDark"));
+                            materialEditor.ShaderProperty(prop_LiquidMudRoughness, languages.speak("prop_LiquidMudRoughness"));
+                        }
+                    }
+                    Components.end_dynamic_disable(!prop_LiquidToggleLiquid.floatValue.Equals(1), configs);
                 });
                 Components.end_foldout();
             });

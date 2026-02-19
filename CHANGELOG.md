@@ -13,7 +13,7 @@
 ## Version 2.1.0
 - New light direction modes, "Object Relative" and "Ambient Priority"
 - Add Lighting Source modes "Backlace" and "Unity" (Backlace is a bit more expensive, but higher quality)
-- Removed reused code and variables, hopefully helping register pressure
+- Removed reused code and variables
 
 ## Version 2.0.5
 - Improved SSS thickness and changed from linear approximation to Beer's Law.

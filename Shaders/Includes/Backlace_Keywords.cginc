@@ -80,6 +80,7 @@
     #pragma shader_feature_local _ _BACKLACE_TOUCH_REACTIVE
     #pragma shader_feature_local _ _BACKLACE_VERTEX_DISTORTION
     #pragma shader_feature_local _ _BACKLACE_SHADOW_TEXTURE
+    #pragma shader_feature_local _ _BACKLACE_LIQUID_LAYER
     // #pragma shader_feature_local _ _BACKLACE_DITHER <-- no longer keyword, but still HIGH only
     // #pragma shader_feature_local _ _BACKLACE_PS1 <-- no longer keyword, but still HIGH only
     // #pragma shader_feature_local _ _BACKLACE_FLAT_MODEL <-- no longer keyword, but still HIGH only

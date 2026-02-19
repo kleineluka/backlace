@@ -1208,10 +1208,12 @@ namespace Luka.Backlace
             }
             string shaderName = mat.shader.name.ToLower();
             string[] nameParts = shaderName.Split('/');
-            string lastPart = nameParts[nameParts.Length - 1];
+            string variantPart = nameParts.Length >= 2 
+                ? nameParts[nameParts.Length - 2] + "/" + nameParts[nameParts.Length - 1]
+                : nameParts[nameParts.Length - 1];
             foreach (ShaderVariant variant in Project.shader_variants)
             {
-                if (lastPart.Contains(variant.Token.ToLower()))
+                if (variantPart.Contains(variant.Token.ToLower()))
                 {
                     detectedCapabilities.Add(new ShaderVariant(variant.Name, variant.Token, variant.Color));
                 }

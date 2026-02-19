@@ -1621,6 +1621,44 @@ namespace Luka.Backlace
             EditorGUI.EndDisabledGroup();
         }
 
+        // check if material is using any of the specified shader variants
+        public static bool is_any_variant_active(Material material, List<string> variant_tokens)
+        {
+            if (material == null || material.shader == null || variant_tokens == null || variant_tokens.Count == 0)
+            {
+                return false;
+            }
+            string shaderName = material.shader.name.ToLower();
+            string[] nameParts = shaderName.Split('/');
+            string variantPart = nameParts.Length >= 2 
+                ? nameParts[nameParts.Length - 2] + "/" + nameParts[nameParts.Length - 1]
+                : nameParts[nameParts.Length - 1];
+            foreach (string token in variant_tokens)
+            {
+                if (variantPart.Contains(token.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // start dynamic disable based on shader variants
+        public static void start_dynamic_disable_variants(Material material, List<string> variant_tokens, bool invert = false, Config config_manager = null)
+        {
+            bool is_variant_match = is_any_variant_active(material, variant_tokens);
+            bool should_disable = invert ? is_variant_match : !is_variant_match;
+            if (config_manager == null || config_manager.json_data.@interface.grey_unused)
+            EditorGUI.BeginDisabledGroup(should_disable);
+        }
+
+        // end dynamic disable based on shader variants
+        public static void end_dynamic_disable_variants(Material material, List<string> variant_tokens, bool invert = false, Config config_manager = null)
+        {
+            if (config_manager == null || config_manager.json_data.@interface.grey_unused)
+            EditorGUI.EndDisabledGroup();
+        }
+
         // cull text given a certain length
         public static string culled_text(string text, int max_length)
         {
@@ -2776,6 +2814,130 @@ namespace Luka.Backlace
             }
         }
         
+    }
+
+    // variant switcher for swapping between shader variants
+    public class VariantSwitcher
+    {
+
+        private Theme theme = null;
+        private Material material = null;
+        private int current_variant_index = 0;
+        private GUIStyle style_variant_label = null;
+        private GUIStyle style_variant_popup = null;
+
+        public VariantSwitcher(ref Theme theme, ref Material material)
+        {
+            this.theme = theme;
+            this.material = material;
+            this.current_variant_index = detect_current_index();
+        }
+
+        private int detect_current_index()
+        {
+            if (material == null || material.shader == null) return 0;
+            string shaderName = material.shader.name.ToLower();
+            string[] nameParts = shaderName.Split('/');
+            string variantPart = nameParts.Length >= 2
+                ? nameParts[nameParts.Length - 2] + "/" + nameParts[nameParts.Length - 1]
+                : nameParts[nameParts.Length - 1];
+            for (int i = 0; i < Project.shader_variants.Count; i++)
+            {
+                if (variantPart.Contains(Project.shader_variants[i].Token.ToLower()))
+                {
+                    return i;
+                }
+            }
+            return 0;
+        }
+
+        private GUIStyle get_label_style(Color tint)
+        {
+            style_variant_label = new GUIStyle(GUI.skin.label);
+            style_variant_label.font = theme.font_manager.default_font;
+            style_variant_label.fontSize = 14;
+            style_variant_label.fontStyle = FontStyle.Bold;
+            style_variant_label.alignment = TextAnchor.MiddleLeft;
+            style_variant_label.richText = true;
+            style_variant_label.normal.textColor = tint;
+            return style_variant_label;
+        }
+
+        private GUIStyle get_popup_style()
+        {
+            if (style_variant_popup == null)
+            {
+                style_variant_popup = new GUIStyle(EditorStyles.popup);
+                style_variant_popup.font = theme.font_manager.default_font;
+                style_variant_popup.fontSize = 14;
+                style_variant_popup.fixedHeight = 30f;
+                style_variant_popup.alignment = TextAnchor.MiddleLeft;
+                style_variant_popup.padding = new RectOffset(8, 8, 0, 0);
+                style_variant_popup.margin = new RectOffset(0, 0, 0, 0);
+            }
+            return style_variant_popup;
+        }
+
+        public bool draw()
+        {
+            if (!Project.shader_has_variants || Project.shader_variants == null || Project.shader_variants.Count <= 1) return false;
+            current_variant_index = detect_current_index();
+            string[] variant_names = new string[Project.shader_variants.Count];
+            for (int i = 0; i < Project.shader_variants.Count; i++)
+            {
+                variant_names[i] = Project.shader_variants[i].Name;
+            }
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(4f);
+            Color current_colour = Project.shader_variants[current_variant_index].Color;
+            string label = theme.language_manager.speak("variant_switcher_label");
+            GUIStyle label_style = get_label_style(current_colour);
+            GUILayout.Label(label, label_style, GUILayout.Width(label_style.CalcSize(new GUIContent(label)).x), GUILayout.Height(30f));
+            GUILayout.Space(6f);
+            int new_index = EditorGUILayout.Popup(current_variant_index, variant_names, get_popup_style());
+            GUILayout.Space(24f);
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(4f);
+            if (new_index != current_variant_index)
+            {
+                return apply_variant(new_index);
+            }
+            return false;
+        }
+
+        private bool apply_variant(int variant_index)
+        {
+            if (variant_index < 0 || variant_index >= Project.shader_variants.Count) return false;
+            ShaderVariant target = Project.shader_variants[variant_index];
+            if (string.IsNullOrEmpty(target.ShaderPath)) return false;
+
+            Shader new_shader = Shader.Find(target.ShaderPath);
+            if (new_shader == null)
+            {
+                Pretty.print($"Could not find shader: {target.ShaderPath}", Pretty.LogKind.Warning);
+                EditorUtility.DisplayDialog(
+                    theme.language_manager.speak("variant_switcher_error_title"),
+                    theme.language_manager.speak("variant_switcher_error_description", target.Name, target.ShaderPath),
+                    theme.language_manager.speak("dialog_okay")
+                );
+                return false;
+            }
+
+            bool confirm = EditorUtility.DisplayDialog(
+                theme.language_manager.speak("variant_switcher_confirm_title"),
+                theme.language_manager.speak("variant_switcher_confirm_description", target.Name),
+                theme.language_manager.speak("variant_switcher_confirm_okay"),
+                theme.language_manager.speak("variant_switcher_confirm_cancel")
+            );
+            if (!confirm) return false;
+
+            Undo.RecordObject(material, "Switch Shader Variant");
+            material.shader = new_shader;
+            EditorUtility.SetDirty(material);
+            current_variant_index = variant_index;
+            return true;
+        }
+
     }
 
     // search bar functionality

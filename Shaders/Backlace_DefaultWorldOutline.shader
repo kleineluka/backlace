@@ -950,6 +950,102 @@ Shader "luka/backlace/default/worldoutline"
         _SSRThickness ("Culling Thickness", Float) = 0.01
         [Enum(Stretch, 0, Fade, 1, Cutoff, 2, Mirror, 3)] _SSROutOfViewMode ("Out Of View Mode", Int) = 0
 
+        // LIQUID LAYER
+        // [Space(35)]
+        // [Header(Liquid Layer)]
+        // [Space(10)]
+        [Toggle(_BACKLACE_LIQUID_LAYER)] _LiquidToggleLiquid ("Enable Liquid Layer", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidEnabled ("Enable Liquid Effect", Int) = 1
+        // mode controls
+        [Enum(Watery, 0, Viscous, 1)] _LiquidFeel ("Liquid Feel", Int) = 0
+        [Enum(Sweat, 0, Blood, 1, Oil, 2)] _LiquidLookWatery ("Watery Look", Int) = 0
+        [Enum(Icing, 0, Slime, 1, Wax, 2, Mud, 3)] _LiquidLookViscous ("Viscous Look", Int) = 0
+        // uv controls
+        [Enum(UV, 0, World XY, 1, World XZ, 2, World YZ, 3, Object Position, 4, Triplanar, 5)] _LiquidSpace ("Mapping Mode", Float) = 0
+        _LiquidMapScale ("Mapping Scale", Float) = 1.0
+        _LiquidTriplanarSharpness ("Triplanar Sharpness", Range(1, 10)) = 4.0
+        // global controls - misc
+        _LiquidMaskMap ("Mask Map (White=Allow)", 2D) = "white" { }
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidUseForceMap ("Use Force Map", Int) = 0
+        _LiquidForceMap ("Force Map (White=Force Fill)", 2D) = "black" { }
+        [Enum(Lit, 0, Unlit, 1)] _LiquidSpecularLit ("Specular Mode", Int) = 0
+        _LiquidGloss ("Gloss", Range(0, 1)) = 0.9
+        _LiquidShine ("Shine", Range(0, 5)) = 1.0
+        _LiquidShineTightness ("Shihe Tightness", Range(0, 1)) = 0.5
+        _LiquidShadow ("Shadow Strength", Range(0, 1)) = 0.3
+        _LiquidRim ("Rim Strength", Range(0, 5)) = 0.5
+        _LiquidDepth ("Depth Strength", Range(0, 0.05)) = 0
+        _LiquidNormalStrength ("Normal Strength", Range(0, 8)) = 2.0
+        _LiquidOpacity ("Opacity", Range(0, 1)) = 0.9
+        _LiquidDarken ("Skin Darkening", Range(0, 0.5)) = 0.2
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidManualDirection ("Enable Manual Direction", Int) = 0
+        _LiquidDirectionOne ("Layer One Direction", Vector) = (0, -1, 0, 0)
+        _LiquidDirectionTwo ("Layer Two Direction", Vector) = (0, -1, 0, 0)
+        // global controls - layer one
+        _LiquidLayerOneScale ("Layer One Scale", Float) = 6.0
+        _LiquidLayerOneDensity ("Layer One Density", Range(0, 1)) = 0.5
+        _LiquidLayerOneStretch ("Layer One Stretch", Float) = 1.5
+        _LiquidLayerOneSpeed ("Layer One Speed", Float) = 0.1
+        _LiquidLayerOneRandomness ("Layer One Randomness", Float) = 0.5
+        _LiquidLayerOneSeed ("Layer One Seed", Float) = 4.20
+        _LiquidLayerOneMod ("Layer One Mod (Trail/Wobble)", Range(0, 1)) = 0.4
+        // global controls - layer two
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidUseLayerTwo ("Enable Layer Two", Int) = 0
+        _LiquidLayerTwoScale ("Layer Two Scale", Float) = 16.0
+        _LiquidLayerTwoDensity ("Layer Two Density", Range(0, 1)) = 0.5
+        _LiquidLayerTwoStretch ("Layer Two Stretch", Float) = 1.5
+        _LiquidLayerTwoSpeed ("Layer Two Speed", Float) = 0.1
+        _LiquidLayerTwoRandomness ("Layer Two Randomness", Float) = 0.5
+        _LiquidLayerTwoSeed ("Layer Two Seed", Float) = 9.69
+        _LiquidLayerTwoAmount ("Layer Two Amount", Range(0, 1)) = 0.5
+        _LiquidLayerTwoMod ("Layer Two Mod (Trail/Wobble)", Range(0, 1)) = 0.4
+        // global controls - coverage
+        _LiquidClusterScale ("Cluster Scale", Float) = 3.0
+        _LiquidClusterSeed ("Cluster Seed", Float) = 6.9
+        _LiquidThreshold ("Coverage Threshold", Range(0, 1)) = 0.5
+        _LiquidSoftness ("Edge Softness", Range(0.01, 0.4)) = 0.12
+        // watery-specific controls
+        _LiquidWateryCoverage ("Coverage Amount", Range(0, 1)) = 0.5
+        // viscous-specific controls
+        _LiquidViscousSmooth ("Merge Radius", Range(0.05, 1.0)) = 0.35
+        _LiquidViscousThinning ("Thinning Variance", Range(0, 1)) = 0.35
+        _LiquidViscousThinSeed ("Thinning Seed", Float) = 0.0
+        _LiquidViscousThinScale ("Thinning Scale", Float) = 3.0
+        // sweat settings
+        _LiquidSweatUseTint ("Use Tint", Range(0, 1)) = 0
+        _LiquidSweatTintColor ("Tint Colour", Color) = (0.8, 0.9, 1, 1)
+        // blood settings
+        _LiquidBloodColorFresh ("Fresh Colour", Color) = (0.8, 0.05, 0.05, 1)
+        _LiquidBloodColorDark ("Dried Colour", Color) = (0.4, 0.02, 0.02, 1)
+        _LiquidBloodPooling ("Pooling Amount", Range(0, 1)) = 0.5
+        _LiquidBloodDryingRate ("Drying Rate", Range(0, 1)) = 0.3
+        _LiquidBloodDryGloss ("Dried Gloss", Range(0, 1)) = 0.15
+        // oil settings
+        _LiquidOilColor ("Oil Tint", Color) = (0.05, 0.04, 0.03, 1)
+        _LiquidOilIridescence ("Iridescence", Range(0, 1)) = 0.8
+        _LiquidOilIridescenceScale ("Iridescence Scale", Float) = 4.0
+        // icing settings
+        _LiquidIcingColor ("Icing Colour", Color) = (1, 1, 1, 1)
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidIcingColorVariation ("Use Colour Variation", Int) = 0
+        _LiquidIcingColorMin ("Colour A", Color) = (1, 0.9, 0.95, 1)
+        _LiquidIcingColorMax ("Colour B", Color) = (1, 1, 1, 1)
+        _LiquidIcingColorScale ("Variation Scale", Float) = 2.0
+        _LiquidIcingColorSeed ("Variation Seed", Float) = 0.0
+        // wax settings
+        _LiquidWaxColor ("Wax Colour", Color) = (1, 0.9, 0.7, 1)
+        _LiquidWaxColorVariation ("Wax Colour Variation", Range(0, 1)) = 0.5
+        _LiquidWaxCoolRate ("Cooling Rate", Float) = 0.5
+        // slime settings
+        _LiquidSlimeColor ("Slime Base Colour", Color) = (0.3, 0.9, 0.4, 1)
+        _LiquidSlimeColorShift ("Slime Shift Colour", Color) = (0.5, 1, 0.6, 1)
+        _LiquidSlimeTranslucency ("Slime Translucency", Range(0, 1)) = 0.6
+        _LiquidSlimeIridescence ("Slime Iridescence", Range(0, 1)) = 0.4
+        _LiquidSlimeStickiness ("Slime Stickiness", Range(0, 1)) = 0.35
+        // mud settings
+        _LiquidMudColor ("Mud Base Colour", Color) = (0.3, 0.2, 0.15, 1)
+        _LiquidMudColorDark ("Mud Dark Colour", Color) = (0.18, 0.12, 0.09, 1)
+        _LiquidMudRoughness ("Mud Surface Roughness", Range(0, 1)) = 0.6
+
         // STOCHASTIC SAMPLING
         // [Space(35)]
         // [Header(Stochastic Sampling)]

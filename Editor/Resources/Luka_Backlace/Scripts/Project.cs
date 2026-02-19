@@ -14,7 +14,7 @@ namespace Luka.Backlace
         public static readonly string project_path = "Luka_Backlace";
         public static readonly string project_license = "/Licenses/Backlace";
         public static Version version = new Version("3.0.0");
-        public static readonly Version version_dazzle = new Version("4.6.0"); // just internally
+        public static readonly Version version_dazzle = new Version("5.0.0"); // just internally
         public static readonly string project_docs = "https://luka.moe/docs/backlace";
         public static readonly bool has_license = true; // if the project has a license file, or if you wanna show it
         public static readonly bool has_docs = true; // if the project has documentation, or if you wanna show it
@@ -26,23 +26,26 @@ namespace Luka.Backlace
         public static readonly List<ShaderVariant> shader_variants = new List<ShaderVariant>
         {
             // smol
-            new ShaderVariant("Small", "Small", new Color(0.6f, 0.8f, 1.0f), "luka/backlace/small/vanilla"),
-            new ShaderVariant("Small Outline", "Small Outline", new Color(0.6f, 0.7f, 0.9f), "luka/backlace/small/outline"),
+            new ShaderVariant("Small", "small/vanilla", new Color(0.6f, 0.8f, 1.0f), "luka/backlace/small/vanilla"),
+            new ShaderVariant("Small Outline", "small/outline", new Color(0.6f, 0.7f, 0.9f), "luka/backlace/small/outline"),
             // default
-            new ShaderVariant("Default", "Default", new Color(0.8f, 0.8f, 1.0f), "luka/backlace/default/vanilla"),
-            new ShaderVariant("Default Outline", "Outline", new Color(1.0f, 0.75f, 0.8f), "luka/backlace/default/outline"),
-            new ShaderVariant("Default World", "World", new Color(0.7f, 0.9f, 0.7f), "luka/backlace/default/world"),
-            new ShaderVariant("Default World Outline", "World Outline", new Color(0.9f, 0.4f, 0.3f), "luka/backlace/default/worldoutline"),
+            new ShaderVariant("Default", "default/vanilla", new Color(0.8f, 0.8f, 1.0f), "luka/backlace/default/vanilla"),
+            new ShaderVariant("Default Outline", "default/outline", new Color(1.0f, 0.75f, 0.8f), "luka/backlace/default/outline"),
+            new ShaderVariant("Default World", "default/world", new Color(0.7f, 0.9f, 0.7f), "luka/backlace/default/world"),
+            new ShaderVariant("Default World Outline", "default/worldoutline", new Color(0.9f, 0.4f, 0.3f), "luka/backlace/default/worldoutline"),
             // full
-            new ShaderVariant("Full", "Full", new Color(0.9f, 0.8f, 1.0f), "luka/backlace/full/vanilla"),
-            new ShaderVariant("Full Outline", "Full Outline", new Color(1.0f, 0.6f, 0.9f), "luka/backlace/full/outline"),
-            new ShaderVariant("Full Grabpass", "Full Grabpass", new Color(0.6f, 0.9f, 0.6f), "luka/backlace/full/grabpass"),
-            new ShaderVariant("Full Grabpass Outline", "Full Grabpass Outline", new Color(0.8f, 0.9f, 0.5f), "luka/backlace/full/grabpassoutline"),
-            new ShaderVariant("Full World", "Full World", new Color(0.5f, 0.8f, 0.6f), "luka/backlace/full/world"),
-            new ShaderVariant("Full World Outline", "Full World Outline", new Color(0.8f, 0.3f, 0.2f), "luka/backlace/full/worldoutline"),
-            new ShaderVariant("Full World Grabpass", "Full World Grabpass", new Color(0.4f, 0.7f, 0.5f), "luka/backlace/full/worldgrabpass"),
-            new ShaderVariant("Full World Grabpass Outline", "Full World Grabpass Outline", new Color(0.7f, 0.2f, 0.1f), "luka/backlace/full/worldgrabpassoutline"),
+            new ShaderVariant("Full", "full/vanilla", new Color(0.9f, 0.8f, 1.0f), "luka/backlace/full/vanilla"),
+            new ShaderVariant("Full Outline", "full/outline", new Color(1.0f, 0.6f, 0.9f), "luka/backlace/full/outline"),
+            new ShaderVariant("Full Grabpass", "full/grabpass", new Color(0.6f, 0.9f, 0.6f), "luka/backlace/full/grabpass"),
+            new ShaderVariant("Full Grabpass Outline", "full/grabpassoutline", new Color(0.8f, 0.9f, 0.5f), "luka/backlace/full/grabpassoutline"),
+            new ShaderVariant("Full World", "full/world", new Color(0.5f, 0.8f, 0.6f), "luka/backlace/full/world"),
+            new ShaderVariant("Full World Outline", "full/worldoutline", new Color(0.8f, 0.3f, 0.2f), "luka/backlace/full/worldoutline"),
+            new ShaderVariant("Full World Grabpass", "full/worldgrabpass", new Color(0.4f, 0.7f, 0.5f), "luka/backlace/full/worldgrabpass"),
+            new ShaderVariant("Full World Grabpass Outline", "full/worldgrabpassoutline", new Color(0.7f, 0.2f, 0.1f), "luka/backlace/full/worldgrabpassoutline"),
         };
+        public static readonly List<string> outline_variants = new List<string> { shader_variants[1].Token, shader_variants[3].Token, shader_variants[5].Token, shader_variants[7].Token, shader_variants[9].Token, shader_variants[11].Token, shader_variants[13].Token };
+        public static readonly List<string> world_variants = new List<string> { shader_variants[4].Token, shader_variants[5].Token, shader_variants[10].Token, shader_variants[11].Token, shader_variants[12].Token, shader_variants[13].Token };
+        public static readonly List<string> grabpass_variants = new List<string> { shader_variants[6].Token, shader_variants[7].Token, shader_variants[12].Token, shader_variants[13].Token };
         public static readonly List<ShaderCapability> shader_capabilities = new List<ShaderCapability>
         { 
             new ShaderCapability("Depth", "depth_popup_info", new Color(0.9f, 0.9f, 0.9f)),
@@ -137,7 +140,7 @@ namespace Luka.Backlace
             }, new Color(0.2f, 0.1f, 0.8f))
         };
         public static readonly bool enable_debug = true;
-        public static readonly string debug_tag = "_Backalce";
+        public static readonly string debug_tag = "_Liquid";
     }
 
 }

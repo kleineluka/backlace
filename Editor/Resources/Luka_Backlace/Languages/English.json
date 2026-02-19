@@ -225,6 +225,34 @@
             "value": "This feature requires (at minimum) the '{0}' shader variant.\n\nShader variants are made in order to help ensure you only include code for the features you need. While other versions may have it (indicated by greyed out tabs or not), this is the \"lowest\" variant tier that supports it. Please see the docs for more info! ^-^"
         },
         {
+            "key": "variant_switcher_label",
+            "value": "Switch Variants"
+        },
+        {
+            "key": "variant_switcher_confirm_title",
+            "value": "Switch Shader Variant"
+        },
+        {
+            "key": "variant_switcher_confirm_description",
+            "value": "Switch this material to the '{0}' shader variant?\n\nYour existing properties will be preserved where possible."
+        },
+        {
+            "key": "variant_switcher_confirm_okay",
+            "value": "Switch"
+        },
+        {
+            "key": "variant_switcher_confirm_cancel",
+            "value": "Cancel"
+        },
+        {
+            "key": "variant_switcher_error_title",
+            "value": "Variant Not Found"
+        },
+        {
+            "key": "variant_switcher_error_description",
+            "value": "Could not find the '{0}' shader variant at path '{1}'.\n\nPlease make sure it is imported in your project!"
+        },
+        {
             "key": "warning_external_website_title",
             "value": "Wait, listen!"
         },
@@ -4375,6 +4403,314 @@
         {
             "key": "header_angel_ring_breakup",
             "value": "Breakup"
+        },
+        {
+            "key": "sub_tab_liquid_layer",
+            "value": "Liquid Layer"
+        },
+        {
+            "key": "prop_LiquidToggleLiquid",
+            "value": "Enable Liquid Layer"
+        },
+        {
+            "key": "prop_LiquidEnabled",
+            "value": "Enable Liquid Effect"
+        },
+        {
+            "key": "prop_LiquidFeel",
+            "value": "Liquid Feel"
+        },
+        {
+            "key": "prop_LiquidLookWatery",
+            "value": "Watery Look"
+        },
+        {
+            "key": "prop_LiquidLookViscous",
+            "value": "Viscous Look"
+        },
+        {
+            "key": "prop_LiquidSpace",
+            "value": "Mapping Mode"
+        },
+        {
+            "key": "prop_LiquidMapScale",
+            "value": "Mapping Scale"
+        },
+        {
+            "key": "prop_LiquidTriplanarSharpness",
+            "value": "Triplanar Sharpness"
+        },
+        {
+            "key": "prop_LiquidMaskMap",
+            "value": "Mask Map"
+        },
+        {
+            "key": "prop_LiquidUseForceMap",
+            "value": "Use Force Map"
+        },
+        {
+            "key": "prop_LiquidForceMap",
+            "value": "Force Map"
+        },
+        {
+            "key": "prop_LiquidSpecularLit",
+            "value": "Specular Mode"
+        },
+        {
+            "key": "prop_LiquidGloss",
+            "value": "Gloss"
+        },
+        {
+            "key": "prop_LiquidShine",
+            "value": "Shine"
+        },
+        {
+            "key": "prop_LiquidShineTightness",
+            "value": "Shine Tightness"
+        },
+        {
+            "key": "prop_LiquidShadow",
+            "value": "Shadow Strength"
+        },
+        {
+            "key": "prop_LiquidRim",
+            "value": "Rim Strength"
+        },
+        {
+            "key": "prop_LiquidDepth",
+            "value": "Depth Strength"
+        },
+        {
+            "key": "prop_LiquidNormalStrength",
+            "value": "Normal Strength"
+        },
+        {
+            "key": "prop_LiquidOpacity",
+            "value": "Opacity"
+        },
+        {
+            "key": "prop_LiquidDarken",
+            "value": "Skin Darkening"
+        },
+        {
+            "key": "prop_LiquidManualDirection",
+            "value": "Enable Manual Direction"
+        },
+        {
+            "key": "prop_LiquidDirectionOne",
+            "value": "Layer One Direction"
+        },
+        {
+            "key": "prop_LiquidDirectionTwo",
+            "value": "Layer Two Direction"
+        },
+        {
+            "key": "prop_LiquidLayerOneScale",
+            "value": "Layer One Scale"
+        },
+        {
+            "key": "prop_LiquidLayerOneDensity",
+            "value": "Layer One Density"
+        },
+        {
+            "key": "prop_LiquidLayerOneStretch",
+            "value": "Layer One Stretch"
+        },
+        {
+            "key": "prop_LiquidLayerOneSpeed",
+            "value": "Layer One Speed"
+        },
+        {
+            "key": "prop_LiquidLayerOneRandomness",
+            "value": "Layer One Randomness"
+        },
+        {
+            "key": "prop_LiquidLayerOneSeed",
+            "value": "Layer One Seed"
+        },
+        {
+            "key": "prop_LiquidLayerOneMod",
+            "value": "Layer One Mod (Trail/Wobble)"
+        },
+        {
+            "key": "prop_LiquidUseLayerTwo",
+            "value": "Enable Layer Two"
+        },
+        {
+            "key": "prop_LiquidLayerTwoScale",
+            "value": "Layer Two Scale"
+        },
+        {
+            "key": "prop_LiquidLayerTwoDensity",
+            "value": "Layer Two Density"
+        },
+        {
+            "key": "prop_LiquidLayerTwoStretch",
+            "value": "Layer Two Stretch"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSpeed",
+            "value": "Layer Two Speed"
+        },
+        {
+            "key": "prop_LiquidLayerTwoRandomness",
+            "value": "Layer Two Randomness"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSeed",
+            "value": "Layer Two Seed"
+        },
+        {
+            "key": "prop_LiquidLayerTwoAmount",
+            "value": "Layer Two Amount"
+        },
+        {
+            "key": "prop_LiquidLayerTwoMod",
+            "value": "Layer Two Mod (Trail/Wobble)"
+        },
+        {
+            "key": "prop_LiquidClusterScale",
+            "value": "Cluster Scale"
+        },
+        {
+            "key": "prop_LiquidClusterSeed",
+            "value": "Cluster Seed"
+        },
+        {
+            "key": "prop_LiquidThreshold",
+            "value": "Coverage Threshold"
+        },
+        {
+            "key": "prop_LiquidSoftness",
+            "value": "Edge Softness"
+        },
+        {
+            "key": "prop_LiquidWateryCoverage",
+            "value": "Coverage Amount"
+        },
+        {
+            "key": "prop_LiquidViscousSmooth",
+            "value": "Merge Radius"
+        },
+        {
+            "key": "prop_LiquidViscousThinning",
+            "value": "Thinning Variance"
+        },
+        {
+            "key": "prop_LiquidViscousThinSeed",
+            "value": "Thinning Seed"
+        },
+        {
+            "key": "prop_LiquidViscousThinScale",
+            "value": "Thinning Scale"
+        },
+        {
+            "key": "prop_LiquidSweatUseTint",
+            "value": "Use Tint"
+        },
+        {
+            "key": "prop_LiquidSweatTintColor",
+            "value": "Tint Colour"
+        },
+        {
+            "key": "prop_LiquidBloodColorFresh",
+            "value": "Fresh Colour"
+        },
+        {
+            "key": "prop_LiquidBloodColorDark",
+            "value": "Dried Colour"
+        },
+        {
+            "key": "prop_LiquidBloodPooling",
+            "value": "Pooling Amount"
+        },
+        {
+            "key": "prop_LiquidBloodDryingRate",
+            "value": "Drying Rate"
+        },
+        {
+            "key": "prop_LiquidBloodDryGloss",
+            "value": "Dried Gloss"
+        },
+        {
+            "key": "prop_LiquidOilColor",
+            "value": "Oil Tint"
+        },
+        {
+            "key": "prop_LiquidOilIridescence",
+            "value": "Iridescence"
+        },
+        {
+            "key": "prop_LiquidOilIridescenceScale",
+            "value": "Iridescence Scale"
+        },
+        {
+            "key": "prop_LiquidIcingColor",
+            "value": "Icing Colour"
+        },
+        {
+            "key": "prop_LiquidIcingColorVariation",
+            "value": "Use Colour Variation"
+        },
+        {
+            "key": "prop_LiquidIcingColorMin",
+            "value": "Colour A"
+        },
+        {
+            "key": "prop_LiquidIcingColorMax",
+            "value": "Colour B"
+        },
+        {
+            "key": "prop_LiquidIcingColorScale",
+            "value": "Variation Scale"
+        },
+        {
+            "key": "prop_LiquidIcingColorSeed",
+            "value": "Variation Seed"
+        },
+        {
+            "key": "prop_LiquidWaxColor",
+            "value": "Wax Colour"
+        },
+        {
+            "key": "prop_LiquidWaxColorVariation",
+            "value": "Wax Colour Variation"
+        },
+        {
+            "key": "prop_LiquidWaxCoolRate",
+            "value": "Cooling Rate"
+        },
+        {
+            "key": "prop_LiquidSlimeColor",
+            "value": "Slime Base Colour"
+        },
+        {
+            "key": "prop_LiquidSlimeColorShift",
+            "value": "Slime Shift Colour"
+        },
+        {
+            "key": "prop_LiquidSlimeTranslucency",
+            "value": "Slime Translucency"
+        },
+        {
+            "key": "prop_LiquidSlimeIridescence",
+            "value": "Slime Iridescence"
+        },
+        {
+            "key": "prop_LiquidSlimeStickiness",
+            "value": "Slime Stickiness"
+        },
+        {
+            "key": "prop_LiquidMudColor",
+            "value": "Mud Base Colour"
+        },
+        {
+            "key": "prop_LiquidMudColorDark",
+            "value": "Mud Dark Colour"
+        },
+        {
+            "key": "prop_LiquidMudRoughness",
+            "value": "Mud Surface Roughness"
         }
     ]
 }

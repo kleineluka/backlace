@@ -1495,6 +1495,697 @@
     }
 #endif // BACKLACE_CAPABILITIES_HIGH
 
+// liquid layers feature
+#if defined(_BACKLACE_LIQUID_LAYER)
+    // shared
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_LiquidMaskMap);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_LiquidForceMap);
+    int _LiquidEnabled;
+    int _LiquidFeel;
+    int _LiquidLookWatery;
+    int _LiquidLookViscous;
+    int _LiquidUseForceMap;
+    int _LiquidSpecularLit;
+    float _LiquidSpace;
+    float _LiquidMapScale;
+    float _LiquidTriplanarSharpness;
+    float _LiquidGloss;
+    float _LiquidShine;
+    float _LiquidShineTightness;
+    float _LiquidShadow;
+    float _LiquidRim;
+    float _LiquidDepth;
+    float _LiquidNormalStrength;
+    float _LiquidOpacity;
+    float _LiquidDarken;
+    int _LiquidManualDirection;
+    float4 _LiquidDirectionOne;
+    float4 _LiquidDirectionTwo;
+    float _LiquidLayerOneScale;
+    float _LiquidLayerOneDensity;
+    float _LiquidLayerOneStretch;
+    float _LiquidLayerOneSpeed;
+    float _LiquidLayerOneRandomness;
+    float _LiquidLayerOneSeed;
+    float _LiquidLayerOneMod;
+    int _LiquidUseLayerTwo;
+    float _LiquidLayerTwoScale;
+    float _LiquidLayerTwoDensity;
+    float _LiquidLayerTwoStretch;
+    float _LiquidLayerTwoSpeed;
+    float _LiquidLayerTwoRandomness;
+    float _LiquidLayerTwoSeed;
+    float _LiquidLayerTwoAmount;
+    float _LiquidLayerTwoMod;
+    float _LiquidClusterScale;
+    float _LiquidClusterSeed;
+    float _LiquidThreshold;
+    float _LiquidSoftness;
+    // watery-specific
+    float _LiquidWateryCoverage;
+    // viscous-specific
+    float _LiquidViscousSmooth;
+    float _LiquidViscousThinning;
+    float _LiquidViscousThinSeed;
+    float _LiquidViscousThinScale;
+    // sweat
+    float _LiquidSweatUseTint;
+    float4 _LiquidSweatTintColor;
+    // blood
+    float4 _LiquidBloodColorFresh;
+    float4 _LiquidBloodColorDark;
+    float _LiquidBloodPooling;
+    float _LiquidBloodDryingRate;
+    float _LiquidBloodDryGloss;
+    // oil
+    float4 _LiquidOilColor;
+    float _LiquidOilIridescence;
+    float _LiquidOilIridescenceScale;
+    // icing
+    float4 _LiquidIcingColor;
+    float _LiquidIcingColorVariation;
+    float4 _LiquidIcingColorMin;
+    float4 _LiquidIcingColorMax;
+    float _LiquidIcingColorScale;
+    float _LiquidIcingColorSeed;
+    // wax
+    float4 _LiquidWaxColor;
+    float _LiquidWaxColorVariation;
+    float _LiquidWaxCoolRate;
+    // slime
+    float4 _LiquidSlimeColor;
+    float4 _LiquidSlimeColorShift;
+    float _LiquidSlimeTranslucency;
+    float _LiquidSlimeIridescence;
+    float _LiquidSlimeStickiness;
+    // mud
+    float4 _LiquidMudColor;
+    float4 _LiquidMudColorDark;
+    float _LiquidMudRoughness;
+
+    // make life easier
+    struct FluidLayer
+    {
+        float scale;
+        float stretch;
+        float density;
+        float randomness;
+        float speed;
+        float seed;
+        float modular; // trail for watery, wobble for viscous
+    };
+
+    FluidLayer MakeFluidLayer(float scale, float stretch, float density, float randomness, float speed, float seed, float modular)
+    {
+        FluidLayer d;
+        d.scale = scale;
+        d.stretch = stretch;
+        d.density = density;
+        d.randomness = randomness;
+        d.speed = speed;
+        d.seed = seed;
+        d.modular = modular;
+        return d;
+    }
+
+    struct ViscousModifiers
+    {
+        float stretch;
+        float wobble;
+        float density;
+        float randomness;
+        float scale;
+    };
+
+    ViscousModifiers MakeViscousModifiers(float stretch, float wobble, float density, float randomness, float scale)
+    {
+        ViscousModifiers m;
+        m.stretch = stretch;
+        m.wobble = wobble;
+        m.density = density;
+        m.randomness = randomness;
+        m.scale = scale;
+        return m;
+    }
+
+    // noise helpers
+    float FluidNoise(float2 p)
+    {
+        float2 i = floor(p);
+        float2 f = frac(p);
+        f = f * f * (3.0 - 2.0 * f);
+        float a = dot(Hash22(i + float2(0, 0)), float2(1, 1));
+        float b = dot(Hash22(i + float2(1, 0)), float2(1, 1));
+        float c = dot(Hash22(i + float2(0, 1)), float2(1, 1));
+        float d = dot(Hash22(i + float2(1, 1)), float2(1, 1));
+        return lerp(lerp(a, b, f.x), lerp(c, d, f.x), f.y);
+    }
+
+    inline float FluidFBM(float2 p, int octaves)
+    {
+        float value = 0.0;
+        float amplitude = 0.5;
+        float frequency = 1.0;
+        for (int i = 0; i < octaves; i++)
+        {
+            value += amplitude * FluidNoise(p * frequency);
+            frequency *= 2.0;
+            amplitude *= 0.5;
+        }
+        return value;
+    }
+
+    // switch between what is acting as the uvs
+    float2 GetFluidSpace()
+    {
+        float2 result = 0;
+        switch ((int)_LiquidSpace)
+        {
+            case 0: // uv space
+                result = Uvs[0]; // uv channel 0, post-manipulation
+                break;
+            case 1: // world xy
+                result = FragData.worldPos.xy * _LiquidMapScale;
+                break;
+            case 2: // world xz
+                result = FragData.worldPos.xz * _LiquidMapScale;
+                break;
+            case 3: // world yz
+                result = FragData.worldPos.yz * _LiquidMapScale;
+                break;
+            case 4: // object space
+                result = mul(unity_WorldToObject, float4(FragData.worldPos, 1.0)).xy * _LiquidMapScale;
+                break;
+            default: // triplanar
+                {
+                    float3 worldNormal = normalize(cross(ddy(FragData.worldPos), ddx(FragData.worldPos)));
+                    float3 blendWeights = abs(worldNormal);
+                    blendWeights = pow(blendWeights, _LiquidTriplanarSharpness);
+                    blendWeights /= (blendWeights.x + blendWeights.y + blendWeights.z);
+                    float2 uvX = FragData.worldPos.yz * _LiquidMapScale;
+                    float2 uvY = FragData.worldPos.xz * _LiquidMapScale;
+                    float2 uvZ = FragData.worldPos.xy * _LiquidMapScale;
+                    result = uvX * blendWeights.x + uvY * blendWeights.y + uvZ * blendWeights.z;
+                    break;
+                }
+        }
+        return result;
+    }
+
+    // get.. "down" direction for fluid flow based on world position derivatives
+    float2 FluidUVGravity()
+    {
+        float3 localPos = mul(unity_WorldToObject, float4(FragData.worldPos, 1.0)).xyz;
+        float2 dY = float2(ddx(localPos.y), ddy(localPos.y));
+        float2 dU = float2(ddx(Uvs[0].x), ddy(Uvs[0].x));
+        float2 dV = float2(ddx(Uvs[0].y), ddy(Uvs[0].y));
+        float2 uvDown = float2(dot(dY, dU), dot(dY, dV));
+        float len = length(uvDown);
+        return (len > 0.0001) ? uvDown / len : float2(0, -1);
+    }
+
+    // calculate a layer of watery fluid
+    float WateryLayer(float2 flowUV, float2 flowDir, FluidLayer layer)
+    {
+        float2 stretchAxis = (length(flowDir) < 0.001) ? float2(0, -1) : flowDir;
+        float2 crossAxis = float2(-stretchAxis.y, stretchAxis.x);
+        float flowCoord = dot(flowUV, stretchAxis) / max(1.0, layer.stretch);
+        float crossCoord = dot(flowUV, crossAxis);
+        float2 layerUV = (flowCoord * stretchAxis + crossCoord * crossAxis) * layer.scale;
+        layerUV += float2(layer.seed * 17.3, layer.seed * 4.2);
+        float2 cellID = floor(layerUV);
+        float2 cellLocal = frac(layerUV);
+        float wobTime = _Time.y * abs(layer.speed) * 10.0;
+        float minDist = 100.0;
+        for (int cy = -2; cy <= 2; cy++)
+        {
+            for (int cx = -2; cx <= 2; cx++)
+            {
+                float2 neighbor = float2(cx, cy);
+                float2 rnd = Hash22(cellID + neighbor);
+                if (rnd.y > layer.density) continue;
+                float2 cellPt = 0.5 + 0.15 * sin(wobTime + 6.2831 * rnd + layer.seed);
+                float2 diff = neighbor + cellPt - cellLocal;
+                float rndSize = 1.0 - (frac(rnd.y * 12.34) * layer.randomness);
+                float flowProj = dot(diff, stretchAxis);
+                float trailMult = lerp(1.0, 0.4, layer.modular * saturate(flowProj * 3.0));
+                float d = length(diff) * trailMult / max(0.2, rndSize);
+                minDist = min(minDist, d);
+            }
+        }
+        return minDist;
+    }
+
+    // calculate a layer of viscous fluid
+    float ViscousLayer(float2 flowUV, float2 uvDown, FluidLayer layer)
+    {
+        float2 stretchAxis = (length(uvDown) < 0.001) ? float2(0, -1) : uvDown;
+        float2 crossAxis = float2(-stretchAxis.y, stretchAxis.x);
+        float flowCoord = dot(flowUV, stretchAxis) / max(1.0, layer.stretch);
+        float crossCoord = dot(flowUV, crossAxis);
+        float2 layerUV = (flowCoord * stretchAxis + crossCoord * crossAxis) * layer.scale;
+        layerUV += float2(layer.seed * 17.3, layer.seed * 4.2);
+        float2 cellID = floor(layerUV);
+        float2 cellUV = frac(layerUV);
+        float wobTime = _Time.y * abs(layer.speed) * 10.0;
+        float smoothDist = 100.0;
+        for (int cy = -2; cy <= 2; cy++)
+        {
+            for (int cx = -2; cx <= 2; cx++)
+            {
+                float2 neighbor = float2(cx, cy);
+                float2 randomVal = Hash22(cellID + neighbor);
+                if (randomVal.y > layer.density) continue;
+                float2 cellPt = 0.5 + layer.modular * sin(wobTime + 6.2831 * randomVal + layer.seed);
+                float d = length(neighbor + cellPt - cellUV);
+                float rndSize = 1.0 - (frac(randomVal.y * 12.34) * layer.randomness);
+                d /= max(0.2, rndSize);
+                float k = 0.35;
+                float h = saturate(0.5 + 0.5 * (smoothDist - d) / k);
+                smoothDist = lerp(smoothDist, d, h) - k * h * (1.0 - h);
+            }
+        }
+        return smoothDist;
+    }
+
+    // viscous helpers
+    float ViscousCluster(float2 mappingUV, float2 flowUV, float forceConst)
+    {
+        float2 clusterUV = (flowUV) * _LiquidClusterScale + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
+        float clusterMask = smoothstep(0.3, 0.8, FluidNoise(clusterUV));
+        return saturate(clusterMask + forceConst);
+    }
+
+    float ViscousThinning(float2 mappingUV, float forceConst)
+    {
+        float2 thinUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
+        float thinVal = saturate(lerp(1.0, FluidFBM(thinUV, 3), _LiquidViscousThinning) + forceConst);
+        return pow(thinVal, 2.0);
+    }
+
+    float BlendViscousLayers(float d1, float d2, float blendAmount)
+    {
+        float h = saturate(0.5 + 0.5 * (d1 - d2) / _LiquidViscousSmooth);
+        float blended = lerp(d1, d2, h) - _LiquidViscousSmooth * h * (1.0 - h);
+        return lerp(d1, blended, blendAmount);
+    }
+
+    // mask helpers
+    float WateryWetMask(float dropletField, float2 mappingUV, float coverage, float forceConst, float maskConst)
+    {
+        float2 coverageUV = mappingUV * _LiquidClusterScale
+        + float2(_LiquidClusterSeed * 13.7, _LiquidClusterSeed * 5.9);
+        float coverageMask = smoothstep(1.0 - coverage, 1.0, FluidFBM(coverageUV, 2));
+        coverageMask = saturate(coverageMask + forceConst);
+        dropletField *= coverageMask;
+        float wet = smoothstep(_LiquidThreshold - _LiquidSoftness, _LiquidThreshold + _LiquidSoftness, dropletField);
+        return wet * maskConst;
+    }
+
+    float ViscousWetMask(float field, float2 mappingUV, float2 flowUV, float thresholdBias, float forceConst, float maskConst)
+    {
+        field *= ViscousCluster(mappingUV, flowUV, forceConst);
+        float localThreshold = _LiquidThreshold * thresholdBias * (1.0 - forceConst * 0.8);
+        float wet = smoothstep(localThreshold - _LiquidSoftness, localThreshold + _LiquidSoftness, field);
+        wet = pow(wet, 0.6);
+        wet *= ViscousThinning(mappingUV, forceConst);
+        return wet * maskConst;
+    }
+
+    // containorised specular helpers
+    float3 LiquidGlossyEnvironment(UNITY_ARGS_TEXCUBE(tex), half4 hdr, Unity_GlossyEnvironmentData glossIn, float3 worldPos)
+    {
+        half perceptualRoughness = glossIn.roughness;
+        perceptualRoughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);
+        half mip = perceptualRoughness * UNITY_SPECCUBE_LOD_STEPS;
+        float3 R = glossIn.reflUVW;
+        #if defined(UNITY_SPECCUBE_BOX_PROJECTION)
+            if (unity_SpecCube0_ProbePosition.w > 0)
+            {
+                float3 factors = ((R > 0 ? unity_SpecCube0_BoxMax.xyz : unity_SpecCube0_BoxMin.xyz) - worldPos) / R;
+                float scalar = min(min(factors.x, factors.y), factors.z);
+                R = R * scalar + (worldPos - unity_SpecCube0_ProbePosition.xyz);
+            }
+        #endif // UNITY_SPECCUBE_BOX_PROJECTION
+        half4 rgbm = UNITY_SAMPLE_TEXCUBE_LOD(tex, R, mip);
+        return DecodeHDR(rgbm, hdr);
+    }
+
+    float3 LiquidStandardSpecular(float3 F, float roughness, float NdotL, float NdotV, float NdotH)
+    {
+        float a = roughness;
+        float a2 = a * a;
+        float d = (NdotH * a2 - NdotH) * NdotH + 1.0;
+        float D = a2 / (d * d + 1e-7f);
+        float lambdaV = NdotL * (NdotV * (1 - a) + a);
+        float lambdaL = NdotV * (NdotL * (1 - a) + a);
+        float V = 0.5f / (lambdaV + lambdaL + 1e-5f);
+        return (D * V) * F;
+    }
+
+    void ApplyLiquidSpecular(inout BacklaceSurfaceData Surface, FragmentData i, float wetMask, float glossiness, float normalStrength)
+    {
+        // normals for liquid layer
+        float2 dxy = float2(ddx(wetMask), ddy(wetMask));
+        float3 liquidNormalTS = normalize(float3(-dxy * normalStrength, 1.0));
+        liquidNormalTS = lerp(float3(0, 0, 1), liquidNormalTS, saturate(wetMask * 1.5));
+        float3 N = normalize(
+            liquidNormalTS.x * Surface.TangentDir +
+            liquidNormalTS.y * Surface.BitangentDir +
+            liquidNormalTS.z * Surface.NormalDir
+        );
+        float3 V = Surface.ViewDir;
+        float3 L = Surface.LightDir;
+        float3 H = normalize(L + V);
+        float NdotL = saturate(dot(N, L));
+        float NdotV = saturate(dot(N, V));
+        float NdotH = saturate(dot(N, H));
+        float LdotH = saturate(dot(L, H));
+        // optional shadowing
+        float edgeRing = smoothstep(0.0, 0.2, wetMask) * (1.0 - smoothstep(0.2, 0.6, wetMask));
+        if (_LiquidShadow != 0) Surface.Albedo.rgb *= (1.0 - (edgeRing * _LiquidShadow));
+        // roughness/gloss
+        float effectiveGloss = lerp(0.0, glossiness, saturate(wetMask * _LiquidShineTightness));
+        float perceptualRoughness = 1.0 - effectiveGloss;
+        float roughness = perceptualRoughness * perceptualRoughness;
+        // fresnel
+        float3 F0 = float3(0.04, 0.04, 0.04);
+        float3 fresnelTerm = F0 + (1.0 - F0) * pow(1.0 - LdotH, 5.0);
+        // direct specular
+        float3 directSpecular = LiquidStandardSpecular(fresnelTerm, roughness, NdotL, NdotV, NdotH);
+        directSpecular *= Surface.LightColor.rgb * Surface.Attenuation * NdotL;
+        // indirect specular
+        Unity_GlossyEnvironmentData envData;
+        envData.roughness = perceptualRoughness;
+        envData.reflUVW = reflect(-V, N);
+        float3 envSpecular = LiquidGlossyEnvironment(
+            UNITY_PASS_TEXCUBE(unity_SpecCube0),
+            unity_SpecCube0_HDR,
+            envData,
+            i.worldPos
+        );
+        float surfaceReduction = 1.0 / (roughness * roughness + 1.0);
+        float grazingTerm = saturate(effectiveGloss + (1.0 - effectiveGloss));
+        float3 envFresnel = lerp(F0, grazingTerm.xxx, pow(1.0 - NdotV, 5.0));
+        envSpecular *= envFresnel * surfaceReduction;
+        // scattering
+        float liquidRim = pow(1.0 - NdotV, 3.0);
+        float3 volumeGlow = liquidRim * wetMask * _LiquidRim * Surface.LightColor.rgb;
+        // compose final result
+        if (_LiquidSpecularLit == 1) // unlit
+        {
+            Surface.FinalColor.rgb += (directSpecular + envSpecular) * wetMask * _LiquidShine;
+            Surface.FinalColor.rgb += volumeGlow;
+        }
+        else // lit
+        {
+            Surface.Albedo.rgb += (directSpecular + envSpecular) * wetMask * _LiquidShine;
+            Surface.Albedo.rgb += volumeGlow;
+        }
+    }
+
+    // various watery substances
+    void ApplySweat(inout BacklaceSurfaceData Surface, float wetMask)
+    {
+        Surface.Albedo.rgb *= lerp(1.0, 1.0 - _LiquidDarken, wetMask);
+        if (_LiquidSweatUseTint > 0) 
+        {
+            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * _LiquidSweatTintColor.rgb, wetMask * _LiquidSweatUseTint);
+        }
+    }
+
+    void ApplyBlood(inout BacklaceSurfaceData Surface, float wetMask, float2 mappingUV, inout float glossiness)
+    {
+        float2 dryingUV = mappingUV * _LiquidClusterScale * 1.5 + float2(_LiquidClusterSeed * 7.3, _LiquidClusterSeed * 3.1);
+        float dryingMask = saturate(lerp(0.0, FluidFBM(dryingUV, 3), _LiquidBloodDryingRate));
+        float3 bloodColor = lerp(_LiquidBloodColorFresh.rgb, _LiquidBloodColorDark.rgb, dryingMask);
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, bloodColor, wetMask);
+        Surface.Albedo.rgb *= lerp(1.0, 1.0 - _LiquidDarken, wetMask);
+        glossiness = lerp(_LiquidGloss, _LiquidBloodDryGloss, dryingMask);
+    }
+
+    void ApplyOil(inout BacklaceSurfaceData Surface, float wetMask, float2 mappingUV)
+    {
+        // view angle drives hue + noise
+        float ndotv = saturate(dot(Surface.NormalDir, Surface.ViewDir));
+        float2 noiseUV = mappingUV * _LiquidOilIridescenceScale;
+        float noiseVal = FluidFBM(noiseUV, 2);
+        float hue = frac(ndotv * 1.5 + noiseVal * 0.4);
+        float3 rainbow = saturate(float3(
+            abs(hue * 6.0 - 3.0) - 1.0,
+            2.0 - abs(hue * 6.0 - 2.0),
+            2.0 - abs(hue * 6.0 - 4.0)
+        ));
+        float3 oilColor = lerp(_LiquidOilColor.rgb, rainbow, _LiquidOilIridescence);
+        Surface.Albedo.rgb *= lerp(1.0, 1.0 - _LiquidDarken, wetMask);
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, oilColor, wetMask * _LiquidOpacity);
+    }
+
+    // two-step viscous substances
+    ViscousModifiers GetIcingModifiers()
+    {
+        ViscousModifiers m;
+        m.stretch = 1.0;
+        m.wobble = 1.0;
+        m.density = 1.0;
+        m.randomness = 1.0;
+        m.scale = 1.0;
+        return m;
+    }
+
+    void ApplyIcing(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float outWetMask)
+    {
+        float wetMask = ViscousWetMask(field, mappingUV, flowUV1, 1.0, forceConst, maskConst);
+        outWetMask = wetMask;
+        float2 thinUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
+        float thinOpacity = saturate(lerp(1.0, FluidFBM(thinUV, 3), _LiquidViscousThinning * 0.8) + forceConst);
+        float3 glazeColor = _LiquidIcingColor.rgb;
+        if (_LiquidIcingColorVariation == 1)
+        {
+            float2 colorUV = mappingUV * _LiquidIcingColorScale + float2(_LiquidIcingColorSeed * 21.7, _LiquidIcingColorSeed * 8.3);
+            glazeColor = lerp(_LiquidIcingColorMin.rgb, _LiquidIcingColorMax.rgb, FluidFBM(colorUV, 2));
+        }
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, glazeColor, outWetMask * _LiquidOpacity * thinOpacity);
+    }
+
+    ViscousModifiers GetWaxModifiers()
+    {
+        ViscousModifiers m;
+        m.stretch = 1.5;
+        m.wobble = 0.3;
+        m.density = 0.8;
+        m.randomness = 0.6;
+        m.scale = 0.7;
+        return m;
+    }
+
+    void ApplyWax(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float outWetMask)
+    {
+        float2 clusterUV = flowUV1 * _LiquidClusterScale * 0.8 + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
+        float clusterMask = smoothstep(0.25, 0.75, FluidNoise(clusterUV));
+        field *= saturate(clusterMask + forceConst);
+        float waxThreshold = (1.0 - _LiquidWaxCoolRate) * (1.0 - forceConst * 0.8);
+        float wetMask = smoothstep(waxThreshold - _LiquidSoftness, waxThreshold + _LiquidSoftness, field);
+        float2 edgeUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
+        float edgeThinning = saturate(lerp(1.0, FluidFBM(edgeUV, 3), _LiquidWaxCoolRate) + forceConst);
+        wetMask *= pow(edgeThinning, 1.5) * maskConst;
+        outWetMask = wetMask;
+        float2 colourUV = mappingUV * 4.0;
+        float colourNoise = FluidFBM(colourUV, 2);
+        float3 waxColor = _LiquidWaxColor.rgb + (colourNoise - 0.5) * _LiquidWaxColorVariation;
+        float edgeOpacity = saturate(lerp(1.0, FluidFBM(edgeUV, 3), _LiquidWaxCoolRate * 0.7) + forceConst);
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb , waxColor, outWetMask * _LiquidOpacity * edgeOpacity);
+    }
+
+    ViscousModifiers GetSlimeModifiers()
+    {
+        ViscousModifiers m;
+        m.stretch = 2.0 - _LiquidSlimeStickiness;
+        m.wobble = 0.6;
+        m.density = 0.9;
+        m.randomness = 0.65;
+        m.scale = 0.85;
+        return m;
+    }
+
+    void ApplySlime(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float outWetMask)
+    {
+        float slimeThreshold = (1.0 - _LiquidThreshold) * (1.0 - forceConst * 0.85);
+        field *= ViscousCluster(mappingUV, flowUV1, forceConst);
+        float wetMask = pow(smoothstep(slimeThreshold - 0.18, slimeThreshold + 0.18, field), 0.7);
+        float2 thinUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
+        float thinning = saturate(lerp(1.0, FluidFBM(thinUV, 3), 0.3) + forceConst);
+        wetMask *= pow(thinning, 1.2) * maskConst;
+        outWetMask = wetMask;
+        float2 iridUV = mappingUV * 5.5;
+        float irid1 = FluidFBM(iridUV, 2);
+        float irid2 = FluidFBM(iridUV * 1.3 + float2(0.5, 0.3), 2);
+        float iridShift = (irid1 + irid2 * 0.5) / 1.5;
+        float3 slimeColor = lerp(_LiquidSlimeColor.rgb, _LiquidSlimeColorShift.rgb, iridShift * _LiquidSlimeIridescence);
+        float transMask = lerp(1.0, FluidFBM(thinUV, 3), 0.4);
+        float effTrans = _LiquidSlimeTranslucency * transMask;
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, slimeColor, outWetMask * (1.0 - effTrans));
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, Surface.Albedo.rgb * 1.2, outWetMask * effTrans * 0.3);
+    }
+
+    ViscousModifiers GetMudModifiers()
+    {
+        ViscousModifiers m;
+        m.stretch = 2.2;
+        m.wobble = 0.2;
+        m.density = 0.7;
+        m.randomness = 0.8;
+        m.scale = 0.65;
+        return m;
+    }
+
+    void ApplyMud(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float glossiness, inout float outWetMask)
+    {
+        float2 clusterUV = flowUV1 * _LiquidClusterScale * 0.5 + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
+        float clusterMask = smoothstep(0.15, 0.7, FluidNoise(clusterUV));
+        field *= saturate(clusterMask + forceConst);
+        float mudThreshold = (1.0 - _LiquidThreshold) * (1.0 - forceConst * 0.8);
+        float wetMask = smoothstep(mudThreshold - 0.2, mudThreshold + 0.1, field);
+        float2 roughUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
+        float roughness = saturate(lerp(1.0, FluidFBM(roughUV, 4), _LiquidMudRoughness) + forceConst);
+        wetMask *= pow(roughness, 1.8) * maskConst;
+        outWetMask = wetMask;
+        float2 colourUV = mappingUV * 3.5;
+        float colourNoise = FluidFBM(colourUV, 2);
+        roughUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
+        float roughNoise = FluidFBM(roughUV, 4);
+        // roughness noise drives dark/light variation spatially
+        float colourBlend = saturate(colourNoise * 0.5 + roughNoise * _LiquidMudRoughness * 0.5);
+        float3 mudColor = lerp(_LiquidMudColor.rgb, _LiquidMudColorDark.rgb, colourBlend);
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, mudColor, outWetMask * _LiquidOpacity);
+        glossiness = _LiquidGloss * lerp(1.0, 1.0 - _LiquidMudRoughness, roughNoise);
+    }
+
+    float2 GetLiquidParallaxOffset(FragmentData i, float3 viewDirWorld)
+    {
+        // Construct TBN Matrix (Normalized to prevent skewing)
+        float3 worldNormal = normalize(i.normal);
+        float3 worldTangent = normalize(i.tangentDir.xyz);
+        float3 worldBinormal = cross(worldNormal, worldTangent) * i.tangentDir.w;
+        
+        float3x3 worldToTangent = float3x3(
+            worldTangent.x, worldTangent.y, worldTangent.z,
+            worldBinormal.x, worldBinormal.y, worldBinormal.z,
+            worldNormal.x, worldNormal.y, worldNormal.z
+        );
+        
+        float3 viewDirTS = mul(worldToTangent, viewDirWorld);
+        
+        // Use simple linear offset (Bump Offset).
+        // Dividing by .z (Iterative Parallax) causes warping at grazing angles.
+        return viewDirTS.xy * _LiquidDepth;
+    }
+
+    // main function to calculate liquid layers and their effects
+    void ApplyLiquidLayer(inout BacklaceSurfaceData Surface, FragmentData i)
+    {
+        // set up base
+        float2 mappingUV = GetFluidSpace();
+        float2 uvDown = FluidUVGravity();
+        float maskConst = UNITY_SAMPLE_TEX2D_SAMPLER(_LiquidMaskMap, _MainTex, Uvs[0]).r;
+        float forceConst = (_LiquidUseForceMap == 1) ? UNITY_SAMPLE_TEX2D_SAMPLER(_LiquidForceMap, _MainTex, Uvs[0]).r : 0.0;
+        float wetMask = 0.0;
+        float glossiness = _LiquidGloss;
+        float normalStrength = _LiquidNormalStrength;
+        float2 flowDirOne = (_LiquidManualDirection) ? normalize(_LiquidDirectionOne.xy) : uvDown;
+        float2 flowDirTwo = (_LiquidManualDirection) ? normalize(_LiquidDirectionTwo.xy) : uvDown;
+        if (_LiquidDepth > 0.0)
+        {
+            float2 parallaxOffset = GetLiquidParallaxOffset(i, Surface.ViewDir);
+            mappingUV += parallaxOffset;
+        }
+        // calculate layers based on feel
+        if (_LiquidFeel == 0) // watery
+        {
+            // blood has special pooling
+            float coverage = (_LiquidLookWatery != 1) 
+                ? _LiquidWateryCoverage 
+                : _LiquidWateryCoverage * (0.5 + _LiquidBloodPooling * 0.5);
+            // first layer (larger, base)
+            FluidLayer wateryLayerOne = MakeFluidLayer(
+                _LiquidLayerOneScale, _LiquidLayerOneStretch, _LiquidLayerOneDensity,
+                _LiquidLayerOneRandomness, _LiquidLayerOneSpeed, _LiquidLayerOneSeed, _LiquidLayerOneMod
+            );
+            float2 flowUVOne = mappingUV - flowDirOne * (_Time.y * wateryLayerOne.speed);
+            float weightOne = WateryLayer(flowUVOne, flowDirOne, wateryLayerOne);
+            // second layer (smaller, detail)
+            float weightTwo = 100.0;
+            float weightFinal = weightOne;
+            if (_LiquidUseLayerTwo == 1) 
+            {
+                FluidLayer wateryLayerTwo = MakeFluidLayer(
+                    _LiquidLayerTwoScale, _LiquidLayerTwoStretch, _LiquidLayerTwoDensity,
+                    _LiquidLayerTwoRandomness, _LiquidLayerTwoSpeed, _LiquidLayerTwoSeed, _LiquidLayerTwoMod
+                );
+                float2 flowUVTwo = mappingUV - flowDirTwo * _Time.y * wateryLayerTwo.speed;
+                weightTwo = WateryLayer(flowUVTwo, flowDirTwo, wateryLayerTwo);
+                weightFinal = lerp(weightFinal, min(weightFinal, weightTwo), _LiquidLayerTwoAmount);
+            }
+            wetMask = WateryWetMask(1.0 - weightFinal, mappingUV, coverage, forceConst, maskConst);
+            // apply effects based on look
+            switch (_LiquidLookWatery)
+            {
+                case 0: ApplySweat(Surface, wetMask); break;
+                case 1: ApplyBlood(Surface, wetMask, mappingUV, glossiness); break;
+                case 2: ApplyOil(Surface, wetMask, mappingUV); break;
+                default: ApplySweat(Surface, wetMask); break;
+            }
+        }
+        else // viscous
+        {
+            // get modifiers based on look
+            ViscousModifiers lookModifiers;
+            switch (_LiquidLookViscous)
+            {
+                case 0: lookModifiers = GetIcingModifiers(); break;
+                case 1: lookModifiers = GetWaxModifiers(); break;
+                case 2: lookModifiers = GetSlimeModifiers(); break;
+                case 3: lookModifiers = GetMudModifiers(); break;
+                default: lookModifiers = GetIcingModifiers(); break;
+            }
+            float threshBias = 1.0;
+            // layer one
+            FluidLayer viscousLayerOne = MakeFluidLayer(
+                _LiquidLayerOneScale * lookModifiers.scale, _LiquidLayerOneStretch * lookModifiers.stretch, _LiquidLayerOneDensity * lookModifiers.density,
+                _LiquidLayerOneRandomness * lookModifiers.randomness, _LiquidLayerOneSpeed, _LiquidLayerOneSeed, _LiquidLayerOneMod * lookModifiers.wobble
+            );
+            float2 flowUVOne = mappingUV - flowDirOne * (_Time.y * viscousLayerOne.speed);
+            float weightOne = ViscousLayer(flowUVOne, flowDirOne, viscousLayerOne);
+            // second layer
+            float weightTwo = 1.0;
+            float weightFinal = weightOne;
+            if (_LiquidUseLayerTwo == 1) 
+            {
+                FluidLayer viscousLayerTwo = MakeFluidLayer(
+                    _LiquidLayerTwoScale * lookModifiers.scale, _LiquidLayerTwoStretch * lookModifiers.stretch, _LiquidLayerTwoDensity * lookModifiers.density,
+                    _LiquidLayerTwoRandomness * lookModifiers.randomness, _LiquidLayerTwoSpeed, _LiquidLayerTwoSeed, _LiquidLayerTwoMod * lookModifiers.wobble
+                );
+                float2 flowUVTwo = mappingUV - flowDirTwo * (_Time.y * viscousLayerTwo.speed);
+                float weightTwo = ViscousLayer(flowUVTwo, flowDirTwo, viscousLayerTwo);
+                weightFinal = BlendViscousLayers(weightOne, weightTwo, _LiquidLayerTwoAmount);
+            }
+            float field = 1.0 - weightFinal;
+            // apply effects based on feel
+            switch (_LiquidLookViscous)
+            {
+                case 0: ApplyIcing(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
+                case 1: ApplyWax(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
+                case 2: ApplySlime(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
+                case 3: ApplyMud(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, glossiness, wetMask); break;
+                default: ApplyIcing(Surface, field, mappingUV, flowUVOne, forceConst, maskConst, wetMask); break;
+            }
+        }
+        // apply specular for all looks
+        ApplyLiquidSpecular(Surface, i, wetMask, glossiness, normalStrength);
+    }
+
+#endif // _BACKLACE_LIQUID_LAYER
+
 
 // [ ♡ ] ────────────────────── [ ♡ ]
 //
@@ -1718,18 +2409,18 @@
                     switch(_SSROutOfViewMode)
                     {
                         case 1: // fade
-                        fadeFactor = smoothstep(x_min, x_min + 0.05, finalUV.x) * smoothstep(1.0 - x_max, 1.0 - x_max + 0.05, finalUV.x);
-                        fadeFactor *= smoothstep(0.0, 0.05, finalUV.y) * smoothstep(1.0, 1.0 - 0.05, finalUV.y);
-                        break;
+                            fadeFactor = smoothstep(x_min, x_min + 0.05, finalUV.x) * smoothstep(1.0 - x_max, 1.0 - x_max + 0.05, finalUV.x);
+                            fadeFactor *= smoothstep(0.0, 0.05, finalUV.y) * smoothstep(1.0, 1.0 - 0.05, finalUV.y);
+                            break;
                         case 2: // cutoff
-                        if (finalUV.x < x_min || finalUV.x > x_max || finalUV.y < 0.0 || finalUV.y > 1.0) fadeFactor = 0;
-                        break;
+                            if (finalUV.x < x_min || finalUV.x > x_max || finalUV.y < 0.0 || finalUV.y > 1.0) fadeFactor = 0;
+                            break;
                         default: // (3) mirror
-                        if (finalUV.x < x_min) finalUV.x = x_min + (x_min - finalUV.x);
-                        if (finalUV.x > x_max) finalUV.x = x_max - (finalUV.x - x_max);
-                        if (finalUV.y < 0.0) finalUV.y = -finalUV.y;
-                        if (finalUV.y > 1.0) finalUV.y = 1.0 - (finalUV.y - 1.0);
-                        break;
+                            if (finalUV.x < x_min) finalUV.x = x_min + (x_min - finalUV.x);
+                            if (finalUV.x > x_max) finalUV.x = x_max - (finalUV.x - x_max);
+                            if (finalUV.y < 0.0) finalUV.y = -finalUV.y;
+                            if (finalUV.y > 1.0) finalUV.y = 1.0 - (finalUV.y - 1.0);
+                            break;
                     }
                     if (_SSRDistortionStrength > 0)
                     {

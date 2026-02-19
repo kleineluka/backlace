@@ -109,6 +109,9 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         SetupAlbedoAndSpecColor(Surface);
         SetupDFG(Surface);
     #endif // _BACKLACE_SPECULAR
+    #if defined(_BACKLACE_LIQUID_LAYER)
+        ApplyLiquidLayer(Surface, i);
+    #endif // _BACKLACE_LIQUID_LAYER
     PremultiplyAlpha(Surface);
     #if defined(BACKLACE_TOON) // TOON LIGHTING
         GetAnimeDiffuse(Surface); // (includes vertex diffuse inside wrapper)
