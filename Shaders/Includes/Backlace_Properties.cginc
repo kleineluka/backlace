@@ -49,15 +49,14 @@ int _StitchAxis;
 float _StitchOffset;
 
 // emission feature
-#if defined(_BACKLACE_EMISSION)
-    float3 Emission;
-    float4 _EmissionColor;
-    float4 _EmissionMap_ST;
-    float _UseAlbedoAsEmission;
-    float _EmissionStrength;
-    float _EmissionMap_UV;
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
-#endif // _BACKLACE_EMISSION
+int _ToggleEmission;
+float3 Emission;
+float4 _EmissionColor;
+float4 _EmissionMap_ST;
+float _UseAlbedoAsEmission;
+float _EmissionStrength;
+float _EmissionMap_UV;
+UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
 
 // dither mask
 #if defined(_BLENDMODE_FADE) || defined(_BACKLACE_DISTANCE_FADE)

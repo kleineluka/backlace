@@ -112,15 +112,14 @@ float _UV_Scroll_Y_Speed;
 #endif // _BACKLACE_UV_EFFECTS
 
 // emission-only features
-#if defined(_BACKLACE_EMISSION)
-    UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
-    float4 _EmissionMap_ST;
-    float4 _EmissionColor;
-    float _EmissionStrength;
-    float _UseAlbedoAsEmission;
-    float _EmissionMap_UV;
-    float3 Emission;
-#endif // _BACKLACE_EMISSION
+int _ToggleEmission;
+UNITY_DECLARE_TEX2D_NOSAMPLER(_EmissionMap);
+float4 _EmissionMap_ST;
+float4 _EmissionColor;
+float _EmissionStrength;
+float _UseAlbedoAsEmission;
+float _EmissionMap_UV;
+float3 Emission;
 
 // specular-only features
 #if defined(_BACKLACE_SPECULAR)
@@ -274,12 +273,20 @@ float4 Fragment(FragmentData i) : SV_TARGET
         if (_Decal1Enable == 1) ApplyDecal1(Surface, FragData, Uvs);
         if (_Decal2Enable == 1) ApplyDecal2(Surface, FragData, Uvs);
     #endif // _BACKLACE_DECALS
-    #if defined(_BACKLACE_EMISSION)
-        CalculateEmission(Surface);
-        surfaceData.Emission = Emission;
-    #else // _BACKLACE_EMISSION
+    #if defined(BACKLACE_CAPABILITIES_LOW)
+        if (_ToggleEmission == 1)
+        {
+            // don't need to worry about al here as meta is for baking not realtime reactivity...
+            CalculateEmission(Surface);
+            surfaceData.Emission = Emission;
+        }
+        else
+        {
+            surfaceData.Emission = 0;
+        }
+    #else // _BACKLACE_DECALS
         surfaceData.Emission = 0;
-    #endif // _BACKLACE_EMISSION
+    #endif // _BACKLACE_DECALS
     #if defined(_BACKLACE_SPECULAR)
         SampleMSSO(Surface);
         GetSampleData(Surface);

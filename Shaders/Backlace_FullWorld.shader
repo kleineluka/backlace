@@ -197,7 +197,7 @@ Shader "luka/backlace/full/world"
         // [Space(35)]
         // [Header(Emission)]
         // [Space(10)]
-        [Toggle(_BACKLACE_EMISSION)] _ToggleEmission ("Enable Emission", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleEmission ("Enable Emission", Int) = 0
         [HDR] _EmissionColor ("Emission Color", Color) = (0, 0, 0, 1)
         _EmissionMap ("Emission Map (Mask)", 2D) = "black" { }
         [IntRange] _UseAlbedoAsEmission ("Use Albedo for Emission", Range(0, 1)) = 0.0

@@ -467,7 +467,7 @@
 
 // shadow texture features
 #if defined(_BACKLACE_SHADOW_TEXTURE)
-    UNITY_DECLARE_TEX2D(_ShadowTex);
+    UNITY_DECLARE_TEX2D_NOSAMPLER(_ShadowTex);
     float _ShadowTex_UV;
     float4 _ShadowPatternColor;
     float _ShadowPatternScale;
@@ -488,7 +488,7 @@
         {
             case 0: // uv albedo
             {
-                float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D(_ShadowTex, Uvs[_ShadowTex_UV]);
+                float4 shadowAlbedoSample = UNITY_SAMPLE_TEX2D_SAMPLER(_ShadowTex, _MainTex, Uvs[_ShadowTex_UV]);
                 texturedShadow = shadowAlbedoSample.rgb * _ShadowPatternColor.rgb;
                 blendFactor = shadowAlbedoSample.a;
                 break;
@@ -496,7 +496,7 @@
             case 1: // screen pattern
             {
                 float2 screenUVs = frac(Surface.ScreenCoords * _ShadowPatternScale);
-                float4 patternSample = UNITY_SAMPLE_TEX2D(_ShadowTex, screenUVs);
+                float4 patternSample = UNITY_SAMPLE_TEX2D_SAMPLER(_ShadowTex, _MainTex, screenUVs);
                 texturedShadow = patternSample.rgb * _ShadowPatternColor.rgb;
                 blendFactor = patternSample.a;
                 break;

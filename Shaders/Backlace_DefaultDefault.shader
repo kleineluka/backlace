@@ -197,7 +197,7 @@ Shader "luka/backlace/default/vanilla"
         // [Space(35)]
         // [Header(Emission)]
         // [Space(10)]
-        [Toggle(_BACKLACE_EMISSION)] _ToggleEmission ("Enable Emission", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleEmission ("Enable Emission", Int) = 0
         [HDR] _EmissionColor ("Emission Color", Color) = (0, 0, 0, 1)
         _EmissionMap ("Emission Map (Mask)", 2D) = "black" { }
         [IntRange] _UseAlbedoAsEmission ("Use Albedo for Emission", Range(0, 1)) = 0.0
@@ -777,7 +777,7 @@ Shader "luka/backlace/default/vanilla"
         // [Space(35)]
         // [Header(Shadow Texture)]
         // [Space(10)]
-        [Toggle(_BACKLACE_SHADOW_TEXTURE)] _ToggleShadowTexture ("Enable Shadow Texture", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleShadowTexture ("Enable Shadow Texture", Int) = 0
         [Enum(UV Albedo, 0, Screen Pattern, 1, Triplanar Pattern, 2)] _ShadowTextureMappingMode ("Shadow Mode", Int) = 0
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _ShadowTextureBlendMode ("Blend Mode", Int) = 1
         _ShadowTextureIntensity ("Shadow Intensity", Range(0, 1)) = 1.0

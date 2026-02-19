@@ -98,9 +98,12 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
         ApplyDetailMaps(Surface);
     #endif // _BACKLACE_DETAIL
     SampleMSSO(Surface);
-    #if defined(_BACKLACE_EMISSION)
-        CalculateEmission(Surface);
-    #endif
+    #if defined(BACKLACE_CAPABILITIES_LOW)
+        [branch] if (_ToggleEmission == 1)
+        {
+            CalculateEmission(Surface);
+        }
+    #endif // BACKLACE_CAPABILITIES_LOW
     #if defined(_BACKLACE_SPECULAR)
         GetSampleData(Surface);
     #endif // _BACKLACE_SPECULAR
@@ -163,13 +166,16 @@ float4 Fragment(FragmentData i, uint facing : SV_IsFrontFace) : SV_TARGET
             ApplyOffsetRim(Surface, i);
         #endif // _RIMMODE_*
     #endif // BACKLACE_RIMLIGHT
-    #if defined(_BACKLACE_EMISSION)
-        #if defined(_BACKLACE_AUDIOLINK)
-            Surface.FinalColor.rgb += ((Emission * Surface.Attenuation) * Music.emission);
-        #else // !_BACKLACE_AUDIOLINK
-            Surface.FinalColor.rgb += Emission * Surface.Attenuation;
-        #endif // _BACKLACE_AUDIOLINK
-    #endif // _BACKLACE_EMISSION
+    #if defined(BACKLACE_CAPABILITIES_LOW)
+        [branch] if (_ToggleEmission == 1)
+        {
+            #if defined(_BACKLACE_AUDIOLINK)
+                Surface.FinalColor.rgb += ((Emission * Surface.Attenuation) * Music.emission);
+            #else // !_BACKLACE_AUDIOLINK
+                Surface.FinalColor.rgb += Emission * Surface.Attenuation;
+            #endif // _BACKLACE_AUDIOLINK
+        }
+    #endif // BACKLACE_CAPABILITIES_LOW
     #if defined(_BACKLACE_PATHING)
         ApplyPathing(Surface, i);
     #endif // _BACKLACE_PATHING

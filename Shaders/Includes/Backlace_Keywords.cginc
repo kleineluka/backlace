@@ -35,8 +35,8 @@
     #pragma shader_feature_local _ _BACKLACE_UV_EFFECTS
     #pragma shader_feature_local _ _BACKLACE_DECALS
     #pragma shader_feature_local _ _BACKLACE_POST_PROCESSING
-    #pragma shader_feature_local _ _BACKLACE_EMISSION
     #pragma shader_feature_local _ _BACKLACE_SPECULAR
+    // #pragma shader_feature_local _ _BACKLACE_EMISSION <-- no longer keyword, but still LOW capabilities+
     // #pragma shader_feature_local _ _BACKLACE_VERTEX_SPECULAR <-- removed
 #endif // BACKLACE_CAPABILITIES_LOW
 
