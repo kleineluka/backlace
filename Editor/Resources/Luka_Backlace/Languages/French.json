@@ -3227,6 +3227,1490 @@
         {
             "key": "custom_badge_wrapped",
             "value": "Enveloppé"
+        },
+        {
+            "key": "tab_anime",
+            "value": "Personnage"
+        },
+        {
+            "key": "sub_tab_shading",
+            "value": "Ombrage"
+        },
+        {
+            "key": "sub_tab_main_textures",
+            "value": "Textures principales"
+        },
+        {
+            "key": "tab_reset_badge",
+            "value": "Réinitialiser"
+        },
+        {
+            "key": "tab_reset_title",
+            "value": "Réinitialiser l'onglet"
+        },
+        {
+            "key": "config_reset_mode",
+            "value": "Bouton de réinitialisation"
+        },
+        {
+            "key": "tab_reset_confirm",
+            "value": "Êtes-vous sûr de vouloir réinitialiser toutes les propriétés de {0} à leurs valeurs par défaut ?"
+        },
+        {
+            "key": "tab_reset_yes",
+            "value": "Réinitialiser"
+        },
+        {
+            "key": "dev_reload_success",
+            "value": "Rechargement Dev réussi"
+        },
+        {
+            "key": "header_layer_one",
+            "value": "Couche Un"
+        },
+        {
+            "key": "header_layer_two",
+            "value": "Couche Deux"
+        },
+        {
+            "key": "header_variation",
+            "value": "Variation"
+        },
+        {
+            "key": "legacy_mode_new",
+            "value": "Prise en charge du matériel hérité\n\nSi vous rencontrez des erreurs de compilation ou si vous devez utiliser ce shader sur un matériel plus ancien qui ne prend pas en charge le Shader Model 5.0, vous pouvez activer le mode hérité.\n\nComment l'activer :\n1. Accédez à Resources/Luka_Backlace/Includes/\n2. Ouvrez ce fichier dans un éditeur de texte :\n   • Backlace_Legacy.cginc\n3. Trouvez la ligne 6 : // #define BACKLACE_LEGACY_MODE\n4. Supprimez les // pour le décommenter (pour qu'il soit écrit : #define BACKLACE_LEGACY_MODE)\n\nCe que cela fait :\n• Compile le shader pour le Shader Model 3.0 (compatible avec les anciens GPU)\n• Désactive automatiquement l'intégration AudioLink et LTCGI pour rester dans les limites du matériel\n• Toutes les autres fonctionnalités restent fonctionnelles\n\nRemarque : Vous devez modifier les trois fichiers pour que le shader se compile correctement."
+        },
+        {
+            "key": "preset_reload",
+            "value": "Recharger le préréglage"
+        },
+        {
+            "key": "prop_AngelRing1Color",
+            "value": "Couleur de l'anneau d'ange 1"
+        },
+        {
+            "key": "prop_AngelRing1Position",
+            "value": "Position de l'anneau d'ange 1"
+        },
+        {
+            "key": "prop_AngelRing1Width",
+            "value": "Largeur de l'anneau d'ange 1"
+        },
+        {
+            "key": "prop_AngelRing2Color",
+            "value": "Couleur de l'anneau d'ange 2"
+        },
+        {
+            "key": "prop_AngelRing2Position",
+            "value": "Position de l'anneau d'ange 2"
+        },
+        {
+            "key": "prop_AngelRing2Width",
+            "value": "Largeur de l'anneau d'ange 2"
+        },
+        {
+            "key": "prop_AngelRing3Color",
+            "value": "Couleur de l'anneau d'ange 3"
+        },
+        {
+            "key": "prop_AngelRing3Position",
+            "value": "Position de l'anneau d'ange 3"
+        },
+        {
+            "key": "prop_AngelRing3Width",
+            "value": "Largeur de l'anneau d'ange 3"
+        },
+        {
+            "key": "prop_AngelRingBlendMode",
+            "value": "Mode de fusion de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingBreakup",
+            "value": "Fragmentation de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingBreakupDensity",
+            "value": "Densité de fragmentation de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingBreakupHeight",
+            "value": "Hauteur de fragmentation de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingBreakupSoftness",
+            "value": "Douceur de fragmentation de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingBreakupWidthMax",
+            "value": "Largeur max de fragmentation de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingBreakupWidthMin",
+            "value": "Largeur min de fragmentation de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingHeightDirection",
+            "value": "Direction de la hauteur de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingHeightOffset",
+            "value": "Décalage de la hauteur de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingHeightScale",
+            "value": "Échelle de la hauteur de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingManualOffset",
+            "value": "Décalage manuel de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingManualScale",
+            "value": "Échelle manuelle de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingMode",
+            "value": "Mode de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingSharpness",
+            "value": "Netteté de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingSoftness",
+            "value": "Douceur de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingThreshold",
+            "value": "Seuil de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AngelRingUseLighting",
+            "value": "Utiliser l'éclairage de l'anneau d'ange"
+        },
+        {
+            "key": "prop_AnimeGradientColourA",
+            "value": "Couleur A du dégradé Anime"
+        },
+        {
+            "key": "prop_AnimeGradientColourB",
+            "value": "Couleur B du dégradé Anime"
+        },
+        {
+            "key": "prop_AnimeGradientDirection",
+            "value": "Direction du dégradé Anime"
+        },
+        {
+            "key": "prop_AnimeGradientMode",
+            "value": "Mode du dégradé Anime"
+        },
+        {
+            "key": "prop_AnimeGradientMultiplier",
+            "value": "Multiplicateur du dégradé Anime"
+        },
+        {
+            "key": "prop_AnimeGradientOffset",
+            "value": "Décalage du dégradé Anime"
+        },
+        {
+            "key": "prop_AnimeModeNew",
+            "value": "Mode d'ombrage"
+        },
+        {
+            "key": "prop_AttenuationBoost",
+            "value": "Boost d'atténuation"
+        },
+        {
+            "key": "prop_AttenuationManual",
+            "value": "Atténuation manuelle"
+        },
+        {
+            "key": "prop_AttenuationMax",
+            "value": "Atténuation Max"
+        },
+        {
+            "key": "prop_AttenuationMin",
+            "value": "Atténuation Min"
+        },
+        {
+            "key": "prop_AttenuationMultiplier",
+            "value": "Multiplicateur d'atténuation"
+        },
+        {
+            "key": "prop_AttenuationOverride",
+            "value": "Remplacement d'atténuation"
+        },
+        {
+            "key": "prop_AttenuationShaded",
+            "value": "Atténuation ombrée"
+        },
+        {
+            "key": "prop_CelCastShadowFeather",
+            "value": "Contour progressif de l'ombre portée Cel"
+        },
+        {
+            "key": "prop_CelCastShadowPower",
+            "value": "Puissance de l'ombre portée Cel"
+        },
+        {
+            "key": "prop_CelFeather",
+            "value": "Contour progressif Cel"
+        },
+        {
+            "key": "prop_CelLitTint",
+            "value": "Teinte éclairée Cel"
+        },
+        {
+            "key": "prop_CelMode",
+            "value": "Mode Cel"
+        },
+        {
+            "key": "prop_CelShadowTint",
+            "value": "Teinte d'ombre Cel"
+        },
+        {
+            "key": "prop_CelSmoothGradientPower",
+            "value": "Puissance du dégradé lisse Cel"
+        },
+        {
+            "key": "prop_CelSmoothOcclusionStrength",
+            "value": "Force d'occlusion lisse Cel"
+        },
+        {
+            "key": "prop_CelThreshold",
+            "value": "Seuil Cel"
+        },
+        {
+            "key": "prop_ColorGradingMode",
+            "value": "Mode d'étalonnage des couleurs"
+        },
+        {
+            "key": "prop_Decal1DistortionControls",
+            "value": "Contrôles de distorsion de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1DistortionSpeed",
+            "value": "Vitesse de distorsion de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1GlitchControls",
+            "value": "Contrôles de glitch de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1SheetCols",
+            "value": "Colonnes de la feuille de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1SheetFPS",
+            "value": "FPS de la feuille de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1SheetRows",
+            "value": "Lignes de la feuille de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1SheetSlider",
+            "value": "Curseur de la feuille de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1SpecialEffect",
+            "value": "Effet spécial de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal1Spritesheet",
+            "value": "Feuille de sprites de l'autocollant 1"
+        },
+        {
+            "key": "prop_Decal2DistortionControls",
+            "value": "Contrôles de distorsion de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2DistortionSpeed",
+            "value": "Vitesse de distorsion de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2GlitchControls",
+            "value": "Contrôles de glitch de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2SheetCols",
+            "value": "Colonnes de la feuille de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2SheetFPS",
+            "value": "FPS de la feuille de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2SheetRows",
+            "value": "Lignes de la feuille de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2SheetSlider",
+            "value": "Curseur de la feuille de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2SpecialEffect",
+            "value": "Effet spécial de l'autocollant 2"
+        },
+        {
+            "key": "prop_Decal2Spritesheet",
+            "value": "Feuille de sprites de l'autocollant 2"
+        },
+        {
+            "key": "prop_DecalLighting",
+            "value": "Éclairage de l'autocollant"
+        },
+        {
+            "key": "prop_DirectDiffuse",
+            "value": "Diffusion directe"
+        },
+        {
+            "key": "prop_DirectionalAmbience",
+            "value": "Ambiance directionnelle"
+        },
+        {
+            "key": "prop_ExCheekColor",
+            "value": "Couleur des joues Ex"
+        },
+        {
+            "key": "prop_ExCheekIntensity",
+            "value": "Intensité des joues Ex"
+        },
+        {
+            "key": "prop_ExEyeColor",
+            "value": "Couleur des yeux Ex"
+        },
+        {
+            "key": "prop_ExpressionMap",
+            "value": "Map d'expression"
+        },
+        {
+            "key": "prop_ExpressionMap_UV",
+            "value": "UV de la Map d'expression"
+        },
+        {
+            "key": "prop_ExShadowColor",
+            "value": "Couleur de l'ombre Ex"
+        },
+        {
+            "key": "prop_ExShadowIntensity",
+            "value": "Intensité de l'ombre Ex"
+        },
+        {
+            "key": "prop_ExShyColor",
+            "value": "Couleur timide Ex"
+        },
+        {
+            "key": "prop_ExShyIntensity",
+            "value": "Intensité timide Ex"
+        },
+        {
+            "key": "prop_EyeParallaxBreathSpeed",
+            "value": "Vitesse de respiration de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxBreathStrength",
+            "value": "Force de respiration de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxClamp",
+            "value": "Limite de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxEyeMaskTex",
+            "value": "Texture du masque de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxEyeMaskTex_UV",
+            "value": "UV du masque de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxIrisTex",
+            "value": "Texture de l'iris de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxIrisTex_UV",
+            "value": "UV de l'iris de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeParallaxStrength",
+            "value": "Force de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_EyeShadowIntensity",
+            "value": "Intensité de l'ombre à paupières"
+        },
+        {
+            "key": "prop_FaceHeadForward",
+            "value": "Visage Tête en avant"
+        },
+        {
+            "key": "prop_FaceMap",
+            "value": "Map du visage"
+        },
+        {
+            "key": "prop_FaceMap_UV",
+            "value": "UV de la Map du visage"
+        },
+        {
+            "key": "prop_GTHighlights",
+            "value": "Reflets GT"
+        },
+        {
+            "key": "prop_GTShadows",
+            "value": "Ombres GT"
+        },
+        {
+            "key": "prop_HairAngleFadeEnd",
+            "value": "Fin du fondu d'angle des cheveux"
+        },
+        {
+            "key": "prop_HairAngleFadeStart",
+            "value": "Début du fondu d'angle des cheveux"
+        },
+        {
+            "key": "prop_HairAngleGuardStrength",
+            "value": "Force de protection de l'angle des cheveux"
+        },
+        {
+            "key": "prop_HairBlendAlpha",
+            "value": "Alpha de fusion des cheveux"
+        },
+        {
+            "key": "prop_HairDistanceFalloffEnd",
+            "value": "Fin de l'atténuation de distance des cheveux"
+        },
+        {
+            "key": "prop_HairDistanceFalloffStart",
+            "value": "Début de l'atténuation de distance des cheveux"
+        },
+        {
+            "key": "prop_HairDistanceFalloffStrength",
+            "value": "Force de l'atténuation de distance des cheveux"
+        },
+        {
+            "key": "prop_HairExtremeAngleGuard",
+            "value": "Protection d'angle extrême des cheveux"
+        },
+        {
+            "key": "prop_HairHeadCenter",
+            "value": "Centre de la tête des cheveux"
+        },
+        {
+            "key": "prop_HairHeadForward",
+            "value": "Avant de la tête des cheveux"
+        },
+        {
+            "key": "prop_HairHeadMaskMode",
+            "value": "Mode du masque de tête des cheveux"
+        },
+        {
+            "key": "prop_HairHeadRight",
+            "value": "Droite de la tête des cheveux"
+        },
+        {
+            "key": "prop_HairHeadUp",
+            "value": "Haut de la tête des cheveux"
+        },
+        {
+            "key": "prop_HairMaskStrength",
+            "value": "Force du masque des cheveux"
+        },
+        {
+            "key": "prop_HairMaskTex",
+            "value": "Texture du masque des cheveux"
+        },
+        {
+            "key": "prop_HairMaskTex_UV",
+            "value": "UV du masque des cheveux"
+        },
+        {
+            "key": "prop_HairSDFBlend",
+            "value": "Mélange SDF des cheveux"
+        },
+        {
+            "key": "prop_HairSDFPreview",
+            "value": "Aperçu SDF des cheveux"
+        },
+        {
+            "key": "prop_HairSDFScale",
+            "value": "Échelle SDF des cheveux"
+        },
+        {
+            "key": "prop_HairSDFSoftness",
+            "value": "Douceur SDF des cheveux"
+        },
+        {
+            "key": "prop_HairTransparencyStrength",
+            "value": "Force de transparence des cheveux"
+        },
+        {
+            "key": "prop_IndirectAdditive",
+            "value": "Additif indirect"
+        },
+        {
+            "key": "prop_IndirectAlbedo",
+            "value": "Albédo indirect"
+        },
+        {
+            "key": "prop_IndirectDiffuse",
+            "value": "Diffusion indirecte"
+        },
+        {
+            "key": "prop_LCWGain",
+            "value": "Gain LCW"
+        },
+        {
+            "key": "prop_LCWGamma",
+            "value": "Gamma LCW"
+        },
+        {
+            "key": "prop_LCWLift",
+            "value": "Lift LCW"
+        },
+        {
+            "key": "prop_LightingSource",
+            "value": "Source de lumière"
+        },
+        {
+            "key": "prop_LipOutlineColor",
+            "value": "Couleur du contour des lèvres"
+        },
+        {
+            "key": "prop_LipOutlineIntensity",
+            "value": "Intensité du contour des lèvres"
+        },
+        {
+            "key": "prop_ManualApplication",
+            "value": "Application manuelle"
+        },
+        {
+            "key": "prop_ManualNormalOffset",
+            "value": "Décalage des normales manuelles"
+        },
+        {
+            "key": "prop_ManualNormalPreview",
+            "value": "Aperçu des normales manuelles"
+        },
+        {
+            "key": "prop_ManualNormalScale",
+            "value": "Échelle des normales manuelles"
+        },
+        {
+            "key": "prop_ManualNormalSharpness",
+            "value": "Netteté des normales manuelles"
+        },
+        {
+            "key": "prop_NoseLineColor",
+            "value": "Couleur de la ligne du nez"
+        },
+        {
+            "key": "prop_NoseLinePower",
+            "value": "Puissance de la ligne du nez"
+        },
+        {
+            "key": "prop_NPRBlinn",
+            "value": "NPR Blinn"
+        },
+        {
+            "key": "prop_NPRBlinnColor",
+            "value": "Couleur NPR Blinn"
+        },
+        {
+            "key": "prop_NPRBlinnMax",
+            "value": "NPR Blinn Max"
+        },
+        {
+            "key": "prop_NPRBlinnMin",
+            "value": "NPR Blinn Min"
+        },
+        {
+            "key": "prop_NPRBlinnMultiplier",
+            "value": "Multiplicateur NPR Blinn"
+        },
+        {
+            "key": "prop_NPRBlinnPower",
+            "value": "Puissance NPR Blinn"
+        },
+        {
+            "key": "prop_NPRDiffMax",
+            "value": "NPR Diffuse Max"
+        },
+        {
+            "key": "prop_NPRDiffMin",
+            "value": "NPR Diffuse Min"
+        },
+        {
+            "key": "prop_NPRForwardSpecular",
+            "value": "NPR Forward Specular"
+        },
+        {
+            "key": "prop_NPRForwardSpecularColor",
+            "value": "Couleur NPR Forward Specular"
+        },
+        {
+            "key": "prop_NPRForwardSpecularMultiplier",
+            "value": "Multiplicateur NPR Forward Specular"
+        },
+        {
+            "key": "prop_NPRForwardSpecularRange",
+            "value": "Plage NPR Forward Specular"
+        },
+        {
+            "key": "prop_NPRLitColor",
+            "value": "Couleur éclairée NPR"
+        },
+        {
+            "key": "prop_NPRRim",
+            "value": "NPR Rim"
+        },
+        {
+            "key": "prop_NPRRimColor",
+            "value": "Couleur NPR Rim"
+        },
+        {
+            "key": "prop_NPRRimExp",
+            "value": "Exposant NPR Rim"
+        },
+        {
+            "key": "prop_NPRRimMax",
+            "value": "NPR Rim Max"
+        },
+        {
+            "key": "prop_NPRRimMin",
+            "value": "NPR Rim Min"
+        },
+        {
+            "key": "prop_NPRShadowColor",
+            "value": "Couleur de l'ombre NPR"
+        },
+        {
+            "key": "prop_NPRSpecularMask",
+            "value": "Masque Spéculaire NPR"
+        },
+        {
+            "key": "prop_NPRSpecularMask_UV",
+            "value": "UV du Masque Spéculaire NPR"
+        },
+        {
+            "key": "prop_NPRSSS",
+            "value": "NPR SSS"
+        },
+        {
+            "key": "prop_NPRSSSColor",
+            "value": "Couleur NPR SSS"
+        },
+        {
+            "key": "prop_NPRSSSExp",
+            "value": "Exposant NPR SSS"
+        },
+        {
+            "key": "prop_NPRSSSMax",
+            "value": "NPR SSS Max"
+        },
+        {
+            "key": "prop_NPRSSSMin",
+            "value": "NPR SSS Min"
+        },
+        {
+            "key": "prop_NPRSSSRef",
+            "value": "Référence NPR SSS"
+        },
+        {
+            "key": "prop_NPRSSSShadows",
+            "value": "Ombres NPR SSS"
+        },
+        {
+            "key": "prop_OffsetRimBlendMode",
+            "value": "Mode de fusion du Rim décalé"
+        },
+        {
+            "key": "prop_OffsetRimColor",
+            "value": "Couleur du Rim décalé"
+        },
+        {
+            "key": "prop_OffsetRimHardness",
+            "value": "Dureté du Rim décalé"
+        },
+        {
+            "key": "prop_OffsetRimLightBased",
+            "value": "Rim décalé basé sur la lumière"
+        },
+        {
+            "key": "prop_OffsetRimWidth",
+            "value": "Largeur du Rim décalé"
+        },
+        {
+            "key": "prop_OutlineLitMix",
+            "value": "Mélange de lumière du contour"
+        },
+        {
+            "key": "prop_PackedAmbient",
+            "value": "Ambiant empaqueté"
+        },
+        {
+            "key": "prop_PackedGGShadow1Push",
+            "value": "Poussée de l'ombre GG 1 empaquetée"
+        },
+        {
+            "key": "prop_PackedGGShadow1Smoothness",
+            "value": "Lissage de l'ombre GG 1 empaquetée"
+        },
+        {
+            "key": "prop_PackedGGShadow1Tint",
+            "value": "Teinte de l'ombre GG 1 empaquetée"
+        },
+        {
+            "key": "prop_PackedGGShadow2Push",
+            "value": "Poussée de l'ombre GG 2 empaquetée"
+        },
+        {
+            "key": "prop_PackedGGShadow2Smoothness",
+            "value": "Lissage de l'ombre GG 2 empaquetée"
+        },
+        {
+            "key": "prop_PackedGGShadow2Tint",
+            "value": "Teinte de l'ombre GG 2 empaquetée"
+        },
+        {
+            "key": "prop_PackedGGSpecularIntensity",
+            "value": "Intensité Spéculaire GG empaquetée"
+        },
+        {
+            "key": "prop_PackedGGSpecularSize",
+            "value": "Taille Spéculaire GG empaquetée"
+        },
+        {
+            "key": "prop_PackedGGSpecularTint",
+            "value": "Teinte Spéculaire GG empaquetée"
+        },
+        {
+            "key": "prop_PackedLitColor",
+            "value": "Couleur éclairée empaquetée"
+        },
+        {
+            "key": "prop_PackedMapMetals",
+            "value": "Métaux de la Map empaquetée"
+        },
+        {
+            "key": "prop_PackedMapOne",
+            "value": "Map empaquetée Un"
+        },
+        {
+            "key": "prop_PackedMapOne_UV",
+            "value": "UV de la Map empaquetée Un"
+        },
+        {
+            "key": "prop_PackedMapStyle",
+            "value": "Style de la Map empaquetée"
+        },
+        {
+            "key": "prop_PackedMapThree",
+            "value": "Map empaquetée Trois"
+        },
+        {
+            "key": "prop_PackedMapThree_UV",
+            "value": "UV de la Map empaquetée Trois"
+        },
+        {
+            "key": "prop_PackedMapTwo",
+            "value": "Map empaquetée Deux"
+        },
+        {
+            "key": "prop_PackedMapTwo_UV",
+            "value": "UV de la Map empaquetée Deux"
+        },
+        {
+            "key": "prop_PackedRimColor",
+            "value": "Couleur du Rim empaqueté"
+        },
+        {
+            "key": "prop_PackedRimLight",
+            "value": "Lumière du Rim empaqueté"
+        },
+        {
+            "key": "prop_PackedRimPower",
+            "value": "Puissance du Rim empaqueté"
+        },
+        {
+            "key": "prop_PackedRimThreshold",
+            "value": "Seuil du Rim empaqueté"
+        },
+        {
+            "key": "prop_PackedShadowColor",
+            "value": "Couleur de l'ombre empaquetée"
+        },
+        {
+            "key": "prop_PackedShadowSmoothness",
+            "value": "Lissage de l'ombre empaquetée"
+        },
+        {
+            "key": "prop_PackedUmaMetalDark",
+            "value": "Métal sombre Uma empaqueté"
+        },
+        {
+            "key": "prop_PackedUmaMetalLight",
+            "value": "Métal clair Uma empaqueté"
+        },
+        {
+            "key": "prop_PackedUmaSpecularBoost",
+            "value": "Boost Spéculaire Uma empaqueté"
+        },
+        {
+            "key": "prop_RampMode",
+            "value": "Mode de la rampe"
+        },
+        {
+            "key": "prop_RampOcclusionOffset",
+            "value": "Décalage d'occlusion de la rampe"
+        },
+        {
+            "key": "prop_RampProceduralShift",
+            "value": "Décalage procédural de la rampe"
+        },
+        {
+            "key": "prop_RampProceduralToony",
+            "value": "Style Toon procédural de la rampe"
+        },
+        {
+            "key": "prop_RampShadows",
+            "value": "Ombres de la rampe"
+        },
+        {
+            "key": "prop_RefractionTexture",
+            "value": "Texture de réfraction"
+        },
+        {
+            "key": "prop_RimMode",
+            "value": "Mode Rim"
+        },
+        {
+            "key": "prop_SDFLocalForward",
+            "value": "SDF Local Avant"
+        },
+        {
+            "key": "prop_SDFLocalRight",
+            "value": "SDF Local Droite"
+        },
+        {
+            "key": "prop_SDFShadowTexture_UV",
+            "value": "UV de la texture d'ombre SDF"
+        },
+        {
+            "key": "prop_ShadowPatternLightBased",
+            "value": "Motif d'ombre basé sur la lumière"
+        },
+        {
+            "key": "prop_ShadowPatternLit",
+            "value": "Motif d'ombre éclairé"
+        },
+        {
+            "key": "prop_SkinLUT_UV",
+            "value": "UV de la LUT de peau"
+        },
+        {
+            "key": "prop_SpecularToonColor",
+            "value": "Couleur Spéculaire Toon"
+        },
+        {
+            "key": "prop_SpecularToonIntensity",
+            "value": "Intensité Spéculaire Toon"
+        },
+        {
+            "key": "prop_SpecularToonRoughness",
+            "value": "Rugosité Spéculaire Toon"
+        },
+        {
+            "key": "prop_SpecularToonSharpness",
+            "value": "Netteté Spéculaire Toon"
+        },
+        {
+            "key": "prop_SpecularToonShininess",
+            "value": "Brillance Spéculaire Toon"
+        },
+        {
+            "key": "prop_SpecularToonThreshold",
+            "value": "Seuil Spéculaire Toon"
+        },
+        {
+            "key": "prop_SpecularToonUseLighting",
+            "value": "Utiliser l'éclairage Spéculaire Toon"
+        },
+        {
+            "key": "prop_StockingsColor",
+            "value": "Couleur des bas"
+        },
+        {
+            "key": "prop_StockingsColorDark",
+            "value": "Couleur sombre des bas"
+        },
+        {
+            "key": "prop_StockingsDarkWidth",
+            "value": "Largeur sombre des bas"
+        },
+        {
+            "key": "prop_StockingsLightedIntensity",
+            "value": "Intensité éclairée des bas"
+        },
+        {
+            "key": "prop_StockingsLightedWidth",
+            "value": "Largeur éclairée des bas"
+        },
+        {
+            "key": "prop_StockingsMap",
+            "value": "Map des bas"
+        },
+        {
+            "key": "prop_StockingsMap_UV",
+            "value": "UV de la Map des bas"
+        },
+        {
+            "key": "prop_StockingsPower",
+            "value": "Puissance des bas"
+        },
+        {
+            "key": "prop_StockingsRoughness",
+            "value": "Rugosité des bas"
+        },
+        {
+            "key": "prop_ToggleAnimeExtras",
+            "value": "Basculer les extras du personnage"
+        },
+        {
+            "key": "prop_ToggleAnimeGradient",
+            "value": "Basculer le dégradé Anime"
+        },
+        {
+            "key": "prop_ToggleExpressionMap",
+            "value": "Basculer la Map d'expression"
+        },
+        {
+            "key": "prop_ToggleEyeParallax",
+            "value": "Basculer la parallaxe des yeux"
+        },
+        {
+            "key": "prop_ToggleEyeParallaxBreathing",
+            "value": "Basculer la respiration de la parallaxe des yeux"
+        },
+        {
+            "key": "prop_ToggleEyeShadow",
+            "value": "Basculer l'ombre à paupières"
+        },
+        {
+            "key": "prop_ToggleFaceMap",
+            "value": "Basculer la Map du visage"
+        },
+        {
+            "key": "prop_ToggleHairTransparency",
+            "value": "Basculer la transparence des cheveux"
+        },
+        {
+            "key": "prop_ToggleLipOutline",
+            "value": "Basculer le contour des lèvres"
+        },
+        {
+            "key": "prop_ToggleLitOutline",
+            "value": "Basculer le contour éclairé"
+        },
+        {
+            "key": "prop_ToggleManualNormals",
+            "value": "Basculer les normales manuelles"
+        },
+        {
+            "key": "prop_ToggleNoseLine",
+            "value": "Basculer la ligne du nez"
+        },
+        {
+            "key": "prop_ToggleSpecularToon",
+            "value": "Basculer le Spéculaire Toon"
+        },
+        {
+            "key": "prop_ToggleStockings",
+            "value": "Basculer les bas"
+        },
+        {
+            "key": "prop_TriBandAttenuatedShadows",
+            "value": "Ombres atténuées tri-bande"
+        },
+        {
+            "key": "prop_TriBandIndirectShallow",
+            "value": "Surface indirecte tri-bande"
+        },
+        {
+            "key": "prop_TriBandLitColor",
+            "value": "Couleur éclairée tri-bande"
+        },
+        {
+            "key": "prop_TriBandPostLitTint",
+            "value": "Teinte post-éclairage tri-bande"
+        },
+        {
+            "key": "prop_TriBandPostShadowTint",
+            "value": "Teinte post-ombre tri-bande"
+        },
+        {
+            "key": "prop_TriBandPostShallowTint",
+            "value": "Teinte post-surface tri-bande"
+        },
+        {
+            "key": "prop_TriBandShadowColor",
+            "value": "Couleur de l'ombre tri-bande"
+        },
+        {
+            "key": "prop_TriBandShallowColor",
+            "value": "Couleur de surface tri-bande"
+        },
+        {
+            "key": "prop_TriBandShallowWidth",
+            "value": "Largeur de surface tri-bande"
+        },
+        {
+            "key": "prop_TriBandSmoothness",
+            "value": "Lissage tri-bande"
+        },
+        {
+            "key": "prop_TriBandThreshold",
+            "value": "Seuil tri-bande"
+        },
+        {
+            "key": "prop_UseSecondaryRing",
+            "value": "Utiliser l'anneau secondaire"
+        },
+        {
+            "key": "prop_UseTertiaryRing",
+            "value": "Utiliser l'anneau tertiaire"
+        },
+        {
+            "key": "sub_tab_angel_rings",
+            "value": "Anneaux d'ange"
+        },
+        {
+            "key": "sub_tab_attenuation",
+            "value": "Atténuation"
+        },
+        {
+            "key": "sub_tab_decal1_effects",
+            "value": "Effets de l'autocollant 1"
+        },
+        {
+            "key": "sub_tab_decal1_settings",
+            "value": "Paramètres de l'autocollant 1"
+        },
+        {
+            "key": "sub_tab_decal2_effects",
+            "value": "Effets de l'autocollant 2"
+        },
+        {
+            "key": "sub_tab_decal2_settings",
+            "value": "Paramètres de l'autocollant 2"
+        },
+        {
+            "key": "sub_tab_expression_map",
+            "value": "Map d'expression"
+        },
+        {
+            "key": "sub_tab_eye_parallax",
+            "value": "Parallaxe des yeux"
+        },
+        {
+            "key": "sub_tab_face_map",
+            "value": "Map du visage"
+        },
+        {
+            "key": "sub_tab_gradient",
+            "value": "Dégradé"
+        },
+        {
+            "key": "sub_tab_intensity",
+            "value": "Intensité"
+        },
+        {
+            "key": "sub_tab_manual_normals",
+            "value": "Normales manuelles"
+        },
+        {
+            "key": "sub_tab_new_rim_lighting",
+            "value": "Éclairage Rim"
+        },
+        {
+            "key": "sub_tab_stocking",
+            "value": "Bas"
+        },
+        {
+            "key": "sub_tab_toon_highlights",
+            "value": "Reflets Toon"
+        },
+        {
+            "key": "sub_tab_translucent_hair",
+            "value": "Cheveux translucides"
+        },
+        {
+            "key": "tab_stickers",
+            "value": "Autocollants"
+        },
+        {
+            "key": "config_toggle_preset_ignore",
+            "value": "Préréglages intelligents"
+        },
+        {
+            "key": "render_queue_notice",
+            "value": "Cet effet peut nécessiter une file d'attente de rendu spécifique pour fonctionner correctement. Veuillez essayer de l'ajuster (l'abaisser ou l'augmenter) s'il apparaît incorrectement dans votre scène."
+        },
+        {
+            "key": "prop_DecalLighting_NEW",
+            "value": "Éclairage de l'autocollant"
+        },
+        {
+            "key": "header_angel_ring_one",
+            "value": "Anneau Un"
+        },
+        {
+            "key": "header_angel_ring_two",
+            "value": "Anneau Deux"
+        },
+        {
+            "key": "header_angel_ring_three",
+            "value": "Anneau Trois"
+        },
+        {
+            "key": "header_angel_ring_breakup",
+            "value": "Fragmentation"
+        },
+        {
+            "key": "sub_tab_liquid_layer",
+            "value": "Couche de liquide"
+        },
+        {
+            "key": "prop_LiquidToggleLiquid",
+            "value": "Activer la couche de liquide"
+        },
+        {
+            "key": "prop_LiquidEnabled",
+            "value": "Activer l'effet liquide"
+        },
+        {
+            "key": "prop_LiquidFeel",
+            "value": "Sensation du liquide"
+        },
+        {
+            "key": "prop_LiquidLookWatery",
+            "value": "Aspect aqueux"
+        },
+        {
+            "key": "prop_LiquidLookViscous",
+            "value": "Aspect visqueux"
+        },
+        {
+            "key": "prop_LiquidSpace",
+            "value": "Mode de mapping"
+        },
+        {
+            "key": "prop_LiquidMapScale",
+            "value": "Échelle de mapping"
+        },
+        {
+            "key": "prop_LiquidTriplanarSharpness",
+            "value": "Netteté triplanaire"
+        },
+        {
+            "key": "prop_LiquidMaskMap",
+            "value": "Map de masque"
+        },
+        {
+            "key": "prop_LiquidUseForceMap",
+            "value": "Utiliser la Map de force"
+        },
+        {
+            "key": "prop_LiquidForceMap",
+            "value": "Map de force"
+        },
+        {
+            "key": "prop_LiquidSpecularLit",
+            "value": "Mode Spéculaire"
+        },
+        {
+            "key": "prop_LiquidGloss",
+            "value": "Brillance"
+        },
+        {
+            "key": "prop_LiquidShine",
+            "value": "Éclat"
+        },
+        {
+            "key": "prop_LiquidShineTightness",
+            "value": "Densité de l'éclat"
+        },
+        {
+            "key": "prop_LiquidShadow",
+            "value": "Force de l'ombre"
+        },
+        {
+            "key": "prop_LiquidRim",
+            "value": "Force du Rim"
+        },
+        {
+            "key": "prop_LiquidDepth",
+            "value": "Force de la profondeur"
+        },
+        {
+            "key": "prop_LiquidNormalStrength",
+            "value": "Force de la normale"
+        },
+        {
+            "key": "prop_LiquidOpacity",
+            "value": "Opacité"
+        },
+        {
+            "key": "prop_LiquidDarken",
+            "value": "Assombrissement de la peau"
+        },
+        {
+            "key": "prop_LiquidManualDirection",
+            "value": "Activer la direction manuelle"
+        },
+        {
+            "key": "prop_LiquidDirectionOne",
+            "value": "Direction de la couche Un"
+        },
+        {
+            "key": "prop_LiquidDirectionTwo",
+            "value": "Direction de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerOneScale",
+            "value": "Échelle de la couche Un"
+        },
+        {
+            "key": "prop_LiquidLayerOneDensity",
+            "value": "Densité de la couche Un"
+        },
+        {
+            "key": "prop_LiquidLayerOneStretch",
+            "value": "Étirement de la couche Un"
+        },
+        {
+            "key": "prop_LiquidLayerOneSpeed",
+            "value": "Vitesse de la couche Un"
+        },
+        {
+            "key": "prop_LiquidLayerOneRandomness",
+            "value": "Aléatoire de la couche Un"
+        },
+        {
+            "key": "prop_LiquidLayerOneSeed",
+            "value": "Graine de la couche Un"
+        },
+        {
+            "key": "prop_LiquidLayerOneMod",
+            "value": "Mod de la couche Un (Traînée/Tremblement)"
+        },
+        {
+            "key": "prop_LiquidUseLayerTwo",
+            "value": "Activer la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoScale",
+            "value": "Échelle de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoDensity",
+            "value": "Densité de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoStretch",
+            "value": "Étirement de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSpeed",
+            "value": "Vitesse de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoRandomness",
+            "value": "Aléatoire de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSeed",
+            "value": "Graine de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoAmount",
+            "value": "Quantité de la couche Deux"
+        },
+        {
+            "key": "prop_LiquidLayerTwoMod",
+            "value": "Mod de la couche Deux (Traînée/Tremblement)"
+        },
+        {
+            "key": "prop_LiquidClusterScale",
+            "value": "Échelle du cluster"
+        },
+        {
+            "key": "prop_LiquidClusterSeed",
+            "value": "Graine du cluster"
+        },
+        {
+            "key": "prop_LiquidThreshold",
+            "value": "Seuil de couverture"
+        },
+        {
+            "key": "prop_LiquidSoftness",
+            "value": "Douceur des bords"
+        },
+        {
+            "key": "prop_LiquidWateryCoverage",
+            "value": "Quantité de couverture"
+        },
+        {
+            "key": "prop_LiquidViscousSmooth",
+            "value": "Rayon de fusion"
+        },
+        {
+            "key": "prop_LiquidViscousThinning",
+            "value": "Variance d'amincissement"
+        },
+        {
+            "key": "prop_LiquidViscousThinSeed",
+            "value": "Graine d'amincissement"
+        },
+        {
+            "key": "prop_LiquidViscousThinScale",
+            "value": "Échelle d'amincissement"
+        },
+        {
+            "key": "prop_LiquidSweatUseTint",
+            "value": "Utiliser la teinte"
+        },
+        {
+            "key": "prop_LiquidSweatTintColor",
+            "value": "Couleur de la teinte"
+        },
+        {
+            "key": "prop_LiquidBloodColorFresh",
+            "value": "Couleur fraîche"
+        },
+        {
+            "key": "prop_LiquidBloodColorDark",
+            "value": "Couleur séchée"
+        },
+        {
+            "key": "prop_LiquidBloodPooling",
+            "value": "Quantité d'accumulation"
+        },
+        {
+            "key": "prop_LiquidBloodDryingRate",
+            "value": "Taux de séchage"
+        },
+        {
+            "key": "prop_LiquidBloodDryGloss",
+            "value": "Brillance séchée"
+        },
+        {
+            "key": "prop_LiquidOilColor",
+            "value": "Teinte d'huile"
+        },
+        {
+            "key": "prop_LiquidOilIridescence",
+            "value": "Iridescence"
+        },
+        {
+            "key": "prop_LiquidOilIridescenceScale",
+            "value": "Échelle d'iridescence"
+        },
+        {
+            "key": "prop_LiquidIcingColor",
+            "value": "Couleur du glaçage"
+        },
+        {
+            "key": "prop_LiquidIcingColorVariation",
+            "value": "Utiliser la variation de couleur"
+        },
+        {
+            "key": "prop_LiquidIcingColorMin",
+            "value": "Couleur A"
+        },
+        {
+            "key": "prop_LiquidIcingColorMax",
+            "value": "Couleur B"
+        },
+        {
+            "key": "prop_LiquidIcingColorScale",
+            "value": "Échelle de variation"
+        },
+        {
+            "key": "prop_LiquidIcingColorSeed",
+            "value": "Graine de variation"
+        },
+        {
+            "key": "prop_LiquidWaxColor",
+            "value": "Couleur de la cire"
+        },
+        {
+            "key": "prop_LiquidWaxColorVariation",
+            "value": "Variation de couleur de la cire"
+        },
+        {
+            "key": "prop_LiquidWaxCoolRate",
+            "value": "Taux de refroidissement"
+        },
+        {
+            "key": "prop_LiquidSlimeColor",
+            "value": "Couleur de base du slime"
+        },
+        {
+            "key": "prop_LiquidSlimeColorShift",
+            "value": "Couleur de décalage du slime"
+        },
+        {
+            "key": "prop_LiquidSlimeTranslucency",
+            "value": "Translucidité du slime"
+        },
+        {
+            "key": "prop_LiquidSlimeIridescence",
+            "value": "Iridescence du slime"
+        },
+        {
+            "key": "prop_LiquidSlimeStickiness",
+            "value": "Adhérence du slime"
+        },
+        {
+            "key": "prop_LiquidMudColor",
+            "value": "Couleur de base de la boue"
+        },
+        {
+            "key": "prop_LiquidMudColorDark",
+            "value": "Couleur sombre de la boue"
+        },
+        {
+            "key": "prop_LiquidMudRoughness",
+            "value": "Rugosité de la surface de la boue"
+        },
+        {
+            "key": "prop_LiquidUseCluster",
+            "value": "Utiliser des clusters"
+        },
+        {
+            "key": "prop_LiquidOilViewBased",
+            "value": "Iridescence basée sur la vue"
+        },
+        {
+            "key": "prop_LiquidOilViewBasedCoverage",
+            "value": "Couverture basée sur la vue"
+        },
+        {
+            "key": "prop_StitchColor",
+            "value": "Couleur de la couture"
+        },
+        {
+            "key": "prop_SDFMode",
+            "value": "Mode SDF"
+        },
+        {
+            "key": "prop_SDFShadowSoftnessLow",
+            "value": "Douceur de l'ombre SDF Basse"
+        },
+        {
+            "key": "prop_PreserveShadows",
+            "value": "Preserve Shadows"
         }
     ]
 }

@@ -336,7 +336,7 @@ float2 Uvs[4];
                 float stitch_check = objectPos[_StitchAxis];
                 if (stitch_check > _StitchOffset)
                 {
-                    Surface.Albedo = UNITY_SAMPLE_TEX2D_SAMPLER(_StitchTex, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _Color;
+                    Surface.Albedo = UNITY_SAMPLE_TEX2D_SAMPLER(_StitchTex, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _StitchTex)) * _StitchColor;
                 }
             }
         }
@@ -860,7 +860,7 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         // get sample data from MSSO texture
         void GetSampleData(inout BacklaceSurfaceData Surface)
         {
-            Surface.Occlusion = lerp(1, Msso.a, _Occlusion);
+            Surface.Occlusion = lerp(lerp(1, Msso.a, _Occlusion), 0.0, _PreserveShadows);
             Surface.Metallic = Msso.r * _Metallic;
             Surface.Glossiness = Msso.g * _Glossiness;
             Surface.Specular = Msso.b * _Specular;
@@ -873,18 +873,22 @@ float4 SampleTextureTriplanar(Texture2D tex, SamplerState texSampler, float3 wor
         {
             float3 specularTint = (UNITY_SAMPLE_TEX2D_SAMPLER(_SpecularTintTexture, _MainTex, BACKLACE_TRANSFORM_TEX(Uvs, _SpecularTintTexture)).rgb * _SpecularTint).rgb;
             Surface.SpecularColor = lerp(float3(Surface.Specular, Surface.Specular, Surface.Specular), Surface.Albedo.rgb, Surface.Metallic);
-            if (_ReplaceSpecular == 1)
-            {
-                Surface.SpecularColor = specularTint;
-            }
-            else
-            {
-                Surface.SpecularColor *= specularTint;
-            }
+            Surface.SpecularColor = lerp(Surface.SpecularColor * specularTint, specularTint, _ReplaceSpecular);
             Surface.OneMinusReflectivity = (1 - Surface.Specular) - (Surface.Metallic * (1 - Surface.Specular));
             Surface.Albedo.rgb *= Surface.OneMinusReflectivity;
         }
     #else // _BACKLACE_SPECULAR
+        // not used in this branch, but may need to be eventually
+        void GetSampleData(inout BacklaceSurfaceData Surface)
+        {
+            Surface.Occlusion = 1.0;
+            Surface.Metallic = 0.0;
+            Surface.Glossiness = 0.0;
+            Surface.Specular = 0.0;
+            Surface.Roughness = 1.0;
+            Surface.SquareRoughness = 1.0;
+        }
+
         // default msso with no specular
         void SampleMSSO(inout BacklaceSurfaceData Surface)
         {

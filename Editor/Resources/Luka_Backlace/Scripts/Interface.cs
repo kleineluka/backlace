@@ -426,11 +426,13 @@ namespace Luka.Backlace
         private MaterialProperty prop_ManualNormalSharpness = null;
         // sdf shadow
         private MaterialProperty prop_ToggleSDFShadow = null;
+        private MaterialProperty prop_SDFMode = null;
         private MaterialProperty prop_SDFLocalForward = null;
         private MaterialProperty prop_SDFLocalRight = null;
         private MaterialProperty prop_SDFShadowTexture = null;
         private MaterialProperty prop_SDFShadowThreshold = null;
         private MaterialProperty prop_SDFShadowSoftness = null;
+        private MaterialProperty prop_SDFShadowSoftnessLow = null;
         // stocking feature
         private MaterialProperty prop_ToggleStockings = null;
         private MaterialProperty prop_StockingsMap = null;
@@ -559,6 +561,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_TangentMap = null;
         private MaterialProperty prop_Anisotropy = null;
         private MaterialProperty prop_ReplaceSpecular = null;
+        private MaterialProperty prop_PreserveShadows = null;
         // rim lighting
         private MaterialProperty prop_RimMode = null;
         private MaterialProperty prop_RimColor = null;
@@ -931,6 +934,7 @@ namespace Luka.Backlace
         private MaterialProperty prop_LiquidLayerTwoSeed = null;
         private MaterialProperty prop_LiquidLayerTwoAmount = null;
         private MaterialProperty prop_LiquidLayerTwoMod = null;
+        private MaterialProperty prop_LiquidUseCluster = null;
         private MaterialProperty prop_LiquidClusterScale = null;
         private MaterialProperty prop_LiquidClusterSeed = null;
         private MaterialProperty prop_LiquidThreshold = null;
@@ -950,6 +954,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_LiquidOilColor = null;
         private MaterialProperty prop_LiquidOilIridescence = null;
         private MaterialProperty prop_LiquidOilIridescenceScale = null;
+        private MaterialProperty prop_LiquidOilViewBased = null;
+        private MaterialProperty prop_LiquidOilViewBasedCoverage = null;
         private MaterialProperty prop_LiquidIcingColor = null;
         private MaterialProperty prop_LiquidIcingColorVariation = null;
         private MaterialProperty prop_LiquidIcingColorMin = null;
@@ -2273,18 +2279,22 @@ namespace Luka.Backlace
                 });
                 sub_tab_sdf_shadow.process(() => {
                     prop_ToggleSDFShadow = TrackProperty("_ToggleSDFShadow", properties);
+                    prop_SDFMode = TrackProperty("_SDFMode", properties);
                     prop_SDFLocalForward = TrackProperty("_SDFLocalForward", properties);
                     prop_SDFLocalRight = TrackProperty("_SDFLocalRight", properties);
                     prop_SDFShadowTexture = TrackProperty("_SDFShadowTexture", properties);
                     prop_SDFShadowThreshold = TrackProperty("_SDFShadowThreshold", properties);
                     prop_SDFShadowSoftness = TrackProperty("_SDFShadowSoftness", properties);
+                    prop_SDFShadowSoftnessLow = TrackProperty("_SDFShadowSoftnessLow", properties);
                     materialEditor.ShaderProperty(prop_ToggleSDFShadow, languages.speak("prop_ToggleSDFShadow"));
                     Components.start_dynamic_disable(!prop_ToggleSDFShadow.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_SDFMode, languages.speak("prop_SDFMode"));
                     Components.Vector3Property(materialEditor, prop_SDFLocalForward, languages.speak("prop_SDFLocalForward"));
                     Components.Vector3Property(materialEditor, prop_SDFLocalRight, languages.speak("prop_SDFLocalRight"));
                     materialEditor.ShaderProperty(prop_SDFShadowTexture, languages.speak("prop_SDFShadowTexture"));
                     materialEditor.ShaderProperty(prop_SDFShadowThreshold, languages.speak("prop_SDFShadowThreshold"));
                     materialEditor.ShaderProperty(prop_SDFShadowSoftness, languages.speak("prop_SDFShadowSoftness"));
+                    materialEditor.ShaderProperty(prop_SDFShadowSoftnessLow, languages.speak("prop_SDFShadowSoftnessLow"));
                     Components.end_dynamic_disable(!prop_ToggleSDFShadow.floatValue.Equals(1), configs);
                 });
                 sub_tab_stocking.process(() => {
@@ -2599,6 +2609,7 @@ namespace Luka.Backlace
                 prop_SpecularTintTexture = TrackProperty("_SpecularTintTexture", properties);
                 prop_SpecularTint = TrackProperty("_SpecularTint", properties);
                 prop_ReplaceSpecular = TrackProperty("_ReplaceSpecular", properties);
+                prop_PreserveShadows = TrackProperty("_PreserveShadows", properties);
                 prop_TangentMap = TrackProperty("_TangentMap", properties);
                 prop_Anisotropy = TrackProperty("_Anisotropy", properties);
                 materialEditor.ShaderProperty(prop_ToggleSpecular, languages.speak("prop_ToggleSpecular"));
@@ -2630,6 +2641,7 @@ namespace Luka.Backlace
                 materialEditor.TexturePropertySingleLine(new GUIContent(languages.speak("prop_SpecularTintTexture")), prop_SpecularTintTexture);
                 materialEditor.ShaderProperty(prop_SpecularTint, languages.speak("prop_SpecularTint"));
                 materialEditor.ShaderProperty(prop_ReplaceSpecular, languages.speak("prop_ReplaceSpecular"));
+                materialEditor.ShaderProperty(prop_PreserveShadows, languages.speak("prop_PreserveShadows"));
                 Components.end_dynamic_disable(!prop_ToggleSpecular.floatValue.Equals(1), configs);
                 Components.end_foldout();
             });
@@ -3345,6 +3357,9 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(!prop_TouchMode.floatValue.Equals(3), configs);
                     Components.end_dynamic_disable(!prop_ToggleTouchReactive.floatValue.Equals(1), configs);
+                    GUIStyle wrappedStyle = new GUIStyle(EditorStyles.label);
+                    wrappedStyle.wordWrap = true;
+                    GUILayout.Label(theme.language_manager.speak("render_queue_notice"), wrappedStyle);
                 });
                 sub_tab_dither.process(() => {
                     prop_ToggleDither = TrackProperty("_ToggleDither", properties);
@@ -3640,6 +3655,7 @@ namespace Luka.Backlace
                     prop_LiquidLayerTwoSeed = TrackProperty("_LiquidLayerTwoSeed", properties);
                     prop_LiquidLayerTwoAmount = TrackProperty("_LiquidLayerTwoAmount", properties);
                     prop_LiquidLayerTwoMod = TrackProperty("_LiquidLayerTwoMod", properties);
+                    prop_LiquidUseCluster = TrackProperty("_LiquidUseCluster", properties);
                     prop_LiquidClusterScale = TrackProperty("_LiquidClusterScale", properties);
                     prop_LiquidClusterSeed = TrackProperty("_LiquidClusterSeed", properties);
                     prop_LiquidThreshold = TrackProperty("_LiquidThreshold", properties);
@@ -3659,6 +3675,8 @@ namespace Luka.Backlace
                     prop_LiquidOilColor = TrackProperty("_LiquidOilColor", properties);
                     prop_LiquidOilIridescence = TrackProperty("_LiquidOilIridescence", properties);
                     prop_LiquidOilIridescenceScale = TrackProperty("_LiquidOilIridescenceScale", properties);
+                    prop_LiquidOilViewBased = TrackProperty("_LiquidOilViewBased", properties);
+                    prop_LiquidOilViewBasedCoverage = TrackProperty("_LiquidOilViewBasedCoverage", properties);
                     prop_LiquidIcingColor = TrackProperty("_LiquidIcingColor", properties);
                     prop_LiquidIcingColorVariation = TrackProperty("_LiquidIcingColorVariation", properties);
                     prop_LiquidIcingColorMin = TrackProperty("_LiquidIcingColorMin", properties);
@@ -3745,6 +3763,7 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_LiquidLayerTwoMod, languages.speak("prop_LiquidLayerTwoMod"));
                     EditorGUI.indentLevel--;
                     Components.end_dynamic_disable(prop_LiquidUseLayerTwo.floatValue.Equals(0), configs);
+                    materialEditor.ShaderProperty(prop_LiquidUseCluster, languages.speak("prop_LiquidUseCluster"));
                     materialEditor.ShaderProperty(prop_LiquidClusterScale, languages.speak("prop_LiquidClusterScale"));
                     materialEditor.ShaderProperty(prop_LiquidClusterSeed, languages.speak("prop_LiquidClusterSeed"));
                     materialEditor.ShaderProperty(prop_LiquidThreshold, languages.speak("prop_LiquidThreshold"));
@@ -3775,6 +3794,12 @@ namespace Luka.Backlace
                             materialEditor.ShaderProperty(prop_LiquidOilColor, languages.speak("prop_LiquidOilColor"));
                             materialEditor.ShaderProperty(prop_LiquidOilIridescence, languages.speak("prop_LiquidOilIridescence"));
                             materialEditor.ShaderProperty(prop_LiquidOilIridescenceScale, languages.speak("prop_LiquidOilIridescenceScale"));
+                            materialEditor.ShaderProperty(prop_LiquidOilViewBased, languages.speak("prop_LiquidOilViewBased"));
+                            Components.start_dynamic_disable(prop_LiquidOilViewBased.floatValue.Equals(0), configs);
+                            EditorGUI.indentLevel++;
+                            materialEditor.ShaderProperty(prop_LiquidOilViewBasedCoverage, languages.speak("prop_LiquidOilViewBasedCoverage"));
+                            EditorGUI.indentLevel--;
+                            Components.end_dynamic_disable(prop_LiquidOilViewBased.floatValue.Equals(0), configs);
                         }
                     }
                     else if (liquidFeel == 1) // viscous

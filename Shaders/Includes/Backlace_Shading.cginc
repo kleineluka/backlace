@@ -401,12 +401,23 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             [branch] if (_ToggleSDFShadow == 1) 
             {
                 // face forward vs light direction
-                // float3 faceForward = normalize(unity_ObjectToWorld[2].xyz); // Z axis
-                // float3 faceRight = normalize(unity_ObjectToWorld[0].xyz); // X axis
                 float3 faceForward = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalForward.xyz));
                 float3 faceRight = normalize(mul((float3x3)unity_ObjectToWorld, _SDFLocalRight.xyz));
-                float forwardDot = dot(faceForward, Surface.LightDir);
-                float rightDot = dot(faceRight, Surface.LightDir);
+                float forwardDot;
+                float rightDot; 
+                [branch] if (_SDFMode == 1) // 3d (pitch aware)
+                {
+                    forwardDot = dot(-faceForward, Surface.LightDir);
+                    rightDot = dot(faceRight, Surface.LightDir);
+                }
+                else // 2D (pitch locked to xz plane)
+                {
+                    float2 lightDirXZ = normalize(Surface.LightDir.xz + float2(0.00001, 0.00001));
+                    float2 faceForwardXZ = normalize(faceForward.xz);
+                    float2 faceRightXZ = normalize(faceRight.xz);
+                    forwardDot = dot(-faceForwardXZ, lightDirXZ);
+                    rightDot = dot(faceRightXZ, lightDirXZ);
+                }
                 // flip as necessary
                 float2 uv = Uvs[_SDFShadowTexture_UV];
                 if (rightDot < 0) uv.x = 1.0 - uv.x;
@@ -415,7 +426,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 // thresholding
                 float halfLambert = forwardDot * 0.5 + 0.5;
                 halfLambert = saturate(halfLambert - (_SDFShadowThreshold - 0.5));
-                float shadowMask = smoothstep(sdfValue - _SDFShadowSoftness, sdfValue + _SDFShadowSoftness, halfLambert);
+                float shadowMask = smoothstep(sdfValue - _SDFShadowSoftnessLow, sdfValue + _SDFShadowSoftness, halfLambert);
                 // apply to NdotL
                 Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, lerp(-1.0, 1.0, shadowMask));
                 Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
@@ -991,20 +1002,24 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             float specMask = UNITY_SAMPLE_TEX2D_SAMPLER(_NPRSpecularMask, _MainTex, Uvs[0]).r;
             #if defined(UNITY_PASS_FORWARDBASE)
                 // mix in forward specular (the constant shine)
-                if (_NPRForwardSpecular == 1) 
+                if (_NPRForwardSpecular > 0) 
                 {
                     float forwardSpec = ViewDirSpecular(Surface);
                     forwardSpec *= specMask;
-                    float3 specColour = outDiffuse * _NPRForwardSpecularColor.rgb * _NPRForwardSpecularMultiplier;
+                    float3 specColour = (_NPRForwardSpecular == 1) 
+                        ? outDiffuse * _NPRForwardSpecularColor.rgb * _NPRForwardSpecularMultiplier // multiplicative
+                        : outDiffuse + (_NPRForwardSpecularColor.rgb * _NPRForwardSpecularMultiplier); // additive
                     outDiffuse = lerp(outDiffuse, specColour, forwardSpec);
                 }
             #endif // UNITY_PASS_FORWARDBASE
             // light-dependent specular (blinn-phong)
-            if (_NPRBlinn == 1)
+            if (_NPRBlinn > 0)
             {
                 float blinnSpec = BlinnPhong(Surface);
                 blinnSpec *= specMask;
-                float3 blinnColour = outDiffuse * _NPRBlinnColor.rgb * _NPRBlinnMultiplier;
+                float3 blinnColour = (_NPRBlinn == 1) 
+                    ? outDiffuse * _NPRBlinnColor.rgb * _NPRBlinnMultiplier // multiplicative
+                    : outDiffuse + (_NPRBlinnColor.rgb * _NPRBlinnMultiplier); // additive
                 outDiffuse = lerp(outDiffuse, blinnColour, blinnSpec);
             }
             #if defined(UNITY_PASS_FORWARDBASE)
@@ -1013,8 +1028,8 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 {
                     float rimMask = SmoothHalfLambert(Surface, 0, 1);
                     float rimFresnel = FresnelRim(Surface, rimMask);
-                    float3 rimColour = rimFresnel * _NPRRimColor.rgb;
-                    outDiffuse = lerp(outDiffuse, rimColour, rimFresnel);
+                    //float3 rimColour = rimFresnel * _NPRRimColor.rgb;
+                    outDiffuse = lerp(outDiffuse, _NPRRimColor.rgb, rimFresnel);
                 }
             #endif // UNITY_PASS_FORWARDBASE
             // fake sss

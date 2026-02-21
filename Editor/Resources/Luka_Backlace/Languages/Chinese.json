@@ -3227,6 +3227,1490 @@
         {
             "key": "custom_badge_wrapped",
             "value": "包裹"
+        },
+        {
+            "key": "tab_anime",
+            "value": "角色"
+        },
+        {
+            "key": "sub_tab_shading",
+            "value": "着色"
+        },
+        {
+            "key": "sub_tab_main_textures",
+            "value": "主贴图"
+        },
+        {
+            "key": "tab_reset_badge",
+            "value": "重置"
+        },
+        {
+            "key": "tab_reset_title",
+            "value": "重置选项卡"
+        },
+        {
+            "key": "config_reset_mode",
+            "value": "重置按钮"
+        },
+        {
+            "key": "tab_reset_confirm",
+            "value": "您确定要将 {0} 中的所有属性重置为默认值吗？"
+        },
+        {
+            "key": "tab_reset_yes",
+            "value": "重置"
+        },
+        {
+            "key": "dev_reload_success",
+            "value": "开发重载成功"
+        },
+        {
+            "key": "header_layer_one",
+            "value": "第一层"
+        },
+        {
+            "key": "header_layer_two",
+            "value": "第二层"
+        },
+        {
+            "key": "header_variation",
+            "value": "变化"
+        },
+        {
+            "key": "legacy_mode_new",
+            "value": "旧版硬件支持\n\n如果您遇到编译错误或需要在不支持 Shader Model 5.0 的旧硬件上使用此着色器，可以启用旧版模式。\n\n如何启用：\n1. 导航到 Resources/Luka_Backlace/Includes/\n2. 在文本编辑器中打开此文件：\n   • Backlace_Legacy.cginc\n3. 找到第 6 行：// #define BACKLACE_LEGACY_MODE\n4. 删除 // 以取消注释（使其变为：#define BACKLACE_LEGACY_MODE）\n\n此操作的作用：\n• 编译适用于 Shader Model 3.0 的着色器（兼容旧 GPU）\n• 自动禁用 AudioLink 和 LTCGI 集成以保持在硬件限制内\n• 所有其他功能保持正常\n\n注意：您必须编辑所有三个文件才能正确编译着色器。"
+        },
+        {
+            "key": "preset_reload",
+            "value": "预设重载"
+        },
+        {
+            "key": "prop_AngelRing1Color",
+            "value": "天使光环 1 颜色"
+        },
+        {
+            "key": "prop_AngelRing1Position",
+            "value": "天使光环 1 位置"
+        },
+        {
+            "key": "prop_AngelRing1Width",
+            "value": "天使光环 1 宽度"
+        },
+        {
+            "key": "prop_AngelRing2Color",
+            "value": "天使光环 2 颜色"
+        },
+        {
+            "key": "prop_AngelRing2Position",
+            "value": "天使光环 2 位置"
+        },
+        {
+            "key": "prop_AngelRing2Width",
+            "value": "天使光环 2 宽度"
+        },
+        {
+            "key": "prop_AngelRing3Color",
+            "value": "天使光环 3 颜色"
+        },
+        {
+            "key": "prop_AngelRing3Position",
+            "value": "天使光环 3 位置"
+        },
+        {
+            "key": "prop_AngelRing3Width",
+            "value": "天使光环 3 宽度"
+        },
+        {
+            "key": "prop_AngelRingBlendMode",
+            "value": "天使光环混合模式"
+        },
+        {
+            "key": "prop_AngelRingBreakup",
+            "value": "天使光环破碎"
+        },
+        {
+            "key": "prop_AngelRingBreakupDensity",
+            "value": "天使光环破碎密度"
+        },
+        {
+            "key": "prop_AngelRingBreakupHeight",
+            "value": "天使光环破碎高度"
+        },
+        {
+            "key": "prop_AngelRingBreakupSoftness",
+            "value": "天使光环破碎柔和度"
+        },
+        {
+            "key": "prop_AngelRingBreakupWidthMax",
+            "value": "天使光环破碎最大宽度"
+        },
+        {
+            "key": "prop_AngelRingBreakupWidthMin",
+            "value": "天使光环破碎最小宽度"
+        },
+        {
+            "key": "prop_AngelRingHeightDirection",
+            "value": "天使光环高度方向"
+        },
+        {
+            "key": "prop_AngelRingHeightOffset",
+            "value": "天使光环高度偏移"
+        },
+        {
+            "key": "prop_AngelRingHeightScale",
+            "value": "天使光环高度缩放"
+        },
+        {
+            "key": "prop_AngelRingManualOffset",
+            "value": "天使光环手动偏移"
+        },
+        {
+            "key": "prop_AngelRingManualScale",
+            "value": "天使光环手动缩放"
+        },
+        {
+            "key": "prop_AngelRingMode",
+            "value": "天使光环模式"
+        },
+        {
+            "key": "prop_AngelRingSharpness",
+            "value": "天使光环锐度"
+        },
+        {
+            "key": "prop_AngelRingSoftness",
+            "value": "天使光环柔和度"
+        },
+        {
+            "key": "prop_AngelRingThreshold",
+            "value": "天使光环阈值"
+        },
+        {
+            "key": "prop_AngelRingUseLighting",
+            "value": "天使光环使用光照"
+        },
+        {
+            "key": "prop_AnimeGradientColourA",
+            "value": "动漫渐变颜色 A"
+        },
+        {
+            "key": "prop_AnimeGradientColourB",
+            "value": "动漫渐变颜色 B"
+        },
+        {
+            "key": "prop_AnimeGradientDirection",
+            "value": "动漫渐变方向"
+        },
+        {
+            "key": "prop_AnimeGradientMode",
+            "value": "动漫渐变模式"
+        },
+        {
+            "key": "prop_AnimeGradientMultiplier",
+            "value": "动漫渐变乘数"
+        },
+        {
+            "key": "prop_AnimeGradientOffset",
+            "value": "动漫渐变偏移"
+        },
+        {
+            "key": "prop_AnimeModeNew",
+            "value": "着色模式"
+        },
+        {
+            "key": "prop_AttenuationBoost",
+            "value": "衰减提升"
+        },
+        {
+            "key": "prop_AttenuationManual",
+            "value": "手动衰减"
+        },
+        {
+            "key": "prop_AttenuationMax",
+            "value": "最大衰减"
+        },
+        {
+            "key": "prop_AttenuationMin",
+            "value": "最小衰减"
+        },
+        {
+            "key": "prop_AttenuationMultiplier",
+            "value": "衰减乘数"
+        },
+        {
+            "key": "prop_AttenuationOverride",
+            "value": "衰减覆盖"
+        },
+        {
+            "key": "prop_AttenuationShaded",
+            "value": "衰减阴影"
+        },
+        {
+            "key": "prop_CelCastShadowFeather",
+            "value": "赛璐璐投射阴影羽化"
+        },
+        {
+            "key": "prop_CelCastShadowPower",
+            "value": "赛璐璐投射阴影强度"
+        },
+        {
+            "key": "prop_CelFeather",
+            "value": "赛璐璐羽化"
+        },
+        {
+            "key": "prop_CelLitTint",
+            "value": "赛璐璐受光染色"
+        },
+        {
+            "key": "prop_CelMode",
+            "value": "赛璐璐模式"
+        },
+        {
+            "key": "prop_CelShadowTint",
+            "value": "赛璐璐阴影染色"
+        },
+        {
+            "key": "prop_CelSmoothGradientPower",
+            "value": "赛璐璐平滑渐变强度"
+        },
+        {
+            "key": "prop_CelSmoothOcclusionStrength",
+            "value": "赛璐璐平滑遮蔽强度"
+        },
+        {
+            "key": "prop_CelThreshold",
+            "value": "赛璐璐阈值"
+        },
+        {
+            "key": "prop_ColorGradingMode",
+            "value": "颜色分级模式"
+        },
+        {
+            "key": "prop_Decal1DistortionControls",
+            "value": "贴纸 1 扭曲控制"
+        },
+        {
+            "key": "prop_Decal1DistortionSpeed",
+            "value": "贴纸 1 扭曲速度"
+        },
+        {
+            "key": "prop_Decal1GlitchControls",
+            "value": "贴纸 1 故障控制"
+        },
+        {
+            "key": "prop_Decal1SheetCols",
+            "value": "贴纸 1 序列帧列数"
+        },
+        {
+            "key": "prop_Decal1SheetFPS",
+            "value": "贴纸 1 序列帧帧率"
+        },
+        {
+            "key": "prop_Decal1SheetRows",
+            "value": "贴纸 1 序列帧行数"
+        },
+        {
+            "key": "prop_Decal1SheetSlider",
+            "value": "贴纸 1 序列帧滑块"
+        },
+        {
+            "key": "prop_Decal1SpecialEffect",
+            "value": "贴纸 1 特效"
+        },
+        {
+            "key": "prop_Decal1Spritesheet",
+            "value": "贴纸 1 序列帧贴图"
+        },
+        {
+            "key": "prop_Decal2DistortionControls",
+            "value": "贴纸 2 扭曲控制"
+        },
+        {
+            "key": "prop_Decal2DistortionSpeed",
+            "value": "贴纸 2 扭曲速度"
+        },
+        {
+            "key": "prop_Decal2GlitchControls",
+            "value": "贴纸 2 故障控制"
+        },
+        {
+            "key": "prop_Decal2SheetCols",
+            "value": "贴纸 2 序列帧列数"
+        },
+        {
+            "key": "prop_Decal2SheetFPS",
+            "value": "贴纸 2 序列帧帧率"
+        },
+        {
+            "key": "prop_Decal2SheetRows",
+            "value": "贴纸 2 序列帧行数"
+        },
+        {
+            "key": "prop_Decal2SheetSlider",
+            "value": "贴纸 2 序列帧滑块"
+        },
+        {
+            "key": "prop_Decal2SpecialEffect",
+            "value": "贴纸 2 特效"
+        },
+        {
+            "key": "prop_Decal2Spritesheet",
+            "value": "贴纸 2 序列帧贴图"
+        },
+        {
+            "key": "prop_DecalLighting",
+            "value": "贴花光照"
+        },
+        {
+            "key": "prop_DirectDiffuse",
+            "value": "直接漫反射"
+        },
+        {
+            "key": "prop_DirectionalAmbience",
+            "value": "方向环境光"
+        },
+        {
+            "key": "prop_ExCheekColor",
+            "value": "额外脸颊颜色"
+        },
+        {
+            "key": "prop_ExCheekIntensity",
+            "value": "额外脸颊强度"
+        },
+        {
+            "key": "prop_ExEyeColor",
+            "value": "额外眼睛颜色"
+        },
+        {
+            "key": "prop_ExpressionMap",
+            "value": "表情贴图"
+        },
+        {
+            "key": "prop_ExpressionMap_UV",
+            "value": "表情贴图 UV"
+        },
+        {
+            "key": "prop_ExShadowColor",
+            "value": "额外阴影颜色"
+        },
+        {
+            "key": "prop_ExShadowIntensity",
+            "value": "额外阴影强度"
+        },
+        {
+            "key": "prop_ExShyColor",
+            "value": "额外害羞颜色"
+        },
+        {
+            "key": "prop_ExShyIntensity",
+            "value": "额外害羞强度"
+        },
+        {
+            "key": "prop_EyeParallaxBreathSpeed",
+            "value": "眼睛视差呼吸速度"
+        },
+        {
+            "key": "prop_EyeParallaxBreathStrength",
+            "value": "眼睛视差呼吸强度"
+        },
+        {
+            "key": "prop_EyeParallaxClamp",
+            "value": "眼睛视差限制"
+        },
+        {
+            "key": "prop_EyeParallaxEyeMaskTex",
+            "value": "眼睛视差遮罩贴图"
+        },
+        {
+            "key": "prop_EyeParallaxEyeMaskTex_UV",
+            "value": "眼睛视差遮罩贴图 UV"
+        },
+        {
+            "key": "prop_EyeParallaxIrisTex",
+            "value": "眼睛视差虹膜贴图"
+        },
+        {
+            "key": "prop_EyeParallaxIrisTex_UV",
+            "value": "眼睛视差虹膜贴图 UV"
+        },
+        {
+            "key": "prop_EyeParallaxStrength",
+            "value": "眼睛视差强度"
+        },
+        {
+            "key": "prop_EyeShadowIntensity",
+            "value": "眼影强度"
+        },
+        {
+            "key": "prop_FaceHeadForward",
+            "value": "面部头部向前"
+        },
+        {
+            "key": "prop_FaceMap",
+            "value": "面部贴图"
+        },
+        {
+            "key": "prop_FaceMap_UV",
+            "value": "面部贴图 UV"
+        },
+        {
+            "key": "prop_GTHighlights",
+            "value": "GT 高光"
+        },
+        {
+            "key": "prop_GTShadows",
+            "value": "GT 阴影"
+        },
+        {
+            "key": "prop_HairAngleFadeEnd",
+            "value": "头发角度淡出结束"
+        },
+        {
+            "key": "prop_HairAngleFadeStart",
+            "value": "头发角度淡出开始"
+        },
+        {
+            "key": "prop_HairAngleGuardStrength",
+            "value": "头发角度保护强度"
+        },
+        {
+            "key": "prop_HairBlendAlpha",
+            "value": "头发混合 Alpha"
+        },
+        {
+            "key": "prop_HairDistanceFalloffEnd",
+            "value": "头发距离衰减结束"
+        },
+        {
+            "key": "prop_HairDistanceFalloffStart",
+            "value": "头发距离衰减开始"
+        },
+        {
+            "key": "prop_HairDistanceFalloffStrength",
+            "value": "头发距离衰减强度"
+        },
+        {
+            "key": "prop_HairExtremeAngleGuard",
+            "value": "头发极限角度保护"
+        },
+        {
+            "key": "prop_HairHeadCenter",
+            "value": "头发头部中心"
+        },
+        {
+            "key": "prop_HairHeadForward",
+            "value": "头发头部向前"
+        },
+        {
+            "key": "prop_HairHeadMaskMode",
+            "value": "头发头部遮罩模式"
+        },
+        {
+            "key": "prop_HairHeadRight",
+            "value": "头发头部向右"
+        },
+        {
+            "key": "prop_HairHeadUp",
+            "value": "头发头部向上"
+        },
+        {
+            "key": "prop_HairMaskStrength",
+            "value": "头发遮罩强度"
+        },
+        {
+            "key": "prop_HairMaskTex",
+            "value": "头发遮罩贴图"
+        },
+        {
+            "key": "prop_HairMaskTex_UV",
+            "value": "头发遮罩贴图 UV"
+        },
+        {
+            "key": "prop_HairSDFBlend",
+            "value": "头发 SDF 混合"
+        },
+        {
+            "key": "prop_HairSDFPreview",
+            "value": "头发 SDF 预览"
+        },
+        {
+            "key": "prop_HairSDFScale",
+            "value": "头发 SDF 缩放"
+        },
+        {
+            "key": "prop_HairSDFSoftness",
+            "value": "头发 SDF 柔和度"
+        },
+        {
+            "key": "prop_HairTransparencyStrength",
+            "value": "头发透明度强度"
+        },
+        {
+            "key": "prop_IndirectAdditive",
+            "value": "间接附加"
+        },
+        {
+            "key": "prop_IndirectAlbedo",
+            "value": "间接反射率"
+        },
+        {
+            "key": "prop_IndirectDiffuse",
+            "value": "间接漫反射"
+        },
+        {
+            "key": "prop_LCWGain",
+            "value": "LCW 增益"
+        },
+        {
+            "key": "prop_LCWGamma",
+            "value": "LCW 伽马"
+        },
+        {
+            "key": "prop_LCWLift",
+            "value": "LCW 提升"
+        },
+        {
+            "key": "prop_LightingSource",
+            "value": "光源"
+        },
+        {
+            "key": "prop_LipOutlineColor",
+            "value": "嘴唇轮廓颜色"
+        },
+        {
+            "key": "prop_LipOutlineIntensity",
+            "value": "嘴唇轮廓强度"
+        },
+        {
+            "key": "prop_ManualApplication",
+            "value": "手动应用"
+        },
+        {
+            "key": "prop_ManualNormalOffset",
+            "value": "手动法线偏移"
+        },
+        {
+            "key": "prop_ManualNormalPreview",
+            "value": "手动法线预览"
+        },
+        {
+            "key": "prop_ManualNormalScale",
+            "value": "手动法线缩放"
+        },
+        {
+            "key": "prop_ManualNormalSharpness",
+            "value": "手动法线锐度"
+        },
+        {
+            "key": "prop_NoseLineColor",
+            "value": "鼻线颜色"
+        },
+        {
+            "key": "prop_NoseLinePower",
+            "value": "鼻线强度"
+        },
+        {
+            "key": "prop_NPRBlinn",
+            "value": "NPR Blinn"
+        },
+        {
+            "key": "prop_NPRBlinnColor",
+            "value": "NPR Blinn 颜色"
+        },
+        {
+            "key": "prop_NPRBlinnMax",
+            "value": "NPR Blinn 最大值"
+        },
+        {
+            "key": "prop_NPRBlinnMin",
+            "value": "NPR Blinn 最小值"
+        },
+        {
+            "key": "prop_NPRBlinnMultiplier",
+            "value": "NPR Blinn 乘数"
+        },
+        {
+            "key": "prop_NPRBlinnPower",
+            "value": "NPR Blinn 强度"
+        },
+        {
+            "key": "prop_NPRDiffMax",
+            "value": "NPR 漫反射最大值"
+        },
+        {
+            "key": "prop_NPRDiffMin",
+            "value": "NPR 漫反射最小值"
+        },
+        {
+            "key": "prop_NPRForwardSpecular",
+            "value": "NPR 正向高光"
+        },
+        {
+            "key": "prop_NPRForwardSpecularColor",
+            "value": "NPR 正向高光颜色"
+        },
+        {
+            "key": "prop_NPRForwardSpecularMultiplier",
+            "value": "NPR 正向高光乘数"
+        },
+        {
+            "key": "prop_NPRForwardSpecularRange",
+            "value": "NPR 正向高光范围"
+        },
+        {
+            "key": "prop_NPRLitColor",
+            "value": "NPR 受光颜色"
+        },
+        {
+            "key": "prop_NPRRim",
+            "value": "NPR 边缘光"
+        },
+        {
+            "key": "prop_NPRRimColor",
+            "value": "NPR 边缘光颜色"
+        },
+        {
+            "key": "prop_NPRRimExp",
+            "value": "NPR 边缘光指数"
+        },
+        {
+            "key": "prop_NPRRimMax",
+            "value": "NPR 边缘光最大值"
+        },
+        {
+            "key": "prop_NPRRimMin",
+            "value": "NPR 边缘光最小值"
+        },
+        {
+            "key": "prop_NPRShadowColor",
+            "value": "NPR 阴影颜色"
+        },
+        {
+            "key": "prop_NPRSpecularMask",
+            "value": "NPR 高光遮罩"
+        },
+        {
+            "key": "prop_NPRSpecularMask_UV",
+            "value": "NPR 高光遮罩 UV"
+        },
+        {
+            "key": "prop_NPRSSS",
+            "value": "NPR 次表面散射 (SSS)"
+        },
+        {
+            "key": "prop_NPRSSSColor",
+            "value": "NPR SSS 颜色"
+        },
+        {
+            "key": "prop_NPRSSSExp",
+            "value": "NPR SSS 指数"
+        },
+        {
+            "key": "prop_NPRSSSMax",
+            "value": "NPR SSS 最大值"
+        },
+        {
+            "key": "prop_NPRSSSMin",
+            "value": "NPR SSS 最小值"
+        },
+        {
+            "key": "prop_NPRSSSRef",
+            "value": "NPR SSS 参考"
+        },
+        {
+            "key": "prop_NPRSSSShadows",
+            "value": "NPR SSS 阴影"
+        },
+        {
+            "key": "prop_OffsetRimBlendMode",
+            "value": "偏移边缘光混合模式"
+        },
+        {
+            "key": "prop_OffsetRimColor",
+            "value": "偏移边缘光颜色"
+        },
+        {
+            "key": "prop_OffsetRimHardness",
+            "value": "偏移边缘光硬度"
+        },
+        {
+            "key": "prop_OffsetRimLightBased",
+            "value": "基于光照的偏移边缘光"
+        },
+        {
+            "key": "prop_OffsetRimWidth",
+            "value": "偏移边缘光宽度"
+        },
+        {
+            "key": "prop_OutlineLitMix",
+            "value": "描边受光混合"
+        },
+        {
+            "key": "prop_PackedAmbient",
+            "value": "打包环境光"
+        },
+        {
+            "key": "prop_PackedGGShadow1Push",
+            "value": "打包 GG 阴影 1 推进"
+        },
+        {
+            "key": "prop_PackedGGShadow1Smoothness",
+            "value": "打包 GG 阴影 1 平滑度"
+        },
+        {
+            "key": "prop_PackedGGShadow1Tint",
+            "value": "打包 GG 阴影 1 染色"
+        },
+        {
+            "key": "prop_PackedGGShadow2Push",
+            "value": "打包 GG 阴影 2 推进"
+        },
+        {
+            "key": "prop_PackedGGShadow2Smoothness",
+            "value": "打包 GG 阴影 2 平滑度"
+        },
+        {
+            "key": "prop_PackedGGShadow2Tint",
+            "value": "打包 GG 阴影 2 染色"
+        },
+        {
+            "key": "prop_PackedGGSpecularIntensity",
+            "value": "打包 GG 高光强度"
+        },
+        {
+            "key": "prop_PackedGGSpecularSize",
+            "value": "打包 GG 高光大小"
+        },
+        {
+            "key": "prop_PackedGGSpecularTint",
+            "value": "打包 GG 高光染色"
+        },
+        {
+            "key": "prop_PackedLitColor",
+            "value": "打包受光颜色"
+        },
+        {
+            "key": "prop_PackedMapMetals",
+            "value": "打包贴图金属度"
+        },
+        {
+            "key": "prop_PackedMapOne",
+            "value": "打包贴图 1"
+        },
+        {
+            "key": "prop_PackedMapOne_UV",
+            "value": "打包贴图 1 UV"
+        },
+        {
+            "key": "prop_PackedMapStyle",
+            "value": "打包贴图样式"
+        },
+        {
+            "key": "prop_PackedMapThree",
+            "value": "打包贴图 3"
+        },
+        {
+            "key": "prop_PackedMapThree_UV",
+            "value": "打包贴图 3 UV"
+        },
+        {
+            "key": "prop_PackedMapTwo",
+            "value": "打包贴图 2"
+        },
+        {
+            "key": "prop_PackedMapTwo_UV",
+            "value": "打包贴图 2 UV"
+        },
+        {
+            "key": "prop_PackedRimColor",
+            "value": "打包边缘光颜色"
+        },
+        {
+            "key": "prop_PackedRimLight",
+            "value": "打包边缘光"
+        },
+        {
+            "key": "prop_PackedRimPower",
+            "value": "打包边缘光强度"
+        },
+        {
+            "key": "prop_PackedRimThreshold",
+            "value": "打包边缘光阈值"
+        },
+        {
+            "key": "prop_PackedShadowColor",
+            "value": "打包阴影颜色"
+        },
+        {
+            "key": "prop_PackedShadowSmoothness",
+            "value": "打包阴影平滑度"
+        },
+        {
+            "key": "prop_PackedUmaMetalDark",
+            "value": "打包 Uma 金属暗部"
+        },
+        {
+            "key": "prop_PackedUmaMetalLight",
+            "value": "打包 Uma 金属亮部"
+        },
+        {
+            "key": "prop_PackedUmaSpecularBoost",
+            "value": "打包 Uma 高光提升"
+        },
+        {
+            "key": "prop_RampMode",
+            "value": "渐变映射模式"
+        },
+        {
+            "key": "prop_RampOcclusionOffset",
+            "value": "渐变映射遮蔽偏移"
+        },
+        {
+            "key": "prop_RampProceduralShift",
+            "value": "程序化渐变映射偏移"
+        },
+        {
+            "key": "prop_RampProceduralToony",
+            "value": "程序化渐变映射卡通化"
+        },
+        {
+            "key": "prop_RampShadows",
+            "value": "渐变映射阴影"
+        },
+        {
+            "key": "prop_RefractionTexture",
+            "value": "折射贴图"
+        },
+        {
+            "key": "prop_RimMode",
+            "value": "边缘光模式"
+        },
+        {
+            "key": "prop_SDFLocalForward",
+            "value": "SDF 局部向前"
+        },
+        {
+            "key": "prop_SDFLocalRight",
+            "value": "SDF 局部向右"
+        },
+        {
+            "key": "prop_SDFShadowTexture_UV",
+            "value": "SDF 阴影贴图 UV"
+        },
+        {
+            "key": "prop_ShadowPatternLightBased",
+            "value": "基于光照的阴影图案"
+        },
+        {
+            "key": "prop_ShadowPatternLit",
+            "value": "受光阴影图案"
+        },
+        {
+            "key": "prop_SkinLUT_UV",
+            "value": "皮肤 LUT UV"
+        },
+        {
+            "key": "prop_SpecularToonColor",
+            "value": "卡通高光颜色"
+        },
+        {
+            "key": "prop_SpecularToonIntensity",
+            "value": "卡通高光强度"
+        },
+        {
+            "key": "prop_SpecularToonRoughness",
+            "value": "卡通高光粗糙度"
+        },
+        {
+            "key": "prop_SpecularToonSharpness",
+            "value": "卡通高光锐度"
+        },
+        {
+            "key": "prop_SpecularToonShininess",
+            "value": "卡通高光光泽度"
+        },
+        {
+            "key": "prop_SpecularToonThreshold",
+            "value": "卡通高光阈值"
+        },
+        {
+            "key": "prop_SpecularToonUseLighting",
+            "value": "卡通高光使用光照"
+        },
+        {
+            "key": "prop_StockingsColor",
+            "value": "丝袜颜色"
+        },
+        {
+            "key": "prop_StockingsColorDark",
+            "value": "丝袜暗部颜色"
+        },
+        {
+            "key": "prop_StockingsDarkWidth",
+            "value": "丝袜暗部宽度"
+        },
+        {
+            "key": "prop_StockingsLightedIntensity",
+            "value": "丝袜受光强度"
+        },
+        {
+            "key": "prop_StockingsLightedWidth",
+            "value": "丝袜受光宽度"
+        },
+        {
+            "key": "prop_StockingsMap",
+            "value": "丝袜贴图"
+        },
+        {
+            "key": "prop_StockingsMap_UV",
+            "value": "丝袜贴图 UV"
+        },
+        {
+            "key": "prop_StockingsPower",
+            "value": "丝袜强度"
+        },
+        {
+            "key": "prop_StockingsRoughness",
+            "value": "丝袜粗糙度"
+        },
+        {
+            "key": "prop_ToggleAnimeExtras",
+            "value": "切换角色额外效果"
+        },
+        {
+            "key": "prop_ToggleAnimeGradient",
+            "value": "切换动漫渐变"
+        },
+        {
+            "key": "prop_ToggleExpressionMap",
+            "value": "切换表情贴图"
+        },
+        {
+            "key": "prop_ToggleEyeParallax",
+            "value": "切换眼睛视差"
+        },
+        {
+            "key": "prop_ToggleEyeParallaxBreathing",
+            "value": "切换眼睛视差呼吸效果"
+        },
+        {
+            "key": "prop_ToggleEyeShadow",
+            "value": "切换眼影"
+        },
+        {
+            "key": "prop_ToggleFaceMap",
+            "value": "切换面部贴图"
+        },
+        {
+            "key": "prop_ToggleHairTransparency",
+            "value": "切换头发透明度"
+        },
+        {
+            "key": "prop_ToggleLipOutline",
+            "value": "切换嘴唇轮廓"
+        },
+        {
+            "key": "prop_ToggleLitOutline",
+            "value": "切换受光描边"
+        },
+        {
+            "key": "prop_ToggleManualNormals",
+            "value": "切换手动法线"
+        },
+        {
+            "key": "prop_ToggleNoseLine",
+            "value": "切换鼻线"
+        },
+        {
+            "key": "prop_ToggleSpecularToon",
+            "value": "切换卡通高光"
+        },
+        {
+            "key": "prop_ToggleStockings",
+            "value": "切换丝袜"
+        },
+        {
+            "key": "prop_TriBandAttenuatedShadows",
+            "value": "三阶调衰减阴影"
+        },
+        {
+            "key": "prop_TriBandIndirectShallow",
+            "value": "三阶调间接浅阴影"
+        },
+        {
+            "key": "prop_TriBandLitColor",
+            "value": "三阶调受光颜色"
+        },
+        {
+            "key": "prop_TriBandPostLitTint",
+            "value": "三阶调后期受光染色"
+        },
+        {
+            "key": "prop_TriBandPostShadowTint",
+            "value": "三阶调后期阴影染色"
+        },
+        {
+            "key": "prop_TriBandPostShallowTint",
+            "value": "三阶调后期浅阴影染色"
+        },
+        {
+            "key": "prop_TriBandShadowColor",
+            "value": "三阶调阴影颜色"
+        },
+        {
+            "key": "prop_TriBandShallowColor",
+            "value": "三阶调浅阴影颜色"
+        },
+        {
+            "key": "prop_TriBandShallowWidth",
+            "value": "三阶调浅阴影宽度"
+        },
+        {
+            "key": "prop_TriBandSmoothness",
+            "value": "三阶调平滑度"
+        },
+        {
+            "key": "prop_TriBandThreshold",
+            "value": "三阶调阈值"
+        },
+        {
+            "key": "prop_UseSecondaryRing",
+            "value": "使用次要光环"
+        },
+        {
+            "key": "prop_UseTertiaryRing",
+            "value": "使用第三光环"
+        },
+        {
+            "key": "sub_tab_angel_rings",
+            "value": "天使光环"
+        },
+        {
+            "key": "sub_tab_attenuation",
+            "value": "衰减"
+        },
+        {
+            "key": "sub_tab_decal1_effects",
+            "value": "贴纸 1 特效"
+        },
+        {
+            "key": "sub_tab_decal1_settings",
+            "value": "贴纸 1 设置"
+        },
+        {
+            "key": "sub_tab_decal2_effects",
+            "value": "贴纸 2 特效"
+        },
+        {
+            "key": "sub_tab_decal2_settings",
+            "value": "贴纸 2 设置"
+        },
+        {
+            "key": "sub_tab_expression_map",
+            "value": "表情贴图"
+        },
+        {
+            "key": "sub_tab_eye_parallax",
+            "value": "眼睛视差"
+        },
+        {
+            "key": "sub_tab_face_map",
+            "value": "面部贴图"
+        },
+        {
+            "key": "sub_tab_gradient",
+            "value": "渐变"
+        },
+        {
+            "key": "sub_tab_intensity",
+            "value": "强度"
+        },
+        {
+            "key": "sub_tab_manual_normals",
+            "value": "手动法线"
+        },
+        {
+            "key": "sub_tab_new_rim_lighting",
+            "value": "边缘光"
+        },
+        {
+            "key": "sub_tab_stocking",
+            "value": "丝袜"
+        },
+        {
+            "key": "sub_tab_toon_highlights",
+            "value": "卡通高光"
+        },
+        {
+            "key": "sub_tab_translucent_hair",
+            "value": "半透明头发"
+        },
+        {
+            "key": "tab_stickers",
+            "value": "贴纸"
+        },
+        {
+            "key": "config_toggle_preset_ignore",
+            "value": "智能预设"
+        },
+        {
+            "key": "render_queue_notice",
+            "value": "此效果可能需要特定的渲染队列才能正常工作。如果它在场景中显示不正确，请尝试调整它（降低或提高）。"
+        },
+        {
+            "key": "prop_DecalLighting_NEW",
+            "value": "贴纸光照"
+        },
+        {
+            "key": "header_angel_ring_one",
+            "value": "光环 1"
+        },
+        {
+            "key": "header_angel_ring_two",
+            "value": "光环 2"
+        },
+        {
+            "key": "header_angel_ring_three",
+            "value": "光环 3"
+        },
+        {
+            "key": "header_angel_ring_breakup",
+            "value": "破碎效果"
+        },
+        {
+            "key": "sub_tab_liquid_layer",
+            "value": "液体层"
+        },
+        {
+            "key": "prop_LiquidToggleLiquid",
+            "value": "启用液体层"
+        },
+        {
+            "key": "prop_LiquidEnabled",
+            "value": "启用液体效果"
+        },
+        {
+            "key": "prop_LiquidFeel",
+            "value": "液体质感"
+        },
+        {
+            "key": "prop_LiquidLookWatery",
+            "value": "水状外观"
+        },
+        {
+            "key": "prop_LiquidLookViscous",
+            "value": "粘稠外观"
+        },
+        {
+            "key": "prop_LiquidSpace",
+            "value": "映射模式"
+        },
+        {
+            "key": "prop_LiquidMapScale",
+            "value": "映射缩放"
+        },
+        {
+            "key": "prop_LiquidTriplanarSharpness",
+            "value": "三向投影锐度"
+        },
+        {
+            "key": "prop_LiquidMaskMap",
+            "value": "遮罩贴图"
+        },
+        {
+            "key": "prop_LiquidUseForceMap",
+            "value": "使用力场贴图"
+        },
+        {
+            "key": "prop_LiquidForceMap",
+            "value": "力场贴图"
+        },
+        {
+            "key": "prop_LiquidSpecularLit",
+            "value": "高光模式"
+        },
+        {
+            "key": "prop_LiquidGloss",
+            "value": "光泽度"
+        },
+        {
+            "key": "prop_LiquidShine",
+            "value": "闪耀度"
+        },
+        {
+            "key": "prop_LiquidShineTightness",
+            "value": "闪耀紧凑度"
+        },
+        {
+            "key": "prop_LiquidShadow",
+            "value": "阴影强度"
+        },
+        {
+            "key": "prop_LiquidRim",
+            "value": "边缘光强度"
+        },
+        {
+            "key": "prop_LiquidDepth",
+            "value": "深度强度"
+        },
+        {
+            "key": "prop_LiquidNormalStrength",
+            "value": "法线强度"
+        },
+        {
+            "key": "prop_LiquidOpacity",
+            "value": "不透明度"
+        },
+        {
+            "key": "prop_LiquidDarken",
+            "value": "皮肤变暗"
+        },
+        {
+            "key": "prop_LiquidManualDirection",
+            "value": "启用手动方向"
+        },
+        {
+            "key": "prop_LiquidDirectionOne",
+            "value": "第一层方向"
+        },
+        {
+            "key": "prop_LiquidDirectionTwo",
+            "value": "第二层方向"
+        },
+        {
+            "key": "prop_LiquidLayerOneScale",
+            "value": "第一层缩放"
+        },
+        {
+            "key": "prop_LiquidLayerOneDensity",
+            "value": "第一层密度"
+        },
+        {
+            "key": "prop_LiquidLayerOneStretch",
+            "value": "第一层拉伸"
+        },
+        {
+            "key": "prop_LiquidLayerOneSpeed",
+            "value": "第一层速度"
+        },
+        {
+            "key": "prop_LiquidLayerOneRandomness",
+            "value": "第一层随机性"
+        },
+        {
+            "key": "prop_LiquidLayerOneSeed",
+            "value": "第一层种子"
+        },
+        {
+            "key": "prop_LiquidLayerOneMod",
+            "value": "第一层修改 (拖尾/晃动)"
+        },
+        {
+            "key": "prop_LiquidUseLayerTwo",
+            "value": "启用第二层"
+        },
+        {
+            "key": "prop_LiquidLayerTwoScale",
+            "value": "第二层缩放"
+        },
+        {
+            "key": "prop_LiquidLayerTwoDensity",
+            "value": "第二层密度"
+        },
+        {
+            "key": "prop_LiquidLayerTwoStretch",
+            "value": "第二层拉伸"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSpeed",
+            "value": "第二层速度"
+        },
+        {
+            "key": "prop_LiquidLayerTwoRandomness",
+            "value": "第二层随机性"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSeed",
+            "value": "第二层种子"
+        },
+        {
+            "key": "prop_LiquidLayerTwoAmount",
+            "value": "第二层数量"
+        },
+        {
+            "key": "prop_LiquidLayerTwoMod",
+            "value": "第二层修改 (拖尾/晃动)"
+        },
+        {
+            "key": "prop_LiquidClusterScale",
+            "value": "簇缩放"
+        },
+        {
+            "key": "prop_LiquidClusterSeed",
+            "value": "簇种子"
+        },
+        {
+            "key": "prop_LiquidThreshold",
+            "value": "覆盖阈值"
+        },
+        {
+            "key": "prop_LiquidSoftness",
+            "value": "边缘柔和度"
+        },
+        {
+            "key": "prop_LiquidWateryCoverage",
+            "value": "覆盖量"
+        },
+        {
+            "key": "prop_LiquidViscousSmooth",
+            "value": "合并半径"
+        },
+        {
+            "key": "prop_LiquidViscousThinning",
+            "value": "变薄差异"
+        },
+        {
+            "key": "prop_LiquidViscousThinSeed",
+            "value": "变薄种子"
+        },
+        {
+            "key": "prop_LiquidViscousThinScale",
+            "value": "变薄缩放"
+        },
+        {
+            "key": "prop_LiquidSweatUseTint",
+            "value": "使用染色"
+        },
+        {
+            "key": "prop_LiquidSweatTintColor",
+            "value": "染色颜色"
+        },
+        {
+            "key": "prop_LiquidBloodColorFresh",
+            "value": "新鲜血液颜色"
+        },
+        {
+            "key": "prop_LiquidBloodColorDark",
+            "value": "干涸血液颜色"
+        },
+        {
+            "key": "prop_LiquidBloodPooling",
+            "value": "汇聚量"
+        },
+        {
+            "key": "prop_LiquidBloodDryingRate",
+            "value": "干燥率"
+        },
+        {
+            "key": "prop_LiquidBloodDryGloss",
+            "value": "干燥光泽度"
+        },
+        {
+            "key": "prop_LiquidOilColor",
+            "value": "油渍染色"
+        },
+        {
+            "key": "prop_LiquidOilIridescence",
+            "value": "珠光"
+        },
+        {
+            "key": "prop_LiquidOilIridescenceScale",
+            "value": "珠光缩放"
+        },
+        {
+            "key": "prop_LiquidIcingColor",
+            "value": "糖霜颜色"
+        },
+        {
+            "key": "prop_LiquidIcingColorVariation",
+            "value": "使用颜色变化"
+        },
+        {
+            "key": "prop_LiquidIcingColorMin",
+            "value": "颜色 A"
+        },
+        {
+            "key": "prop_LiquidIcingColorMax",
+            "value": "颜色 B"
+        },
+        {
+            "key": "prop_LiquidIcingColorScale",
+            "value": "变化缩放"
+        },
+        {
+            "key": "prop_LiquidIcingColorSeed",
+            "value": "变化种子"
+        },
+        {
+            "key": "prop_LiquidWaxColor",
+            "value": "蜡颜色"
+        },
+        {
+            "key": "prop_LiquidWaxColorVariation",
+            "value": "蜡颜色变化"
+        },
+        {
+            "key": "prop_LiquidWaxCoolRate",
+            "value": "冷却率"
+        },
+        {
+            "key": "prop_LiquidSlimeColor",
+            "value": "史莱姆基础颜色"
+        },
+        {
+            "key": "prop_LiquidSlimeColorShift",
+            "value": "史莱姆偏移颜色"
+        },
+        {
+            "key": "prop_LiquidSlimeTranslucency",
+            "value": "史莱姆半透明度"
+        },
+        {
+            "key": "prop_LiquidSlimeIridescence",
+            "value": "史莱姆珠光"
+        },
+        {
+            "key": "prop_LiquidSlimeStickiness",
+            "value": "史莱姆粘性"
+        },
+        {
+            "key": "prop_LiquidMudColor",
+            "value": "泥土基础颜色"
+        },
+        {
+            "key": "prop_LiquidMudColorDark",
+            "value": "泥土暗部颜色"
+        },
+        {
+            "key": "prop_LiquidMudRoughness",
+            "value": "泥土表面粗糙度"
+        },
+        {
+            "key": "prop_LiquidUseCluster",
+            "value": "使用簇"
+        },
+        {
+            "key": "prop_LiquidOilViewBased",
+            "value": "基于视角的珠光"
+        },
+        {
+            "key": "prop_LiquidOilViewBasedCoverage",
+            "value": "基于视角的覆盖"
+        },
+        {
+            "key": "prop_StitchColor",
+            "value": "缝线颜色"
+        },
+        {
+            "key": "prop_SDFMode",
+            "value": "SDF 模式"
+        },
+        {
+            "key": "prop_SDFShadowSoftnessLow",
+            "value": "SDF 阴影柔和度（低）"
+        },
+        {
+            "key": "prop_PreserveShadows",
+            "value": "Preserve Shadows"
         }
     ]
 }

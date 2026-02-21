@@ -3227,6 +3227,1490 @@
         {
             "key": "custom_badge_wrapped",
             "value": "랩"
+        },
+        {
+            "key": "tab_anime",
+            "value": "캐릭터"
+        },
+        {
+            "key": "sub_tab_shading",
+            "value": "셰이딩"
+        },
+        {
+            "key": "sub_tab_main_textures",
+            "value": "메인 텍스처"
+        },
+        {
+            "key": "tab_reset_badge",
+            "value": "초기화"
+        },
+        {
+            "key": "tab_reset_title",
+            "value": "탭 초기화"
+        },
+        {
+            "key": "config_reset_mode",
+            "value": "초기화 버튼"
+        },
+        {
+            "key": "tab_reset_confirm",
+            "value": "{0}의 모든 속성을 기본값으로 초기화하시겠습니까?"
+        },
+        {
+            "key": "tab_reset_yes",
+            "value": "초기화"
+        },
+        {
+            "key": "dev_reload_success",
+            "value": "개발자 리로드 성공"
+        },
+        {
+            "key": "header_layer_one",
+            "value": "레이어 1"
+        },
+        {
+            "key": "header_layer_two",
+            "value": "레이어 2"
+        },
+        {
+            "key": "header_variation",
+            "value": "베리에이션"
+        },
+        {
+            "key": "legacy_mode_new",
+            "value": "레거시 하드웨어 지원\n\n컴파일 오류가 발생하거나 Shader Model 5.0을 지원하지 않는 구형 하드웨어에서 이 셰이더를 사용해야 하는 경우 레거시 모드를 활성화할 수 있습니다.\n\n활성화 방법:\n1. Resources/Luka_Backlace/Includes/ 경로로 이동합니다.\n2. 텍스트 편집기에서 다음 파일을 엽니다:\n   • Backlace_Legacy.cginc\n3. 6번째 줄을 찾습니다: // #define BACKLACE_LEGACY_MODE\n4. //를 삭제하여 주석을 해제합니다 (#define BACKLACE_LEGACY_MODE가 되도록 함)\n\n적용되는 사항:\n• Shader Model 3.0용으로 셰이더를 컴파일합니다 (구형 GPU와 호환)\n• 하드웨어 제한을 준수하기 위해 AudioLink 및 LTCGI 통합을 자동으로 비활성화합니다.\n• 기타 모든 기능은 정상적으로 작동합니다.\n\n참고: 셰이더가 올바르게 컴파일되려면 세 개의 파일을 모두 편집해야 합니다."
+        },
+        {
+            "key": "preset_reload",
+            "value": "프리셋 리로드"
+        },
+        {
+            "key": "prop_AngelRing1Color",
+            "value": "엔젤 링 1 색상"
+        },
+        {
+            "key": "prop_AngelRing1Position",
+            "value": "엔젤 링 1 위치"
+        },
+        {
+            "key": "prop_AngelRing1Width",
+            "value": "엔젤 링 1 너비"
+        },
+        {
+            "key": "prop_AngelRing2Color",
+            "value": "엔젤 링 2 색상"
+        },
+        {
+            "key": "prop_AngelRing2Position",
+            "value": "엔젤 링 2 위치"
+        },
+        {
+            "key": "prop_AngelRing2Width",
+            "value": "엔젤 링 2 너비"
+        },
+        {
+            "key": "prop_AngelRing3Color",
+            "value": "엔젤 링 3 색상"
+        },
+        {
+            "key": "prop_AngelRing3Position",
+            "value": "엔젤 링 3 위치"
+        },
+        {
+            "key": "prop_AngelRing3Width",
+            "value": "엔젤 링 3 너비"
+        },
+        {
+            "key": "prop_AngelRingBlendMode",
+            "value": "엔젤 링 혼합 모드"
+        },
+        {
+            "key": "prop_AngelRingBreakup",
+            "value": "엔젤 링 브레이크업"
+        },
+        {
+            "key": "prop_AngelRingBreakupDensity",
+            "value": "엔젤 링 브레이크업 밀도"
+        },
+        {
+            "key": "prop_AngelRingBreakupHeight",
+            "value": "엔젤 링 브레이크업 높이"
+        },
+        {
+            "key": "prop_AngelRingBreakupSoftness",
+            "value": "엔젤 링 브레이크업 부드러움"
+        },
+        {
+            "key": "prop_AngelRingBreakupWidthMax",
+            "value": "엔젤 링 브레이크업 최대 너비"
+        },
+        {
+            "key": "prop_AngelRingBreakupWidthMin",
+            "value": "엔젤 링 브레이크업 최소 너비"
+        },
+        {
+            "key": "prop_AngelRingHeightDirection",
+            "value": "엔젤 링 높이 방향"
+        },
+        {
+            "key": "prop_AngelRingHeightOffset",
+            "value": "엔젤 링 높이 오프셋"
+        },
+        {
+            "key": "prop_AngelRingHeightScale",
+            "value": "엔젤 링 높이 스케일"
+        },
+        {
+            "key": "prop_AngelRingManualOffset",
+            "value": "엔젤 링 수동 오프셋"
+        },
+        {
+            "key": "prop_AngelRingManualScale",
+            "value": "엔젤 링 수동 스케일"
+        },
+        {
+            "key": "prop_AngelRingMode",
+            "value": "엔젤 링 모드"
+        },
+        {
+            "key": "prop_AngelRingSharpness",
+            "value": "엔젤 링 선명도"
+        },
+        {
+            "key": "prop_AngelRingSoftness",
+            "value": "엔젤 링 부드러움"
+        },
+        {
+            "key": "prop_AngelRingThreshold",
+            "value": "엔젤 링 임계값"
+        },
+        {
+            "key": "prop_AngelRingUseLighting",
+            "value": "엔젤 링 조명 사용"
+        },
+        {
+            "key": "prop_AnimeGradientColourA",
+            "value": "애니메이션 그라데이션 색상 A"
+        },
+        {
+            "key": "prop_AnimeGradientColourB",
+            "value": "애니메이션 그라데이션 색상 B"
+        },
+        {
+            "key": "prop_AnimeGradientDirection",
+            "value": "애니메이션 그라데이션 방향"
+        },
+        {
+            "key": "prop_AnimeGradientMode",
+            "value": "애니메이션 그라데이션 모드"
+        },
+        {
+            "key": "prop_AnimeGradientMultiplier",
+            "value": "애니메이션 그라데이션 배수"
+        },
+        {
+            "key": "prop_AnimeGradientOffset",
+            "value": "애니메이션 그라데이션 오프셋"
+        },
+        {
+            "key": "prop_AnimeModeNew",
+            "value": "셰이딩 모드"
+        },
+        {
+            "key": "prop_AttenuationBoost",
+            "value": "감쇠 부스트"
+        },
+        {
+            "key": "prop_AttenuationManual",
+            "value": "수동 감쇠"
+        },
+        {
+            "key": "prop_AttenuationMax",
+            "value": "최대 감쇠"
+        },
+        {
+            "key": "prop_AttenuationMin",
+            "value": "최소 감쇠"
+        },
+        {
+            "key": "prop_AttenuationMultiplier",
+            "value": "감쇠 배수"
+        },
+        {
+            "key": "prop_AttenuationOverride",
+            "value": "감쇠 오버라이드"
+        },
+        {
+            "key": "prop_AttenuationShaded",
+            "value": "감쇠 그림자"
+        },
+        {
+            "key": "prop_CelCastShadowFeather",
+            "value": "셀 캐스트 섀도우 페더"
+        },
+        {
+            "key": "prop_CelCastShadowPower",
+            "value": "셀 캐스트 섀도우 강도"
+        },
+        {
+            "key": "prop_CelFeather",
+            "value": "셀 페더"
+        },
+        {
+            "key": "prop_CelLitTint",
+            "value": "셀 빛 틴트"
+        },
+        {
+            "key": "prop_CelMode",
+            "value": "셀 모드"
+        },
+        {
+            "key": "prop_CelShadowTint",
+            "value": "셀 그림자 틴트"
+        },
+        {
+            "key": "prop_CelSmoothGradientPower",
+            "value": "셀 부드러운 그라데이션 강도"
+        },
+        {
+            "key": "prop_CelSmoothOcclusionStrength",
+            "value": "셀 부드러운 오클루전 강도"
+        },
+        {
+            "key": "prop_CelThreshold",
+            "value": "셀 임계값"
+        },
+        {
+            "key": "prop_ColorGradingMode",
+            "value": "컬러 그레이딩 모드"
+        },
+        {
+            "key": "prop_Decal1DistortionControls",
+            "value": "스티커 1 왜곡 컨트롤"
+        },
+        {
+            "key": "prop_Decal1DistortionSpeed",
+            "value": "스티커 1 왜곡 속도"
+        },
+        {
+            "key": "prop_Decal1GlitchControls",
+            "value": "스티커 1 글리치 컨트롤"
+        },
+        {
+            "key": "prop_Decal1SheetCols",
+            "value": "스티커 1 시트 열"
+        },
+        {
+            "key": "prop_Decal1SheetFPS",
+            "value": "스티커 1 시트 FPS"
+        },
+        {
+            "key": "prop_Decal1SheetRows",
+            "value": "스티커 1 시트 행"
+        },
+        {
+            "key": "prop_Decal1SheetSlider",
+            "value": "스티커 1 시트 슬라이더"
+        },
+        {
+            "key": "prop_Decal1SpecialEffect",
+            "value": "스티커 1 특수 효과"
+        },
+        {
+            "key": "prop_Decal1Spritesheet",
+            "value": "스티커 1 스프라이트 시트"
+        },
+        {
+            "key": "prop_Decal2DistortionControls",
+            "value": "스티커 2 왜곡 컨트롤"
+        },
+        {
+            "key": "prop_Decal2DistortionSpeed",
+            "value": "스티커 2 왜곡 속도"
+        },
+        {
+            "key": "prop_Decal2GlitchControls",
+            "value": "스티커 2 글리치 컨트롤"
+        },
+        {
+            "key": "prop_Decal2SheetCols",
+            "value": "스티커 2 시트 열"
+        },
+        {
+            "key": "prop_Decal2SheetFPS",
+            "value": "스티커 2 시트 FPS"
+        },
+        {
+            "key": "prop_Decal2SheetRows",
+            "value": "스티커 2 시트 행"
+        },
+        {
+            "key": "prop_Decal2SheetSlider",
+            "value": "스티커 2 시트 슬라이더"
+        },
+        {
+            "key": "prop_Decal2SpecialEffect",
+            "value": "스티커 2 특수 효과"
+        },
+        {
+            "key": "prop_Decal2Spritesheet",
+            "value": "스티커 2 스프라이트 시트"
+        },
+        {
+            "key": "prop_DecalLighting",
+            "value": "데칼 조명"
+        },
+        {
+            "key": "prop_DirectDiffuse",
+            "value": "다이렉트 디퓨즈"
+        },
+        {
+            "key": "prop_DirectionalAmbience",
+            "value": "디렉셔널 앰비언스"
+        },
+        {
+            "key": "prop_ExCheekColor",
+            "value": "추가 볼 색상"
+        },
+        {
+            "key": "prop_ExCheekIntensity",
+            "value": "추가 볼 강도"
+        },
+        {
+            "key": "prop_ExEyeColor",
+            "value": "추가 눈 색상"
+        },
+        {
+            "key": "prop_ExpressionMap",
+            "value": "표정 맵"
+        },
+        {
+            "key": "prop_ExpressionMap_UV",
+            "value": "표정 맵 UV"
+        },
+        {
+            "key": "prop_ExShadowColor",
+            "value": "추가 그림자 색상"
+        },
+        {
+            "key": "prop_ExShadowIntensity",
+            "value": "추가 그림자 강도"
+        },
+        {
+            "key": "prop_ExShyColor",
+            "value": "추가 부끄러움 색상"
+        },
+        {
+            "key": "prop_ExShyIntensity",
+            "value": "추가 부끄러움 강도"
+        },
+        {
+            "key": "prop_EyeParallaxBreathSpeed",
+            "value": "눈 시차 호흡 속도"
+        },
+        {
+            "key": "prop_EyeParallaxBreathStrength",
+            "value": "눈 시차 호흡 강도"
+        },
+        {
+            "key": "prop_EyeParallaxClamp",
+            "value": "눈 시차 클램프"
+        },
+        {
+            "key": "prop_EyeParallaxEyeMaskTex",
+            "value": "눈 시차 아이 마스크 텍스처"
+        },
+        {
+            "key": "prop_EyeParallaxEyeMaskTex_UV",
+            "value": "눈 시차 아이 마스크 텍스처 UV"
+        },
+        {
+            "key": "prop_EyeParallaxIrisTex",
+            "value": "눈 시차 홍채 텍스처"
+        },
+        {
+            "key": "prop_EyeParallaxIrisTex_UV",
+            "value": "눈 시차 홍채 텍스처 UV"
+        },
+        {
+            "key": "prop_EyeParallaxStrength",
+            "value": "눈 시차 강도"
+        },
+        {
+            "key": "prop_EyeShadowIntensity",
+            "value": "아이섀도 강도"
+        },
+        {
+            "key": "prop_FaceHeadForward",
+            "value": "얼굴 머리 전방"
+        },
+        {
+            "key": "prop_FaceMap",
+            "value": "얼굴 맵"
+        },
+        {
+            "key": "prop_FaceMap_UV",
+            "value": "얼굴 맵 UV"
+        },
+        {
+            "key": "prop_GTHighlights",
+            "value": "GT 하이라이트"
+        },
+        {
+            "key": "prop_GTShadows",
+            "value": "GT 그림자"
+        },
+        {
+            "key": "prop_HairAngleFadeEnd",
+            "value": "머리카락 각도 페이드 끝"
+        },
+        {
+            "key": "prop_HairAngleFadeStart",
+            "value": "머리카락 각도 페이드 시작"
+        },
+        {
+            "key": "prop_HairAngleGuardStrength",
+            "value": "머리카락 각도 가드 강도"
+        },
+        {
+            "key": "prop_HairBlendAlpha",
+            "value": "머리카락 블렌드 알파"
+        },
+        {
+            "key": "prop_HairDistanceFalloffEnd",
+            "value": "머리카락 거리 감쇠 끝"
+        },
+        {
+            "key": "prop_HairDistanceFalloffStart",
+            "value": "머리카락 거리 감쇠 시작"
+        },
+        {
+            "key": "prop_HairDistanceFalloffStrength",
+            "value": "머리카락 거리 감쇠 강도"
+        },
+        {
+            "key": "prop_HairExtremeAngleGuard",
+            "value": "머리카락 극한 각도 가드"
+        },
+        {
+            "key": "prop_HairHeadCenter",
+            "value": "머리카락 머리 중앙"
+        },
+        {
+            "key": "prop_HairHeadForward",
+            "value": "머리카락 머리 전방"
+        },
+        {
+            "key": "prop_HairHeadMaskMode",
+            "value": "머리카락 머리 마스크 모드"
+        },
+        {
+            "key": "prop_HairHeadRight",
+            "value": "머리카락 머리 우측"
+        },
+        {
+            "key": "prop_HairHeadUp",
+            "value": "머리카락 머리 위"
+        },
+        {
+            "key": "prop_HairMaskStrength",
+            "value": "머리카락 마스크 강도"
+        },
+        {
+            "key": "prop_HairMaskTex",
+            "value": "머리카락 마스크 텍스처"
+        },
+        {
+            "key": "prop_HairMaskTex_UV",
+            "value": "머리카락 마스크 텍스처 UV"
+        },
+        {
+            "key": "prop_HairSDFBlend",
+            "value": "머리카락 SDF 블렌드"
+        },
+        {
+            "key": "prop_HairSDFPreview",
+            "value": "머리카락 SDF 미리보기"
+        },
+        {
+            "key": "prop_HairSDFScale",
+            "value": "머리카락 SDF 스케일"
+        },
+        {
+            "key": "prop_HairSDFSoftness",
+            "value": "머리카락 SDF 부드러움"
+        },
+        {
+            "key": "prop_HairTransparencyStrength",
+            "value": "머리카락 투명도 강도"
+        },
+        {
+            "key": "prop_IndirectAdditive",
+            "value": "인다이렉트 애디티브"
+        },
+        {
+            "key": "prop_IndirectAlbedo",
+            "value": "인다이렉트 알베도"
+        },
+        {
+            "key": "prop_IndirectDiffuse",
+            "value": "인다이렉트 디퓨즈"
+        },
+        {
+            "key": "prop_LCWGain",
+            "value": "LCW 게인"
+        },
+        {
+            "key": "prop_LCWGamma",
+            "value": "LCW 감마"
+        },
+        {
+            "key": "prop_LCWLift",
+            "value": "LCW 리프트"
+        },
+        {
+            "key": "prop_LightingSource",
+            "value": "광원"
+        },
+        {
+            "key": "prop_LipOutlineColor",
+            "value": "입술 외곽선 색상"
+        },
+        {
+            "key": "prop_LipOutlineIntensity",
+            "value": "입술 외곽선 강도"
+        },
+        {
+            "key": "prop_ManualApplication",
+            "value": "수동 적용"
+        },
+        {
+            "key": "prop_ManualNormalOffset",
+            "value": "수동 노멀 오프셋"
+        },
+        {
+            "key": "prop_ManualNormalPreview",
+            "value": "수동 노멀 미리보기"
+        },
+        {
+            "key": "prop_ManualNormalScale",
+            "value": "수동 노멀 스케일"
+        },
+        {
+            "key": "prop_ManualNormalSharpness",
+            "value": "수동 노멀 선명도"
+        },
+        {
+            "key": "prop_NoseLineColor",
+            "value": "코 라인 색상"
+        },
+        {
+            "key": "prop_NoseLinePower",
+            "value": "코 라인 강도"
+        },
+        {
+            "key": "prop_NPRBlinn",
+            "value": "NPR Blinn"
+        },
+        {
+            "key": "prop_NPRBlinnColor",
+            "value": "NPR Blinn 색상"
+        },
+        {
+            "key": "prop_NPRBlinnMax",
+            "value": "NPR Blinn 최대"
+        },
+        {
+            "key": "prop_NPRBlinnMin",
+            "value": "NPR Blinn 최소"
+        },
+        {
+            "key": "prop_NPRBlinnMultiplier",
+            "value": "NPR Blinn 배수"
+        },
+        {
+            "key": "prop_NPRBlinnPower",
+            "value": "NPR Blinn 강도"
+        },
+        {
+            "key": "prop_NPRDiffMax",
+            "value": "NPR 디퓨즈 최대"
+        },
+        {
+            "key": "prop_NPRDiffMin",
+            "value": "NPR 디퓨즈 최소"
+        },
+        {
+            "key": "prop_NPRForwardSpecular",
+            "value": "NPR 포워드 스페큘러"
+        },
+        {
+            "key": "prop_NPRForwardSpecularColor",
+            "value": "NPR 포워드 스페큘러 색상"
+        },
+        {
+            "key": "prop_NPRForwardSpecularMultiplier",
+            "value": "NPR 포워드 스페큘러 배수"
+        },
+        {
+            "key": "prop_NPRForwardSpecularRange",
+            "value": "NPR 포워드 스페큘러 범위"
+        },
+        {
+            "key": "prop_NPRLitColor",
+            "value": "NPR 빛 색상"
+        },
+        {
+            "key": "prop_NPRRim",
+            "value": "NPR 림 라이트"
+        },
+        {
+            "key": "prop_NPRRimColor",
+            "value": "NPR 림 라이트 색상"
+        },
+        {
+            "key": "prop_NPRRimExp",
+            "value": "NPR 림 라이트 지수"
+        },
+        {
+            "key": "prop_NPRRimMax",
+            "value": "NPR 림 라이트 최대"
+        },
+        {
+            "key": "prop_NPRRimMin",
+            "value": "NPR 림 라이트 최소"
+        },
+        {
+            "key": "prop_NPRShadowColor",
+            "value": "NPR 그림자 색상"
+        },
+        {
+            "key": "prop_NPRSpecularMask",
+            "value": "NPR 스페큘러 마스크"
+        },
+        {
+            "key": "prop_NPRSpecularMask_UV",
+            "value": "NPR 스페큘러 마스크 UV"
+        },
+        {
+            "key": "prop_NPRSSS",
+            "value": "NPR SSS"
+        },
+        {
+            "key": "prop_NPRSSSColor",
+            "value": "NPR SSS 색상"
+        },
+        {
+            "key": "prop_NPRSSSExp",
+            "value": "NPR SSS 지수"
+        },
+        {
+            "key": "prop_NPRSSSMax",
+            "value": "NPR SSS 최대"
+        },
+        {
+            "key": "prop_NPRSSSMin",
+            "value": "NPR SSS 최소"
+        },
+        {
+            "key": "prop_NPRSSSRef",
+            "value": "NPR SSS 레퍼런스"
+        },
+        {
+            "key": "prop_NPRSSSShadows",
+            "value": "NPR SSS 그림자"
+        },
+        {
+            "key": "prop_OffsetRimBlendMode",
+            "value": "오프셋 림 라이트 혼합 모드"
+        },
+        {
+            "key": "prop_OffsetRimColor",
+            "value": "오프셋 림 라이트 색상"
+        },
+        {
+            "key": "prop_OffsetRimHardness",
+            "value": "오프셋 림 라이트 경도"
+        },
+        {
+            "key": "prop_OffsetRimLightBased",
+            "value": "조명 기반 오프셋 림 라이트"
+        },
+        {
+            "key": "prop_OffsetRimWidth",
+            "value": "오프셋 림 라이트 너비"
+        },
+        {
+            "key": "prop_OutlineLitMix",
+            "value": "외곽선 빛 혼합"
+        },
+        {
+            "key": "prop_PackedAmbient",
+            "value": "패킹 앰비언트"
+        },
+        {
+            "key": "prop_PackedGGShadow1Push",
+            "value": "패킹 GG 섀도우 1 푸시"
+        },
+        {
+            "key": "prop_PackedGGShadow1Smoothness",
+            "value": "패킹 GG 섀도우 1 부드러움"
+        },
+        {
+            "key": "prop_PackedGGShadow1Tint",
+            "value": "패킹 GG 섀도우 1 틴트"
+        },
+        {
+            "key": "prop_PackedGGShadow2Push",
+            "value": "패킹 GG 섀도우 2 푸시"
+        },
+        {
+            "key": "prop_PackedGGShadow2Smoothness",
+            "value": "패킹 GG 섀도우 2 부드러움"
+        },
+        {
+            "key": "prop_PackedGGShadow2Tint",
+            "value": "패킹 GG 섀도우 2 틴트"
+        },
+        {
+            "key": "prop_PackedGGSpecularIntensity",
+            "value": "패킹 GG 스페큘러 강도"
+        },
+        {
+            "key": "prop_PackedGGSpecularSize",
+            "value": "패킹 GG 스페큘러 크기"
+        },
+        {
+            "key": "prop_PackedGGSpecularTint",
+            "value": "패킹 GG 스페큘러 틴트"
+        },
+        {
+            "key": "prop_PackedLitColor",
+            "value": "패킹 빛 색상"
+        },
+        {
+            "key": "prop_PackedMapMetals",
+            "value": "패킹 맵 금속성"
+        },
+        {
+            "key": "prop_PackedMapOne",
+            "value": "패킹 맵 1"
+        },
+        {
+            "key": "prop_PackedMapOne_UV",
+            "value": "패킹 맵 1 UV"
+        },
+        {
+            "key": "prop_PackedMapStyle",
+            "value": "패킹 맵 스타일"
+        },
+        {
+            "key": "prop_PackedMapThree",
+            "value": "패킹 맵 3"
+        },
+        {
+            "key": "prop_PackedMapThree_UV",
+            "value": "패킹 맵 3 UV"
+        },
+        {
+            "key": "prop_PackedMapTwo",
+            "value": "패킹 맵 2"
+        },
+        {
+            "key": "prop_PackedMapTwo_UV",
+            "value": "패킹 맵 2 UV"
+        },
+        {
+            "key": "prop_PackedRimColor",
+            "value": "패킹 림 라이트 색상"
+        },
+        {
+            "key": "prop_PackedRimLight",
+            "value": "패킹 림 라이트"
+        },
+        {
+            "key": "prop_PackedRimPower",
+            "value": "패킹 림 라이트 강도"
+        },
+        {
+            "key": "prop_PackedRimThreshold",
+            "value": "패킹 림 라이트 임계값"
+        },
+        {
+            "key": "prop_PackedShadowColor",
+            "value": "패킹 그림자 색상"
+        },
+        {
+            "key": "prop_PackedShadowSmoothness",
+            "value": "패킹 그림자 부드러움"
+        },
+        {
+            "key": "prop_PackedUmaMetalDark",
+            "value": "패킹 Uma 메탈 어두움"
+        },
+        {
+            "key": "prop_PackedUmaMetalLight",
+            "value": "패킹 Uma 메탈 밝음"
+        },
+        {
+            "key": "prop_PackedUmaSpecularBoost",
+            "value": "패킹 Uma 스페큘러 부스트"
+        },
+        {
+            "key": "prop_RampMode",
+            "value": "램프 모드"
+        },
+        {
+            "key": "prop_RampOcclusionOffset",
+            "value": "램프 오클루전 오프셋"
+        },
+        {
+            "key": "prop_RampProceduralShift",
+            "value": "램프 프로시저럴 시프트"
+        },
+        {
+            "key": "prop_RampProceduralToony",
+            "value": "램프 프로시저럴 툰"
+        },
+        {
+            "key": "prop_RampShadows",
+            "value": "램프 그림자"
+        },
+        {
+            "key": "prop_RefractionTexture",
+            "value": "굴절 텍스처"
+        },
+        {
+            "key": "prop_RimMode",
+            "value": "림 라이트 모드"
+        },
+        {
+            "key": "prop_SDFLocalForward",
+            "value": "SDF 로컬 전방"
+        },
+        {
+            "key": "prop_SDFLocalRight",
+            "value": "SDF 로컬 우측"
+        },
+        {
+            "key": "prop_SDFShadowTexture_UV",
+            "value": "SDF 섀도우 텍스처 UV"
+        },
+        {
+            "key": "prop_ShadowPatternLightBased",
+            "value": "조명 기반 그림자 패턴"
+        },
+        {
+            "key": "prop_ShadowPatternLit",
+            "value": "빛 그림자 패턴"
+        },
+        {
+            "key": "prop_SkinLUT_UV",
+            "value": "스킨 LUT UV"
+        },
+        {
+            "key": "prop_SpecularToonColor",
+            "value": "스페큘러 툰 색상"
+        },
+        {
+            "key": "prop_SpecularToonIntensity",
+            "value": "스페큘러 툰 강도"
+        },
+        {
+            "key": "prop_SpecularToonRoughness",
+            "value": "스페큘러 툰 거칠기"
+        },
+        {
+            "key": "prop_SpecularToonSharpness",
+            "value": "스페큘러 툰 선명도"
+        },
+        {
+            "key": "prop_SpecularToonShininess",
+            "value": "스페큘러 툰 광택"
+        },
+        {
+            "key": "prop_SpecularToonThreshold",
+            "value": "스페큘러 툰 임계값"
+        },
+        {
+            "key": "prop_SpecularToonUseLighting",
+            "value": "스페큘러 툰 조명 사용"
+        },
+        {
+            "key": "prop_StockingsColor",
+            "value": "스타킹 색상"
+        },
+        {
+            "key": "prop_StockingsColorDark",
+            "value": "스타킹 어두운 색상"
+        },
+        {
+            "key": "prop_StockingsDarkWidth",
+            "value": "스타킹 어두운 너비"
+        },
+        {
+            "key": "prop_StockingsLightedIntensity",
+            "value": "스타킹 빛 강도"
+        },
+        {
+            "key": "prop_StockingsLightedWidth",
+            "value": "스타킹 빛 너비"
+        },
+        {
+            "key": "prop_StockingsMap",
+            "value": "스타킹 맵"
+        },
+        {
+            "key": "prop_StockingsMap_UV",
+            "value": "스타킹 맵 UV"
+        },
+        {
+            "key": "prop_StockingsPower",
+            "value": "스타킹 강도"
+        },
+        {
+            "key": "prop_StockingsRoughness",
+            "value": "스타킹 거칠기"
+        },
+        {
+            "key": "prop_ToggleAnimeExtras",
+            "value": "캐릭터 엑스트라 전환"
+        },
+        {
+            "key": "prop_ToggleAnimeGradient",
+            "value": "애니메이션 그라데이션 전환"
+        },
+        {
+            "key": "prop_ToggleExpressionMap",
+            "value": "표정 맵 전환"
+        },
+        {
+            "key": "prop_ToggleEyeParallax",
+            "value": "눈 시차 전환"
+        },
+        {
+            "key": "prop_ToggleEyeParallaxBreathing",
+            "value": "눈 시차 호흡 전환"
+        },
+        {
+            "key": "prop_ToggleEyeShadow",
+            "value": "아이섀도 전환"
+        },
+        {
+            "key": "prop_ToggleFaceMap",
+            "value": "얼굴 맵 전환"
+        },
+        {
+            "key": "prop_ToggleHairTransparency",
+            "value": "머리카락 투명도 전환"
+        },
+        {
+            "key": "prop_ToggleLipOutline",
+            "value": "입술 외곽선 전환"
+        },
+        {
+            "key": "prop_ToggleLitOutline",
+            "value": "빛 외곽선 전환"
+        },
+        {
+            "key": "prop_ToggleManualNormals",
+            "value": "수동 노멀 전환"
+        },
+        {
+            "key": "prop_ToggleNoseLine",
+            "value": "코 라인 전환"
+        },
+        {
+            "key": "prop_ToggleSpecularToon",
+            "value": "스페큘러 툰 전환"
+        },
+        {
+            "key": "prop_ToggleStockings",
+            "value": "스타킹 전환"
+        },
+        {
+            "key": "prop_TriBandAttenuatedShadows",
+            "value": "3 밴드 감쇠 그림자"
+        },
+        {
+            "key": "prop_TriBandIndirectShallow",
+            "value": "3 밴드 인다이렉트 얕은 그림자"
+        },
+        {
+            "key": "prop_TriBandLitColor",
+            "value": "3 밴드 빛 색상"
+        },
+        {
+            "key": "prop_TriBandPostLitTint",
+            "value": "3 밴드 포스트 빛 틴트"
+        },
+        {
+            "key": "prop_TriBandPostShadowTint",
+            "value": "3 밴드 포스트 그림자 틴트"
+        },
+        {
+            "key": "prop_TriBandPostShallowTint",
+            "value": "3 밴드 포스트 얕은 그림자 틴트"
+        },
+        {
+            "key": "prop_TriBandShadowColor",
+            "value": "3 밴드 그림자 색상"
+        },
+        {
+            "key": "prop_TriBandShallowColor",
+            "value": "3 밴드 얕은 그림자 색상"
+        },
+        {
+            "key": "prop_TriBandShallowWidth",
+            "value": "3 밴드 얕은 그림자 너비"
+        },
+        {
+            "key": "prop_TriBandSmoothness",
+            "value": "3 밴드 부드러움"
+        },
+        {
+            "key": "prop_TriBandThreshold",
+            "value": "3 밴드 임계값"
+        },
+        {
+            "key": "prop_UseSecondaryRing",
+            "value": "보조 링 사용"
+        },
+        {
+            "key": "prop_UseTertiaryRing",
+            "value": "3차 링 사용"
+        },
+        {
+            "key": "sub_tab_angel_rings",
+            "value": "엔젤 링"
+        },
+        {
+            "key": "sub_tab_attenuation",
+            "value": "감쇠"
+        },
+        {
+            "key": "sub_tab_decal1_effects",
+            "value": "스티커 1 효과"
+        },
+        {
+            "key": "sub_tab_decal1_settings",
+            "value": "스티커 1 설정"
+        },
+        {
+            "key": "sub_tab_decal2_effects",
+            "value": "스티커 2 효과"
+        },
+        {
+            "key": "sub_tab_decal2_settings",
+            "value": "스티커 2 설정"
+        },
+        {
+            "key": "sub_tab_expression_map",
+            "value": "표정 맵"
+        },
+        {
+            "key": "sub_tab_eye_parallax",
+            "value": "눈 시차"
+        },
+        {
+            "key": "sub_tab_face_map",
+            "value": "얼굴 맵"
+        },
+        {
+            "key": "sub_tab_gradient",
+            "value": "그라데이션"
+        },
+        {
+            "key": "sub_tab_intensity",
+            "value": "강도"
+        },
+        {
+            "key": "sub_tab_manual_normals",
+            "value": "수동 노멀"
+        },
+        {
+            "key": "sub_tab_new_rim_lighting",
+            "value": "림 라이팅"
+        },
+        {
+            "key": "sub_tab_stocking",
+            "value": "스타킹"
+        },
+        {
+            "key": "sub_tab_toon_highlights",
+            "value": "툰 하이라이트"
+        },
+        {
+            "key": "sub_tab_translucent_hair",
+            "value": "반투명 머리카락"
+        },
+        {
+            "key": "tab_stickers",
+            "value": "스티커"
+        },
+        {
+            "key": "config_toggle_preset_ignore",
+            "value": "스마트 프리셋"
+        },
+        {
+            "key": "render_queue_notice",
+            "value": "이 효과가 제대로 작동하려면 특정 렌더 큐가 필요할 수 있습니다. 씬에서 올바르게 보이지 않는 경우 조정(낮추거나 높임)해 보세요."
+        },
+        {
+            "key": "prop_DecalLighting_NEW",
+            "value": "스티커 조명"
+        },
+        {
+            "key": "header_angel_ring_one",
+            "value": "링 1"
+        },
+        {
+            "key": "header_angel_ring_two",
+            "value": "링 2"
+        },
+        {
+            "key": "header_angel_ring_three",
+            "value": "링 3"
+        },
+        {
+            "key": "header_angel_ring_breakup",
+            "value": "브레이크업"
+        },
+        {
+            "key": "sub_tab_liquid_layer",
+            "value": "액체 레이어"
+        },
+        {
+            "key": "prop_LiquidToggleLiquid",
+            "value": "액체 레이어 활성화"
+        },
+        {
+            "key": "prop_LiquidEnabled",
+            "value": "액체 효과 활성화"
+        },
+        {
+            "key": "prop_LiquidFeel",
+            "value": "액체 느낌"
+        },
+        {
+            "key": "prop_LiquidLookWatery",
+            "value": "물 같은 외형"
+        },
+        {
+            "key": "prop_LiquidLookViscous",
+            "value": "점성 있는 외형"
+        },
+        {
+            "key": "prop_LiquidSpace",
+            "value": "매핑 모드"
+        },
+        {
+            "key": "prop_LiquidMapScale",
+            "value": "매핑 스케일"
+        },
+        {
+            "key": "prop_LiquidTriplanarSharpness",
+            "value": "트라이플래너 선명도"
+        },
+        {
+            "key": "prop_LiquidMaskMap",
+            "value": "마스크 맵"
+        },
+        {
+            "key": "prop_LiquidUseForceMap",
+            "value": "포스 맵 사용"
+        },
+        {
+            "key": "prop_LiquidForceMap",
+            "value": "포스 맵"
+        },
+        {
+            "key": "prop_LiquidSpecularLit",
+            "value": "스페큘러 모드"
+        },
+        {
+            "key": "prop_LiquidGloss",
+            "value": "글로스"
+        },
+        {
+            "key": "prop_LiquidShine",
+            "value": "샤인"
+        },
+        {
+            "key": "prop_LiquidShineTightness",
+            "value": "샤인 조밀도"
+        },
+        {
+            "key": "prop_LiquidShadow",
+            "value": "그림자 강도"
+        },
+        {
+            "key": "prop_LiquidRim",
+            "value": "림 라이트 강도"
+        },
+        {
+            "key": "prop_LiquidDepth",
+            "value": "깊이 강도"
+        },
+        {
+            "key": "prop_LiquidNormalStrength",
+            "value": "노멀 강도"
+        },
+        {
+            "key": "prop_LiquidOpacity",
+            "value": "불투명도"
+        },
+        {
+            "key": "prop_LiquidDarken",
+            "value": "피부 어두워짐"
+        },
+        {
+            "key": "prop_LiquidManualDirection",
+            "value": "수동 방향 활성화"
+        },
+        {
+            "key": "prop_LiquidDirectionOne",
+            "value": "레이어 1 방향"
+        },
+        {
+            "key": "prop_LiquidDirectionTwo",
+            "value": "레이어 2 방향"
+        },
+        {
+            "key": "prop_LiquidLayerOneScale",
+            "value": "레이어 1 스케일"
+        },
+        {
+            "key": "prop_LiquidLayerOneDensity",
+            "value": "레이어 1 밀도"
+        },
+        {
+            "key": "prop_LiquidLayerOneStretch",
+            "value": "레이어 1 늘어남"
+        },
+        {
+            "key": "prop_LiquidLayerOneSpeed",
+            "value": "레이어 1 속도"
+        },
+        {
+            "key": "prop_LiquidLayerOneRandomness",
+            "value": "레이어 1 무작위성"
+        },
+        {
+            "key": "prop_LiquidLayerOneSeed",
+            "value": "레이어 1 시드"
+        },
+        {
+            "key": "prop_LiquidLayerOneMod",
+            "value": "레이어 1 모드 (꼬리/흔들림)"
+        },
+        {
+            "key": "prop_LiquidUseLayerTwo",
+            "value": "레이어 2 활성화"
+        },
+        {
+            "key": "prop_LiquidLayerTwoScale",
+            "value": "레이어 2 스케일"
+        },
+        {
+            "key": "prop_LiquidLayerTwoDensity",
+            "value": "레이어 2 밀도"
+        },
+        {
+            "key": "prop_LiquidLayerTwoStretch",
+            "value": "레이어 2 늘어남"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSpeed",
+            "value": "레이어 2 속도"
+        },
+        {
+            "key": "prop_LiquidLayerTwoRandomness",
+            "value": "레이어 2 무작위성"
+        },
+        {
+            "key": "prop_LiquidLayerTwoSeed",
+            "value": "레이어 2 시드"
+        },
+        {
+            "key": "prop_LiquidLayerTwoAmount",
+            "value": "레이어 2 양"
+        },
+        {
+            "key": "prop_LiquidLayerTwoMod",
+            "value": "레이어 2 모드 (꼬리/흔들림)"
+        },
+        {
+            "key": "prop_LiquidClusterScale",
+            "value": "클러스터 스케일"
+        },
+        {
+            "key": "prop_LiquidClusterSeed",
+            "value": "클러스터 시드"
+        },
+        {
+            "key": "prop_LiquidThreshold",
+            "value": "커버리지 임계값"
+        },
+        {
+            "key": "prop_LiquidSoftness",
+            "value": "가장자리 부드러움"
+        },
+        {
+            "key": "prop_LiquidWateryCoverage",
+            "value": "커버리지 양"
+        },
+        {
+            "key": "prop_LiquidViscousSmooth",
+            "value": "병합 반경"
+        },
+        {
+            "key": "prop_LiquidViscousThinning",
+            "value": "얇아짐 차이"
+        },
+        {
+            "key": "prop_LiquidViscousThinSeed",
+            "value": "얇아짐 시드"
+        },
+        {
+            "key": "prop_LiquidViscousThinScale",
+            "value": "얇아짐 스케일"
+        },
+        {
+            "key": "prop_LiquidSweatUseTint",
+            "value": "틴트 사용"
+        },
+        {
+            "key": "prop_LiquidSweatTintColor",
+            "value": "틴트 색상"
+        },
+        {
+            "key": "prop_LiquidBloodColorFresh",
+            "value": "신선한 피 색상"
+        },
+        {
+            "key": "prop_LiquidBloodColorDark",
+            "value": "마른 피 색상"
+        },
+        {
+            "key": "prop_LiquidBloodPooling",
+            "value": "고임 양"
+        },
+        {
+            "key": "prop_LiquidBloodDryingRate",
+            "value": "건조율"
+        },
+        {
+            "key": "prop_LiquidBloodDryGloss",
+            "value": "건조 글로스"
+        },
+        {
+            "key": "prop_LiquidOilColor",
+            "value": "오일 틴트"
+        },
+        {
+            "key": "prop_LiquidOilIridescence",
+            "value": "오색 (이리데슨스)"
+        },
+        {
+            "key": "prop_LiquidOilIridescenceScale",
+            "value": "오색 스케일"
+        },
+        {
+            "key": "prop_LiquidIcingColor",
+            "value": "아이싱 색상"
+        },
+        {
+            "key": "prop_LiquidIcingColorVariation",
+            "value": "색상 베리에이션 사용"
+        },
+        {
+            "key": "prop_LiquidIcingColorMin",
+            "value": "색상 A"
+        },
+        {
+            "key": "prop_LiquidIcingColorMax",
+            "value": "색상 B"
+        },
+        {
+            "key": "prop_LiquidIcingColorScale",
+            "value": "베리에이션 스케일"
+        },
+        {
+            "key": "prop_LiquidIcingColorSeed",
+            "value": "베리에이션 시드"
+        },
+        {
+            "key": "prop_LiquidWaxColor",
+            "value": "왁스 색상"
+        },
+        {
+            "key": "prop_LiquidWaxColorVariation",
+            "value": "왁스 색상 베리에이션"
+        },
+        {
+            "key": "prop_LiquidWaxCoolRate",
+            "value": "냉각률"
+        },
+        {
+            "key": "prop_LiquidSlimeColor",
+            "value": "슬라임 기본 색상"
+        },
+        {
+            "key": "prop_LiquidSlimeColorShift",
+            "value": "슬라임 시프트 색상"
+        },
+        {
+            "key": "prop_LiquidSlimeTranslucency",
+            "value": "슬라임 반투명도"
+        },
+        {
+            "key": "prop_LiquidSlimeIridescence",
+            "value": "슬라임 오색"
+        },
+        {
+            "key": "prop_LiquidSlimeStickiness",
+            "value": "슬라임 점착성"
+        },
+        {
+            "key": "prop_LiquidMudColor",
+            "value": "진흙 기본 색상"
+        },
+        {
+            "key": "prop_LiquidMudColorDark",
+            "value": "진흙 어두운 색상"
+        },
+        {
+            "key": "prop_LiquidMudRoughness",
+            "value": "진흙 표면 거칠기"
+        },
+        {
+            "key": "prop_LiquidUseCluster",
+            "value": "클러스터 사용"
+        },
+        {
+            "key": "prop_LiquidOilViewBased",
+            "value": "시점 기반 오색"
+        },
+        {
+            "key": "prop_LiquidOilViewBasedCoverage",
+            "value": "시점 기반 커버리지"
+        },
+        {
+            "key": "prop_StitchColor",
+            "value": "스티치 색상"
+        },
+        {
+            "key": "prop_SDFMode",
+            "value": "SDF 모드"
+        },
+        {
+            "key": "prop_SDFShadowSoftnessLow",
+            "value": "SDF 섀도우 부드러움 (낮음)"
+        },
+        {
+            "key": "prop_PreserveShadows",
+            "value": "Preserve Shadows"
         }
     ]
 }

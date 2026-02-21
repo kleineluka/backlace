@@ -49,6 +49,7 @@ Shader "luka/backlace/full/grabpassoutline"
         // [Space(10)]
         [Enum(Disabled, 0, Enabled, 1)] _UseTextureStitching ("Enable Texture Stitching", Int) = 0
         [NoScaleOffset] _StitchTex ("Stitch Texture (RGB)", 2D) = "white" { }
+        [HDR] _StitchColor ("Stitch Color", Color) = (1, 1, 1, 1)
         [Enum(X Axis, 0, Y Axis, 1, Z Axis, 2)] _StitchAxis ("Stitch Axis", Int) = 0
         _StitchOffset ("Stitch Seam Offset", Float) = 0
 
@@ -242,8 +243,8 @@ Shader "luka/backlace/full/grabpassoutline"
         _RampShadows ("Ramp Shadow intensity", Range(0, 1)) = 0.6
         _RampOcclusionOffset ("Ramp Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
-        _RampProceduralShift ("Ramp Shift", Range(-1, 1)) = 0
-        _RampProceduralToony ("Ramp Toony Factor", Range(0, 1)) = 0.9
+        _RampProceduralShift ("Ramp Shift", Range(-1, 1)) = -0.35
+        _RampProceduralToony ("Ramp Toony Factor", Range(0, 1)) = 0.3
         [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Ramp Normals to Intensity", Float) = 0
         [IntRange] _RampIndex ("Ramp Index", Range(0, 9)) = 0
         [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
@@ -265,12 +266,12 @@ Shader "luka/backlace/full/grabpassoutline"
         // npr - shared specular
         _NPRSpecularMask ("NPR Specular Mask", 2D) = "white" { }
         // npr - forward specular
-        [Enum(Disabled, 0, Enabled, 1)] _NPRForwardSpecular ("Enable NPR Forward Specular", Int) = 1
+        [Enum(Disabled, 0, Multiplicative, 1, Additive, 2)] _NPRForwardSpecular ("Enable NPR Forward Specular", Int) = 1
         _NPRForwardSpecularRange ("NPR Forward Specular Range", Range(0, 1)) = 0.5
         _NPRForwardSpecularMultiplier ("NPR Forward Specular Multiplier", Float) = 5.0
         _NPRForwardSpecularColor ("NPR Forward Specular Color", Color) = (1, 1, 1, 1)
         // npr - bling phong specular
-        [Enum(Disabled, 0, Enabled, 1)] _NPRBlinn ("Enable NPR Phong Specular", Int) = 1
+        [Enum(Disabled, 0, Multiplicative, 1, Additive, 2)] _NPRBlinn ("Enable NPR Phong Specular", Int) = 1
         _NPRBlinnPower ("NPR Phong Specular Power", Float) = 10
         _NPRBlinnMin ("NPR Phong Specular Min", Range(0, 2)) = 0.0
         _NPRBlinnMax ("NPR Phong Specular Max", Range(0, 2)) = 1.0
@@ -362,11 +363,13 @@ Shader "luka/backlace/full/grabpassoutline"
         _ManualNormalSharpness ("Manual Normal Sharpness", Range(0.1, 5)) = 1.0
         // sdf shadow
         [Enum(Disabled, 0, Enabled, 1)] _ToggleSDFShadow ("Enable SDF Shadow", Float) = 0.0
+        [Enum(Locked 2D, 0, Pitch Aware 3D, 1)] _SDFMode ("SDF Shadow Mode", Int) = 0
         _SDFLocalForward ("Local Forward (e.g. 0,0,1)", Vector) = (0, 0, 1, 0)
         _SDFLocalRight ("Local Right (e.g. 1,0,0)", Vector) = (1, 0, 0, 0)
         _SDFShadowTexture ("SDF Shadow Texture", 2D) = "white" { }
         _SDFShadowThreshold ("SDF Shadow Threshold", Range(0, 1)) = 0.5
         _SDFShadowSoftness ("SDF Shadow Softness", Range(0.001, 1)) = 0.05
+        _SDFShadowSoftnessLow ("SDF Shadow Softness Low", Range(0.001, 1)) = 0
         // stocking feature
         [Enum(Disabled, 0, Enabled, 1)] _ToggleStockings ("Enable Stockings", Int) = 0
         _StockingsMap ("Stockings Map (R:Mask G:Light B:Rough)", 2D) = "white" { }
@@ -499,7 +502,8 @@ Shader "luka/backlace/full/grabpassoutline"
         _SpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
         _TangentMap ("Tangent Map", 2D) = "white" { }
         _Anisotropy ("Anisotropy", Range(-1, 1)) = 0
-        [Enum(Disabled, 0, Enabled, 1)] _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
+        _ReplaceSpecular ("Replace Specular", Range(0, 1)) = 0
+        _PreserveShadows ("Preserve Shadows", Range(0, 1)) = 0.25
 
         // RIM LIGHTING
         [KeywordEnum(Disabled, Fresnel, Depth, Normal)] _RimMode ("Rim Light Mode", Int) = 0
@@ -985,7 +989,7 @@ Shader "luka/backlace/full/grabpassoutline"
         _LiquidLayerOneScale ("Layer One Scale", Float) = 6.0
         _LiquidLayerOneDensity ("Layer One Density", Range(0, 1)) = 0.5
         _LiquidLayerOneStretch ("Layer One Stretch", Float) = 1.5
-        _LiquidLayerOneSpeed ("Layer One Speed", Float) = 0.1
+        _LiquidLayerOneSpeed ("Layer One Speed", Float) = 0
         _LiquidLayerOneRandomness ("Layer One Randomness", Float) = 0.5
         _LiquidLayerOneSeed ("Layer One Seed", Float) = 4.20
         _LiquidLayerOneMod ("Layer One Mod (Trail/Wobble)", Range(0, 1)) = 0.4
@@ -994,13 +998,14 @@ Shader "luka/backlace/full/grabpassoutline"
         _LiquidLayerTwoScale ("Layer Two Scale", Float) = 16.0
         _LiquidLayerTwoDensity ("Layer Two Density", Range(0, 1)) = 0.5
         _LiquidLayerTwoStretch ("Layer Two Stretch", Float) = 1.5
-        _LiquidLayerTwoSpeed ("Layer Two Speed", Float) = 0.1
+        _LiquidLayerTwoSpeed ("Layer Two Speed", Float) = 0
         _LiquidLayerTwoRandomness ("Layer Two Randomness", Float) = 0.5
         _LiquidLayerTwoSeed ("Layer Two Seed", Float) = 9.69
         _LiquidLayerTwoAmount ("Layer Two Amount", Range(0, 1)) = 0.5
         _LiquidLayerTwoMod ("Layer Two Mod (Trail/Wobble)", Range(0, 1)) = 0.4
         // global controls - coverage
         _LiquidClusterScale ("Cluster Scale", Float) = 3.0
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidUseCluster ("Use Cluster", Int) = 1
         _LiquidClusterSeed ("Cluster Seed", Float) = 6.9
         _LiquidThreshold ("Coverage Threshold", Range(0, 1)) = 0.5
         _LiquidSoftness ("Edge Softness", Range(0.01, 0.4)) = 0.12
@@ -1024,6 +1029,8 @@ Shader "luka/backlace/full/grabpassoutline"
         _LiquidOilColor ("Oil Tint", Color) = (0.05, 0.04, 0.03, 1)
         _LiquidOilIridescence ("Iridescence", Range(0, 1)) = 0.8
         _LiquidOilIridescenceScale ("Iridescence Scale", Float) = 4.0
+        [Enum(Disabled, 0, Enabled, 1)] _LiquidOilViewBased ("View-Based Iridescence", Int) = 1
+        _LiquidOilViewBasedCoverage ("View-Based Coverage", Range(0, 1)) = 0.5
         // icing settings
         _LiquidIcingColor ("Icing Colour", Color) = (1, 1, 1, 1)
         [Enum(Disabled, 0, Enabled, 1)] _LiquidIcingColorVariation ("Use Colour Variation", Int) = 0
@@ -1032,9 +1039,9 @@ Shader "luka/backlace/full/grabpassoutline"
         _LiquidIcingColorScale ("Variation Scale", Float) = 2.0
         _LiquidIcingColorSeed ("Variation Seed", Float) = 0.0
         // wax settings
-        _LiquidWaxColor ("Wax Colour", Color) = (1, 0.9, 0.7, 1)
+        _LiquidWaxColor ("Wax Colour", Color) = (0.7, 0.07, 0, 1)
         _LiquidWaxColorVariation ("Wax Colour Variation", Range(0, 1)) = 0.5
-        _LiquidWaxCoolRate ("Cooling Rate", Float) = 0.5
+        _LiquidWaxCoolRate ("Cooling Rate", Float) = 1.0
         // slime settings
         _LiquidSlimeColor ("Slime Base Colour", Color) = (0.3, 0.9, 0.4, 1)
         _LiquidSlimeColorShift ("Slime Shift Colour", Color) = (0.5, 1, 0.6, 1)

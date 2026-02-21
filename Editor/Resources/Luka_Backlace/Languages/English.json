@@ -4711,6 +4711,34 @@
         {
             "key": "prop_LiquidMudRoughness",
             "value": "Mud Surface Roughness"
+        },
+        {
+            "key": "prop_LiquidUseCluster",
+            "value": "Use Clusters"
+        },
+        {
+            "key": "prop_LiquidOilViewBased",
+            "value": "View-Based Iridescence"
+        },
+        {
+            "key": "prop_LiquidOilViewBasedCoverage",
+            "value": "View-Based Coverage"
+        },
+        {
+            "key": "prop_StitchColor",
+            "value": "Stitch Colour"
+        },
+        {
+            "key": "prop_SDFMode",
+            "value": "SDF Mode"
+        },
+        {
+            "key": "prop_SDFShadowSoftnessLow",
+            "value": "SDF Shadow Softness Low"
+        },
+        {
+            "key": "prop_PreserveShadows",
+            "value": "Preserve Shadows"
         }
     ]
 }

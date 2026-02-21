@@ -47,6 +47,7 @@ float4 _StitchTex_ST;
 int _StitchTex_UV;
 int _StitchAxis;
 float _StitchOffset;
+float4 _StitchColor;
 
 // emission feature
 int _ToggleEmission;
@@ -207,10 +208,12 @@ float3 _VertexManipulationScale;
         float _AmbientGroundThreshold;
         //sdf shadow
         float _ToggleSDFShadow;
+        int _SDFMode;
         UNITY_DECLARE_TEX2D(_SDFShadowTexture);
         float _SDFShadowTexture_UV;
         float _SDFShadowThreshold;
         float _SDFShadowSoftness;
+        float _SDFShadowSoftnessLow;
         float3 _SDFLocalForward;
         float3 _SDFLocalRight;
         // stockings
@@ -462,6 +465,7 @@ float3 _VertexManipulationScale;
     float _Specular;
     float _SpecularIntensity;
     float _ReplaceSpecular;
+    float _PreserveShadows;
     float _Anisotropy;
     UNITY_DECLARE_TEX2D_NOSAMPLER(_MSSO);
     float4 _MSSO_ST;

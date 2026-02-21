@@ -191,6 +191,7 @@ float4 _StitchTex_ST;
 int _StitchTex_UV;
 int _StitchAxis;
 float _StitchOffset;
+float4 _StitchColor;
 
 
 // [ ♡ ] ────────────────────── [ ♡ ]

@@ -1537,6 +1537,7 @@
     float _LiquidLayerTwoSeed;
     float _LiquidLayerTwoAmount;
     float _LiquidLayerTwoMod;
+    int _LiquidUseCluster;
     float _LiquidClusterScale;
     float _LiquidClusterSeed;
     float _LiquidThreshold;
@@ -1561,6 +1562,8 @@
     float4 _LiquidOilColor;
     float _LiquidOilIridescence;
     float _LiquidOilIridescenceScale;
+    int _LiquidOilViewBased;
+    float _LiquidOilViewBasedCoverage;
     // icing
     float4 _LiquidIcingColor;
     float _LiquidIcingColorVariation;
@@ -1793,18 +1796,20 @@
     // mask helpers
     float WateryWetMask(float dropletField, float2 mappingUV, float coverage, float forceConst, float maskConst)
     {
-        float2 coverageUV = mappingUV * _LiquidClusterScale
-        + float2(_LiquidClusterSeed * 13.7, _LiquidClusterSeed * 5.9);
-        float coverageMask = smoothstep(1.0 - coverage, 1.0, FluidFBM(coverageUV, 2));
-        coverageMask = saturate(coverageMask + forceConst);
-        dropletField *= coverageMask;
+        if (_LiquidUseCluster != 0)
+        {
+            float2 coverageUV = mappingUV * _LiquidClusterScale + float2(_LiquidClusterSeed * 13.7, _LiquidClusterSeed * 5.9);
+            float coverageMask = smoothstep(1.0 - coverage, 1.0, FluidFBM(coverageUV, 2));
+            coverageMask = saturate(coverageMask + forceConst);
+            dropletField *= coverageMask;
+        }
         float wet = smoothstep(_LiquidThreshold - _LiquidSoftness, _LiquidThreshold + _LiquidSoftness, dropletField);
         return wet * maskConst;
     }
 
     float ViscousWetMask(float field, float2 mappingUV, float2 flowUV, float thresholdBias, float forceConst, float maskConst)
     {
-        field *= ViscousCluster(mappingUV, flowUV, forceConst);
+        if (_LiquidUseCluster != 0) field *= ViscousCluster(mappingUV, flowUV, forceConst);
         float localThreshold = _LiquidThreshold * thresholdBias * (1.0 - forceConst * 0.8);
         float wet = smoothstep(localThreshold - _LiquidSoftness, localThreshold + _LiquidSoftness, field);
         wet = pow(wet, 0.6);
@@ -1863,7 +1868,13 @@
         float LdotH = saturate(dot(L, H));
         // optional shadowing
         float edgeRing = smoothstep(0.0, 0.2, wetMask) * (1.0 - smoothstep(0.2, 0.6, wetMask));
-        if (_LiquidShadow != 0) Surface.Albedo.rgb *= (1.0 - (edgeRing * _LiquidShadow));
+        if (_LiquidShadow != 0)
+        {
+            float shadowAmount = edgeRing * _LiquidShadow;
+            float luma = dot(Surface.Albedo.rgb, float3(0.2126, 0.7152, 0.0722));
+            float3 deepColor = lerp(luma.xxx, Surface.Albedo.rgb, 1.0 + shadowAmount * 0.5) * (1.0 - shadowAmount * 0.85);
+            Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, deepColor, shadowAmount);
+        }
         // roughness/gloss
         float effectiveGloss = lerp(0.0, glossiness, saturate(wetMask * _LiquidShineTightness));
         float perceptualRoughness = 1.0 - effectiveGloss;
@@ -1936,7 +1947,14 @@
             2.0 - abs(hue * 6.0 - 2.0),
             2.0 - abs(hue * 6.0 - 4.0)
         ));
-        float3 oilColor = lerp(_LiquidOilColor.rgb, rainbow, _LiquidOilIridescence);
+        float iridescence = _LiquidOilIridescence;
+        if (_LiquidOilViewBased != 0)
+        {
+            // real thin-film iridescence fades at direct angles, shines at grazing ones
+            float viewFalloff = pow(1.0 - ndotv, lerp(0.5, 5.0, 1.0 - _LiquidOilViewBasedCoverage));
+            iridescence *= viewFalloff;
+        }
+        float3 oilColor = lerp(_LiquidOilColor.rgb, rainbow, iridescence);
         Surface.Albedo.rgb *= lerp(1.0, 1.0 - _LiquidDarken, wetMask);
         Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, oilColor, wetMask * _LiquidOpacity);
     }
@@ -1981,20 +1999,25 @@
 
     void ApplyWax(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float outWetMask)
     {
-        float2 clusterUV = flowUV1 * _LiquidClusterScale * 0.8 + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
-        float clusterMask = smoothstep(0.25, 0.75, FluidNoise(clusterUV));
-        field *= saturate(clusterMask + forceConst);
+        if (_LiquidUseCluster != 0)
+        {
+            float2 clusterUV = flowUV1 * _LiquidClusterScale * 0.8 + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
+            float clusterMask = smoothstep(0.25, 0.75, FluidNoise(clusterUV));
+            field *= saturate(clusterMask + forceConst);
+        }
         float waxThreshold = (1.0 - _LiquidWaxCoolRate) * (1.0 - forceConst * 0.8);
         float wetMask = smoothstep(waxThreshold - _LiquidSoftness, waxThreshold + _LiquidSoftness, field);
-        float2 edgeUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
-        float edgeThinning = saturate(lerp(1.0, FluidFBM(edgeUV, 3), _LiquidWaxCoolRate) + forceConst);
-        wetMask *= pow(edgeThinning, 1.5) * maskConst;
+        // gentle thinning — just enough to soften blob edges, not punch holes
+        float2 thinUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * -7.1);
+        float edgeThinning = saturate(lerp(1.0, FluidFBM(thinUV, 3), _LiquidWaxCoolRate * 0.18) + forceConst);
+        wetMask *= edgeThinning * maskConst;
         outWetMask = wetMask;
+        // colour variation: multiply-based so it darkens/lightens within the hue rather than adding brightness
         float2 colourUV = mappingUV * 4.0;
         float colourNoise = FluidFBM(colourUV, 2);
-        float3 waxColor = _LiquidWaxColor.rgb + (colourNoise - 0.5) * _LiquidWaxColorVariation;
-        float edgeOpacity = saturate(lerp(1.0, FluidFBM(edgeUV, 3), _LiquidWaxCoolRate * 0.7) + forceConst);
-        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb , waxColor, outWetMask * _LiquidOpacity * edgeOpacity);
+        float colourScale = lerp(1.0 - _LiquidWaxColorVariation * 0.35, 1.0 + _LiquidWaxColorVariation * 0.15, colourNoise);
+        float3 waxColor = saturate(_LiquidWaxColor.rgb * colourScale);
+        Surface.Albedo.rgb = lerp(Surface.Albedo.rgb, waxColor, outWetMask * _LiquidOpacity);
     }
 
     ViscousModifiers GetSlimeModifiers()
@@ -2011,7 +2034,7 @@
     void ApplySlime(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float outWetMask)
     {
         float slimeThreshold = (1.0 - _LiquidThreshold) * (1.0 - forceConst * 0.85);
-        field *= ViscousCluster(mappingUV, flowUV1, forceConst);
+        if (_LiquidUseCluster != 0) field *= ViscousCluster(mappingUV, flowUV1, forceConst);
         float wetMask = pow(smoothstep(slimeThreshold - 0.18, slimeThreshold + 0.18, field), 0.7);
         float2 thinUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);
         float thinning = saturate(lerp(1.0, FluidFBM(thinUV, 3), 0.3) + forceConst);
@@ -2041,9 +2064,12 @@
 
     void ApplyMud(inout BacklaceSurfaceData Surface, float field, float2 mappingUV, float2 flowUV1, float forceConst, float maskConst, inout float glossiness, inout float outWetMask)
     {
-        float2 clusterUV = flowUV1 * _LiquidClusterScale * 0.5 + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
-        float clusterMask = smoothstep(0.15, 0.7, FluidNoise(clusterUV));
-        field *= saturate(clusterMask + forceConst);
+        if (_LiquidUseCluster != 0)
+        {
+            float2 clusterUV = flowUV1 * _LiquidClusterScale * 0.5 + float2(_LiquidClusterSeed * 17.3, _LiquidClusterSeed * 4.2);
+            float clusterMask = smoothstep(0.15, 0.7, FluidNoise(clusterUV));
+            field *= saturate(clusterMask + forceConst);
+        }
         float mudThreshold = (1.0 - _LiquidThreshold) * (1.0 - forceConst * 0.8);
         float wetMask = smoothstep(mudThreshold - 0.2, mudThreshold + 0.1, field);
         float2 roughUV = mappingUV * _LiquidLayerOneScale * _LiquidViscousThinScale + float2(_LiquidViscousThinSeed * 9.3, _LiquidViscousThinSeed * - 7.1);

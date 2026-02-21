@@ -48,7 +48,7 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 
 ## Other Perks 😇
 - **Variant Splitting:** Backlace is divided into multiple shaders so that you only need the performance cost of the features you need!
-- **Fair Keyword Usage:**
+- **Fair Keyword Usage:** 
 - **Fully Documented:**
 
 ## Where Backlace Is Used 🍰
