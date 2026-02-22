@@ -4715,6 +4715,54 @@
         {
             "key": "prop_PreserveShadows",
             "value": "Preserve Shadows"
+        },
+        {
+            "key": "sub_tab_material_preset",
+            "value": "クイックマテリアル"
+        },
+        {
+            "key": "prop_ToggleMaterialPreset",
+            "value": "クイックマテリアルを有効にする"
+        },
+        {
+            "key": "prop_MaterialPresetType",
+            "value": "マテリアル"
+        },
+        {
+            "key": "prop_MaterialPresetIntensity",
+            "value": "プリセット強度"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularPower",
+            "value": "スペキュラパワー"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularIntensity",
+            "value": "スペキュラ強度"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelPower",
+            "value": "フレネルパワー"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelIntensity",
+            "value": "フレネル強度"
+        },
+        {
+            "key": "prop_MaterialPresetShadowSharpness",
+            "value": "シャドウ鮮明度"
+        },
+        {
+            "key": "prop_MaterialPresetShadowIntensity",
+            "value": "シャドウ強度"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularTint",
+            "value": "スペキュラティント"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelTint",
+            "value": "フレネルティント"
         }
     ]
 }

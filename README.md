@@ -40,16 +40,22 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 	- UV Effects (Triplanar, Screen, Spritesheet/Flipbook, Flow), UV Manipulation, Vertex Manipulation, 4 Assignable UV Sets
 - **Anime Shading:** PBR, Ramp (Texutre/Procedural), Cel (Harsh/Default/Soft), NPR, Packed (Genshin/UmaMusume/GuiltyGear), TriBand, Skin, Wrapped
 - **Lighting:** Extensive Control, Multiple Lighting Models, Manual Controls, Light Limiting, Attenuation Control, and Emission
-- **Character Settings:** Ambient Gradient, Manual Normals, SDF Shadows, Stocking, Eye Parallax, Translucent Hair, Expression Map, Face Map, Gradient, Toon Highlights, Angel Rings (Hair)
+- **Character Settings:** Ambient Gradient, Manual Normals, SDF Shadows, Stocking, Eye Parallax, Translucent Hair, Expression Map, Face Map, Gradient, Toon Highlights, Angel Rings (Hair), Quick Materials (Latex/Fabric/Silk/Rubber)
 - **Specular:** Standard/Anisotropic, Vertex Specular, Energy Control
 - **Stylise:** Rim Lighting (Fresnel/Depth/Normal), Clearcoat, Matcap, Parallax Mapping (UV/Layered/Interior), Subsurface Scattering, Detail Mapping, Shadow Mapping
 - **Stickers:** Two Sticker Slots, UV/Triplanar/Screen Mapping, Hue Shift, Distortion, Glitch
 - **Effects:** Dissolve (Noise/Directional/Voxel), Texture Pathing, Glitter, Distance Fading, Iridescence, Shadow Textures, Flatten Model, World Aligned Textures, VRChat Mirror Detection, Touch Interactions, Dithering, Low-Precision (PS1), Vertex Distortion (Distortion/Glitch), Refraction, Screen Space Reflections, Liquid Layer (Sweat/Blood/Oil/Icing/Slime/Wax/Mud)
+- **World Building:** Stochastic Tiling (Triangle Grid/Contrast Aware), Splatter Mapping (Standard/Projection), Texture Bombing (Jittered/Layered)
+- **Outline:** Outline/Silhouette Mode, Colour/Texture, Vertex Colour Masking
+- **Third-Party Integrations:** LTCGI, Super Plug Shader, AudioLink
 
 ## Other Perks 😇
-- **Variant Splitting:** Backlace is divided into multiple shaders so that you only need the performance cost of the features you need!
-- **Fair Keyword Usage:** 
-- **Fully Documented:**
+- **Variant Splitting:** Backlace is divided into multiple shaders so that you only need the performance cost of the features you need! You will find **Small**, **Default**, and **Full** versions of the shader alongside different features such as **Grabpass** or **Outline**.
+- **Fair Keyword Usage:** Alongside variant splitting, some more expensive features are gated behind local shader features, so they won't ever touch performance if you aren't using them!
+- **Fully Documented:** on my website at https://luka.moe/docs/backlace ~
+- **Custom UI:** Pretty to look at, a search bar, custom settings, 9 languages, easily reset tabs and keep track of activated features.
+- **Generate Compact Shaders:** Automatically make new shader files that strip any unused keywords from even being seen by the compiler.
+- **Preset System:** Use built-in presets or make your own! Presets won't mess-up your main settings like the albedo texture, so you can experiment with different looks without losing your base material setup.
 
 ## Where Backlace Is Used 🍰
 This section will be updated when I make things with it! If you make something with Backlace ~ whether a game or shader ~ please let me know so I can add it here! ♡＾▽＾♡

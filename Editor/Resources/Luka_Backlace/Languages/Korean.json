@@ -4711,6 +4711,54 @@
         {
             "key": "prop_PreserveShadows",
             "value": "Preserve Shadows"
+        },
+        {
+            "key": "sub_tab_material_preset",
+            "value": "빠른 재질"
+        },
+        {
+            "key": "prop_ToggleMaterialPreset",
+            "value": "빠른 재질 활성화"
+        },
+        {
+            "key": "prop_MaterialPresetType",
+            "value": "재질"
+        },
+        {
+            "key": "prop_MaterialPresetIntensity",
+            "value": "사전 설정 강도"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularPower",
+            "value": "반사 파워"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularIntensity",
+            "value": "반사 강도"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelPower",
+            "value": "프레넬 파워"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelIntensity",
+            "value": "프레넬 강도"
+        },
+        {
+            "key": "prop_MaterialPresetShadowSharpness",
+            "value": "그림자 선명도"
+        },
+        {
+            "key": "prop_MaterialPresetShadowIntensity",
+            "value": "그림자 강도"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularTint",
+            "value": "반사 색조"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelTint",
+            "value": "프레넬 색조"
         }
     ]
 }

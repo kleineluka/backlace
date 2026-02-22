@@ -4711,6 +4711,54 @@
         {
             "key": "prop_PreserveShadows",
             "value": "Preserve Shadows"
+        },
+        {
+            "key": "sub_tab_material_preset",
+            "value": "快速材质"
+        },
+        {
+            "key": "prop_ToggleMaterialPreset",
+            "value": "启用快速材质"
+        },
+        {
+            "key": "prop_MaterialPresetType",
+            "value": "材质"
+        },
+        {
+            "key": "prop_MaterialPresetIntensity",
+            "value": "预设强度"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularPower",
+            "value": "镜面力度"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularIntensity",
+            "value": "镜面强度"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelPower",
+            "value": "菲涅尔力度"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelIntensity",
+            "value": "菲涅尔强度"
+        },
+        {
+            "key": "prop_MaterialPresetShadowSharpness",
+            "value": "阴影锐度"
+        },
+        {
+            "key": "prop_MaterialPresetShadowIntensity",
+            "value": "阴影强度"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularTint",
+            "value": "镜面色调"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelTint",
+            "value": "菲涅尔色调"
         }
     ]
 }

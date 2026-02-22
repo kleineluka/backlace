@@ -86,6 +86,7 @@ namespace Luka.Backlace
         private static Tab sub_tab_gradient = null;
         private static Tab sub_tab_toon_highlights = null;
         private static Tab sub_tab_angel_rings = null;
+        private static Tab sub_tab_material_preset = null;
         // stylise
         private static Tab tab_stylise = null;
         private static Tab sub_tab_rim_lighting = null;
@@ -542,6 +543,18 @@ namespace Luka.Backlace
         private MaterialProperty prop_AngelRingBreakupSoftness = null;
         private MaterialProperty prop_AngelRingBreakupHeight = null;
         private MaterialProperty prop_AngelRingUseLighting = null;
+        // material preset
+        private MaterialProperty prop_ToggleMaterialPreset = null;
+        private MaterialProperty prop_MaterialPresetType = null;
+        private MaterialProperty prop_MaterialPresetIntensity = null;
+        private MaterialProperty prop_MaterialPresetSpecularPower = null;
+        private MaterialProperty prop_MaterialPresetSpecularIntensity = null;
+        private MaterialProperty prop_MaterialPresetFresnelPower = null;
+        private MaterialProperty prop_MaterialPresetFresnelIntensity = null;
+        private MaterialProperty prop_MaterialPresetShadowSharpness = null;
+        private MaterialProperty prop_MaterialPresetShadowIntensity = null;
+        private MaterialProperty prop_MaterialPresetSpecularTint = null;
+        private MaterialProperty prop_MaterialPresetFresnelTint = null;
         // specular
         private MaterialProperty prop_ToggleSpecular = null;
         private MaterialProperty prop_ToggleVertexSpecular = null;
@@ -1145,6 +1158,7 @@ namespace Luka.Backlace
             if (sub_tab_gradient != null) { sub_tab_gradient.is_expanded = false; sub_tab_gradient.is_active = false; }
             if (sub_tab_toon_highlights != null) { sub_tab_toon_highlights.is_expanded = false; sub_tab_toon_highlights.is_active = false; }
             if (sub_tab_angel_rings != null) { sub_tab_angel_rings.is_expanded = false; sub_tab_angel_rings.is_active = false; }
+            if (sub_tab_material_preset != null) { sub_tab_material_preset.is_expanded = false; sub_tab_material_preset.is_active = false; }
             if (tab_stylise != null) { tab_stylise.is_expanded = false; tab_stylise.is_active = false; }
             if (sub_tab_rim_lighting != null) { sub_tab_rim_lighting.is_expanded = false; sub_tab_rim_lighting.is_active = false; }
             if (sub_tab_clear_coat != null) { sub_tab_clear_coat.is_expanded = false; sub_tab_clear_coat.is_active = false; }
@@ -1248,6 +1262,7 @@ namespace Luka.Backlace
             sub_tab_gradient = null;
             sub_tab_toon_highlights = null;
             sub_tab_angel_rings = null;
+            sub_tab_material_preset = null;
             tab_stylise = null;
             sub_tab_rim_lighting = null;
             sub_tab_clear_coat = null;
@@ -1361,6 +1376,7 @@ namespace Luka.Backlace
             sub_tab_gradient = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 8, languages.speak("sub_tab_gradient"), null, "_ToggleAnimeGradient");
             sub_tab_toon_highlights = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_toon_highlights"), null, "_ToggleSpecularToon");
             sub_tab_angel_rings = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_angel_rings"), null, "_AngelRingMode");
+            sub_tab_material_preset = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_material_preset"), null, "_ToggleMaterialPreset");
             tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_specular"));
             sub_tab_emission = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_emission"), null, "_ToggleEmission");
             sub_tab_attenuation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_attenuation"));
@@ -1379,7 +1395,7 @@ namespace Luka.Backlace
             sub_tab_decal1_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_decal1_effects"));
             sub_tab_decal2_settings = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 2, languages.speak("sub_tab_decal2_settings"));
             sub_tab_decal2_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_decal2_effects"));
-            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_effects"));
+            tab_effects = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 7, languages.speak("tab_effects"), Project.shader_variants[6]);
             sub_tab_dissolve = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_dissolve"), null, "_ToggleDissolve", null, null, Project.dissolve_mode_badges);
             sub_tab_pathing = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 1, languages.speak("sub_tab_pathing"), null, "_TogglePathing");
             sub_tab_glitter = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_glitter"), null, "_ToggleGlitter", null, null, Project.glitter_mode_badges);
@@ -1393,8 +1409,8 @@ namespace Luka.Backlace
             sub_tab_dither = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_dither"), null, "_ToggleDither");
             sub_tab_ps1 = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 12, languages.speak("sub_tab_ps1"), null, "_TogglePS1");
             sub_tab_vertex_distortion = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 13, languages.speak("sub_tab_vertex_distortion"), null, "_ToggleVertexDistortion", null, null, Project.distortion_mode_badges);
-            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_refraction"), Project.shader_variants[2], "_ToggleRefraction");
-            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[2], "_ToggleSSR");
+            sub_tab_refraction = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 14, languages.speak("sub_tab_refraction"), Project.shader_variants[8], "_ToggleRefraction");
+            sub_tab_screenspace_reflection = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 15, languages.speak("sub_tab_screenspace_reflection"), Project.shader_variants[8], "_ToggleSSR");
             sub_tab_liquid_layer = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 16, languages.speak("sub_tab_liquid_layer"), null, "_LiquidToggleLiquid");
             tab_world = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 8, languages.speak("tab_world"),  Project.shader_variants[4]);
             sub_tab_stochastic = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 0, languages.speak("sub_tab_stochastic"), null, "_StochasticSampling");
@@ -2586,6 +2602,32 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     materialEditor.ShaderProperty(prop_AngelRingUseLighting, languages.speak("prop_AngelRingUseLighting"));
                     Components.end_dynamic_disable(prop_AngelRingMode.floatValue == 0, configs);
+                });
+                sub_tab_material_preset.process(() => {
+                    prop_ToggleMaterialPreset = TrackProperty("_ToggleMaterialPreset", properties);
+                    prop_MaterialPresetType = TrackProperty("_MaterialPresetType", properties);
+                    prop_MaterialPresetIntensity = TrackProperty("_MaterialPresetIntensity", properties);
+                    prop_MaterialPresetSpecularPower = TrackProperty("_MaterialPresetSpecularPower", properties);
+                    prop_MaterialPresetSpecularIntensity = TrackProperty("_MaterialPresetSpecularIntensity", properties);
+                    prop_MaterialPresetFresnelPower = TrackProperty("_MaterialPresetFresnelPower", properties);
+                    prop_MaterialPresetFresnelIntensity = TrackProperty("_MaterialPresetFresnelIntensity", properties);
+                    prop_MaterialPresetShadowSharpness = TrackProperty("_MaterialPresetShadowSharpness", properties);
+                    prop_MaterialPresetShadowIntensity = TrackProperty("_MaterialPresetShadowIntensity", properties);
+                    prop_MaterialPresetSpecularTint = TrackProperty("_MaterialPresetSpecularTint", properties);
+                    prop_MaterialPresetFresnelTint = TrackProperty("_MaterialPresetFresnelTint", properties);
+                    materialEditor.ShaderProperty(prop_ToggleMaterialPreset, languages.speak("prop_ToggleMaterialPreset"));
+                    Components.start_dynamic_disable(!prop_ToggleMaterialPreset.floatValue.Equals(1), configs);
+                    materialEditor.ShaderProperty(prop_MaterialPresetType, languages.speak("prop_MaterialPresetType"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetIntensity, languages.speak("prop_MaterialPresetIntensity"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetSpecularPower, languages.speak("prop_MaterialPresetSpecularPower"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetSpecularIntensity, languages.speak("prop_MaterialPresetSpecularIntensity"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetSpecularTint, languages.speak("prop_MaterialPresetSpecularTint"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetFresnelPower, languages.speak("prop_MaterialPresetFresnelPower"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetFresnelIntensity, languages.speak("prop_MaterialPresetFresnelIntensity"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetFresnelTint, languages.speak("prop_MaterialPresetFresnelTint"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetShadowSharpness, languages.speak("prop_MaterialPresetShadowSharpness"));
+                    materialEditor.ShaderProperty(prop_MaterialPresetShadowIntensity, languages.speak("prop_MaterialPresetShadowIntensity"));
+                    Components.end_dynamic_disable(!prop_ToggleMaterialPreset.floatValue.Equals(1), configs);
                 });
                 Components.end_dynamic_disable(!prop_ToggleAnimeExtras.floatValue.Equals(1), configs);
                 Components.end_foldout();

@@ -2860,6 +2860,7 @@ namespace Luka.Backlace
             style_variant_label.alignment = TextAnchor.MiddleLeft;
             style_variant_label.richText = true;
             style_variant_label.normal.textColor = tint;
+            style_variant_label.padding = new RectOffset(0, 0, -5, 0);
             return style_variant_label;
         }
 

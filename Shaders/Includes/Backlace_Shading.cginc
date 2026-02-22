@@ -664,6 +664,75 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 Surface.FinalColor.rgb += ringColours;
             }
         }
+
+        // material preset effect (applies physically-inspired lighting for material types)
+        void ApplyMaterialPreset(inout BacklaceSurfaceData Surface)
+        {
+            [branch] if (_ToggleMaterialPreset == 0)
+            {
+                return;
+            }
+            else // preset mode
+            {
+                float specPower = _MaterialPresetSpecularPower;
+                float specIntensity = _MaterialPresetSpecularIntensity;
+                float fresnelPow = _MaterialPresetFresnelPower;
+                float fresnelInt = _MaterialPresetFresnelIntensity;
+                float shadowSharp = _MaterialPresetShadowSharpness;
+                float shadowInt = _MaterialPresetShadowIntensity;
+                switch (_MaterialPresetType)
+                {
+                    case 0: // latex
+                        specPower *= 128.0;
+                        specIntensity *= 2.5;
+                        fresnelPow *= 3.0;
+                        fresnelInt *= 1.2;
+                        shadowSharp *= 2.0;
+                        shadowInt *= 1.5;
+                        break;
+                    case 1: // fabric
+                        specPower *= 8.0;
+                        specIntensity *= 0.3;
+                        fresnelPow *= 5.0;
+                        fresnelInt *= 0.15;
+                        shadowSharp *= 0.5;
+                        shadowInt *= 0.6;
+                        break;
+                    case 2: // silk
+                        specPower *= 64.0;
+                        specIntensity *= 1.5;
+                        fresnelPow *= 3.5;
+                        fresnelInt *= 0.8;
+                        shadowSharp *= 1.0;
+                        shadowInt *= 0.8;
+                        break;
+                    case 3: // rubber
+                        specPower *= 16.0;
+                        specIntensity *= 0.5;
+                        fresnelPow *= 4.5;
+                        fresnelInt *= 0.3;
+                        shadowSharp *= 1.8;
+                        shadowInt *= 1.3;
+                        break;
+                    default: // custom (use raw values)
+                        specPower = max(1.0, specPower);
+                        break;
+                }
+                // specular highlight
+                float blinnPhong = pow(max(0.0, Surface.NdotH), specPower) * Surface.Attenuation;
+                float3 specColor = blinnPhong * specIntensity * _MaterialPresetSpecularTint.rgb;
+                specColor *= Surface.LightColor.rgb;
+                // fresnel rim
+                float fresnel = pow(1.0 - Surface.NdotV, fresnelPow);
+                float3 fresnelColor = fresnel * fresnelInt * _MaterialPresetFresnelTint.rgb;
+                // shadow sharpening
+                float shadowMask = smoothstep(0.5 - shadowSharp * 0.25, 0.5 + shadowSharp * 0.25, Surface.NdotL * 0.5 + 0.5);
+                float3 shadowTint = lerp(1.0 - shadowInt * 0.5, 1.0, shadowMask);
+                Surface.Diffuse *= shadowTint;
+                // composite
+                Surface.FinalColor.rgb += (specColor + fresnelColor) * _MaterialPresetIntensity;
+            }
+        }
     #endif // _BACKLACE_ANIME_EXTRAS
 
 
@@ -1524,6 +1593,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
             // anime-styled specular goes after lighting
             ApplyToonHighlights(Surface);
             ApplyAngelRings(Surface);
+            ApplyMaterialPreset(Surface);
             // preview manual normals in debug mode
             if (_ToggleManualNormals == 1 && _ManualNormalPreview != 0)
             {

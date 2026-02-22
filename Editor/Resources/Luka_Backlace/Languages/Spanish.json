@@ -4711,6 +4711,54 @@
         {
             "key": "prop_PreserveShadows",
             "value": "Preserve Shadows"
+        },
+        {
+            "key": "sub_tab_material_preset",
+            "value": "Material Rápido"
+        },
+        {
+            "key": "prop_ToggleMaterialPreset",
+            "value": "Habilitar Material Rápido"
+        },
+        {
+            "key": "prop_MaterialPresetType",
+            "value": "Material"
+        },
+        {
+            "key": "prop_MaterialPresetIntensity",
+            "value": "Intensidad Preestablecida"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularPower",
+            "value": "Poder Especular"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularIntensity",
+            "value": "Intensidad Especular"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelPower",
+            "value": "Poder de Fresnel"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelIntensity",
+            "value": "Intensidad de Fresnel"
+        },
+        {
+            "key": "prop_MaterialPresetShadowSharpness",
+            "value": "Nitidez de Sombra"
+        },
+        {
+            "key": "prop_MaterialPresetShadowIntensity",
+            "value": "Intensidad de Sombra"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularTint",
+            "value": "Tinte Especular"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelTint",
+            "value": "Tinte de Fresnel"
         }
     ]
 }

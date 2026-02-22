@@ -4711,6 +4711,54 @@
         {
             "key": "prop_PreserveShadows",
             "value": "Preserve Shadows"
+        },
+        {
+            "key": "sub_tab_material_preset",
+            "value": "Быстрый материал"
+        },
+        {
+            "key": "prop_ToggleMaterialPreset",
+            "value": "Включить быстрый материал"
+        },
+        {
+            "key": "prop_MaterialPresetType",
+            "value": "Материал"
+        },
+        {
+            "key": "prop_MaterialPresetIntensity",
+            "value": "Интенсивность предустановки"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularPower",
+            "value": "Зеркальная мощность"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularIntensity",
+            "value": "Интенсивность зеркала"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelPower",
+            "value": "Мощность Френеля"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelIntensity",
+            "value": "Интенсивность Френеля"
+        },
+        {
+            "key": "prop_MaterialPresetShadowSharpness",
+            "value": "Резкость тени"
+        },
+        {
+            "key": "prop_MaterialPresetShadowIntensity",
+            "value": "Интенсивность тени"
+        },
+        {
+            "key": "prop_MaterialPresetSpecularTint",
+            "value": "Оттенок зеркала"
+        },
+        {
+            "key": "prop_MaterialPresetFresnelTint",
+            "value": "Оттенок Френеля"
         }
     ]
 }

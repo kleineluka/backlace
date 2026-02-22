@@ -57,7 +57,7 @@
     #pragma shader_feature_local _ _BACKLACE_CLEARCOAT
     #pragma shader_feature_local _ _BACKLACE_SSS
     #pragma shader_feature_local _ _BACKLACE_DETAIL
-    #pragma shader_feature_local _ _BACKLACE_SHADOW_MAP
+    // #pragma shader_feature_local _ _BACKLACE_SHADOW_MAP <- no longer keyword, but still MEDIUM only
 #endif // BACKLACE_CAPABILITIES_MEDIUM
 
 

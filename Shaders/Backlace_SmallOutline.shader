@@ -480,6 +480,18 @@ Shader "luka/backlace/small/outline"
         _AngelRingBreakupSoftness ("Breakup Softness", Float) = 0.1
         _AngelRingBreakupHeight ("Breakup Height", Float) = 0
         [Enum(Disabled, 0, Enabled, 1)] _AngelRingUseLighting ("Use Lighting", Int) = 0
+        // material preset
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleMaterialPreset ("Enable Material Preset", Int) = 0
+        [Enum(Latex, 0, Fabric, 1, Silk, 2, Rubber, 3, Custom, 4)] _MaterialPresetType ("Material Type", Int) = 0
+        _MaterialPresetIntensity ("Preset Intensity", Range(0, 2)) = 1.0
+        _MaterialPresetSpecularPower ("Specular Power", Range(0.01, 3)) = 1.0
+        _MaterialPresetSpecularIntensity ("Specular Intensity", Range(0, 3)) = 1.0
+        _MaterialPresetFresnelPower ("Fresnel Power", Range(0.01, 3)) = 1.0
+        _MaterialPresetFresnelIntensity ("Fresnel Intensity", Range(0, 3)) = 1.0
+        _MaterialPresetShadowSharpness ("Shadow Sharpness", Range(0, 3)) = 1.0
+        _MaterialPresetShadowIntensity ("Shadow Intensity", Range(0, 2)) = 1.0
+        [HDR] _MaterialPresetSpecularTint ("Specular Tint", Color) = (1, 1, 1, 1)
+        _MaterialPresetFresnelTint ("Fresnel Tint", Color) = (1, 1, 1, 1)
 
         // SPECULAR
         // [Space(35)]
@@ -610,7 +622,7 @@ Shader "luka/backlace/small/outline"
         // [Space(35)]
         // [Header(Shadow Map)]
         // [Space(10)]
-        [Toggle(_BACKLACE_SHADOW_MAP)] _ToggleShadowMap ("Enable Shadow Map", Float) = 0.0
+        [Enum(Disabled, 0, Enabled, 1)] _ToggleShadowMap ("Enable Shadow Map", Int) = 0
         [NoScaleOffset] _ShadowMap ("Shadow Map (R=Mask)", 2D) = "white" { }
         _ShadowMapIntensity ("Intensity", Range(0, 1)) = 1.0
 

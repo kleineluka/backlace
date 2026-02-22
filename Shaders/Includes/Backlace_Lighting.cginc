@@ -602,10 +602,13 @@ void GetLightData(inout BacklaceSurfaceData Surface)
     // prepare dot products
     Surface.UnmaxedNdotL = dot(Surface.NormalDir, Surface.LightDir);
     Surface.UnmaxedNdotL = min(Surface.UnmaxedNdotL, Surface.LightColor.a);
-    #if defined(_BACKLACE_SHADOW_MAP)
-        float shadowMask = UNITY_SAMPLE_TEX2D_SAMPLER(_ShadowMap, _MainTex, Uvs[_ShadowMap_UV]).r;
-        Surface.UnmaxedNdotL -= (shadowMask * _ShadowMapIntensity);
-    #endif // _BACKLACE_SHADOW_MAP
+    #if defined(BACKLACE_CAPABILITIES_MEDIUM)
+        [branch] if (_ToggleShadowMap == 1)
+        {
+            float shadowMask = UNITY_SAMPLE_TEX2D_SAMPLER(_ShadowMap, _MainTex, Uvs[_ShadowMap_UV]).r;
+            Surface.UnmaxedNdotL -= (shadowMask * _ShadowMapIntensity);
+        }
+    #endif // BACKLACE_CAPABILITIES_MEDIUM
     Surface.NdotL = max(Surface.UnmaxedNdotL, 0);
     // Surface.NdotV = abs(dot(Surface.NormalDir, Surface.ViewDir));
     Surface.NdotV = saturate(dot(Surface.NormalDir, Surface.ViewDir));

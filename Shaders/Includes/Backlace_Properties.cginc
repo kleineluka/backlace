@@ -332,6 +332,18 @@ float3 _VertexManipulationScale;
         float _AngelRingBreakupSoftness;
         float _AngelRingBreakupHeight;
         int _AngelRingUseLighting;
+        // material preset
+        int _ToggleMaterialPreset;
+        int _MaterialPresetType;
+        float _MaterialPresetIntensity;
+        float _MaterialPresetSpecularPower;
+        float _MaterialPresetSpecularIntensity;
+        float _MaterialPresetFresnelPower;
+        float _MaterialPresetFresnelIntensity;
+        float _MaterialPresetShadowSharpness;
+        float _MaterialPresetShadowIntensity;
+        float4 _MaterialPresetSpecularTint;
+        float4 _MaterialPresetFresnelTint;
     #endif // _BACKLACE_ANIME_EXTRAS
     #if defined(_ANIMEMODE_RAMP)
         UNITY_DECLARE_TEX2D(_Ramp);
@@ -557,11 +569,12 @@ float3 _VertexManipulationScale;
 #endif // _BACKLACE_DECALS
 
 // shadow map properties
-#if defined(_BACKLACE_SHADOW_MAP)
+#if defined(BACKLACE_CAPABILITIES_MEDIUM)
+    int _ToggleShadowMap;
     UNITY_DECLARE_TEX2D_NOSAMPLER(_ShadowMap);
     float _ShadowMap_UV;
     float _ShadowMapIntensity;
-#endif // _BACKLACE_SHADOW_MAP
+#endif // BACKLACE_CAPABILITIES_MEDIUM
 
 
 #endif // BACKLACE_PROPERTIES_CGINC
