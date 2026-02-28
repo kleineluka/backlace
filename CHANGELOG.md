@@ -8,7 +8,7 @@
 - More bug fixes than I can count
 - Restructued lighting
 - More optimisations than I can count (I obviously just can't count, I guess)
-- New Characrer Settings: Ambient Gradient, Manual Normals, SDF Shadows, Stocking, Eye Parallax, Translucent Hair, Expression Map, Face Map, Gradient, Toon Highlights, Angel Rings (Hair), Quick Materials (Latex/Fabric/Silk/Rubber)
+- New Character Settings: Ambient Gradient, Manual Normals, SDF Shadows, Stocking, Eye Parallax, Translucent Hair, Expression Map, Face Map, Gradient, Toon Highlights, Angel Rings (Hair), Quick Materials (Latex/Fabric/Silk/Rubber)
 - A lot of lighting controls were added
 - Sticker improvements
 - Specular restructure

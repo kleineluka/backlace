@@ -67,22 +67,12 @@ This section will be updated when I make things with it! If you make something w
 
 - The official distribution of Backlace itself! You can find it on [Gumroad](https://kleineluka.gumroad.com/l/backlace), [Jinxxy](https://jinxxy.com/luka/backlace), [Booth.pm](https://lukasong.booth.pm/items/7551840), and [Payhip](https://payhip.com/b/71i3E) (and on this repo).
 
+## More Information 🍷
+
+Backlace is licensed under Backlace License 2.0: for content creators (games, avatars, renders, videos, etc.) it grants permission to use personally or commercially without additional restrictions; for derivative shaders it adds restrictions (no near-identical resale and attribution). The software is provided “as is.” See [LICENSE.md](LICENSE.md) for full terms.
+
 If you wish to **make your own shader** with Backlace, please see [Contributing to Backlace](BUILDING.md) for more information! This is unnecessary if you just want to use Backlace as-is in your projects (ex. game developers, avatar creators, or world builders). ( *︾▽︾)
 
-## License 🍷
-Backlace is licensed under the Backlace License (Version 1.5). Please see the `LICENSE.md` file for the full terms.
-
-**For Game Developers, VRChat Creators, and General Users —**
-- You’re free to use Backlace in any project (personal or commercial) at no cost.
-- Please give credit to “Backlace Anime Shader” somewhere in your project, whether that be in your README, credits, or simply in your code. You don't need to be super formal about it or fly a banner, I just enjoy seeing my what my work is used in! (◕‿◕)♡
-
-**For Developers Building Off of Backlace —**
-- You’re free to use Backlace in any project (personal or commercial) at no cost.
-- Anything you sell with Backlace must be transformative (adding significant new features or creativity). You can’t just rebrand or resell Backlace as-is.
-- You must credit “Backlace” somewhere visible in your shader's user interface (like a credits section or footer) with a link to the official GitHub page.
-- Please avoid modifying/redistributing files in the `Editor` and `Processor` folders in your project as those are not intended to be built off of. This doesn't apply to anybody using Backlace as-is in their projects.
-
-If you’re unsure whether your use fits the license or just want to talk about it, feel free to reach out! 💗
 
 ## Attributions ❤️‍🔥
 - This shader was originally a fork of the [Toony Standard Rebuild](https://github.com/VRLabs/Toony-Standard-Rebuild) shader by VRLabs, which is under the MIT license. However, essentially all of that code has been replaced, removed, or rewritten. **No bugs for Backlace should be reported to them.**
