@@ -7,12 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AnimeCelSmooth
+  m_Name: BloodSplatter
   m_Shader: {fileID: 4800000, guid: 6ad1369079a943740962aff114ea6359, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ANIMEMODE_CEL
+  - _BACKLACE_LIQUID_LAYER
   m_InvalidKeywords:
   - _ALPHASTENCIL_ON
   - _ANIMEMODE_DISABLED
@@ -437,13 +438,13 @@ Material:
     - _CausticsIntensity: 1.5
     - _CausticsSpeed: 0.2
     - _CausticsTiling: 2
-    - _CelCastShadowFeather: 0.344
-    - _CelCastShadowPower: 0.856
-    - _CelFeather: 0.521
+    - _CelCastShadowFeather: 0.484
+    - _CelCastShadowPower: 0.448
+    - _CelFeather: 0.237
     - _CelMode: 2
-    - _CelSmoothGradientPower: 1.09
-    - _CelSmoothOcclusionStrength: 0.164
-    - _CelThreshold: -0.18
+    - _CelSmoothGradientPower: 1.28
+    - _CelSmoothOcclusionStrength: 0.34
+    - _CelThreshold: -0.13
     - _ClearcoatMap_UV: 0
     - _ClearcoatReflectionStrength: 1
     - _ClearcoatRoughness: 0.1
@@ -599,64 +600,64 @@ Material:
     - _LightingDirectionMode: 0
     - _LightingSource: 0
     - _LipOutlineIntensity: 1
-    - _LiquidBloodDryGloss: 0.15
-    - _LiquidBloodDryingRate: 0.3
-    - _LiquidBloodPooling: 0.5
-    - _LiquidClusterScale: 3
+    - _LiquidBloodDryGloss: 1
+    - _LiquidBloodDryingRate: 0.606
+    - _LiquidBloodPooling: 1
+    - _LiquidClusterScale: 115.2
     - _LiquidClusterSeed: 6.9
-    - _LiquidDarken: 0.2
+    - _LiquidDarken: 0.173
     - _LiquidDepth: 0
     - _LiquidEnabled: 1
     - _LiquidFeel: 0
-    - _LiquidGloss: 0.9
+    - _LiquidGloss: 0.734
     - _LiquidIcingColorScale: 2
     - _LiquidIcingColorSeed: 0
     - _LiquidIcingColorVariation: 0
-    - _LiquidLayerOneDensity: 0.5
-    - _LiquidLayerOneMod: 0.4
-    - _LiquidLayerOneRandomness: 0.5
-    - _LiquidLayerOneScale: 6
-    - _LiquidLayerOneSeed: 4.2
-    - _LiquidLayerOneSpeed: 0.1
-    - _LiquidLayerOneStretch: 1.5
-    - _LiquidLayerTwoAmount: 0.5
+    - _LiquidLayerOneDensity: 0.734
+    - _LiquidLayerOneMod: 0.894
+    - _LiquidLayerOneRandomness: 0.94
+    - _LiquidLayerOneScale: 150
+    - _LiquidLayerOneSeed: 5.4
+    - _LiquidLayerOneSpeed: 0
+    - _LiquidLayerOneStretch: 2.9
+    - _LiquidLayerTwoAmount: 0.707
     - _LiquidLayerTwoDensity: 0.5
-    - _LiquidLayerTwoMod: 0.4
-    - _LiquidLayerTwoRandomness: 0.5
-    - _LiquidLayerTwoScale: 16
+    - _LiquidLayerTwoMod: 0.443
+    - _LiquidLayerTwoRandomness: 0.62
+    - _LiquidLayerTwoScale: 200
     - _LiquidLayerTwoSeed: 9.69
-    - _LiquidLayerTwoSpeed: 0.1
-    - _LiquidLayerTwoStretch: 1.5
+    - _LiquidLayerTwoSpeed: 0
+    - _LiquidLayerTwoStretch: 1.24
     - _LiquidLookViscous: 0
-    - _LiquidLookWatery: 0
+    - _LiquidLookWatery: 1
     - _LiquidManualDirection: 0
     - _LiquidMapScale: 1
     - _LiquidMudRoughness: 0.6
-    - _LiquidNormalStrength: 2
+    - _LiquidNormalStrength: 8
     - _LiquidOilIridescence: 0.8
     - _LiquidOilIridescenceScale: 4
     - _LiquidOpacity: 0.9
-    - _LiquidRim: 0.5
-    - _LiquidShadow: 0.3
-    - _LiquidShine: 1
-    - _LiquidShineTightness: 0.5
+    - _LiquidRim: 0.32
+    - _LiquidShadow: 0.03
+    - _LiquidShine: 2.26
+    - _LiquidShineTightness: 0.651
     - _LiquidSlimeIridescence: 0.4
     - _LiquidSlimeStickiness: 0.35
     - _LiquidSlimeTranslucency: 0.6
-    - _LiquidSoftness: 0.12
+    - _LiquidSoftness: 0.057
     - _LiquidSpace: 0
     - _LiquidSpecularLit: 0
     - _LiquidSweatUseTint: 0
-    - _LiquidThreshold: 0.5
-    - _LiquidToggleLiquid: 0
+    - _LiquidThreshold: 0.628
+    - _LiquidToggleLiquid: 1
     - _LiquidTriplanarSharpness: 4
     - _LiquidUseForceMap: 0
-    - _LiquidUseLayerTwo: 0
+    - _LiquidUseLayerTwo: 1
     - _LiquidViscousSmooth: 0.35
     - _LiquidViscousThinScale: 3
     - _LiquidViscousThinSeed: 0
     - _LiquidViscousThinning: 0.35
-    - _LiquidWateryCoverage: 0.5
+    - _LiquidWateryCoverage: 0.805
     - _LiquidWaxColorVariation: 0.5
     - _LiquidWaxCoolRate: 0.5
     - _MSSO_UV: 0
@@ -728,7 +729,7 @@ Material:
     - _PS1CompressionPrecision: 32
     - _PS1Rounding: 0
     - _PS1RoundingPrecision: 64
-    - _PackedAmbient: 0.5
+    - _PackedAmbient: 0.551
     - _PackedGGShadow1Push: 0.5
     - _PackedGGShadow1Smoothness: 0
     - _PackedGGShadow2Push: -1
@@ -741,9 +742,9 @@ Material:
     - _PackedMapThree_UV: 0
     - _PackedMapTwo_UV: 0
     - _PackedRimLight: 1
-    - _PackedRimPower: 1
-    - _PackedRimThreshold: 0.5
-    - _PackedShadowSmoothness: 0.05
+    - _PackedRimPower: 1.83
+    - _PackedRimThreshold: 0.53
+    - _PackedShadowSmoothness: 0.033
     - _PackedUmaSpecularBoost: 20
     - _ParallaxBlend: 0
     - _ParallaxBlendWeight: 1
@@ -961,9 +962,9 @@ Material:
     - _TouchRainbowSpread: 1
     - _TriBandAttenuatedShadows: 0
     - _TriBandIndirectShallow: 0
-    - _TriBandShallowWidth: 0.25
-    - _TriBandSmoothness: 0.05
-    - _TriBandThreshold: 0
+    - _TriBandShallowWidth: 0.553
+    - _TriBandSmoothness: 0.129
+    - _TriBandThreshold: 0.68
     - _UVFlipbook: 0
     - _UVFlipbookColumns: 1
     - _UVFlipbookFPS: 30
@@ -1078,18 +1079,18 @@ Material:
     - _LCWGain: {r: 1, g: 1, b: 1, a: 1}
     - _LCWGamma: {r: 1, g: 1, b: 1, a: 1}
     - _LCWLift: {r: 0, g: 0, b: 0, a: 0}
-    - _LipOutlineColor: {r: 0.6, g: 0.09999997, b: 0.09999997, a: 1}
-    - _LiquidBloodColorDark: {r: 0.39999998, g: 0.02, b: 0.02, a: 1}
-    - _LiquidBloodColorFresh: {r: 0.8, g: 0.049999982, b: 0.049999982, a: 1}
+    - _LipOutlineColor: {r: 0.6, g: 0.09999994, b: 0.09999994, a: 1}
+    - _LiquidBloodColorDark: {r: 0.39999995, g: 0.02, b: 0.02, a: 1}
+    - _LiquidBloodColorFresh: {r: 0.8, g: 0.049999967, b: 0.049999967, a: 1}
     - _LiquidDirectionOne: {r: 0, g: -1, b: 0, a: 0}
     - _LiquidDirectionTwo: {r: 0, g: -1, b: 0, a: 0}
     - _LiquidIcingColor: {r: 1, g: 1, b: 1, a: 1}
     - _LiquidIcingColorMax: {r: 1, g: 1, b: 1, a: 1}
     - _LiquidIcingColorMin: {r: 1, g: 0.9, b: 0.95, a: 1}
-    - _LiquidMudColor: {r: 0.29999998, g: 0.19999996, b: 0.14999998, a: 1}
-    - _LiquidMudColorDark: {r: 0.17999998, g: 0.11999995, b: 0.089999996, a: 1}
-    - _LiquidOilColor: {r: 0.049999982, g: 0.04, b: 0.03, a: 1}
-    - _LiquidSlimeColor: {r: 0.29999998, g: 0.9, b: 0.39999998, a: 1}
+    - _LiquidMudColor: {r: 0.29999995, g: 0.19999993, b: 0.14999995, a: 1}
+    - _LiquidMudColorDark: {r: 0.17999995, g: 0.11999992, b: 0.08999997, a: 1}
+    - _LiquidOilColor: {r: 0.049999967, g: 0.04, b: 0.03, a: 1}
+    - _LiquidSlimeColor: {r: 0.29999995, g: 0.9, b: 0.39999995, a: 1}
     - _LiquidSlimeColorShift: {r: 0.5, g: 1, b: 0.6, a: 1}
     - _LiquidSweatTintColor: {r: 0.8, g: 0.9, b: 1, a: 1}
     - _LiquidWaxColor: {r: 1, g: 0.9, b: 0.7, a: 1}
@@ -1103,7 +1104,7 @@ Material:
     - _NPRRimColor: {r: 1, g: 1, b: 1, a: 1}
     - _NPRSSSColor: {r: 0.9811321, g: 0.8360418, b: 0.76207423, a: 1}
     - _NPRShadowColor: {r: 0.78616345, g: 0.78616345, b: 0.78616345, a: 1}
-    - _NoseLineColor: {r: 0.24999997, g: 0.24999997, b: 0.24999997, a: 1}
+    - _NoseLineColor: {r: 0.24999994, g: 0.24999994, b: 0.24999994, a: 1}
     - _OffsetRimColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineOffset: {r: 0, g: 0, b: 0, a: 0}
@@ -1115,7 +1116,7 @@ Material:
     - _PackedLitColor: {r: 1, g: 1, b: 1, a: 1}
     - _PackedRimColor: {r: 1, g: 1, b: 1, a: 1}
     - _PackedShadowColor: {r: 0.7, g: 0.7, b: 0.8, a: 1}
-    - _PackedUmaMetalDark: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _PackedUmaMetalDark: {r: 0.19999993, g: 0.19999993, b: 0.19999993, a: 1}
     - _PackedUmaMetalLight: {r: 1, g: 1, b: 1, a: 1}
     - _PathingColor: {r: 0, g: 1, b: 1, a: 1}
     - _PathingColor2: {r: 1, g: 0, b: 0, a: 1}

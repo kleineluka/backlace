@@ -3809,6 +3809,10 @@
             "value": "Puissance de la ligne du nez"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "Fondu d'albédo NPR"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3883,6 +3887,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "Couleur de l'ombre NPR"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "Dureté de l'ombre NPR"
         },
         {
             "key": "prop_NPRSpecularMask",

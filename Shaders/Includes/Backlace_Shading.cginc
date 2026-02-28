@@ -455,11 +455,11 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 {
                     float3 headCenterWS = mul(unity_ObjectToWorld, float4(_HairHeadCenter.xyz, 1.0)).xyz;
                     float distToHead = distance(FragData.worldPos, headCenterWS);
-                    if (_HairHeadMaskMode == 1) //sdf
+                    if (_HairHeadMaskMode == 1) //sdf ellipsoid
                     {
-                        float radius = _HairSDFScale.x;
-                        // signed distance (negative = inside)
-                        float sdf = distToHead - radius;
+                        float3 offset = FragData.worldPos - headCenterWS;
+                        float3 scaledOffset = offset / max(_HairSDFScale.xyz, 1e-5);
+                        float sdf = length(scaledOffset) - 1.0;
                         hairMask = saturate(1.0 - sdf / max(_HairSDFSoftness, 1e-5));
                         hairMask = pow(hairMask, _HairSDFBlend);
                     }
@@ -578,10 +578,18 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                     float3 right = normalize(cross(up, Surface.NormalDir));
                     flowTangent = normalize(cross(Surface.NormalDir, right));
                 }
-                else // (3) world aligned
+                else if (_AngelRingMode == 3) // world aligned
                 {
                     hairLength = dot(FragData.worldPos, _AngelRingHeightDirection) - _AngelRingHeightScale;
                     float3 right = normalize(cross(_AngelRingHeightDirection, Surface.NormalDir));
+                    flowTangent = normalize(cross(Surface.NormalDir, right));
+                }
+                else // (4) normal equatorial — reversed ambient gradient (sides/equator highlighted, not top/bottom)
+                {
+                    float3 worldNormal = normalize(FragData.normal);
+                    hairLength = 1.0 - abs(worldNormal.y); // 0 at poles, 1 at equatorial sides
+                    float3 up = float3(0, 1, 0);
+                    float3 right = normalize(cross(up, Surface.NormalDir));
                     flowTangent = normalize(cross(Surface.NormalDir, right));
                 }
                 // optional breakup mix-in
@@ -985,9 +993,9 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 shadowColor = Surface.Albedo.rgb * _CelShadowTint.rgb;
             #endif // _BACKLACE_SHADOW_TEXTURE
             float3 combinedColour = lerp(shadowColor, litColor, finalLight);
-            float3 directLight = Surface.LightColor.rgb * Surface.LightColor.a * lerp(1, finalLight, _DirectDiffuse);
+            float3 directLight = Surface.LightColor.rgb * Surface.LightColor.a * lerp(1, combinedColour, _DirectDiffuse);
             Surface.Diffuse = CombineDiffuses(Surface.Albedo, directLight, indirectLight);
-            Surface.Attenuation = StyliseAttenuation(Surface.LightColor.a, finalLight * Surface.LightColor.a);
+            Surface.Attenuation = StyliseAttenuation(Surface.LightColor.a, combinedColour * Surface.LightColor.a);
         }
 
         // get the vertex diffuse contribution using cel-shading
@@ -1059,7 +1067,9 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
         {
             // base diffuse
             float3 directLight = Surface.LightColor.rgb * Surface.LightColor.a;
-            float lightMask = SmoothHalfLambert(Surface, _NPRDiffMin, _NPRDiffMax);
+            float _nprMid = (_NPRDiffMin + _NPRDiffMax) * 0.5;
+            float _nprHalfW = max(0.0001, (_NPRDiffMax - _NPRDiffMin) * 0.5 * (1.0 - _NPRShadowHardness));
+            float lightMask = smoothstep(_nprMid - _nprHalfW, _nprMid + _nprHalfW, Surface.UnmaxedNdotL * 0.5 + 0.5);
             float3 shadowCol = _NPRShadowColor.rgb;
             #if defined(UNITY_PASS_FORWARDADD)
                 shadowCol = float3(0, 0, 0);
@@ -1067,7 +1077,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 shadowCol = GetTexturedShadowColor(Surface, directLight, shadowCol);
             #endif // UNITY_PASS_FORWARDADD || _BACKLACE_SHADOW_TEXTURE
             float3 colourRamp = lerp(shadowCol, _NPRLitColor.rgb, lightMask);
-            float3 outDiffuse = Surface.Albedo * colourRamp;
+            float3 outDiffuse = lerp(Surface.Albedo, Surface.Albedo * colourRamp, _NPRAlbedoFeather);
             float specMask = UNITY_SAMPLE_TEX2D_SAMPLER(_NPRSpecularMask, _MainTex, Uvs[0]).r;
             #if defined(UNITY_PASS_FORWARDBASE)
                 // mix in forward specular (the constant shine)
@@ -1110,7 +1120,7 @@ void GetPBRVertexDiffuse(inout BacklaceSurfaceData Surface)
                 outDiffuse = lerp(outDiffuse, sssColour, sssFresnel);
             }
             float3 indirectLight = Surface.IndirectDiffuse * lerp(1, lightMask, _IndirectDiffuse);
-            Surface.Diffuse = CombineDiffuses(outDiffuse, directLight * lerp(1, lightMask, _DirectDiffuse), indirectLight);
+            Surface.Diffuse = CombineDiffuses(outDiffuse, directLight, indirectLight);
             Surface.Attenuation = StyliseAttenuation(Surface.LightColor.a, lightMask * Surface.LightColor.a);
         }
 

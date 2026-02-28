@@ -3809,6 +3809,10 @@
             "value": "Сила линии носа"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "Растушёвка альбедо NPR"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3883,6 +3887,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "Цвет тени NPR"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "Жёсткость тени NPR"
         },
         {
             "key": "prop_NPRSpecularMask",

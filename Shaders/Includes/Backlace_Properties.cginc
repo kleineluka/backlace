@@ -375,6 +375,8 @@ float3 _VertexManipulationScale;
         float _NPRDiffMax;
         float4 _NPRLitColor;
         float4 _NPRShadowColor;
+        float _NPRShadowHardness;
+        float _NPRAlbedoFeather;
         // shared specular
         UNITY_DECLARE_TEX2D_NOSAMPLER(_NPRSpecularMask);
         float _NPRSpecularMask_UV;

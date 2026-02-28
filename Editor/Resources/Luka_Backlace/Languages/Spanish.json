@@ -3809,6 +3809,10 @@
             "value": "Poder de Línea de Nariz"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "Difuminado de Albedo NPR"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3883,6 +3887,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "Color de Sombra NPR"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "Dureza de Sombra NPR"
         },
         {
             "key": "prop_NPRSpecularMask",

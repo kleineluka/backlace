@@ -3813,6 +3813,10 @@
             "value": "ノーズラインの強度"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "NPRアルベドのフェザー"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3887,6 +3891,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "NPRシャドウの色"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "NPRシャドウの硬さ"
         },
         {
             "key": "prop_NPRSpecularMask",

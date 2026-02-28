@@ -3837,6 +3837,10 @@
             "value": "Nose Line Power"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "NPR Albedo Feather"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3911,6 +3915,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "NPR Shadow Colour"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "NPR Shadow Hardness"
         },
         {
             "key": "prop_NPRSpecularMask",

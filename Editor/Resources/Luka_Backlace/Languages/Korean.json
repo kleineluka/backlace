@@ -3809,6 +3809,10 @@
             "value": "코 라인 강도"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "NPR 알베도 페더"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3883,6 +3887,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "NPR 그림자 색상"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "NPR 그림자 경도"
         },
         {
             "key": "prop_NPRSpecularMask",

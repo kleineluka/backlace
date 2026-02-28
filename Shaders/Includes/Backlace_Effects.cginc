@@ -2274,14 +2274,14 @@
             fresnel = pow(fresnel, _RefractionFresnel);
             float2 noise = (SampleTextureTriplanar(_DistortionNoiseTex, sampler_MainTex, i.worldPos, Surface.NormalDir, float3(0, 0, 0), _DistortionNoiseTiling, float3(0, 0, 0), 2.0, true, float2(0, 0)).rg * 2.0 - 1.0) * _DistortionNoiseStrength;
             float3 distortionNormal = Surface.NormalDir + float3(noise.x, noise.y, 0);
-            float3 refractionVector = distortionNormal * _RefractionIOR;
+            float3 refractionVector = mul((float3x3)UNITY_MATRIX_V, distortionNormal) * _RefractionIOR;
             float4 screenPos = i.scrPos;
             float2 baseUV = screenPos.xy / screenPos.w;
             float2 distortedUV = baseUV + refractionVector.xy;
             [branch] if (_RefractionZoomToggle == 1)
             {
-                float normalFactor = frac(dot(Surface.NormalDir, float3(12.9898, 78.233, 37.719))) * 2.0 - 1.0;
-                float zoomFactor = 1.0 - (normalFactor * _RefractionZoom);
+                float ndotv = saturate(dot(Surface.NormalDir, Surface.ViewDir));
+                float zoomFactor = 1.0 - ((1.0 - ndotv) * _RefractionZoom);
                 float2 center = 0.5;
                 distortedUV = (distortedUV - center) * zoomFactor + center;
             }

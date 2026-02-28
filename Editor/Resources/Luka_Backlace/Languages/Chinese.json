@@ -3809,6 +3809,10 @@
             "value": "鼻线强度"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "NPR 反照率羽化"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3883,6 +3887,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "NPR 阴影颜色"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "NPR 阴影硬度"
         },
         {
             "key": "prop_NPRSpecularMask",

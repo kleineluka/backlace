@@ -342,6 +342,8 @@ namespace Luka.Backlace
         private MaterialProperty prop_NPRDiffMax = null;
         private MaterialProperty prop_NPRLitColor = null;
         private MaterialProperty prop_NPRShadowColor = null;
+        private MaterialProperty prop_NPRShadowHardness = null;
+        private MaterialProperty prop_NPRAlbedoFeather = null;
         private MaterialProperty prop_NPRSpecularMask = null;
         private MaterialProperty prop_NPRForwardSpecular = null;
         private MaterialProperty prop_NPRForwardSpecularRange = null;
@@ -1377,7 +1379,7 @@ namespace Luka.Backlace
             sub_tab_toon_highlights = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 9, languages.speak("sub_tab_toon_highlights"), null, "_ToggleSpecularToon");
             sub_tab_angel_rings = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 10, languages.speak("sub_tab_angel_rings"), null, "_AngelRingMode");
             sub_tab_material_preset = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 11, languages.speak("sub_tab_material_preset"), null, "_ToggleMaterialPreset");
-            tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_specular"));
+            tab_specular = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Primary, 4, languages.speak("tab_specular"), null, "_ToggleSpecular");
             sub_tab_emission = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 3, languages.speak("sub_tab_emission"), null, "_ToggleEmission");
             sub_tab_attenuation = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 4, languages.speak("sub_tab_attenuation"));
             sub_tab_light_limiting = new Tab(ref targetMat, ref theme, (int)Tab.tab_sizes.Sub, 5, languages.speak("sub_tab_light_limiting"));
@@ -2020,6 +2022,8 @@ namespace Luka.Backlace
                 prop_NPRDiffMax = TrackProperty("_NPRDiffMax", properties);
                 prop_NPRLitColor = TrackProperty("_NPRLitColor", properties);
                 prop_NPRShadowColor = TrackProperty("_NPRShadowColor", properties);
+                prop_NPRShadowHardness = TrackProperty("_NPRShadowHardness", properties);
+                prop_NPRAlbedoFeather = TrackProperty("_NPRAlbedoFeather", properties);
                 prop_NPRSpecularMask = TrackProperty("_NPRSpecularMask", properties);
                 prop_NPRForwardSpecular = TrackProperty("_NPRForwardSpecular", properties);
                 prop_NPRForwardSpecularRange = TrackProperty("_NPRForwardSpecularRange", properties);
@@ -2138,6 +2142,8 @@ namespace Luka.Backlace
                     materialEditor.ShaderProperty(prop_NPRDiffMax, languages.speak("prop_NPRDiffMax"));
                     materialEditor.ShaderProperty(prop_NPRLitColor, languages.speak("prop_NPRLitColor"));
                     materialEditor.ShaderProperty(prop_NPRShadowColor, languages.speak("prop_NPRShadowColor"));
+                    materialEditor.ShaderProperty(prop_NPRShadowHardness, languages.speak("prop_NPRShadowHardness"));
+                    materialEditor.ShaderProperty(prop_NPRAlbedoFeather, languages.speak("prop_NPRAlbedoFeather"));
                     // forward specular
                     materialEditor.ShaderProperty(prop_NPRForwardSpecular, languages.speak("prop_NPRForwardSpecular"));
                     Components.start_dynamic_disable(prop_NPRForwardSpecular.floatValue == 0, configs);
@@ -2591,8 +2597,8 @@ namespace Luka.Backlace
                     EditorGUI.indentLevel--;
                     EditorGUILayout.LabelField(languages.speak("header_angel_ring_breakup"), EditorStyles.boldLabel);
                     EditorGUI.indentLevel++;
-                    Components.start_dynamic_disable(prop_AngelRingBreakup.floatValue == 0, configs);
                     materialEditor.ShaderProperty(prop_AngelRingBreakup, languages.speak("prop_AngelRingBreakup"));
+                    Components.start_dynamic_disable(prop_AngelRingBreakup.floatValue == 0, configs);
                     materialEditor.ShaderProperty(prop_AngelRingBreakupDensity, languages.speak("prop_AngelRingBreakupDensity"));
                     materialEditor.ShaderProperty(prop_AngelRingBreakupWidthMin, languages.speak("prop_AngelRingBreakupWidthMin"));
                     materialEditor.ShaderProperty(prop_AngelRingBreakupWidthMax, languages.speak("prop_AngelRingBreakupWidthMax"));

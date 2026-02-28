@@ -3809,6 +3809,10 @@
             "value": "Boop Noodle Line Power"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "NPR Albedo Floofy-Feather"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn nya"
         },
@@ -3883,6 +3887,11 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "NPR Shadow Paw-lour *hiss*"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "NPR Shadow Hard-hiss-ness"
+
         },
         {
             "key": "prop_NPRSpecularMask",

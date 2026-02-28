@@ -282,6 +282,11 @@ fixed4 frag(FragmentData i) : SV_Target
         fixed4 outlineTexColor = UNITY_SAMPLE_TEX2D_SAMPLER(_OutlineTex, _MainTex, outlineTexUV);
         finalColor.rgb = outlineTexColor;
     }
+    else if (_OutlineMode == 2) // albedo
+    {
+        fixed4 albedo = UNITY_SAMPLE_TEX2D(_MainTex, i.uv) * _OutlineColor;
+        finalColor.rgb = albedo.rgb;
+    }
     if (_OutlineHueShift == 1)
     {
         float3 rainbow = Sinebow(_Time.y * _OutlineHueShiftSpeed);

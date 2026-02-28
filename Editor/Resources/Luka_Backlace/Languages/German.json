@@ -3809,6 +3809,10 @@
             "value": "Nasenlinien-Stärke"
         },
         {
+            "key": "prop_NPRAlbedoFeather",
+            "value": "NPR Albedo Feder"
+        },
+        {
             "key": "prop_NPRBlinn",
             "value": "NPR Blinn"
         },
@@ -3883,6 +3887,10 @@
         {
             "key": "prop_NPRShadowColor",
             "value": "NPR Schattenfarbe"
+        },
+        {
+            "key": "prop_NPRShadowHardness",
+            "value": "NPR Schatten Härte"
         },
         {
             "key": "prop_NPRSpecularMask",

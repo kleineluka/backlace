@@ -234,62 +234,64 @@ Shader "luka/backlace/small/vanilla"
         // [Space(35)]
         // [Header(Shading)]
         // [Space(10)]
-        [KeywordEnum(PBR, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 1
+        [KeywordEnum(PBR, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped)] _AnimeMode ("Anime Mode", Int) = 3
         // ramp
-        [Enum(Texture, 0, Procedural, 1)] _RampMode ("Ramp Mode", Int) = 0
+        [Enum(Texture, 0, Procedural, 1)] _RampMode ("Ramp Mode", Int) = 1
         _Ramp ("Ramp Map", 2D) = "white" { }
         _RampColor ("Ramp Color", Color) = (1, 1, 1, 1)
-        _RampOffset ("Ramp Offset", Range(-1, 1)) = 0
-        _RampShadows ("Ramp Shadow intensity", Range(0, 1)) = 0.6
+        _RampOffset ("Ramp Offset", Range(-1, 1)) = -0.25
+        _RampShadows ("Ramp Shadow intensity", Range(0, 1)) = 0.9
         _RampOcclusionOffset ("Ramp Occlusion Offset Intensity", Range(0, 1)) = 0
         _RampMin ("Ramp Min", Color) = (0.003921569, 0.003921569, 0.003921569, 0.003921569)
-        _RampProceduralShift ("Ramp Shift", Range(-1, 1)) = -0.35
-        _RampProceduralToony ("Ramp Toony Factor", Range(0, 1)) = 0.3
+        _RampProceduralShift ("Ramp Shift", Range(-1, 1)) = -0.25
+        _RampProceduralToony ("Ramp Toony Factor", Range(0, 1)) = 0.65
         [Enum(Disabled, 0, Enabled, 1)] _RampNormalIntensity ("Ramp Normals to Intensity", Float) = 0
         [IntRange] _RampIndex ("Ramp Index", Range(0, 9)) = 0
         [IntRange] _RampTotal ("Ramp Total", Range(1, 10)) = 1
         // cel
         [Enum(Default, 0, Harsh, 1, Smooth, 2)] _CelMode ("Cel Shading Mode", Int) = 0
-        _CelThreshold ("Cel Threshold", Range(-1, 1)) = 0
-        _CelFeather ("Cel Feather", Range(0.001, 1)) = 0.05
+        _CelThreshold ("Cel Threshold", Range(-1, 1)) = -0.5
+        _CelFeather ("Cel Feather", Range(0.001, 1)) = 0.01
         _CelCastShadowFeather ("Cast Shadow Feather", Range(0.001, 1)) = 0.1
         _CelCastShadowPower ("Cast Shadow Power", Range(0, 1)) = 1.0
         [HDR] _CelShadowTint ("Cel Shadow Tint", Color) = (0.7, 0.7, 0.8, 1)
         [HDR] _CelLitTint ("Cel Lit Tint", Color) = (1.0, 1.0, 1.0, 1)
-        _CelSmoothGradientPower ("Cel Gradient Power", Range(0.1, 4)) = 1.0
+        _CelSmoothGradientPower ("Cel Gradient Power", Range(0.1, 4)) = 2.5
         _CelSmoothOcclusionStrength ("Cel Occlusion Strength", Range(0, 1)) = 0.5
         // npr
         _NPRDiffMin ("NPR Diffuse SmoothStep Min", Range(0, 2)) = 0.0
         _NPRDiffMax ("NPR Diffuse SmoothStep Max", Range(0, 2)) = 1.0
         _NPRLitColor ("NPR Lit Color", Color) = (1, 1, 1, 1)
         _NPRShadowColor ("NPR Shadow Color", Color) = (0.3, 0.3, 0.3, 1)
+        _NPRShadowHardness ("NPR Shadow Hardness", Range(0, 1)) = 0.9
+        _NPRAlbedoFeather ("NPR Albedo Feather", Range(0, 1)) = 0.35
         // npr - shared specular
         _NPRSpecularMask ("NPR Specular Mask", 2D) = "white" { }
         // npr - forward specular
         [Enum(Disabled, 0, Multiplicative, 1, Additive, 2)] _NPRForwardSpecular ("Enable NPR Forward Specular", Int) = 1
-        _NPRForwardSpecularRange ("NPR Forward Specular Range", Range(0, 1)) = 0.5
-        _NPRForwardSpecularMultiplier ("NPR Forward Specular Multiplier", Float) = 5.0
+        _NPRForwardSpecularRange ("NPR Forward Specular Range", Range(0, 1)) = 0.525
+        _NPRForwardSpecularMultiplier ("NPR Forward Specular Multiplier", Float) = 1.1
         _NPRForwardSpecularColor ("NPR Forward Specular Color", Color) = (1, 1, 1, 1)
         // npr - bling phong specular
         [Enum(Disabled, 0, Multiplicative, 1, Additive, 2)] _NPRBlinn ("Enable NPR Phong Specular", Int) = 1
-        _NPRBlinnPower ("NPR Phong Specular Power", Float) = 10
+        _NPRBlinnPower ("NPR Phong Specular Power", Float) = 80
         _NPRBlinnMin ("NPR Phong Specular Min", Range(0, 2)) = 0.0
         _NPRBlinnMax ("NPR Phong Specular Max", Range(0, 2)) = 1.0
         _NPRBlinnColor ("NPR Phong Specular Color", Color) = (1, 1, 1, 1)
-        _NPRBlinnMultiplier ("NPR Phong Specular Multiplier", Float) = 5.0
+        _NPRBlinnMultiplier ("NPR Phong Specular Multiplier", Float) = 1.45
         // npr - fake sss
         [Enum(Disabled, 0, Enabled, 1)] _NPRSSS ("Enable NPR SSS", Int) = 1
         _NPRSSSExp ("NPR SSS Exponent", Float) = 5.0
-        _NPRSSSRef ("NPR SSS Reflectance", Range(0, 0.5)) = 0.04
+        _NPRSSSRef ("NPR SSS Reflectance", Range(0, 0.5)) = 0.15
         _NPRSSSMin ("NPR SSS Min", Range(0, 1)) = 0.0
         _NPRSSSMax ("NPR SSS Max", Range(0, 1)) = 1.0
-        _NPRSSSShadows ("NPR SSS Shadow Strength", Range(0, 1)) = 0.5
+        _NPRSSSShadows ("NPR SSS Shadow Strength", Range(0, 1)) = 0.15
         _NPRSSSColor ("NPR SSS Color", Color) = (1, 0.8, 0.7, 1)
         // npr - rim lighting
         [Enum(Disabled, 0, Enabled, 1)] _NPRRim ("Enable NPR Rim Lighting", Int) = 1
-        _NPRRimExp ("NPR Rim Power", Float) = 10
+        _NPRRimExp ("NPR Rim Power", Float) = 1.1
         _NPRRimMin ("NPR Rim Min", Range(0, 2)) = 0.0
-        _NPRRimMax ("NPR Rim Max", Range(0, 2)) = 1.0
+        _NPRRimMax ("NPR Rim Max", Range(0, 2)) = 2.0
         _NPRRimColor ("NPR Rim Color", Color) = (1, 1, 1, 1)
         // packed map
         [Enum(Genshin, 0, UmaMusume, 1, GuiltyGear, 2)] _PackedMapStyle ("Packed Map Style", Int) = 0
@@ -320,9 +322,9 @@ Shader "luka/backlace/small/vanilla"
         _PackedGGShadow1Tint ("GG Shadow 1 Tint", Color) = (1, 1, 1, 1)
         _PackedGGShadow2Tint ("GG Shadow 2 Tint", Color) = (1, 1, 1, 1)
         // tri band
-        _TriBandSmoothness ("TriBand Shadow Smoothness", Range(0.001, 0.5)) = 0.05
-        _TriBandThreshold ("TriBand Shadow Threshold", Range(-1, 1)) = 0.0
-        _TriBandShallowWidth ("TriBand Shallow Band Width", Range(0, 1)) = 0.25
+        _TriBandSmoothness ("TriBand Shadow Smoothness", Range(0.001, 0.5)) = 0.37
+        _TriBandThreshold ("TriBand Shadow Threshold", Range(-1, 1)) = 0.35
+        _TriBandShallowWidth ("TriBand Shallow Band Width", Range(0, 1)) = 0.3
         [HDR] _TriBandShadowColor ("TriBand Shadow Color", Color) = (0.6, 0.6, 0.6, 1)
         [HDR] _TriBandShallowColor ("TriBand Shallow (Transition) Color", Color) = (0.8, 0.8, 0.8, 1)
         [HDR] _TriBandLitColor ("TriBand Lit Color", Color) = (1.0, 1.0, 1.0, 1)
@@ -336,8 +338,8 @@ Shader "luka/backlace/small/vanilla"
         _SkinShadowColor ("Skin Shadow Color", Color) = (0.75, 0.65, 0.65, 1)
         _SkinScattering ("Skin Scattering", Range(0, 1)) = 0.5
         // wrapped
-        _WrapFactor ("Wrap Factor", Range(0, 3)) = 0.5
-        _WrapNormalization ("Wrap Normalization", Range(0, 2)) = 0.5
+        _WrapFactor ("Wrap Factor", Range(0, 5)) = 3
+        _WrapNormalization ("Wrap Normalization", Range(0, 2)) = 0.15
         _WrapColorHigh ("Wrap High Color", Color) = (1, 1, 1, 1)
         _WrapColorLow ("Wrap Low Color", Color) = (0, 0, 0, 1)
 
@@ -452,7 +454,7 @@ Shader "luka/backlace/small/vanilla"
         [HDR] _SpecularToonColor ("Specular Color", Color) = (1, 1, 1, 1)
         [Enum(Disabled, 0, Enabled, 1)] _SpecularToonUseLighting ("Use Lighting", Int) = 0
         // angel rings
-        [Enum(Disabled, 0, View Aligned, 1, UV Flow, 2)] _AngelRingMode ("Angel Ring Mode", Int) = 0
+        [Enum(Disabled, 0, View Aligned, 1, UV Flow, 2, World Aligned, 3, Normal Equatorial, 4)] _AngelRingMode ("Angel Ring Mode", Int) = 0
         _AngelRingSharpness ("Ring Sharpness", Range(1, 100)) = 20
         _AngelRingThreshold ("Ring Threshold", Range(0, 1)) = 0.5
         _AngelRingSoftness ("Ring Softness", Range(0, 0.5)) = 0.05
@@ -526,13 +528,13 @@ Shader "luka/backlace/small/vanilla"
         [Enum(Disabled, 0, Enabled, 1)] _RimLightBased ("Light-Based Rim", Range(0, 1)) = 0.0
         // depth
         [HDR] _DepthRimColor ("Color", Color) = (0.5, 0.75, 1, 1)
-        _DepthRimWidth ("Width", Range(0, 0.5)) = 0.1
+        _DepthRimWidth ("Width", Float) = 0.1
         _DepthRimThreshold ("Threshold", Range(0.01, 1)) = 0.1
         _DepthRimSharpness ("Sharpness", Range(0.01, 1)) = 0.1
         [Enum(Additive, 0, Replace, 1, Multiply, 2)] _DepthRimBlendMode ("Blend Mode", Int) = 0
         // normal
         [HDR] _OffsetRimColor ("Color", Color) = (1, 1, 1, 1)
-        _OffsetRimWidth ("Width", Range(0, 0.2)) = 0.02
+        _OffsetRimWidth ("Width", Float) = 0.02
         _OffsetRimHardness ("Hardness", Range(0.01, 1)) = 0.5
         [Enum(Disabled, 0, Enabled, 1)] _OffsetRimLightBased ("Light-Based", Float) = 1.0
         [Enum(Additive, 0, Replace, 1, Multiply, 2)] _OffsetRimBlendMode ("Blend Mode", Int) = 0
@@ -639,7 +641,7 @@ Shader "luka/backlace/small/vanilla"
         // [Space(10)]
         [Enum(Disabled, 0, Enabled, 1)] _Decal1Enable ("Enable Decal 1", Int) = 0
         [NoScaleOffset] _Decal1Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
-        _Decal1Tint ("Tint", Color) = (1, 1, 1, 1)
+        [HDR] _Decal1Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal1BlendMode ("Blend Mode", Int) = 2
         [Enum(UV, 0, Triplanar, 1, Screen, 2)] _Decal1Space ("Mapping Space", Int) = 0
         [Enum(Decal, 1, Overlay, 0)] _Decal1Behavior ("Decal Behavior", Int) = 1
@@ -671,7 +673,7 @@ Shader "luka/backlace/small/vanilla"
         // [Space(10)]
         [Enum(Disabled, 0, Enabled, 1)] _Decal2Enable ("Enable Decal 2", Int) = 0
         [NoScaleOffset] _Decal2Tex ("Decal Texture (A=Mask)", 2D) = "white" { }
-        _Decal2Tint ("Tint", Color) = (1, 1, 1, 1)
+        [HDR] _Decal2Tint ("Tint", Color) = (1, 1, 1, 1)
         [Enum(Additive, 0, Multiply, 1, Alpha Blend, 2)] _Decal2BlendMode ("Blend Mode", Int) = 2
         [Enum(UV, 0, Triplanar, 1, Screen, 2)] _Decal2Space ("Mapping Space", Int) = 0
         [Enum(Decal, 1, Overlay, 0)] _Decal2Behavior ("Decal Behavior", Int) = 1
@@ -1177,7 +1179,7 @@ Shader "luka/backlace/small/vanilla"
         _OutlineHueShiftSpeed ("Hue Shift Speed", Float) = 0.2
         _OutlineOpacity ("Outline Opacity", Range(0, 1)) = 1.0
         [Enum(View, 0, World, 1)] _OutlineSpace ("Outline Space", Int) = 0
-        [Enum(Colour, 0, Texture, 1)] _OutlineMode ("Outline Mode", Int) = 0
+        [Enum(Colour, 0, Texture, 1, Albedo, 2)] _OutlineMode ("Outline Mode", Int) = 0
         [Enum(Screen Space, 0, World Space, 1, UV Space, 2)] _OutlineTexMap ("Outline Texture Mapping Mode", Int) = 0
         _OutlineTex ("Outline Texture", 2D) = "white" { }
         _OutlineTexTiling ("Outline Texture Tiling", Vector) = (1, 1, 0, 0)
