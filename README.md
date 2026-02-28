@@ -6,7 +6,7 @@
 
 > *High heels, cute face, all the boys, they want a taste~*
 
-Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Liquid Layers! (─‿‿─)♡
+Backlace 🎀 is a pretty anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Liquid Layers! (─‿‿─)♡
 
 **Latest Release:** 3.0.0 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
 <br>
@@ -22,7 +22,7 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 
 | Caption | Preview |
 |---|---|
-| Thumbnail | <img src=".assets/thumb.webp" width="600"/> |
+| Thumbnail | <img src=".assets/thumb.webp" width="300"/> |
 | Styles #1 | <img src=".assets/one.webp" width="600"/> |
 | Styles #2 | <img src=".assets/two.webp" width="600"/> |
 | Styles #3 | <img src=".assets/three.webp" width="600"/> |

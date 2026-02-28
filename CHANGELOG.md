@@ -1,7 +1,22 @@
 ## Version 3.0.0
-- This is a combintion of a tonne of smaller updates that I figured would be best released together. Anyways..
+- This is a combintion of a tonne of smaller updates that I figured would be best released together. At this point, it's a soft rewrite. Anyways..
 - Improved Shadowcaster pass when using various options (Flat Model, UV Effects, etc.)
-- Removed many keywords!
+- Keyword restructure.
+- Final shading modes: PBR, Ramp, Cel, NPR, Packed, TriBand, Skin, Wrapped
+- New Rim Lighting Mode: Normals
+- Branch/Variants Restructure
+- More bug fixes than I can count
+- Restructued lighting
+- More optimisations than I can count (I obviously just can't count, I guess)
+- New Characrer Settings: Ambient Gradient, Manual Normals, SDF Shadows, Stocking, Eye Parallax, Translucent Hair, Expression Map, Face Map, Gradient, Toon Highlights, Angel Rings (Hair), Quick Materials (Latex/Fabric/Silk/Rubber)
+- A lot of lighting controls were added
+- Sticker improvements
+- Specular restructure
+- Liquid Layer Effect (Sweat/Blood/Oil/Icing/Slime/Wax/Mud)
+- UI Improvements
+- License Update
+- New Outline Settings
+- Much more..
 
 ## Version 2.2.0
 - Rewrote some less-than-ideal lighting data calculations
