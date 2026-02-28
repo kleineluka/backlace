@@ -18,17 +18,22 @@ Backlace 🎀 is a versatile anime (also called "toon", "cel shaded", or "npr") 
 
 <details>
 
-<summary><h3>Some Preview Images (◕‿◕)♡</h3></summary>
+<summary><h3>Click For Some Preview Images! (◕‿◕)♡</h3></summary>
 
 | Caption | Preview |
 |---|---|
-| Anime Shading | <img src=".assets/preview_anime.webp" width="600"/> |
-| Advanced Features | <img src=".assets/preview_advanced.webp" width="600"/> |
-| Various Materials | <img src=".assets/preview_materials.webp" width="600"/> |
-| Outline Styles | <img src=".assets/preview_outlines.webp" width="600"/> |
-| Special Effects | <img src=".assets/preview_sfx.webp" width="600"/> |
-| Grabpass Features | <img src=".assets/preview_grabpass.webp" width="600"/> |
-| UI, Docs, and More | <img src=".assets/preview_extra.webp" width="600"/> |
+| Thumbnail | <img src=".assets/thumb.webp" width="600"/> |
+| Styles #1 | <img src=".assets/one.webp" width="600"/> |
+| Styles #2 | <img src=".assets/two.webp" width="600"/> |
+| Styles #3 | <img src=".assets/three.webp" width="600"/> |
+| Styles #4 | <img src=".assets/four.webp" width="600"/> |
+| Creative Effects | <img src=".assets/creative.webp" width="600"/> |
+| Diagram View | <img src=".assets/diagram.webp" width="600"/> |
+| Stickers | <img src=".assets/stickers.webp" width="600"/> |
+| Substances | <img src=".assets/substances.webp" width="600"/> |
+| Materials | <img src=".assets/mats.webp" width="600"/> |
+| Liquids | <img src=".assets/liquids.webp" width="600"/> |
+
 
 </details>
 
