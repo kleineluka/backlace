@@ -8,13 +8,7 @@
 
 Backlace 🎀 is a pretty anime (also called "toon", "cel shaded", or "npr") shader for Unity and VRChat. Backlace is packed with a wide range of features- from anime character shading, to screen-space rim lighting, to procedural glitter. Get started with a single click for a typical fully-lit anime character or dive deep into the advanced settings like Pathing and Liquid Layers! (─‿‿─)♡
 
-**Latest Release:** 3.0.0 — see the [changelog](CHANGELOG.md) if you wish (｀・ω・´)ゞ
-<br>
-**Supported Platforms:** Unity Built-in Render Pipeline (BiRP), VRChat, Beatsaber, MateEngine, BepinEx Targetting BiRP, and more!
-<br>
-**Built With:** Unity 2022 LTS (but compatible with 2019.4+)
-<br>
-**Notice!!** It is best to download from [Releases](https://github.com/kleineluka/backlace/releases) or on another platform like [Gumroad](https://kleineluka.gumroad.com/l/backlace), because the Github Repo has many in-development settings on (ex. limited/no UI).
+**Notice!!** It is best to download from [Releases](https://github.com/kleineluka/backlace/releases) or on another platform like [Gumroad](https://kleineluka.gumroad.com/l/backlace), because the Github Repo has many in-development settings on (ex. limited/no UI). The **latest release** is 3.0.0.
 
 <details>
 
@@ -70,6 +64,10 @@ This section will be updated when I make things with it! If you make something w
 ## More Information 🍷
 
 Backlace is licensed under Backlace License 2.0: for content creators (games, avatars, renders, videos, etc.) it grants permission to use personally or commercially without additional restrictions; for derivative shaders it adds restrictions (no near-identical resale and attribution). The software is provided “as is.” See [LICENSE.md](LICENSE.md) for full terms.
+
+Backlace supports any platform that uses the **Unity Built-in Render Pipeline (BiRP)**. These include your own game made with BiRP, or content in other games such as VRChat, Beatsaber, and MateEngine. Any BepinEx plugins targetting BiRP that load custom shaders can also use Backlace.
+
+Backlace was **built with** Unity 2022 LTS (but compatible with 2019.4+)
 
 If you wish to **make your own shader** with Backlace, please see [Contributing to Backlace](BUILDING.md) for more information! This is unnecessary if you just want to use Backlace as-is in your projects (ex. game developers, avatar creators, or world builders). ( *︾▽︾)
 
